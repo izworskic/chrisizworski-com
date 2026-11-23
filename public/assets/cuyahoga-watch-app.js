@@ -183,37 +183,61 @@
   }
   renderBridgeMarkers();
  }
+
+ // Overhead silhouettes. AIS course over ground describes travel direction, not bow heading.
+ // Without both usable movement and COG we draw a neutral position dot.
+ function markerHasTravelCourse(v){
+  return typeof v.speedKnots==='number'&&v.speedKnots>0.5&&
+   core.vesselVisual(v).reportedCourseDegrees!==null;
+ }
  function liveVesselIcon(v){
   const info=core.vesselVisual(v);
-  const widths={large:70,medium:58,small:44,'not-reported':48};
-  const width=widths[info.widthClass]||48;
+  if(!markerHasTravelCourse(v)){
+   const html='<span class="cuyahoga-ship-marker cuyahoga-ship-neutral pin-vessel" title="Reported position; direction unverified">'+
+    '<svg viewBox="0 0 32 32" aria-hidden="true" focusable="false">'+
+    '<circle class="ship-neutral-ring" cx="16" cy="16" r="13"/>'+
+    '<circle class="ship-neutral-center" cx="16" cy="16" r="5"/></svg></span>';
+   return L.divIcon({className:'cuyahoga-vessel-icon cuyahoga-vessel-without-course',html,iconSize:[32,32],iconAnchor:[16,16]});
+  }
+  const widths={large:58,medium:48,small:38,'not-reported':42};
+  const width=widths[info.widthClass]||42;
   const deck={
-   cargo:'<path d="M13 14V6H23V14M27 15h8m3 0h8m3 0h8" class="ship-deck"/>',
-   tanker:'<path d="M14 14V6H24V14M29 11h27M32 9v6m10-6v6m10-6v6" class="ship-deck"/>',
-   tug:'<path d="M19 16V6H39L45 16M27 6V2H32V6" class="ship-deck"/>',
-   passenger:'<path d="M12 15V7H56L62 15M17 10h4m5 0h4m5 0h4m5 0h4" class="ship-deck"/>',
-   unknown:'<path d="M17 15V9H32V15M35 13h12" class="ship-deck"/>'
+   cargo:'<rect x="22" y="10" width="9" height="12" rx="1" class="ship-deck"/><rect x="34" y="10" width="9" height="12" rx="1" class="ship-deck"/><rect x="46" y="10" width="8" height="12" rx="1" class="ship-deck"/>',
+   tanker:'<circle cx="28" cy="16" r="4" class="ship-deck"/><circle cx="40" cy="16" r="4" class="ship-deck"/><circle cx="52" cy="16" r="4" class="ship-deck"/>',
+   tug:'<rect x="21" y="10" width="16" height="12" rx="3" class="ship-deck"/><path d="M39 12H53M39 20H53" class="ship-deck"/>',
+   passenger:'<rect x="20" y="10" width="38" height="12" rx="4" class="ship-deck"/><path d="M24 16H53" class="ship-deck"/>',
+   unknown:'<path d="M24 11H48M24 21H48" class="ship-deck"/>'
   }[info.kind];
-  // Default bow points right (east), so reported COG 90° is zero rotation.
-  // Vessel shapes and length bands are illustrative, not precise hull drawings.
-  const course=info.reportedCourseDegrees;
-  const rotate=course===null?'':(' style="transform:rotate('+(course-90).toFixed(1)+'deg)"');
+  // In the drawing the bow points right (90°). A 0° northbound course rotates it -90°.
+  const angle=info.reportedCourseDegrees-90;
   const html='<span class="cuyahoga-ship-marker pin-vessel cuyahoga-ship-'+info.kind+' cuyahoga-ship-'+info.widthClass+
-    '"><svg viewBox="0 0 72 30" aria-hidden="true" focusable="false"'+rotate+
-    '><path d="M3 17H59L69 12L66 20L59 24H13Z" class="ship-hull"/>'+
-    deck+'</svg></span>';
-  return L.divIcon({className:'cuyahoga-vessel-icon',html,iconSize:[width,38],iconAnchor:[width/2,19]});
+   '"><svg viewBox="0 0 72 32" aria-hidden="true" focusable="false">'+
+   '<g class="ship-bearing" transform="rotate('+angle.toFixed(1)+' 36 16)">'+
+   '<path d="M6 9L50 4Q61 4 69 16Q61 28 50 28L6 23Q3 16 6 9Z" class="ship-hull"/>'+
+   '<rect x="11" y="11" width="7" height="10" rx="1.2" class="ship-deck"/>'+deck+'</g></svg></span>';
+  return L.divIcon({className:'cuyahoga-vessel-icon cuyahoga-vessel-with-course',
+   html,iconSize:[width,36],iconAnchor:[width/2,18]});
+ }
+ function syncShipSelection(){
+  for(const btn of document.querySelectorAll('[data-ship]')){
+   btn.setAttribute('aria-current',String(btn.dataset.ship===state.selectedShip));
+  }
+  if(mapGroup.ships)mapGroup.ships.eachLayer(marker=>{
+   marker.getElement()?.classList.toggle('is-active-vessel',marker.options.shipMmsi===state.selectedShip);
+  });
  }
  function speedCopy(v){
   return v.speedKnots===null?'Speed not reported':v.speedKnots.toFixed(1)+' kn reported';
  }
  function selectShip(v){
   state.selectedShip=String(v.mmsi);
+  syncShipSelection();
   const visual=core.vesselVisual(v);
   replaceFocus('LATEST RECEIVED AIS / OBSERVATION',v.name,
    'AIS position reported '+locClock.format(new Date(v.seen))+'. '+speedCopy(v)+'. '+visual.label+' (AIS type, if reported). '+
    (visual.reportedLengthMeters===null?'Length not reported.':'Reported length '+Math.round(visual.reportedLengthMeters*3.28084)+' feet. ')+
-   (visual.reportedCourseDegrees===null?'Course over ground unavailable.':'Reported course over ground '+Math.round(visual.reportedCourseDegrees)+' degrees. ')+
+   (markerHasTravelCourse(v)?'AIS travel course '+Math.round(visual.reportedCourseDegrees)+' degrees (course over ground, not verified bow heading). ':
+    'Travel direction is not shown because course or usable motion is unavailable. ')+
    'The ship symbol is illustrative; this is not a bridge arrival estimate.',
    [{label:'Open the full ship tracker ↗',url:'/great-lakes-freighter-tracking/'}],
    'MMSI '+v.mmsi+' · '+v.source+' · coordinates '+v.lat.toFixed(4)+', '+v.lon.toFixed(4)+'. Do not navigate by a public AIS map.');
@@ -246,6 +270,7 @@
    status.textContent=result.reason;
   }
   if(mapGroup.ships)mapGroup.ships.clearLayers();
+  if(state.selectedShip&&!result.vessels.some(v=>String(v.mmsi)===state.selectedShip))state.selectedShip=null;
   if(!result.vessels.length){
    list.append(escText('li',result.reason));
    renderParkSignals();
@@ -254,15 +279,17 @@
   }
   for(const v of result.vessels){
    const item=escText('li',''),btn=escText('button','');
-   btn.type='button';
+   btn.type='button';btn.dataset.ship=String(v.mmsi);
    btn.append(escText('strong',v.name),escText('small',core.vesselVisual(v).label+' · '+speedCopy(v)+' · '+locClock.format(new Date(v.seen))));
    btn.addEventListener('click',()=>selectShip(v));item.append(btn);list.append(item);
    if(mapGroup.ships){
-    const marker=L.marker([v.lat,v.lon],{title:v.name,alt:v.name+' recent AIS report',icon:liveVesselIcon(v),zIndexOffset:1000}).addTo(mapGroup.ships);
-    marker.bindTooltip(v.name);
+    const hasTravelCourse=markerHasTravelCourse(v);
+    const marker=L.marker([v.lat,v.lon],{title:v.name,alt:v.name+' recent AIS report',shipMmsi:String(v.mmsi),icon:liveVesselIcon(v),zIndexOffset:1000}).addTo(mapGroup.ships);
+    marker.bindTooltip(v.name+' · '+speedCopy(v)+(hasTravelCourse?' · AIS travel course '+Math.round(v.course)+'°':' · direction not shown'));
     marker.on('click',()=>selectShip(v));
    }
   }
+  syncShipSelection();
   renderParkSignals();
   if(state.selectedParkId)choosePark(state.selectedParkId,false);
  }
