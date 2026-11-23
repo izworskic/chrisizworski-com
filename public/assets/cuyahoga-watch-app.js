@@ -298,7 +298,7 @@
    status.textContent=result.reason;
   }
   const showShips=$('show-ships-on-map');
-  if(showShips){showShips.disabled=!result.vessels.length;showShips.textContent='Show '+result.vessels.length+' ships';}
+  if(showShips){showShips.disabled=!result.vessels.length;showShips.textContent='Show '+result.vessels.length+(result.vessels.length===1?' ship':' ships');}
   if(mapGroup.ships)mapGroup.ships.clearLayers();
   if(state.selectedShip&&!result.vessels.some(v=>String(v.mmsi)===state.selectedShip)){
    state.selectedShip=null;
