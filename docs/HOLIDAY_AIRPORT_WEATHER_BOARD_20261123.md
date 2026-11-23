@@ -23,5 +23,5 @@ Thanksgiving: fourth Thursday in November, opens the Friday six days before and 
 - Exact BTS top-30 list, selected counts, date math, year boundary, target weather phrases, NWS partial outage, no em dash and API noindex are asserted in tests/holiday-airport-weather.test.js.
 - The separate path-scoped PR workflow checks out full history, runs npm run verify:all and tests Chromium with blocked NWS at 360px and 1440px. It also checks a partial-data 30-by-16 matrix and origin-preloaded planner links.
 - Browser screenshots and complete CI are **NOT VERIFIED** until that workflow reports passing and its artifacts have been inspected. No claim of deployment, AdSense uplift or actual visitor outcomes is made.
-- Dependency: the static BTS best-days section and tests come from the still-open PR #1874. This change deliberately stacks on its branch; its numerical assertions are unchanged.
-- The next step is to inspect PR workflow, fix any failure, review real screenshots, then review merge order. Do not merge automatically.
+- Best-days foundation: its unchanged BTS historical figures and test were selectively imported from open PR #1874 into this main-based PR. Unrelated winter files from #1874 were not included.
+- The next step is to run the full PR gate on the exact main-based head, review screenshots and merge only on explicit owner instruction.
