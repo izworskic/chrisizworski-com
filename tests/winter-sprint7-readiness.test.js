@@ -41,11 +41,11 @@ test('all seven indexed riding regions retain evidence hierarchy and no unverifi
   assert.ok(h.includes('not a guarantee of opening or grooming'),key);
   assert.ok(h.includes('/michigan-winter-weekends/#weekend-desk'),key);
   assert.ok(h.includes('data-source-name=')&&h.includes('id="routePlanner"'),key);
-  assert.match(h,/"dateModified":"2026-11-11"/);
+  assert.match(h,/"dateModified":"2026-11-23"/);
   assert.ok(winterMap.includes('https://chrisizworski.com/snowmobile/regions/'+key+'.html'));
  }
  assert.ok(snowGen.includes('s7-region-check'));
- assert.ok(snowGen.includes('dateModified: \'2026-11-11\''));
+ assert.ok(snowGen.includes('dateModified: \'2026-11-23\''));
  assert.ok(snowCss.includes('.s7-readiness-steps'));
  assert.ok(snowCss.includes('@media(max-width:750px)'));
 });

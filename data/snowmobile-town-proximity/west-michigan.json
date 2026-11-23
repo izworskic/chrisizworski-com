@@ -1,0 +1,681 @@
+{
+ "region": "west-michigan",
+ "checked": "2026-11-23",
+ "sourceBoundary": "Autocomplete is a demand proxy, not volume; only towns with an official DNR trail feature within a 5 km spatial query are retained. Generalized lines are for build-time context, not closures or legal condition evidence.",
+ "towns": [
+  {
+   "name": "Cadillac",
+   "lat": 44.2459,
+   "lon": -85.4311,
+   "proxy": {
+    "seed": "snowmobile trail conditions c",
+    "suggestion": "snowmobile trail conditions cadillac michigan",
+    "source": "Google autocomplete, US/en; demand proxy not volume",
+    "checked": "2026-11-23"
+   },
+   "dnr": {
+    "source": "Michigan DNR DNRTrailsOPENDATA layer 15",
+    "radiusKm": 5,
+    "query": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/15/query?where=1%3D1&geometry=-85.4311%2C44.2459&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=5000&units=esriSRUnit_Meter&outFields=OBJECTID%2CDNRTrail%2CTrailNamePrimary%2CTrailNetwork%2CCounty&returnGeometry=true&outSR=4326&f=geojson&geometryPrecision=5&maxAllowableOffset=0.0002&resultRecordCount=250",
+    "hitCount": 6,
+    "features": [
+     {
+      "id": 2934,
+      "code": "LP 5",
+      "county": "Wexford",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.42648,
+         44.22286
+        ],
+        [
+         -85.42835,
+         44.22077
+        ],
+        [
+         -85.42951,
+         44.21729
+        ],
+        [
+         -85.43037,
+         44.21602
+        ],
+        [
+         -85.43261,
+         44.2148
+        ],
+        [
+         -85.44142,
+         44.21258
+        ],
+        [
+         -85.44336,
+         44.21148
+        ],
+        [
+         -85.45085,
+         44.20311
+        ],
+        [
+         -85.45191,
+         44.20151
+        ],
+        [
+         -85.45234,
+         44.20028
+        ],
+        [
+         -85.45388,
+         44.19026
+        ],
+        [
+         -85.45283,
+         44.18797
+        ],
+        [
+         -85.44886,
+         44.1833
+        ]
+       ]
+      }
+     },
+     {
+      "id": 5634,
+      "code": "LP 6",
+      "county": "Wexford",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.43869,
+         44.22326
+        ],
+        [
+         -85.43841,
+         44.22305
+        ]
+       ]
+      }
+     },
+     {
+      "id": 5635,
+      "code": "LP 6",
+      "county": "Wexford",
+      "geometry": {
+       "type": "MultiLineString",
+       "coordinates": [
+        [
+         [
+          -85.46432,
+          44.22984
+         ],
+         [
+          -85.46411,
+          44.22888
+         ],
+         [
+          -85.46065,
+          44.22915
+         ],
+         [
+          -85.45927,
+          44.23007
+         ],
+         [
+          -85.45758,
+          44.23182
+         ],
+         [
+          -85.45526,
+          44.23238
+         ],
+         [
+          -85.45465,
+          44.23282
+         ],
+         [
+          -85.4545,
+          44.23368
+         ]
+        ],
+        [
+         [
+          -85.4545,
+          44.23367
+         ],
+         [
+          -85.45407,
+          44.23468
+         ],
+         [
+          -85.45432,
+          44.23507
+         ],
+         [
+          -85.4527,
+          44.23556
+         ],
+         [
+          -85.44422,
+          44.22961
+         ],
+         [
+          -85.43869,
+          44.22326
+         ]
+        ]
+       ]
+      }
+     },
+     {
+      "id": 5640,
+      "code": "LP 6",
+      "county": "Wexford",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.43841,
+         44.22305
+        ],
+        [
+         -85.42648,
+         44.22286
+        ]
+       ]
+      }
+     },
+     {
+      "id": 12376,
+      "code": "LP 5",
+      "county": "Wexford",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.42648,
+         44.22286
+        ],
+        [
+         -85.41911,
+         44.22972
+        ]
+       ]
+      }
+     },
+     {
+      "id": 14121,
+      "code": "LP 6",
+      "county": "Wexford",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.55792,
+         44.2374
+        ],
+        [
+         -85.55773,
+         44.23021
+        ],
+        [
+         -85.48187,
+         44.23036
+        ],
+        [
+         -85.4762,
+         44.22902
+        ],
+        [
+         -85.47044,
+         44.23021
+        ],
+        [
+         -85.4646,
+         44.23025
+        ],
+        [
+         -85.46432,
+         44.23021
+        ],
+        [
+         -85.46432,
+         44.22984
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "reportClub": "Cadillac Winter Promotions"
+  },
+  {
+   "name": "Baldwin",
+   "lat": 43.897,
+   "lon": -85.8523,
+   "proxy": {
+    "seed": "baldwin mi snowmobile trails",
+    "suggestion": "baldwin mi snowmobile trail report",
+    "source": "Google autocomplete, US/en; demand proxy not volume",
+    "checked": "2026-11-23"
+   },
+   "dnr": {
+    "source": "Michigan DNR DNRTrailsOPENDATA layer 15",
+    "radiusKm": 5,
+    "query": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/15/query?where=1%3D1&geometry=-85.8523%2C43.897&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=5000&units=esriSRUnit_Meter&outFields=OBJECTID%2CDNRTrail%2CTrailNamePrimary%2CTrailNetwork%2CCounty&returnGeometry=true&outSR=4326&f=geojson&geometryPrecision=5&maxAllowableOffset=0.0002&resultRecordCount=250",
+    "hitCount": 11,
+    "features": [
+     {
+      "id": 3132,
+      "code": "LP 3",
+      "county": "Lake",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.86165,
+         43.90823
+        ],
+        [
+         -85.8607,
+         43.9082
+        ],
+        [
+         -85.86041,
+         43.90791
+        ],
+        [
+         -85.86047,
+         43.9011
+        ],
+        [
+         -85.86152,
+         43.90091
+        ],
+        [
+         -85.86166,
+         43.89673
+        ]
+       ]
+      }
+     },
+     {
+      "id": 3135,
+      "code": "LP 3",
+      "county": "Lake",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.88249,
+         43.87187
+        ],
+        [
+         -85.90125,
+         43.87185
+        ],
+        [
+         -85.90173,
+         43.87617
+        ],
+        [
+         -85.90149,
+         43.87617
+        ],
+        [
+         -85.9016,
+         43.87913
+        ],
+        [
+         -85.91474,
+         43.87903
+        ],
+        [
+         -85.92369,
+         43.87998
+        ],
+        [
+         -85.92443,
+         43.8809
+        ],
+        [
+         -85.9258,
+         43.88169
+        ],
+        [
+         -85.92697,
+         43.88378
+        ],
+        [
+         -85.93035,
+         43.88503
+        ],
+        [
+         -85.93178,
+         43.88596
+        ],
+        [
+         -85.93181,
+         43.88831
+        ]
+       ]
+      }
+     },
+     {
+      "id": 3137,
+      "code": "LP 3",
+      "county": "Lake",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.86177,
+         43.89346
+        ],
+        [
+         -85.86224,
+         43.88619
+        ],
+        [
+         -85.86716,
+         43.8861
+        ],
+        [
+         -85.86796,
+         43.8853
+        ],
+        [
+         -85.8684,
+         43.88368
+        ],
+        [
+         -85.87044,
+         43.88167
+        ],
+        [
+         -85.8715,
+         43.87966
+        ],
+        [
+         -85.87308,
+         43.87791
+        ],
+        [
+         -85.87472,
+         43.87678
+        ],
+        [
+         -85.87867,
+         43.87515
+        ],
+        [
+         -85.88199,
+         43.87278
+        ],
+        [
+         -85.88249,
+         43.87187
+        ]
+       ]
+      }
+     },
+     {
+      "id": 5642,
+      "code": "LP 3",
+      "county": "Lake",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.87096,
+         43.9156
+        ],
+        [
+         -85.86734,
+         43.91539
+        ],
+        [
+         -85.86729,
+         43.90827
+        ]
+       ]
+      }
+     },
+     {
+      "id": 7380,
+      "code": "LP 3",
+      "county": "Lake",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.89472,
+         43.92949
+        ],
+        [
+         -85.88204,
+         43.9296
+        ],
+        [
+         -85.88174,
+         43.92109
+        ]
+       ]
+      }
+     },
+     {
+      "id": 9891,
+      "code": "LP 3",
+      "county": "Lake",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.86729,
+         43.90827
+        ],
+        [
+         -85.86165,
+         43.90823
+        ]
+       ]
+      }
+     },
+     {
+      "id": 11519,
+      "code": "LP 3",
+      "county": "Lake",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.86166,
+         43.89673
+        ],
+        [
+         -85.86177,
+         43.89346
+        ]
+       ]
+      }
+     },
+     {
+      "id": 12187,
+      "code": "LP 30",
+      "county": "Lake",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.56236,
+         43.88179
+        ],
+        [
+         -85.56934,
+         43.88088
+        ],
+        [
+         -85.57605,
+         43.88067
+        ],
+        [
+         -85.58942,
+         43.88337
+        ],
+        [
+         -85.60058,
+         43.88353
+        ],
+        [
+         -85.60863,
+         43.88525
+        ],
+        [
+         -85.61178,
+         43.88491
+        ],
+        [
+         -85.61568,
+         43.88366
+        ],
+        [
+         -85.61851,
+         43.88349
+        ],
+        [
+         -85.6422,
+         43.88803
+        ],
+        [
+         -85.65751,
+         43.89191
+        ],
+        [
+         -85.67022,
+         43.89188
+        ],
+        [
+         -85.67886,
+         43.89292
+        ],
+        [
+         -85.70315,
+         43.90116
+        ],
+        [
+         -85.70628,
+         43.90165
+        ],
+        [
+         -85.71785,
+         43.90246
+        ],
+        [
+         -85.72193,
+         43.90232
+        ],
+        [
+         -85.73927,
+         43.89908
+        ],
+        [
+         -85.74197,
+         43.89884
+        ],
+        [
+         -85.80947,
+         43.89968
+        ],
+        [
+         -85.8417,
+         43.89793
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18629,
+      "code": "LP 30",
+      "county": "Lake",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.8417,
+         43.89793
+        ],
+        [
+         -85.85315,
+         43.89723
+        ],
+        [
+         -85.8532,
+         43.89668
+        ],
+        [
+         -85.85352,
+         43.89662
+        ],
+        [
+         -85.8583,
+         43.89659
+        ]
+       ]
+      }
+     },
+     {
+      "id": 19225,
+      "code": "LP 3",
+      "county": "Lake",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.88174,
+         43.92109
+        ],
+        [
+         -85.88166,
+         43.9157
+        ],
+        [
+         -85.87096,
+         43.9156
+        ]
+       ]
+      }
+     },
+     {
+      "id": 19227,
+      "code": "LP 3",
+      "county": "Lake",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.89946,
+         43.93353
+        ],
+        [
+         -85.90029,
+         43.93114
+        ],
+        [
+         -85.89985,
+         43.92972
+        ],
+        [
+         -85.89472,
+         43.92949
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "reportClub": "Pere Marquette Snowmobile Club"
+  }
+ ]
+}

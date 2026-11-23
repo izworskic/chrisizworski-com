@@ -353,3 +353,17 @@ button:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{
 .loop-option:hover,.loop-option:focus-visible,.loop-presets button:focus-visible,.loop-actions button:focus-visible,.loop-field input:focus-visible{outline:3px solid #e19c28;outline-offset:2px}
 .loop-truth{padding-bottom:12px;color:#5d4a26}
 @media(max-width:640px){.loop-form{grid-template-columns:1fr}.loop-actions{display:grid;grid-template-columns:1fr}.loop-actions button{width:100%;min-height:48px}.loop-options{grid-template-columns:1fr}}
+
+
+/* Demand-verified local answers: below decision desk, legible on phones. */
+.snow-town-guide{margin-top:18px}
+.snow-town-guide>h2{margin-top:5px}
+.snow-town-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px;margin-top:15px}
+.snow-town-card{border:1px solid #d3dedb;border-radius:10px;background:#fff;padding:17px 18px}
+.snow-town-card h3{font-size:1.15rem;line-height:1.35;margin:0 0 10px;color:#123246;scroll-margin-top:16px}
+.snow-town-card p{line-height:1.55}
+.snow-town-links{display:flex;align-items:center;flex-wrap:wrap;gap:10px 18px}
+.snow-town-links a{display:inline-flex;min-height:44px;align-items:center;font-weight:700}
+.snow-town-live{border-left:3px solid #527589;background:#eef5f7;padding:10px 12px;margin-top:12px;color:#153b4c;font-size:.94rem}
+.snow-town-links a:focus-visible{outline:3px solid #e19c28;outline-offset:3px}
+@media(max-width:670px){.snow-town-card{padding:15px}.snow-town-grid{grid-template-columns:1fr}.snow-town-links{flex-direction:column;align-items:stretch}.snow-town-links a{min-height:44px}}

@@ -35,6 +35,7 @@
    const data=await response.json();
    if(!response.ok||data.region!==region||!Array.isArray(data.reports))throw Error('source desk unavailable');
    list.innerHTML=cards(data.reports);
+   window.dispatchEvent(new CustomEvent('snowmobile:local-reports',{detail:data}));
    const current=Number(data.totals?.recent)||0,conflicts=Number(data.totals?.conflicts)||0,checked=data.checkedAt?
      new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',timeZone:'America/Detroit',timeZoneName:'short'}).format(new Date(data.checkedAt)):'time unavailable';
    status.innerHTML=(current===0?'<strong>No recent club condition report verified in these monitored sources.</strong> ':'' )+

@@ -546,6 +546,16 @@ document.addEventListener('keydown',e=>{LOOPS?.handleKey(e);});
 
 document.addEventListener('input',e=>{if(LOOPS?.handleInput(e))return;if(e.target?.id==='junctionSearch')renderJunctionMatches();});
 document.addEventListener('click',e=>{
+  const townLink=e.target?.closest?.('[data-town-junction-lat][data-town-junction-lon]');
+  if(townLink&&MAP){
+    const lat=Number(townLink.dataset.townJunctionLat),lon=Number(townLink.dataset.townJunctionLon);
+    if(Number.isFinite(lat)&&Number.isFinite(lon)&&Math.abs(lat)<=90&&Math.abs(lon)<=180){
+      e.preventDefault(); MAP.setView([lat,lon],Math.max(12,MAP.getZoom?.()||10));
+      $('#map')?.scrollIntoView?.({block:'center',behavior:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+      track('snowmobile_town_map_focus',{region:DATA?.key||window.SNOWMOBILE_REGION||'unknown'});
+    }
+    return;
+  }
   if(LOOPS?.handleClick(e))return;
   if(e.target?.id==='downloadRouteGpx'){downloadRouteGpx();return;}
   if(e.target?.id==='copyRouteSummary'){copyRouteSummary();return;}
