@@ -59,6 +59,27 @@ async function main() {
         status: 200, contentType: 'application/json', body: JSON.stringify(fixture(down))
       }));
       await page.goto('http://127.0.0.1:8765/holiday-travel/', { waitUntil: 'domcontentloaded' });
+
+      // The existing select data model is now a visible, typed, keyboard-operated input.
+      await page.locator('#home-search').waitFor({ timeout: 15000 });
+      assert.equal(await page.locator('#home').isVisible(), false, 'native select stays nonvisual once enhanced');
+      assert.equal(await page.locator('input[role="combobox"]').count(), 10);
+      const homeSearch = page.locator('#home-search');
+      await homeSearch.fill('ATL');
+      await homeSearch.press('ArrowDown');
+      await homeSearch.press('Enter');
+      await page.waitForFunction(() => document.getElementById('home').value === 'ATL');
+      assert.match(await homeSearch.inputValue(), /Atlanta.*ATL/);
+      await page.screenshot({ path: 'artifacts/holiday-airport-weather/type-to-find-' + width + '.png', fullPage: true });
+      await homeSearch.fill('DTW');
+      await homeSearch.press('ArrowDown');
+      await homeSearch.press('Enter');
+      await page.waitForFunction(() => document.getElementById('home').value === 'DTW');
+      await homeSearch.fill('this airport does not exist');
+      assert.equal(await page.getByText('No match. Try a city, airport code or another date.').isVisible(), true);
+      await homeSearch.press('Escape');
+      assert.equal(await page.locator('#home').inputValue(), 'DTW', 'unrecognized entry must not change the route');
+
       await page.getByText('National Weather Service data is unavailable for the 30 airports right now').waitFor({ timeout: 15000 });
       await assertNoPageOverflow(page, width);
       assert.equal(await page.locator('#airport-weather-scroll').isVisible(), false, 'no empty grid on NWS outage');
@@ -77,10 +98,18 @@ async function main() {
       await page.screenshot({ path: 'artifacts/holiday-airport-weather/partial-nws-' + width + '.png', fullPage: true });
       await page.getByRole('link', { name: 'ATL flight plan' }).click();
       await page.waitForFunction(() => document.getElementById('home')?.value === 'ATL', { timeout: 15000 });
+      await page.locator('#home-search').waitFor();
+      assert.match(await page.locator('#home-search').inputValue(), /Atlanta.*ATL/, 'shared weather board link populates typed airport');
+
       assert.deepEqual(errors, [], 'JavaScript page errors at ' + width);
       await page.close();
     }
-    console.log('Holiday airport NWS-down and partial-data browser QA passed at 360px and 1440px');
+    const staticPage = await browser.newPage({ viewport: { width: 360, height: 800 }, javaScriptEnabled: false });
+    await staticPage.goto('http://127.0.0.1:8765/holiday-travel/', { waitUntil: 'domcontentloaded' });
+    assert.equal(await staticPage.locator('#home').isVisible(), true, 'native fallback when JavaScript is off');
+    assert.equal(await staticPage.locator('#best-days').isVisible(), true, 'BTS history stays indexable without JavaScript');
+    await staticPage.close();
+    console.log('Holiday weather, type-to-find, keyboard, unknown-airport, deep link and no-JS QA passed at 360px and 1440px');
   } finally {
     if (browser) await browser.close();
     server.kill();
