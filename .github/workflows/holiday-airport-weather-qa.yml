@@ -37,6 +37,8 @@ jobs:
           python3 scripts/holiday-travel/verify_airport_catalog.py
           rustc --edition=2021 -O scripts/holiday-travel/verify_airport_catalog.rs -o "$RUNNER_TEMP/holiday-airport-rust-check"
           python3 scripts/holiday-travel/verify_airport_catalog.py --tsv | "$RUNNER_TEMP/holiday-airport-rust-check"
+      - name: Inventory remaining dropdown-heavy pages (nonblocking triage)
+        run: python3 scripts/audit-selection-surfaces.py --top 12
       - name: Run complete repository gate
         run: npm run verify:all
       - name: Install browser-only Playwright
