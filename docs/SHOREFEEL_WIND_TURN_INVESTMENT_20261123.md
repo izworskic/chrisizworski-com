@@ -20,7 +20,7 @@ No forecast wind is treated as an observed lake-breeze front, and a model shorel
 
 ## Implementation, data path and scope
 
-1. `lib/shorefeel/wind-turn.js` is deterministic. It classifies each **valid** NWS hourly land-forecast wind as from-bay, from-land, alongshore or unknown using the existing beach-to-inner-bay bearing and existing `breezeSector`. A "turn toward bay" requires a documented non-onshore forecast hour followed by **two contiguous hourly onshore forecast periods** at wind speeds at least 3 mph. A single blip, missing hour, conflicting duplicate, stale forecast or unverified wind direction cannot trigger a turn. This is a presentation convention, **not a statistical confidence interval or predicted physical lake-breeze onset**.
+1. `lib/shorefeel/wind-turn.js` is deterministic. It classifies each **valid** NWS hourly land-forecast wind as from-bay, from-land, alongshore or unknown using the existing beach-to-inner-bay bearing and existing `breezeSector`. An "onshore wind turn" requires a documented non-onshore forecast hour followed by **two contiguous hourly onshore forecast periods** at wind speeds at least 3 mph. A single blip, missing hour, conflicting duplicate, stale forecast or unverified wind direction cannot trigger a turn. This is a presentation convention, **not a statistical confidence interval or predicted physical lake-breeze onset**.
 2. `lib/shorefeel/paired-hourly.js` compares hourly temperatures ONLY when NWS `/points` returns **verified different** forecast grid identities for Bay City State Park land-side `43.6714,-83.9120` and west Bay County `43.6714,-84.1000`. Each comparison uses exactly matching forecast valid hours; no 400 m gradient, independent thermometer, or degree correction is imputed.
 3. NOAA satellite-derived inner-bay surface water may inform qualitative air-water contrast at the shift hour only while valid within **36 hours of that hour**. The seasonal 45163 buoy, fixed SBLM4 station and whole-lake Huron mean remain separate measurements; none substitutes a sand thermometer.
 4. `api/shorefeel.js` derives `windTurn` and `hourlyAirComparison` from **existing** `weatherFor` calls and existing NOAA water. Neither creates an endpoint, additional source call, daily job or cache.
@@ -47,7 +47,7 @@ Checked 2026-11-23:
 
 A two-grid NWS temperature difference is useful for understanding the regional forecast's interpretation, not the difference between shoreline and one-quarter mile inland. No 400 m on-sand correction is published. The numerical physical sensitivity envelope in the earlier research disclosure remains an exploratory model, not an error bar. Dedicated observed beach-air temperature skill remains blocked by independent field data; see issue #1810.
 
-A real NWS hourly forecast **is still a prediction**. Avoid "lake breeze arrives at 3 PM" or "beach will be 8°F cooler." Instead, "NWS forecast winds turn toward the bay around 3 PM; beach-air change is not measured."
+A real NWS hourly forecast **is still a prediction**. Avoid "lake breeze arrives at 3 PM" or "beach will be 8°F cooler." Instead, "NWS forecast winds turn from Saginaw Bay toward the park around 3 PM; beach-air change is not measured."
 
 ## Design and technology fit
 
