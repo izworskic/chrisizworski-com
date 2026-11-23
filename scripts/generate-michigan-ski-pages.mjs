@@ -7,7 +7,7 @@ const {SOURCES}=require('../lib/michigan-ski/official-reports');
 const {hubTitle,titleCanClaimOpen}=require('../lib/michigan-ski/title-gate');
 const base='https://chrisizworski.com/michigan-ski-hills/';
 const P='https://chrisizworski.com/#person';
-const today='2026-11-23';
+const today='2026-11-11'; // Historical detail page and sitemap editorial date; do not bump unchanged details.
 // Search-title promise is gated on approved operator report connections.
 const officialSourceCount=RESORTS.filter(r=>r.kind==='downhill'&&SOURCES[r.slug]).length;
 const canTitleOpen=titleCanClaimOpen(officialSourceCount);
@@ -49,7 +49,7 @@ function person(){return {'@type':'Person','@id':P,name:'Chris Izworski',url:'ht
 function pageShell({title,description,url,h1,subtitle,content,slug=null}){
  if(title.length>60||description.length>158)throw Error('Search snippet length: '+title+' '+description);
  const json=[
- person(),{'@type':'WebPage','@id':url+'#page',url,name:title,description,dateModified:today,author:{'@id':P},publisher:{'@id':P},isPartOf:{'@id':'https://chrisizworski.com/#website'}},
+ person(),{'@type':'WebPage','@id':url+'#page',url,name:title,description,dateModified:slug?today:'2026-11-23',author:{'@id':P},publisher:{'@id':P},isPartOf:{'@id':'https://chrisizworski.com/#website'}},
  {'@type':'SoftwareApplication','@id':url+'#tool',name:h1,applicationCategory:'TravelApplication',operatingSystem:'Web',
  url,isAccessibleForFree:true,creator:{'@id':P},offers:{'@type':'Offer',price:0,priceCurrency:'USD'}}
  ];
