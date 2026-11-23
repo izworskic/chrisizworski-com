@@ -139,3 +139,5 @@
 .bay-wind-hours span{font-size:13px;line-height:1.45}
 .bay-wind-source{font-size:13px;line-height:1.5;color:#425961;max-width:88ch;margin:1px 0 0}
 @media(max-width:530px){.bay-wind-window{padding-top:12px}.bay-wind-hours>li{flex-basis:120px;padding:11px 9px;min-height:100px}}
+
+.bay-wind-hours .bay-hour-pair{display:block;margin-top:7px;padding-top:6px;border-top:1px solid #aebfc5;font-size:12px;font-weight:700;color:#1d4d62;line-height:1.4}
