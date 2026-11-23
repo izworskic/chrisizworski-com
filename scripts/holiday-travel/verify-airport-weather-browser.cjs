@@ -77,10 +77,32 @@ async function main() {
       await page.screenshot({ path: 'artifacts/holiday-airport-weather/partial-nws-' + width + '.png', fullPage: true });
       await page.getByRole('link', { name: 'ATL flight plan' }).click();
       await page.waitForFunction(() => document.getElementById('home')?.value === 'ATL', { timeout: 15000 });
+      const homeSearch = page.locator('#home-search');
+      const awaySearch = page.locator('#away-search');
+      assert.equal(await homeSearch.isVisible(), true, 'type-to-search shows on ' + width);
+      assert.equal(await awaySearch.isVisible(), true);
+      assert.equal(await page.locator('#home').isVisible(), false, 'legacy select is hidden once search is active');
+      await homeSearch.fill('Detroit');
+      await page.getByRole('option', { name: /Detroit.*DTW/ }).click();
+      await page.waitForFunction(() => document.getElementById('home')?.value === 'DTW');
+      await homeSearch.fill('New York');
+      await homeSearch.press('Enter');
+      assert.equal(await page.locator('#home').inputValue(), 'DTW', 'ambiguous city must not be auto-selected');
+      await homeSearch.press('ArrowDown');
+      await homeSearch.press('Enter');
+      assert.equal(await page.locator('#home').inputValue(), 'LGA', 'arrow selection chooses an explicit IATA airport');
+      await homeSearch.fill('Atlantis');
+      await page.locator('#rank-heading').click();
+      await page.waitForFunction(() => document.getElementById('home-search')?.value.includes('(LGA)'));
+      assert.equal(await page.locator('#home').inputValue(), 'LGA', 'unknown airport must not replace route');
+      await awaySearch.fill('ORD');
+      await awaySearch.press('Enter');
+      assert.equal(await page.locator('#away').inputValue(), 'ORD', 'exact airport code works without a dropdown');
+      await assertNoPageOverflow(page, width);
       assert.deepEqual(errors, [], 'JavaScript page errors at ' + width);
       await page.close();
     }
-    console.log('Holiday airport NWS-down and partial-data browser QA passed at 360px and 1440px');
+    console.log('Holiday airport NWS-down, typed-city ambiguity, keyboard IATA choice and partial-data browser QA passed at 360px and 1440px');
   } finally {
     if (browser) await browser.close();
     server.kill();
