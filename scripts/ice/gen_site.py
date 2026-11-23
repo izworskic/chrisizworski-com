@@ -10,7 +10,7 @@ OUT = pathlib.Path(os.environ.get("ICE_OUT", str(ROOT / "public" / "michigan-ice
 (OUT / "regions").mkdir(parents=True, exist_ok=True)
 # Moved forward 2026-10-06: root and regional pages gained publisher references to the
 # existing canonical Person entity. This identity metadata changed on those seven pages.
-ICE_ROOT_DATE_MODIFIED = "2026-10-24"
+ICE_ROOT_DATE_MODIFIED = "2026-11-23" # Region descriptions revised for current-season search intents.
 # Sub-pages (ice safety, freezing degree days, ice cover history) gained their
 # dateModified on 2026-08-25. Keep this separate from the root/region date: the stamper
 # only corrects stamps FORWARD, so an overstated date would never be walked back.
@@ -432,8 +432,8 @@ def build_index():
     )
     (OUT / "index.html").write_text(head(
         "Michigan Ice Report: Ice Cover Today | Chris Izworski",
-        "Michigan ice conditions for six waters: accumulated freezing degree days, NOAA satellite ice cover, "
-        "and a 54 year Great Lakes climatology baseline.",
+        "Michigan ice report today for Saginaw Bay, Houghton Lake, Lake St. Clair and three more waters: "
+        "season cold vs normal, NOAA ice cover and live wind.",
         url, ld) + body)
 
 
@@ -787,6 +787,15 @@ def build_history():
         "How much of the Great Lakes is frozen today? Compare NOAA GLERL's five lake percentages and basin total with 54 years of historical ice data.",
         url, ld) + body)
 
+def _access_label(r):
+    # First named access point; skip a generic "town accesses" label in favor of the next named place.
+    parts = [p.strip() for p in r['access'].split(',') if p.strip()]
+    for p in parts:
+        if 'accesses' not in p:
+            return p
+    return parts[0]
+
+
 def build_region(r):
     url = f"{SITE}/regions/{r['slug']}.html"
     ld = {"@context": "https://schema.org", "@graph": [
@@ -897,8 +906,8 @@ def build_region(r):
     )
     (OUT / "regions" / f"{r['slug']}.html").write_text(head(
         f"{r['name']} Ice Conditions Today | Chris Izworski",
-        f"Accumulated freezing degree days, current temperature and wind, and ice context for {r['name']}, "
-        f"plus access at {r['access'].split(',')[0]}.",
+        f"{r['name']} ice report today: is ice forming yet? Season cold vs a 10-year normal, live air temp "
+        f"and wind, and access notes for {_access_label(r)}.",
         url, ld) + body)
 
 

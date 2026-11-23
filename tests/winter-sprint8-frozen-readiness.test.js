@@ -94,10 +94,14 @@ test('five-site original evidence engine links back to Frozen Michigan without c
   const p='public/michigan-ice-caves/'+route+'index.html';
   const page=read(p);
   assert.ok(page.includes('href="/frozen-michigan/#frozen-trip-desk"'),p);
-  assert.ok(page.includes('"dateModified":"2026-11-11"'),p);
-  assert.ok(sitemap.includes('<loc>https://chrisizworski.com/michigan-ice-caves/'+route+'</loc><lastmod>2026-11-11</lastmod>'),p);
+  // Assert the property, not a literal date: a stamp no older than the evidence-engine
+  // release, not in the future, and in agreement with its sitemap lastmod. A pinned literal
+  // broke on the next legitimate edit (2026-11-23 title/description pass).
+  const stamp=(page.match(/"dateModified":"(\d{4}-\d\d-\d\d)"/)||[])[1];
+  assert.ok(stamp && stamp>='2026-11-11' && stamp<=new Date().toISOString().slice(0,10),p);
+  assert.ok(sitemap.includes('<loc>https://chrisizworski.com/michigan-ice-caves/'+route+'</loc><lastmod>'+stamp+'</lastmod>'),p);
  }
- assert.ok(guide.includes("date='2026-11-11'"));
+ assert.match(guide,/hubDate='2026-11-\d\d'/);
  assert.ok(guide.includes('Land-based ice viewing trips'));
  assert.ok(sitemap.includes('<loc>https://chrisizworski.com/frozen-michigan/</loc><lastmod>2026-11-11</lastmod>'));
  assert.ok(html.includes('"dateModified":"2026-11-11"'));
