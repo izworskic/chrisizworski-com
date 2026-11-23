@@ -295,4 +295,63 @@ h3{font-weight:750}
  .source-grid p{margin:0 0 10px}
  .footer{padding:16px 18px;flex-direction:column;align-items:flex-start;gap:8px;font-size:.73rem}
 }
+
+/* Cleveland park field guide: four distinct symbols shared by map and cards. */
+.viewpoint-symbol-defs{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+.cuyahoga-viewpoint-icon.leaflet-marker-icon{background:transparent;border:0;overflow:visible}
+.park-map-pin,.place-glyph{--place-ink:#26616b;display:grid;place-items:center;color:var(--place-ink)}
+.park-map-pin--scranton,.place-glyph--bend{--place-ink:#216d70}
+.park-map-pin--rivergate,.place-glyph--wharf{--place-ink:#85612c}
+.park-map-pin--heritage,.place-glyph--heritage{--place-ink:#675d84}
+.park-map-pin--wendy,.place-glyph--harbor{--place-ink:#2e668b}
+.park-map-pin.pin-park{width:34px;height:34px;position:relative;border-radius:12px 12px 9px 9px;
+ background:#fffef8;border:2px solid var(--place-ink);box-shadow:0 2px 5px #0d2d3977}
+.park-map-pin::after{content:"";position:absolute;left:12px;bottom:-5px;width:8px;height:8px;
+ transform:rotate(45deg);background:#fffef8;border-right:2px solid var(--place-ink);border-bottom:2px solid var(--place-ink)}
+.park-map-pin.is-offset::before{content:"";position:absolute;top:33px;left:15px;height:43px;border-left:2px dashed var(--place-ink);opacity:.8;pointer-events:none}
+.park-map-pin svg,.place-glyph svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.85;
+ stroke-linecap:round;stroke-linejoin:round}
+.cuyahoga-viewpoint-icon:focus-visible{outline:3px solid #d49a39;outline-offset:3px;border-radius:10px}
+.cuyahoga-viewpoint-icon.leaflet-marker-icon:has(+ .leaflet-marker-shadow){z-index:1}
+.park-popup-content{min-width:205px;max-width:290px}
+.park-popup-title{display:block;font:700 1rem/1.25 system-ui;color:#173c45}
+.park-popup-description{color:#314f54;margin:6px 0 10px!important;font-size:.875rem;line-height:1.45}
+.park-popup-actions{display:flex;gap:6px 12px;flex-wrap:wrap;margin:8px 0}
+.park-popup-actions a{font-size:.8rem;font-weight:750;color:#155c68;text-underline-offset:3px}
+.park-popup-actions a:focus-visible{outline:2px solid #aa752b;outline-offset:2px}
+.park-popup-note{display:block;color:#53696d;font-size:.7rem;line-height:1.4}
+.place-entry{border-bottom:1px solid #dce7e2;padding:3px 0 8px}
+.place-entry:last-child{border-bottom:0}
+.place-entry .place-button{grid-template-columns:42px minmax(0,1fr) 14px;gap:10px;
+ min-height:0;padding:10px 5px 6px;border:0;background:transparent}
+.place-entry .place-button:hover{background:#edf4f1}
+.place-entry .place-button:focus-visible{outline:3px solid #bd8a43;outline-offset:-3px}
+.place-glyph{width:38px;height:38px;border:1px solid #ceded9;background:#f1f6f3;border-radius:10px;align-self:start}
+.place-info .place-role{font-size:.73rem;font-weight:750;color:#3e6667;margin-top:3px}
+.place-info .place-watch-copy{font-size:.875rem;line-height:1.43;color:#425d60;margin-top:5px}
+.place-entry .place-arrow{align-self:start;margin-top:4px}
+.place-entry .park-signal{grid-column:2/-1;margin-top:0}
+.place-entry-links{display:flex;align-items:center;justify-content:space-between;gap:7px 10px;
+ flex-wrap:wrap;padding:1px 7px 8px 57px}
+.place-google-link{display:inline-flex;align-items:center;min-height:40px;font-size:.875rem;color:#145b67;font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.place-google-link:hover{color:#0a384d}
+.place-google-link:focus-visible{outline:2px solid #bd8a43;outline-offset:3px}
+.place-entry-links>span{color:#526866;font-size:.75rem;line-height:1.35}
+@media(max-width:830px){
+ .place-entry .place-button{grid-template-columns:38px minmax(0,1fr) 14px;padding:9px 6px 5px}
+ .place-entry-links{padding-left:54px}
+}
+@media(max-width:560px){
+ .place-buttons{display:grid;grid-template-columns:minmax(0,1fr);gap:0}
+ .place-entry{padding:4px 0 7px}
+ .place-entry .place-button{grid-template-columns:40px minmax(0,1fr) 15px;gap:10px;
+  min-height:0;padding:9px 8px 5px;background:transparent}
+ .place-entry .place-arrow{display:block}
+ .place-info strong{font-size:.86rem}
+ .place-info .place-role{font-size:.72rem}
+ .place-info .place-watch-copy{font-size:.875rem;line-height:1.45}
+ .place-entry .park-signal{grid-column:2/-1}
+ .place-entry-links{padding:1px 9px 9px 58px}
+}
+
 @media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*,*::before,*::after{transition:none!important;animation:none!important}}

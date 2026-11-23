@@ -6,6 +6,7 @@
  if(!core){$('vessel-status').textContent='Interactive data is unavailable. Use the official source links below.';return;}
  const state={parks:null,bridges:null,bridgeNotices:null,live:null,selectedParkId:null,selectedBridgeId:null,map:null,selectedShip:null,shipKindFilter:'all'};
  const mapGroup={parks:null,bridges:null,ships:null};
+ const parkMarkers=new Map();
  let vesselPopup=null;
  const featuredBridgeIds=new Set(['center-st-139','columbus-193','carter-243','west-third-369','eagle-280']);
  const locClock=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
@@ -24,11 +25,53 @@
  function revealMobileFocus(){
   if(window.matchMedia('(max-width:830px)').matches) $('river-focus').scrollIntoView({block:'start',behavior:'auto'});
  }
- function mapPointIcon(kind){
+ const parkSymbolKinds=Object.freeze({scranton:'bend',rivergate:'wharf',heritage:'heritage',wendy:'harbor'});
+ function parkMapsUrl(park){
+  const value=String(park?.googleMapsUrl||'');
+  // Checked-in official Metroparks map points only; reject arbitrary source URLs.
+  return /^https:\/\/www\.google\.com\/maps\?q=41\.\d+,-81\.\d+$/.test(value)
+   ?value:core.safeMapsQuery(park?.name);
+ }
+ function parkPopupContent(park){
+  const wrap=escText('div','','park-popup-content');
+  wrap.append(escText('strong',park.name,'park-popup-title'));
+  wrap.append(escText('p',park.watchFor||park.experience,'park-popup-description'));
+  const actions=escText('div','','park-popup-actions');
+  const maps=escText('a','Google Maps ↗');maps.href=parkMapsUrl(park);maps.target='_blank';maps.rel='noopener noreferrer';
+  const official=escText('a','Official park details ↗');official.href=park.officialUrl;official.target='_blank';official.rel='noopener noreferrer';
+  actions.append(maps,official);wrap.append(actions);
+  wrap.append(escText('small','Official park-area map point, not a verified viewing entrance. Check access before visiting.','park-popup-note'));
+  return wrap;
+ }
+ function mapPointIcon(kind,parkId,offset=false){
   if(!window.L)return null;
-  const classes={park:'pin-park',bridge:'pin-bridge',work:'pin-work'};
-  const width=kind==='park'?18:30,glyph=kind==='park'?'':kind==='work'?'!':'&#9646;';
-  return L.divIcon({className:'',html:'<div class="map-pin '+(classes[kind]||classes.bridge)+'" style="width:'+width+'px;height:'+width+'px">'+glyph+'</div>',iconSize:[width,width],iconAnchor:[width/2,width/2]});
+  if(kind==='park'){
+   const id=Object.prototype.hasOwnProperty.call(parkSymbolKinds,parkId)?parkId:'scranton';
+   const glyph=parkSymbolKinds[id];
+   const html='<span class="park-map-pin pin-park park-map-pin--'+id+(offset?' is-offset':'')+'" aria-hidden="true">'+
+    '<svg viewBox="0 0 24 24" focusable="false"><use href="#cuy-park-'+glyph+'"></use></svg></span>';
+   return L.divIcon({className:'cuyahoga-viewpoint-icon',html,iconSize:[36,40],iconAnchor:[18,offset?77:37],popupAnchor:[0,offset?-85:-34]});
+  }
+  const classes={bridge:'pin-bridge',work:'pin-work'};
+  return L.divIcon({className:'',html:'<div class="map-pin '+(classes[kind]||classes.bridge)+'" style="width:30px;height:30px">'+(kind==='work'?'!':'&#9646;')+'</div>',iconSize:[30,30],iconAnchor:[15,15]});
+ }
+ // Keep a park's public tap target clear when a vessel overlaps its map point.
+ // Only move the *symbol on screen*, never the underlying park coordinates.
+ function separateParkAndShipPins(){
+  if(!state.map||!state.parks)return;
+  for(const park of state.parks.spots){
+   const marker=parkMarkers.get(park.id);
+   if(!marker)continue;
+   const point=state.map.latLngToLayerPoint([park.lat,park.lon]);
+   const overlap=state.live?.vessels?.filter(v=>!shipUI||shipUI.match(v,state.shipKindFilter)).some(v=>{
+    const shipPoint=state.map.latLngToLayerPoint([v.lat,v.lon]);
+    return Math.abs(point.x-shipPoint.x)<54&&Math.abs(point.y-shipPoint.y)<38;
+   })||false;
+   if(marker.options.parkOffset!==overlap){
+    marker.options.parkOffset=overlap;
+    marker.setIcon(mapPointIcon('park',park.id,overlap));
+   }
+  }
  }
  function initMap(){
   if(!window.L){
@@ -45,7 +88,7 @@
   state.map.on('tileerror',function(){
    $('map-heading').title='Some map tiles are unavailable. Public parks and text links remain usable.';
   });
-  state.map.on('zoomend',()=>{if(shipUI)mapGroup.ships?.eachLayer(m=>{if(m.options.shipReport)m.setIcon(liveVesselIcon(m.options.shipReport));});syncShipSelection();});
+  state.map.on('zoomend',()=>{if(shipUI)mapGroup.ships?.eachLayer(m=>{if(m.options.shipReport)m.setIcon(liveVesselIcon(m.options.shipReport));});syncShipSelection();separateParkAndShipPins();});
  }
  function plotParks(){
   if(!state.parks)return;
@@ -63,11 +106,13 @@
     btn.title=park.suitability;
    }
    if(mapGroup.parks){
-    const marker=L.marker([park.lat,park.lon],{title:park.name,alt:park.name+' approximate park area',icon:mapPointIcon('park')}).addTo(mapGroup.parks);
-    marker.bindTooltip(park.name,{direction:'top'});
-    marker.on('click',()=>{choosePark(park.id,false);revealMobileFocus();});
+    const marker=L.marker([park.lat,park.lon],{title:park.name+' · public viewing area',alt:park.name+' approximate park area',parkOffset:false,icon:mapPointIcon('park',park.id)}).addTo(mapGroup.parks);
+    parkMarkers.set(park.id,marker);
+    marker.bindPopup(parkPopupContent(park),{maxWidth:290,autoPan:true,closeButton:true});
+    marker.on('click',()=>{choosePark(park.id,false);marker.openPopup();});
    }
   }
+  separateParkAndShipPins();
  }
  function parkSignalLine(park){
 
@@ -88,6 +133,7 @@
   }
  }
  function choosePark(id,move){
+  state.map?.closePopup();
   if(vesselPopup&&state.map?.hasLayer(vesselPopup))state.map.removeLayer(vesselPopup);
   const park=state.parks?.spots.find(p=>p.id===id);
   if(!park)return;
@@ -98,10 +144,10 @@
   for(const btn of document.querySelectorAll('[data-park]'))btn.setAttribute('aria-current',String(btn.dataset.park===id));
   const official=[
    {label:'Official park details ↗',url:park.officialUrl},
-   {label:'Find the park on a map ↗',url:core.safeMapsQuery(park.name)}
+   {label:'Google Maps · park location ↗',url:parkMapsUrl(park)}
   ];
   const note='Distances use the general park reference, not a surveyed viewing deck. They cannot establish line of sight, vessel arrival, or a safe entrance. Confirm current park access.';
-  let description=park.experience,action=null;
+  let description=park.experience+' '+(park.visitTip||''),action=null;
    const observed=core.parkObservation(park,state.live,Date.now());
    if(observed.closest){
     const nearby=observed.closest;
@@ -127,6 +173,7 @@
   return values.year+'-'+values.month+'-'+values.day;
  }
  function chooseBridge(bridgeId,move){
+  state.map?.closePopup();
   if(vesselPopup&&state.map?.hasLayer(vesselPopup))state.map.removeLayer(vesselPopup);
   const bridge=state.bridges?.bridges.find(x=>x.channel==='main'&&x.id===bridgeId);
   if(!bridge)return;
@@ -268,6 +315,7 @@
   return v.speedKnots===null?'Speed not reported':v.speedKnots.toFixed(1)+' kn reported';
  }
  function selectShip(v,move=true){
+  state.map?.closePopup();
   if(shipUI&&state.shipKindFilter!=='all'&&!shipUI.match(v,state.shipKindFilter)){state.shipKindFilter='all';renderLive();}
   state.selectedParkId=null;state.selectedBridgeId=null;
   for(const btn of document.querySelectorAll('[data-park]'))btn.setAttribute('aria-current','false');
@@ -326,6 +374,7 @@
   if(showShips){showShips.disabled=!visible.length;showShips.textContent='Show '+visible.length+(visible.length===1?' ship':' ships');}
   if(vesselPopup&&state.map?.hasLayer(vesselPopup))state.map.removeLayer(vesselPopup);
   if(mapGroup.ships)mapGroup.ships.clearLayers();
+  separateParkAndShipPins();
   if(state.selectedShip&&!result.vessels.some(v=>String(v.mmsi)===state.selectedShip)){
    state.selectedShip=null;
    if(!state.selectedParkId&&!state.selectedBridgeId)replaceFocus('RECENT AIS / REPORT EXPIRED',
@@ -334,6 +383,7 @@
     [{label:'Check the full Great Lakes tracker ↗',url:'/great-lakes-freighter-tracking/'}]);
   }
   if(!visible.length){
+   separateParkAndShipPins();
    list.append(escText('li',result.vessels.length?'No vessels match this type filter.':result.reason));
    renderParkSignals();
    if(state.selectedParkId)choosePark(state.selectedParkId,false);
@@ -354,6 +404,7 @@
    }
   }
   syncShipSelection();
+  separateParkAndShipPins();
   renderParkSignals();
   if(state.selectedParkId)choosePark(state.selectedParkId,false);
   else if(state.selectedShip){

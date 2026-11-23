@@ -27,6 +27,15 @@
  <a class="back" href="/great-lakes-freighter-tracking/">Great Lakes ship tracker <span aria-hidden="true">↗</span></a>
 </header>
 <main>
+<svg class="viewpoint-symbol-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" width="0" height="0">
+ <defs>
+  <symbol id="cuy-park-bend" viewBox="0 0 24 24"><path d="M4 4h6c4 0 4 4 0 4H9c-5 0-5 8 0 8h6c5 0 5 4 0 4H4" /></symbol>
+  <symbol id="cuy-park-wharf" viewBox="0 0 24 24"><path d="M3 7h18M6 7v13M18 7v13M4 20h16M9 7v7h6V7" /></symbol>
+  <symbol id="cuy-park-heritage" viewBox="0 0 24 24"><path d="M3 20h18M5 20V8l7-5 7 5v12M9 20v-8h6v8M9 9h6" /></symbol>
+  <symbol id="cuy-park-harbor" viewBox="0 0 24 24"><path d="M2 17c2 0 2 2 4 2s2-2 4-2 2 2 4 2 2-2 4-2 2 2 4 2M12 3v10m-4-4 4 4 4-4" /></symbol>
+ </defs>
+</svg>
+
 <section class="lead" aria-labelledby="main-title">
  <div class="lead-copy">
   <p class="kicker">CLEVELAND / THE CUYAHOGA RIVER</p>
@@ -52,7 +61,7 @@
    </div>
    <div class="map-underbar">
     <div class="map-key" aria-label="Map legend">
-     <span><i class="key-spot"></i>Viewing parks</span><span><i class="key-ship"></i>Recent AIS ships</span><span data-bridge-legend hidden><i class="key-bridge"></i>Bridge landmarks</span><span data-bridge-legend hidden><i class="key-work"></i>Dated removal notice</span>
+     <span><i class="key-spot"></i>Illustrated viewing-place markers</span><span><i class="key-ship"></i>Recent AIS ships</span><span data-bridge-legend hidden><i class="key-bridge"></i>Bridge landmarks</span><span data-bridge-legend hidden><i class="key-work"></i>Dated removal notice</span>
     </div>
     <details class="map-caveat">
      <summary>What do these pins mean?</summary>
@@ -83,10 +92,38 @@
      <span>4 public places</span>
     </div>
     <div id="place-buttons" class="place-buttons">
-     <button type="button" data-park="scranton" class="place-button"><span class="place-index">01</span><span class="place-info"><strong>Scranton Flats Pier</strong><span>Watch the working bends</span></span><span class="place-arrow" aria-hidden="true">↗</span></button>
-     <button type="button" data-park="rivergate" class="place-button"><span class="place-index">02</span><span class="place-info"><strong>Rivergate Park</strong><span>Stay awhile by Merwin's Wharf</span></span><span class="place-arrow" aria-hidden="true">↗</span></button>
-     <button type="button" data-park="heritage" class="place-button"><span class="place-index">03</span><span class="place-info"><strong>Heritage Park</strong><span>Walk the old waterfront</span></span><span class="place-arrow" aria-hidden="true">↗</span></button>
-     <button type="button" data-park="wendy" class="place-button"><span class="place-index">04</span><span class="place-info"><strong>Wendy Park</strong><span>Watch the lake and river meet</span></span><span class="place-arrow" aria-hidden="true">↗</span></button>
+     <div class="place-entry" data-viewpoint="scranton">
+      <button type="button" data-park="scranton" class="place-button" aria-current="false">
+       <span class="place-glyph place-glyph--bend" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#cuy-park-bend"></use></svg></span>
+       <span class="place-info"><strong>Scranton Flats Pier</strong><span class="place-role">Bend-side observation deck</span><span class="place-watch-copy">From the observation deck below Hope Memorial Bridge, watch long freighters ease around the tight river bends.</span></span>
+       <span class="place-arrow" aria-hidden="true">›</span>
+      </button>
+      <div class="place-entry-links"><a class="place-google-link" href="https://www.google.com/maps?q=41.48796000,-81.69382000" target="_blank" rel="noopener noreferrer" aria-label="Open Scranton Flats Pier in Google Maps">Google Maps ↗</a><span>Park location · confirm access</span></div>
+     </div>
+     <div class="place-entry" data-viewpoint="rivergate">
+      <button type="button" data-park="rivergate" class="place-button" aria-current="false">
+       <span class="place-glyph place-glyph--wharf" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#cuy-park-wharf"></use></svg></span>
+       <span class="place-info"><strong>Rivergate Park</strong><span class="place-role">Riverside walk and wharf</span><span class="place-watch-copy">Follow the public riverside walk near Merwin's Wharf. Freighters and smaller boats share this busy stretch.</span></span>
+       <span class="place-arrow" aria-hidden="true">›</span>
+      </button>
+      <div class="place-entry-links"><a class="place-google-link" href="https://www.google.com/maps?q=41.48915000,-81.70197000" target="_blank" rel="noopener noreferrer" aria-label="Open Rivergate Park in Google Maps">Google Maps ↗</a><span>Park location · confirm access</span></div>
+     </div>
+     <div class="place-entry" data-viewpoint="heritage">
+      <button type="button" data-park="heritage" class="place-button" aria-current="false">
+       <span class="place-glyph place-glyph--heritage" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#cuy-park-heritage"></use></svg></span>
+       <span class="place-info"><strong>Heritage Park</strong><span class="place-role">Historic riverfront</span><span class="place-watch-copy">Walk the historic Flats waterfront, where public riverfront paths and day-use slips sit beside the working channel.</span></span>
+       <span class="place-arrow" aria-hidden="true">›</span>
+      </button>
+      <div class="place-entry-links"><a class="place-google-link" href="https://www.google.com/maps?q=41.49445000,-81.70210000" target="_blank" rel="noopener noreferrer" aria-label="Open Heritage Park in Google Maps">Google Maps ↗</a><span>Park location · confirm access</span></div>
+     </div>
+     <div class="place-entry" data-viewpoint="wendy">
+      <button type="button" data-park="wendy" class="place-button" aria-current="false">
+       <span class="place-glyph place-glyph--harbor" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#cuy-park-harbor"></use></svg></span>
+       <span class="place-info"><strong>Wendy Park</strong><span class="place-role">Lake Erie harbor mouth</span><span class="place-watch-copy">On Whiskey Island, look toward the broad meeting of the Cuyahoga and Lake Erie, where freighters move through the harbor.</span></span>
+       <span class="place-arrow" aria-hidden="true">›</span>
+      </button>
+      <div class="place-entry-links"><a class="place-google-link" href="https://www.google.com/maps?q=41.49700000,-81.71645000" target="_blank" rel="noopener noreferrer" aria-label="Open Wendy Park in Google Maps">Google Maps ↗</a><span>Park location · confirm access</span></div>
+     </div>
     </div>
     <details class="bridge-picker">
      <summary>Explore Cleveland's bridge landmarks</summary>
@@ -100,7 +137,7 @@
    <section id="river-focus" class="focus-panel" aria-live="polite" aria-label="Selected viewing place or river landmark">
     <p class="eyebrow">START HERE / PUBLIC SHORE</p>
     <h3>Scranton Flats Pier</h3>
-    <p>At the bend below Hope Memorial Bridge, Cleveland Metroparks provides a public river observation deck. Choose a place to see its description, last reported nearby AIS evidence, and official access link.</p>
+    <p>Below Hope Memorial Bridge, watch freighters work through the tight river bends from a public observation deck. Pick any viewing place for the full field guide and nearby AIS observations.</p>
     <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/scranton-flats-pier">Scranton Flats park information ↗</a>
    </section>
 

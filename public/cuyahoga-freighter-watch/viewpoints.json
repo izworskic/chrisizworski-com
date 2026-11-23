@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "checkedOn": "2026-11-22",
+  "checkedOn": "2026-11-23",
   "intent": "Public places to view freighters from land, not guaranteed sighting or bridge opening",
   "coordinateKind": "general park reference point, not verified visitor entrance or exact waterside viewing position",
   "verifiedSourceOwner": "Cleveland Metroparks",
@@ -19,7 +19,12 @@
       "evidence": "Metroparks specifically recommends this river observation deck for watching large cargo ships negotiate the bends.",
       "experience": "Stand at the riverside observation deck below the Hope Memorial Bridge. The sharp bends make the ship's slow turn the spectacle. Keep clear of active docks and watch from designated public paths.",
       "suitability": "River bend viewing",
-      "visitStatus": "PUBLIC_PARK_ACCESS_VERIFY_CURRENT_CLOSURES"
+      "visitStatus": "PUBLIC_PARK_ACCESS_VERIFY_CURRENT_CLOSURES",
+      "iconKind": "bend",
+      "googleMapsUrl": "https://www.google.com/maps?q=41.48796000,-81.69382000",
+      "watchFor": "From the observation deck below Hope Memorial Bridge, watch long freighters ease around the tight river bends.",
+      "visitTip": "Choose this for the closest look at a ship making a slow turn; confirm current access to the pier before leaving.",
+      "googleMapsNote": "Official Cleveland Metroparks map point for the park area; not a surveyed entrance, parking spot or guaranteed viewing position."
     },
     {
       "id": "rivergate",
@@ -34,7 +39,12 @@
       "evidence": "Cleveland Metroparks lists public river views adjacent to Merwin's Wharf and day-use recreational boat slips.",
       "experience": "Follow the public riverfront paths near Merwin's Wharf to see the working harbor at close range. Large cargo vessels share the water with rowers and smaller craft; remain on shore for watching.",
       "suitability": "Riverside watching and food nearby",
-      "visitStatus": "PUBLIC_PARK_ACCESS_VERIFY_CURRENT_CLOSURES"
+      "visitStatus": "PUBLIC_PARK_ACCESS_VERIFY_CURRENT_CLOSURES",
+      "iconKind": "wharf",
+      "googleMapsUrl": "https://www.google.com/maps?q=41.48915000,-81.70197000",
+      "watchFor": "Follow the public riverside walk near Merwin's Wharf. Freighters and smaller boats share this busy stretch.",
+      "visitTip": "A comfortable place to linger by the river; the restaurant and day-use docks are nearby, not ship-viewing platforms.",
+      "googleMapsNote": "Official Cleveland Metroparks map point for the park area; not a surveyed entrance, parking spot or guaranteed viewing position."
     },
     {
       "id": "heritage",
@@ -49,7 +59,12 @@
       "evidence": "Metroparks confirms public parkland along the river adjacent to Canal Basin Park and new day-use slips.",
       "experience": "The east-bank public park sits beside the old port district. Here the river's shipping role meets the earliest waterfront settlement landscape. Stay on park walks rather than crossing into private docks.",
       "suitability": "History and riverfront walk",
-      "visitStatus": "PUBLIC_PARK_ACCESS_VERIFY_CURRENT_CLOSURES"
+      "visitStatus": "PUBLIC_PARK_ACCESS_VERIFY_CURRENT_CLOSURES",
+      "iconKind": "heritage",
+      "googleMapsUrl": "https://www.google.com/maps?q=41.49445000,-81.70210000",
+      "watchFor": "Walk the historic Flats waterfront, where public riverfront paths and day-use slips sit beside the working channel.",
+      "visitTip": "Choose this for a short waterfront walk and the city's port history, without entering private docks.",
+      "googleMapsNote": "Official Cleveland Metroparks map point for the park area; not a surveyed entrance, parking spot or guaranteed viewing position."
     },
     {
       "id": "wendy",
@@ -64,7 +79,12 @@
       "evidence": "Metroparks public lakefront park on Whiskey Island near where the river enters Lake Erie, with accessible trail connections.",
       "experience": "Choose the open shore near the river mouth when the lakefront, rather than the tight inland bends, is what you want to watch. Expect a wide harbor scene, not a guaranteed close approach.",
       "suitability": "River mouth and lakefront",
-      "visitStatus": "PUBLIC_PARK_ACCESS_VERIFY_CURRENT_CLOSURES"
+      "visitStatus": "PUBLIC_PARK_ACCESS_VERIFY_CURRENT_CLOSURES",
+      "iconKind": "harbor",
+      "googleMapsUrl": "https://www.google.com/maps?q=41.49700000,-81.71645000",
+      "watchFor": "On Whiskey Island, look toward the broad meeting of the Cuyahoga and Lake Erie, where freighters move through the harbor.",
+      "visitTip": "Choose this for the wider lake-and-harbor setting; ships may appear farther away than at the inland bends.",
+      "googleMapsNote": "Official Cleveland Metroparks map point for the park area; not a surveyed entrance, parking spot or guaranteed viewing position."
     }
   ]
 }

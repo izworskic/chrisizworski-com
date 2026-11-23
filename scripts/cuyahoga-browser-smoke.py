@@ -95,6 +95,27 @@ async def run():
                 raise AssertionError("Default river map should prioritize public parks and observed ships, not bridge pins")
             if await page.locator(".pin-park").count() != 4:
                 raise AssertionError("Default river map missing four public viewing points")
+            if await page.locator(".park-map-pin--heritage.is-offset").count()!=1:
+                raise AssertionError("A vessel nearly at Heritage Park must not obscure its tappable marker")
+            official_google_maps = {
+                "scranton": "https://www.google.com/maps?q=41.48796000,-81.69382000",
+                "rivergate": "https://www.google.com/maps?q=41.48915000,-81.70197000",
+                "heritage": "https://www.google.com/maps?q=41.49445000,-81.70210000",
+                "wendy": "https://www.google.com/maps?q=41.49700000,-81.71645000"
+            }
+            symbols = {"scranton":"bend","rivergate":"wharf","heritage":"heritage","wendy":"harbor"}
+            for spot_id, maps_url in official_google_maps.items():
+                card=page.locator('.place-entry[data-viewpoint="'+spot_id+'"]')
+                if await card.count()!=1:
+                    raise AssertionError("Missing park information card "+spot_id)
+                if await card.locator(".place-watch-copy").inner_text()=="":
+                    raise AssertionError("Missing explanatory ship-watching guidance "+spot_id)
+                if await card.locator(".place-google-link").get_attribute("href")!=maps_url:
+                    raise AssertionError("Wrong Cleveland Metroparks Google Maps link "+spot_id)
+                if await card.locator(".place-glyph svg use").get_attribute("href")!="#cuy-park-"+symbols[spot_id]:
+                    raise AssertionError("Card has wrong place-specific icon "+spot_id)
+                if await page.locator(".park-map-pin--"+spot_id+" svg use").get_attribute("href")!="#cuy-park-"+symbols[spot_id]:
+                    raise AssertionError("Map icon does not match public park card "+spot_id)
             frame = await page.locator("#cuyahoga-map").bounding_box()
             for pin in await page.locator(".pin-park").all():
                 location = await pin.bounding_box()
@@ -143,6 +164,24 @@ async def run():
                 raise AssertionError("Bridge-to-park selection did not synchronize")
             if await page.locator("#river-focus a[href*='clevelandmetroparks']").count() != 1:
                 raise AssertionError("Selected public park lost its official access link")
+            if await page.locator("#river-focus a[href*='google.com/maps']").count()!=1:
+                raise AssertionError("Selected park focus must retain its official Google Maps action")
+            # Park markers open one helpful popup, rather than scrolling away from the map.
+            await page.locator("#show-parks-on-map").click()
+            await page.locator(".cuyahoga-viewpoint-icon").last.click()
+            await page.locator(".leaflet-popup .park-popup-title").get_by_text("Wendy Park").wait_for(timeout=6000)
+            if await page.locator(".leaflet-popup").count()!=1:
+                raise AssertionError("Park map marker should open exactly one popup")
+            if await page.locator(".leaflet-popup .park-popup-actions a").count()!=2:
+                raise AssertionError("Park popup must offer Google Maps and official park details")
+            if await page.locator(".leaflet-popup .park-popup-actions a").first.get_attribute("href")!=official_google_maps["wendy"]:
+                raise AssertionError("Park popup Google Maps destination is not the official Metroparks point")
+            await page.locator(".place-button[data-park=scranton]").click()
+            try:
+                await page.locator(".leaflet-popup").wait_for(state="detached",timeout=2300)
+            except Exception as exc:
+                raise AssertionError("Switching viewing locations left an unrelated park popup visible") from exc
+
             if await page.locator("#show-history").count() or await page.locator("#history-controls").count():
                 raise AssertionError("Outdated 2025 replay is still advertised on current map")
             await page.locator(".place-button[data-park=scranton]").click()
