@@ -296,3 +296,43 @@ test('first map screen favors four active reference landmarks plus Eagle work no
  assert.match(page,/Showing all 19 charted crossings|Show all 19 charted crossings/);
  assert.match(css,/\.bridge-toggle/);
 });
+
+test('river desk redesign puts public shore decisions and map before expanded technical evidence',()=>{
+ const mapAt=page.indexOf('id="cuyahoga-map"');
+ const parksAt=page.indexOf('id="place-buttons"');
+ const reportAt=page.indexOf('id="live-vessels"');
+ const storyAt=page.indexOf('class="story"');
+ const sourceAt=page.indexOf('class="sources"');
+ assert.ok(mapAt>0&&parksAt>mapAt&&reportAt>parksAt&&storyAt>reportAt&&sourceAt>storyAt);
+ assert.match(page,/<section class="workbench" id="river-workbench"/);
+ assert.match(page,/data-park="scranton"/);
+ assert.match(page,/data-park="rivergate"/);
+ assert.match(page,/data-park="heritage"/);
+ assert.match(page,/data-park="wendy"/);
+ assert.match(page,/<details class="map-caveat">/);
+ assert.match(page,/<details class="report-method">/);
+ assert.match(page,/<details class="sources">/);
+ assert.match(app,/choosePark\('scranton',false\)/);
+ assert.match(css,/#cuyahoga-map\{[^}]*height:clamp/);
+ assert.match(css,/\.map-layout\{[^}]*grid-template-rows/);
+ assert.doesNotMatch(page,/<script[^>]+src="https:\/\/.*(?:react|jquery|gsap|vue)/i);
+});
+test('historic Sam Laud photo is verified exact-subject and properly attributed',()=>{
+ assert.match(page,/class="story-photo"/);
+ assert.match(page,/The_Cuyahoga_River_and_Cleveland_OH\.jpg/);
+ assert.match(page,/alt="The freighter Sam Laud passing downtown Cleveland/);
+ assert.match(page,/Roy Luck/);
+ assert.match(page,/https:\/\/creativecommons\.org\/licenses\/by\/2\.0\//);
+ assert.match(page,/Historical photograph, not a live view/);
+ assert.match(page,/loading="lazy"/);
+ assert.match(page,/decoding="async"/);
+});
+test('optional bridge geography cannot obscure the default current AIS and public parks',()=>{
+ assert.match(page,/data-bridge-legend hidden/);
+ assert.match(app,/const bridgePickerOpen=document\.querySelector\('\.bridge-picker'\)\?\.open===true/);
+ assert.match(app,/if\(!bridgePickerOpen&&!state\.selectedBridgeId\)/);
+ assert.match(app,/\.addEventListener\('toggle',renderBridgeMarkers\)/);
+ assert.match(app,/zIndexOffset:1000/);
+ assert.match(page,/Show all 19 charted crossings/);
+ assert.match(css,/\[hidden\]\{display:none!important\}/);
+});
