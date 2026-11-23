@@ -3,7 +3,7 @@
 'use strict';
 const core=window.CalumetWatchCore,links=window.VisitorMapLinks;
 const $=id=>document.getElementById(id);
-const state={guide:null,map:null,live:null,selected:null,places:null,bridges:null,ships:null};
+const state={guide:null,map:null,live:null,selected:null,places:null,bridges:null,railBridges:null,ships:null};
 const timeFmt=new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
 const node=(tag,text,cls)=>{const e=document.createElement(tag);e.textContent=String(text??'');if(cls)e.className=cls;return e;};
 const ext=(label,url)=>{const a=node('a',label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a;};
@@ -29,7 +29,7 @@ function initMap(){
   state.map=L.map('calumet-map',{zoomControl:true,scrollWheelZoom:false,worldCopyJump:false,preferCanvas:true});
   state.map.setView([41.719,-87.546],13);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'}).addTo(state.map);
-  state.places=L.layerGroup().addTo(state.map);state.bridges=L.layerGroup().addTo(state.map);state.ships=L.layerGroup().addTo(state.map);
+  state.places=L.layerGroup().addTo(state.map);state.bridges=L.layerGroup().addTo(state.map);state.railBridges=L.layerGroup();state.ships=L.layerGroup().addTo(state.map);
   $('calumet-map').querySelector('.map-loading')?.remove();
   state.map.on('tileerror',()=>{$('calumet-map').title='Some map tiles failed; public-place links remain available.';});
  }catch(_){state.map=null;$('calumet-map').textContent='Map unavailable. See public places, AIS reports and bridge information alongside.';}
@@ -52,6 +52,7 @@ function choosePlace(id,pan=true){
 function chooseBridge(id,pan=true){
  const b=state.guide?.bridges.find(x=>x.id===id);if(!b)return;
  state.selected={kind:'bridge',id};pressPlace(null);$('bridge-select').value=id;
+ if(b.group==='rail'&&state.railBridges&&state.map){$('rail-layer').checked=true;state.railBridges.addTo(state.map);}
  detail('PUBLISHED BRIDGE REFERENCE / NOT LIVE STATUS',b.name,b.summary+' Published river mile '+b.riverMile+'. The marker does not establish when the crossing is opening.',
   [{label:'Bridge source ↗',url:b.sourceUrl},{label:'USCG navigation notices ↗',url:'https://www.navcen.uscg.gov/local-notices-to-mariners-by-cg-district'}],
   'Bridge pins are not parking or public viewing entrances. Never enter restricted terminal or railway areas.');
@@ -69,19 +70,21 @@ function chooseShip(mmsi,pan=true){
 }
 function plotGuide(){
  if(!state.guide)return;
- state.places?.clearLayers();state.bridges?.clearLayers();
+ state.places?.clearLayers();state.bridges?.clearLayers();state.railBridges?.clearLayers();
  for(const p of state.guide.viewpoints){
   if(!state.places)continue;
   const m=L.marker([p.lat,p.lon],{title:p.name,alt:p.name+' approximate area',icon:pin('place','●')}).addTo(state.places);
   m.bindTooltip(p.name);m.on('click',()=>choosePlace(p.id,false));
  }
  for(const b of state.guide.bridges){
-  if(!state.bridges)continue;
-  const m=L.marker([b.lat,b.lon],{title:b.name,alt:b.name+' rounded reference',icon:pin('bridge','⇧')}).addTo(state.bridges);
+  const layer=b.group==='rail'?state.railBridges:state.bridges;
+  if(!layer)continue;
+  const kind=b.group==='rail'?'rail':'bridge';
+  const m=L.marker([b.lat,b.lon],{title:b.name,alt:b.name+' rounded chart reference',icon:pin(kind,kind==='rail'?'▤':'⇧')}).addTo(layer);
   m.bindTooltip(b.name);m.on('click',()=>chooseBridge(b.id,false));
  }
  const select=$('bridge-select');select.replaceChildren(node('option','Choose a bridge'));select.options[0].value='';
- for(const b of state.guide.bridges){const option=node('option',b.name+' · '+b.type);option.value=b.id;select.append(option);}
+ for(const b of state.guide.bridges){const option=node('option',b.name+' · '+b.type+(b.group==='rail'?' / railroad':''));option.value=b.id;select.append(option);}
  for(const btn of document.querySelectorAll('[data-place]'))btn.addEventListener('click',()=>choosePlace(btn.dataset.place));
  choosePlace('bridge95',false);
 }
@@ -143,5 +146,8 @@ if(!core){$('report-message').textContent='Interactive rules unavailable. Use th
 initMap();wireBridgeDemo();
 $('refresh-ships').addEventListener('click',loadShips);
 $('bridge-select').addEventListener('change',e=>{if(e.target.value)chooseBridge(e.target.value);});
+$('rail-layer').addEventListener('change',e=>{if(!state.map||!state.railBridges)return;
+ if(e.target.checked)state.railBridges.addTo(state.map);else state.map.removeLayer(state.railBridges);
+});
 loadGuide();loadShips();
 })();
