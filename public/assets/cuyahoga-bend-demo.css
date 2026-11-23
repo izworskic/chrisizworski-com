@@ -16,10 +16,10 @@
 .bend-chart-key .bend-key-bow{background:#f4bd65;border:1px solid #163942}
 .bend-chart-key .bend-key-river{background:#bad8d9;border:1px solid #769f9f}
 .bend-notes{padding:2px 0 0}
-.bend-notes .side-eyebrow{margin-bottom:9px}
+.bend-notes .side-eyebrow{margin-bottom:9px;color:#2b565c}
 .bend-steps{display:flex;gap:5px;margin:0 0 15px}
 .bend-steps button{background:#f4f7f2;border:1px solid #c8d9d3;color:#385c64;padding:7px 8px;line-height:1.25;flex:1;border-radius:8px;font-size:.73rem;min-height:47px;font-weight:720;cursor:pointer}
-.bend-steps button span{display:block;color:#637b7b;font-size:.63rem}
+.bend-steps button span{display:block;color:#465c5e;font-size:.63rem}
 .bend-steps button[aria-pressed=true]{background:#173c48;color:white;border-color:#173c48}
 .bend-steps button[aria-pressed=true] span{color:#f8d49e}
 .bend-steps button:disabled{cursor:default;opacity:1}
