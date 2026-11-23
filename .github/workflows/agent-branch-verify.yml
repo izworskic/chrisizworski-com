@@ -68,6 +68,38 @@ jobs:
     with:
       build-artifact: verified-site-output
 
+
+  michigan-ski-browser-qa:
+    needs: verify
+    if: github.event_name == 'pull_request' && github.head_ref == 'feat/michigan-ski-official-open-today'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated Playwright runtime
+        run: |
+          mkdir -p /tmp/michigan-ski-playwright
+          npm install --prefix /tmp/michigan-ski-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/michigan-ski-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser || command -v chromium)" >> "$GITHUB_ENV"
+      - name: Generate Michigan ski pages and run 360px/1440px browser acceptance
+        run: |
+          node scripts/generate-michigan-ski-pages.mjs
+          node scripts/verify-michigan-ski-browser.cjs
+      - name: Retain ski viewport, operator failure, and no-JS evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: michigan-ski-browser-qa
+          path: artifacts/michigan-ski/
+          retention-days: 7
+          if-no-files-found: warn
+
   lspp-browser-qa:
     needs: verify
     if: github.event_name == 'pull_request' && github.head_ref == 'feature/lake-superior-provincial-park-explorer-20261026'
