@@ -1,3 +1,13 @@
+## Return-visit skills: build tools people come back to (2026-11-23)
+
+Three adapted skills live identically in `.agents/skills/`, `.claude/skills/` and `.github/skills/`; see `docs/RETURN_VISIT_SKILLS.md`.
+
+- `return-visit-loops`: use alongside Experience Investment for every new visitor tool, substantial redesign or new interactive mode, and whenever repeat visits, retention, saved places, reminders or alerts come up. Score the loop (trigger, one-glance answer, honest changing reward, optional investment, visitor-chosen path back) and name the rows blocking 10/10.
+- `live-conditions-trust`: use for any tool showing live, forecast or periodically refreshed data (updated stamps, cadence, stale and offline states, per-feed failure, no blank values).
+- `remembered-state`: use for any tool with a region, place, date, filter, tab or map selection (URL state, deep links, sharing, one saved spot in localStorage, opt-in location).
+
+These skills add guidance only. They do not override Experience OS, Experience Investment, Foundry, source verification, canonical/Person, the Auto ads policy or CI, and they do not authorize a new Vercel Function, Middleware, cron, Redis, paid API, account wall or email capture without written owner approval. Mark unrun checks NOT VERIFIED, run `npm run verify:all`, open a PR and do not auto-merge.
+
 ## HUGGING_FACE_CAPABILITIES — opt-in agent skills (2026-11-22)
 
 Eight scoped Hugging Face skills now live in `.agents/skills/`, `.claude/skills/` and `.github/skills/`: the five adapted upstream skills `hf-cli`, `huggingface-best`, `huggingface-datasets`, `huggingface-tool-builder`, `transformers-js`, and three project-specific skills `hf-semantic-discovery`, `hf-visual-evidence`, `hf-forecast-benchmark`. See `docs/HUGGING_FACE_CAPABILITY_ADOPTION_20261122.md`.
