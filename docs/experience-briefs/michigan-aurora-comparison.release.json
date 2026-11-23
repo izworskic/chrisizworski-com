@@ -1,0 +1,129 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "aurora",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/northern-lights-michigan/",
+    "pageFile": "public/northern-lights-michigan/index.html",
+    "visitorDecision": "Decide whether another Michigan region merits a look during the same dark hour as home.",
+    "primaryAction": "Read the local dark-hour signal, then compare an alternative at that hour."
+  },
+  "claims": [
+    {
+      "id": "kp-window",
+      "kind": "forecast",
+      "subject": "weather-context",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.spaceweather.gov/products/3-day-forecast",
+      "checkedDate": "2026-11-22",
+      "limitation": "Planetary Kp is broad planning guidance. The displayed composite has a twenty-minute age guard.",
+      "maxAgeMinutes": 20
+    },
+    {
+      "id": "cloud-grid",
+      "kind": "forecast",
+      "subject": "weather-context",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://api.weather.gov/gridpoints/DTX/33,89",
+      "checkedDate": "2026-11-22",
+      "limitation": "NWS sky cover is a grid forecast for the selected interval. The API excludes grids updated more than twelve hours ago.",
+      "maxAgeMinutes": 720
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "selectedRegionId and compareRegion.value",
+    "sourceOfTruth": "Existing NOAA Kp intervals and NWS grid periods from /api/aurora, with local astronomical darkness.",
+    "linkedSurfaces": [
+      "answer",
+      "regional selector",
+      "comparison",
+      "local guide"
+    ],
+    "unavailableBehavior": "Remove the expired comparison and show official forecast links."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "initial visitor scenario",
+      "expectedVisibleAnswer": "Show the saved region and its dark-hour forecast.",
+      "sourceAndSafety": "Missing evidence stays unknown. Forecasts cannot establish a sighting."
+    },
+    {
+      "kind": "alternative",
+      "input": "alternative visitor scenario",
+      "expectedVisibleAnswer": "Show both regions at the home planning hour.",
+      "sourceAndSafety": "Missing evidence stays unknown. Forecasts cannot establish a sighting."
+    },
+    {
+      "kind": "reverse",
+      "input": "reverse visitor scenario",
+      "expectedVisibleAnswer": "Restore the home forecast and its local guide.",
+      "sourceAndSafety": "Missing evidence stays unknown. Forecasts cannot establish a sighting."
+    },
+    {
+      "kind": "no-js",
+      "input": "no-js visitor scenario",
+      "expectedVisibleAnswer": "Offer NOAA and local weather directly in HTML.",
+      "sourceAndSafety": "Missing evidence stays unknown. Forecasts cannot establish a sighting."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "no-tiles visitor scenario",
+      "expectedVisibleAnswer": "Local forecast and comparison still work without map tiles.",
+      "sourceAndSafety": "Missing evidence stays unknown. Forecasts cannot establish a sighting."
+    },
+    {
+      "kind": "stale-data",
+      "input": "stale-data visitor scenario",
+      "expectedVisibleAnswer": "Remove the previous regional window and comparison.",
+      "sourceAndSafety": "Missing evidence stays unknown. Forecasts cannot establish a sighting."
+    }
+  ],
+  "failures": {
+    "no-js": "Offer NOAA and local weather directly in HTML.",
+    "no-tiles": "Local forecast and comparison still work without map tiles.",
+    "no-image": "All decisions and links use text.",
+    "stale-data": "Remove the previous regional window and comparison."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1280,
+      1440
+    ],
+    "browserStatus": "PENDING",
+    "scopeNote": "Local Playwright and Chromium, fixed November 22 evening forecast. All five widths passed home selection, comparison, guide URL, reversal, and expired snapshot. No JavaScript leaves direct NOAA/NWS links. axe-core reported zero WCAG A/AA violations in the regional panel at 390 px with the comparison open. Live feeds, field Web Vitals and visitor outcomes require separate evidence.",
+    "localEvidence": [
+      "aurora-comparison/before-390.webp",
+      "aurora-comparison/after-390.webp",
+      "aurora-comparison/comparison-390.webp",
+      "aurora-comparison/before-1280.webp",
+      "aurora-comparison/after-1280.webp"
+    ],
+    "headlinePosition": "390px viewport, selected Bay City, measured from document top: 1067px before and 472px after. At 1280px: 777px before and 376px after.",
+    "foundry": "Same-hour weather and guide, missing comparison clouds, expired response and canonical preservation. Foundry 0.3 reported BEHAVIOR_DEMONSTRATED. The replay is tests/aurora-two-region.test.js."
+  },
+  "photos": [],
+  "release": {
+    "implemented": {
+      "status": "PENDING"
+    },
+    "verified": {
+      "status": "PENDING"
+    },
+    "deployed": {
+      "status": "PENDING"
+    },
+    "live": {
+      "status": "PENDING"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "technology": "Semantic HTML and CSS carry the first decision. Browser JavaScript joins the two existing grids on one timestamp. Retain the existing Node response. Python, Java and Rust would add runtime or deployment work without supplying new evidence. Revisit only if data validation or profiling identifies a bottleneck.",
+  "designReview": "Compared an interactive statewide map with a local-hour comparison. Michigan After Dark answers where to go, and Snow Totals ranks reported accumulations. Here the visitor keeps one reference hour and asks what the northern sky could look like in two places. Reverting the PR restores the original presentation."
+}

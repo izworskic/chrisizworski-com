@@ -8,9 +8,10 @@ const script = [...html.matchAll(/<script>([\s\S]*?)<\/script>/g)].map(m => m[1]
 function page(now = '2026-10-11T16:00:00Z') {
   const nodes = new Map();
   const node = id => {
-    if (!nodes.has(id)) nodes.set(id, {textContent:'', innerHTML:''});
+    if (!nodes.has(id)) nodes.set(id, {textContent:'', innerHTML:'', removeAttribute(key){ delete this[key]; }});
     return nodes.get(id);
   };
+  node('compareRegion').options = [];
   node('regionSelect').options = [{value:'bay-city',text:'Bay City / Saginaw Bay'},{value:'detroit',text:'Detroit / southern Michigan'},{value:'mackinaw-city',text:'Mackinaw City / Straits'}];
   node('regionSelect').selectedIndex = 0;
   Object.defineProperty(node('regionSelect'),'value',{
@@ -21,7 +22,7 @@ function page(now = '2026-10-11T16:00:00Z') {
     constructor(...args) { super(...(args.length ? args : [now])); }
     static now() { return Date.parse(now); }
   }
-  const context = vm.createContext({Date:FixedDate, document:{getElementById:node}, window:{addEventListener(){}}, localStorage:{getItem(){return null;}}});
+  const context = vm.createContext({Date:FixedDate, document:{getElementById:node,querySelectorAll(){return [];}}, window:{addEventListener(){}}, localStorage:{getItem(){return null;}}});
   vm.runInContext(script, context);
   return {context, node, run:s => vm.runInContext(s, context)};
 }
