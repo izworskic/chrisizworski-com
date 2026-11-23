@@ -11,11 +11,12 @@ OUT = pathlib.Path(os.environ.get("ICE_OUT", str(ROOT / "public" / "michigan-ice
 # Moved forward 2026-10-06: root and regional pages gained publisher references to the
 # existing canonical Person entity. This identity metadata changed on those seven pages.
 ICE_ROOT_DATE_MODIFIED = "2026-10-24"
-ICE_HUB_DATE_MODIFIED = "2026-10-24" # Land-based ice-viewing handoff added.
 # Sub-pages (ice safety, freezing degree days, ice cover history) gained their
 # dateModified on 2026-08-25. Keep this separate from the root/region date: the stamper
 # only corrects stamps FORWARD, so an overstated date would never be walked back.
 ICE_SUBPAGE_DATE_MODIFIED = "2026-10-24"
+ICE_HISTORY_DATE_MODIFIED = "2026-11-23"  # Only the history page changes this date.
+ICE_HUB_DATE_MODIFIED = "2026-11-23"  # Hub history handoff changed; region stamps untouched.
 
 REGIONS = [
     dict(
@@ -422,7 +423,7 @@ def build_index():
         '<div class="anchor-list">'
         '<a href="/michigan-ice/ice-safety.html">Ice safety, and what the DNR actually says</a>'
         '<a href="/michigan-ice/freezing-degree-days.html">How accumulated cold predicts ice</a>'
-        '<a href="/michigan-ice/ice-cover-history.html">54 years of Great Lakes ice</a>'
+        '<a href="/michigan-ice/ice-cover-history.html">Great Lakes ice cover today</a>'
         '<a href="https://greatlakeslevels.org">Great Lakes Levels</a>'
         '<a href="https://michigantroutreport.com">Michigan Trout Report</a>'
         '<a href="https://whitetail.chrisizworski.com">Michigan Whitetail Report</a>'
@@ -636,87 +637,155 @@ def build_method():
         url, ld) + body)
 
 
+def basin_daily_peak():
+    """Compute the 54-year basin calendar-day mean peak from the pinned NOAA GLERL file.
+
+    Keep the exact source columns, including NA and recorded 0, so this analysis
+    remains auditable and deterministic without a network dependency at build time.
+    NOAA source: https://www.glerl.noaa.gov/data/ice/glicd/daily/bas.txt
+    """
+    path = ROOT / "scripts" / "ice" / "data" / "noaa-basin-daily-1973-2026.txt"
+    lines = path.read_text(encoding="utf-8").splitlines()
+    years = [int(year) for year in lines[0].split()]
+    if len(years) != 54 or years[0] != 1973 or years[-1] != 2026:
+        raise ValueError("Unexpected NOAA basin climatology columns; review before updating the 54-year page")
+    best = None
+    for line in lines[1:]:
+        cells = line.split()
+        if len(cells) != len(years) + 1 or not cells[0][:3].isalpha():
+            continue
+        measured = [float(value) for value in cells[1:] if value != "NA"]
+        if not measured or any(not (0 <= value <= 100) for value in measured):
+            continue
+        mean = sum(measured) / len(measured)
+        if best is None or mean > best[1]:
+            best = (cells[0], mean, len(measured))
+    if best is None:
+        raise ValueError("No valid basin climatology observations")
+    import datetime
+    date = datetime.datetime.strptime(best[0], "%b-%d").strftime("%B %-d")
+    return date, best[1], best[2], len(years), years[0], years[-1]
+
+
 def build_history():
     url = SITE + "/ice-cover-history.html"
+    peak_day, peak_mean, peak_observations, n_years, first_year, last_year = basin_daily_peak()
+    answer = (
+        "Great Lakes ice cover today means the percentage of the five Great Lakes' combined surface that NOAA's "
+        "Great Lakes Environmental Research Laboratory estimates is ice-covered. The daily NOAA GLERL analysis "
+        "tracks broad lake and basin coverage, not thickness, strength, or conditions at a shoreline. "
+        f"Across {n_years} recorded ice years ({first_year} to {last_year}) in the daily NOAA climatology, "
+        f"the basin's average coverage reaches its seasonal high around {peak_day}, at {peak_mean:.1f} percent. "
+        "That is an average of measured ice cover on a calendar date, not a forecast for this winter or a promise "
+        "that any lake will freeze. A single day's percentage can swing dramatically from year to year because "
+        "cold air, water temperature, wind, storms, and ice movement interact differently across shallow bays "
+        "and deep open water. The record also has days without an observation. Those gaps are not zeros. "
+        "Use the dated live comparison below for the current year, and check local official conditions "
+        "separately before making any decision near ice."
+    )
+    assert 134 <= len(answer.split()) <= 167, "The static answer must stay 134-167 words"
     ld = {"@context": "https://schema.org", "@graph": [
         {"@type": "Article", "@id": url + "#article",
-         "headline": "54 Years of Great Lakes Ice Cover",
-         "description": "What the NOAA GLERL ice climatology record shows about Great Lakes ice cover since 1973, "
-                        "when ice peaks, and how variable Michigan winters actually are.",
+         "headline": "Great Lakes ice cover today, against 54 years of record",
+         "description": "How much of the Great Lakes is frozen today? Compare NOAA GLERL lake and basin percentages with 54 years of daily ice records.",
          "author": {"@id": PERSON_ID}, "publisher": {"@id": PERSON_ID},
-         "dateModified": ICE_SUBPAGE_DATE_MODIFIED,
+         "dateModified": ICE_HISTORY_DATE_MODIFIED,
          "inLanguage": "en-US", "mainEntityOfPage": url,
          "isPartOf": {"@id": SITE + "/#website"}},
-        breadcrumb([("Michigan Ice Report", SITE + "/"), ("54 year history", url)]),
+        breadcrumb([("Michigan Ice Report", SITE + "/"), ("Great Lakes ice cover today", url)]),
         PERSON_NODE,
     ]}
     body = (
         header("/ice-cover-history.html") +
-        '<h1 style="font-size:30px;margin:22px 0 0">54 years of Great Lakes ice cover</h1>'
-        '<p class="lede">NOAA has recorded daily ice cover on each Great Lake since the 1973 ice year. That record is '
-        'what makes it possible to say whether this winter is actually unusual, rather than just feeling like it.</p>'
+        '<style>'
+        '.ice-record-board{width:100%;border-collapse:collapse}'
+        '.ice-record-board th,.ice-record-board td{padding:12px 9px;border-bottom:1px solid #d2e1e5;text-align:left;vertical-align:middle}'
+        '.ice-record-board th{font-size:12px;color:#36505b;letter-spacing:.03em}'
+        '.ice-record-board .ice-number{font:700 23px/1.1 system-ui,sans-serif;white-space:nowrap}'
+        '.ice-record-board small{display:block;color:#3f5967;font-size:12px;margin-top:4px;line-height:1.4}'
+        '.ice-range{position:relative;height:11px;border-radius:12px;background:#dbe9ed;min-width:128px;margin:7px 0}'
+        '.ice-range .ice-fill{position:absolute;left:0;top:0;bottom:0;background:#327d91;border-radius:12px}'
+        '.ice-range .ice-mean{position:absolute;top:-4px;height:19px;border-left:3px solid #ad6c28}'
+        '.ice-range .ice-today{position:absolute;top:-3px;height:17px;border-left:3px solid #153d60}'
+        '.ice-range-legend{display:flex;justify-content:space-between;gap:9px;color:#355666;font-size:11px}'
+        '.ice-chart{width:100%;height:auto;display:block;background:#f6fafb;border:1px solid #d2e1e5;border-radius:10px}'
+        '.ice-chart-legend{display:flex;flex-wrap:wrap;gap:15px;font-size:13px;color:#334b5c;margin-top:8px}'
+        '.ice-chart-legend span::before{content:"";display:inline-block;width:16px;height:4px;vertical-align:middle;margin-right:5px;background:#154d72}'
+        '.ice-chart-legend .ice-mean-key::before{background:#c17d35}'
+        '.ice-chart-legend .ice-band-key::before{height:10px;background:#c3dbe5}'
+        '.ice-chart-table{max-height:400px;overflow:auto}'
+        '.ice-chart-table table{width:100%;border-collapse:collapse}'
+        '.ice-chart-table th,.ice-chart-table td{padding:7px 10px;border-bottom:1px solid #d2e1e5;text-align:left}'
+        '.ice-chart-table td:not(:first-child){font-variant-numeric:tabular-nums}'
+        '#hist-offseason{padding:12px 14px;border-left:4px solid #ad6c28;background:#fff7e9}'
+        '@media(max-width:610px){.ice-record-board th,.ice-record-board td{padding:10px 6px;font-size:12px}'
+        '.ice-record-board .ice-number{font-size:20px}.ice-range{min-width:88px}'
+        '.ice-range-legend{font-size:10px}}'
+        '</style>'
+        '<h1 style="font-size:30px;margin:22px 0 0">Great Lakes ice cover today, against 54 years of record</h1>'
+        f'<p class="lede" id="hist-answer">{answer}</p>'
         + SAFETY_BANNER +
-        '<div class="card"><div class="kicker">Today against the record</div>'
-        '<p style="margin:0;font-size:16px" id="hist-detail">Loading the climatology record.</p>'
-        '<p class="note" style="margin-top:8px" id="hist-stamp"></p></div>'
-
-        '<h2>What the record actually contains</h2>'
-        '<p>The GLERL ice climatology gives daily average ice cover as a percentage for each lake, from November '
-        'through early June, for every ice year since 1973. An ice year is labeled by the January calendar year, so '
-        'the 1975 column holds November and December of 1974 along with the early months of 1975.</p>'
-        '<p>One detail in that dataset is worth appreciating, because it is a small model of the honesty problem this '
-        'whole site deals with. The record distinguishes a recorded zero from a day where ice cover simply was not '
-        'measured. A zero means someone looked and there was no ice. A gap means nobody looked. Conflating the two '
-        'would quietly manufacture data that does not exist.</p>'
-
-        '<h2>When Michigan ice peaks</h2>'
-        '<p>Averaged across the full record, Lake Huron ice cover peaks in the third week of February, at roughly half '
-        'the lake surface. That average conceals enormous year to year variation, and the variation is the real story: '
-        'on the same mid February date the record contains years under 10 percent cover and years above 95 percent.</p>'
-        '<p>For an ice angler that spread is the whole point. A mid February date is not a season, it is a coin flip '
-        'weighted by that particular winter. Which is exactly why accumulated cold for the current season matters more '
-        'than a calendar.</p>'
-
-        '<h2>Lake by lake, and why Michigan waters differ</h2>'
-        '<p>Ice behaves differently on each lake for reasons that come down mostly to depth and shape.</p>'
-        '<ul class="tight">'
-        '<li><strong>Lake Erie</strong> is shallow and freezes most completely, often approaching full cover in a cold '
-        'winter.</li>'
-        '<li><strong>Lake Huron</strong> carries Saginaw Bay, which locks up well ahead of the open lake because it is '
-        'shallow and protected relative to the main basin.</li>'
-        '<li><strong>Lake Michigan</strong> is deep in the middle and rarely freezes across, but its northern end and '
-        'protected bays like Little Bay de Noc make reliable ice.</li>'
-        '<li><strong>Lake Superior</strong> is deep and cold, and its ice varies dramatically between mild and severe '
-        'winters.</li>'
-        '<li><strong>Lake St. Clair</strong> is shallow and small enough to freeze readily, but it has current running '
-        'through it constantly, which is a different problem entirely.</li>'
-        '</ul>'
-        '<p>A lake wide percentage is a blunt instrument for a specific bay. Grand Traverse Bay can be wide open while '
-        'Lake Michigan as a whole reports meaningful cover, because that cover is concentrated in the far north and in '
-        'shallow water elsewhere. The region pages here note where the lake wide number is and is not informative.</p>'
-
-        '<h2>Using history to read the current season</h2>'
-        '<p>The useful comparison is not this year against last year, it is this year against the distribution. If '
-        'today sits above the 54 year average for this date, ice is running ahead of a normal season. If it sits in '
-        'the bottom quarter of years, no amount of one cold week is going to catch it up quickly, because the square '
-        'root relationship means late cold adds less thickness than early cold does.</p>'
-        '<p>That is the comparison the front page makes automatically, and it is the reason this site pulls the whole '
-        'historical file rather than just today.</p>'
+        '<section aria-labelledby="hist-board-heading">'
+        '<h2 id="hist-board-heading">Today against the record</h2>'
+        '<p class="note">NOAA GLERL measures the share of each whole lake covered by ice. '
+        'A lake-wide percentage says nothing about the ice under a person\'s feet.</p>'
+        '<p id="hist-detail" role="status" aria-live="polite">Checking NOAA daily observations and the historical record.</p>'
+        '<p id="hist-offseason" role="status" hidden></p>'
+        '<div class="tbl-wrap"><table class="ice-record-board">'
+        '<thead><tr><th scope="col">Lake or basin</th><th scope="col">Current ice and rank</th>'
+        '<th scope="col">Historical span and mean</th></tr></thead>'
+        '<tbody id="hist-board"><tr><td colspan="3">Loading measured records.</td></tr></tbody>'
+        '</table></div><p class="note" id="hist-stamp"></p></section>'
+        '<section aria-labelledby="hist-season-heading">'
+        '<h2 id="hist-season-heading">How this ice year is unfolding</h2>'
+        '<p>Follow measured daily ice cover against the long-term mean. The shaded range shows '
+        'the lowest and highest recorded percentages for each date, not a prediction.</p>'
+        '<p><label for="hist-lake-selector">Compare water: </label>'
+        '<select id="hist-lake-selector">'
+        '<option value="total">Five-lake total</option>'
+        '<option value="superior">Lake Superior</option>'
+        '<option value="michigan">Lake Michigan</option>'
+        '<option value="huron">Lake Huron</option>'
+        '<option value="erie">Lake Erie</option>'
+        '<option value="ontario">Lake Ontario</option>'
+        '</select></p>'
+        '<figure><svg class="ice-chart" id="hist-chart" viewBox="0 0 960 300" '
+        'role="img" aria-label="Seasonal NOAA Great Lakes ice cover compared with historic mean and range">'
+        '<text x="38" y="40" fill="#355666">Loading NOAA ice cover record</text></svg>'
+        '<figcaption class="ice-chart-legend">'
+        '<span>Observed season</span><span class="ice-mean-key">54-year mean</span>'
+        '<span class="ice-band-key">Historical min to max</span></figcaption></figure>'
+        '<details><summary>Read the chart as a daily data table</summary>'
+        '<div class="ice-chart-table"><table>'
+        '<caption>Measured ice cover and historical bounds for each date, in percent</caption>'
+        '<thead><tr><th>Date</th><th>This ice year</th><th>Mean</th><th>Min</th>'
+        '<th>Max</th><th>Years recorded</th></tr></thead>'
+        '<tbody id="hist-chart-data"><tr><td colspan="6">Loading data.</td></tr></tbody>'
+        '</table></div></details>'
+        '<noscript><p>Live comparisons require JavaScript. The NOAA historical analysis and its '
+        'source remain available in the written answer above.</p></noscript>'
+        '</section>'
+        '<h2>Why the comparison changes from lake to lake</h2>'
+        '<p>Shallow Lake Erie responds quickly to a sustained freeze, while deep water in Superior '
+        'and Michigan can remain open much longer. Wind can spread, break or compress floating ice. '
+        'Ontario, Huron and their sheltered bays have different shapes and exposure. A basin average '
+        'does not describe an individual harbor or bay.</p>'
+        '<p>Ice years are labeled by their January year. A 2026 ice year includes November and '
+        'December 2025. The 54-year file includes years 1973 through 2026, but early and late dates '
+        'have fewer measured values. Those gaps remain missing, not zero. The rank counts only '
+        'winters measured on the same date.</p>'
         '<div class="anchor-list">'
+        '<a href="https://www.glerl.noaa.gov/data/ice/glicd/daily/bas.txt">NOAA GLERL daily basin climatology</a>'
         '<a href="https://www.glerl.noaa.gov/data/ice/">NOAA GLERL ice data</a>'
-        '<a href="/michigan-ice/">Current conditions</a>'
-        '<a href="/michigan-ice/freezing-degree-days.html">How accumulated cold works</a>'
-        '<a href="/michigan-ice/ice-safety.html">Ice safety</a>'
-        '<a href="/michigan-ice/regions/saginaw-bay.html">Saginaw Bay</a>'
+        '<a href="/michigan-ice/">Michigan ice conditions</a>'
+        '<a href="/michigan-ice/ice-safety.html">Michigan DNR ice safety guidance</a>'
         '</div>'
         + FOOTER
     )
     (OUT / "ice-cover-history.html").write_text(head(
-        "Great Lakes Ice Cover: 54-Year NOAA Record | Chris Izworski",
-        "What NOAA GLERL records show about Great Lakes ice cover since 1973: when ice peaks, how variable "
-        "Michigan winters are, and how this season compares.",
+        "Great Lakes Ice Cover Today vs Record | Chris Izworski",
+        "How much of the Great Lakes is frozen today? Compare NOAA GLERL's five lake percentages and basin total with 54 years of historical ice data.",
         url, ld) + body)
-
 
 def build_region(r):
     url = f"{SITE}/regions/{r['slug']}.html"

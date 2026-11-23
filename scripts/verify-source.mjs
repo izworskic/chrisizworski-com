@@ -43,6 +43,8 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // November 23: canonical GLERL ice-cover record and measured winter handoffs.
+  "/great-lakes-freighter-winter-layup/",
   // New lighthouse winter tool and a relevant directory handoff, November 2026.
   "/frozen-lighthouses-michigan/",
   "/great-lakes-lighthouses/",
