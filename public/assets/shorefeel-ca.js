@@ -120,7 +120,10 @@
  function startMap(){
   if(typeof window.L!=='object')return mapFailed();
   try{
-   map=window.L.map('shore-map',{scrollWheelZoom:false,touchZoom:false,dragging:!matchMedia('(pointer:coarse)').matches});
+   // Keep one-finger page scrolling on touch devices, but allow two-finger pinch
+   // zoom and always display accessible + / - controls. Wheel scrolling stays
+   // with the page rather than unexpectedly zooming the map.
+   map=window.L.map('shore-map',{scrollWheelZoom:false,zoomControl:true,touchZoom:true,dragging:!matchMedia('(pointer:coarse)').matches});
    map.setView([44.4,-83.9],6);
    const layer=window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:12,attribution:'© OpenStreetMap contributors'}).addTo(map);
    layer.on('tileload',()=>{tilesLoaded=true;});layer.on('tileerror',()=>{tileErrors++;if(tileErrors>=3&&!tilesLoaded)mapFailed();});
