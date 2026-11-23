@@ -48,6 +48,8 @@ jobs:
             git add public/michigan-ice/ice-cover-history.html public/michigan-ice/index.html public/soo-locks/index.html public/great-lakes/index.html public/great-lakes-freighter-winter-layup/index.html
             git commit -m "Stamp freshness for ice-cover routes [ice generated]"
           fi
+      - name: Install pinned dependencies
+        run: npm ci
       - name: Full-history verification
         run: npm run verify:all
       - name: Push generated changes to review branch
