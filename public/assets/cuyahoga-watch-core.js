@@ -24,6 +24,7 @@
         lat:v.lat,lon:v.lon,seen:v.seen,
         speedKnots:numberInRange(v.speedKnots,0,100)?v.speedKnots:null,
         course:numberInRange(v.course,0,359.9)?v.course:null,
+        heading:numberInRange(v.heading,0,359)?v.heading:null,
         lengthMeters:numberInRange(v.lengthMeters,1,600)?v.lengthMeters:null,
         shipType:Number.isInteger(v.shipType)?v.shipType:null,
         source:String(v.source||'AIS report').slice(0,90)}))
@@ -86,9 +87,10 @@
     const widthClass=typeof v?.lengthMeters==='number'&&Number.isFinite(v.lengthMeters)
       ?v.lengthMeters>=200?'large':v.lengthMeters>=80?'medium':'small':'not-reported';
     const course=numberInRange(v?.course,0,359.9)?v.course:null;
+    const heading=numberInRange(v?.heading,0,359)?v.heading:null;
     return {
       kind,widthClass,reportedLengthMeters:numberInRange(v?.lengthMeters,1,600)?v.lengthMeters:null,
-      reportedCourseDegrees:course,
+      reportedCourseDegrees:course,reportedHeadingDegrees:heading,
       illustrationOnly:true,actualHullGeometryKnown:false,
       label:{cargo:'Cargo vessel',tanker:'Tanker',tug:'Tug or towing vessel',
         passenger:'Passenger vessel',unknown:'Vessel type not reported'}[kind]
