@@ -248,7 +248,8 @@ test('every main NOAA bridge is keyboard-accessible without tapping tightly clus
  assert.match(app,/function plotBridges\(/);
  assert.match(app,/\$\('bridge-select'\)\.addEventListener\('change'/);
  assert.match(app,/state\.selectedBridgeId/);
- assert.match(app,/else if\(state\.selectedBridgeId\)chooseBridge/);
+ assert.match(app,/state\.selectedBridgeId=bridge\.id/);
+ assert.match(app,/\$\('bridge-select'\)\.addEventListener/);
  assert.match(css,/\.bridge-picker/);
  assert.doesNotMatch(app,/window\.open\(|alert\(/);
 });
