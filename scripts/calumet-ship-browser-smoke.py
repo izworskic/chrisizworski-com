@@ -17,6 +17,24 @@ NOW = datetime.now(timezone.utc)
 def iso(dt):
     return dt.isoformat(timespec="seconds").replace("+00:00", "Z")
 
+async def assert_popup_visible(page,tag):
+    # Popups must be legible within the real browser viewport after selection,
+    # not merely exist in Leaflet's off-screen map pane.
+    await page.wait_for_timeout(400)
+    geometry=await page.locator("#calumet-map .leaflet-popup").evaluate(
+        "(el)=>{const r=el.getBoundingClientRect();return {top:r.top,bottom:r.bottom,screen:window.innerHeight};}")
+    if geometry["top"] < -1 or geometry["bottom"] > geometry["screen"]+1:
+        raise AssertionError(f"{tag} map popup is clipped in the browser viewport: {geometry}")
+    title_readable=await page.locator("#calumet-map .leaflet-popup .park-popup-title").evaluate(
+        """(el)=>{
+          const r=el.getBoundingClientRect();
+          const top=document.elementFromPoint(r.left+Math.min(8,r.width/2),r.top+r.height/2);
+          return !!top&&(el===top||el.contains(top));
+        }""")
+    if not title_readable:
+        raise AssertionError(f"{tag} popup title is obstructed by Leaflet map controls")
+
+
 def report():
     recent=iso(NOW-timedelta(seconds=80))
     def vessel(mmsi,name,lat,lon,type_,speed,course,length):
@@ -55,8 +73,8 @@ async def run():
                 raise AssertionError("Two verified public places should be available for map framing")
             await page.locator("#calumet-show-ships").click()
             await page.locator("#calumet-show-places").click()
-            await page.locator("#calumet-map .river-watch-marker").first.wait_for(timeout=25000)
-            if await page.locator("#calumet-map .river-watch-marker").count()!=4:
+            await page.locator("#calumet-map .soo-ais-symbol").first.wait_for(timeout=25000)
+            if await page.locator("#calumet-map .soo-ais-symbol").count()!=4:
                 raise AssertionError("Only four distinct fresh AIS reports should be mapped")
             if await page.locator(".reported-ships li").count()!=4:
                 raise AssertionError("List and map must have same four recent reports")
@@ -65,23 +83,21 @@ async def run():
                 if count!=expected:raise AssertionError(kind+" count: "+count+" vs "+expected)
             if await page.locator("#calumet-type-counts .river-type-filter.type-all strong").inner_text()!="4":
                 raise AssertionError("All counter wrong")
-            if await page.locator(".river-watch-marker .ship-hull").count()!=4:
+            if await page.locator(".soo-ais-symbol .ship-hull").count()!=4:
                 raise AssertionError("Some map markers are still generic diamonds/dots")
-            if await page.locator(".river-watch-marker.with-course").count()!=2:
-                raise AssertionError("Only actively moving ships with valid course should have an arrow")
-            if await page.locator(".river-watch-marker.without-course").count()!=2:
-                raise AssertionError("Stopped/unknown direction ships should have an upright hull but no arrow")
-            course_styles=await page.locator(".river-ship-course").evaluate_all(
-                "(els)=>els.map(e=>e.getAttribute('style'))")
-            if not any("--river-course:90.0deg" in x for x in course_styles):
-                raise AssertionError("Eastbound reported course arrow missing")
-            if not any("--river-course:0.0deg" in x for x in course_styles):
-                raise AssertionError("Northbound reported course arrow missing")
+            if await page.locator("#calumet-map .soo-ais-symbol.type-cargo").count()!=2:
+                raise AssertionError("Two reported cargo vessels must use the Soo-class silhouette")
+            if await page.locator(".river-ship-course").count()!=0:
+                raise AssertionError("Calumet must match Cleveland's upright Soo icons, without second compass badges")
+            if await page.locator("#calumet-map .calumet-viewpoint-icon").count()!=2:
+                raise AssertionError("Both public views must have distinct illustrated markers")
+            if await page.locator("#calumet-map .calumet-bridge-icon").count()!=5:
+                raise AssertionError("Five road bridge references should have diagram-shaped marker icons")
             if await page.get_by_text("QA STALE SHIP",exact=True).count():
                 raise AssertionError("Stale AIS report should not appear anywhere")
             await page.locator("#calumet-type-counts .river-type-filter.type-tug").click()
-            await page.locator("#calumet-map .river-watch-marker").first.wait_for()
-            if await page.locator("#calumet-map .river-watch-marker").count()!=1:
+            await page.locator("#calumet-map .soo-ais-symbol").first.wait_for()
+            if await page.locator("#calumet-map .soo-ais-symbol").count()!=1:
                 raise AssertionError("Tug filter did not narrow map")
             if await page.locator(".reported-ships li").count()!=1:
                 raise AssertionError("Tug filter did not narrow list")
@@ -90,10 +106,66 @@ async def run():
             if await page.evaluate("document.activeElement?.dataset.kind")!="tug":
                 raise AssertionError("Type filter lost keyboard focus after rerender")
             await page.locator("#calumet-type-counts .river-type-filter.type-all").click()
-            if await page.locator("#calumet-map .river-watch-marker").count()!=4:
+            if await page.locator("#calumet-map .soo-ais-symbol").count()!=4:
                 raise AssertionError("All filter did not restore four ship markers")
             if await page.locator(".reported-ships li").count()!=4:
                 raise AssertionError("All filter did not restore four list items")
+            # One click-open bubble at a time, matching Cuyahoga's ship
+            # metadata, public-place actions, and honest bridge limitations.
+            await page.locator("#calumet-map .soo-ais-symbol.type-cargo").first.click()
+            popup=page.locator("#calumet-map .leaflet-popup-content")
+            await popup.first.wait_for()
+            popup_texts=await popup.all_inner_texts()
+            if len(popup_texts)!=1:
+                raise AssertionError("Expected exactly one clicked vessel popup, got "+repr(popup_texts))
+            ship_text=popup_texts[0]
+            for required in ("Reported AIS type: Freighter / cargo","Reported length: 794 ft",
+                             "4.2 knots reported","MMSI 367770001","mock QA",
+                             "Reported travel course: 90°","Last position:"):
+                if required not in ship_text:
+                    raise AssertionError("Ship popup missing Cuyahoga-parity data: "+required+" / "+ship_text)
+            if await page.locator("#calumet-map .leaflet-popup").count()!=1:
+                raise AssertionError("Only one ship detail bubble is permitted")
+            await assert_popup_visible(page,"AIS vessel")
+            if width in (390,1280):
+                await page.screenshot(path=str(OUT/f"calumet-{width}-ship-popup.png"),animations="disabled")
+            # Leaflet popups can cover nearby pins, as on Cuyahoga.
+            # Close the ship bubble before choosing a shore marker.
+            await page.locator("#calumet-map .leaflet-popup-close-button").click()
+            await page.locator("#calumet-map .calumet-viewpoint-icon[title*='95th Street']").click()
+            shore=await page.locator("#calumet-map .leaflet-popup-content").inner_text()
+            if "95th Street Bridge approaches" not in shore or "Google Maps" not in shore:
+                raise AssertionError("95th Street map bubble needs name and map handoff")
+            if "not a verified sidewalk standing spot" not in shore:
+                raise AssertionError("Approximate public sidewalk access warning missing")
+            if await page.locator("#calumet-map .leaflet-popup").count()!=1:
+                raise AssertionError("A place click must replace, not stack, the previous ship popup")
+            await page.locator("#bridge-select").select_option("95th")
+            # The bridge picker closes the shore popup before we tap the
+            # separate chart-marker symbol. Verify that close actually settles.
+            await page.locator("#calumet-map .leaflet-popup").first.wait_for(state="detached",timeout=5000)
+            await page.locator("#calumet-map .calumet-bridge-icon[title*='95th Street']").click()
+            await page.wait_for_timeout(300)
+            bridge_texts=await page.locator("#calumet-map .leaflet-popup-content").all_inner_texts()
+            if len(bridge_texts)!=1:
+                raise AssertionError("Bridge click opened competing popups: "+repr(bridge_texts))
+            bridge=bridge_texts[0]
+            for required in ("95th Street","double-leaf bascule","river mile 1.09",
+                             "NOAA bridge reference","not a live bridge opening"):
+                if required not in bridge:
+                    raise AssertionError("Published bridge bubble missing: "+required+" / "+bridge)
+            if await page.locator("#calumet-map .leaflet-popup").count()!=1:
+                raise AssertionError("A bridge click must replace the prior public-place popup")
+            await assert_popup_visible(page,"charted bridge")
+            if width in (390,1280):
+                await page.screenshot(path=str(OUT/f"calumet-{width}-bridge-popup.png"),animations="disabled")
+            await page.locator("[data-place='calumetpark']").click()
+            if await page.locator("#selection h3").inner_text()!="Calumet Park lakefront":
+                raise AssertionError("Viewing-place rail and map focus became desynchronized")
+            await page.locator("#rail-layer").check()
+            if await page.locator("#calumet-map .calumet-bridge-pin--rail").count()!=5:
+                raise AssertionError("Rail layer must expose five distinct lift bridge pictograms")
+            await page.locator("#rail-layer").uncheck()
             await page.locator("#calumet-map").screenshot(path=str(OUT/f"calumet-{width}-ships.png"))
             if width<=390:
                 await page.screenshot(path=str(OUT/f"calumet-{width}-full.png"),full_page=True)
@@ -101,7 +173,7 @@ async def run():
             if overflow>5:raise AssertionError("Horizontal overflow: "+str(overflow)+"px")
             if errors:raise AssertionError("JavaScript page errors: "+str(errors))
             cases.append({"viewport":width,"status":"PASS","fresh":4,"cargo":2,"tug":1,"tanker":1,
-              "filters":"tug-to-all","course":"separate arrow, upright hull"})
+              "filters":"tug-to-all","course":"Soo upright hull; reported course in exclusive popup"})
             await context.close()
 
         # No feed is not zero ships; type counts must not fabricate zero categories.

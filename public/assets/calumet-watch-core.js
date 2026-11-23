@@ -27,6 +27,7 @@
         lat:v.lat,lon:v.lon,seen:v.seen,
         speedKnots:finite(v.speedKnots,0,100)?v.speedKnots:null,
         course:finite(v.course,0,359.9)?v.course:null,
+        heading:finite(v.heading,0,359)?v.heading:null,
         lengthMeters:finite(v.lengthMeters,1,600)?v.lengthMeters:null,
         shipType:Number.isInteger(v.shipType)?v.shipType:null,
         source:String(v.source||'AIS report').slice(0,120)}));
