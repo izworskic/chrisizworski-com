@@ -6,7 +6,7 @@
 })(typeof globalThis!=='undefined'?globalThis:this,function(){
   'use strict';
   const URL='/assets/snowmobile-origin-cities.json';
-  const safe=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;':'&quot;'}[c]));
+  const safe=s=>String(s??'').replace(/[&<>"']/g,c=>c==='&'?'&amp;':c==='<'?'&lt;':c==='>'?'&gt;':c==='"'?'&quot;':'&#39;');
   function normalize(s){
     return String(s??'').normalize('NFKD').replace(/[\u0300-\u036f]/g,'')
       .toLowerCase().replace(/\b(?:michigan|mi)\b\s*$/,'')
