@@ -404,7 +404,11 @@
   document.querySelector('.bridge-picker')?.addEventListener('toggle',renderBridgeMarkers);
 
  }
- initMap();wire();Promise.allSettled([loadReferenceData(),getLive()]).then(()=>frameMap('all'));
+ initMap();wire();Promise.allSettled([loadReferenceData(),getLive()]).then(()=>{
+  // Re-measure after async park and ship panels settle; Leaflet keeps its old
+  // viewport size until invalidated, which can clip mobile park markers.
+  requestAnimationFrame(()=>{if(state.map)state.map.invalidateSize({animate:false,pan:false});frameMap('all');});
+ });
  // Match Duluth and Soo Locks: refresh every minute only while a visitor is present.
  setInterval(()=>{if(!document.hidden)getLive();},60000);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)getLive();});
