@@ -1,0 +1,2189 @@
+{
+ "region": "eastern-up",
+ "checked": "2026-11-23",
+ "sourceBoundary": "Town candidate must appear in live US Google autocomplete and have a Michigan DNR trail feature intersect the 5 km geodesic query radius. This is a demand proxy, not Search Console volume or current trail status. Line geometries are approximate ArcGIS generalized centerlines for build-time junction and label computation; the runtime full DNR API remains authoritative.",
+ "towns": [
+  {
+   "name": "Sault Ste. Marie",
+   "lat": 46.4762,
+   "lon": -84.3705,
+   "proxy": {
+    "seed": "sault ste marie snowmobile trails",
+    "suggestion": "sault ste marie snowmobile trail report",
+    "source": "Google autocomplete, US/en; demand proxy not volume",
+    "checked": "2026-11-23"
+   },
+   "dnr": {
+    "source": "Michigan DNR DNRTrailsOPENDATA layer 15",
+    "radiusKm": 5,
+    "query": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/15/query?where=1%3D1&geometry=-84.3705%2C46.4762&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=5000&units=esriSRUnit_Meter&outFields=OBJECTID%2CDNRTrail%2CTrailNamePrimary%2CTrailNetwork%2CCounty&returnGeometry=true&outSR=4326&f=geojson&geometryPrecision=5&maxAllowableOffset=0.0002&resultRecordCount=250",
+    "hitCount": 11,
+    "features": [
+     {
+      "id": 2498,
+      "code": "UP 49",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.41633,
+         46.34587
+        ],
+        [
+         -84.4186,
+         46.34588
+        ],
+        [
+         -84.41265,
+         46.3593
+        ],
+        [
+         -84.41166,
+         46.35926
+        ],
+        [
+         -84.41041,
+         46.36034
+        ],
+        [
+         -84.40934,
+         46.36053
+        ],
+        [
+         -84.40796,
+         46.36245
+        ],
+        [
+         -84.406,
+         46.3637
+        ],
+        [
+         -84.40568,
+         46.36505
+        ],
+        [
+         -84.40504,
+         46.36581
+        ],
+        [
+         -84.40081,
+         46.36753
+        ],
+        [
+         -84.40057,
+         46.3729
+        ],
+        [
+         -84.4016,
+         46.37378
+        ],
+        [
+         -84.40157,
+         46.37848
+        ],
+        [
+         -84.40069,
+         46.38036
+        ],
+        [
+         -84.39803,
+         46.38184
+        ],
+        [
+         -84.39703,
+         46.38199
+        ],
+        [
+         -84.39637,
+         46.38267
+        ],
+        [
+         -84.39651,
+         46.38471
+        ],
+        [
+         -84.39603,
+         46.38504
+        ],
+        [
+         -84.39619,
+         46.38554
+        ],
+        [
+         -84.39584,
+         46.38594
+        ],
+        [
+         -84.39618,
+         46.3869
+        ],
+        [
+         -84.39611,
+         46.39086
+        ],
+        [
+         -84.39903,
+         46.39113
+        ],
+        [
+         -84.39911,
+         46.39141
+        ],
+        [
+         -84.39526,
+         46.40034
+        ],
+        [
+         -84.3948,
+         46.40033
+        ],
+        [
+         -84.39462,
+         46.40081
+        ],
+        [
+         -84.39334,
+         46.40098
+        ],
+        [
+         -84.3916,
+         46.40493
+        ],
+        [
+         -84.38986,
+         46.40522
+        ],
+        [
+         -84.38649,
+         46.40863
+        ],
+        [
+         -84.38494,
+         46.41225
+        ],
+        [
+         -84.38485,
+         46.41941
+        ],
+        [
+         -84.37962,
+         46.41965
+        ],
+        [
+         -84.37965,
+         46.42668
+        ],
+        [
+         -84.37316,
+         46.4307
+        ],
+        [
+         -84.36954,
+         46.43405
+        ],
+        [
+         -84.36928,
+         46.43723
+        ],
+        [
+         -84.36927,
+         46.45766
+        ],
+        [
+         -84.36979,
+         46.45831
+        ],
+        [
+         -84.3719,
+         46.45859
+        ],
+        [
+         -84.37171,
+         46.45923
+        ],
+        [
+         -84.37002,
+         46.46083
+        ],
+        [
+         -84.37048,
+         46.46228
+        ],
+        [
+         -84.37014,
+         46.46352
+        ],
+        [
+         -84.36948,
+         46.46356
+        ],
+        [
+         -84.36834,
+         46.46299
+        ],
+        [
+         -84.3643,
+         46.463
+        ],
+        [
+         -84.36402,
+         46.4663
+        ],
+        [
+         -84.36184,
+         46.46634
+        ],
+        [
+         -84.35961,
+         46.46596
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2584,
+      "code": "UP 8",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.36554,
+         46.49786
+        ],
+        [
+         -84.36663,
+         46.49796
+        ],
+        [
+         -84.36772,
+         46.49761
+        ],
+        [
+         -84.3699,
+         46.49556
+        ],
+        [
+         -84.38804,
+         46.49073
+        ],
+        [
+         -84.38771,
+         46.4904
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2589,
+      "code": "UP 49",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.35961,
+         46.46596
+        ],
+        [
+         -84.35866,
+         46.46665
+        ],
+        [
+         -84.35762,
+         46.46687
+        ],
+        [
+         -84.35662,
+         46.46775
+        ],
+        [
+         -84.35421,
+         46.46803
+        ],
+        [
+         -84.35415,
+         46.4718
+        ],
+        [
+         -84.35611,
+         46.47272
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2590,
+      "code": "UP 49",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.35611,
+         46.47272
+        ],
+        [
+         -84.35759,
+         46.47241
+        ],
+        [
+         -84.36014,
+         46.47309
+        ],
+        [
+         -84.36145,
+         46.4723
+        ],
+        [
+         -84.36273,
+         46.4732
+        ],
+        [
+         -84.36356,
+         46.47331
+        ],
+        [
+         -84.3641,
+         46.47413
+        ],
+        [
+         -84.37092,
+         46.47898
+        ],
+        [
+         -84.37298,
+         46.4786
+        ],
+        [
+         -84.37543,
+         46.48013
+        ],
+        [
+         -84.38074,
+         46.48086
+        ],
+        [
+         -84.38097,
+         46.48154
+        ],
+        [
+         -84.38003,
+         46.48208
+        ],
+        [
+         -84.37966,
+         46.4838
+        ],
+        [
+         -84.38227,
+         46.48409
+        ],
+        [
+         -84.38229,
+         46.48725
+        ],
+        [
+         -84.38423,
+         46.48863
+        ],
+        [
+         -84.38613,
+         46.48925
+        ],
+        [
+         -84.38771,
+         46.4904
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2592,
+      "code": "UP 449",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.35961,
+         46.46596
+        ],
+        [
+         -84.35529,
+         46.46572
+        ],
+        [
+         -84.35425,
+         46.4666
+        ],
+        [
+         -84.34938,
+         46.4668
+        ],
+        [
+         -84.34503,
+         46.46668
+        ],
+        [
+         -84.34312,
+         46.46623
+        ],
+        [
+         -84.34149,
+         46.46672
+        ],
+        [
+         -84.33874,
+         46.46675
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2593,
+      "code": "UP 497",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.33874,
+         46.46675
+        ],
+        [
+         -84.33843,
+         46.46951
+        ],
+        [
+         -84.33924,
+         46.47059
+        ],
+        [
+         -84.33903,
+         46.47208
+        ],
+        [
+         -84.33964,
+         46.47238
+        ],
+        [
+         -84.34028,
+         46.47379
+        ],
+        [
+         -84.34072,
+         46.48083
+        ]
+       ]
+      }
+     },
+     {
+      "id": 10107,
+      "code": "UP 449",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.33874,
+         46.46675
+        ],
+        [
+         -84.33282,
+         46.46667
+        ],
+        [
+         -84.33266,
+         46.47102
+        ],
+        [
+         -84.32737,
+         46.47237
+        ],
+        [
+         -84.32639,
+         46.47231
+        ],
+        [
+         -84.32551,
+         46.47357
+        ],
+        [
+         -84.32455,
+         46.47393
+        ],
+        [
+         -84.32504,
+         46.47541
+        ],
+        [
+         -84.3244,
+         46.47622
+        ]
+       ]
+      }
+     },
+     {
+      "id": 12720,
+      "code": "UP 8",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.3953,
+         46.48616
+        ],
+        [
+         -84.41316,
+         46.47247
+        ]
+       ]
+      }
+     },
+     {
+      "id": 12732,
+      "code": "UP 8",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.41316,
+         46.47247
+        ],
+        [
+         -84.43069,
+         46.45906
+        ]
+       ]
+      }
+     },
+     {
+      "id": 12875,
+      "code": "UP 8",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.38771,
+         46.4904
+        ],
+        [
+         -84.39012,
+         46.48963
+        ],
+        [
+         -84.39191,
+         46.48817
+        ],
+        [
+         -84.39456,
+         46.48672
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18425,
+      "code": "UP 8",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.39456,
+         46.48672
+        ],
+        [
+         -84.3953,
+         46.48616
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "reportClub": "Sault Snowmobile Association"
+  },
+  {
+   "name": "Brimley",
+   "lat": 46.4073,
+   "lon": -84.5833,
+   "proxy": {
+    "seed": "snowmobile trail report b",
+    "suggestion": "snowmobile trail report brimley michigan",
+    "source": "Google autocomplete, US/en; demand proxy not volume",
+    "checked": "2026-11-23"
+   },
+   "dnr": {
+    "source": "Michigan DNR DNRTrailsOPENDATA layer 15",
+    "radiusKm": 5,
+    "query": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/15/query?where=1%3D1&geometry=-84.5833%2C46.4073&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=5000&units=esriSRUnit_Meter&outFields=OBJECTID%2CDNRTrail%2CTrailNamePrimary%2CTrailNetwork%2CCounty&returnGeometry=true&outSR=4326&f=geojson&geometryPrecision=5&maxAllowableOffset=0.0002&resultRecordCount=250",
+    "hitCount": 10,
+    "features": [
+     {
+      "id": 2513,
+      "code": "UP 889",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.63509,
+         46.42569
+        ],
+        [
+         -84.63509,
+         46.43406
+        ],
+        [
+         -84.63637,
+         46.43622
+        ],
+        [
+         -84.63638,
+         46.43963
+        ],
+        [
+         -84.6395,
+         46.44286
+        ],
+        [
+         -84.6398,
+         46.44395
+        ],
+        [
+         -84.64105,
+         46.44483
+        ],
+        [
+         -84.64392,
+         46.44801
+        ],
+        [
+         -84.64384,
+         46.45056
+        ],
+        [
+         -84.64236,
+         46.45271
+        ],
+        [
+         -84.63937,
+         46.45422
+        ],
+        [
+         -84.63723,
+         46.45623
+        ],
+        [
+         -84.63736,
+         46.45673
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2605,
+      "code": "UP 889",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.68232,
+         46.40481
+        ],
+        [
+         -84.6543,
+         46.4246
+        ],
+        [
+         -84.65046,
+         46.42589
+        ],
+        [
+         -84.63509,
+         46.42569
+        ]
+       ]
+      }
+     },
+     {
+      "id": 5499,
+      "code": "UP 8",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.56186,
+         46.40838
+        ],
+        [
+         -84.56218,
+         46.41165
+        ],
+        [
+         -84.57258,
+         46.41128
+        ],
+        [
+         -84.57238,
+         46.40614
+        ],
+        [
+         -84.57625,
+         46.40522
+        ]
+       ]
+      }
+     },
+     {
+      "id": 12719,
+      "code": "UP 8",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.57625,
+         46.40522
+        ],
+        [
+         -84.57621,
+         46.40423
+        ],
+        [
+         -84.58183,
+         46.40411
+        ]
+       ]
+      }
+     },
+     {
+      "id": 17397,
+      "code": "UP 8",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.58183,
+         46.40411
+        ],
+        [
+         -84.67424,
+         46.38263
+        ],
+        [
+         -84.69301,
+         46.37898
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18421,
+      "code": "UP 8",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.54581,
+         46.4115
+        ],
+        [
+         -84.56186,
+         46.40838
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18422,
+      "code": "UP 8",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.54105,
+         46.41244
+        ],
+        [
+         -84.54581,
+         46.4115
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18530,
+      "code": "UP 8",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.50977,
+         46.41853
+        ],
+        [
+         -84.54105,
+         46.41244
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18843,
+      "code": "UP 889",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.60533,
+         46.42558
+        ],
+        [
+         -84.63509,
+         46.42569
+        ]
+       ]
+      }
+     },
+     {
+      "id": 19221,
+      "code": "UP 889",
+      "county": "Chippewa",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.60386,
+         46.42396
+        ],
+        [
+         -84.60533,
+         46.42558
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "reportClub": "Sault Snowmobile Association"
+  },
+  {
+   "name": "Newberry",
+   "lat": 46.3538,
+   "lon": -85.5098,
+   "proxy": {
+    "seed": "snowmobile trail report n",
+    "suggestion": "snowmobile trail report newberry michigan",
+    "source": "Google autocomplete, US/en; demand proxy not volume",
+    "checked": "2026-11-23"
+   },
+   "dnr": {
+    "source": "Michigan DNR DNRTrailsOPENDATA layer 15",
+    "radiusKm": 5,
+    "query": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/15/query?where=1%3D1&geometry=-85.5098%2C46.3538&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=5000&units=esriSRUnit_Meter&outFields=OBJECTID%2CDNRTrail%2CTrailNamePrimary%2CTrailNetwork%2CCounty&returnGeometry=true&outSR=4326&f=geojson&geometryPrecision=5&maxAllowableOffset=0.0002&resultRecordCount=250",
+    "hitCount": 28,
+    "features": [
+     {
+      "id": 2550,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.47483,
+         46.33242
+        ],
+        [
+         -85.4748,
+         46.33387
+        ],
+        [
+         -85.47532,
+         46.33491
+        ],
+        [
+         -85.48143,
+         46.33521
+        ],
+        [
+         -85.48381,
+         46.33964
+        ],
+        [
+         -85.48488,
+         46.34074
+        ],
+        [
+         -85.48545,
+         46.341
+        ],
+        [
+         -85.48917,
+         46.3411
+        ],
+        [
+         -85.48917,
+         46.34312
+        ],
+        [
+         -85.49697,
+         46.34311
+        ],
+        [
+         -85.49745,
+         46.34408
+        ],
+        [
+         -85.49928,
+         46.34541
+        ],
+        [
+         -85.50459,
+         46.34668
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2612,
+      "code": "UP 45",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.37038,
+         46.42526
+        ],
+        [
+         -85.39095,
+         46.4059
+        ],
+        [
+         -85.39434,
+         46.40353
+        ],
+        [
+         -85.39756,
+         46.40205
+        ],
+        [
+         -85.40547,
+         46.39988
+        ],
+        [
+         -85.44147,
+         46.39234
+        ],
+        [
+         -85.44222,
+         46.39197
+        ],
+        [
+         -85.4424,
+         46.39028
+        ],
+        [
+         -85.44269,
+         46.39009
+        ],
+        [
+         -85.44578,
+         46.38956
+        ],
+        [
+         -85.44878,
+         46.39042
+        ],
+        [
+         -85.45025,
+         46.3905
+        ],
+        [
+         -85.50283,
+         46.37946
+        ],
+        [
+         -85.50467,
+         46.37885
+        ],
+        [
+         -85.50653,
+         46.37763
+        ],
+        [
+         -85.5079,
+         46.37547
+        ],
+        [
+         -85.50972,
+         46.37535
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2614,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.5098,
+         46.35732
+        ],
+        [
+         -85.51057,
+         46.35746
+        ],
+        [
+         -85.51173,
+         46.35843
+        ],
+        [
+         -85.51286,
+         46.35855
+        ],
+        [
+         -85.51313,
+         46.35882
+        ],
+        [
+         -85.51313,
+         46.36006
+        ],
+        [
+         -85.51449,
+         46.36068
+        ],
+        [
+         -85.51838,
+         46.36051
+        ],
+        [
+         -85.52016,
+         46.3608
+        ],
+        [
+         -85.52058,
+         46.36171
+        ],
+        [
+         -85.52023,
+         46.36316
+        ],
+        [
+         -85.52029,
+         46.36502
+        ],
+        [
+         -85.52069,
+         46.36604
+        ],
+        [
+         -85.52031,
+         46.36707
+        ],
+        [
+         -85.52038,
+         46.36845
+        ],
+        [
+         -85.5178,
+         46.36872
+        ],
+        [
+         -85.5162,
+         46.36948
+        ],
+        [
+         -85.51244,
+         46.36839
+        ],
+        [
+         -85.5098,
+         46.36847
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2623,
+      "code": "UP 454",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.51269,
+         46.34346
+        ],
+        [
+         -85.5126,
+         46.33438
+        ],
+        [
+         -85.51055,
+         46.33214
+        ],
+        [
+         -85.47483,
+         46.33242
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2859,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.46575,
+         46.31802
+        ],
+        [
+         -85.46475,
+         46.31872
+        ],
+        [
+         -85.46403,
+         46.31982
+        ],
+        [
+         -85.46392,
+         46.32348
+        ],
+        [
+         -85.46516,
+         46.32496
+        ],
+        [
+         -85.46654,
+         46.32573
+        ],
+        [
+         -85.4669,
+         46.32728
+        ],
+        [
+         -85.46787,
+         46.32886
+        ],
+        [
+         -85.46804,
+         46.33089
+        ],
+        [
+         -85.47292,
+         46.33101
+        ],
+        [
+         -85.47321,
+         46.3323
+        ],
+        [
+         -85.47483,
+         46.33242
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2861,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50827,
+         46.35596
+        ],
+        [
+         -85.50656,
+         46.35595
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2862,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50485,
+         46.35594
+        ],
+        [
+         -85.50458,
+         46.35594
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2863,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.5057,
+         46.35594
+        ],
+        [
+         -85.50485,
+         46.35594
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2864,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50656,
+         46.35595
+        ],
+        [
+         -85.5057,
+         46.35594
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2865,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50462,
+         46.35496
+        ],
+        [
+         -85.50458,
+         46.35594
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2866,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50458,
+         46.35391
+        ],
+        [
+         -85.50462,
+         46.35496
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2867,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50461,
+         46.35283
+        ],
+        [
+         -85.50458,
+         46.35391
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2868,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50459,
+         46.3518
+        ],
+        [
+         -85.50461,
+         46.35283
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2869,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50459,
+         46.35081
+        ],
+        [
+         -85.50459,
+         46.3518
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2870,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50458,
+         46.34978
+        ],
+        [
+         -85.50459,
+         46.35081
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2871,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50456,
+         46.34927
+        ],
+        [
+         -85.50458,
+         46.34978
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2872,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.5046,
+         46.34849
+        ],
+        [
+         -85.50456,
+         46.34927
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2873,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50457,
+         46.34762
+        ],
+        [
+         -85.5046,
+         46.34849
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2874,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50459,
+         46.34668
+        ],
+        [
+         -85.50457,
+         46.34762
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2875,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50527,
+         46.34667
+        ],
+        [
+         -85.50459,
+         46.34668
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2876,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50563,
+         46.34666
+        ],
+        [
+         -85.50527,
+         46.34667
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2877,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50694,
+         46.34667
+        ],
+        [
+         -85.50563,
+         46.34666
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2878,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.5098,
+         46.34665
+        ],
+        [
+         -85.50694,
+         46.34667
+        ]
+       ]
+      }
+     },
+     {
+      "id": 3605,
+      "code": "UP 454",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.5098,
+         46.34665
+        ],
+        [
+         -85.51257,
+         46.34661
+        ],
+        [
+         -85.51269,
+         46.34346
+        ]
+       ]
+      }
+     },
+     {
+      "id": 3666,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50996,
+         46.377
+        ],
+        [
+         -85.55665,
+         46.4023
+        ],
+        [
+         -85.55805,
+         46.40341
+        ],
+        [
+         -85.5593,
+         46.40514
+        ],
+        [
+         -85.56354,
+         46.40871
+        ],
+        [
+         -85.56404,
+         46.40962
+        ],
+        [
+         -85.56981,
+         46.4118
+        ],
+        [
+         -85.57231,
+         46.41201
+        ],
+        [
+         -85.57325,
+         46.4133
+        ],
+        [
+         -85.57432,
+         46.41377
+        ]
+       ]
+      }
+     },
+     {
+      "id": 15250,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50996,
+         46.377
+        ],
+        [
+         -85.50972,
+         46.37535
+        ]
+       ]
+      }
+     },
+     {
+      "id": 15251,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50972,
+         46.37535
+        ],
+        [
+         -85.5098,
+         46.36847
+        ]
+       ]
+      }
+     },
+     {
+      "id": 15314,
+      "code": "UP 9",
+      "county": "Luce",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.50827,
+         46.35596
+        ],
+        [
+         -85.50827,
+         46.35652
+        ],
+        [
+         -85.50981,
+         46.35661
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "reportClub": "Tahquamenon Snowmobile Association"
+  },
+  {
+   "name": "Munising",
+   "lat": 46.4309,
+   "lon": -86.6194,
+   "proxy": {
+    "seed": "snowmobile trail conditions m",
+    "suggestion": "snowmobile trail conditions munising michigan",
+    "source": "Google autocomplete, US/en; demand proxy not volume",
+    "checked": "2026-11-23"
+   },
+   "dnr": {
+    "source": "Michigan DNR DNRTrailsOPENDATA layer 15",
+    "radiusKm": 5,
+    "query": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/15/query?where=1%3D1&geometry=-86.6194%2C46.4309&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=5000&units=esriSRUnit_Meter&outFields=OBJECTID%2CDNRTrail%2CTrailNamePrimary%2CTrailNetwork%2CCounty&returnGeometry=true&outSR=4326&f=geojson&geometryPrecision=5&maxAllowableOffset=0.0002&resultRecordCount=250",
+    "hitCount": 3,
+    "features": [
+     {
+      "id": 2598,
+      "code": "UP 419",
+      "county": "Alger",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -86.66442,
+         46.42295
+        ],
+        [
+         -86.66387,
+         46.42512
+        ],
+        [
+         -86.66522,
+         46.42434
+        ],
+        [
+         -86.66861,
+         46.42389
+        ],
+        [
+         -86.66955,
+         46.42348
+        ],
+        [
+         -86.67254,
+         46.42349
+        ],
+        [
+         -86.67303,
+         46.42302
+        ],
+        [
+         -86.67431,
+         46.42284
+        ],
+        [
+         -86.67599,
+         46.42157
+        ],
+        [
+         -86.67736,
+         46.42154
+        ],
+        [
+         -86.67811,
+         46.42116
+        ],
+        [
+         -86.68153,
+         46.42132
+        ],
+        [
+         -86.68332,
+         46.42217
+        ],
+        [
+         -86.68415,
+         46.42157
+        ]
+       ]
+      }
+     },
+     {
+      "id": 7196,
+      "code": "UP 419",
+      "county": "Alger",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -86.64819,
+         46.39821
+        ],
+        [
+         -86.64154,
+         46.39688
+        ],
+        [
+         -86.64062,
+         46.39537
+        ],
+        [
+         -86.63755,
+         46.39505
+        ],
+        [
+         -86.6375,
+         46.39434
+        ],
+        [
+         -86.63676,
+         46.39348
+        ],
+        [
+         -86.63672,
+         46.39241
+        ],
+        [
+         -86.63739,
+         46.39188
+        ],
+        [
+         -86.63778,
+         46.39093
+        ],
+        [
+         -86.63728,
+         46.3898
+        ],
+        [
+         -86.63749,
+         46.38823
+        ],
+        [
+         -86.63665,
+         46.38704
+        ],
+        [
+         -86.63689,
+         46.38612
+        ],
+        [
+         -86.6366,
+         46.38498
+        ],
+        [
+         -86.63615,
+         46.3847
+        ],
+        [
+         -86.62045,
+         46.38238
+        ],
+        [
+         -86.62018,
+         46.38198
+        ],
+        [
+         -86.61537,
+         46.38119
+        ],
+        [
+         -86.61507,
+         46.37863
+        ],
+        [
+         -86.6157,
+         46.3754
+        ],
+        [
+         -86.61186,
+         46.37543
+        ],
+        [
+         -86.61081,
+         46.37378
+        ],
+        [
+         -86.6089,
+         46.37254
+        ],
+        [
+         -86.60864,
+         46.37206
+        ],
+        [
+         -86.60744,
+         46.37149
+        ],
+        [
+         -86.60504,
+         46.36822
+        ],
+        [
+         -86.60367,
+         46.36745
+        ],
+        [
+         -86.60089,
+         46.36349
+        ],
+        [
+         -86.59997,
+         46.3602
+        ],
+        [
+         -86.59673,
+         46.35589
+        ],
+        [
+         -86.59653,
+         46.35382
+        ]
+       ]
+      }
+     },
+     {
+      "id": 7197,
+      "code": "UP 419",
+      "county": "Alger",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -86.68415,
+         46.42157
+        ],
+        [
+         -86.68612,
+         46.41994
+        ],
+        [
+         -86.68719,
+         46.41855
+        ],
+        [
+         -86.68854,
+         46.41845
+        ],
+        [
+         -86.68949,
+         46.41789
+        ],
+        [
+         -86.68947,
+         46.41662
+        ],
+        [
+         -86.68902,
+         46.41554
+        ],
+        [
+         -86.6894,
+         46.41409
+        ],
+        [
+         -86.68893,
+         46.41312
+        ],
+        [
+         -86.68932,
+         46.41193
+        ],
+        [
+         -86.68884,
+         46.4105
+        ],
+        [
+         -86.68997,
+         46.40873
+        ],
+        [
+         -86.69188,
+         46.40852
+        ],
+        [
+         -86.6922,
+         46.40814
+        ],
+        [
+         -86.68894,
+         46.40587
+        ],
+        [
+         -86.68741,
+         46.40551
+        ],
+        [
+         -86.68627,
+         46.40288
+        ],
+        [
+         -86.68546,
+         46.40262
+        ],
+        [
+         -86.68186,
+         46.40266
+        ],
+        [
+         -86.68127,
+         46.40218
+        ],
+        [
+         -86.68133,
+         46.40141
+        ],
+        [
+         -86.68101,
+         46.401
+        ],
+        [
+         -86.67896,
+         46.40075
+        ],
+        [
+         -86.67779,
+         46.39964
+        ],
+        [
+         -86.67654,
+         46.39934
+        ],
+        [
+         -86.67583,
+         46.39779
+        ],
+        [
+         -86.6758,
+         46.39741
+        ],
+        [
+         -86.6765,
+         46.39649
+        ],
+        [
+         -86.67598,
+         46.39593
+        ],
+        [
+         -86.67314,
+         46.395
+        ],
+        [
+         -86.67214,
+         46.39422
+        ],
+        [
+         -86.67056,
+         46.39374
+        ],
+        [
+         -86.66949,
+         46.39407
+        ],
+        [
+         -86.66903,
+         46.39459
+        ],
+        [
+         -86.66984,
+         46.39585
+        ],
+        [
+         -86.66958,
+         46.3965
+        ],
+        [
+         -86.66869,
+         46.39688
+        ],
+        [
+         -86.66866,
+         46.39834
+        ],
+        [
+         -86.66778,
+         46.3987
+        ],
+        [
+         -86.66574,
+         46.39901
+        ],
+        [
+         -86.66254,
+         46.39807
+        ],
+        [
+         -86.66096,
+         46.39872
+        ],
+        [
+         -86.66053,
+         46.39852
+        ],
+        [
+         -86.66057,
+         46.39778
+        ],
+        [
+         -86.65945,
+         46.39761
+        ],
+        [
+         -86.65739,
+         46.39756
+        ],
+        [
+         -86.65531,
+         46.39798
+        ],
+        [
+         -86.65297,
+         46.39774
+        ],
+        [
+         -86.65313,
+         46.39939
+        ],
+        [
+         -86.6526,
+         46.40055
+        ],
+        [
+         -86.65011,
+         46.40349
+        ],
+        [
+         -86.64855,
+         46.40305
+        ],
+        [
+         -86.6481,
+         46.40259
+        ],
+        [
+         -86.64784,
+         46.4011
+        ],
+        [
+         -86.64849,
+         46.39832
+        ],
+        [
+         -86.64819,
+         46.39821
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "reportClub": null
+  },
+  {
+   "name": "St. Ignace",
+   "lat": 45.8872,
+   "lon": -84.7317,
+   "proxy": {
+    "seed": "st ignace snowmobile trails",
+    "suggestion": "st ignace snowmobile trail report",
+    "source": "Google autocomplete, US/en; demand proxy not volume",
+    "checked": "2026-11-23"
+   },
+   "dnr": {
+    "source": "Michigan DNR DNRTrailsOPENDATA layer 15",
+    "radiusKm": 5,
+    "query": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/15/query?where=1%3D1&geometry=-84.7317%2C45.8872&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=5000&units=esriSRUnit_Meter&outFields=OBJECTID%2CDNRTrail%2CTrailNamePrimary%2CTrailNetwork%2CCounty&returnGeometry=true&outSR=4326&f=geojson&geometryPrecision=5&maxAllowableOffset=0.0002&resultRecordCount=250",
+    "hitCount": 1,
+    "features": [
+     {
+      "id": 2495,
+      "code": "UP 2",
+      "county": "Mackinac",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.73683,
+         45.87386
+        ],
+        [
+         -84.73752,
+         45.87454
+        ],
+        [
+         -84.73735,
+         45.87637
+        ],
+        [
+         -84.73771,
+         45.87682
+        ],
+        [
+         -84.74844,
+         45.88003
+        ],
+        [
+         -84.75939,
+         45.88469
+        ],
+        [
+         -84.76232,
+         45.8865
+        ],
+        [
+         -84.77121,
+         45.89337
+        ],
+        [
+         -84.78343,
+         45.91564
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "reportClub": null
+  }
+ ]
+}

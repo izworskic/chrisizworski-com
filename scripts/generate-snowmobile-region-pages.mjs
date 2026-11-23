@@ -3,6 +3,7 @@ import path from 'node:path';
 import { REGIONS } from '../lib/snowmobile/regions.mjs';
 import { metadataFor, imageFor, socialExtras, discoveryGraph, discoverySections } from '../lib/snowmobile/discovery.mjs';
 import { planningFor } from '../lib/snowmobile/planning.mjs';
+import { townSectionsFor } from '../lib/snowmobile/town-discovery.mjs';
 
 const root = process.cwd();
 const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
@@ -23,11 +24,11 @@ function pageFor(region) {
   const localDeskBlock=region.legacyCorridor?'':`<section class="local-club-desk ui" id="localClubDesk" aria-labelledby="localClubTitle"><h3 id="localClubTitle">From the local groomer clubs</h3><p>Read the last dated postings from clubs in different parts of this region. Old reports stay labeled old. No one club speaks for the whole region; its condition report does not override DNR closures.</p><p class="small" id="localClubStatus" role="status" aria-live="polite">Checking source dates with Michigan's snowmobile clubs…</p><div class="local-club-reports" id="localClubReports" aria-label="Dated local club reports"></div></section>`;
   const localDeskScript=region.legacyCorridor?'':'<script src="/assets/snowmobile-local-reports.js?v=20261113-source-date-audit-3"></script>\n';
 
-  return `<!doctype html><html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><link rel="canonical" href="${canonical}"><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1"><meta name="google-adsense-account" content="ca-pub-8222782620788075"><meta name="theme-color" content="#123246"><meta property="og:type" content="website"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${imageFor(region)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(description)}"><meta name="twitter:image" content="${imageFor(region)}">${socialExtras(region)}<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="/assets/snowmobile.css?v=${'20261115-loop-finder-1'}">${cameraCss}<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script><script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script><script type="application/ld+json">${JSON.stringify({
+  return `<!doctype html><html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(title)}</title><meta name="description" content="${esc(description)}"><link rel="canonical" href="${canonical}"><meta name="robots" content="index,follow,max-image-preview:large,max-snippet:-1"><meta name="google-adsense-account" content="ca-pub-8222782620788075"><meta name="theme-color" content="#123246"><meta property="og:type" content="website"><meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(description)}"><meta property="og:url" content="${canonical}"><meta property="og:image" content="${imageFor(region)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(title)}"><meta name="twitter:description" content="${esc(description)}"><meta name="twitter:image" content="${imageFor(region)}">${socialExtras(region)}<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"><link rel="stylesheet" href="/assets/snowmobile.css?v=${'20261123-town-1'}">${cameraCss}<script async src="https://www.googletagmanager.com/gtag/js?id=G-Y5D2V2W7HN"></script><script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments)}gtag('js',new Date());gtag('config','G-Y5D2V2W7HN');</script><script async crossorigin="anonymous" src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script><script type="application/ld+json">${JSON.stringify({
     '@context': 'https://schema.org',
     '@graph': [
       { '@type': 'Person', '@id': 'https://chrisizworski.com/#person', name: 'Chris Izworski', url: 'https://chrisizworski.com/' },
-      { '@type': 'WebPage', '@id': `${canonical}#page`, url: canonical, name: `${region.label} Snowmobile Trail Conditions`, description, inLanguage: 'en-US', primaryImageOfPage: {'@id':`${canonical}#primaryimage`}, mainEntity: {'@id':`${canonical}#planner`}, isPartOf: {'@id':'https://chrisizworski.com/snowmobile/#page'}, relatedLink: REGIONS.filter(r=>r.key!==region.key).map(r=>`https://chrisizworski.com/snowmobile/regions/${r.key}.html`), dateModified: '2026-11-11', author: {'@id':'https://chrisizworski.com/#person'}, publisher: {'@id':'https://chrisizworski.com/#person'} },
+      { '@type': 'WebPage', '@id': `${canonical}#page`, url: canonical, name: `${region.label} Snowmobile Trail Conditions`, description, inLanguage: 'en-US', primaryImageOfPage: {'@id':`${canonical}#primaryimage`}, mainEntity: {'@id':`${canonical}#planner`}, isPartOf: {'@id':'https://chrisizworski.com/snowmobile/#page'}, relatedLink: REGIONS.filter(r=>r.key!==region.key).map(r=>`https://chrisizworski.com/snowmobile/regions/${r.key}.html`), dateModified: '2026-11-23', author: {'@id':'https://chrisizworski.com/#person'}, publisher: {'@id':'https://chrisizworski.com/#person'} },
       ...discoveryGraph(region),
       { '@type': 'BreadcrumbList', itemListElement: [
         { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://chrisizworski.com/' },
@@ -90,6 +91,7 @@ function pageFor(region) {
   </article>
 ${corridorBlock}
 ${reportBlock}
+${townSectionsFor(region)}
   <section id="seasonNote" class="panel" hidden><strong>Pre-season mode.</strong> Michigan state-designated snowmobile trails are generally open Dec. 1–Mar. 31. The product remains indexable and source-connected now, but it will not manufacture an in-season ride score outside the riding season.</section>
   <section class="panel outlook-panel" id="outlook72"><div class="section-headline"><div><div class="eyebrow">Next 72 hours</div><h2>When the weather window is most favorable</h2></div><span class="small">Weather timing only — it can downgrade or time a verified trail, but cannot create a trail-condition verdict</span></div><div id="outlookCards" class="outlook-cards"><div class="outlook-card">Loading NWS forecast periods…</div></div></section>
   <section class="grid">
@@ -114,7 +116,7 @@ ${region.key==='eastern-up'?'<section class="panel"><h2>Munising winter ice view
 ${stagingScript}<script src="/assets/snowmobile-route-export.js?v=20261113-gpx-1"></script>
 <script src="/assets/snowmobile-loop-finder.js?v=20261115-loop-finder-1"></script>
 <script src="/assets/snowmobile-region.js?v=20261115-loop-finder-1"></script>
-${localDeskScript}${cameraScript}
+<script src="/assets/snowmobile-town-evidence.js?v=20261123-town-1"></script>\n${localDeskScript}${cameraScript}
 </body></html>`;
 }
 
