@@ -74,7 +74,7 @@ test("Mobile responsive, request timestamps, data outage and readable fallback r
 test("Search canonical, entity, Person byline and intent boundary stay stable", () => {
   assert.match(html, /<title>Great Lakes Freighter Central: Ports \| Chris Izworski<\/title>/);
   assert.match(html, /rel="canonical" href="https:\/\/chrisizworski\.com\/freighters\/"/);
-  assert.match(html, /"@type":"CollectionPage"/);
+  assert.match(html, /"@type"\s*:\s*"CollectionPage"/);
   assert.match(html, /https:\/\/chrisizworski\.com\/#person/);
   assert.match(html, /Built by <a href="https:\/\/chrisizworski\.com\/chris-izworski\/"/);
   assert.doesNotMatch(html, /<meta[^>]+noindex/);
