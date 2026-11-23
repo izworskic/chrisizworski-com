@@ -13,6 +13,29 @@ function detail(label,name,body,actions=[],note=''){
  if(note)box.append(node('p',note,'access-note'));
 }
 function focus(lat,lon,zoom=15){if(state.map)state.map.setView([lat,lon],zoom,{animate:false});}
+// Match the Cuyahoga river desk: visitors can frame reported vessels or
+// confirmed public-place *areas* independently. No estimated approaches.
+function visibleShips(){
+ return state.live?.state==='REPORTS_AVAILABLE'?(state.live.vessels||[]).filter(v=>!shipUI||shipUI.match(v,state.shipKindFilter)):[];
+}
+function updateMapViewControls(){
+ const ships=visibleShips(),places=state.guide?.viewpoints||[];
+ const shipsButton=$('calumet-show-ships'),placesButton=$('calumet-show-places');
+ if(shipsButton){
+  shipsButton.disabled=!state.map||!ships.length;
+  shipsButton.textContent='Show '+ships.length+(ships.length===1?' ship':' ships');
+ }
+ if(placesButton)placesButton.disabled=!state.map||!places.length;
+}
+function frameMap(mode='all'){
+ if(!state.map)return;
+ const places=(state.guide?.viewpoints||[]).map(p=>[p.lat,p.lon]);
+ const ships=visibleShips().map(v=>[v.lat,v.lon]);
+ const points=mode==='places'?places:mode==='ships'?ships:[...places,...ships];
+ if(!points.length)return;
+ if(points.length===1)state.map.setView(points[0],14,{animate:false});
+ else state.map.fitBounds(points,{padding:[35,35],maxZoom:13,animate:false});
+}
 function pin(kind,glyph){
  return L.divIcon({className:'',html:'<span class="cw-pin '+kind+'">'+glyph+'</span>',iconSize:[31,31],iconAnchor:[15,15]});
 }
@@ -104,6 +127,7 @@ function plotGuide(){
 }
 function showShips(){
  const r=state.live,list=$('reported-ships');list.replaceChildren();state.ships?.clearLayers();
+ updateMapViewControls();
  const summary=shipUI?.summarize(r);
  if(!summary?.available||!summary.groups.some(g=>g.kind===state.shipKindFilter))state.shipKindFilter='all';
  shipUI?.renderTypeFilters($('calumet-type-counts'),r,state.shipKindFilter,kind=>{
@@ -159,7 +183,7 @@ async function loadGuide(){
   const res=await fetch('/calumet-freighter-watch/guide.json',{cache:'force-cache',signal:AbortSignal.timeout(12000)});
   if(!res.ok)throw Error('guide unavailable');
   const guide=await res.json();if(!core.validateGuide(guide))throw Error('guide invalid');
-  state.guide=guide;plotGuide();
+  state.guide=guide;plotGuide();updateMapViewControls();
  }catch(_){
   $('bridge-caption').textContent='Bridge catalog unavailable. Consult current Coast Guard notices.';
   detail('REFERENCE GUIDE UNAVAILABLE','Use official public-place sources','The map guide could not be verified. Static official links remain available on this page.',
@@ -188,9 +212,11 @@ function wireBridgeDemo(){
 if(!core){$('report-message').textContent='Interactive rules unavailable. Use the official source links.';return;}
 initMap();wireBridgeDemo();
 $('refresh-ships').addEventListener('click',loadShips);
+$('calumet-show-ships').addEventListener('click',()=>frameMap('ships'));
+$('calumet-show-places').addEventListener('click',()=>frameMap('places'));
 $('bridge-select').addEventListener('change',e=>{if(e.target.value)chooseBridge(e.target.value);});
 $('rail-layer').addEventListener('change',e=>{if(!state.map||!state.railBridges)return;
  if(e.target.checked)state.railBridges.addTo(state.map);else state.map.removeLayer(state.railBridges);
 });
-loadGuide();loadShips();
+Promise.allSettled([loadGuide(),loadShips()]).then(()=>frameMap('all'));
 })();
