@@ -11,7 +11,6 @@ OUT = pathlib.Path(os.environ.get("ICE_OUT", str(ROOT / "public" / "michigan-ice
 # Moved forward 2026-10-06: root and regional pages gained publisher references to the
 # existing canonical Person entity. This identity metadata changed on those seven pages.
 ICE_ROOT_DATE_MODIFIED = "2026-10-24"
-ICE_HUB_DATE_MODIFIED = "2026-10-24" # Land-based ice-viewing handoff added.
 # Sub-pages (ice safety, freezing degree days, ice cover history) gained their
 # dateModified on 2026-08-25. Keep this separate from the root/region date: the stamper
 # only corrects stamps FORWARD, so an overstated date would never be walked back.
