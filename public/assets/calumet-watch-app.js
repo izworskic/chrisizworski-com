@@ -62,12 +62,29 @@ function shipPopupContent(v){
  wrap.append(node('small','Fresh AIS position, not a ship sighting or future arrival. The icon is an illustration of the reported vessel class and length band.','park-popup-note'));
  return wrap;
 }
+// Leaflet pans *inside the map* to expose a popup. On narrow screens a
+// previously scrolled page can still leave the top of that popup above the
+// browser viewport. Reveal the popup in the page as well, only if clipped.
+function revealPopupInViewport(popup){
+ if(!popup)return;
+ requestAnimationFrame(()=>{
+  const element=popup.getElement?.();
+  if(!element)return;
+  const rect=element.getBoundingClientRect(),margin=16;
+  if(rect.top<margin){
+   window.scrollBy({top:rect.top-margin,behavior:'instant'});
+  }else if(rect.bottom>window.innerHeight-margin){
+   window.scrollBy({top:rect.bottom-window.innerHeight+margin,behavior:'instant'});
+  }
+ });
+}
 function openShipPopup(marker,v){
  if(!state.map||!marker)return;
  if(!vesselPopup)vesselPopup=L.popup({autoClose:true,closeOnClick:true,maxWidth:305});
  const anchor=marker.options.icon?.options?.popupAnchor||[0,-10];
  vesselPopup.options.offset=L.point(anchor[0],anchor[1]);
  vesselPopup.setLatLng(marker.getLatLng()).setContent(shipPopupContent(v)).openOn(state.map);
+ revealPopupInViewport(vesselPopup);
 }
 function findShipMarker(mmsi){
  let found=null;
@@ -237,7 +254,7 @@ function plotGuide(){
    alt:p.name+' approximate public viewing area',placeId:p.id,placeOffset:false,icon:placePin(p),zIndexOffset:1000}).addTo(state.places);
   placeMarkers.set(p.id,m);
   m.bindPopup(placePopupContent(p),{maxWidth:295,autoPan:true,closeButton:true});
-  m.on('click',()=>{choosePlace(p.id,false);m.openPopup();});
+  m.on('click',()=>{choosePlace(p.id,false);m.openPopup();revealPopupInViewport(m.getPopup());});
  }
  for(const b of state.guide.bridges){
   const layer=b.group==='rail'?state.railBridges:state.bridges;
@@ -251,7 +268,7 @@ function plotGuide(){
    alt:b.name+' NOAA rounded chart reference',bridgeId:b.id,bridgeOffset:overlapsView,
    icon:bridgePin(b,overlapsView)}).addTo(layer);
   m.bindPopup(bridgePopupContent(b),{maxWidth:290,autoPan:true,closeButton:true});
-  m.on('click',()=>{chooseBridge(b.id,false);m.openPopup();});
+  m.on('click',()=>{chooseBridge(b.id,false);m.openPopup();revealPopupInViewport(m.getPopup());});
  }
  const select=$('bridge-select');select.replaceChildren(node('option','Choose a bridge'));select.options[0].value='';
  for(const b of state.guide.bridges){const option=node('option',b.name+' · '+b.type+(b.group==='rail'?' / railroad':''));option.value=b.id;select.append(option);}
