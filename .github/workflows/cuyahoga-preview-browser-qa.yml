@@ -3,11 +3,14 @@ name: Cuyahoga noindex preview browser QA
 # One-time read-only local browser smoke; not a deployment or live API test.
 on:
   push:
-    branches: [research/cuyahoga-ais-audit-20261122]
+    branches: [research/cuyahoga-ais-audit-20261122, design/cuyahoga-river-desk-v2-20261122]
     paths:
       - .github/workflows/cuyahoga-preview-browser-qa.yml
       - tests/cuyahoga-public-watch.test.js
       - scripts/cuyahoga-browser-smoke.py
+      - public/cuyahoga-freighter-watch/index.html
+      - public/assets/cuyahoga-watch.css
+      - public/assets/cuyahoga-watch-app.js
 
 permissions:
   contents: read
@@ -46,7 +49,7 @@ jobs:
           sleep 2
           "$RUNNER_TEMP/cuyahoga-browser-env/bin/python" scripts/cuyahoga-browser-smoke.py
           echo '### Cuyahoga shore-watch preview browser QA' >> "$GITHUB_STEP_SUMMARY"
-          echo 'Mocked local AIS; real static NOAA data and official place reference; 390px and 1280px; no-JavaScript fallback.' >> "$GITHUB_STEP_SUMMARY"
+          echo 'Mocked local AIS; real static NOAA data and official park source. Full-width mobile and desktop map UX, 360/390/768/1280/1440 px, no-JavaScript fallback.' >> "$GITHUB_STEP_SUMMARY"
           echo 'Screenshots and browser acceptance JSON in attached short-retention artifact.' >> "$GITHUB_STEP_SUMMARY"
       - uses: actions/upload-artifact@v4
         if: always()
