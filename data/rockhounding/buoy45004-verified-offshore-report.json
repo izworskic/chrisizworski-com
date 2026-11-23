@@ -4,25 +4,24 @@
   "modelGrid": "2p5km",
   "sourceBuoy": "https://www.ndbc.noaa.gov/data/realtime2/45004.txt",
   "sourceModel": "NOAA_GLWU_GRIB2",
-  "asOfISO": "2026-11-22T20:49:03.000Z",
+  "asOfISO": "2026-11-23T11:06:38.000Z",
   "toleranceMinutes": 30,
   "maxLeadHours": 24,
-  "observedSamplesAvailable": 3052,
-  "eligibleForecastRows": 494,
-  "totalIssuedForecastCandidates": 1000,
-  "supersededForecastCandidates": 506,
+  "observedSamplesAvailable": 2986,
+  "eligibleForecastRows": 497,
+  "totalIssuedForecastCandidates": 1006,
+  "supersededForecastCandidates": 509,
   "forecastSelectionPolicy": "LATEST_NOMINAL_ISSUE_PER_VALID_HOUR",
   "nominalIssueDoesNotProvePublicationAvailability": true,
-  "matchedPairs": 427,
-  "unmatchedForecastRows": 67,
+  "matchedPairs": 419,
+  "unmatchedForecastRows": 78,
   "distinctModelCells": [
     {
       "cell": "47.578791,-86.573970",
-      "matches": 427
+      "matches": 419
     }
   ],
   "distinctObservationDays": [
-    "2026-11-02",
     "2026-11-03",
     "2026-11-04",
     "2026-11-05",
@@ -43,7 +42,6 @@
     "2026-11-20"
   ],
   "issueCyclesRepresented": [
-    "2026-11-02T06:00:00.000Z",
     "2026-11-02T18:00:00.000Z",
     "2026-11-03T06:00:00.000Z",
     "2026-11-03T18:00:00.000Z",
@@ -91,9 +89,9 @@
   },
   "status": "PRELIMINARY_OFFSHORE_PAIRS_NOT_CALIBRATED",
   "metrics": {
-    "maeM": 0.2798,
-    "rmseM": 0.3641,
-    "meanBiasM": 0.1356
+    "maeM": 0.2815,
+    "rmseM": 0.3666,
+    "meanBiasM": 0.1346
   },
   "matchedPairsInRawPreview": 200,
   "matchesPreviewTruncated": true,
@@ -107,9 +105,8 @@
     "elevationIsNotNwsHazardThreshold": true,
     "leadTime": {
       "1-6h": {
-        "pairs": 224,
+        "pairs": 218,
         "distinctDays": [
-          "2026-11-02",
           "2026-11-03",
           "2026-11-04",
           "2026-11-05",
@@ -129,16 +126,15 @@
           "2026-11-19",
           "2026-11-20"
         ],
-        "maeM": 0.282,
-        "rmseM": 0.3828,
-        "meanBiasM": 0.1588,
+        "maeM": 0.285,
+        "rmseM": 0.3869,
+        "meanBiasM": 0.1585,
         "canInterpret": true,
         "status": "DESCRIPTIVE_OFFSHORE_SAMPLE_NOT_CALIBRATED"
       },
       "7-12h": {
-        "pairs": 182,
+        "pairs": 180,
         "distinctDays": [
-          "2026-11-02",
           "2026-11-03",
           "2026-11-04",
           "2026-11-05",
@@ -157,9 +153,9 @@
           "2026-11-19",
           "2026-11-20"
         ],
-        "maeM": 0.2893,
-        "rmseM": 0.3535,
-        "meanBiasM": 0.1137,
+        "maeM": 0.2898,
+        "rmseM": 0.3545,
+        "meanBiasM": 0.1123,
         "canInterpret": true,
         "status": "DESCRIPTIVE_OFFSHORE_SAMPLE_NOT_CALIBRATED"
       },
@@ -180,9 +176,8 @@
     },
     "observedHeight": {
       "below-0.5m": {
-        "pairs": 78,
+        "pairs": 70,
         "distinctDays": [
-          "2026-11-02",
           "2026-11-04",
           "2026-11-05",
           "2026-11-07",
@@ -193,9 +188,9 @@
           "2026-11-16",
           "2026-11-20"
         ],
-        "maeM": 0.2005,
-        "rmseM": 0.2435,
-        "meanBiasM": 0.079,
+        "maeM": 0.2019,
+        "rmseM": 0.2483,
+        "meanBiasM": 0.0664,
         "canInterpret": true,
         "status": "DESCRIPTIVE_OFFSHORE_SAMPLE_NOT_CALIBRATED"
       },
@@ -251,17 +246,6 @@
       }
     },
     "observedUtcDay": {
-      "2026-11-02": {
-        "pairs": 8,
-        "distinctDays": [
-          "2026-11-02"
-        ],
-        "maeM": 0.1888,
-        "rmseM": 0.1966,
-        "meanBiasM": 0.1888,
-        "canInterpret": true,
-        "status": "DESCRIPTIVE_OFFSHORE_SAMPLE_NOT_CALIBRATED"
-      },
       "2026-11-03": {
         "pairs": 14,
         "distinctDays": [
@@ -476,8 +460,8 @@
       }
     ],
     "evidence": {
-      "matchedPairs": 427,
-      "distinctObservedDays": 19,
+      "matchedPairs": 419,
+      "distinctObservedDays": 18,
       "highWaveObservedThresholdM": 1,
       "separatedElevatedWaveEpisodes": 2,
       "independentlySampledHighWaveEpisodes": 2,
