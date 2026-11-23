@@ -429,7 +429,7 @@ function renderLive(p,my){
 }
 
 function render(){
- if(window.HolidayTravelChoices)window.HolidayTravelChoices.sync();
+ if(typeof window!=='undefined'&&window.HolidayTravelChoices)window.HolidayTravelChoices.sync();
  var d=data[holiday];var h=dateFor(0);var year=h.getUTCFullYear();doc('holiday-stat').textContent=d.name+' '+year;doc('date-stat').textContent=fullDate(h);
  doc('planning-banner').textContent=d.name+' '+year+' travel planning · dates recalculate automatically; flight odds come from six past holiday seasons of BTS records, with a live NWS check in the final week.';
  doc('yearly-source-note').textContent='Travel days are generated for '+year+'. Flight odds use observed 2018, 2019, 2022–2025 holiday windows; driving figures are AAA/INRIX 2025 and EIA Oct 12, 2026.';
