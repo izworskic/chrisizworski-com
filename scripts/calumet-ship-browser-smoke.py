@@ -96,8 +96,11 @@ async def run():
             # metadata, public-place actions, and honest bridge limitations.
             await page.locator("#calumet-map .soo-ais-symbol.type-cargo").first.click()
             popup=page.locator("#calumet-map .leaflet-popup-content")
-            await popup.wait_for()
-            ship_text=await popup.inner_text()
+            await popup.first.wait_for()
+            popup_texts=await popup.all_inner_texts()
+            if len(popup_texts)!=1:
+                raise AssertionError("Expected exactly one clicked vessel popup, got "+repr(popup_texts))
+            ship_text=popup_texts[0]
             for required in ("Reported AIS type: Freighter / cargo","Reported length: 794 ft",
                              "4.2 knots reported","MMSI 367770001","mock QA",
                              "Reported travel course: 90°","Last position:"):
