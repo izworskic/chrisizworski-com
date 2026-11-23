@@ -55,7 +55,7 @@ async def run():
                 ship_btn="calumet-show-ships" if city=="calumet" else "show-ships-on-map"
                 region_class=f"river-family--{city}"
                 await page.locator(f"#{ship_btn}:not([disabled])").wait_for(timeout=25000)
-                await page.locator(f"#{map_id} .leaflet-tile-container").first.wait_for(timeout=25000)
+                await page.locator(f"#{map_id} .leaflet-tile-pane img.leaflet-tile").first.wait_for(state="attached",timeout=25000)
                 await page.locator(f"#{map_id} .river-watch-marker, #{map_id} .soo-ais-symbol").first.wait_for(timeout=25000)
                 await page.wait_for_timeout(250)
                 if await page.locator(f"body.{region_class}").count()!=1:
