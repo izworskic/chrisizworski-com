@@ -139,7 +139,12 @@
           (active + choices.length - 1) % choices.length;
         indicate(); event.preventDefault();
       } else if (event.key === 'Enter' && !list.hidden && choices.length) {
-        choose(choices[Math.max(0, active)].code); event.preventDefault();
+        var typed = normalize(input.value);
+        var exact = choices.find(function (airport) { return normalize(airport.code) === typed; });
+        var selected = active >= 0 ? choices[active] : exact || (choices.length === 1 ? choices[0] : null);
+        if (selected) choose(selected.code);
+        else note.textContent = 'Several airports match. Choose a specific suggestion or type its 3-letter code.';
+        event.preventDefault();
       }
     });
     input.addEventListener('blur', function () {
