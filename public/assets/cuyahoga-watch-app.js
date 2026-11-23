@@ -154,7 +154,13 @@
  function renderBridgeMarkers(){
   if(!state.bridges)return;
   const showAll=$('show-all-bridges')?.checked===true;
+  const bridgePickerOpen=document.querySelector('.bridge-picker')?.open===true;
   if(mapGroup.bridges)mapGroup.bridges.clearLayers();
+  if(!bridgePickerOpen&&!state.selectedBridgeId){
+   const status=$('bridge-layer-status');
+   if(status)status.textContent='Bridge pins are hidden until you open the bridge explorer. Public viewing places and observed vessels remain visible.';
+   return;
+  }
   let visible=0;
   for(const bridge of state.bridges.bridges){
    if(bridge.channel!=='main')continue;
@@ -361,6 +367,7 @@
   $('refresh-ais').addEventListener('click',getLive);
   $('bridge-select').addEventListener('change',e=>{if(e.target.value)chooseBridge(e.target.value,true);});
   $('show-all-bridges').addEventListener('change',renderBridgeMarkers);
+  document.querySelector('.bridge-picker')?.addEventListener('toggle',renderBridgeMarkers);
   $('voyage-select').addEventListener('change',e=>{state.historyId=e.target.value;state.historyIndex=core.firstRiverFixIndex(state.history,state.historyId);renderHistory();});
   $('history-scrubber').addEventListener('input',e=>{state.historyIndex=Number(e.target.value);renderHistory();});
   $('history-prev').addEventListener('click',()=>{state.historyIndex--;renderHistory();});
