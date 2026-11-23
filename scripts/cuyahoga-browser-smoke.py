@@ -177,8 +177,10 @@ async def run():
             if await page.locator(".leaflet-popup .park-popup-actions a").first.get_attribute("href")!=official_google_maps["wendy"]:
                 raise AssertionError("Park popup Google Maps destination is not the official Metroparks point")
             await page.locator(".place-button[data-park=scranton]").click()
-            if await page.locator(".leaflet-popup").count():
-                raise AssertionError("Switching viewing locations left an unrelated park popup visible")
+            try:
+                await page.locator(".leaflet-popup").wait_for(state="detached",timeout=2300)
+            except Exception as exc:
+                raise AssertionError("Switching viewing locations left an unrelated park popup visible") from exc
 
             if await page.locator("#show-history").count() or await page.locator("#history-controls").count():
                 raise AssertionError("Outdated 2025 replay is still advertised on current map")
