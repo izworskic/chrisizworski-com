@@ -114,7 +114,7 @@ test('preserved NOAA archive data remains authentic without appearing in the cur
 test('live visitor map does not fetch or present archived 2025 vessel observations',()=>{
  assert.doesNotMatch(app,/state\.mode|renderHistory|history-scrubber|noaa-historical-2025\.json/);
  assert.doesNotMatch(page,/2025 ship replay|Choose a 2025 vessel day/);
- assert.match(page,/Recent AIS vessels/);
+ assert.match(page,/Reported vessels/);
  assert.match(app,/\/cuyahoga-freighter-watch\/viewpoints\.json/);
  assert.match(app,/\/cuyahoga-freighter-watch\/bridges\.json/);
  assert.match(page,/<noscript>/);
