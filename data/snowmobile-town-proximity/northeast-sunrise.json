@@ -1,0 +1,1569 @@
+{
+ "region": "northeast-sunrise",
+ "checked": "2026-11-23",
+ "sourceBoundary": "Autocomplete is a demand proxy, not volume; only towns with an official DNR trail feature within a 5 km spatial query are retained. Generalized lines are for build-time context, not closures or legal condition evidence.",
+ "towns": [
+  {
+   "name": "Cheboygan",
+   "lat": 45.6419,
+   "lon": -84.4688,
+   "proxy": {
+    "seed": "cheboygan snowmobile trails",
+    "suggestion": "cheboygan snowmobile trail report",
+    "source": "Google autocomplete, US/en; demand proxy not volume",
+    "checked": "2026-11-23"
+   },
+   "dnr": {
+    "source": "Michigan DNR DNRTrailsOPENDATA layer 15",
+    "radiusKm": 5,
+    "query": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/15/query?where=1%3D1&geometry=-84.4688%2C45.6419&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=5000&units=esriSRUnit_Meter&outFields=OBJECTID%2CDNRTrail%2CTrailNamePrimary%2CTrailNetwork%2CCounty&returnGeometry=true&outSR=4326&f=geojson&geometryPrecision=5&maxAllowableOffset=0.0002&resultRecordCount=250",
+    "hitCount": 18,
+    "features": [
+     {
+      "id": 2947,
+      "code": "LP 99",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.46362,
+         45.62752
+        ],
+        [
+         -84.46361,
+         45.62585
+        ],
+        [
+         -84.43319,
+         45.62406
+        ],
+        [
+         -84.4334,
+         45.61691
+        ]
+       ]
+      }
+     },
+     {
+      "id": 3374,
+      "code": "LP 720",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.50231,
+         45.59283
+        ],
+        [
+         -84.49728,
+         45.607
+        ]
+       ]
+      }
+     },
+     {
+      "id": 3375,
+      "code": "LP 720",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.49478,
+         45.61422
+        ],
+        [
+         -84.48936,
+         45.62957
+        ]
+       ]
+      }
+     },
+     {
+      "id": 3376,
+      "code": "LP 720",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.48936,
+         45.62957
+        ],
+        [
+         -84.48815,
+         45.63305
+        ],
+        [
+         -84.48719,
+         45.63339
+        ]
+       ]
+      }
+     },
+     {
+      "id": 7289,
+      "code": "LP 720",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.49728,
+         45.607
+        ],
+        [
+         -84.49536,
+         45.61252
+        ]
+       ]
+      }
+     },
+     {
+      "id": 7290,
+      "code": "LP 720",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.49536,
+         45.61252
+        ],
+        [
+         -84.49478,
+         45.61422
+        ]
+       ]
+      }
+     },
+     {
+      "id": 13271,
+      "code": "LP 9",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.48719,
+         45.63339
+        ],
+        [
+         -84.48704,
+         45.62563
+        ],
+        [
+         -84.48587,
+         45.6208
+        ],
+        [
+         -84.46898,
+         45.57852
+        ],
+        [
+         -84.46368,
+         45.56473
+        ],
+        [
+         -84.46284,
+         45.56156
+        ],
+        [
+         -84.46252,
+         45.55852
+        ],
+        [
+         -84.46272,
+         45.55433
+        ],
+        [
+         -84.46447,
+         45.54217
+        ],
+        [
+         -84.46539,
+         45.52929
+        ],
+        [
+         -84.46505,
+         45.52527
+        ],
+        [
+         -84.46369,
+         45.52207
+        ],
+        [
+         -84.46083,
+         45.5186
+        ],
+        [
+         -84.45751,
+         45.5162
+        ],
+        [
+         -84.45245,
+         45.51373
+        ]
+       ]
+      }
+     },
+     {
+      "id": 15635,
+      "code": "LP 9",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.5377,
+         45.68599
+        ],
+        [
+         -84.48579,
+         45.65199
+        ],
+        [
+         -84.48443,
+         45.65047
+        ],
+        [
+         -84.48389,
+         45.64846
+        ],
+        [
+         -84.48409,
+         45.64485
+        ],
+        [
+         -84.48574,
+         45.64005
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18638,
+      "code": "LP 9",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.48693,
+         45.63653
+        ],
+        [
+         -84.48711,
+         45.63428
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18639,
+      "code": "LP 9",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.48688,
+         45.6367
+        ],
+        [
+         -84.48693,
+         45.63653
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18640,
+      "code": "LP 9",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.48711,
+         45.63428
+        ],
+        [
+         -84.48713,
+         45.63412
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18641,
+      "code": "LP 9",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.48641,
+         45.63811
+        ],
+        [
+         -84.48688,
+         45.6367
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18642,
+      "code": "LP 9",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.48635,
+         45.63829
+        ],
+        [
+         -84.48641,
+         45.63811
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18643,
+      "code": "LP 9",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.48578,
+         45.63987
+        ],
+        [
+         -84.48635,
+         45.63829
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18644,
+      "code": "LP 9",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.48574,
+         45.64005
+        ],
+        [
+         -84.48578,
+         45.63987
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18804,
+      "code": "LP 720",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.48719,
+         45.63339
+        ],
+        [
+         -84.48713,
+         45.63412
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18969,
+      "code": "LP 99",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.4334,
+         45.61691
+        ],
+        [
+         -84.41339,
+         45.61599
+        ],
+        [
+         -84.41039,
+         45.61544
+        ],
+        [
+         -84.40937,
+         45.6157
+        ],
+        [
+         -84.40633,
+         45.61558
+        ],
+        [
+         -84.40511,
+         45.61612
+        ],
+        [
+         -84.40267,
+         45.61649
+        ],
+        [
+         -84.39712,
+         45.6164
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18970,
+      "code": "LP 99",
+      "county": "Cheboygan",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.48713,
+         45.63412
+        ],
+        [
+         -84.47717,
+         45.63381
+        ],
+        [
+         -84.47642,
+         45.6334
+        ],
+        [
+         -84.47384,
+         45.6334
+        ],
+        [
+         -84.47389,
+         45.63041
+        ],
+        [
+         -84.46885,
+         45.62996
+        ],
+        [
+         -84.46848,
+         45.62967
+        ],
+        [
+         -84.4683,
+         45.62861
+        ],
+        [
+         -84.46697,
+         45.62786
+        ],
+        [
+         -84.46474,
+         45.62805
+        ],
+        [
+         -84.46362,
+         45.62752
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "reportClub": "Cheboygan Trail Blazers"
+  },
+  {
+   "name": "Lewiston",
+   "lat": 44.8776,
+   "lon": -84.3036,
+   "proxy": {
+    "seed": "snowmobile trail report l",
+    "suggestion": "lewiston snowmobile trail report",
+    "source": "Google autocomplete, US/en; demand proxy not volume",
+    "checked": "2026-11-23"
+   },
+   "dnr": {
+    "source": "Michigan DNR DNRTrailsOPENDATA layer 15",
+    "radiusKm": 5,
+    "query": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/15/query?where=1%3D1&geometry=-84.3036%2C44.8776&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=5000&units=esriSRUnit_Meter&outFields=OBJECTID%2CDNRTrail%2CTrailNamePrimary%2CTrailNetwork%2CCounty&returnGeometry=true&outSR=4326&f=geojson&geometryPrecision=5&maxAllowableOffset=0.0002&resultRecordCount=250",
+    "hitCount": 13,
+    "features": [
+     {
+      "id": 2800,
+      "code": "LP 449",
+      "county": "Montmorency",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.24872,
+         44.89937
+        ],
+        [
+         -84.2502,
+         44.89876
+        ],
+        [
+         -84.25218,
+         44.89861
+        ],
+        [
+         -84.25229,
+         44.88419
+        ],
+        [
+         -84.28988,
+         44.88409
+        ],
+        [
+         -84.28989,
+         44.88225
+        ],
+        [
+         -84.29026,
+         44.88188
+        ],
+        [
+         -84.29107,
+         44.88192
+        ],
+        [
+         -84.29175,
+         44.88256
+        ],
+        [
+         -84.29286,
+         44.88288
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2801,
+      "code": "LP 449",
+      "county": "Montmorency",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.29286,
+         44.88288
+        ],
+        [
+         -84.29408,
+         44.88227
+        ],
+        [
+         -84.29572,
+         44.88223
+        ],
+        [
+         -84.29857,
+         44.88322
+        ],
+        [
+         -84.29878,
+         44.88281
+        ],
+        [
+         -84.30143,
+         44.88274
+        ],
+        [
+         -84.30153,
+         44.88171
+        ],
+        [
+         -84.30603,
+         44.88169
+        ],
+        [
+         -84.30617,
+         44.88255
+        ],
+        [
+         -84.30647,
+         44.88274
+        ],
+        [
+         -84.31301,
+         44.88271
+        ],
+        [
+         -84.3132,
+         44.88381
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2802,
+      "code": "LP 429",
+      "county": "Montmorency",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.3387,
+         44.86202
+        ],
+        [
+         -84.33535,
+         44.86223
+        ],
+        [
+         -84.33392,
+         44.86297
+        ],
+        [
+         -84.33355,
+         44.86939
+        ],
+        [
+         -84.3236,
+         44.86937
+        ],
+        [
+         -84.32346,
+         44.87271
+        ],
+        [
+         -84.32456,
+         44.87358
+        ],
+        [
+         -84.32467,
+         44.87401
+        ],
+        [
+         -84.32344,
+         44.8758
+        ],
+        [
+         -84.32331,
+         44.88388
+        ],
+        [
+         -84.3132,
+         44.88381
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2806,
+      "code": "LP 429",
+      "county": "Montmorency",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.34279,
+         44.85506
+        ],
+        [
+         -84.34217,
+         44.8566
+        ],
+        [
+         -84.34207,
+         44.85847
+        ],
+        [
+         -84.34142,
+         44.86001
+        ],
+        [
+         -84.34049,
+         44.86098
+        ],
+        [
+         -84.33927,
+         44.86138
+        ],
+        [
+         -84.3387,
+         44.86202
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2807,
+      "code": "LP 429",
+      "county": "Oscoda",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.34383,
+         44.85391
+        ],
+        [
+         -84.34279,
+         44.85506
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2808,
+      "code": "LP 429",
+      "county": "Oscoda",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.34383,
+         44.85391
+        ],
+        [
+         -84.34373,
+         44.85457
+        ],
+        [
+         -84.34279,
+         44.85506
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2907,
+      "code": "LP 429",
+      "county": "Oscoda",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.3491,
+         44.85223
+        ],
+        [
+         -84.34688,
+         44.85242
+        ],
+        [
+         -84.34383,
+         44.85391
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2908,
+      "code": "LP 429",
+      "county": "Oscoda",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.35077,
+         44.8521
+        ],
+        [
+         -84.3491,
+         44.85223
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2909,
+      "code": "LP 429",
+      "county": "Oscoda",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.35077,
+         44.8521
+        ],
+        [
+         -84.34984,
+         44.85263
+        ],
+        [
+         -84.3491,
+         44.85223
+        ]
+       ]
+      }
+     },
+     {
+      "id": 2911,
+      "code": "LP 429",
+      "county": "Oscoda",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.35248,
+         44.84094
+        ],
+        [
+         -84.35231,
+         44.84286
+        ],
+        [
+         -84.35339,
+         44.84398
+        ],
+        [
+         -84.35341,
+         44.84708
+        ],
+        [
+         -84.35416,
+         44.84839
+        ],
+        [
+         -84.35458,
+         44.85044
+        ],
+        [
+         -84.35335,
+         44.85148
+        ],
+        [
+         -84.35077,
+         44.8521
+        ]
+       ]
+      }
+     },
+     {
+      "id": 7371,
+      "code": "LP 448",
+      "county": "Montmorency",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.33337,
+         44.92175
+        ],
+        [
+         -84.33302,
+         44.92084
+        ],
+        [
+         -84.32824,
+         44.91707
+        ],
+        [
+         -84.32797,
+         44.91639
+        ],
+        [
+         -84.32809,
+         44.91257
+        ],
+        [
+         -84.32705,
+         44.90992
+        ],
+        [
+         -84.32481,
+         44.90883
+        ],
+        [
+         -84.3245,
+         44.90694
+        ],
+        [
+         -84.32307,
+         44.90503
+        ],
+        [
+         -84.3203,
+         44.90241
+        ],
+        [
+         -84.31761,
+         44.90049
+        ],
+        [
+         -84.31342,
+         44.89827
+        ],
+        [
+         -84.298,
+         44.89829
+        ],
+        [
+         -84.29614,
+         44.89412
+        ],
+        [
+         -84.29701,
+         44.8918
+        ],
+        [
+         -84.29691,
+         44.88767
+        ],
+        [
+         -84.29298,
+         44.88754
+        ],
+        [
+         -84.29286,
+         44.88288
+        ]
+       ]
+      }
+     },
+     {
+      "id": 12216,
+      "code": "LP 449",
+      "county": "Montmorency",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.24872,
+         44.89937
+        ],
+        [
+         -84.24758,
+         44.89899
+        ],
+        [
+         -84.24537,
+         44.89919
+        ],
+        [
+         -84.2443,
+         44.89977
+        ],
+        [
+         -84.24307,
+         44.89991
+        ],
+        [
+         -84.24085,
+         44.90128
+        ],
+        [
+         -84.23822,
+         44.90129
+        ],
+        [
+         -84.23713,
+         44.90198
+        ],
+        [
+         -84.2366,
+         44.90198
+        ],
+        [
+         -84.23582,
+         44.90095
+        ],
+        [
+         -84.23369,
+         44.90066
+        ],
+        [
+         -84.23178,
+         44.90104
+        ]
+       ]
+      }
+     },
+     {
+      "id": 12218,
+      "code": "LP 449",
+      "county": "Montmorency",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.24434,
+         44.9058
+        ],
+        [
+         -84.24424,
+         44.90524
+        ],
+        [
+         -84.24519,
+         44.9046
+        ],
+        [
+         -84.24544,
+         44.90114
+        ],
+        [
+         -84.24724,
+         44.90071
+        ],
+        [
+         -84.24768,
+         44.9
+        ],
+        [
+         -84.24872,
+         44.89937
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "reportClub": "Lewiston Area Trail Groomers"
+  },
+  {
+   "name": "Mio",
+   "lat": 44.6623,
+   "lon": -84.146,
+   "proxy": {
+    "seed": "mio michigan snowmobile trails",
+    "suggestion": "mio michigan snowmobile trail report",
+    "source": "Google autocomplete, US/en; demand proxy not volume",
+    "checked": "2026-11-23"
+   },
+   "dnr": {
+    "source": "Michigan DNR DNRTrailsOPENDATA layer 15",
+    "radiusKm": 5,
+    "query": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/15/query?where=1%3D1&geometry=-84.146%2C44.6623&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=5000&units=esriSRUnit_Meter&outFields=OBJECTID%2CDNRTrail%2CTrailNamePrimary%2CTrailNetwork%2CCounty&returnGeometry=true&outSR=4326&f=geojson&geometryPrecision=5&maxAllowableOffset=0.0002&resultRecordCount=250",
+    "hitCount": 3,
+    "features": [
+     {
+      "id": 3024,
+      "code": "LP 968",
+      "county": "Oscoda",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.18136,
+         44.58075
+        ],
+        [
+         -84.18235,
+         44.58195
+        ],
+        [
+         -84.18241,
+         44.58323
+        ],
+        [
+         -84.18388,
+         44.58603
+        ],
+        [
+         -84.18374,
+         44.58914
+        ],
+        [
+         -84.18398,
+         44.59069
+        ],
+        [
+         -84.18339,
+         44.59288
+        ],
+        [
+         -84.1844,
+         44.59358
+        ],
+        [
+         -84.18499,
+         44.59451
+        ],
+        [
+         -84.1846,
+         44.59495
+        ],
+        [
+         -84.18151,
+         44.59558
+        ],
+        [
+         -84.18193,
+         44.60049
+        ],
+        [
+         -84.18145,
+         44.60302
+        ],
+        [
+         -84.18175,
+         44.60465
+        ],
+        [
+         -84.18143,
+         44.60552
+        ],
+        [
+         -84.18043,
+         44.60659
+        ],
+        [
+         -84.18142,
+         44.607
+        ],
+        [
+         -84.18126,
+         44.60824
+        ],
+        [
+         -84.18165,
+         44.60885
+        ],
+        [
+         -84.18073,
+         44.60942
+        ],
+        [
+         -84.17975,
+         44.61109
+        ],
+        [
+         -84.18312,
+         44.61452
+        ],
+        [
+         -84.18502,
+         44.61537
+        ],
+        [
+         -84.18818,
+         44.61791
+        ],
+        [
+         -84.18824,
+         44.61839
+        ],
+        [
+         -84.18685,
+         44.62081
+        ],
+        [
+         -84.18686,
+         44.62397
+        ],
+        [
+         -84.18649,
+         44.62414
+        ],
+        [
+         -84.1845,
+         44.62314
+        ],
+        [
+         -84.18161,
+         44.6231
+        ],
+        [
+         -84.17904,
+         44.62106
+        ],
+        [
+         -84.17513,
+         44.62047
+        ],
+        [
+         -84.17192,
+         44.62095
+        ],
+        [
+         -84.17151,
+         44.62201
+        ],
+        [
+         -84.17083,
+         44.6221
+        ]
+       ]
+      }
+     },
+     {
+      "id": 5562,
+      "code": "LP 968",
+      "county": "Oscoda",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.17083,
+         44.6221
+        ],
+        [
+         -84.16983,
+         44.62228
+        ],
+        [
+         -84.16877,
+         44.62335
+        ],
+        [
+         -84.16557,
+         44.62348
+        ],
+        [
+         -84.16457,
+         44.62454
+        ],
+        [
+         -84.16444,
+         44.62536
+        ],
+        [
+         -84.16386,
+         44.62595
+        ],
+        [
+         -84.15943,
+         44.62614
+        ],
+        [
+         -84.1577,
+         44.62669
+        ],
+        [
+         -84.15696,
+         44.62731
+        ],
+        [
+         -84.15595,
+         44.63001
+        ],
+        [
+         -84.15876,
+         44.63201
+        ],
+        [
+         -84.15825,
+         44.63274
+        ],
+        [
+         -84.15808,
+         44.63373
+        ],
+        [
+         -84.15685,
+         44.6352
+        ],
+        [
+         -84.15739,
+         44.63566
+        ],
+        [
+         -84.15828,
+         44.63783
+        ],
+        [
+         -84.16013,
+         44.63802
+        ],
+        [
+         -84.1604,
+         44.63838
+        ],
+        [
+         -84.16031,
+         44.64061
+        ],
+        [
+         -84.15931,
+         44.64167
+        ],
+        [
+         -84.16048,
+         44.6424
+        ],
+        [
+         -84.15883,
+         44.64362
+        ],
+        [
+         -84.15783,
+         44.64379
+        ],
+        [
+         -84.15822,
+         44.64503
+        ]
+       ]
+      }
+     },
+     {
+      "id": 10331,
+      "code": "LP 967",
+      "county": "Oscoda",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -84.10786,
+         44.65081
+        ],
+        [
+         -84.10722,
+         44.65028
+        ],
+        [
+         -84.10862,
+         44.64928
+        ],
+        [
+         -84.10887,
+         44.64852
+        ],
+        [
+         -84.10826,
+         44.64821
+        ],
+        [
+         -84.10785,
+         44.64751
+        ],
+        [
+         -84.10756,
+         44.64592
+        ],
+        [
+         -84.11011,
+         44.64479
+        ],
+        [
+         -84.11066,
+         44.64374
+        ],
+        [
+         -84.10997,
+         44.64242
+        ],
+        [
+         -84.10917,
+         44.64171
+        ],
+        [
+         -84.10892,
+         44.64068
+        ],
+        [
+         -84.11031,
+         44.63994
+        ],
+        [
+         -84.11268,
+         44.63934
+        ],
+        [
+         -84.11255,
+         44.63838
+        ],
+        [
+         -84.11189,
+         44.63733
+        ],
+        [
+         -84.11298,
+         44.63561
+        ],
+        [
+         -84.11203,
+         44.63287
+        ],
+        [
+         -84.11065,
+         44.63078
+        ],
+        [
+         -84.11042,
+         44.62748
+        ],
+        [
+         -84.10834,
+         44.62589
+        ],
+        [
+         -84.10835,
+         44.62533
+        ],
+        [
+         -84.10747,
+         44.62415
+        ],
+        [
+         -84.10776,
+         44.62315
+        ],
+        [
+         -84.10827,
+         44.62292
+        ],
+        [
+         -84.10826,
+         44.62093
+        ],
+        [
+         -84.10759,
+         44.6203
+        ],
+        [
+         -84.10632,
+         44.62031
+        ],
+        [
+         -84.10612,
+         44.61985
+        ],
+        [
+         -84.1068,
+         44.61947
+        ],
+        [
+         -84.10631,
+         44.61877
+        ],
+        [
+         -84.10425,
+         44.61827
+        ],
+        [
+         -84.10366,
+         44.617
+        ],
+        [
+         -84.10251,
+         44.61652
+        ],
+        [
+         -84.10205,
+         44.61583
+        ],
+        [
+         -84.10232,
+         44.61464
+        ],
+        [
+         -84.10296,
+         44.61403
+        ],
+        [
+         -84.10301,
+         44.61288
+        ],
+        [
+         -84.10478,
+         44.61124
+        ],
+        [
+         -84.10692,
+         44.61085
+        ],
+        [
+         -84.1027,
+         44.60746
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "reportClub": null
+  },
+  {
+   "name": "Alpena",
+   "lat": 45.0745,
+   "lon": -83.4436,
+   "proxy": {
+    "seed": "alpena snowmobile trails",
+    "suggestion": "alpena snowmobile trails",
+    "source": "Google autocomplete, US/en; demand proxy not volume",
+    "checked": "2026-11-23"
+   },
+   "dnr": {
+    "source": "Michigan DNR DNRTrailsOPENDATA layer 15",
+    "radiusKm": 5,
+    "query": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/15/query?where=1%3D1&geometry=-83.4436%2C45.0745&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=5000&units=esriSRUnit_Meter&outFields=OBJECTID%2CDNRTrail%2CTrailNamePrimary%2CTrailNetwork%2CCounty&returnGeometry=true&outSR=4326&f=geojson&geometryPrecision=5&maxAllowableOffset=0.0002&resultRecordCount=250",
+    "hitCount": 3,
+    "features": [
+     {
+      "id": 7659,
+      "code": "LP 4",
+      "county": "Alpena",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -83.47119,
+         45.05789
+        ],
+        [
+         -83.51598,
+         45.0566
+        ]
+       ]
+      }
+     },
+     {
+      "id": 9666,
+      "code": "LP 992",
+      "county": "Alpena",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -83.6057,
+         45.19209
+        ],
+        [
+         -83.60302,
+         45.18985
+        ],
+        [
+         -83.4565,
+         45.09648
+        ],
+        [
+         -83.45371,
+         45.09505
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18666,
+      "code": "LP 992",
+      "county": "Alpena",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -83.45371,
+         45.09505
+        ],
+        [
+         -83.4417,
+         45.08738
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "reportClub": null
+  }
+ ]
+}
