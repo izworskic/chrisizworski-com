@@ -122,8 +122,15 @@ async def run():
             if await page.locator("#calumet-map .leaflet-popup").count()!=1:
                 raise AssertionError("A place click must replace, not stack, the previous ship popup")
             await page.locator("#bridge-select").select_option("95th")
+            # The bridge picker closes the shore popup before we tap the
+            # separate chart-marker symbol. Verify that close actually settles.
+            await page.locator("#calumet-map .leaflet-popup").first.wait_for(state="detached",timeout=5000)
             await page.locator("#calumet-map .calumet-bridge-icon[title*='95th Street']").click()
-            bridge=await page.locator("#calumet-map .leaflet-popup-content").inner_text()
+            await page.wait_for_timeout(300)
+            bridge_texts=await page.locator("#calumet-map .leaflet-popup-content").all_inner_texts()
+            if len(bridge_texts)!=1:
+                raise AssertionError("Bridge click opened competing popups: "+repr(bridge_texts))
+            bridge=bridge_texts[0]
             for required in ("95th Street","double-leaf bascule","river mile 1.09",
                              "NOAA bridge reference","not a live bridge opening"):
                 if required not in bridge:
