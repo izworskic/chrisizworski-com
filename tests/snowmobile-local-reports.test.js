@@ -11,9 +11,9 @@ const html=(condition,reportDate,groomed)=>`<html><nav>Groomer Reports</nav><sec
 const stale=html('Excellent','March 12th, 2026','January 01st, 1970');
 const current=html('Good','December 15th, 2026','December 14th, 2026');
 
-test('nineteen verified sources resolve to six geographically scoped operator rosters',()=>{
+test('nineteen region sources and two existing corridor club sources remain geographically scoped',()=>{
  const keys=['eastern-up','keweenaw-copper-country','central-western-up','northeast-sunrise','northwest-michigan','west-michigan'];
- assert.deepEqual(Object.keys(desk.CLUBS),keys);
+ assert.deepEqual(Object.keys(desk.CLUBS),[...keys.slice(0,3),'grayling-gaylord',...keys.slice(3)]);
  const urls=new Set();
  for(const key of keys){
   const records=desk.roster(key);
@@ -26,7 +26,7 @@ test('nineteen verified sources resolve to six geographically scoped operator ro
   }
  }
  assert.equal(urls.size,19);
- assert.equal(desk.roster('grayling-gaylord'),null,'existing legacy corridor preserved');
+ assert.equal(desk.roster('grayling-gaylord').length,2,'existing legacy clubs now also supply dated town evidence');
  assert.equal(desk.roster('../eastern-up'),null);
 });
 test('structured MISORVA published date is different from source fetch/check date',()=>{
@@ -160,7 +160,7 @@ test('report-desk client version changes when new source-date safety logic ships
  const version='/assets/snowmobile-local-reports.js?v=20261113-source-date-audit-3';
  const generator=readFileSync(new URL('../scripts/generate-snowmobile-region-pages.mjs',import.meta.url),'utf8');
  assert.ok(generator.includes(version));
- for(const region of Object.keys(desk.CLUBS)){
+ for(const region of Object.keys(desk.CLUBS).filter(key=>key!=='grayling-gaylord')){
    const html=readFileSync(new URL('../public/snowmobile/regions/'+region+'.html',import.meta.url),'utf8');
    assert.ok(html.includes(version),region+' must load source-date audit client, not the old cached version');
  }
