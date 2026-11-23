@@ -53,6 +53,9 @@ test('Calumet shore, bridge and vessel bubbles match Cuyahoga without competing 
  assert.match(app,/function bridgePopupContent\(b\)/);
  assert.match(app,/function shipPopupContent\(v\)/);
  assert.match(app,/function openShipPopup\(marker,v\)/);
+ assert.match(app,/function revealPopupInViewport\(popup\)/);
+ assert.match(app,/window\.scrollBy\(\{top:.*behavior:'instant'\}\)/);
+ assert.match(app,/revealPopupInViewport\(m\.getPopup\(\)\)/);
  assert.match(app,/L\.popup\(\{autoClose:true,closeOnClick:true,maxWidth:305\}\)/);
  assert.match(app,/vesselPopup\.setLatLng\(marker\.getLatLng\(\)\)\.setContent\(shipPopupContent\(v\)\)\.openOn\(state\.map\)/);
  assert.match(app,/m\.bindPopup\(placePopupContent\(p\)/);
