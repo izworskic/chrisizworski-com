@@ -107,6 +107,9 @@ async def run():
                 raise AssertionError("Only one ship detail bubble is permitted")
             if width in (390,1280):
                 await page.screenshot(path=str(OUT/f"calumet-{width}-ship-popup.png"),animations="disabled")
+            # Leaflet popups can cover nearby pins, as on Cuyahoga.
+            # Close the ship bubble before choosing a shore marker.
+            await page.locator("#calumet-map .leaflet-popup-close-button").click()
             await page.locator("#calumet-map .calumet-viewpoint-icon[title*='95th Street']").click()
             shore=await page.locator("#calumet-map .leaflet-popup-content").inner_text()
             if "95th Street Bridge approaches" not in shore or "Google Maps" not in shore:
