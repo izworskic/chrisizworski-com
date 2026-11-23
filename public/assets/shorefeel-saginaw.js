@@ -7,6 +7,17 @@ const id=x=>document.getElementById(x);
 const put=(x,v)=>{const el=id(x);if(el)el.textContent=v;};
 const date=s=>{const d=new Date(s);return Number.isFinite(d.getTime())?d.toLocaleString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Time unavailable';};
 const temp=n=>Number.isFinite(n)?n.toFixed(1)+'°F':'Not available';
+// The shared API permits stale cache delivery. Do not display a past hourly
+// forecast as "now" simply because its source was current when computed.
+const sourceRecent=data=>{
+ const when=Date.parse(data?.generatedAt||'');
+ const age=Date.now()-when;
+ return Number.isFinite(age)&&age>=-5*60000&&age<=30*60000;
+};
+const currentHour=startsAt=>{
+ const when=Date.parse(startsAt||'');
+ return Number.isFinite(when)&&when<=Date.now()&&Date.now()<when+3600000;
+};
 const points=[
  {key:'inner-bay',name:'Near Bay City State Park',kind:'satellite',lat:43.702,lon:-83.858,detail:'NOAA analyzed satellite surface pixel, in the inner bay. Not a reading in the swimming area.'},
  {key:'west-bay',name:'Off Nayanquing Point',kind:'satellite',lat:43.799,lon:-83.861,detail:'NOAA analyzed satellite surface pixel off the western bay shoreline. Not a shoreline thermometer.'},
@@ -29,7 +40,7 @@ function band(t){
  return {key:'warm',name:'Warmer water',note:'Temperature alone never establishes swimming safety or water quality.'};
 }
 function renderLead(){
- const feel=payload?.beachFeel,weather=feel?.status==='forecast-based';
+ const feel=payload?.beachFeel,weather=feel?.status==='forecast-based'&&currentHour(feel.startsAt);
  const water=payload?.water,validWater=Number.isFinite(water?.tempF);
  const hero=id('bay-hero');
  if(hero)hero.dataset.band=!weather?'none':feel.apparentF<50?'cold':feel.apparentF>=85?'warm':'cool';
@@ -58,7 +69,7 @@ function renderLead(){
    ?'NWS shore '+Math.round(paired.beachNwsF)+'°F · west Bay County '+Math.round(paired.inlandF)+'°F. Different gridded forecast cells, not independent thermometer measurements.'
    :grid?.status==='same-grid'?'Both sites use the same NWS forecast cell. We will not present that as an observed shoreline difference.'
    :'Two current NWS hourly forecasts with verified distinct cells are required; no inland difference is inferred.');
- const modeled=physics?.status==='research-only';
+ const modeled=weather&&physics?.status==='research-only';
  put('physics-model-range',modeled
    ?physics.lowF.toFixed(1)+'–'+physics.highF.toFixed(1)+'°F (scenarios)'
    :'Research scenarios unavailable');
@@ -77,7 +88,7 @@ function renderWindTurn(){
  const value=payload?.windTurn;
  const list=id('wind-turn-hours');
  if(list)list.replaceChildren();
- if(!value||value.status==='unavailable'){
+ if(!value||value.status==='unavailable'||!currentHour(value.current?.startsAt)){
   put('wind-turn-answer','Hourly wind outlook unavailable');
   put('wind-turn-explain','There is no verified current NWS hourly wind forecast. A change in the wind cannot be timed from missing information.');
   put('wind-turn-source','Use official NWS forecasts and beach hazard notices before visiting. No offshore sensor has been substituted for the land-area forecast.');
@@ -165,7 +176,7 @@ function renderEvidence(){
 }
 function renderActivity(a){
  document.querySelectorAll('[data-activity]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.activity===a)));
- const v=payload?.assessments?.[a];
+ const v=currentHour(payload?.weatherNow?.startsAt)?payload?.assessments?.[a]:null;
  if(!v){put('activity-heading','Not enough verified evidence');put('on-sand','Local shoreline forecast unavailable.');put('in-water','No site-specific water reading is available.');put('after-water','Wind and wet clothing can increase cooling.');put('activity-decision','Check official forecasts and beach hazards separately.');return;}
  put('activity-heading',v.heading);put('on-sand',v.beach);put('in-water',v.water);put('after-water',v.after);
  put('activity-decision',v.decision);
@@ -221,7 +232,9 @@ async function load(){
   const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),18000);
   let response;try{response=await fetch('/api/shorefeel?lake=huron&place=saginaw-bay',{headers:{Accept:'application/json'},signal:ctrl.signal});}finally{clearTimeout(timer);}
   if(!response.ok)throw Error('Live source failed');
-  payload=await response.json();
+  const received=await response.json();
+  if(!sourceRecent(received))throw Error('ShoreFeel data is stale; no current forecast can be shown');
+  payload=received;
   renderLead();renderWindTurn();renderEvidence();renderActivity('relax');
  }catch(e){
   put('lead-temp','Beach feel unavailable');put('lead-band','Beach conditions unverified');
