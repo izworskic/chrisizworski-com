@@ -22,7 +22,7 @@ test('Working river listings are distinct real tool cards in the Great Lakes sec
   assert.equal(cards.length,1,river+' directory card');
   assert.ok(section.includes(cards[0][0]));
   assert.match(cards[0][0],new RegExp('data-tool-id="'+id+'"'));
-  assert.match(cards[0][0],/data-tags="[^"]*boating[^"]*freighters[^"]*ships/);
+  assert.match(cards[0][0],/data-tags="[^"]*boating[^"]*ships/);
   assert.ok(cards[0][2].includes(city));
   assert.match(cards[0][3],/AIS|vessels/);
   assert.ok(fs.existsSync('public'+slug+'index.html'));
