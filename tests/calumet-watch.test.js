@@ -12,7 +12,11 @@ const vessel=(seen,lat=41.7228,lon=-87.5433)=>({mmsi:'366123456',name:'TEST FREI
 
 test('Calumet bridge and public-place catalog is source-backed and explicitly limited',()=>{
  assert.equal(core.validateGuide(guide),true);
- assert.equal(guide.bridges.length,5);assert.equal(guide.viewpoints.length,2);
+ assert.equal(guide.bridges.length,10);assert.equal(guide.viewpoints.length,2);
+ assert.equal(guide.bridges.filter(b=>b.group==='city').length,5);
+ assert.equal(guide.bridges.filter(b=>b.group==='rail').length,5);
+ assert.equal(guide.turningBasins.references.length,3);
+ assert.deepEqual(guide.turningBasins.references.map(x=>x.milesAboveMouth),[0.9,4.63,6.06]);
  assert.equal(guide.dataRules.noEta,true);
  assert.equal(guide.dataRules.noLiveBridgeOpenings,true);
  assert.ok(guide.bridges.every(b=>b.mapRole==='ROUNDED_REFERENCE_NOT_SPAN'));
@@ -63,6 +67,9 @@ test('noindex route and inherited site contracts are preserved without touching 
  assert.match(html,/© 2026 Chris Izworski/);
  assert.match(html,/id="calumet-map"/);assert.match(html,/id="bridge-angle"/);
  assert.match(html,/id="view-choices"/);assert.match(html,/<noscript>/);
+ assert.match(html,/id="rail-layer"/);assert.match(app,/state\.railBridges=L\.layerGroup\(\)/);
+ assert.match(app,/b\.group==='rail'/);
+ assert.match(html,/turning basins/);
  assert.match(html,/\/assets\/visitor-map-links\.js/);
  assert.match(app,/fetch\('\/api\/freighter-ais'/);
  assert.match(app,/core\.nearPlace\(/);assert.match(app,/if\(!window\.L\)/);
