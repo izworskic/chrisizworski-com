@@ -70,7 +70,7 @@ h3{font-weight:750}
 .map-wayfinding a{font-weight:800;color:#145b66;text-decoration-thickness:1.5px}
 .map-layout{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(335px,.8fr);grid-template-rows:auto minmax(0,1fr);align-items:start;gap:16px 20px}
 .map-column{min-width:0}
-.map-frame{position:relative;border:5px solid #f7f7f1;background:#d1e4e3;border-radius:15px;overflow:hidden;box-shadow:var(--shadow)}
+.map-frame{position:relative;border:1px solid #c8d5d3;background:#dce8e9;border-radius:7px;overflow:hidden;box-shadow:0 3px 12px rgba(21,48,53,.08)}
 .map-frame-heading{position:absolute;top:8px;left:60px;right:12px;display:flex;justify-content:space-between;gap:12px;align-items:center;z-index:700;pointer-events:none;font-size:.65rem;font-weight:800;letter-spacing:.1em;color:#244851;text-shadow:0 1px 4px #fff,0 -1px 3px #fff}
 .map-latitude{font-variant-numeric:tabular-nums}
 #cuyahoga-map{position:relative;width:100%;height:clamp(525px,72vh,780px);background:linear-gradient(125deg,#d4e6df,#b4d2d1);z-index:0}
@@ -89,6 +89,11 @@ h3{font-weight:750}
 .key-unknown{background:#eef7f7;border:2px dashed #155e70;width:15px!important;height:8px!important;border-radius:6px!important}
 .key-bridge{background:#c48735}
 .key-work{background:#756286}
+.map-secondary{display:flex;align-items:center;flex-wrap:wrap;gap:8px 16px;width:100%}
+.map-secondary .map-view-actions button{min-height:32px;padding:5px 9px;border-radius:4px;border-color:#c9d7d7;background:#f7faf8;color:#315865;font-size:.73rem}
+.map-secondary .river-type-strip{margin:0}
+.map-secondary .river-type-strip summary{font-size:.73rem;font-weight:680;color:#315865;cursor:pointer}
+.map-secondary .river-type-strip[open]{flex-basis:100%;padding:6px 0}
 .map-caveat{max-width:100%;flex:0 1 auto}
 .map-caveat summary{list-style:none;color:#315c67;font-size:.73rem;font-weight:720;cursor:pointer;text-decoration:underline;text-underline-offset:2px;white-space:nowrap}
 .map-caveat summary::-webkit-details-marker{display:none}
@@ -186,7 +191,8 @@ h3{font-weight:750}
 .pin-work{background:#765f87}
 .pin-historic{background:#2b6780}
 .pin-vessel{background:#165e70}
-.map-pin{display:grid;place-items:center;border:2px solid #fff;color:#fff;border-radius:50%;font-weight:790;box-shadow:0 2px 7px #122d3f80}
+.map-pin{display:grid;place-items:center;border:2px solid #fff;color:#fff;border-radius:50%;font-weight:790;box-shadow:0 1px 3px #122d3f70}
+.map-pin.pin-park{border:2px solid #fff;box-shadow:0 1px 3px #17372f77}
 .cuyahoga-vessel-icon{background:transparent!important;border:0!important}
 .cuyahoga-ship-marker.pin-vessel{display:flex;align-items:center;justify-content:center;background:transparent!important;border:0!important;border-radius:0!important;box-shadow:none!important;width:100%;height:38px}
 .cuyahoga-ship-marker svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 2px 3px rgba(10,46,56,.5))}

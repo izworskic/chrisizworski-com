@@ -12,6 +12,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="stylesheet" href="/assets/cuyahoga-watch.css">
 <link rel="stylesheet" href="/assets/river-watch-vessel-ui.css">
+<link rel="stylesheet" href="/assets/soo-vessel-icons.css?v=20261122">
 <link rel="stylesheet" href="/assets/cuyahoga-bridge-to-shore.css">
 <link rel="stylesheet" href="/assets/cuyahoga-bend-demo.css">
 <script type="application/ld+json">
@@ -40,31 +41,29 @@
 </section>
 <section class="workbench" id="river-workbench" aria-labelledby="map-heading">
  <div class="map-header">
-  <div class="map-intro"><p class="kicker">THE RIVER AT A GLANCE</p><h2 id="map-heading">Find your view of the river.</h2></div>
-   <div class="map-header-tools">
-    <div class="map-view-actions" role="group" aria-label="Choose map framing"><button id="show-ships-on-map" type="button" disabled>Show ships</button><button id="show-parks-on-map" type="button">Viewing parks</button></div>
-    <p class="map-wayfinding"><strong>Blue:</strong> AIS vessels. <strong>Green:</strong> public places. <a href="#places-heading">Choose where to watch ↓</a></p>
-   </div>
+  <div class="map-intro"><p class="kicker">CURRENT VESSEL REPORTS</p><h2 id="map-heading">Ships on the Cuyahoga</h2></div>
+   <p class="map-wayfinding">Select a freighter for its last report. Green markers identify public viewing parks.</p>
  </div>
  <noscript><p class="js-fallback">Interactive vessel markers require JavaScript. You can still use the <a href="/great-lakes-freighter-tracking/">current Great Lakes ship tracker</a>, or choose a park below: <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/scranton-flats-pier">Scranton Flats Pier</a>, <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/rivergate-park">Rivergate Park</a>, <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/heritage-park">Heritage Park</a>, <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/wendy-park">Wendy Park</a>. Park managers provide current access information.</p></noscript>
  <div class="map-layout">
   <div class="map-column">
    <div class="map-frame">
-    <div class="map-frame-heading" aria-hidden="true"><span class="map-latitude">41°29′ N</span><span>LOWER CUYAHOGA · THE FLATS</span></div>
     <div id="cuyahoga-map" role="region" aria-label="Interactive map of Cleveland Cuyahoga River, public viewing parks, select NOAA bridge references and observed vessel positions" tabindex="0"><p class="map-loading">Map is loading. Public park links and report status remain usable below.</p></div>
    </div>
    <div class="map-underbar">
     <div class="map-key" aria-label="Map legend">
-     <span><i class="key-spot"></i>Public parks</span><span><i class="key-ship"></i>Reported vessels</span><span><i class="key-unknown"></i>Unoriented vessel outline</span><span data-bridge-legend hidden><i class="key-bridge"></i>Bridge landmarks</span><span data-bridge-legend hidden><i class="key-work"></i>Dated removal notice</span>
+     <span><i class="key-spot"></i>Viewing parks</span><span><i class="key-ship"></i>Recent AIS ships</span><span data-bridge-legend hidden><i class="key-bridge"></i>Bridge landmarks</span><span data-bridge-legend hidden><i class="key-work"></i>Dated removal notice</span>
     </div>
     <details class="map-caveat">
      <summary>What do these pins mean?</summary>
      <p>Park pins show approximate park areas, not surveyed entrances or guaranteed sightlines. Bridge pins use rounded NOAA Coast Pilot reference coordinates, not physical crossing axes. Work notices are dated announcements, not real-time bridge status. This map is for shore watching, never navigation.</p>
     </details>
    </div>
-  </div>
-   <div class="river-type-strip"><p class="river-type-kicker">RECENT AIS TYPES · Select to filter the map and list</p>
-    <div id="cuyahoga-type-counts" class="river-type-counts" role="group" aria-label="Filter recent Cuyahoga AIS vessels by reported type"><span class="river-type-note">Vessel type counts will appear with fresh AIS positions.</span></div>
+   <div class="map-secondary">
+    <div class="map-view-actions" role="group" aria-label="Map locations"><button id="show-ships-on-map" type="button" disabled>Show ships</button><button id="show-parks-on-map" type="button">Viewing parks</button></div>
+    <details class="river-type-strip"><summary>Ship types and counts</summary>
+     <div id="cuyahoga-type-counts" class="river-type-counts" role="group" aria-label="Filter recent Cuyahoga AIS vessels by reported type"><span class="river-type-note">Vessel type counts appear with fresh AIS reports.</span></div>
+    </details>
    </div>
   </div>
   <aside class="action-rail" aria-label="Choose a public shore watch and inspect reported ships">
@@ -74,10 +73,11 @@
     <ul id="live-vessels" class="vessel-list" aria-label="Fresh river vessel positions"><li>A missing report does not mean the river is empty.</li></ul>
     <details class="report-method">
      <summary>Source, accuracy and limitations</summary>
-     <p class="source-note">From <a href="https://openwaters.io/api/ais/">Open Waters AIS</a>, using a Cleveland-specific area request like the <a href="/soo-locks/">Soo Locks</a> and <a href="/duluth-canal-park/">Duluth</a> tools. Reports can be delayed, sparse or unavailable. Hull shapes illustrate reported AIS type and length band, not true scale. An independent arrow indicates reported moving course over ground or true heading where available; the side-profile ship stays upright. Without either, no bow direction is implied. No bridge arrival times are calculated.</p>
+     <p class="source-note">From <a href="https://openwaters.io/api/ais/">Open Waters AIS</a>, using a Cleveland-specific area request like the <a href="/soo-locks/">Soo Locks</a> and <a href="/duluth-canal-park/">Duluth</a> tools. Reports can be delayed, sparse or unavailable. Hull shapes illustrate reported AIS type and length band, not true scale. As on our Soo Locks map, vessel silhouettes remain upright. The symbols indicate reported AIS vessel category and approximate length band, not compass direction. Reported course and heading are available in the vessel details. No bridge arrival times are calculated.</p>
      <p id="ais-source-credits" class="source-note" aria-label="AIS source attributions">Individual upstream source credits appear when the AIS report includes them. <a href="https://openwaters.io/ais/">Provider and licensing information ↗</a></p>
     </details>
-   </section>   <section class="panel places" aria-labelledby="places-heading">
+   </section>
+   <section class="panel places" aria-labelledby="places-heading">
     <div class="panel-header">
      <div><p class="side-eyebrow">STEP 02 / CHOOSE A VIEW</p><h3 id="places-heading">Where to stand</h3></div>
      <span>4 public places</span>

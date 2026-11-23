@@ -1,11 +1,12 @@
 /* Live-first Cuyahoga shore watch. Shared AIS positions, no synthetic tracks. */
 (function(){
  'use strict';
- const core=window.CuyahogaWatchCore,shipUI=window.RiverWatchVesselUI;
+ const core=window.CuyahogaWatchCore,shipUI=window.RiverWatchVesselUI,Icons=window.SeawayVesselIcons;
  const $=id=>document.getElementById(id);
  if(!core){$('vessel-status').textContent='Interactive data is unavailable. Use the official source links below.';return;}
  const state={parks:null,bridges:null,bridgeNotices:null,live:null,selectedParkId:null,selectedBridgeId:null,map:null,selectedShip:null,shipKindFilter:'all'};
  const mapGroup={parks:null,bridges:null,ships:null};
+ let vesselPopup=null;
  const featuredBridgeIds=new Set(['center-st-139','columbus-193','carter-243','west-third-369','eagle-280']);
  const locClock=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
  const escText=(tag,text,className)=>{const e=document.createElement(tag);e.textContent=String(text??'');if(className)e.className=className;return e};
@@ -26,7 +27,8 @@
  function mapPointIcon(kind){
   if(!window.L)return null;
   const classes={park:'pin-park',bridge:'pin-bridge',work:'pin-work'};
-  return L.divIcon({className:'',html:'<div class="map-pin '+(classes[kind]||classes.bridge)+'" style="width:30px;height:30px">'+(kind==='park'?'&#10003;':kind==='work'?'!': '&#9646;')+'</div>',iconSize:[30,30],iconAnchor:[15,15]});
+  const width=kind==='park'?18:30,glyph=kind==='park'?'':kind==='work'?'!':'&#9646;';
+  return L.divIcon({className:'',html:'<div class="map-pin '+(classes[kind]||classes.bridge)+'" style="width:'+width+'px;height:'+width+'px">'+glyph+'</div>',iconSize:[width,width],iconAnchor:[width/2,width/2]});
  }
  function initMap(){
   if(!window.L){
@@ -51,7 +53,7 @@
   // A center chosen for desktop clipped Wendy Park at narrow widths.
   if(state.map&&state.parks.spots.length){
    state.map.fitBounds(state.parks.spots.map(p=>[p.lat,p.lon]),{
-    paddingTopLeft:[44,52],paddingBottomRight:[44,46],maxZoom:14,animate:false
+    paddingTopLeft:[44,52],paddingBottomRight:[44,46],maxZoom:13,animate:false
    });
   }
   for(const park of state.parks.spots){
@@ -86,6 +88,7 @@
   }
  }
  function choosePark(id,move){
+  if(vesselPopup&&state.map?.hasLayer(vesselPopup))state.map.removeLayer(vesselPopup);
   const park=state.parks?.spots.find(p=>p.id===id);
   if(!park)return;
   state.selectedParkId=id;state.selectedBridgeId=null;state.selectedShip=null;
@@ -124,6 +127,7 @@
   return values.year+'-'+values.month+'-'+values.day;
  }
  function chooseBridge(bridgeId,move){
+  if(vesselPopup&&state.map?.hasLayer(vesselPopup))state.map.removeLayer(vesselPopup);
   const bridge=state.bridges?.bridges.find(x=>x.channel==='main'&&x.id===bridgeId);
   if(!bridge)return;
   state.selectedBridgeId=bridge.id;state.selectedParkId=null;state.selectedShip=null;
@@ -212,29 +216,33 @@
   return null;
  }
  function liveVesselIcon(v){
-  if(shipUI){const g=shipUI.marker(v,{zoom:state.map?.getZoom()||14,selected:state.selectedShip===String(v.mmsi)});
-   return L.divIcon({className:g.className+' cuyahoga-vessel-icon cuyahoga-ship-'+g.kind,html:g.html,iconSize:g.size,iconAnchor:[g.size[0]/2,g.size[1]/2]});}
-  const info=core.vesselVisual(v),bearing=markerBearing(v),oriented=!!bearing;
-  const widths={large:60,medium:50,small:40,'not-reported':44};
-  const width=widths[info.widthClass]||44;
-  const decks={
-   cargo:'<rect x="22" y="10" width="9" height="12" rx="1" class="ship-deck"/><rect x="34" y="10" width="9" height="12" rx="1" class="ship-deck"/><rect x="46" y="10" width="8" height="12" rx="1" class="ship-deck"/>',
-   tanker:'<circle cx="28" cy="16" r="4" class="ship-deck"/><circle cx="40" cy="16" r="4" class="ship-deck"/><circle cx="52" cy="16" r="4" class="ship-deck"/>',
-   tug:'<rect x="21" y="10" width="16" height="12" rx="3" class="ship-deck"/><path d="M39 12H53M39 20H53" class="ship-deck"/>',
-   passenger:'<rect x="20" y="10" width="38" height="12" rx="4" class="ship-deck"/><path d="M24 16H53" class="ship-deck"/>',
-   unknown:'<path d="M24 11H48M24 21H48" class="ship-deck"/>'
-  };
-  const pointed='M6 9L50 4Q61 4 69 16Q61 28 50 28L6 23Q3 16 6 9Z';
-  const symmetric='M10 7Q3 16 10 25L62 25Q69 16 62 7Z';
-  const transform=oriented?' transform="rotate('+(bearing.degrees-90).toFixed(1)+' 36 16)"':'';
-  const html='<span class="cuyahoga-ship-marker pin-vessel cuyahoga-ship-'+info.kind+
-   ' cuyahoga-ship-'+info.widthClass+(oriented?' is-oriented':' is-unoriented')+'">'+
-   '<svg viewBox="0 0 72 32" aria-hidden="true" focusable="false"><g class="ship-bearing"'+transform+'>'+
-   '<path d="'+(oriented?pointed:symmetric)+'" class="ship-hull"/>'+
-   '<rect x="11" y="11" width="7" height="10" rx="1.2" class="ship-deck"/>'+
-   decks[info.kind]+'</g></svg></span>';
-  return L.divIcon({className:'cuyahoga-vessel-icon '+(oriented?'cuyahoga-vessel-with-course':'cuyahoga-vessel-without-course'),
-   html,iconSize:[width,38],iconAnchor:[width/2,19]});
+  // Exactly the Soo Locks SVG factory and sizes. No additional course badges.
+  if(Icons){
+   const g=Icons.icon(v,{zoom:state.map?.getZoom()||13,selected:state.selectedShip===String(v.mmsi)});
+   return L.divIcon({className:g.className+' soo-ais-symbol cuyahoga-vessel-icon cuyahoga-ship-'+g.kind,html:g.html,iconSize:g.size,iconAnchor:[g.size[0]/2,g.size[1]/2],popupAnchor:[0,-g.size[1]/2]});
+  }
+  return L.divIcon({className:'cuyahoga-vessel-icon',html:'<span class="map-pin pin-vessel" style="width:18px;height:18px"></span>',iconSize:[18,18],iconAnchor:[9,9]});
+ }
+ // A single shared popup, like Soo Locks. Source strings are always DOM text.
+ function openShipPopup(marker,v){
+  if(!state.map||!marker)return;
+  const content=escText('div','');
+  content.append(escText('strong',v.name||'Vessel '+v.mmsi));
+  const type=Icons?.KINDS?.find(k=>k.kind===Icons.classify(v))?.label||'Unknown vessel type';
+  content.append(escText('p','Reported AIS type: '+type));
+  if(Number.isFinite(v.lengthMeters))content.append(escText('p','Reported length: '+Math.round(v.lengthMeters*3.28084)+' ft'));
+  content.append(escText('p',speedCopy(v)+' · reported '+locClock.format(new Date(v.seen))));
+  content.append(escText('p','MMSI '+v.mmsi+' · '+v.source));
+  if(Number.isFinite(v.course))content.append(escText('p','Reported travel course: '+Math.round(v.course)+'°'));
+  if(!vesselPopup)vesselPopup=L.popup({autoClose:true,closeOnClick:true});
+  const anchor=marker.options.icon?.options?.popupAnchor||[0,-8];
+  vesselPopup.options.offset=L.point(anchor[0],anchor[1]);
+  vesselPopup.setLatLng(marker.getLatLng()).setContent(content).openOn(state.map);
+ }
+ function findShipMarker(v){
+  let found=null;
+  mapGroup.ships?.eachLayer(marker=>{if(marker.options.shipMmsi===String(v.mmsi))found=marker;});
+  return found;
  }
  function frameMap(mode='all'){
   if(!state.map)return;
@@ -243,14 +251,17 @@
   const points=mode==='parks'?parks:mode==='ships'?ships:[...parks,...ships];
   if(!points.length)return;
   if(points.length===1)state.map.setView(points[0],14,{animate:false});
-  else state.map.fitBounds(points,{paddingTopLeft:[52,54],paddingBottomRight:[52,54],maxZoom:14,animate:false});
+  else state.map.fitBounds(points,{paddingTopLeft:[52,54],paddingBottomRight:[52,54],maxZoom:13,animate:false});
  }
  function syncShipSelection(){
   for(const btn of document.querySelectorAll('[data-ship]')){
    btn.setAttribute('aria-current',String(btn.dataset.ship===state.selectedShip));
   }
   if(mapGroup.ships)mapGroup.ships.eachLayer(marker=>{
-   marker.getElement()?.classList.toggle('is-active-vessel',marker.options.shipMmsi===state.selectedShip);
+   const selected=marker.options.shipMmsi===state.selectedShip;
+   if(Icons&&marker.options.shipReport){const current=marker.options.icon?.options?.className||'';if(current.includes('is-selected')!==selected)marker.setIcon(liveVesselIcon(marker.options.shipReport));}
+   marker.getElement()?.classList.toggle('is-active-vessel',selected);
+   if(marker.getElement()&&marker.options.shipReport)marker.getElement().setAttribute('aria-label',marker.options.shipReport.name);
   });
  }
  function speedCopy(v){
@@ -272,7 +283,7 @@
    'The ship symbol is illustrative; this is not a bridge arrival estimate.',
    [{label:'Open the full ship tracker ↗',url:'/great-lakes-freighter-tracking/'}],
    'MMSI '+v.mmsi+' · '+v.source+' · coordinates '+v.lat.toFixed(4)+', '+v.lon.toFixed(4)+'. Do not navigate by a public AIS map.');
-  if(move&&state.map)state.map.setView([v.lat,v.lon],15,{animate:false});
+  if(move&&state.map){state.map.setView([v.lat,v.lon],15,{animate:false});openShipPopup(findShipMarker(v),v);}
  }
  function renderLive(){
   const status=$('vessel-status'),list=$('live-vessels'),readout=$('live-readout'),age=$('source-age');
@@ -313,6 +324,7 @@
   }
   const showShips=$('show-ships-on-map');
   if(showShips){showShips.disabled=!visible.length;showShips.textContent='Show '+visible.length+(visible.length===1?' ship':' ships');}
+  if(vesselPopup&&state.map?.hasLayer(vesselPopup))state.map.removeLayer(vesselPopup);
   if(mapGroup.ships)mapGroup.ships.clearLayers();
   if(state.selectedShip&&!result.vessels.some(v=>String(v.mmsi)===state.selectedShip)){
    state.selectedShip=null;
@@ -332,13 +344,13 @@
    btn.type='button';btn.dataset.ship=String(v.mmsi);btn.classList.add('river-vessel-entry');
    if(shipUI){const kind=shipUI.kindOf(v),glyph=escText('span','','river-vessel-list-glyph type-'+kind);glyph.innerHTML=shipUI.glyphSvg(kind);glyph.setAttribute('aria-hidden','true');btn.append(glyph);}
    const info=escText('span','','river-vessel-name');info.append(escText('strong',v.name),escText('small',(shipUI?.typeName(shipUI.kindOf(v))||core.vesselVisual(v).label)+' · '+speedCopy(v)+' · '+locClock.format(new Date(v.seen))));btn.append(info);
-   btn.addEventListener('click',()=>{selectShip(v);revealMobileFocus();});item.append(btn);list.append(item);
+   btn.addEventListener('click',()=>{selectShip(v);$('cuyahoga-map').scrollIntoView({block:'center',behavior:'auto'});});item.append(btn);list.append(item);
    if(mapGroup.ships){
     const bearing=markerBearing(v);
     const marker=L.marker([v.lat,v.lon],{title:v.name,alt:v.name+' recent AIS report',shipMmsi:String(v.mmsi),shipReport:v,icon:liveVesselIcon(v),zIndexOffset:1000}).addTo(mapGroup.ships);
-    // AIS vessel names are untrusted. Leaflet tooltip content must be a text node.
-    marker.bindTooltip(escText('span',v.name+' · '+speedCopy(v)+(bearing?' · '+bearing.basis+' '+Math.round(bearing.degrees)+'°':' · bow direction not reported')));
-    marker.on('click',()=>{selectShip(v);revealMobileFocus();});
+    // Soo Locks uses one popup, not a competing hover tooltip and scroll-away panel.
+    marker.getElement()?.setAttribute('aria-label',v.name+' · '+(Icons?.KINDS?.find(k=>k.kind===Icons.classify(v))?.label||'Vessel'));
+    marker.on('click',()=>{selectShip(v,false);openShipPopup(marker,v);});
    }
   }
   syncShipSelection();
@@ -392,7 +404,11 @@
   document.querySelector('.bridge-picker')?.addEventListener('toggle',renderBridgeMarkers);
 
  }
- initMap();wire();Promise.allSettled([loadReferenceData(),getLive()]).then(()=>frameMap('all'));
+ initMap();wire();Promise.allSettled([loadReferenceData(),getLive()]).then(()=>{
+  // Re-measure after async park and ship panels settle; Leaflet keeps its old
+  // viewport size until invalidated, which can clip mobile park markers.
+  requestAnimationFrame(()=>{if(state.map)state.map.invalidateSize({animate:false,pan:false});frameMap('all');});
+ });
  // Match Duluth and Soo Locks: refresh every minute only while a visitor is present.
  setInterval(()=>{if(!document.hidden)getLive();},60000);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)getLive();});

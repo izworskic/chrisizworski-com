@@ -75,7 +75,7 @@ test('published preview is noindex, map first, source-first, accessible and has 
  assert.match(page,/aria-pressed="true"/);
  assert.match(page,/id="cuyahoga-map"/);
  assert.doesNotMatch(page,/id="history-scrubber"|id="show-history"|2025 ship replay/);
- assert.match(page,/Choose where to watch/);
+ assert.match(page,/Ships on the Cuyahoga/);
  assert.match(page,/id="live-vessels"/);
  assert.match(page,/https:\/\/openwaters.io\/ais\//);
  assert.doesNotMatch(page,/NOAA historical AIS ↗/);
@@ -114,7 +114,7 @@ test('preserved NOAA archive data remains authentic without appearing in the cur
 test('live visitor map does not fetch or present archived 2025 vessel observations',()=>{
  assert.doesNotMatch(app,/state\.mode|renderHistory|history-scrubber|noaa-historical-2025\.json/);
  assert.doesNotMatch(page,/2025 ship replay|Choose a 2025 vessel day/);
- assert.match(page,/Reported vessels/);
+ assert.match(page,/Recent AIS ships/);
  assert.match(app,/\/cuyahoga-freighter-watch\/viewpoints\.json/);
  assert.match(app,/\/cuyahoga-freighter-watch\/bridges\.json/);
  assert.match(page,/<noscript>/);
@@ -289,25 +289,30 @@ test('AIS vessel illustrations reflect only reported category, size band and bou
  assert.match(app,/function liveVesselIcon\(/);
  assert.doesNotMatch(app,/icon:mapPointIcon\('ship'\)/);
  assert.match(app,/icon:liveVesselIcon\(v\)/);
- assert.match(css,/\.cuyahoga-ship-marker/);
+ assert.match(page,/\/assets\/soo-vessel-icons\.css/);
+ assert.match(app,/Icons\.icon\(v,/);
+ assert.match(app,/soo-ais-symbol/);
  assert.match(page,/Hull shapes illustrate reported AIS type/);
  assert.ok(page.indexOf('id="live-controls"')<page.indexOf('class="panel places"'),'Reported vessels must appear before park directory');
  assert.match(page,/id="show-ships-on-map"/);
  assert.match(page,/id="show-parks-on-map"/);
  assert.match(app,/function revealMobileFocus\(/);
- assert.match(page,/Unoriented vessel outline/);
+ assert.match(page,/Ship types and counts/);
+ assert.ok(page.indexOf('class="river-type-strip"') > page.indexOf('id="cuyahoga-map"'),'type filters must not overwhelm the ship map');
  assert.match(app,/function markerHasTravelCourse\(/);
  assert.match(app,/v\.speedKnots>0\.5/);
  assert.match(app,/function markerBearing\(/);
  assert.match(app,/reportedHeadingDegrees/);
- assert.match(app,/const symmetric='M10 7Q3 16 10 25L62 25Q69 16 62 7Z'/);
+ assert.doesNotMatch(app,/shipUI\.marker\(/);
+ assert.doesNotMatch(app,/river-ship-course/);
  assert.doesNotMatch(app,/ship-neutral-ring/);
  assert.match(app,/frameMap\('all'\)/);
  assert.match(app,/frameMap\('ships'\)/);
- assert.match(app,/bindTooltip\(escText\('span'/);
- assert.match(app,/M6 9L50 4Q61 4 69 16Q61 28 50 28L6 23Q3 16 6 9Z/);
- assert.doesNotMatch(app,/M3 17H59L69 12/);
- assert.match(css,/\.is-active-vessel \.ship-hull/);
+ assert.match(app,/function openShipPopup\(/);
+ assert.match(app,/L\.popup\(\{autoClose:true,closeOnClick:true\}\)/);
+ assert.match(app,/openShipPopup\(marker,v\)/);
+ assert.doesNotMatch(app,/marker\.bindTooltip\(escText/);
+ assert.match(page,/id="cuyahoga-type-counts"/);
 });
 
 test('first map screen favors four active reference landmarks plus Eagle work notice; full catalogue is opt-in',()=>{
