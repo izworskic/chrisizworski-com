@@ -241,7 +241,7 @@
  function speedCopy(v){
   return v.speedKnots===null?'Speed not reported':v.speedKnots.toFixed(1)+' kn reported';
  }
- function selectShip(v){
+ function selectShip(v,move=true){
   state.selectedParkId=null;state.selectedBridgeId=null;
   for(const btn of document.querySelectorAll('[data-park]'))btn.setAttribute('aria-current','false');
   state.selectedShip=String(v.mmsi);
@@ -255,7 +255,7 @@
    'The ship symbol is illustrative; this is not a bridge arrival estimate.',
    [{label:'Open the full ship tracker ↗',url:'/great-lakes-freighter-tracking/'}],
    'MMSI '+v.mmsi+' · '+v.source+' · coordinates '+v.lat.toFixed(4)+', '+v.lon.toFixed(4)+'. Do not navigate by a public AIS map.');
-  if(state.map)state.map.setView([v.lat,v.lon],15,{animate:false});
+  if(move&&state.map)state.map.setView([v.lat,v.lon],15,{animate:false});
  }
  function renderLive(){
   const status=$('vessel-status'),list=$('live-vessels'),readout=$('live-readout'),age=$('source-age');
@@ -314,15 +314,19 @@
   if(state.selectedParkId)choosePark(state.selectedParkId,false);
   else if(state.selectedShip){
    const selected=result.vessels.find(v=>String(v.mmsi)===state.selectedShip);
-   if(selected)selectShip(selected);
+   if(selected)selectShip(selected,false);
   }
  }
  async function getLive(){
-  const refresh=$('refresh-ais');refresh.disabled=true;
+  const refresh=$('refresh-ais');
+  if(refresh.disabled)return;
+  refresh.disabled=true;
   try{
-   const response=await fetch('/api/freighter-ais',{cache:'no-store',signal:AbortSignal.timeout(12000)});
+   // Same bounded Open Waters AIS approach as Soo and Duluth; Cleveland query only.
+   const response=await fetch('/api/freighter-ais?region=cuyahoga',{cache:'no-store',signal:AbortSignal.timeout(12000)});
    if(!response.ok)throw Error('AIS HTTP failure');
    const data=await response.json();
+   if(data.scope!=='cuyahoga-regional-openwaters')throw Error('Incorrect AIS area');
    state.live=core.classifyLive(data,Date.now());
   }catch(_){
    state.live=core.classifyLive(null,Date.now());
@@ -355,4 +359,7 @@
 
  }
  initMap();wire();loadReferenceData();getLive();
+ // Match Duluth and Soo Locks: refresh every minute only while a visitor is present.
+ setInterval(()=>{if(!document.hidden)getLive();},60000);
+ document.addEventListener('visibilitychange',()=>{if(!document.hidden)getLive();});
 })();

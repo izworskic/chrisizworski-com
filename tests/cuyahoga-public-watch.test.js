@@ -81,7 +81,12 @@ test('published preview is noindex, map first, source-first, accessible and has 
  assert.doesNotMatch(page,/NOAA historical AIS ↗/);
  assert.match(page,/https:\/\/www.clevelandmetroparks.com\//);
  assert.match(page,/#person/);
- assert.match(app,/fetch\('\/api\/freighter-ais'/);
+ assert.match(app,/fetch\('\/api\/freighter-ais\?region=cuyahoga'/);
+ assert.match(app,/data\.scope!==\x27cuyahoga-regional-openwaters\x27/);
+ assert.match(app,/setInterval\(\(\)=>\{if\(!document\.hidden\)getLive\(\);\},60000\)/);
+ assert.match(app,/visibilitychange/);
+ assert.match(app,/if\(refresh\.disabled\)return/);
+ assert.match(app,/if\(selected\)selectShip\(selected,false\)/);
  assert.doesNotMatch(app,/ais\.openwaters\.io|marine.?traffic\.com|redis|api\.openai\.com/i);
  assert.doesNotMatch(app,/arrive(?:s|d|al)? in \d|minutes until|ETA =/i);
  assert.match(css,/prefers-reduced-motion/);

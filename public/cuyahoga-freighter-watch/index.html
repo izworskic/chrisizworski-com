@@ -88,11 +88,11 @@
    </section>
    <section id="live-controls" class="panel reports-panel">
     <div class="panel-header"><div><p class="side-eyebrow">OBSERVED / NOT A FORECAST</p><h3>Recent ship reports</h3></div><button id="refresh-ais" type="button" class="small-button">Refresh</button></div>
-    <p id="vessel-status" aria-live="polite">Checking the existing Great Lakes AIS feed…</p>
+    <p id="vessel-status" aria-live="polite">Checking regional Cleveland AIS reports…</p>
     <ul id="live-vessels" class="vessel-list" aria-label="Fresh river vessel positions"><li>A missing report does not mean the river is empty.</li></ul>
     <details class="report-method">
      <summary>Source, accuracy and limitations</summary>
-     <p class="source-note">From the existing <a href="/great-lakes-freighter-tracking/">Great Lakes AIS tracker</a>. Reports can be delayed, sparse or unavailable. Vessel shapes use broad reported AIS categories and length bands, not true hull scale. Directional ship shapes appear only when usable course over ground and reported motion are present; slow or unknown motion is shown as a neutral marker. Course over ground is travel direction, not confirmed bow heading. No bridge arrival times are calculated.</p>
+     <p class="source-note">From <a href="https://openwaters.io/api/ais/">Open Waters AIS</a>, using a Cleveland-specific area request like the <a href="/soo-locks/">Soo Locks</a> and <a href="/duluth-canal-park/">Duluth</a> tools. Reports can be delayed, sparse or unavailable. Vessel shapes use broad reported AIS categories and length bands, not true hull scale. Directional ship shapes appear only when usable course over ground and reported motion are present; slow or unknown motion is shown as a neutral marker. Course over ground is travel direction, not confirmed bow heading. No bridge arrival times are calculated.</p>
      <p id="ais-source-credits" class="source-note" aria-label="AIS source attributions">Individual upstream source credits appear when the AIS report includes them. <a href="https://openwaters.io/ais/">Provider and licensing information ↗</a></p>
     </details>
    </section>
@@ -159,7 +159,7 @@
 <details class="sources">
  <summary id="source-heading"><span>HOW TO READ THIS TOOL</span><strong>The evidence behind the river map</strong><span class="sources-symbol" aria-hidden="true">+</span></summary>
  <div class="source-grid">
-  <div><h3>Recent AIS observations</h3><p>The map uses the existing <a href="/great-lakes-freighter-tracking/">Great Lakes AIS tracker</a>, not NOAA historical replays. Each point has a reported time; absent or expired reports do not prove an empty river. <a href="https://openwaters.io/ais/">AIS provider information ↗</a></p></div>
+  <div><h3>Recent AIS observations</h3><p>The map queries the same <a href="https://openwaters.io/api/ais/">Open Waters AIS service</a> used by the Soo Locks and Duluth tools, within a dedicated Cleveland area. It is not a historical replay. Each point has a reported time; absent or expired reports do not prove an empty river. <a href="https://openwaters.io/ais/">AIS provider information ↗</a></p></div>
   <div><h3>Bridge landmarks</h3><p><a href="https://www.nauticalcharts.noaa.gov/publications/coast-pilot/files/cp6/CPB6_WEB.pdf">NOAA Coast Pilot 6 ↗</a> provides published bridge references, not current operations or exact span crossings.</p></div>
   <div><h3>Public viewing places</h3><p>Visit descriptions come from <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation">Cleveland Metroparks ↗</a>. Confirm parking, closures and designated public access with the park manager.</p></div>
  </div>

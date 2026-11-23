@@ -124,3 +124,54 @@ test("live map comes before the Gazette on the dedicated tracker", () => {
   assert.ok(html.indexOf('id="live-map"') < html.indexOf('class="gazette-daily"'));
   assert.ok(html.indexOf('class="layup-handoff"') < html.indexOf('class="gazette-daily"'));
 });
+
+
+test("Cuyahoga selects the same Open Waters regional AIS pipeline as Soo and Duluth without changing the lake-wide route", async t => {
+  const handler = require("../api/freighter-ais");
+  const now = Date.now();
+  const iso = ms => new Date(ms).toISOString();
+  let called = 0, requested, headers;
+  t.mock.method(global, "fetch", async (url, options) => {
+    called++;
+    requested = new URL(url);
+    headers = options.headers;
+    return { ok: true, json: async () => ({
+      type: "FeatureCollection", features: [
+        { type:"Feature", geometry:{type:"Point",coordinates:[-81.7033,41.4945]},
+          properties:{mmsi:367111111,name:"CLEVELAND TEST SHIP",seen:iso(now-90000),sog:3.1,cog:115,type:70,length:190,source:"cleveland-receiver"} },
+        // A second report of the same MMSI must not duplicate the ship.
+        { type:"Feature", geometry:{type:"Point",coordinates:[-81.705,41.495]},
+          properties:{mmsi:367111111,name:"CLEVELAND TEST SHIP",seen:iso(now-140000),sog:2,source:"cleveland-receiver"} },
+        { type:"Feature", geometry:{type:"Point",coordinates:[-92.08,46.78]},
+          properties:{mmsi:367222222,name:"OUTSIDE CLEVELAND",seen:iso(now-90000),source:"outside"} },
+        { type:"Feature", geometry:{type:"Point",coordinates:[-81.704,41.493]},
+          properties:{mmsi:367333333,name:"EXPIRED CLEVELAND",seen:iso(now-3600000),source:"expired"} }
+      ], attribution: {"cleveland-receiver":"Licensed receiver credit via Open Waters"}
+    })};
+  });
+  const res = { headers:{}, setHeader(key,value){this.headers[key]=value},
+    status(code){this.code=code;return this}, json(data){this.data=data;return this} };
+  await handler({method:"GET",query:{region:"cuyahoga"},headers:{}},res);
+  assert.equal(called,1);
+  assert.equal(requested.hostname,"ais.openwaters.io");
+  assert.equal(requested.pathname,"/v1/vessels");
+  assert.deepEqual(requested.searchParams.getAll("bbox"),["41.4,-81.85,41.6,-81.58"]);
+  assert.equal(requested.searchParams.get("max_age"),"30m");
+  assert.match(headers["User-Agent"],/CuyahogaRiverWatch/);
+  assert.equal(res.code,200);
+  assert.equal(res.data.scope,"cuyahoga-regional-openwaters");
+  assert.deepEqual(res.data.bbox,[41.4,-81.85,41.6,-81.58]);
+  assert.equal(res.data.vessels.length,1);
+  assert.equal(res.data.vessels[0].mmsi,"367111111");
+  assert.equal(res.data.vessels[0].name,"CLEVELAND TEST SHIP");
+  assert.equal(res.data.vessels[0].course,115);
+  assert.equal(res.data.attribution[0].credit,"Licensed receiver credit via Open Waters");
+  assert.equal(res.headers["X-Robots-Tag"],"noindex, nofollow");
+  assert.equal(res.headers["Cache-Control"],"public, s-maxage=45, stale-while-revalidate=60");
+  // Do not silently serve a lake-wide feed on a mistyped regional query.
+  const bad = {headers:{},setHeader(key,value){this.headers[key]=value},
+    status(code){this.code=code;return this},json(data){this.data=data;return this}};
+  await handler({method:"GET",query:{region:"unknown"},headers:{}},bad);
+  assert.equal(bad.code,400);
+  assert.equal(called,1);
+});

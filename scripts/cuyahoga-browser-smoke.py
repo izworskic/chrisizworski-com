@@ -29,7 +29,7 @@ async def run():
             page.on("pageerror", lambda err: errors.append(str(err)))
             now = iso(NOW - timedelta(seconds=90))
             feed = {
-                "ok": True,
+                "ok": True, "scope": "cuyahoga-regional-openwaters",
                 "checkedAt": iso(NOW - timedelta(seconds=15)),
                 "vessels": [
                     {"mmsi": "367123456", "name": "BROWSER TEST SHIP", "seen": now,
@@ -40,7 +40,7 @@ async def run():
                      "shipType": 70, "source": "mock AIS QA"}
                 ]
             }
-            await page.route("**/api/freighter-ais", lambda route: route.fulfill(status=200, content_type="application/json", body=json.dumps(feed)))
+            await page.route("**/api/freighter-ais?region=cuyahoga", lambda route: route.fulfill(status=200, content_type="application/json", body=json.dumps(feed)))
             await page.goto(URL, wait_until="domcontentloaded", timeout=40000)
             await page.get_by_text("BROWSER TEST SHIP", exact=True).first.wait_for(timeout=25000)
             # Check the redesign's actual first screen, not only full-page snapshots.
@@ -196,12 +196,12 @@ async def run():
             if width == 390:
                 glyphs = await context.new_page()
                 now = iso(NOW - timedelta(seconds=60))
-                orientation_feed = {"ok": True, "checkedAt": iso(NOW - timedelta(seconds=5)), "vessels": [
+                orientation_feed = {"ok": True, "scope": "cuyahoga-regional-openwaters", "checkedAt": iso(NOW - timedelta(seconds=5)), "vessels": [
                     {"mmsi":"367123456","name":"EASTBOUND TEST","seen":now,"lat":41.4945,"lon":-81.7033,"speedKnots":4.0,"course":90,"lengthMeters":190,"shipType":70},
                     {"mmsi":"367123458","name":"NORTHBOUND TEST","seen":now,"lat":41.492,"lon":-81.698,"speedKnots":5.0,"course":0,"lengthMeters":120,"shipType":80},
                     {"mmsi":"367123459","name":"STOPPED TEST","seen":now,"lat":41.491,"lon":-81.705,"speedKnots":0.1,"course":180,"lengthMeters":38,"shipType":31}
                 ]}
-                await glyphs.route("**/api/freighter-ais", lambda route: route.fulfill(status=200, content_type="application/json", body=json.dumps(orientation_feed)))
+                await glyphs.route("**/api/freighter-ais?region=cuyahoga", lambda route: route.fulfill(status=200, content_type="application/json", body=json.dumps(orientation_feed)))
                 await glyphs.goto(URL, wait_until="domcontentloaded")
                 await glyphs.get_by_text("EASTBOUND TEST", exact=True).first.wait_for(timeout=15000)
                 if await glyphs.locator(".cuyahoga-vessel-with-course").count() != 2:
@@ -218,7 +218,7 @@ async def run():
                 await glyphs.close()
             if width == 390:
                 failed = await context.new_page()
-                await failed.route("**/api/freighter-ais", lambda route: route.fulfill(status=503, content_type="application/json", body='{"ok":false}'))
+                await failed.route("**/api/freighter-ais?region=cuyahoga", lambda route: route.fulfill(status=503, content_type="application/json", body='{"ok":false}'))
                 await failed.goto(URL, wait_until="domcontentloaded")
                 await failed.get_by_text("AIS reporting unavailable").wait_for(timeout=15000)
                 await failed.get_by_role("button", name="Rivergate Park").click()
