@@ -349,3 +349,28 @@ test('licensed historical photo contains a complete JPEG frame, not a truncated 
  assert.match(page,/Roy Luck/);
  assert.match(page,/creativecommons\.org\/licenses\/by\/2\.0/);
 });
+
+test('sourced river-bend teaching model is optional and never passes itself off as AIS',()=>{
+ const html=readFileSync('public/cuyahoga-freighter-watch/index.html','utf8');
+ const demo=readFileSync('public/assets/cuyahoga-bend-demo.js','utf8');
+ const styles=readFileSync('public/assets/cuyahoga-bend-demo.css','utf8');
+ assert.match(html,/id="bend-lab"/);
+ assert.match(html,/id="bend-diagram"/);
+ assert.match(html,/id="bend-guide"/);
+ assert.match(html,/id="bend-position"[^>]*disabled/);
+ assert.match(html,/data-bend-step="0"[^>]*disabled/);
+ assert.match(html,/id="bend-play"[^>]*disabled/);
+ assert.match(html,/Illustration, not vessel tracking/);
+ assert.match(html,/not NOAA AIS replay/);
+ assert.match(html,/https:\/\/www\.portofcleveland\.com\/tourism-recreation\/tools\/safety-guidelines\//);
+ assert.match(html,/\/assets\/cuyahoga-bend-demo\.js/);
+ assert.match(html,/\/assets\/cuyahoga-bend-demo\.css/);
+ assert.match(demo,/getPointAtLength/);
+ assert.match(demo,/prefers-reduced-motion: reduce/);
+ assert.match(demo,/document\.hidden/);
+ assert.match(demo,/cancelAnimationFrame/);
+ assert.match(demo,/setAttribute\('aria-pressed'/);
+ assert.match(styles,/@media\(max-width:680px\)/);
+ assert.match(styles,/\.bend-lab\{grid-column:1/);
+ assert.doesNotMatch(demo,/fetch\(|\/api\/|getUserMedia|geolocation|AIS endpoint/);
+});
