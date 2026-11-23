@@ -88,8 +88,9 @@ test('preserve original canonical pages and truthful release dates',()=>{
  for(const [html,url] of [[snow,'/snowmobile/'],[ski,'/michigan-ski-hills/'],[xc,'/michigan-cross-country-skiing/']]){
   assert.ok(html.includes('https://chrisizworski.com'+url));
   assert.ok(html.includes('https://chrisizworski.com/#person'));
-  assert.ok(html.includes('"dateModified":"2026-11-11"'));
-  assert.ok(winterMap.includes('<loc>https://chrisizworski.com'+url+'</loc><lastmod>2026-11-11</lastmod>'));
+  const dated=url==='/snowmobile/'?'2026-11-23':'2026-11-11';
+  assert.ok(html.includes('"dateModified":"'+dated+'"'));
+  assert.ok(winterMap.includes('<loc>https://chrisizworski.com'+url+'</loc><lastmod>'+dated+'</lastmod>'));
  }
  assert.ok(mainMap.includes('<loc>https://chrisizworski.com/michigan-ski-hills/</loc><lastmod>2026-11-11</lastmod>'));
  for(const r of RESORTS){
