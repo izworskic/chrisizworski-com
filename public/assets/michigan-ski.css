@@ -147,7 +147,7 @@ body{background:#edf3f6;background-image:linear-gradient(180deg,#e6f0f5 0,#f6f9f
 .ski-operations{border-color:#a6c7d3}
 .ski-open-count{font-size:clamp(1.15rem,2vw,1.6rem);line-height:1.35;font-weight:800;letter-spacing:-.015em;margin:.3em 0 .7em;color:#153b54}
 .ski-status-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px}
-.ski-filter-chip{border:2px solid #155e7b;background:white;color:#16465e;border-radius:40px;min-height:44px;padding:8px 17px;font:700 .95rem/1.3 inherit;cursor:pointer}
+.ski-filter-chip{border:2px solid #155e7b;background:white;color:#16465e;border-radius:40px;min-height:44px;padding:8px 17px;font:700 .95rem/1.3 system-ui,sans-serif;cursor:pointer}
 .ski-filter-chip[aria-pressed=true]{background:#143c57;color:white;border-color:#143c57}
 #ski-operating-list{display:grid;gap:0;border-top:1px solid #d6e2e9}
 .ski-operation-row{border-bottom:1px solid #d6e2e9;padding:11px 2px;min-width:0}

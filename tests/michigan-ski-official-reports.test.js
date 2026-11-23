@@ -69,7 +69,7 @@ test('SEO title cannot contain Open when 9 or fewer source URLs exist',()=>{
 test('static 2026-27 opening table is grounded and labels unknowns',()=>{
  const generator=fs.readFileSync(path.join(root,'scripts/generate-michigan-ski-pages.mjs'),'utf8');
  for(const s of ['Not announced','Nov 23, 2026','ski-opening-evidence','openingEvidence','Projected daily skiing','Target'])assert.ok(generator.includes(s),s);
- assert.equal([...generator.matchAll(/Dec 5, 2026|Nov 26, 2026|Dec 17, 2026/g)].length,3);
+ assert.equal([...generator.matchAll(/Dec 5, 2026|Nov 26, 2026|Dec 17, 2026/g)].length,4);
  assert.doesNotMatch(generator,/OnTheSnow|Skiresort\.info/i);
 });
 

@@ -54,7 +54,7 @@ function operatingBoard(data){
   const runsText=trail?.open!=null?' · '+trail.open+' of '+(trail.total??'?')+' runs':'';
   info.textContent=liftText+runsText+' · Operator report: '+reportStamp(r.official?.reportUpdatedAt)+' · Checked: '+reportStamp(r.official?.checkedAt);
   const source=r.official?.url||r.snow;
-  add(row,head,info,external('Read operator report',source));
+  add(row,head,info,external(r.official?.status==='NOT_CONNECTED'?'Visit resort website (no verified lift report)':'Read operator report',source));
   if(r.official?.operatorStatusText)add(row,node('p','small',r.official.operatorStatusText));
   add(host,row);
  }
@@ -67,10 +67,10 @@ function status(r){
  if(r.official?.status==='CLOSED_PER_OPERATOR')return 'Closed per operator · zero lifts on a dated current report';
  if(r.official?.status==='STALE_REPORT')return 'Stale operator report · not evidence of current lift operation';
  if(r.official?.status==='UNVERIFIED')return 'Official report unverified or unavailable · check the operator before leaving';
+ if(r.official?.status==='NOT_CONNECTED')return 'No approved operating report connection · verify directly with the resort';
  if(r.ranking?.verdict==='OFF_SEASON_PLANNING')return 'Off-season · 2026–27 planning only';
  if(a.some(x=>/Warning/i.test(x.event)))return 'Winter warning · verify safe travel and lift openings';
  if(!r.weather||r.weather.weatherCoverage!=='NWS_GRID_RECEIVED')return 'Forecast unavailable · verify official sources';
- if(r.official?.status==='NOT_CONNECTED')return 'Official operating report not connected · verify directly with the resort';
  return 'Provisional comparison · verify lifts, snow base and ticket';
 }
 function chipsFor(r){

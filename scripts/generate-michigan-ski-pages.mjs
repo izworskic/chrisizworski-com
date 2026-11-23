@@ -127,7 +127,7 @@ function details(r){
 }
 // Operator opening-date announcements verified 2026-11-23. Targets are NOT actual lift status.
 // No inferred date from historical patterns, ticket sales, or a year-conflicted announcement.
-const openingEvidence=Object.freeze([["snowriver","Dec 5, 2026","Target","https://www.snowriver.com/mountain-info/hours-of-operation"],["ski-brule","Nov 26, 2026","Target","https://skibrule.com/ski-brule-snowmaking-thanksgiving-opening-2026/"],["shanty-creek","Dec 17, 2026","Projected daily skiing","https://www.shantycreek.com/ski/lift-tickets-season-passes/"]]);
+const openingEvidence=Object.freeze([["snowriver","Dec 5, 2026","Target","https://www.snowriver.com/mountain-info/hours-of-operation"],["caberfae-peaks","Dec 5, 2026","Target","https://caberfaepeaks.com/snow-report/"],["ski-brule","Nov 26, 2026","Target","https://skibrule.com/ski-brule-snowmaking-thanksgiving-opening-2026/"],["shanty-creek","Dec 17, 2026","Projected daily skiing","https://www.shantycreek.com/ski/lift-tickets-season-passes/"]]);
 function openingTable(){
  const selected=new Map(openingEvidence.map(([slug,date,qualification,url])=>[slug,{date,qualification,url}]));
  const rows=RESORTS.filter(r=>r.kind==='downhill').map(r=>{
