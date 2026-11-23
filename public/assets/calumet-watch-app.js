@@ -73,7 +73,7 @@ function plotGuide(){
  state.places?.clearLayers();state.bridges?.clearLayers();state.railBridges?.clearLayers();
  for(const p of state.guide.viewpoints){
   if(!state.places)continue;
-  const m=L.marker([p.lat,p.lon],{title:p.name,alt:p.name+' approximate area',icon:pin('place','●')}).addTo(state.places);
+  const m=L.marker([p.lat,p.lon],{title:p.name,alt:p.name+' approximate area',icon:pin('place','●'),zIndexOffset:1000}).addTo(state.places);
   m.bindTooltip(p.name);m.on('click',()=>choosePlace(p.id,false));
  }
  for(const b of state.guide.bridges){
