@@ -43,6 +43,8 @@ async def run():
             await page.route("**/api/freighter-ais?region=cuyahoga", lambda route: route.fulfill(status=200, content_type="application/json", body=json.dumps(feed)))
             await page.goto(URL, wait_until="domcontentloaded", timeout=40000)
             await page.get_by_text("BROWSER TEST SHIP", exact=True).first.wait_for(timeout=25000)
+            # Allow the post-fetch Leaflet invalidateSize/fitBounds animation frame to settle.
+            await page.wait_for_timeout(450)
             # Check the redesign's actual first screen, not only full-page snapshots.
             hero = await page.locator(".lead").bounding_box()
             river = await page.locator("#cuyahoga-map").bounding_box()
