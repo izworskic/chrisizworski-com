@@ -1,12 +1,88 @@
 /* Calumet industrial river desk: reuses existing same-site AIS source, never predicts crossings. */
 (function(){
 'use strict';
-const core=window.CalumetWatchCore,links=window.VisitorMapLinks,shipUI=window.RiverWatchVesselUI;
+const core=window.CalumetWatchCore,links=window.VisitorMapLinks,shipUI=window.RiverWatchVesselUI,Icons=window.SeawayVesselIcons;
 const $=id=>document.getElementById(id);
 const state={guide:null,map:null,live:null,selected:null,places:null,bridges:null,railBridges:null,ships:null,shipKindFilter:'all'};
+let vesselPopup=null;
 const timeFmt=new Intl.DateTimeFormat('en-US',{timeZone:'America/Chicago',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
 const node=(tag,text,cls)=>{const e=document.createElement(tag);e.textContent=String(text??'');if(cls)e.className=cls;return e;};
 const ext=(label,url)=>{const a=node('a',label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a;};
+// The Calumet uses Cuyahoga's map vocabulary: pictured public places,
+// a different icon for each bridge type, and one readable source-backed popup.
+function placeMapsUrl(p){
+ return links?.placeSearch({role:'public-place',query:p.mapsQuery})||
+  'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.mapsQuery);
+}
+function popupActionRow(actions){
+ const row=node('div','','park-popup-actions');
+ for(const a of actions)if(a.url)row.append(ext(a.label,a.url));
+ return row;
+}
+function placePopupContent(p){
+ const wrap=node('div','','park-popup-content calumet-place-popup');
+ wrap.append(node('strong',p.name,'park-popup-title'),
+  node('p',p.visit,'park-popup-description'));
+ wrap.append(popupActionRow([{label:'Google Maps ↗',url:placeMapsUrl(p)},
+  {label:'Official / documented place details ↗',url:p.sourceUrl}]));
+ wrap.append(node('small',p.accessClass==='PUBLIC_SIDEWALK_AREA_VERIFY_ACCESS'?
+  'Approximate bridge reference, not a verified sidewalk standing spot, parking entrance or open crossing. Confirm public access before visiting.':
+  'General public park area, not a verified view of ships or an entrance. Check current park access and sightlines.',
+  'park-popup-note'));
+ return wrap;
+}
+function bridgePopupContent(b){
+ const wrap=node('div','','park-popup-content calumet-bridge-popup');
+ wrap.append(node('strong',b.name,'park-popup-title'));
+ wrap.append(node('p',b.type+' · published river mile '+b.riverMile,'calumet-popup-meta'));
+ wrap.append(node('p',b.summary,'park-popup-description'));
+ wrap.append(popupActionRow([{label:'NOAA bridge reference ↗',url:b.sourceUrl},
+  {label:'Coast Guard notices ↗',url:'https://www.navcen.uscg.gov/local-notices-to-mariners-by-cg-district'}]));
+ wrap.append(node('small','Rounded NOAA chart location only. Not a live bridge opening, public viewpoint, or place to park; stay out of restricted terminals and rail areas.','park-popup-note'));
+ return wrap;
+}
+function vesselType(v){
+ return Icons?.KINDS?.find(k=>k.kind===Icons.classify(v))?.label||
+  shipUI?.typeName(shipUI.kindOf(v))||'Unknown vessel type';
+}
+function shipPopupContent(v){
+ const wrap=node('div','','park-popup-content calumet-vessel-popup');
+ wrap.append(node('strong',v.name||'Vessel '+v.mmsi,'park-popup-title'));
+ wrap.append(node('p','Reported AIS type: '+vesselType(v),'calumet-popup-meta'));
+ if(Number.isFinite(v.lengthMeters))wrap.append(node('p','Reported length: '+Math.round(v.lengthMeters*3.28084)+' ft','calumet-popup-meta'));
+ wrap.append(node('p',(v.speedKnots===null?'Speed not reported':v.speedKnots.toFixed(1)+' knots reported')+
+  ' · '+timeFmt.format(new Date(v.seen)),'calumet-popup-meta'));
+ wrap.append(node('p','MMSI '+v.mmsi+' · '+v.source,'calumet-popup-meta'));
+ const motion=shipUI?.bearing(v);
+ if(motion!==null&&motion!==undefined)wrap.append(node('p','Reported travel course: '+Math.round(motion)+'°','calumet-popup-meta'));
+ else if(Number.isFinite(v.heading))wrap.append(node('p','Reported true heading: '+Math.round(v.heading)+'°','calumet-popup-meta'));
+ wrap.append(node('p','Last position: '+v.lat.toFixed(4)+', '+v.lon.toFixed(4),'calumet-popup-meta'));
+ wrap.append(popupActionRow([{label:'Full ship tracker ↗',url:'/great-lakes-freighter-tracking/'}]));
+ wrap.append(node('small','Fresh AIS position, not a ship sighting or future arrival. The icon is an illustration of the reported vessel class and length band.','park-popup-note'));
+ return wrap;
+}
+function openShipPopup(marker,v){
+ if(!state.map||!marker)return;
+ if(!vesselPopup)vesselPopup=L.popup({autoClose:true,closeOnClick:true,maxWidth:305});
+ const anchor=marker.options.icon?.options?.popupAnchor||[0,-10];
+ vesselPopup.options.offset=L.point(anchor[0],anchor[1]);
+ vesselPopup.setLatLng(marker.getLatLng()).setContent(shipPopupContent(v)).openOn(state.map);
+}
+function findShipMarker(mmsi){
+ let found=null;
+ state.ships?.eachLayer(m=>{if(m.options.shipMmsi===String(mmsi))found=m;});
+ return found;
+}
+function placePin(p){
+ const id=p.id==='calumetpark'?'calumetpark':'bridge95';
+ const html='<span class="calumet-place-pin calumet-place-pin--'+id+'" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#cal-place-'+id+'"></use></svg></span>';
+ return L.divIcon({className:'calumet-viewpoint-icon',html,iconSize:[36,40],iconAnchor:[18,37],popupAnchor:[0,-34]});
+}
+function bridgePin(b){
+ const kind=b.group==='rail'?'rail':'road';
+ const html='<span class="calumet-bridge-pin calumet-bridge-pin--'+kind+'" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#cal-bridge-'+kind+'"></use></svg></span>';
+ return L.divIcon({className:'calumet-bridge-icon',html,iconSize:[32,32],iconAnchor:[16,16],popupAnchor:[0,-21]});
+}
 function detail(label,name,body,actions=[],note=''){
  const box=$('selection');box.replaceChildren(node('p',label,'selection-kicker'),node('h3',name),node('p',body));
  if(actions.length){const links=node('div','','detail-links');for(const a of actions)if(a.url)links.append(ext(a.label,a.url));box.append(links);}
@@ -40,16 +116,30 @@ function pin(kind,glyph){
  return L.divIcon({className:'',html:'<span class="cw-pin '+kind+'">'+glyph+'</span>',iconSize:[31,31],iconAnchor:[15,15]});
 }
 function boatPin(v){
- // Local ship profile is always upright, including for stopped/unknown course;
- // only the separate small compass pointer follows valid reported travel course.
+ // Same Soo Locks vessel SVG factory, length bands and selected state as Cuyahoga.
+ // The ship remains upright; any real course/heading belongs in the detail popup.
+ if(Icons){
+  const glyph=Icons.icon(v,{zoom:state.map?.getZoom()||13,
+   selected:state.selected?.kind==='ship'&&state.selected.id===String(v.mmsi)});
+  return L.divIcon({className:glyph.className+' soo-ais-symbol calumet-vessel-icon calumet-ship-'+glyph.kind,
+   html:glyph.html,iconSize:glyph.size,iconAnchor:[glyph.size[0]/2,glyph.size[1]/2],
+   popupAnchor:[0,-glyph.size[1]/2]});
+ }
  if(!shipUI)return pin('ship','▲');
- const glyph=shipUI.marker(v,{zoom:state.map?.getZoom()||13,selected:state.selected?.id===v.mmsi});
+ const glyph=shipUI.marker(v,{zoom:state.map?.getZoom()||13});
  return L.divIcon({className:glyph.className,html:glyph.html,iconSize:glyph.size,
-   iconAnchor:[glyph.size[0]/2,glyph.size[1]/2]});
+  iconAnchor:[glyph.size[0]/2,glyph.size[1]/2],popupAnchor:[0,-glyph.size[1]/2]});
 }
 function syncShipHighlight(){
- state.ships?.eachLayer(marker=>marker.getElement()?.classList.toggle('is-active-vessel',
-   marker.options.shipMmsi===state.selected?.id&&state.selected?.kind==='ship'));
+ state.ships?.eachLayer(marker=>{
+  const selected=marker.options.shipMmsi===state.selected?.id&&state.selected?.kind==='ship';
+  if(Icons&&marker.options.shipReport){
+   const cls=marker.options.icon?.options?.className||'';
+   if(cls.includes('is-selected')!==selected)marker.setIcon(boatPin(marker.options.shipReport));
+  }
+  marker.getElement()?.classList.toggle('is-active-vessel',selected);
+  marker.getElement()?.setAttribute('aria-label',marker.options.shipReport?.name||'Reported vessel');
+ });
 }
 function refreshShipIconSize(){
  if(!shipUI||!state.ships)return;
@@ -71,13 +161,13 @@ function initMap(){
 function pressPlace(id){for(const b of document.querySelectorAll('[data-place]'))b.setAttribute('aria-pressed',String(b.dataset.place===id));}
 function choosePlace(id,pan=true){
  const p=state.guide?.viewpoints.find(x=>x.id===id);if(!p)return;
+ state.map?.closePopup();
  state.selected={kind:'place',id};pressPlace(id);syncShipHighlight();
  const signal=core.nearPlace(p,state.live);
  const description=signal.closest?' A fresh AIS fix is '+signal.closest.distanceMiles.toFixed(1)+' straight-line miles from this approximate area. This does not establish visibility or direction of travel.':
   state.live?.state==='NO_FRESH_LOCAL_REPORTS'?' No fresh local AIS reports are available, which does not establish an empty river.':
   ' A nearby fresh AIS position has not been established.';
- const mapUrl=links?.placeSearch({role:'public-place',query:p.mapsQuery})||
-  'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(p.mapsQuery);
+ const mapUrl=placeMapsUrl(p);
  detail(p.accessClass==='PUBLIC_SIDEWALK_AREA_VERIFY_ACCESS'?'PUBLIC SIDEWALK AREA / VERIFY ACCESS':'PUBLIC PARK / SIGHTLINE UNVERIFIED',
   p.name,p.visit+description,
   [{label:'Source and visitor information ↗',url:p.sourceUrl},{label:'View area in Google Maps ↗',url:mapUrl}],p.coordinateNote);
@@ -85,6 +175,7 @@ function choosePlace(id,pan=true){
 }
 function chooseBridge(id,pan=true){
  const b=state.guide?.bridges.find(x=>x.id===id);if(!b)return;
+ state.map?.closePopup();
  state.selected={kind:'bridge',id};pressPlace(null);$('bridge-select').value=id;syncShipHighlight();
  if(b.group==='rail'&&state.railBridges&&state.map){$('rail-layer').checked=true;state.railBridges.addTo(state.map);}
  detail('PUBLISHED BRIDGE REFERENCE / NOT LIVE STATUS',b.name,b.summary+' Published river mile '+b.riverMile+'. The marker does not establish when the crossing is opening.',
@@ -94,31 +185,46 @@ function chooseBridge(id,pan=true){
  if(pan)focus(b.lat,b.lon,15);
 }
 function chooseShip(mmsi,pan=true){
- const v=state.live?.vessels?.find(x=>x.mmsi===mmsi);if(!v)return;
+ const v=state.live?.vessels?.find(x=>x.mmsi===String(mmsi));if(!v)return;
+ state.map?.closePopup();
  if(shipUI&&state.shipKindFilter!=='all'&&!shipUI.match(v,state.shipKindFilter)){
   state.shipKindFilter='all';showShips();
  }
- state.selected={kind:'ship',id:mmsi};pressPlace(null);syncShipHighlight();
- const visual=core.vesselVisual(v);
- detail('OBSERVED AIS POSITION / NO ARRIVAL FORECAST',v.name,'Reported type: '+(shipUI?.typeName(shipUI.kindOf(v))||'Type unknown')+'. Last reported '+timeFmt.format(new Date(v.seen))+' at '+v.lat.toFixed(5)+', '+v.lon.toFixed(5)+'. '+(v.speedKnots===null?'Speed not reported.':'Reported speed '+v.speedKnots.toFixed(1)+' knots.')+' '+(visual.course===null?'Course not reported.':'Course '+Math.round(visual.course)+'°.')+' The report does not establish a path, sighting, bridge crossing or ETA.',
+ state.selected={kind:'ship',id:String(mmsi)};pressPlace(null);syncShipHighlight();
+ const visual=core.vesselVisual(v),course=shipUI?.bearing(v);
+ const motion=course!==null&&course!==undefined?'Reported travel course '+Math.round(course)+'°. ':
+  Number.isFinite(v.heading)?'Reported true heading '+Math.round(v.heading)+'°. ':
+  'Travel direction and bow heading not verified. ';
+ detail('LATEST RECEIVED AIS / OBSERVATION',v.name,
+  'AIS position reported '+timeFmt.format(new Date(v.seen))+'. '+
+  (v.speedKnots===null?'Speed not reported.':'Reported speed '+v.speedKnots.toFixed(1)+' knots. ')+
+  (shipUI?.typeName(shipUI.kindOf(v))||'Type unknown')+' (AIS type if reported). '+
+  (visual.size==='not-reported'?'Length not reported.':'Reported length '+Math.round(v.lengthMeters*3.28084)+' feet. ')+
+  motion+'The ship silhouette is illustrative; no future bridge crossing or arrival time is predicted.',
   [{label:'Open full ship tracker ↗',url:'/great-lakes-freighter-tracking/'}],
-  'Source: '+v.source+'. Vessel type and size icons are illustrations, not hull geometry or map-scale depictions.');
- if(pan)focus(v.lat,v.lon,15);
+  'MMSI '+v.mmsi+' · '+v.source+' · coordinates '+v.lat.toFixed(4)+', '+v.lon.toFixed(4)+'. Do not navigate using public AIS.');
+ if(pan&&state.map){
+  focus(v.lat,v.lon,15);
+  openShipPopup(findShipMarker(v.mmsi),v);
+ }
 }
 function plotGuide(){
  if(!state.guide)return;
  state.places?.clearLayers();state.bridges?.clearLayers();state.railBridges?.clearLayers();
  for(const p of state.guide.viewpoints){
   if(!state.places)continue;
-  const m=L.marker([p.lat,p.lon],{title:p.name,alt:p.name+' approximate area',icon:pin('place','●'),zIndexOffset:1000}).addTo(state.places);
-  m.bindTooltip(p.name);m.on('click',()=>choosePlace(p.id,false));
+  const m=L.marker([p.lat,p.lon],{title:p.name+' · public area (verify access)',
+   alt:p.name+' approximate public viewing area',placeId:p.id,icon:placePin(p),zIndexOffset:1000}).addTo(state.places);
+  m.bindPopup(placePopupContent(p),{maxWidth:295,autoPan:true,closeButton:true});
+  m.on('click',()=>{choosePlace(p.id,false);m.openPopup();});
  }
  for(const b of state.guide.bridges){
   const layer=b.group==='rail'?state.railBridges:state.bridges;
   if(!layer)continue;
-  const kind=b.group==='rail'?'rail':'bridge';
-  const m=L.marker([b.lat,b.lon],{title:b.name,alt:b.name+' rounded chart reference',icon:pin(kind,kind==='rail'?'▤':'⇧')}).addTo(layer);
-  m.bindTooltip(b.name);m.on('click',()=>chooseBridge(b.id,false));
+  const m=L.marker([b.lat,b.lon],{title:b.name+' · published bridge reference',
+   alt:b.name+' NOAA rounded chart reference',bridgeId:b.id,icon:bridgePin(b)}).addTo(layer);
+  m.bindPopup(bridgePopupContent(b),{maxWidth:290,autoPan:true,closeButton:true});
+  m.on('click',()=>{chooseBridge(b.id,false);m.openPopup();});
  }
  const select=$('bridge-select');select.replaceChildren(node('option','Choose a bridge'));select.options[0].value='';
  for(const b of state.guide.bridges){const option=node('option',b.name+' · '+b.type+(b.group==='rail'?' / railroad':''));option.value=b.id;select.append(option);}
@@ -126,7 +232,7 @@ function plotGuide(){
  choosePlace('bridge95',false);
 }
 function showShips(){
- const r=state.live,list=$('reported-ships');list.replaceChildren();state.ships?.clearLayers();
+ const r=state.live,list=$('reported-ships');list.replaceChildren();state.map?.closePopup();state.ships?.clearLayers();
  updateMapViewControls();
  const summary=shipUI?.summarize(r);
  if(!summary?.available||!summary.groups.some(g=>g.kind===state.shipKindFilter))state.shipKindFilter='all';
@@ -149,7 +255,7 @@ function showShips(){
  if(r?.state==='REPORTS_AVAILABLE'){
   for(const v of visible){
    const item=node('li',''),btn=node('button','');
-   btn.type='button';btn.className='river-vessel-entry';
+   btn.type='button';btn.className='river-vessel-entry';btn.dataset.ship=String(v.mmsi);
    const kind=shipUI?.kindOf(v)||'unknown';
    if(shipUI){const glyph=node('span','','river-vessel-list-glyph type-'+kind);
      glyph.innerHTML=shipUI.glyphSvg(kind);glyph.setAttribute('aria-hidden','true');btn.append(glyph);}
@@ -159,12 +265,10 @@ function showShips(){
    btn.append(info);btn.addEventListener('click',()=>chooseShip(v.mmsi));item.append(btn);list.append(item);
    if(state.ships){
     const m=L.marker([v.lat,v.lon],{title:v.name+' last AIS fix',alt:v.name+' reported '+(shipUI?.typeName(kind)||'vessel')+' position',
-      shipMmsi:v.mmsi,shipReport:v,icon:boatPin(v),zIndexOffset:500}).addTo(state.ships);
-    const course=shipUI?.bearing(v);
-    m.bindTooltip(v.name+' · '+(shipUI?.typeName(kind)||'Type unknown')+
-      ' · '+timeFmt.format(new Date(v.seen))+
-      (course!==null&&course!==undefined?' · travel course '+Math.round(course)+'°':' · direction unverified'));
-    m.on('click',()=>chooseShip(v.mmsi,false));
+      shipMmsi:String(v.mmsi),shipReport:v,icon:boatPin(v),zIndexOffset:500}).addTo(state.ships);
+    // Like Cuyahoga: one click-open popup. No competing hover tooltip.
+    m.getElement()?.setAttribute('aria-label',v.name+' · '+vesselType(v));
+    m.on('click',()=>{chooseShip(v.mmsi,false);openShipPopup(m,v);});
    }
   }
  }else list.append(node('li','Check the full Great Lakes ship tracker. No local report is not proof that the river is empty.'));
