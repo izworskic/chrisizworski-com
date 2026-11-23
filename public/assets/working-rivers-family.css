@@ -285,7 +285,7 @@ body.river-family--cuyahoga {--river-accent:#155d6f;--river-accent-soft:#e5f0ef}
   gap:10px;
  }
  .river-family .view-choices{grid-template-columns:1fr}
- .river-family .story{grid-column:1;grid-row:3}
+ /* Preserve Cuyahoga's existing bend-lab row 3 and story row 4. */
  .river-family #calumet-map,.river-family #cuyahoga-map{
   height:clamp(390px,53svh,590px);
  }
@@ -313,7 +313,7 @@ body.river-family--cuyahoga {--river-accent:#155d6f;--river-accent-soft:#e5f0ef}
   font-size:.83rem;line-height:1.43;
  }
  .river-family .signal,.river-family .lead-status{
-  display:grid;grid-template-columns:80px minmax(0,1fr);
+  margin-top:0;display:grid;grid-template-columns:80px minmax(0,1fr);
   align-items:center;justify-content:start;
   gap:2px 9px;min-height:0;padding:8px 10px;
  }
