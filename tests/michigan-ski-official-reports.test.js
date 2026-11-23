@@ -80,3 +80,11 @@ test('date-only operator report stays date-only; no fictitious published hour',(
  const client=fs.readFileSync(path.join(root,'public/assets/michigan-ski.js'),'utf8');
  assert.ok(client.includes('(date only; time not published)'));
 });
+
+test('old season-closure prose cannot manufacture a zero-lift report',()=>{
+ const html='<h1>Current Conditions</h1><p>UPDATED April 30, 2026 Another great season has come to a close. The Nordic Spa remains open through the spring season.</p>';
+ const parsed=parse('mt-bohemia',html);
+ assert.equal(parsed.lifts,null);
+ assert.match(parsed.operatorStatusText,/Another great season has come to a close/);
+ assert.equal(classifyParsed(parsed,at).status,'STALE_REPORT');
+});
