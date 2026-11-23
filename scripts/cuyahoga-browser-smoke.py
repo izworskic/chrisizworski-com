@@ -112,7 +112,14 @@ async def run():
                     location["x"] + location["width"] > frame["x"] + frame["width"] - 4 or
                     location["y"] < frame["y"] + 4 or
                     location["y"] + location["height"] > frame["y"] + frame["height"] - 4):
-                    raise AssertionError(f"Public park map marker clipped at {width}px: {location}")
+                    diagnosis=await page.evaluate("""() => {
+                      const m=window.__CuyahogaTestMap;
+                      const frame=document.getElementById('cuyahoga-map').getBoundingClientRect();
+                      return {zoom:m?.getZoom(),size:m?.getSize(),bounds:m?.getBounds()?.toBBoxString(),
+                        center:m?.getCenter(),frame:{x:frame.x,y:frame.y,width:frame.width,height:frame.height},
+                        pins:[...document.querySelectorAll('.pin-park')].map(p=>{const r=p.getBoundingClientRect();return {name:p.getAttribute('title'),x:r.x,y:r.y,width:r.width}})};
+                    }""")
+                    raise AssertionError(f"Public park map marker clipped at {width}px: {location} | map={diagnosis}")
             await page.screenshot(path=str(OUT / f"cuyahoga-{width}-live.png"), full_page=True, animations="disabled")
             await page.get_by_role("button", name="Scranton Flats Pier").click()
             await page.locator("#river-focus h3").get_by_text("Scranton Flats Pier").wait_for()
