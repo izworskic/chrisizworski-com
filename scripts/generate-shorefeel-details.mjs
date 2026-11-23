@@ -1,11 +1,13 @@
 import {mkdir,readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
 import {fileURLToPath} from 'node:url';
+import shorelineNetwork from '../lib/shorefeel/network-links.js';
 const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
 function h(x){return String(x??'').replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'","&#39;")}
 function pageFor(b,region,all){
  const canada=region==='ca',area=canada?'canada':'around-the-lakes';
  const slug=b.slug,name=b.name,lake=b.lake;
+ const waterEvidence=shorelineNetwork.waterEvidenceLink(b);
  const city=canada?b.nearbyTown:b.city,place=canada?city+', Ontario, Canada':city+', '+b.state+', USA';
  const regionHub='/great-lakes-beaches/'+area+'/',rel='/great-lakes-beaches/'+area+'/'+slug+'/',canonical='https://chrisizworski.com'+rel;
  const park=canada?b.officialUrl:b.parkUrl,advisory=canada?b.advisory.url:b.safety.url,authority=canada?b.advisory.authority:b.safety.name;
@@ -66,6 +68,7 @@ function pageFor(b,region,all){
 </div></div></div>
 <p class="shore-guide" id="feel-guide">The lake has its own weather story. Compare the reported wind with the shoreline when you arrive; this is a nearby area forecast, not a thermometer at ${h(name)}.</p>
 <p class="shore-source"><strong>What this reading can tell you</strong><span id="feel-evidence">${sourceName} ${forecastKind}. No measured beach cooling adjustment or current swimming-area water temperature is available from this source.</span></p>
+<p class="shore-water-context"><a href="${h(waterEvidence.href)}">${h(waterEvidence.label)}</a><span>${h(waterEvidence.note)}</span></p>
 ${canada?'<p class="shore-attribution">Contains information licensed under the <a href="https://eccc-msc.github.io/open-data/licence/readme_en/" rel="noopener" target="_blank">Data Server End-use Licence</a> of Environment and Climate Change Canada.</p>':''}
 </section>
 <section class="shore-columns">
