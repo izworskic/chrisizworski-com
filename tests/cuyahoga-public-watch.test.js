@@ -326,13 +326,13 @@ test('first map screen favors four active reference landmarks plus Eagle work no
  assert.match(css,/\.bridge-toggle/);
 });
 
-test('river desk redesign puts public shore decisions and map before expanded technical evidence',()=>{
+test('river desk puts the map and current ship evidence before parks, with deeper source material later',()=>{
  const mapAt=page.indexOf('id="cuyahoga-map"');
  const parksAt=page.indexOf('id="place-buttons"');
  const reportAt=page.indexOf('id="live-vessels"');
  const storyAt=page.indexOf('class="story"');
  const sourceAt=page.indexOf('class="sources"');
- assert.ok(mapAt>0&&parksAt>mapAt&&reportAt>parksAt&&storyAt>reportAt&&sourceAt>storyAt);
+ assert.ok(mapAt>0&&reportAt>mapAt&&parksAt>reportAt&&storyAt>parksAt&&sourceAt>storyAt);
  assert.match(page,/<section class="workbench" id="river-workbench"/);
  assert.match(page,/data-park="scranton"/);
  assert.match(page,/data-park="rivergate"/);
