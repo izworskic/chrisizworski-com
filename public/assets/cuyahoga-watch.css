@@ -314,7 +314,7 @@ h3{font-weight:750}
 .cuyahoga-viewpoint-icon.leaflet-marker-icon:has(+ .leaflet-marker-shadow){z-index:1}
 .park-popup-content{min-width:205px;max-width:290px}
 .park-popup-title{display:block;font:700 1rem/1.25 system-ui;color:#173c45}
-.park-popup-description{color:#314f54;margin:6px 0 10px!important;line-height:1.45}
+.park-popup-description{color:#314f54;margin:6px 0 10px!important;font-size:.875rem;line-height:1.45}
 .park-popup-actions{display:flex;gap:6px 12px;flex-wrap:wrap;margin:8px 0}
 .park-popup-actions a{font-size:.8rem;font-weight:750;color:#155c68;text-underline-offset:3px}
 .park-popup-actions a:focus-visible{outline:2px solid #aa752b;outline-offset:2px}
@@ -327,15 +327,15 @@ h3{font-weight:750}
 .place-entry .place-button:focus-visible{outline:3px solid #bd8a43;outline-offset:-3px}
 .place-glyph{width:38px;height:38px;border:1px solid #ceded9;background:#f1f6f3;border-radius:10px;align-self:start}
 .place-info .place-role{font-size:.73rem;font-weight:750;color:#3e6667;margin-top:3px}
-.place-info .place-watch-copy{font-size:.75rem;line-height:1.43;color:#4c6365;margin-top:5px}
+.place-info .place-watch-copy{font-size:.875rem;line-height:1.43;color:#425d60;margin-top:5px}
 .place-entry .place-arrow{align-self:start;margin-top:4px}
 .place-entry .park-signal{grid-column:2/-1;margin-top:0}
 .place-entry-links{display:flex;align-items:center;justify-content:space-between;gap:7px 10px;
  flex-wrap:wrap;padding:1px 7px 8px 57px}
-.place-google-link{font-size:.77rem;color:#145b67;font-weight:800;text-decoration:underline;text-underline-offset:3px}
+.place-google-link{display:inline-flex;align-items:center;min-height:40px;font-size:.875rem;color:#145b67;font-weight:800;text-decoration:underline;text-underline-offset:3px}
 .place-google-link:hover{color:#0a384d}
 .place-google-link:focus-visible{outline:2px solid #bd8a43;outline-offset:3px}
-.place-entry-links>span{color:#667977;font-size:.64rem;line-height:1.35}
+.place-entry-links>span{color:#526866;font-size:.75rem;line-height:1.35}
 @media(max-width:830px){
  .place-entry .place-button{grid-template-columns:38px minmax(0,1fr) 14px;padding:9px 6px 5px}
  .place-entry-links{padding-left:54px}
@@ -348,7 +348,7 @@ h3{font-weight:750}
  .place-entry .place-arrow{display:block}
  .place-info strong{font-size:.86rem}
  .place-info .place-role{font-size:.72rem}
- .place-info .place-watch-copy{font-size:.74rem;line-height:1.4}
+ .place-info .place-watch-copy{font-size:.875rem;line-height:1.45}
  .place-entry .park-signal{grid-column:2/-1}
  .place-entry-links{padding:1px 9px 9px 58px}
 }
