@@ -72,6 +72,58 @@ function renderLead(){
  put('huron-context',h?.status==='recent'?'Lake Huron whole-lake water average: '+temp(h.latest.tempF)+' ('+h.latest.date+'). Not the beach air or local water.':'Lake Huron whole-lake surface analysis unavailable.');
 }
 
+
+function renderWindTurn(){
+ const value=payload?.windTurn;
+ const list=id('wind-turn-hours');
+ if(list)list.replaceChildren();
+ if(!value||value.status==='unavailable'){
+  put('wind-turn-answer','Hourly wind outlook unavailable');
+  put('wind-turn-explain','There is no verified current NWS hourly wind forecast. A change in the wind cannot be timed from missing information.');
+  put('wind-turn-source','Use official NWS forecasts and beach hazard notices before visiting. No offshore sensor has been substituted for the land-area forecast.');
+  return;
+ }
+ if(value.phase==='onshore-now'){
+  put('wind-turn-answer','Wind from the bay is forecast now');
+ }else if(value.phase==='forecast-turn'){
+  put('wind-turn-answer','Forecast winds turn toward the bay around '+date(value.at));
+ }else{
+  put('wind-turn-answer','No sustained turn toward the bay shown in the available forecast');
+ }
+ let note=value.reason||'The wind information is regional forecast guidance, not a beach thermometer.';
+ if(Number.isFinite(value.forecastAirWaterContrastF)&&value.water){
+  if(value.contrastMeaning==='water-cooler-than-air'){
+   note+=' NOAA analyzed water in the bay is cooler than the area air forecast for that hour. Cooling at the sand remains unmeasured.';
+  }else if(value.contrastMeaning==='water-warmer-than-air'){
+   note+=' NOAA analyzed water is warmer than the area air forecast for that hour. Shoreline moderation is possible but unmeasured.';
+  }else{
+   note+=' The forecast air and nearby NOAA surface-water temperatures are relatively close. A shoreline air correction is not established.';
+  }
+ }else{
+  note+=' A suitable current inner-bay satellite water reference is not available for this wind period.';
+ }
+ put('wind-turn-explain',note);
+ put('wind-turn-source','Source: NWS Bay City State Park land-area hourly forecast. Each hour is predicted wind FROM that direction, not a measured beach wind. The wind turn is not confirmed lake-breeze onset, an on-sand temperature or a swim-safety decision.');
+ if(!list)return;
+ const sectorName={onshore:'From the bay',offshore:'From land',alongshore:'Along shore',unknown:'Wind uncertain'};
+ (Array.isArray(value.hours)?value.hours:[]).slice(0,8).forEach(hour=>{
+  const li=document.createElement('li');
+  li.dataset.sector=Object.hasOwn(sectorName,hour.sector)?hour.sector:'unknown';
+  const time=document.createElement('time');
+  time.dateTime=hour.startsAt;
+  time.textContent=date(hour.startsAt);
+  const direction=document.createElement('strong');
+  direction.textContent=sectorName[li.dataset.sector];
+  const details=document.createElement('span');
+  const hasWind=Number.isFinite(hour.windMph)&&hour.windFrom;
+  const hasTemp=Number.isFinite(hour.areaAirF);
+  details.textContent=(hasWind?Math.round(hour.windMph)+' mph '+hour.windFrom:'Wind unavailable')+
+   (hasTemp?' · '+Math.round(hour.areaAirF)+'°F area air':'');
+  li.append(time,direction,details);
+  list.append(li);
+ });
+}
+
 function renderSelected(){
  const p=points.find(x=>x.key===selected),e=evidence(selected);
  put('selected-heading',p.name);
@@ -154,7 +206,7 @@ async function load(){
   let response;try{response=await fetch('/api/shorefeel?lake=huron&place=saginaw-bay',{headers:{Accept:'application/json'},signal:ctrl.signal});}finally{clearTimeout(timer);}
   if(!response.ok)throw Error('Live source failed');
   payload=await response.json();
-  renderLead();renderEvidence();renderActivity('relax');
+  renderLead();renderWindTurn();renderEvidence();renderActivity('relax');
  }catch(e){
   put('lead-temp','Beach feel unavailable');put('lead-band','Beach conditions unverified');
   put('lead-band-note','Current NWS beach-area weather could not be retrieved.');
@@ -167,7 +219,7 @@ async function load(){
   put('lead-caveat','No inland or water-temperature reading is substituted for a beach thermometer.');
   put('last-updated','Latest data not verified');put('selected-source','Source unavailable');
   put('buoy-status','No verified buoy observation');
-  renderActivity('relax');
+  renderWindTurn();renderActivity('relax');
  }finally{buildMap();}
 }
 document.querySelectorAll('[data-point]').forEach(el=>el.addEventListener('click',()=>{selected=el.dataset.point;renderSelected();}));
