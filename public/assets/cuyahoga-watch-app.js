@@ -25,7 +25,7 @@
  function revealMobileFocus(){
   if(window.matchMedia('(max-width:830px)').matches) $('river-focus').scrollIntoView({block:'start',behavior:'auto'});
  }
- const supportedParks=new Set(['scranton','rivergate','heritage','wendy']);
+ const parkSymbolKinds=Object.freeze({scranton:'bend',rivergate:'wharf',heritage:'heritage',wendy:'harbor'});
  function parkMapsUrl(park){
   const value=String(park?.googleMapsUrl||'');
   // Checked-in official Metroparks map points only; reject arbitrary source URLs.
@@ -46,9 +46,10 @@
  function mapPointIcon(kind,parkId,offset=false){
   if(!window.L)return null;
   if(kind==='park'){
-   const id=supportedParks.has(parkId)?parkId:'scranton';
+   const id=Object.prototype.hasOwnProperty.call(parkSymbolKinds,parkId)?parkId:'scranton';
+   const glyph=parkSymbolKinds[id];
    const html='<span class="park-map-pin pin-park park-map-pin--'+id+(offset?' is-offset':'')+'" aria-hidden="true">'+
-    '<svg viewBox="0 0 24 24" focusable="false"><use href="#cuy-park-'+id+'"></use></svg></span>';
+    '<svg viewBox="0 0 24 24" focusable="false"><use href="#cuy-park-'+glyph+'"></use></svg></span>';
    return L.divIcon({className:'cuyahoga-viewpoint-icon',html,iconSize:[36,40],iconAnchor:[18,offset?77:37],popupAnchor:[0,offset?-85:-34]});
   }
   const classes={bridge:'pin-bridge',work:'pin-work'};
