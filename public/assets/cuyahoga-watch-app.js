@@ -36,6 +36,7 @@
    return;
   }
   state.map=L.map('cuyahoga-map',{scrollWheelZoom:false,zoomControl:true,preferCanvas:true,worldCopyJump:false});
+  if(location.hostname==='127.0.0.1')window.__CuyahogaTestMap=state.map;
   state.map.setView([41.493,-81.698],14);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
     maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'
