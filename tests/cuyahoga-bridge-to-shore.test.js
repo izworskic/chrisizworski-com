@@ -46,6 +46,8 @@ test('enhancement extends existing map and bridge selection without changing the
  assert.match(page,/\/assets\/cuyahoga-bridge-to-shore\.css/);
  assert.match(page,/id="bridge-select"/);
  assert.match(page,/id="river-focus"/);
+ assert.match(page,/\/assets\/cuyahoga-bend-demo\.js/);
+ assert.match(page,/\/assets\/cuyahoga-bend-demo\.css/);
  assert.match(page,/name="robots" content="noindex,follow"/);
  assert.match(app,/MutationObserver/);
  assert.match(app,/data-park/);
