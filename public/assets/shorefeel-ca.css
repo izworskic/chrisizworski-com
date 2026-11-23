@@ -17,3 +17,24 @@
 .interpret{margin-top:48px}
 .interpret details a{font-weight:600}
 @media(max-width:720px){.intro{padding-top:27px}.field-report .source-scope{line-height:1.65}}
+
+/*
+ * Keep two-finger map gestures inside Leaflet, including when an Android
+ * in-app browser lands either contact on a tile, pane, marker or map border.
+ * Scope this to Canada only: other page regions preserve browser pinch zoom.
+ */
+.map-section .map-shell,
+.map-section #shore-map,
+.map-section #shore-map * {
+  touch-action: none !important;
+  -ms-touch-action: none;
+}
+.map-section #shore-map { overscroll-behavior: contain; }
+@media (pointer:coarse) {
+  .map-section #shore-map .leaflet-control-zoom a {
+    width: 46px;
+    height: 46px;
+    line-height: 46px;
+    font-size: 25px;
+  }
+}

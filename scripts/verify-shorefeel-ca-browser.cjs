@@ -105,7 +105,7 @@ async function main(){
   status:200,contentType:'image/png',body:tile
  }));
  // Expose the exact local Leaflet instance to this isolated test only.
- await zoomCtx.route('**/assets/shorefeel-ca.js',route=>{
+ await zoomCtx.route('**/assets/shorefeel-ca.js*',route=>{
   const script=fs.readFileSync(path.join(ROOT,'assets/shorefeel-ca.js'),'utf8');
   const needle='map=window.L.map(';
   assert.ok(script.includes(needle),'Map initialization source unchanged');
@@ -133,11 +133,21 @@ async function main(){
  const touchSettings=await mapSurface.evaluate(el=>({
   touchAction:getComputedStyle(el).touchAction,
   pinch:el.classList.contains('leaflet-touch-zoom'),
-  drag:el.classList.contains('leaflet-touch-drag')
+  drag:el.classList.contains('leaflet-touch-drag'),
+  shell:getComputedStyle(el.closest('.map-shell')).touchAction,
+  tile:getComputedStyle(el.querySelector('.leaflet-tile')||el).touchAction
  }));
  assert.equal(touchSettings.pinch,true,'Leaflet pinch handler active');
  assert.equal(touchSettings.drag,true,'Leaflet drag handler active');
  assert.equal(touchSettings.touchAction,'none','Prevent native touch cancellation');
+ assert.equal(touchSettings.shell,'none','Map shell must not allow browser page pinch');
+ assert.equal(touchSettings.tile,'none','Tile touch target must not allow browser page pinch');
+ assert.ok(await zoomIn.evaluate(el=>el.getBoundingClientRect().width>=44),
+  'Mobile map zoom controls must be at least 44px wide');
+ assert.ok(await zoomOut.evaluate(el=>el.getBoundingClientRect().height>=44),
+  'Mobile map zoom controls must be at least 44px tall');
+ assert.match(await zoomPage.locator('script[src*="shorefeel-ca.js"]').getAttribute('src'),/mobile-pinch-4/,
+  'Versioned JS URL prevents reuse of the old cached gesture code');
  const readTileZoom=()=>zoomPage.evaluate(()=>{
   const imgs=[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')];
   return Math.max(-1,...imgs.map(img=>{
@@ -219,6 +229,7 @@ async function main(){
    .map(img=>Number(new URL(img.src).pathname.split('/')[1])),
   trace:window.__shorePinchTrace,
   viewportScale:window.visualViewport?.scale,
+  viewportWidth:window.visualViewport?.width,
   mapZoom:window.__shoreTestMap.getZoom(),
   hitTarget:(()=>{const box=document.getElementById('shore-map').getBoundingClientRect();
    const e=document.elementFromPoint(box.left+box.width/2,box.top+box.height/2);
@@ -243,6 +254,8 @@ async function main(){
   });
  },zoomBeforePinch,{timeout:10000});
  assert.equal(await zoomPage.locator('#map-fallback').isVisible(),false);
+ assert.ok(Math.abs(await zoomPage.evaluate(()=>visualViewport.scale)-1)<0.02,
+  'Pinch must zoom the map rather than changing the whole page scale');
  await zoomPage.screenshot({path:path.join(OUT,'canada-mobile-working-map-zoom-390.png')});
  await zoomCtx.close();
  const ctx=await browser.newContext({viewport:{width:390,height:850}});
