@@ -29,3 +29,76 @@ a{color:#0b5b6a;text-underline-offset:3px}button,select,input{font:inherit}butto
 .cw-pin.rail{background:#6d566a}
 .rail-toggle{display:flex!important;gap:9px;align-items:center;line-height:1.4;min-height:43px;margin:9px 0!important;font-size:.8rem!important;font-weight:750!important;color:#284750}
 .rail-toggle input{width:19px;height:19px;flex:0 0 auto;accent-color:#6d566a}
+
+
+/* Calumet shore-watch markers now use Cuyahoga's illustrated map vocabulary.
+   Road/rail crossings remain distinct NOAA references, not public viewpoints. */
+.calumet-map-symbol-defs{position:absolute;width:0;height:0;overflow:hidden;pointer-events:none}
+.calumet-viewpoint-icon.leaflet-marker-icon,
+.calumet-bridge-icon.leaflet-marker-icon,
+.calumet-vessel-icon.leaflet-marker-icon{
+ background:transparent;border:0;overflow:visible;
+}
+.calumet-viewpoint-icon:focus-visible,.calumet-bridge-icon:focus-visible{
+ outline:3px solid #d49a39;outline-offset:3px;border-radius:10px;
+}
+.calumet-place-pin{
+ --place-ink:#246e6f;
+ width:34px;height:34px;display:grid;place-items:center;position:relative;
+ border:2px solid var(--place-ink);border-radius:12px 12px 9px 9px;
+ background:#fffef8;color:var(--place-ink);box-shadow:0 2px 5px #0d2d3977;
+}
+.calumet-place-pin--bridge95{--place-ink:#246e6f}
+.calumet-place-pin--calumetpark{--place-ink:#366e8b}
+.calumet-place-pin::after{
+ content:"";position:absolute;left:12px;bottom:-5px;width:8px;height:8px;
+ transform:rotate(45deg);background:#fffef8;
+ border-right:2px solid var(--place-ink);border-bottom:2px solid var(--place-ink);
+}
+.calumet-place-pin svg,.calumet-bridge-pin svg{
+ display:block;width:23px;height:23px;fill:none;stroke:currentColor;
+ stroke-width:1.85;stroke-linecap:round;stroke-linejoin:round;
+}
+.calumet-bridge-pin{
+ width:30px;height:30px;display:grid;place-items:center;
+ border-radius:50%;background:#fffdf5;border:2px solid #946222;
+ color:#946222;box-shadow:0 1px 5px #0d2d3977;
+}
+.calumet-bridge-pin--rail{border-color:#64778b;color:#64778b;background:#f9fafa}
+.calumet-bridge-pin svg{width:21px;height:21px}
+#calumet-map .leaflet-popup-content-wrapper{
+ border-radius:12px;box-shadow:0 7px 24px #0c293c3d;
+}
+#calumet-map .leaflet-popup-content{
+ font-size:.83rem;line-height:1.45;margin:12px 15px;
+ max-height:min(56vh,380px);overflow-y:auto;
+}
+#calumet-map .park-popup-content{min-width:190px;max-width:290px}
+#calumet-map .park-popup-title{
+ display:block;font:700 1rem/1.25 system-ui;color:#173c45;
+}
+#calumet-map .park-popup-description{
+ margin:6px 0 10px;color:#314f54;font-size:.875rem;line-height:1.46;
+}
+#calumet-map .calumet-popup-meta{margin:6px 0;color:#35565d;font-size:.81rem}
+#calumet-map .park-popup-actions{
+ display:flex;flex-wrap:wrap;gap:6px 12px;margin:10px 0 8px;
+}
+#calumet-map .park-popup-actions a{
+ font-size:.8rem;font-weight:750;color:#155c68;text-decoration:underline;text-underline-offset:3px;
+}
+#calumet-map .park-popup-actions a:focus-visible{
+ outline:2px solid #aa752b;outline-offset:2px;
+}
+#calumet-map .park-popup-note{
+ display:block;color:#53696d;font-size:.72rem;line-height:1.48;
+ border-top:1px solid #e0e7e2;padding-top:8px;
+}
+#calumet-map .calumet-vessel-icon.is-selected{z-index:1500}
+#calumet-map .calumet-vessel-icon.is-active-vessel .ship-hull{
+ stroke:#e7aa42;stroke-width:2.6;
+}
+.river-family--calumet .reported-ships button[aria-current=true]{
+ border-left:3px solid #175c69;padding-left:9px;background:#e9f2ee;
+}
+.river-family--calumet .reported-ships button:focus-visible{outline-offset:-2px}
