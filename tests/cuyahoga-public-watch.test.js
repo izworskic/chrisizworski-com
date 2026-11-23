@@ -28,6 +28,35 @@ test('public source directory is exactly the reviewed dataset, not a guessed acc
  assert.equal(pubPilot.excludedFromFutureEtas,true);
  assert.equal(pubPilot.bridges.length,21);
 });
+test('all four verified viewing places have distinct, illustrated map markers, useful field guidance and official-coordinate Google Maps links',()=>{
+ const ids=['scranton','rivergate','heritage','wendy'];
+ const kinds=['bend','wharf','heritage','harbor'];
+ const urls=new Set();
+ for(let i=0;i<ids.length;i++){
+  const park=parks.spots.find(p=>p.id===ids[i]);
+  assert.equal(park.iconKind,kinds[i]);
+  assert.ok(park.watchFor.length>=75,'Each park must explain what the visitor will see');
+  assert.ok(park.visitTip.length>=65,'Each park must describe the visit decision');
+  assert.match(park.googleMapsUrl,/^https:\/\/www\.google\.com\/maps\?q=41\.\d+,-81\.\d+$/);
+  assert.match(park.googleMapsNote,/not a surveyed entrance/);
+  urls.add(park.googleMapsUrl);
+  assert.ok(page.includes('id="cuy-park-'+kinds[i]+'"'),'Missing icon definition for '+park.id);
+  assert.ok(page.includes('data-viewpoint="'+park.id+'"'),'Missing public watch card '+park.id);
+  assert.ok(page.includes('class="place-google-link" href="'+park.googleMapsUrl+'"'),'Missing official Google Maps link on card '+park.id);
+  assert.ok(page.includes(park.watchFor.replaceAll('&','&amp;')),'Park visitor information must be readable without JS');
+ }
+ assert.equal(urls.size,4);
+ assert.match(app,/function parkPopupContent\(park\)/);
+ assert.match(app,/marker\.bindPopup\(parkPopupContent\(park\)/);
+ assert.match(app,/Google Maps · park location/);
+ assert.match(app,/parkMapsUrl\(park\)/);
+ assert.match(app,/state\.map\?\.closePopup\(\)/);
+ assert.match(css,/\.park-map-pin\b/);
+ assert.match(css,/\.park-popup-actions/);
+ assert.match(css,/\.place-watch-copy/);
+ assert.match(css,/\.place-google-link/);
+ assert.doesNotMatch(app,/marker\.bindTooltip\(park\.name/);
+});
 test('a fresh AIS observation near Cleveland is displayed without future prediction',()=>{
  const result=core.classifyLive({ok:true,checkedAt:'2026-11-22T13:59:50Z',vessels:[
   v('2026-11-22T13:58:00Z'),
