@@ -61,7 +61,8 @@
    .catch(e=>{if(e.name!=='AbortError'&&current===d.slug)unavailable('ECCC weather could not be reached. Use the official park and beach health links.');});
   if(mapReady&&markers.has(d.slug)){
     for(const [slug,p]of markers){const e=p.getElement()?.querySelector('.shore-marker');if(e)e.classList.toggle('selected',slug===d.slug);}
-    markers.get(d.slug).openPopup();
+    // Do not open a popup from the beach list: it obscures mobile pinch gestures.
+    // Leaflet's bound popup still opens when a visitor taps its marker.
   }
   try{const u=new URL(location.href);u.searchParams.set('beach',d.slug);history.replaceState(null,'',u);}catch{}
   if(window.va)window.va('event',{name:'ShoreFeel Canada Beach Select',data:{beach:d.slug,lake:d.lake}});
@@ -120,10 +121,11 @@
  function startMap(){
   if(typeof window.L!=='object')return mapFailed();
   try{
-   // Keep one-finger page scrolling on touch devices, but allow two-finger pinch
-   // zoom and always display accessible + / - controls. Wheel scrolling stays
-   // with the page rather than unexpectedly zooming the map.
-   map=window.L.map('shore-map',{scrollWheelZoom:false,zoomControl:true,touchZoom:true,dragging:!matchMedia('(pointer:coarse)').matches});
+   // With dragging disabled, Leaflet sets touch-action: pan-x pan-y, letting
+   // the mobile browser cancel multi-touch before the map can zoom.
+   // Enable drag and zoom together so Leaflet sets touch-action: none.
+   // Visitors scroll the page outside the map; wheel zoom stays disabled.
+   map=window.L.map('shore-map',{scrollWheelZoom:false,zoomControl:true,touchZoom:true,dragging:true});
    map.setView([44.4,-83.9],6);
    const layer=window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:12,attribution:'© OpenStreetMap contributors'}).addTo(map);
    layer.on('tileload',()=>{tilesLoaded=true;});layer.on('tileerror',()=>{tileErrors++;if(tileErrors>=3&&!tilesLoaded)mapFailed();});
@@ -146,7 +148,8 @@
    }else map.setView([44.5,-85.5],6,{animate:false});
    if(current&&markers.has(current)){
     const selected=markers.get(current);
-    selected.openPopup();
+    // The field note already describes the selected beach. Keep the initial
+    // map unobstructed rather than centering a popup over touch gestures.
     const icon=selected.getElement()?.querySelector('.shore-marker');
     if(icon)icon.classList.add('selected');
    }

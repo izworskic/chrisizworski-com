@@ -104,6 +104,14 @@ async function main(){
  await zoomCtx.route('https://tile.openstreetmap.org/**',route=>route.fulfill({
   status:200,contentType:'image/png',body:tile
  }));
+ // Expose the exact local Leaflet instance to this isolated test only.
+ await zoomCtx.route('**/assets/shorefeel-ca.js',route=>{
+  const script=fs.readFileSync(path.join(ROOT,'assets/shorefeel-ca.js'),'utf8');
+  const needle='map=window.L.map(';
+  assert.ok(script.includes(needle),'Map initialization source unchanged');
+  return route.fulfill({status:200,contentType:'application/javascript',
+   body:script.replace(needle,'map=window.__shoreTestMap=window.L.map(')});
+ });
  await zoomCtx.route('**/api/shorefeel-ca?*',route=>{
   const slug=new URL(route.request().url()).searchParams.get('beach');
   return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(fixture(slug))});
@@ -113,6 +121,8 @@ async function main(){
  await zoomPage.waitForFunction(()=>document.querySelector('#report-temp')?.textContent==='2°C');
  await zoomPage.waitForFunction(()=>document.querySelector('#shore-map .leaflet-tile-loaded')!==null,{timeout:14000});
  assert.equal(await zoomPage.locator('#map-fallback').isVisible(),false,'working tile layer must remain available');
+ assert.equal(await zoomPage.locator('#shore-map .leaflet-popup').count(),0,
+  'Map must not auto-open a popup that blocks phone gestures');
  const mapSurface=zoomPage.locator('#shore-map');
  assert.equal(await mapSurface.evaluate(el=>el.classList.contains('leaflet-touch-zoom')),true,
   'mobile map must register Leaflet two-finger touch zoom');
@@ -120,6 +130,14 @@ async function main(){
  const zoomOut=zoomPage.locator('#shore-map .leaflet-control-zoom-out');
  assert.ok(await zoomIn.isVisible(),'visible zoom-in control');
  assert.ok(await zoomOut.isVisible(),'visible zoom-out control');
+ const touchSettings=await mapSurface.evaluate(el=>({
+  touchAction:getComputedStyle(el).touchAction,
+  pinch:el.classList.contains('leaflet-touch-zoom'),
+  drag:el.classList.contains('leaflet-touch-drag')
+ }));
+ assert.equal(touchSettings.pinch,true,'Leaflet pinch handler active');
+ assert.equal(touchSettings.drag,true,'Leaflet drag handler active');
+ assert.equal(touchSettings.touchAction,'none','Prevent native touch cancellation');
  const readTileZoom=()=>zoomPage.evaluate(()=>{
   const imgs=[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')];
   return Math.max(-1,...imgs.map(img=>{
@@ -145,6 +163,85 @@ async function main(){
    return m&&Number(m[1])===before;
   });
  },before,{timeout:10000});
+ // Start from a fresh map so higher-zoom tiles left by the +/- control
+ // animation cannot be mistaken for the pinch gesture's initial zoom.
+ await zoomPage.reload({waitUntil:'domcontentloaded'});
+ await zoomPage.waitForFunction(()=>document.querySelector('#shore-map img.leaflet-tile-loaded')!==null,{timeout:14000});
+ await zoomPage.waitForTimeout(400);
+ // Record touch and pointer events so a failed gesture can be diagnosed.
+ await zoomPage.evaluate(()=>{
+  window.__shorePinchTrace=[];
+  const el=document.getElementById('shore-map');
+  for(const name of ['touchstart','touchmove','touchend','pointerdown','pointermove','pointercancel']){
+   el.addEventListener(name,e=>{
+    const trace=window.__shorePinchTrace;
+    if(trace.length<65)trace.push({type:name,touches:e.touches?.length??null,
+      pointer:e.pointerType||null,cancelable:e.cancelable});
+   },{passive:true});
+  }
+ });
+ // Prove pinch-zoom using two real touchscreen contacts, not map controls.
+ await mapSurface.scrollIntoViewIfNeeded();
+ const rect=await mapSurface.boundingBox();
+ assert.ok(rect&&rect.width>150&&rect.height>150,'Visible map gesture surface');
+ const cx=rect.x+rect.width/2,cy=rect.y+rect.height/2;
+ const zoomBeforePinch=await readTileZoom();
+ await zoomPage.evaluate(()=>{
+  window.__shoreZoomLog=[];
+  const m=window.__shoreTestMap;
+  m.on('zoomstart zoom zoomend',e=>window.__shoreZoomLog.push({
+   type:e.type,zoom:m.getZoom()}));
+ });
+ const mapBeforePinch=await zoomPage.evaluate(()=>({
+  zoom:window.__shoreTestMap.getZoom(),
+  handler:window.__shoreTestMap.touchZoom.enabled(),
+  animating:!!window.__shoreTestMap._animatingZoom
+ }));
+ const cdp=await zoomCtx.newCDPSession(zoomPage);
+ const finger=(id,x,y)=>({id,x,y,force:1});
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[
+  finger(1,cx-24,cy)
+ ]});
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[
+  finger(1,cx-24,cy),finger(2,cx+24,cy)
+ ]});
+ for(let step=1;step<=12;step++){
+  const spread=24+step*7;
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[
+   finger(1,cx-spread,cy),finger(2,cx+spread,cy)
+  ]});
+  await zoomPage.waitForTimeout(24);
+ }
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+ const pinchEvidence=await zoomPage.evaluate(()=>({
+  touchAction:getComputedStyle(document.getElementById('shore-map')).touchAction,
+  tileLevels:[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')]
+   .map(img=>Number(new URL(img.src).pathname.split('/')[1])),
+  trace:window.__shorePinchTrace,
+  viewportScale:window.visualViewport?.scale,
+  mapZoom:window.__shoreTestMap.getZoom(),
+  hitTarget:(()=>{const box=document.getElementById('shore-map').getBoundingClientRect();
+   const e=document.elementFromPoint(box.left+box.width/2,box.top+box.height/2);
+   return e?.className||e?.tagName;})(),
+  gesture:{
+   started:!!window.__shoreTestMap.touchZoom._zooming,
+   moved:!!window.__shoreTestMap.touchZoom._moved,
+   startDist:window.__shoreTestMap.touchZoom._startDist,
+   startZoom:window.__shoreTestMap.touchZoom._startZoom,
+   targetZoom:window.__shoreTestMap.touchZoom._zoom
+  },
+  zoomLog:window.__shoreZoomLog
+ }));
+ console.log('ShoreFeel real pinch evidence: '+JSON.stringify({
+  zoomBeforePinch,mapBeforePinch,...pinchEvidence
+ }));
+ await zoomPage.waitForFunction(before=>{
+  const imgs=[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')];
+  return imgs.some(img=>{
+   const z=Number(new URL(img.src).pathname.split('/')[1]);
+   return Number.isFinite(z)&&z>before;
+  });
+ },zoomBeforePinch,{timeout:10000});
  assert.equal(await zoomPage.locator('#map-fallback').isVisible(),false);
  await zoomPage.screenshot({path:path.join(OUT,'canada-mobile-working-map-zoom-390.png')});
  await zoomCtx.close();
