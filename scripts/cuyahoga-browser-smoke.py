@@ -85,6 +85,14 @@ async def run():
                 raise AssertionError("Default river map should prioritize public parks and observed ships, not bridge pins")
             if await page.locator(".pin-park").count() != 4:
                 raise AssertionError("Default river map missing four public viewing points")
+            frame = await page.locator("#cuyahoga-map").bounding_box()
+            for pin in await page.locator(".pin-park").all():
+                location = await pin.bounding_box()
+                if not frame or not location or (location["x"] < frame["x"] + 4 or
+                    location["x"] + location["width"] > frame["x"] + frame["width"] - 4 or
+                    location["y"] < frame["y"] + 4 or
+                    location["y"] + location["height"] > frame["y"] + frame["height"] - 4):
+                    raise AssertionError(f"Public park map marker clipped at {width}px: {location}")
             await page.screenshot(path=str(OUT / f"cuyahoga-{width}-live.png"), full_page=True, animations="disabled")
             await page.get_by_role("button", name="Scranton Flats Pier").click()
             await page.locator("#river-focus h3").get_by_text("Scranton Flats Pier").wait_for()
