@@ -34,7 +34,7 @@ test('each of the seven existing region pages has source-grounded town demand an
     assert.ok(body.includes('not a verified trailhead or parking location'));
     assert.ok(body.includes('data-town-live'));
     assert.ok(body.includes('data-town-junction-lat'));
-    assert.ok(body.includes('snowmobile-town-guide-title'));
+    assert.ok(body.includes('snow-town-guide-title'));
   }
   assert.equal(count,27);
 });
