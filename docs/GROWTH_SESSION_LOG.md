@@ -1,3 +1,6 @@
+### 2026-11-22 | Michigan northern lights regional comparison
+The existing Michigan hub now leads with the selected region and compares an alternative at the same dark hour. The 390px Bay City fixture moved its local headline from 1,067px to 472px. Source and regression evidence are in the Michigan aurora comparison release record. The November 20 last-12-month GSC export showed 62,857 impressions and 788 clicks for this canonical. Page-level AdSense earnings and post-release outcomes are unavailable. Branch review only, production unverified. Next action after release is to compare 28-day guide visits and publisher revenue against comparable aurora activity and query positions.
+
 ### 2026-11-22 | Adventure Finder natural-language intent layer, PR #1851, HOLD MERGE
 - Visitor decision: describe a Michigan day instead of guessing a filter keyword; season, activity and region remain strict constraints.
 - Implementation: tiny on-device rule-based phrase matcher derived from the existing 20 field notes, optional compact search control, source-based top-result link, no-match guard for unsupported safety/facilities, map/list sync, clear/reset, no-JS/missing-module fallback and no typed data in URL/storage/network. No model, Redis, Vercel backend, ad, canonical, Person, photo or map source modification.
