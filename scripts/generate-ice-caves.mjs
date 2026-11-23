@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import {SITES,DEFERRED} from '../lib/michigan-ice/sites.mjs';
-const base='https://chrisizworski.com/michigan-ice-caves/',person='https://chrisizworski.com/#person',date='2026-11-11';
+const base='https://chrisizworski.com/michigan-ice-caves/',person='https://chrisizworski.com/#person',hubDate='2026-11-11',siteDate='2026-11-23';
 const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const url=s=>base+(s?s.id+'/':'');
 const faqs=[['Are the ice caves formed yet?','A current site-specific official report is needed to confirm formation. Accumulated cold and forecasts describe weather, not the actual curtain. Before November 1, the new season’s cold counter has not started.'],['Can I walk across the ice to Grand Island?','This planner recommends mainland viewing from Sand Point only. Stay off the lake ice: shifting currents, thin ice and hidden open water make cold totals and lake-wide percentages unsuitable for judging a crossing.'],['Does Tahquamenon Falls freeze completely?','This tool does not predict a complete freeze. Ice and snow can frame a still-flowing waterfall; plan around open designated overlooks.'],['Is Munising Falls open?','As checked October 19, 2026, NPS still lists the Munising Falls trail as closed until further notice after storm damage. Check the linked official page for an explicit reopening.']];
@@ -12,7 +12,7 @@ function shell(site){
  const description=site?(site.id==='eben'?'Are the Eben Ice Caves formed yet? Check cold since Nov. 1, thaw history, NWS weather, the Frey Road approach and official sources before you drive.':`Check ${site.name} ice-viewing evidence, cold and thaw history, NWS weather, access and official sources before a winter drive.`):'Are Michigan ice caves formed? Compare Eben, Grand Island shore views and frozen waterfalls with dated evidence, cold history and NWS weather.';
  if(title.length>60||description.length>158)throw Error('Snippet too long '+title+' '+description.length);
  const graph=[{'@type':'Person','@id':person,name:'Chris Izworski',url:'https://chrisizworski.com/'},{'@type':'WebSite','@id':'https://chrisizworski.com/#website',url:'https://chrisizworski.com/',name:'Chris Izworski',publisher:{'@id':person}},
-  {'@type':'WebPage','@id':url(site)+'#page',url:url(site),name:title,description,dateModified:date,author:{'@id':person},publisher:{'@id':person},isPartOf:{'@id':'https://chrisizworski.com/#website'}},
+  {'@type':'WebPage','@id':url(site)+'#page',url:url(site),name:title,description,dateModified:(site?siteDate:hubDate),author:{'@id':person},publisher:{'@id':person},isPartOf:{'@id':'https://chrisizworski.com/#website'}},
   {'@type':'SoftwareApplication','@id':url(site)+'#tool',name:site?site.name+' winter viewing planner':'Michigan Ice Caves & Frozen Waterfalls',url:url(site),applicationCategory:'TravelApplication',operatingSystem:'Web',isAccessibleForFree:true,creator:{'@id':person},publisher:{'@id':person},offers:{'@type':'Offer',price:'0',priceCurrency:'USD'}},
   {'@type':'FAQPage',mainEntity:faqs.map(([q,a])=>({'@type':'Question',name:q,acceptedAnswer:{'@type':'Answer',text:a}}))}];
  if(!site)graph.push({'@type':'ItemList',name:'Tracked winter viewing destinations',itemListElement:SITES.map((s,i)=>({'@type':'ListItem',position:i+1,name:s.name,url:url(s)}))});
