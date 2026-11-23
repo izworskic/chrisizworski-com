@@ -11,6 +11,7 @@
 <link rel="icon" href="/favicon.ico">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="stylesheet" href="/assets/cuyahoga-watch.css">
+<link rel="stylesheet" href="/assets/cuyahoga-bend-demo.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/cuyahoga-freighter-watch/#page","url":"https://chrisizworski.com/cuyahoga-freighter-watch/","name":"Cuyahoga Freighter Watch","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}
 </script>
@@ -108,6 +109,54 @@
     </details>
    </section>
   </aside>
+
+  <section class="bend-lab" id="bend-lab" aria-labelledby="bend-title">
+   <div class="bend-intro">
+    <div><p class="kicker">HOW THE RIVER WORKS / INTERACTIVE EXPLAINER</p>
+    <h2 id="bend-title">A straight ship in a crooked river.</h2>
+    <p>Watch how the bow, middle and stern occupy different parts of a turn. This is why a freighter rounding Cleveland's bends is worth seeing from shore.</p></div>
+    <span class="bend-kind">Illustration, not vessel tracking</span>
+   </div>
+   <div class="bend-workspace">
+    <div class="bend-chart">
+     <svg id="bend-diagram" viewBox="0 0 760 365" role="img" aria-labelledby="bend-svg-title bend-svg-desc">
+      <title id="bend-svg-title">A top-down explanation of a long ship traveling around a winding river bend</title>
+      <desc id="bend-svg-desc">A simplified winding river, with an illustrated cargo freighter showing where its bow and stern are during the turn. This is not a chart, measured channel, or actual ship track.</desc>
+      <rect x="0" y="0" width="760" height="365" fill="#edf0e6"/>
+      <path d="M 0 322 C 130 310 112 179 224 206 S 325 325 425 270 S 458 144 565 130 S 663 69 760 47" fill="none" stroke="#8e9d88" stroke-width="139" stroke-linecap="round"/>
+      <path d="M 0 322 C 130 310 112 179 224 206 S 325 325 425 270 S 458 144 565 130 S 663 69 760 47" fill="none" stroke="#bad8d9" stroke-width="128" stroke-linecap="round"/>
+      <path id="bend-guide" d="M 0 322 C 130 310 112 179 224 206 S 325 325 425 270 S 458 144 565 130 S 663 69 760 47" fill="none" stroke="#477d89" stroke-width="2.5" stroke-dasharray="8 10" opacity=".55"/>
+      <text x="25" y="55" class="bend-map-label">A RIVER CHANNEL</text>
+      <text x="25" y="76" class="bend-map-caption">Simplified • not to scale</text>
+      <g id="bend-ship" transform="translate(95 295) rotate(-37)">
+       <path d="M -58 -13 L 41 -13 Q 54 -12 61 0 Q 54 12 41 13 L -58 13 Q -65 0 -58 -13 Z" fill="#183f4b" stroke="#f9f6ec" stroke-width="2.8" stroke-linejoin="round"/>
+       <path d="M -44 -7 H -21 V 7 H -44 Z" fill="#f7dfaf" opacity=".93"/>
+       <path d="M -15 -7 H 12 V 7 H -15 Z M 19 -7 H 40 V 7 H 19 Z" fill="#91b7c0"/>
+       <circle cx="52" cy="0" r="4" fill="#f4bd65"/>
+       <circle cx="-53" cy="0" r="4" fill="#f8f5e9"/>
+       <path d="M 67 0 L 76 0 M 71 -4 L 76 0 L 71 4" fill="none" stroke="#f2af58" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <g class="bend-compass" transform="translate(715 303)" aria-hidden="true"><circle r="27" fill="#fffdf6" stroke="#7e9d9e"/><text text-anchor="middle" y="-5" font-size="12" font-weight="800" fill="#345660">PLAN</text><text text-anchor="middle" y="11" font-size="10" fill="#345660">VIEW</text></g>
+     </svg>
+     <div class="bend-chart-key"><span><i class="bend-key-bow"></i>Bow / direction of travel</span><span><i class="bend-key-river"></i>Illustrative river channel</span></div>
+    </div>
+    <div class="bend-notes">
+      <p class="side-eyebrow">WATCH THE TURN / 3 MOMENTS</p>
+      <div class="bend-steps" role="group" aria-label="Choose a moment in the river bend">
+       <button type="button" data-bend-step="0" aria-pressed="true" disabled><span>01</span>Approach</button>
+       <button type="button" data-bend-step="1" aria-pressed="false" disabled><span>02</span>In the bend</button>
+       <button type="button" data-bend-step="2" aria-pressed="false" disabled><span>03</span>Clear the turn</button>
+      </div>
+      <h3 id="bend-stage-name">The bow begins to change direction.</h3>
+      <p id="bend-stage-explanation" aria-live="polite">The forward end starts following the curve while the stern is still coming from the straight approach. The whole ship does not turn at once.</p>
+      <label for="bend-position">Move through the illustrated bend</label>
+      <input type="range" id="bend-position" min="0" max="100" value="12" step="1" aria-label="Illustrated progress through the turn" disabled>
+      <div class="bend-actions"><button id="bend-play" type="button" disabled>Play the turn</button><button id="bend-reset" type="button" disabled>Start again</button></div>
+      <p id="bend-motion-note" class="bend-qualifier">The moving ship is a teaching model, not NOAA AIS replay. Shapes, channel width, steering actions, and timing are not measured.</p>
+      <p class="bend-source">Why these bends matter: <a href="https://www.portofcleveland.com/tourism-recreation/tools/safety-guidelines/">Port of Cleveland safety guidance</a> and <a href="https://case.edu/ech/articles/c/cuyahoga-river">Encyclopedia of Cleveland History</a>. Stay on public shore paths.</p>
+    </div>
+   </div>
+  </section>
   <section class="story" aria-labelledby="read-river">
    <div class="story-identity"><p class="kicker">FIELD NOTES / THE LOWER RIVER</p><h2 id="read-river">Why this is a remarkable place to watch a ship.</h2><span class="story-rule" aria-hidden="true"></span>
     <figure class="story-photo">
@@ -132,5 +181,6 @@
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script defer src="/assets/cuyahoga-watch-core.js"></script>
 <script defer src="/assets/cuyahoga-watch-app.js"></script>
+<script defer src="/assets/cuyahoga-bend-demo.js"></script>
 </body>
 </html>
