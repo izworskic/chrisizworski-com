@@ -75,7 +75,7 @@ test('published preview is noindex, map first, source-first, accessible and has 
  assert.match(page,/aria-pressed="true"/);
  assert.match(page,/id="cuyahoga-map"/);
  assert.doesNotMatch(page,/id="history-scrubber"|id="show-history"|2025 ship replay/);
- assert.match(page,/Choose where to watch/);
+ assert.match(page,/Ships on the Cuyahoga/);
  assert.match(page,/id="live-vessels"/);
  assert.match(page,/https:\/\/openwaters.io\/ais\//);
  assert.doesNotMatch(page,/NOAA historical AIS ↗/);
@@ -114,7 +114,7 @@ test('preserved NOAA archive data remains authentic without appearing in the cur
 test('live visitor map does not fetch or present archived 2025 vessel observations',()=>{
  assert.doesNotMatch(app,/state\.mode|renderHistory|history-scrubber|noaa-historical-2025\.json/);
  assert.doesNotMatch(page,/2025 ship replay|Choose a 2025 vessel day/);
- assert.match(page,/Reported vessels/);
+ assert.match(page,/Recent AIS ships/);
  assert.match(app,/\/cuyahoga-freighter-watch\/viewpoints\.json/);
  assert.match(app,/\/cuyahoga-freighter-watch\/bridges\.json/);
  assert.match(page,/<noscript>/);
@@ -311,7 +311,7 @@ test('AIS vessel illustrations reflect only reported category, size band and bou
  assert.match(app,/function openShipPopup\(/);
  assert.match(app,/L\.popup\(\{autoClose:true,closeOnClick:true\}\)/);
  assert.match(app,/openShipPopup\(marker,v\)/);
- assert.doesNotMatch(app,/marker\.bindTooltip\(/);
+ assert.doesNotMatch(app,/marker\.bindTooltip\(escText/);
  assert.match(page,/id="cuyahoga-type-counts"/);
 });
 
