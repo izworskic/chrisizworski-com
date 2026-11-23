@@ -1,3 +1,10 @@
+### 2026-11-23 | Michigan ski official operating evidence, PR review only
+- Visitor job: Which of 17 Michigan downhill hills have actually reported operating lifts today? The NWS weather ranking cannot certify an opening.
+- Implementation: Sixteen operator report URLs (previously three), one captured HTML fixture/parser test each, dated 36-hour operating verdicts, a source-linked opening-date table, source-aware hub and Open now filter, plus a ten-operator-source SEO title gate. No new route, function, database, paid service or cron. +13 outbound source fetches per cache miss, same API invocation count, 15-minute edge caching.
+- Safety: Alpine Valley stays NOT_CONNECTED, Garland Nordic excluded; undated/stale sources and source failures never imply open or closed. Existing canonical, Person schema, Auto ads, rankings and PROVISIONAL policy retained.
+- Verification: Baseline main Agent branch verification on completed run 45173503152 passed; latest main/PR runs must be separately checked. Full-history npm run verify:all, 360px and 1440px browser QA and all-sources-down are release gates. Not merged or deployed. GSC, CTR, visitor engagement and AdSense unmeasured.
+- Exactly one next action: Review the PR CI plus browser evidence and repair any failures before considering a separate merge.
+
 ### 2026-11-22 | Michigan northern lights regional comparison
 The existing Michigan hub now leads with the selected region and compares an alternative at the same dark hour. The 390px Bay City fixture moved its local headline from 1,067px to 472px. Source and regression evidence are in the Michigan aurora comparison release record. The November 20 last-12-month GSC export showed 62,857 impressions and 788 clicks for this canonical. Page-level AdSense earnings and post-release outcomes are unavailable. Branch review only, production unverified. Next action after release is to compare 28-day guide visits and publisher revenue against comparable aurora activity and query positions.
 

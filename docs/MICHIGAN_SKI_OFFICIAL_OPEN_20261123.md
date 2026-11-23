@@ -1,0 +1,17 @@
+# Michigan ski resorts open today — official evidence investment (2026-11-23)
+
+## Visitor decision and design
+Visitors need to distinguish verified operating lifts today from plausible snow conditions before choosing travel or buying tickets. Concept A: a dated operator evidence board immediately below the hero, followed by weather decisions. Concept B: move the NWS snowfall map up and attach lift-status badges. Chose A: weather cannot prove open lifts; a map-first screen would bury the authoritative answer. The Open now chip filters both the operating board and existing resort list. With JS unavailable, a static answer, official operator opening table, source links and destinations remain visible.
+
+## Technology fit and costs
+Keep generated HTML/CSS, vanilla browser JavaScript, Node parser and the existing API. No need for Python (no numerical intelligence task), Rust (no compute bottleneck) or Java (no JVM/server). Allowlisted operator pages are fetched in parallel, with a 4.5-second timeout, and the API keeps its edge cache, 900 seconds for successful snapshots. **Cost: 16 operator-page outbound fetches per cache miss versus 3 before (+13), same invocation count for api/michigan-ski, no additional Vercel function, project, cron, database or Redis.** Burst origin fetch costs may increase on a cache miss; concurrency caps latency.
+
+## Sources and freshness
+16 operator-controlled URLs, one recorded HTML text fixture and parser test per connection. Alpine Valley lacks a defensible dated lift-report endpoint and remains NOT_CONNECTED; Garland Nordic is excluded from the 17-downhill denominator. Dated 2026-27 operator opening targets checked November 23: Ski Brule November 26 (weather-dependent), Snowriver December 5 (anticipated), Caberfae Peaks December 5 (target reported Nov 20), Shanty Creek December 17 daily Schuss skiing (projected). Shanty also prints a contradictory November 27, 2027 passholder statement; exclude that ambiguous date. Others: not announced in approved checked sources.
+
+OPEN_PER_OPERATOR requires a report updated within 36 hours and >0 lifts; CLOSED_PER_OPERATOR is similarly dated and zero lifts; STALE_REPORT is older than 36 hours; UNVERIFIED means missing date, bad parsing, unreachable source or conflicting operator status; NOT_CONNECTED means no approved report source. No snow/temperature/calendar inference. In particular Snowriver's undated 1/10 lift number beside a future-opening notice cannot certify opening.
+
+## Guardrails and verification
+Keep URL /michigan-ski-hills/, original PROVISIONAL forecast disclosure, NWS alerts/drive times, Auto ads, Person/canonical and source rights. Only generator edited for destination subpages; regenerated detail HTML is not committed. SEO title flips to Open Today only when at least 10 approved downhill SOURCES exist.
+
+Release gates: fixture tests, existing ski suite, full-history npm run verify:all, browser QA at 360px and 1440px including all-sources-down, and PR CI. If any check cannot execute, mark NOT VERIFIED rather than green. No production deploy or measured GSC, CTR or AdSense outcome from this PR.

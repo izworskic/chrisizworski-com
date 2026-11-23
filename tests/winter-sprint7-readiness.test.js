@@ -70,7 +70,7 @@ test('stale snow forecast and unknown resort opening can never be labeled an ope
  assert.ok(skiClient.includes('Forecast comparison · verify resort lifts'));
  assert.ok(!skiClient.includes('In-season comparison · verify resort operations'));
  assert.ok(!skiClient.includes('October forecast does not imply'));
- assert.ok(skiClient.includes('Original report update time is unverified'));
+ assert.ok(skiClient.includes('Operator report dated')); // Dated evidence now exists; old blanket undated claim is incorrect.
  assert.ok(skiClient.includes('Official hill / lift report'));
  assert.ok(skiClient.includes('No independently parsed resort operating report'));
 });
