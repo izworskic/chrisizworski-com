@@ -163,9 +163,13 @@ async def run():
             await approach.click()
             if await page.locator("#bend-ship").get_attribute("transform") != original:
                 raise AssertionError("A → B → C → A did not restore the same scene")
-            await page.locator("#bend-position").fill("72")
-            if await page.locator("#bend-position").input_value() != "72":
-                raise AssertionError("Native keyboard-accessible slider failed")
+            await page.locator("#bend-position").focus()
+            await page.keyboard.press("End")
+            if await page.locator("#bend-position").input_value() != "100":
+                raise AssertionError("Native keyboard-accessible slider failed at the final endpoint")
+            await page.keyboard.press("ArrowLeft")
+            if await page.locator("#bend-position").input_value() != "99":
+                raise AssertionError("Range input did not respond to the left arrow key")
             if not await page.locator("#bend-play").is_disabled():
                 raise AssertionError("Reduced-motion viewport must not autoplay the diagram")
             await page.locator("#bend-reset").click()
