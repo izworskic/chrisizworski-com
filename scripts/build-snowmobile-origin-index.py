@@ -116,7 +116,9 @@ def main() -> None:
     expected = build()
     if args.check:
         actual = json.loads(OUTPUT.read_text(encoding="utf-8"))
-        if actual != expected:
+        # JSON arrays may be human-sorted by the publishing tool; identity and data must match.
+        same = lambda value: {**value, "records": sorted(value["records"], key=lambda r: r["id"])}
+        if same(actual) != same(expected):
             raise SystemExit("Snowmobile origin index is not reproducible: rerun Python generator")
         print(f"Origin index valid: {len(expected['records'])} source-backed Michigan places")
     else:
