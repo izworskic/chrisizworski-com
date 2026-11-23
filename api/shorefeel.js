@@ -5,6 +5,8 @@ const {LAKES,DESTINATIONS,SOURCE,parseGLSEA,parseGLSEACsv,parseLongTermAverage,p
 const BF=require('../lib/shorefeel/beach-forecast.js');
 const {beachFeel}=require('../lib/shorefeel/beach-feel.js');
 const {INLAND_BAY_COUNTY,marineAirFromNDBC,scenario}=require('../lib/shorefeel/physics.js');
+const {forecastWindTurn}=require('../lib/shorefeel/wind-turn.js');
+const {pairedHourlyAir}=require('../lib/shorefeel/paired-hourly.js');
 const BACKTEST=require('../data/shorefeel/backtest-2026-10.json');
 const {observations:NOAA_SNAPSHOT}=require('../data/shorefeel/last-verified-noaa-glsea.json');
 const GLSEA_CSV='https://apps.glerl.noaa.gov/erddap/tabledap/glsea_avgtemps_3.csv?Year%2CDay%2CSup%2CMich%2CHuron%2CErie%2COnt&Year%3E%3D2026';
@@ -189,6 +191,17 @@ module.exports=async function handler(req,res){
   const shorelineFeel=placeKey==='saginaw-bay'
     ?beachFeel(current,water,place.beach,place.cells.find(c=>c.key==='inner-bay'),now)
     :null;
+  // Reuse the NWS hourly forecast already fetched above; no new source call.
+  const shoreWindTurn=placeKey==='saginaw-bay'
+    ?forecastWindTurn(periods,{beach:place.beach,
+       waterReference:place.cells.find(c=>c.key==='inner-bay'),water},now)
+    :null;
+  const shorelineHourlyComparison=placeKey==='saginaw-bay'
+    ?pairedHourlyAir(periods,
+       inlandForecast.status==='fulfilled'?inlandForecast.value?.periods||[]:[],
+       forecast.status==='fulfilled'?forecast.value?.grid:null,
+       inlandForecast.status==='fulfilled'?inlandForecast.value?.grid:null,now)
+    :null;
   const seasonalMarineAir=placeKey==='saginaw-bay'&&nearby.status==='fulfilled'
     ?marineAirFromNDBC(nearby.value,now):null;
   const fixedStationAir=placeKey==='saginaw-bay'&&fixedMarine.status==='fulfilled'
@@ -227,6 +240,8 @@ module.exports=async function handler(req,res){
     lake:requested,lakes,normal,beachForecast,
     water:water?{...water,beach:place.beach.name}:null,
     beachFeel:shorelineFeel,shorelinePhysics:physicalScenarios,
+    windTurn:shoreWindTurn,
+    hourlyAirComparison:shorelineHourlyComparison,
     local,regionalSatellite:satellite,weatherNow:current,assessments,
     weatherWindow:windows?.relax||null,weatherWindows:windows,
     limitations:['Lakewide surface average is not a beach temperature and is never used as one.','A buoy reading represents its stated location and depth, not nearby sand or harbor water.','A satellite pixel is a daily offshore surface estimate, not a beach thermometer.','Comfort descriptions are qualitative and are not swim-safety determinations.'],

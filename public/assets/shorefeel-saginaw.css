@@ -120,3 +120,24 @@
  .bay-hero[data-band=none] #lead-temp{font-size:30px}
  .bay-after-answer{margin-top:20px;padding-top:15px}
 }
+
+
+/* Wind turn field strip: forecast direction first; no pretend on-sand estimate. */
+.bay-wind-window{padding:20px 0 12px}
+.bay-wind-head{display:flex;align-items:end;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.bay-wind-eyebrow{margin:0 0 4px;font-size:12px;line-height:1.4;letter-spacing:.07em;text-transform:uppercase;font-weight:750;color:#386077}
+.bay-wind-head h2{margin:0;color:#123e50;font-size:clamp(23px,3vw,32px);line-height:1.18}
+.bay-wind-head>a{min-height:44px;display:inline-flex;align-items:center;font-size:14px;font-weight:700;text-underline-offset:3px;color:#075774}
+#wind-turn-answer{display:block;margin:13px 0 3px;font-size:clamp(19px,2.5vw,25px);font-weight:750;color:#173b49;line-height:1.3}
+#wind-turn-explain{margin:5px 0 13px;line-height:1.55;max-width:78ch;color:#304955}
+.bay-wind-hours{list-style:none;display:flex;gap:0;padding:0 0 10px;margin:0;max-width:100%;overflow-x:auto;overscroll-behavior-inline:contain;scroll-snap-type:x proximity}
+.bay-wind-hours>li{flex:0 0 138px;scroll-snap-align:start;border-left:2px solid #9aadb6;background:#f0f5f6;padding:11px 13px;min-height:98px;color:#213d49}
+.bay-wind-hours>li[data-sector="onshore"]{border-left-color:#006983;background:#e6f2f2}
+.bay-wind-hours>li[data-sector="unknown"]{background:#f5f5f3}
+.bay-wind-hours time{display:block;font-size:13px;font-weight:750}
+.bay-wind-hours strong{display:block;font-size:15px;line-height:1.35;margin:4px 0;color:#153c4e}
+.bay-wind-hours span{font-size:13px;line-height:1.45}
+.bay-wind-source{font-size:13px;line-height:1.5;color:#425961;max-width:88ch;margin:1px 0 0}
+@media(max-width:530px){.bay-wind-window{padding-top:12px}.bay-wind-hours>li{flex-basis:120px;padding:11px 9px;min-height:100px}}
+
+.bay-wind-hours .bay-hour-pair{display:block;margin-top:7px;padding-top:6px;border-top:1px solid #aebfc5;font-size:12px;font-weight:700;color:#1d4d62;line-height:1.4}
