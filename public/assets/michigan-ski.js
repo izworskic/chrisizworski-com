@@ -2,7 +2,7 @@
 const $=id=>document.getElementById(id),root=document.querySelector('[data-ski-page]');
 if(!root)return;
 const slug=root.getAttribute('data-resort');
-const state={data:null,origin:'detroit',region:'all'};
+const state={data:null,origin:'detroit',region:'all',openOnly:false};
 function node(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=String(text);return e;}
 function add(parent,...children){children.forEach(x=>x&&parent.appendChild(x));return parent;}
 function external(label,url){const a=node('a',null,label);a.href=url;a.target='_blank';a.rel='noopener noreferrer';return a;}
@@ -15,15 +15,61 @@ function score(r){if(r.kind==='nordic')return null;
  const newTravel=Math.max(0,Math.round(27-(r.driveMinutes?.[state.origin]||999)/30));
  const s=r.ranking?.score;
  return Number.isFinite(s)?Math.max(0,Math.min(100,s-old+newTravel)):null;}
+function reportStamp(x){
+ const time=Date.parse(x||'');
+ return Number.isFinite(time)?new Date(time).toLocaleString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Date not published';
+}
+function operatingLabel(r){
+ const status=r.official?.status;
+ if(status==='OPEN_PER_OPERATOR')return 'Open per operator';
+ if(status==='CLOSED_PER_OPERATOR')return 'Closed per operator';
+ if(status==='STALE_REPORT')return 'Stale report (>36 hours)';
+ if(status==='NOT_CONNECTED')return 'Not connected';
+ return 'Unverified';
+}
+function operatingBoard(data){
+ const count=$('ski-open-count'),host=$('ski-operating-list'),coverage=$('ski-source-coverage'),filter=$('ski-open-filter');
+ if(!host||!count)return;
+ const hills=data.resorts.filter(r=>r.kind==='downhill');
+ const open=hills.filter(r=>r.official?.status==='OPEN_PER_OPERATOR');
+ const connected=hills.filter(r=>r.official?.status!=='NOT_CONNECTED');
+ const successful=hills.filter(r=>['OPEN_PER_OPERATOR','CLOSED_PER_OPERATOR','STALE_REPORT'].includes(r.official?.status));
+ const when=new Date(data.generatedAt).toLocaleString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
+ count.textContent=open.length+' of 17 resorts report lifts running, checked '+when+'.';
+ if(coverage)coverage.textContent=connected.length+' operator report sources connected · '+successful.length+' dated operator reports parsed. Undated or unavailable reports do not confirm opening.';
+ if(filter){filter.setAttribute('aria-pressed',String(state.openOnly));filter.textContent=state.openOnly?'Open now · Show all':'Open now';}
+ host.replaceChildren();
+ const visible=hills.filter(r=>!state.openOnly||r.official?.status==='OPEN_PER_OPERATOR')
+ .sort((a,b)=>({'OPEN_PER_OPERATOR':0,'CLOSED_PER_OPERATOR':1,'STALE_REPORT':2,'UNVERIFIED':3,'NOT_CONNECTED':4}[a.official?.status]??3)-({'OPEN_PER_OPERATOR':0,'CLOSED_PER_OPERATOR':1,'STALE_REPORT':2,'UNVERIFIED':3,'NOT_CONNECTED':4}[b.official?.status]??3)||a.name.localeCompare(b.name));
+ if(!visible.length)add(host,node('p','ski-open-empty','No resort has a dated, current operator report confirming open lifts in this snapshot. This does not mean every hill is closed. Select “Open now” again to see all resorts and their report links.'));
+ for(const r of visible){
+  const row=node('div','ski-operation-row'),head=node('div','ski-operation-heading');
+  const title=node('strong'),link=node('a',null,r.name);link.href='/michigan-ski-hills/'+r.slug+'/';add(title,link);
+  const status=node('span','ski-evidence-status '+(r.official?.status==='OPEN_PER_OPERATOR'?'evidence-open':'evidence-uncertain'),operatingLabel(r));
+  add(head,title,status);
+  const info=node('p','small');
+  const lifts=r.official?.lifts,trail=r.official?.trails;
+  const liftText=lifts?.open!=null?lifts.open+' of '+(lifts.total??'?')+' lifts':'Lift count not verified';
+  const runsText=trail?.open!=null?' · '+trail.open+' of '+(trail.total??'?')+' runs':'';
+  info.textContent=liftText+runsText+' · Operator report: '+reportStamp(r.official?.reportUpdatedAt)+' · Checked: '+reportStamp(r.official?.checkedAt);
+  const source=r.official?.url||r.snow;
+  add(row,head,info,external('Read operator report',source));
+  if(r.official?.operatorStatusText)add(row,node('p','small',r.official.operatorStatusText));
+  add(host,row);
+ }
+ if(!successful.length)add(host,node('p','event','No dated operator reports were verified in this snapshot. The sources may be inaccessible, stale or undated. Check the resort reports directly; no current open or closed status is confirmed.'));
+}
 function status(r){
  const a=r.weather?.alerts||[];
  if(r.kind==='nordic')return 'Nordic only — excluded from downhill ranking';
+ if(r.official?.status==='OPEN_PER_OPERATOR')return 'Open per operator · '+r.official.lifts.open+' of '+r.official.lifts.total+' lifts · report '+reportStamp(r.official.reportUpdatedAt)+' · verify before travel';
+ if(r.official?.status==='CLOSED_PER_OPERATOR')return 'Closed per operator · zero lifts on a dated current report';
+ if(r.official?.status==='STALE_REPORT')return 'Stale operator report · not evidence of current lift operation';
+ if(r.official?.status==='UNVERIFIED')return 'Official report unverified or unavailable · check the operator before leaving';
  if(r.ranking?.verdict==='OFF_SEASON_PLANNING')return 'Off-season · 2026–27 planning only';
  if(a.some(x=>/Warning/i.test(x.event)))return 'Winter warning · verify safe travel and lift openings';
  if(!r.weather||r.weather.weatherCoverage!=='NWS_GRID_RECEIVED')return 'Forecast unavailable · verify official sources';
- if(r.official?.status==='PUBLISHED_OFFICIAL_REPORT')return r.official.lifts.open===0?
- 'Official report currently shows no operating lifts · future ski day unconfirmed':
- 'Official page reports '+r.official.lifts.open+' of '+r.official.lifts.total+' lifts currently · confirm weekend operation';
+ if(r.official?.status==='NOT_CONNECTED')return 'Official operating report not connected · verify directly with the resort';
  return 'Provisional comparison · verify lifts, snow base and ticket';
 }
 function chipsFor(r){
@@ -35,7 +81,8 @@ function chipsFor(r){
  if(r.ranking?.verdict==='OFF_SEASON_PLANNING')arr.push(['Off season','neutral']);
  if(w.forecastSnowInches!==null&&Number.isFinite(w.forecastSnowInches))arr.push([fmt(w.forecastSnowInches,'"″')+' forecast weekend snow','lake']);
  if(w.weatherCoverage!=='NWS_GRID_RECEIVED')arr.push(['NWS grid unavailable','neutral']);
- if(r.official?.status==='PUBLISHED_OFFICIAL_REPORT')arr.push(['Official hill report checked','neutral']);
+ if(r.official?.status==='OPEN_PER_OPERATOR')arr.push(['Dated official open-lift report','neutral']);
+ if(r.official?.status==='STALE_REPORT')arr.push(['Stale report','neutral']);
  return arr;
 }
 function ticket(r){
@@ -62,8 +109,8 @@ function card(r,index,detail=false){
  ['Lake-effect',r.weather?.alerts?.some(x=>x.isLakeEffect)?'Official alert':
    r.weather?.lakeEffectWind?.status==='WIND_ALIGNED'?'Favorable wind only':
    r.weather?.lakeEffectWind?.status==='NOT_ALIGNED'?'Wind not aligned':'Unverified'],
- ['Current operating lifts',r.official?.status==='PUBLISHED_OFFICIAL_REPORT'?r.official.lifts.open+'/'+r.official.lifts.total+' (as posted)':'Not verified'],
- ['Current open trails',r.official?.status==='PUBLISHED_OFFICIAL_REPORT'?r.official.trails.open+'/'+r.official.trails.total+' (as posted)':'Not verified']
+ ['Current operating lifts',r.official?.lifts?.open!=null?r.official.lifts.open+'/'+(r.official.lifts.total??'?')+' ('+operatingLabel(r)+')':'Not verified'],
+ ['Current open trails',r.official?.trails?.open!=null?r.official.trails.open+'/'+(r.official.trails.total??'?')+' ('+operatingLabel(r)+')':'Not verified']
  ];
  const keep=data.filter(([label])=>label==='Sat forecast snow'||label==='Sun forecast snow'||label.startsWith('Drive ·')||label==='Adult lift ticket');
  const other=data.filter(([label])=>!keep.some(([name])=>name===label));
@@ -78,8 +125,8 @@ function card(r,index,detail=false){
  add(body,node('p','verdict',status(r)),node('p','source-line',r.note));
  const preferred=r.weather?.skiDays?.moreSnowForecast;
  if(preferred==='SATURDAY'||preferred==='SUNDAY')add(body,node('p','note','NWS forecasts more snow in the '+(preferred==='SATURDAY'?'Friday-to-Saturday':'Saturday-to-Sunday')+' 24-hour window. This is not a ski-surface or road-safety recommendation.'));
- if(detail&&r.official?.status==='PUBLISHED_OFFICIAL_REPORT')add(body,node('p','note','Official mountain page checked '+new Date(r.official.checkedAt).toLocaleString('en-US',{timeZone:'America/Detroit',dateStyle:'medium',timeStyle:'short'})+' ET. This is a site snapshot, not confirmation lifts will be open on your weekend.'));
- if(detail){const links=node('div','source-links');add(links,external('Official snow / resort report ↗',r.snow),
+ if(detail)add(body,node('p','note','Official report status: '+operatingLabel(r)+'. Operator report: '+reportStamp(r.official?.reportUpdatedAt)+'. Source fetched: '+reportStamp(r.official?.checkedAt)+'. The page fetch time is not the resort update time; future operation is never guaranteed.'));
+ if(detail){const links=node('div','source-links');add(links,external('Official snow / resort report ↗',r.official?.url||r.snow),
  external('Official tickets ↗',r.tickets));add(body,links);}
  add(box,num,body);return box;
 }
@@ -120,9 +167,11 @@ function render(){
  const info=state.data,stamp=$('updated');
  if(stamp)stamp.textContent='NWS and storm-report snapshot '+new Date(info.generatedAt).toLocaleString('en-US',{timeZone:'America/Detroit',dateStyle:'medium',timeStyle:'short'})+' ET · Published prices dated October 2026 · Drive times estimated.';
  warnings(info);
+ operatingBoard(info);
  const target=$('resort-list');if(target){
-   const filtered=sortResorts(info.resorts.filter(r=>state.region==='all'||r.region===state.region));
+   const filtered=sortResorts(info.resorts.filter(r=>(state.region==='all'||r.region===state.region)&&(!state.openOnly||r.official?.status==='OPEN_PER_OPERATOR')));
    target.replaceChildren();filtered.forEach((r,i)=>add(target,card(r,i)));
+   if(!filtered.length)add(target,node('p','event','No resorts match the current filters with a verified, dated open-lift report. Clear “Open now” to inspect operator links.'));
    if($('count'))$('count').textContent=filtered.length+' destinations · '+filtered.filter(x=>x.kind==='downhill').length+' downhill hills. Ranked for the selected origin; missing data receives no positive points.';
  }
  const one=$('hill-live');
@@ -151,10 +200,13 @@ async function load(){
    const data=await res.json();if(!data.ok||!Array.isArray(data.resorts)||data.resorts.length!==18)throw Error('Incomplete report');
    state.data=data;render();document.dispatchEvent(new CustomEvent('michigan-ski:data',{detail:data}));
  }catch(e){
-   if($('updated'))$('updated').textContent='Live conditions unavailable. The static resort directory and official source links below are still usable; no conditions are verified.';
+   if($('updated'))$('updated').textContent='Live conditions unavailable. No operating status can be verified. The static resort directory and operator opening-date sources remain available.';
+   if($('ski-open-count'))$('ski-open-count').textContent='Live operator reports unavailable · no open or closed claims can be made.';
+   if($('ski-operating-list'))$('ski-operating-list').textContent='Report feed unavailable. Use the operator links in the opening-date table and destination directory below.';
    if($('hill-live'))$('hill-live').append(node('p','event','Live conditions could not be verified. Use the official resort and NWS links below.'));
  }finally{clearTimeout(tm);}
 }
 for(const id of ['origin','region'])if($(id))$(id).addEventListener('change',render);
+if($('ski-open-filter'))$('ski-open-filter').addEventListener('click',()=>{state.openOnly=!state.openOnly;if(state.data)render();});
 load();
 })();

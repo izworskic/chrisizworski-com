@@ -3,9 +3,14 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 const require=createRequire(import.meta.url);
 const {RESORTS}=require('../lib/michigan-ski/resorts');
+const {SOURCES}=require('../lib/michigan-ski/official-reports');
+const {hubTitle,titleCanClaimOpen}=require('../lib/michigan-ski/title-gate');
 const base='https://chrisizworski.com/michigan-ski-hills/';
 const P='https://chrisizworski.com/#person';
-const today='2026-11-11';
+const today='2026-11-23';
+// Search-title promise is gated on approved operator report connections.
+const officialSourceCount=RESORTS.filter(r=>r.kind==='downhill'&&SOURCES[r.slug]).length;
+const canTitleOpen=titleCanClaimOpen(officialSourceCount);
 
 // Curated geographically verified archival photography, NOT live conditions or forecasts.
 // License + authors verified against each Wikimedia Commons file's source page on 2026-10-15.
@@ -120,10 +125,32 @@ function details(r){
  ].join('');
  return pageShell({title,description:desc.slice(0,158),url:base+r.slug+'/',h1:h,subtitle:r.location+' · '+area+' · NWS snow forecast, lake-effect alerts and published resort sources.',content:html,slug:r.slug});
 }
+// Operator opening-date announcements verified 2026-11-23. Targets are NOT actual lift status.
+// No inferred date from historical patterns, ticket sales, or a year-conflicted announcement.
+const openingEvidence=Object.freeze([["snowriver","Dec 5, 2026","Target","https://www.snowriver.com/mountain-info/hours-of-operation"],["ski-brule","Nov 26, 2026","Target","https://skibrule.com/ski-brule-snowmaking-thanksgiving-opening-2026/"],["shanty-creek","Dec 17, 2026","Projected daily skiing","https://www.shantycreek.com/ski/lift-tickets-season-passes/"]]);
+function openingTable(){
+ const selected=new Map(openingEvidence.map(([slug,date,qualification,url])=>[slug,{date,qualification,url}]));
+ const rows=RESORTS.filter(r=>r.kind==='downhill').map(r=>{
+  const source=selected.get(r.slug),url=source?.url||SOURCES[r.slug]?.url||r.snow;
+  return '<tr><th scope="row">'+esc(r.name)+'</th><td>'+(source?esc(source.date)+' · '+esc(source.qualification):'Not announced')+
+  '</td><td><a rel="noopener noreferrer" target="_blank" href="'+esc(url)+'">Operator source</a></td><td>Nov 23, 2026</td></tr>';
+ }).join('');
+ return '<section class="panel ski-opening-evidence" aria-labelledby="ski-opening-heading"><h2 id="ski-opening-heading">2026–27 resort opening announcements</h2>'+
+ '<p class="small">Operator-published plans checked Nov 23, 2026. A projected opening is weather-dependent, not a confirmation lifts are running. Not announced means no defensible 2026–27 opening date was identified in the referenced operator source.</p>'+
+ '<div class="ski-table-scroll"><table><thead><tr><th>Resort</th><th>Opening date / plan</th><th>Source</th><th>Checked</th></tr></thead><tbody>'+rows+'</tbody></table></div></section>';
+}
 function index(){
  const url=base;
  const links=RESORTS.map(r=>'<li><a href="/michigan-ski-hills/'+r.slug+'/">'+esc(r.name)+'</a> — '+esc(r.location)+' ('+esc(r.region.replaceAll('-',' '))+')</li>').join('');
  const html=[
+ '<section class="panel ski-operations" aria-labelledby="ski-operations-title"><p class="eyebrow">Operator lift report · Today</p>'+
+ '<h2 id="ski-operations-title">Which Michigan ski resorts are open today?</h2>'+
+ '<p class="ski-open-count" id="ski-open-count" aria-live="polite">Checking 17 downhill resorts against their official, dated lift reports…</p>'+
+ '<div class="ski-status-controls"><button id="ski-open-filter" type="button" aria-pressed="false" class="ski-filter-chip">Open now</button><span class="small" id="ski-source-coverage">Only operator reports count as opening evidence.</span></div>'+
+ '<div id="ski-operating-list" aria-live="polite"><p>Checking published reports. The operator links in the resort directory remain available if reports cannot be retrieved.</p></div>'+
+ '<p class="small">Checked time means we fetched the page; it does not mean the resort updated its report. “Open” requires an operator-reported lift count dated within 36 hours; weather and forecasts cannot create an open claim.</p>'+
+ '<h3>Are Michigan ski resorts open?</h3><p>'+esc("Michigan’s downhill ski season typically begins in late November or December, but that does not mean every resort opens together. Early-season snowmaking hills can prepare limited terrain during sustained cold weather, even when nearby fields are bare. Natural-snow-dependent slopes often need more accumulation before their first lift spins. The operator opening dates listed below show announced or targeted plans for the 2026–27 season; these dates can change and are not evidence that lifts actually opened. For today’s answer, use the dated mountain reports above. We mark a resort open only when its own report is no more than 36 hours old and explicitly counts at least one operating lift. A report showing zero lifts can establish a closure only under the same timestamp rule. Older reports are stale, inaccessible or undated pages remain unverified, and places without a usable official report connection remain not connected. Snow forecasts, webcam scenery and the calendar never substitute for an operator’s lift report.")+'</p></section>',
+ openingTable(),
  '<section class="panel s7-ski-readiness" aria-labelledby="s7-ski-title"><p class="eyebrow">Before you commit to a ski day</p><h2 id="s7-ski-title">Three checks before you buy or drive</h2><div class="s7-ski-steps">',
  '<div><strong>1 · Is the hill operating?</strong><p>The NWS does not report open lifts. Use each <a href="#resort-list">hill’s official mountain report</a>, confirm the report date, then check the date you want to ski.</p></div>',
  '<div><strong>2 · What actually fell?</strong><p><a href="/michigan-snow-totals/">Dated NWS reports</a>, <a href="/michigan-snow-depth/">modeled snowpack</a> and resort-reported base depth are different observations. None guarantees groomed terrain.</p></div>',
@@ -164,7 +191,7 @@ function index(){
  '<details><summary>Does every ski hill benefit from Lake Michigan or Lake Superior snow?</summary><p>No. Wind direction, lake-air temperature contrast, fetch, topography and distance inland matter. The NWS Gaylord wind-sector climatology favors Mancelona with northwest flow and the Boyne Falls area with west-northwest flow, but no single direction guarantees fresh snow on a hill.</p></details>',
  '<details><summary>Is the highest-ranked resort guaranteed to be worth the drive?</summary><p>No. The index helps prioritize a shortlist. Off-season, uncertain base depth, variable lift tickets and unknown opening information can make any rank provisional. Always verify operating lifts, weather hazards and official pricing.</p></details></section>'
  ].join('');
- return pageShell({title:'Michigan Ski Hills 2026–27: Snow & Drive | Chris Izworski',description:'Compare 18 Michigan ski destinations by NWS snow forecasts, lake-effect alerts, drive time, and adult ticket evidence for the 2026–27 season.',url,h1:'Michigan ski hills: worth the drive this weekend?',subtitle:'See where lake-effect snow may matter, then compare official forecasts, nearby reported snowfall, price and driving distance for 18 destinations.',content:html});
+ return pageShell({title:hubTitle(officialSourceCount),description:'Dated official lift reports for 17 Michigan ski resorts, with live operating evidence, lake-effect outlooks, drive time and opening plans.',url,h1:canTitleOpen?'Michigan Ski Resorts Open Today: Lifts & Snow':'Michigan ski hills: worth the drive this weekend?',subtitle:'Check which lifts operators report running, then compare NWS forecasts, lake-effect alerts and the drive.',content:html});
 }
 const dry=process.argv.includes('--check');
 function produce(file,content){
