@@ -121,6 +121,17 @@
  function startMap(){
   if(typeof window.L!=='object')return mapFailed();
   try{
+   // Some Android in-app browsers still hand a two-finger gesture to page
+   // magnification even with Leaflet touchZoom on. Cancel only multi-touch
+   // default actions within this map. Do not disable viewport zoom elsewhere:
+   // visitors must retain accessible page pinch-zoom outside the map.
+   const mapSurface=$('shore-map');
+   mapSurface.style.touchAction='none';
+   const keepPinchOnMap=(event)=>{
+    if(event.touches&&event.touches.length>1&&event.cancelable)event.preventDefault();
+   };
+   mapSurface.addEventListener('touchstart',keepPinchOnMap,{passive:false,capture:true});
+   mapSurface.addEventListener('touchmove',keepPinchOnMap,{passive:false,capture:true});
    // With dragging disabled, Leaflet sets touch-action: pan-x pan-y, letting
    // the mobile browser cancel multi-touch before the map can zoom.
    // Enable drag and zoom together so Leaflet sets touch-action: none.
