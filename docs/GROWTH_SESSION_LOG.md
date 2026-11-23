@@ -6,6 +6,14 @@
 - **Search measurement:** No comparable new GSC/AdSense cohort measured. Hypothesis is better visitor completion and matching "near [town]" intent; no uplift claim.
 - **Next action:** Verify the new search on 390px mobile and desktop, including selection, ambiguous locations, return navigation, and all existing trail evidence gates, then review the PR.
 
+### 2026-11-23 | Holiday travel: busiest-airport NWS weather board (PR #1875, main-based)
+- Visitor decision: compare warning/forecast weather signals at the 30 busiest historical BTS holiday airports by travel day, then preload a flagged airport into the existing holiday flight planner. National, not Michigan-first.
+- Implementation: committed 30-airport BTS flight counts selected from national.json during build; one Edge endpoint; existing HolidayTravelEngine.hazards/forecastFor reused; independent per-airport NWS errors; 30-by-12/16 day matrix with scrollable mobile dates and sticky airport column; NWS issue times and no forecast-to-delay probability conversion; static off-season fallback with inherited best-days historical worst days. No new URL, database, cron, project, Redis, ad change, or canonical change.
+- Cost: s-maxage=1800, stale-while-revalidate; nominally 48 cache-miss windows/day in season per cache/region, NWS fanout only on a miss. Zero NWS requests from the new endpoint off-season.
+- Integration: #1874 remains open; its unchanged BTS best-days section and test were selectively brought into the direct-to-main PR #1875, excluding its unrelated winter files.
+- Evidence: unit and browser tests added; full-history CI and 360px/1440px NWS-down Chromium run are **NOT VERIFIED** until PR checks complete. No deployed visitor metrics or revenue evidence.
+- Next action: inspect the rebased PR's CI and browser artifacts, repair any red gate, then merge on explicit owner authorization.
+
 ### 2026-11-23 | Snowmobile region town search answers, draft PR #1878
 - **Visitor decision:** Riders searching snowmobile trail conditions near a specific Michigan town can find nearby official DNR trail codes, a mapped endpoint/junction, the responsible monitored club where verified, and the nearest NWS snow-reference station on the existing regional URL.
 - **Source discipline:** 52 A–Z Google autocomplete conditions/report seed queries and named-town trail queries were a **search-demand proxy, not observed GSC volume**. 27 Michigan towns survived official DNR layer-15 5 km spatial checks across seven existing region pages; a separate dated evidence file per region retains both the query proxy and geometry. Petoskey, Traverse City, Manistee, Charlevoix, and Boyne City failed the 5 km test and are not town-answer blocks.
