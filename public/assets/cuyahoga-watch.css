@@ -308,6 +308,7 @@ h3{font-weight:750}
  background:#fffef8;border:2px solid var(--place-ink);box-shadow:0 2px 5px #0d2d3977}
 .park-map-pin::after{content:"";position:absolute;left:12px;bottom:-5px;width:8px;height:8px;
  transform:rotate(45deg);background:#fffef8;border-right:2px solid var(--place-ink);border-bottom:2px solid var(--place-ink)}
+.park-map-pin.is-offset::before{content:"";position:absolute;top:33px;left:15px;height:43px;border-left:2px dashed var(--place-ink);opacity:.8;pointer-events:none}
 .park-map-pin svg,.place-glyph svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.85;
  stroke-linecap:round;stroke-linejoin:round}
 .cuyahoga-viewpoint-icon:focus-visible{outline:3px solid #d49a39;outline-offset:3px;border-radius:10px}
