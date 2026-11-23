@@ -79,10 +79,10 @@ function placePin(p,offset=false){
  const html='<span class="calumet-place-pin calumet-place-pin--'+id+(offset?' is-offset':'')+'" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#cal-place-'+id+'"></use></svg></span>';
  return L.divIcon({className:'calumet-viewpoint-icon',html,iconSize:[36,40],iconAnchor:[18,offset?77:37],popupAnchor:[0,offset?-85:-34]});
 }
-function bridgePin(b){
+function bridgePin(b,offset=false){
  const kind=b.group==='rail'?'rail':'road';
- const html='<span class="calumet-bridge-pin calumet-bridge-pin--'+kind+'" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#cal-bridge-'+kind+'"></use></svg></span>';
- return L.divIcon({className:'calumet-bridge-icon',html,iconSize:[32,32],iconAnchor:[16,16],popupAnchor:[0,-21]});
+ const html='<span class="calumet-bridge-pin calumet-bridge-pin--'+kind+(offset?' is-offset':'')+'" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false"><use href="#cal-bridge-'+kind+'"></use></svg></span>';
+ return L.divIcon({className:'calumet-bridge-icon',html,iconSize:[32,32],iconAnchor:[offset?-26:16,16],popupAnchor:[0,-21]});
 }
 function detail(label,name,body,actions=[],note=''){
  const box=$('selection');box.replaceChildren(node('p',label,'selection-kicker'),node('h3',name),node('p',body));
@@ -242,8 +242,14 @@ function plotGuide(){
  for(const b of state.guide.bridges){
   const layer=b.group==='rail'?state.railBridges:state.bridges;
   if(!layer)continue;
+  // 95th Street's chart point is also the approximate public-view pin.
+  // Move the *drawing* to the right so both controls remain usable;
+  // the chart coordinate and public-sidewalk caveat are unchanged.
+  const overlapsView=state.guide.viewpoints.some(p=>
+   Math.abs(p.lat-b.lat)<0.0002&&Math.abs(p.lon-b.lon)<0.0002);
   const m=L.marker([b.lat,b.lon],{title:b.name+' · published bridge reference',
-   alt:b.name+' NOAA rounded chart reference',bridgeId:b.id,icon:bridgePin(b)}).addTo(layer);
+   alt:b.name+' NOAA rounded chart reference',bridgeId:b.id,bridgeOffset:overlapsView,
+   icon:bridgePin(b,overlapsView)}).addTo(layer);
   m.bindPopup(bridgePopupContent(b),{maxWidth:290,autoPan:true,closeButton:true});
   m.on('click',()=>{chooseBridge(b.id,false);m.openPopup();});
  }
