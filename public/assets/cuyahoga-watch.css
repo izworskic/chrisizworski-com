@@ -99,7 +99,7 @@ h3{font-weight:750}
 .place-button{width:100%;display:grid;grid-template-columns:26px minmax(0,1fr) 20px;gap:10px;align-items:center;background:transparent;border:0;border-bottom:1px solid #e4e9e3;padding:11px 8px 11px 6px;text-align:left;color:var(--ink);min-height:62px;position:relative;border-radius:2px}
 .place-button:hover{background:#f1f5f1}
 .place-button[aria-current=true]{background:#e4efea;box-shadow:inset 4px 0 0 #1e705d}
-.place-index{font-size:.73rem;color:#64807d;font-weight:760;font-variant-numeric:tabular-nums}
+.place-index{font-size:.73rem;color:#355d58;font-weight:760;font-variant-numeric:tabular-nums}
 .place-info{min-width:0;display:block}
 .place-info strong{font-weight:780;display:block;font-size:.91rem;line-height:1.2;color:#16323c}
 .place-info>span{display:block;color:#4a6669;font-size:.75rem;margin-top:3px;line-height:1.3}
