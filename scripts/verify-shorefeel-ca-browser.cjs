@@ -153,6 +153,23 @@ async function main(){
    return m&&Number(m[1])===before;
   });
  },before,{timeout:10000});
+ // Start from a fresh map so higher-zoom tiles left by the +/- control
+ // animation cannot be mistaken for the pinch gesture's initial zoom.
+ await zoomPage.reload({waitUntil:'domcontentloaded'});
+ await zoomPage.waitForFunction(()=>document.querySelector('#shore-map img.leaflet-tile-loaded')!==null,{timeout:14000});
+ await zoomPage.waitForTimeout(400);
+ // Record touch and pointer events so a failed gesture can be diagnosed.
+ await zoomPage.evaluate(()=>{
+  window.__shorePinchTrace=[];
+  const el=document.getElementById('shore-map');
+  for(const name of ['touchstart','touchmove','touchend','pointerdown','pointermove','pointercancel']){
+   el.addEventListener(name,e=>{
+    const trace=window.__shorePinchTrace;
+    if(trace.length<65)trace.push({type:name,touches:e.touches?.length??null,
+      pointer:e.pointerType||null,cancelable:e.cancelable});
+   },{passive:true});
+  }
+ });
  // Prove pinch-zoom using two real touchscreen contacts, not map controls.
  await mapSurface.scrollIntoViewIfNeeded();
  const rect=await mapSurface.boundingBox();
@@ -161,6 +178,9 @@ async function main(){
  const zoomBeforePinch=await readTileZoom();
  const cdp=await zoomCtx.newCDPSession(zoomPage);
  const finger=(id,x,y)=>({id,x,y,force:1});
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[
+  finger(1,cx-24,cy)
+ ]});
  await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[
   finger(1,cx-24,cy),finger(2,cx+24,cy)
  ]});
@@ -172,6 +192,16 @@ async function main(){
   await zoomPage.waitForTimeout(24);
  }
  await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+ const pinchEvidence=await zoomPage.evaluate(()=>({
+  touchAction:getComputedStyle(document.getElementById('shore-map')).touchAction,
+  tileLevels:[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')]
+   .map(img=>Number(new URL(img.src).pathname.split('/')[1])),
+  trace:window.__shorePinchTrace,
+  viewportScale:window.visualViewport?.scale
+ }));
+ console.log('ShoreFeel real pinch evidence: '+JSON.stringify({
+  zoomBeforePinch,...pinchEvidence
+ }));
  await zoomPage.waitForFunction(before=>{
   const imgs=[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')];
   return imgs.some(img=>{
