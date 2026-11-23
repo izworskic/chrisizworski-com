@@ -114,7 +114,7 @@ async def run():
                 raise AssertionError("Ship-list selection stacked another popup")
             if not await page.locator(".leaflet-popup").get_by_text("BROWSER TEST SHIP").count():
                 raise AssertionError("Vessel details missing from map popup")
-            await page.get_by_role("button", name="Scranton Flats Pier").click()
+            await page.locator(".place-button[data-park=scranton]").click()
             await page.locator("#river-focus h3").get_by_text("Scranton Flats Pier").wait_for()
             if await page.locator("#river-focus a[href*='clevelandmetroparks']").count() != 1:
                 raise AssertionError("Missing park manager handoff")
@@ -137,7 +137,7 @@ async def run():
             if "opening" not in (await page.locator("#river-focus").inner_text()).lower():
                 raise AssertionError("Bridge notice does not state opening limitations")
             # Return from a bridge's chart reference to a verified public park.
-            await page.get_by_role("button", name="Rivergate Park").click()
+            await page.locator(".place-button[data-park=rivergate]").click()
             await page.locator("#river-focus h3").get_by_text("Rivergate Park").wait_for()
             if await page.locator(".place-button[aria-current=true][data-park=rivergate]").count() != 1:
                 raise AssertionError("Bridge-to-park selection did not synchronize")
@@ -145,14 +145,14 @@ async def run():
                 raise AssertionError("Selected public park lost its official access link")
             if await page.locator("#show-history").count() or await page.locator("#history-controls").count():
                 raise AssertionError("Outdated 2025 replay is still advertised on current map")
-            await page.get_by_role("button", name="Scranton Flats Pier").click()
+            await page.locator(".place-button[data-park=scranton]").click()
             await page.locator("#river-focus button.focus-action").get_by_text("Inspect this reported vessel").click()
             await page.locator("#river-focus h3").get_by_text("BROWSER TEST SHIP").wait_for()
             if await page.locator(".vessel-list button[aria-current=true]").count() != 1:
                 raise AssertionError("Selected ship not reflected in vessel list")
             if await page.locator(".leaflet-marker-icon.is-active-vessel").count() != 1:
                 raise AssertionError("Selected ship not reflected on map")
-            await page.get_by_role("button", name="Scranton Flats Pier").click()
+            await page.locator(".place-button[data-park=scranton]").click()
             if await page.locator(".leaflet-marker-icon.is-active-vessel").count():
                 raise AssertionError("Returning to a park left the previous ship selected")
             photo = page.locator(".story-photo img")
@@ -246,7 +246,7 @@ async def run():
                 await failed.route("**/api/freighter-ais?region=cuyahoga", lambda route: route.fulfill(status=503, content_type="application/json", body='{"ok":false}'))
                 await failed.goto(URL, wait_until="domcontentloaded")
                 await failed.get_by_text("AIS reporting unavailable").wait_for(timeout=15000)
-                await failed.get_by_role("button", name="Rivergate Park").click()
+                await failed.locator(".place-button[data-park=rivergate]").click()
                 await failed.locator("#river-focus h3").get_by_text("Rivergate Park").wait_for()
                 if await failed.locator("#river-focus a[href*='clevelandmetroparks']").count() != 1:
                     raise AssertionError("Official park guidance disappeared when AIS was unavailable")
