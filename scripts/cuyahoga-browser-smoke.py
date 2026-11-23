@@ -55,6 +55,23 @@ async def run():
             if await page.locator("#river-focus h3").inner_text() != "Scranton Flats Pier":
                 raise AssertionError("Default park selection does not answer the visit question")
             await page.screenshot(path=str(OUT / f"cuyahoga-{width}-first-screen.png"), full_page=False, animations="disabled")
+            axe_path = os.environ.get("CUYAHOGA_AXE_PATH")
+            if axe_path:
+                await page.add_script_tag(path=axe_path)
+                audit = await page.evaluate("""async () => {
+                    const result = await axe.run(document.querySelector('main'), {
+                        runOnly: {type:'tag', values:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']}
+                    });
+                    return result.violations.map(v => ({
+                        id:v.id,impact:v.impact,description:v.description,
+                        nodes:v.nodes.map(n => ({target:n.target,summary:n.failureSummary})).slice(0,8)
+                    }));
+                }""")
+                (OUT / f"cuyahoga-{width}-axe.json").write_text(json.dumps(audit, indent=2)+"\\n")
+                if any(x["impact"] in ("critical","serious") for x in audit):
+                    raise AssertionError(f"Serious or critical axe accessibility violations at {width}px: " +
+                                         json.dumps([x for x in audit if x["impact"] in ("critical","serious")])[:1800])
+
             if await page.get_by_text("STALE SHIP", exact=True).count():
                 raise AssertionError("Stale AIS still visible")
             marker_count = await page.locator(".pin-vessel").count()
