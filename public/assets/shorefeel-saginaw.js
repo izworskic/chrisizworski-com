@@ -169,9 +169,9 @@ function renderEvidence(){
  });
  const local=payload?.local;
  put('buoy-status',local?.measurement?'Fresh offshore buoy observation · '+date(local.measurement.observedAt):'NOAA buoy 45163: no recent valid report; seasonal station.');
- put('shore-air',Number.isFinite(payload?.weatherNow?.tempF)?Math.round(payload.weatherNow.tempF)+'°F':'Unavailable');
- put('shore-wind',Number.isFinite(payload?.weatherNow?.windMph)?payload.weatherNow.windMph+' mph'+(payload.weatherNow.windDirection?' from '+payload.weatherNow.windDirection:''):'Unavailable');
- put('shore-forecast-time',payload?.weatherNow?.startsAt?'NWS land-side hourly forecast near Bay City State Park · '+date(payload.weatherNow.startsAt):'NWS hourly forecast unavailable.');
+ put('shore-air',currentHour(payload?.weatherNow?.startsAt)&&Number.isFinite(payload?.weatherNow?.tempF)?Math.round(payload.weatherNow.tempF)+'°F':'Unavailable');
+ put('shore-wind',currentHour(payload?.weatherNow?.startsAt)&&Number.isFinite(payload?.weatherNow?.windMph)?payload.weatherNow.windMph+' mph'+(payload.weatherNow.windDirection?' from '+payload.weatherNow.windDirection:''):'Unavailable');
+ put('shore-forecast-time',currentHour(payload?.weatherNow?.startsAt)?'NWS land-side hourly forecast near Bay City State Park · '+date(payload.weatherNow.startsAt):'The NWS hourly forecast for the current hour is unavailable.');
  renderSelected();
 }
 function renderActivity(a){
