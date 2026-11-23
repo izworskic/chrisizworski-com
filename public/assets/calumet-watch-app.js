@@ -186,7 +186,9 @@ function separatePlaceAndShipPins(){
 function initMap(){
  if(!window.L){$('calumet-map').querySelector('.map-loading').textContent='Map service unavailable. Use the official public-place links and ship reports.';return;}
  try{
-  state.map=L.map('calumet-map',{zoomControl:true,scrollWheelZoom:false,worldCopyJump:false,preferCanvas:true});
+  state.map=L.map('calumet-map',{zoomControl:false,scrollWheelZoom:false,worldCopyJump:false,preferCanvas:true});
+  // Keep map zoom controls away from the wide source-detail popups on phones.
+  L.control.zoom({position:'bottomright'}).addTo(state.map);
   state.map.setView([41.719,-87.546],13);
   L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap contributors</a>'}).addTo(state.map);
   state.places=L.layerGroup().addTo(state.map);state.bridges=L.layerGroup().addTo(state.map);state.railBridges=L.layerGroup();state.ships=L.layerGroup().addTo(state.map);
