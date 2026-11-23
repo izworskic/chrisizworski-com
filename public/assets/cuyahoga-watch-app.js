@@ -111,6 +111,7 @@
   }
  }
  function choosePark(id,move){
+  state.map?.closePopup();
   if(vesselPopup&&state.map?.hasLayer(vesselPopup))state.map.removeLayer(vesselPopup);
   const park=state.parks?.spots.find(p=>p.id===id);
   if(!park)return;
@@ -150,6 +151,7 @@
   return values.year+'-'+values.month+'-'+values.day;
  }
  function chooseBridge(bridgeId,move){
+  state.map?.closePopup();
   if(vesselPopup&&state.map?.hasLayer(vesselPopup))state.map.removeLayer(vesselPopup);
   const bridge=state.bridges?.bridges.find(x=>x.channel==='main'&&x.id===bridgeId);
   if(!bridge)return;
@@ -291,6 +293,7 @@
   return v.speedKnots===null?'Speed not reported':v.speedKnots.toFixed(1)+' kn reported';
  }
  function selectShip(v,move=true){
+  state.map?.closePopup();
   if(shipUI&&state.shipKindFilter!=='all'&&!shipUI.match(v,state.shipKindFilter)){state.shipKindFilter='all';renderLive();}
   state.selectedParkId=null;state.selectedBridgeId=null;
   for(const btn of document.querySelectorAll('[data-park]'))btn.setAttribute('aria-current','false');
