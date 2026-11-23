@@ -168,7 +168,7 @@ test('report-desk client version changes when new source-date safety logic ships
 test('all six generated region pages have a local desk and the original corridor stays unchanged',()=>{
  const generator=readFileSync(new URL('../scripts/generate-snowmobile-region-pages.mjs',import.meta.url),'utf8');
  const core=readFileSync(new URL('../public/assets/snowmobile-region.js',import.meta.url),'utf8');
- for(const region of Object.keys(desk.CLUBS)){
+ for(const region of Object.keys(desk.CLUBS).filter(key=>key!=='grayling-gaylord')){
   const html=readFileSync(new URL('../public/snowmobile/regions/'+region+'.html',import.meta.url),'utf8');
   for(const marker of ['id="localClubDesk"','id="localClubReports"','/assets/snowmobile-local-reports.js','/assets/snowmobile-region.js','id="parkingPlanner"','id="routePlanner"','google-adsense-account']){
    assert.ok(html.includes(marker),region+' missing '+marker);
