@@ -95,6 +95,8 @@ async def run():
                 raise AssertionError("Default river map should prioritize public parks and observed ships, not bridge pins")
             if await page.locator(".pin-park").count() != 4:
                 raise AssertionError("Default river map missing four public viewing points")
+            if await page.locator(".park-map-pin--heritage.is-offset").count()!=1:
+                raise AssertionError("A vessel nearly at Heritage Park must not obscure its tappable marker")
             official_google_maps = {
                 "scranton": "https://www.google.com/maps?q=41.48796000,-81.69382000",
                 "rivergate": "https://www.google.com/maps?q=41.48915000,-81.70197000",
