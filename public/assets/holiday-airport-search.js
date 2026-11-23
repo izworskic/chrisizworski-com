@@ -31,10 +31,9 @@
     if (words.some(function (word) { return word.startsWith(query); })) return 4;
     if (query.length >= 3 && city.includes(query)) return 5;
     if (query.split(' ').every(function (token) { return city.includes(token); })) return 6;
-    if (query.length >= 4 && words.some(function (word) { return oneEdit(tokenLast(query), word); })) return 8;
+    if (query.length >= 4 && !query.includes(' ') && words.some(function (word) { return oneEdit(query, word); })) return 8;
     return Infinity;
   }
-  function tokenLast(query) { return query.split(' ').at(-1); }
   function search(airports, rawQuery, limit) {
     var query = normalize(rawQuery), max = Number.isInteger(limit) && limit > 0 ? limit : 7;
     if (query.length > 80) return [];
