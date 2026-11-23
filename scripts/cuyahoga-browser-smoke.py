@@ -87,16 +87,6 @@ async def run():
                 raise AssertionError("Cuyahoga must not overlay extra compass badges over Soo-style hulls")
             if await page.locator(".river-type-strip").evaluate("(el)=>el.open"):
                 raise AssertionError("Advanced vessel-type filters must be collapsed by default")
-            # The Soo Locks pattern is one on-map ship popup, never a hover card plus
-            # another distant content card competing for the same click.
-            await page.locator(".soo-ais-symbol").first.click()
-            if await page.locator(".leaflet-popup").count() != 1:
-                raise AssertionError("Selecting a vessel must open exactly one on-map popup")
-            await page.locator("#live-vessels button[data-ship='367123456']").click()
-            if await page.locator(".leaflet-popup").count() != 1:
-                raise AssertionError("Ship-list selection stacked another popup")
-            if not await page.locator(".leaflet-popup").get_by_text("BROWSER TEST SHIP").count():
-                raise AssertionError("Vessel details missing from map popup")
             if await page.locator("#show-ships-on-map").inner_text() != "Show 1 ship":
                 raise AssertionError("Live ship map control must display a verified report count")
             if await page.locator("#live-controls").count() != 1:
@@ -112,15 +102,18 @@ async def run():
                     location["x"] + location["width"] > frame["x"] + frame["width"] - 4 or
                     location["y"] < frame["y"] + 4 or
                     location["y"] + location["height"] > frame["y"] + frame["height"] - 4):
-                    diagnosis=await page.evaluate("""() => {
-                      const m=window.__CuyahogaTestMap;
-                      const frame=document.getElementById('cuyahoga-map').getBoundingClientRect();
-                      return {zoom:m?.getZoom(),size:m?.getSize(),bounds:m?.getBounds()?.toBBoxString(),
-                        center:m?.getCenter(),frame:{x:frame.x,y:frame.y,width:frame.width,height:frame.height},
-                        pins:[...document.querySelectorAll('.pin-park')].map(p=>{const r=p.getBoundingClientRect();return {name:p.getAttribute('title'),x:r.x,y:r.y,width:r.width}})};
-                    }""")
-                    raise AssertionError(f"Public park map marker clipped at {width}px: {location} | map={diagnosis}")
+                    raise AssertionError(f"Public park map marker clipped in initial overview at {width}px: {location}")
             await page.screenshot(path=str(OUT / f"cuyahoga-{width}-live.png"), full_page=True, animations="disabled")
+            # The Soo Locks pattern is one on-map ship popup, never a hover card plus
+            # another distant content card competing for the same click.
+            await page.locator(".soo-ais-symbol").first.click()
+            if await page.locator(".leaflet-popup").count() != 1:
+                raise AssertionError("Selecting a vessel must open exactly one on-map popup")
+            await page.locator("#live-vessels button[data-ship='367123456']").click()
+            if await page.locator(".leaflet-popup").count() != 1:
+                raise AssertionError("Ship-list selection stacked another popup")
+            if not await page.locator(".leaflet-popup").get_by_text("BROWSER TEST SHIP").count():
+                raise AssertionError("Vessel details missing from map popup")
             await page.get_by_role("button", name="Scranton Flats Pier").click()
             await page.locator("#river-focus h3").get_by_text("Scranton Flats Pier").wait_for()
             if await page.locator("#river-focus a[href*='clevelandmetroparks']").count() != 1:
