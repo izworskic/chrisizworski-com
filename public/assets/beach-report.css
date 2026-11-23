@@ -1789,8 +1789,3 @@ body[data-beach-report-page="detail"] .shorefeel-primary[data-status="forecast"]
     font-size:clamp(65px,17vw,83px) !important;
   }
 }
-
-/* ShoreFeel evidence bridge: an ordinary link, not another card or ad slot. */
-.shorefeel-evidence-link{margin:4px 0 14px;font-size:.9rem;line-height:1.5;color:#426168}
-.shorefeel-evidence-link a{font-weight:700;text-underline-offset:3px}
-.shorefeel-evidence-link span{display:block;font-size:.86rem}
