@@ -246,10 +246,10 @@
    credits.append(document.createTextNode(' · '),link);
   }
   if(result.state==='REPORTS_AVAILABLE'){
-   readout.textContent=result.count+' fresh AIS '+(result.count===1?'report':'reports')+' within the Cuyahoga research area';
+   readout.textContent=result.count+' recent AIS '+(result.count===1?'position':'positions')+' in the greater Cleveland riverfront area';
    status.textContent=result.reason;
   }else{
-   readout.textContent=result.state==='UNAVAILABLE'?'Live AIS source unavailable':'No confirmed fresh local AIS positions';
+   readout.textContent=result.state==='UNAVAILABLE'?'AIS reporting unavailable':'No fresh AIS positions in this map area';
    status.textContent=result.reason;
   }
   if(mapGroup.ships)mapGroup.ships.clearLayers();
@@ -345,7 +345,7 @@
     safeGet('/cuyahoga-freighter-watch/noaa-historical-2025.json'),
     safeGet('/cuyahoga-freighter-watch/bridge-notices.json')]);
   const parks=results[0].status==='fulfilled'?results[0].value:null;
-  if(core.validCatalog(parks)){state.parks=parks;plotParks();renderParkSignals();}
+  if(core.validCatalog(parks)){state.parks=parks;plotParks();renderParkSignals();choosePark('scranton',false);}
   else replaceFocus('PARK SOURCE UNAVAILABLE','Check Cleveland Metroparks','The park directory could not be verified. Use the official park manager links in the text below.');
   const notices=results[3].status==='fulfilled'?results[3].value:null;
   if(notices?.schemaVersion===1&&Array.isArray(notices.notices))state.bridgeNotices=notices;
