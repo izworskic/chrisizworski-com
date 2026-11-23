@@ -39,7 +39,7 @@ function bridgePopupContent(b){
  wrap.append(node('p',b.summary,'park-popup-description'));
  wrap.append(popupActionRow([{label:'NOAA bridge reference ↗',url:b.sourceUrl},
   {label:'Coast Guard notices ↗',url:'https://www.navcen.uscg.gov/local-notices-to-mariners-by-cg-district'}]));
- wrap.append(node('small','Rounded NOAA chart location only. Not a live bridge opening, public viewpoint, or place to park; stay out of restricted terminals and rail areas.','park-popup-note'));
+ wrap.append(node('small','Rounded NOAA chart location only; not a live bridge opening, public viewpoint, or place to park. Stay out of restricted terminals and rail areas.','park-popup-note'));
  return wrap;
 }
 function vesselType(v){
