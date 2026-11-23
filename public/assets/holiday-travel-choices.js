@@ -43,7 +43,7 @@
     entry.setAttribute('aria-haspopup', 'listbox');
     entry.setAttribute('aria-expanded', 'false');
     entry.setAttribute('aria-controls', entry.id + '-list');
-    entry.setAttribute('aria-label', select.getAttribute('aria-label') || (label && label.textContent.trim()) || select.id);
+    if (!label) entry.setAttribute('aria-label', select.getAttribute('aria-label') || select.id);
     entry.placeholder = select.id === 'home' || select.id === 'away' ?
       'Type a city or airport code' : 'Type to find an option';
     var list = document.createElement('div');
