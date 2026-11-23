@@ -46,7 +46,15 @@ async def run():
             await page.route("**/api/freighter-ais",lambda route:route.fulfill(status=200,
               content_type="application/json",body=json.dumps(report())))
             await page.goto(URL,wait_until="domcontentloaded",timeout=40000)
+            await page.locator(".river-type-strip summary").click()
             await page.locator("#calumet-type-counts .river-type-filter.type-cargo").wait_for(timeout=25000)
+            await page.locator("#calumet-show-ships:not([disabled])").wait_for(timeout=25000)
+            if await page.locator("#calumet-show-ships").inner_text()!="Show 4 ships":
+                raise AssertionError("Ships framing count must match observed, fresh AIS count")
+            if await page.locator("#calumet-show-places").is_disabled():
+                raise AssertionError("Two verified public places should be available for map framing")
+            await page.locator("#calumet-show-ships").click()
+            await page.locator("#calumet-show-places").click()
             await page.locator("#calumet-map .river-watch-marker").first.wait_for(timeout=25000)
             if await page.locator("#calumet-map .river-watch-marker").count()!=4:
                 raise AssertionError("Only four distinct fresh AIS reports should be mapped")
