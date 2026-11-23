@@ -52,7 +52,7 @@
    </div>
    <div class="map-underbar">
     <div class="map-key" aria-label="Map legend">
-     <span><i class="key-spot"></i>Public parks</span><span><i class="key-ship"></i>Reported ships</span><span><i class="key-bridge"></i>Bridge landmarks</span><span><i class="key-work"></i>Dated removal notice</span>
+     <span><i class="key-spot"></i>Public parks</span><span><i class="key-ship"></i>Reported ships</span><span data-bridge-legend hidden><i class="key-bridge"></i>Bridge landmarks</span><span data-bridge-legend hidden><i class="key-work"></i>Dated removal notice</span>
     </div>
     <details class="map-caveat">
      <summary>What do these pins mean?</summary>
@@ -77,7 +77,7 @@
      <label for="bridge-select">Choose a NOAA chart reference</label>
      <select id="bridge-select" aria-label="Select a historic or current bridge landmark"><option value="">Select a bridge</option></select>
      <label class="bridge-toggle" for="show-all-bridges"><input type="checkbox" id="show-all-bridges"> Show all 19 charted crossings</label>
-     <p class="source-note" id="bridge-layer-status" aria-live="polite">Five key river landmarks are shown by default. All 19 remain available in this selector.</p>
+     <p class="source-note" id="bridge-layer-status" aria-live="polite">Open this section to show five key NOAA bridge landmarks, or expand to all 19.</p>
      <p class="source-note">Includes fixed spans, long-open structures and dated work notices. No live opening times.</p>
     </details>
    </section>
