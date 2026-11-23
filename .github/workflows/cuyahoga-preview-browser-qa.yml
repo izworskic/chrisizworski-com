@@ -16,6 +16,9 @@ on:
       - public/assets/river-watch-vessel-ui.css
       - public/calumet-freighter-watch/index.html
       - public/assets/calumet-watch-app.js
+      - public/assets/calumet-watch-core.js
+      - public/assets/soo-vessel-icons.css
+      - tests/calumet-map-popup-parity.test.js
       - tests/river-watch-vessel-ui.test.js
       - public/cuyahoga-freighter-watch/index.html
       - public/assets/cuyahoga-watch.css
@@ -50,7 +53,7 @@ jobs:
           node --check public/assets/cuyahoga-bend-demo.js
           node --check public/assets/calumet-watch-app.js
           node --check public/assets/river-watch-vessel-ui.js
-          node --test tests/cuyahoga-public-watch.test.js tests/calumet-watch.test.js tests/river-watch-vessel-ui.test.js tests/working-rivers-family.test.js
+          node --test tests/cuyahoga-public-watch.test.js tests/calumet-watch.test.js tests/calumet-map-popup-parity.test.js tests/river-watch-vessel-ui.test.js tests/working-rivers-family.test.js
       - name: Create isolated browser-only Python environment
         shell: bash
         run: |
