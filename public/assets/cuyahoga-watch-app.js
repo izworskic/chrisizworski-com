@@ -20,7 +20,10 @@
   }
   if(note)panel.append(escText('p',note,'detail-small'));
  }
- function mapPointIcon(kind,content){
+ function revealMobileFocus(){
+  if(window.matchMedia('(max-width:830px)').matches) $('river-focus').scrollIntoView({block:'start',behavior:'auto'});
+ }
+ function mapPointIcon(kind){
   if(!window.L)return null;
   const classes={park:'pin-park',bridge:'pin-bridge',work:'pin-work'};
   return L.divIcon({className:'',html:'<div class="map-pin '+(classes[kind]||classes.bridge)+'" style="width:30px;height:30px">'+(kind==='park'?'&#10003;':kind==='work'?'!': '&#9646;')+'</div>',iconSize:[30,30],iconAnchor:[15,15]});
@@ -46,13 +49,13 @@
   for(const park of state.parks.spots){
    const btn=document.querySelector('[data-park="'+park.id+'"]');
    if(btn){
-    btn.addEventListener('click',()=>choosePark(park.id,true));
+    btn.addEventListener('click',()=>{choosePark(park.id,true);revealMobileFocus();});
     btn.title=park.suitability;
    }
    if(mapGroup.parks){
     const marker=L.marker([park.lat,park.lon],{title:park.name,alt:park.name+' approximate park area',icon:mapPointIcon('park')}).addTo(mapGroup.parks);
     marker.bindTooltip(park.name,{direction:'top'});
-    marker.on('click',()=>choosePark(park.id,false));
+    marker.on('click',()=>{choosePark(park.id,false);revealMobileFocus();});
    }
   }
  }
@@ -163,7 +166,7 @@
     icon:mapPointIcon(notice?'work':'bridge')
    }).addTo(mapGroup.bridges);
    marker.bindTooltip(bridge.name+' · river mile '+bridge.riverMile+(notice?' · planned removal work':''));
-   marker.on('click',()=>chooseBridge(bridge.id,false));
+   marker.on('click',()=>{chooseBridge(bridge.id,false);revealMobileFocus();});
   }
   const status=$('bridge-layer-status');
   if(status)status.textContent=showAll?'Showing all '+visible+' NOAA main-channel references. Dated chart points are not live bridge status.':
@@ -291,12 +294,12 @@
    const item=escText('li',''),btn=escText('button','');
    btn.type='button';btn.dataset.ship=String(v.mmsi);
    btn.append(escText('strong',v.name),escText('small',core.vesselVisual(v).label+' · '+speedCopy(v)+' · '+locClock.format(new Date(v.seen))));
-   btn.addEventListener('click',()=>selectShip(v));item.append(btn);list.append(item);
+   btn.addEventListener('click',()=>{selectShip(v);revealMobileFocus();});item.append(btn);list.append(item);
    if(mapGroup.ships){
     const hasTravelCourse=markerHasTravelCourse(v);
     const marker=L.marker([v.lat,v.lon],{title:v.name,alt:v.name+' recent AIS report',shipMmsi:String(v.mmsi),icon:liveVesselIcon(v),zIndexOffset:1000}).addTo(mapGroup.ships);
     marker.bindTooltip(v.name+' · '+speedCopy(v)+(hasTravelCourse?' · AIS travel course '+Math.round(v.course)+'°':' · direction not shown'));
-    marker.on('click',()=>selectShip(v));
+    marker.on('click',()=>{selectShip(v);revealMobileFocus();});
    }
   }
   syncShipSelection();
@@ -339,7 +342,7 @@
  function wire(){
 
   $('refresh-ais').addEventListener('click',getLive);
-  $('bridge-select').addEventListener('change',e=>{if(e.target.value)chooseBridge(e.target.value,true);});
+  $('bridge-select').addEventListener('change',e=>{if(e.target.value){chooseBridge(e.target.value,true);revealMobileFocus();}});
   $('show-all-bridges').addEventListener('change',renderBridgeMarkers);
   document.querySelector('.bridge-picker')?.addEventListener('toggle',renderBridgeMarkers);
 
