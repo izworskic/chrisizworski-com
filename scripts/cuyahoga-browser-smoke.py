@@ -74,13 +74,27 @@ async def run():
 
             if await page.get_by_text("STALE SHIP", exact=True).count():
                 raise AssertionError("Stale AIS still visible")
-            marker_count = await page.locator(".river-watch-marker").count()
+            marker_count = await page.locator(".soo-ais-symbol").count()
             if marker_count != 1:
                 raise AssertionError(f"Expected one recent marker, found {marker_count}")
             if await page.locator(".cuyahoga-ship-cargo").count() != 1:
                 raise AssertionError("Cargo vessel missing its source-category silhouette")
             if await page.locator(".cuyahoga-vessel-icon svg").count() != 1:
-                raise AssertionError("AIS vessel marker missing SVG source category shape")
+                raise AssertionError("Soo Locks SVG vessel marker missing")
+            if await page.locator(".river-ship-course").count():
+                raise AssertionError("Cuyahoga must not overlay extra compass badges over Soo-style hulls")
+            if await page.locator(".river-type-strip").evaluate("(el)=>el.open"):
+                raise AssertionError("Advanced vessel-type filters must be collapsed by default")
+            # The Soo Locks pattern is one on-map ship popup, never a hover card plus
+            # another distant content card competing for the same click.
+            await page.locator(".soo-ais-symbol").first.click()
+            if await page.locator(".leaflet-popup").count() != 1:
+                raise AssertionError("Selecting a vessel must open exactly one on-map popup")
+            await page.locator("#live-vessels button[data-ship='367123456']").click()
+            if await page.locator(".leaflet-popup").count() != 1:
+                raise AssertionError("Ship-list selection stacked another popup")
+            if not await page.locator(".leaflet-popup").get_by_text("BROWSER TEST SHIP").count():
+                raise AssertionError("Vessel details missing from map popup")
             if await page.locator("#show-ships-on-map").inner_text() != "Show 1 ship":
                 raise AssertionError("Live ship map control must display a verified report count")
             if await page.locator("#live-controls").count() != 1:
@@ -209,23 +223,21 @@ async def run():
                 await glyphs.route("**/api/freighter-ais?region=cuyahoga", lambda route: route.fulfill(status=200, content_type="application/json", body=json.dumps(orientation_feed)))
                 await glyphs.goto(URL, wait_until="domcontentloaded")
                 await glyphs.get_by_text("EASTBOUND TEST", exact=True).first.wait_for(timeout=15000)
-                if await glyphs.locator(".river-watch-marker.with-course").count() != 2:
-                    raise AssertionError("Two moving vessels must have course arrows")
-                if await glyphs.locator(".river-watch-marker.with-heading").count() != 1:
-                    raise AssertionError("AIS true heading at berth must be shown independently")
-                if await glyphs.locator(".river-watch-marker.without-course").count() != 1:
-                    raise AssertionError("Unknown bearing must not be assigned a bow direction")
-                arrows = await glyphs.locator(".river-ship-course").evaluate_all("(els)=>els.map(x=>x.getAttribute('style'))")
-                if not all(any("--river-course:"+course+"deg" in v for v in arrows) for course in ("90.0","0.0","265.0")):
-                    raise AssertionError("Missing reported course or heading arrow: "+str(arrows))
-                if await glyphs.locator(".river-watch-marker.without-course .river-ship-course").count():
-                    raise AssertionError("Unoriented ship must not invent a heading arrow")
-                if await glyphs.locator(".river-watch-marker .ship-hull").count() != 4:
-                    raise AssertionError("All AIS reports must remain ship-shaped")
-                if await glyphs.locator(".ship-neutral-ring").count():
-                    raise AssertionError("No ship should revert to a generic circle")
+                if await glyphs.locator(".soo-ais-symbol").count() != 4:
+                    raise AssertionError("All four AIS vessels must use Soo Locks symbol markers")
+                if await glyphs.locator(".soo-ais-symbol .ship-hull").count() != 4:
+                    raise AssertionError("Every moving and stopped AIS report needs a real ship silhouette")
+                if await glyphs.locator(".river-ship-course").count():
+                    raise AssertionError("Soo-style ship hulls must not have added compass badges")
+                shapes = await glyphs.locator(".soo-ais-symbol svg").evaluate_all("(els)=>els.map(x=>x.outerHTML)")
+                if any("rotate(" in value for value in shapes):
+                    raise AssertionError("Side-profile ships may not rotate upside down with AIS travel course")
+                if await glyphs.locator(".soo-ais-symbol.type-cargo").count() != 2:
+                    raise AssertionError("Cargo silhouettes or reported type categories lost")
+                if await glyphs.locator(".soo-ais-symbol.type-tanker").count() != 1:
+                    raise AssertionError("Tanker silhouette missing")
                 await glyphs.screenshot(path=str(OUT / "cuyahoga-390-real-direction-glyphs.png"), full_page=False, animations="disabled")
-                cases.append({"viewport":390,"vesselOrientation":"upright hulls, course-90/course-0, heading-265, unoriented hull","status":"PASS"})
+                cases.append({"viewport":390,"vesselOrientation":"Soo profile hulls, moving-and-stopped, no arrows","status":"PASS"})
                 await glyphs.close()
             if width == 390:
                 failed = await context.new_page()
