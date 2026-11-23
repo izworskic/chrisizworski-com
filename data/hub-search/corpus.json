@@ -903,6 +903,26 @@
    "href": "/welland-canal/"
   },
   {
+   "id": "calumet-river-watch",
+   "title": "Chicago Calumet River Freighter & Bridge Watch",
+   "tags": "boating planning freighters ships river bridge watching chicago calumet industrial great-lakes",
+   "place": "",
+   "kind": "River ship & bridge watch",
+   "description": "Explore source-checked recent AIS ship positions along Chicago's industrial Calumet River, the 95th Street drawbridge and documented public viewing areas. A report is not a ship-arrival or bridge-opening prediction.",
+   "months": "3,4,5,6,7,8,9,10,11,12",
+   "href": "/calumet-freighter-watch/"
+  },
+  {
+   "id": "cuyahoga-river-watch",
+   "title": "Cleveland Cuyahoga River Freighter & Bridge Watch",
+   "tags": "boating planning freighters ships river bridges viewing cleveland cuyahoga ohio great-lakes",
+   "place": "",
+   "kind": "River ship & bend watch",
+   "description": "Look for recent reported vessels on Cleveland's winding working river, explore bridge references and four public waterfront viewing places, and see how large ships navigate the bends.",
+   "months": "3,4,5,6,7,8,9,10,11,12",
+   "href": "/cuyahoga-freighter-watch/"
+  },
+  {
    "id": "rideau-canal",
    "title": "Rideau Canal Trip Planner",
    "tags": "boating travel planning ontario rideau-canal historic locks paddling kayaking",
