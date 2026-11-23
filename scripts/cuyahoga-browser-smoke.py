@@ -22,7 +22,7 @@ async def run():
             launch_options["executable_path"] = executable
         browser = await chromium.launch(**launch_options)
         cases = []
-        for width, height in ((390, 844), (1280, 900)):
+        for width, height in ((360, 780), (390, 844), (768, 1024), (1280, 900), (1440, 900)):
             context = await browser.new_context(viewport={"width": width, "height": height}, reduced_motion="reduce", device_scale_factor=1)
             page = await context.new_page()
             errors = []
@@ -43,6 +43,18 @@ async def run():
             await page.route("**/api/freighter-ais", lambda route: route.fulfill(status=200, content_type="application/json", body=json.dumps(feed)))
             await page.goto(URL, wait_until="domcontentloaded", timeout=40000)
             await page.get_by_text("BROWSER TEST SHIP", exact=True).first.wait_for(timeout=25000)
+            # Check the redesign's actual first screen, not only full-page snapshots.
+            hero = await page.locator(".lead").bounding_box()
+            river = await page.locator("#cuyahoga-map").bounding_box()
+            if not hero or not river or river["y"] > height * 0.67:
+                raise AssertionError(f"River map is still buried below the first screen at {width}px")
+            if river["width"] < width * (0.72 if width < 830 else 0.43):
+                raise AssertionError(f"River canvas too narrow at {width}px")
+            if await page.locator(".place-button[aria-current=true][data-park=scranton]").count() != 1:
+                raise AssertionError("Start at a real public park, not an empty focus panel")
+            if await page.locator("#river-focus h3").inner_text() != "Scranton Flats Pier":
+                raise AssertionError("Default park selection does not answer the visit question")
+            await page.screenshot(path=str(OUT / f"cuyahoga-{width}-first-screen.png"), full_page=False, animations="disabled")
             if await page.get_by_text("STALE SHIP", exact=True).count():
                 raise AssertionError("Stale AIS still visible")
             marker_count = await page.locator(".pin-vessel").count()
@@ -110,7 +122,7 @@ async def run():
                 raise AssertionError("Map tiles not loaded; browser acceptance blocked")
             filename = OUT / f"cuyahoga-{width}-history.png"
             await page.screenshot(path=str(filename), full_page=True, animations="disabled")
-            cases.append({"viewport":width,"status":"PASS","tilesLoaded":tiles,"liveShipMarkers":marker_count,
+            cases.append({"viewport":width,"status":"PASS","firstScreenMapY":round(river["y"]),"firstScreenMapWidth":round(river["width"]),"tilesLoaded":tiles,"liveShipMarkers":marker_count,
                           "archiveSelected":"laud-2025-08-15","screenshots":filename.name,"jsErrors":errors})
             await context.close()
         nojs = await browser.new_context(viewport={"width":390,"height":844}, java_script_enabled=False)
