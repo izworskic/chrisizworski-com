@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calumet River Freighter Watch | Chris Izworski</title>
+<meta name="description" content="Find a public place to watch Chicago's Calumet River ships. Explore the bridge corridor and inspect genuinely recent AIS reports.">
+<meta name="robots" content="noindex,follow">
+<meta name="theme-color" content="#13232b">
+<link rel="canonical" href="https://chrisizworski.com/calumet-freighter-watch/">
+<link rel="icon" href="/favicon.ico">
+<meta property="og:type" content="website"><meta property="og:title" content="Calumet River Freighter Watch"><meta property="og:description" content="Chicago's working ship corridor: where to stand, what ships are reported, and how its bridges work.">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="/assets/calumet-watch.css">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/calumet-freighter-watch/#page","url":"https://chrisizworski.com/calumet-freighter-watch/","name":"Calumet River Freighter Watch","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
+</head>
+<body>
+<a class="skip" href="#river-desk">Skip to the river map</a>
+<header class="site-top">
+ <a class="site-id" href="/freighters/"><span class="mark" aria-hidden="true">GL</span> Great Lakes <strong>Freighter Central</strong></a>
+ <span>CHICAGO · SOUTH SIDE</span>
+ <a href="/great-lakes-freighter-tracking/">Full ship tracker <span aria-hidden="true">↗</span></a>
+</header>
+<main>
+ <section class="hero" aria-labelledby="page-title">
+  <div class="hero-words">
+   <p class="kicker">CHICAGO'S OTHER WORKING RIVER</p>
+   <h1 id="page-title">Freighters on the <em>Calumet.</em></h1>
+   <p>Follow the ship corridor, choose a public viewing place, and watch the enormous bridge machinery that makes this port work.</p>
+  </div>
+  <div class="signal" aria-label="Latest AIS evidence">
+   <span class="signal-head"><span class="signal-light" aria-hidden="true"></span> RIVER REPORT</span>
+   <strong id="signal-text" aria-live="polite">Checking reported vessel positions…</strong>
+   <small id="signal-age">Only position reports and source checks less than 30 minutes old qualify.</small>
+  </div>
+ </section>
+ <section id="river-desk" class="river-desk" aria-label="Calumet River ship-watching workbench">
+  <div class="desk-head"><div><p class="kicker">RIVER OBSERVATION DESK</p><h2>Find the place. Read the river.</h2></div><a class="text-link" href="#bridge-mechanics">See how a bridge lifts ↓</a></div>
+  <noscript><p class="static-fallback">The interactive map requires JavaScript. You can still choose the <a href="https://www.chicagomag.com/city-life/the-best-place-in-the-city-to-watch-boats/">95th Street bridge viewing area</a>, check <a href="https://www.chicagoparkdistrict.com/parks-facilities/calumet-park">Calumet Park access</a>, or inspect the <a href="/great-lakes-freighter-tracking/">existing ship tracker</a>. Neither place promises a vessel sighting.</p></noscript>
+  <div class="desk-grid">
+   <div class="chart-side">
+    <div class="chart-frame">
+     <span class="chart-stamp" aria-hidden="true">CALUMET RIVER · LAKE MICHIGAN → INLAND TERMINALS</span>
+     <div id="calumet-map" role="region" aria-label="Map of public viewing areas, published bridge references and fresh vessel reports" tabindex="0"><p class="map-loading">Map loading. Use the public-place links and bridge list to the right if tiles do not appear.</p></div>
+    </div>
+    <div class="map-foot"><span><i class="legend-spot"></i> Viewing area</span><span><i class="legend-bridge"></i> Bridge reference</span><span><i class="legend-ship"></i> Reported ship</span><details><summary>Map accuracy &amp; safety</summary><p>Bridge pins are rounded published reference coordinates, not measured crossing axes. Public place markers are approximate areas, not certified parking entrances or clear sightlines. Industrial docks and port terminals are private or controlled areas, not visitor destinations. The map is not for navigation.</p></details></div>
+    <div id="selection" class="selection" aria-live="polite">
+     <p class="selection-kicker">SELECTED PUBLIC VIEW</p><h3>95th Street Bridge approaches</h3>
+     <p>Watch from a lawful public sidewalk near the bridge, not an active road lane or industrial property. Confirm access and closures on arrival.</p>
+     <a href="https://www.chicagomag.com/city-life/the-best-place-in-the-city-to-watch-boats/">Read the documented ship-watching account ↗</a>
+    </div>
+   </div>
+   <aside class="desk-controls" aria-label="Where to stand and what to watch">
+    <section class="choices">
+     <p class="rail-label">01 / CHOOSE WHERE TO STAND</p><h3>Two different views</h3>
+     <div id="view-choices" class="view-choices">
+      <button class="view-choice" type="button" data-place="bridge95" aria-pressed="true"><span class="choice-no">01</span><span><strong>95th Street Bridge</strong><small>Close to the drawbridge action; sidewalk access must be checked</small></span><span aria-hidden="true">↗</span></button>
+      <button class="view-choice" type="button" data-place="calumetpark" aria-pressed="false"><span class="choice-no">02</span><span><strong>Calumet Park lakefront</strong><small>Broader harbor setting; sightline to ships is not confirmed</small></span><span aria-hidden="true">↗</span></button>
+     </div>
+     <p class="access-note">A public location is not a guarantee of ship visibility, parking, open sidewalks, or a vessel passage.</p>
+    </section>
+    <section class="reports">
+     <div class="split-head"><div><p class="rail-label">02 / CHECK THE EVIDENCE</p><h3>Recently reported ships</h3></div><button type="button" class="refresh" id="refresh-ships">Refresh</button></div>
+     <p id="report-message" role="status" aria-live="polite">Checking the same AIS source used by the Great Lakes freighter tracker.</p>
+     <ul id="reported-ships" class="reported-ships"><li>Only verified fresh reports appear here. No report does not mean no ship.</li></ul>
+     <details class="method"><summary>Source, timestamps and limits</summary><p>Reports are supplied by this site's <a href="/great-lakes-freighter-tracking/">existing AIS service</a>, with any available upstream credits preserved. Position, reported course and speed do not establish a future bridge opening, visible vessel, or arrival time. Commercial data permissions follow the site's existing feed arrangements; this page adds no provider.</p><p id="provider-credits">Credits are shown when supplied by the AIS source. <a href="https://openwaters.io/ais/">Provider information ↗</a></p></details>
+    </section>
+    <section class="crossings">
+     <p class="rail-label">03 / EXPLORE THE CROSSINGS</p><h3>Bridge-by-bridge</h3>
+     <label for="bridge-select">Published bridge landmark</label><select id="bridge-select"><option value="">Choose a bridge</option></select>
+     <p id="bridge-caption" class="bridge-caption">Select a crossing to learn how its structure works. No live opening feed is provided.</p>
+     <a href="https://www.navcen.uscg.gov/local-notices-to-mariners-by-cg-district" target="_blank" rel="noopener noreferrer">Current Coast Guard navigation notices ↗</a>
+    </section>
+   </aside>
+  </div>
+ </section>
+ <section class="engineering" id="bridge-mechanics" aria-labelledby="engineering-title">
+  <div class="engineering-copy">
+   <p class="kicker">HOW THE INDUSTRIAL RIVER WORKS</p>
+   <h2 id="engineering-title">Why does the roadway rise into the sky?</h2>
+   <p>A freighter cannot squeeze beneath an ordinary road deck. At 95th Street, two bascule leaves pivot upward, counterweights helping the machinery raise the span. Farther inland, some railroad structures use vertical lifts, raising a whole span between towers.</p>
+   <p>This is a <strong>teaching illustration</strong>, not a drawing to scale, a real-time bridge state, or a signal that any particular bridge is opening.</p>
+  </div>
+  <div class="engineering-demo">
+   <svg viewBox="0 0 580 245" role="img" aria-labelledby="bridge-diagram-title bridge-diagram-desc">
+    <title id="bridge-diagram-title">Interactive simplified double-leaf bascule bridge diagram</title>
+    <desc id="bridge-diagram-desc">Two blue roadway leaves swing upward from shore-side pivots above a stylized vessel and river.</desc>
+    <rect x="0" y="157" width="580" height="88" fill="#0d5261"/>
+    <path d="M0 173 Q70 164 140 174 T290 172 T430 172 T580 174" fill="none" stroke="#65aeba" stroke-width="2"/>
+    <rect x="0" y="132" width="153" height="25" fill="#9a9e91"/><rect x="427" y="132" width="153" height="25" fill="#9a9e91"/>
+    <g id="left-leaf" transform="rotate(0 154 135)"><rect x="152" y="123" width="141" height="14" rx="2" fill="#e1a64b"/><path d="M160 123 L222 106 L288 123" stroke="#233d48" stroke-width="5" fill="none"/></g>
+    <g id="right-leaf" transform="rotate(0 426 135)"><rect x="286" y="123" width="141" height="14" rx="2" fill="#e1a64b"/><path d="M290 123 L356 106 L422 123" stroke="#233d48" stroke-width="5" fill="none"/></g>
+    <circle cx="154" cy="135" r="11" fill="#13232b" stroke="#fff8de" stroke-width="3"/><circle cx="426" cy="135" r="11" fill="#13232b" stroke="#fff8de" stroke-width="3"/>
+    <path d="M236 197 L370 197 L352 214 L254 214 Z" fill="#e3e7e3"/><rect x="271" y="183" width="59" height="14" fill="#e3e7e3"/><rect x="301" y="165" width="14" height="18" fill="#e3e7e3"/>
+    <text x="289" y="234" fill="#ecf6f2" font-size="12" text-anchor="middle">SCHEMATIC • NOT A LIVE BRIDGE</text>
+   </svg>
+   <label for="bridge-angle">Raise the bridge leaves <output id="angle-output" for="bridge-angle">0°</output></label>
+   <input id="bridge-angle" type="range" min="0" max="70" value="0" step="5">
+   <div class="demo-actions"><button type="button" id="bridge-reset">Lower the illustration</button><span id="demo-explanation" aria-live="polite">Roadway leaves shown closed. An actual lift is controlled by bridge operators.</span></div>
+  </div>
+ </section>
+ <section class="field-notes" aria-labelledby="place-story">
+  <p class="kicker">FIELD NOTES / SOUTH CHICAGO</p><h2 id="place-story">A port that is still at work.</h2>
+  <p>The Calumet is not Chicago's downtown riverfront. A ship coming from Lake Michigan enters a waterway of lift spans, bascule leaves and working terminals. The Illinois International Port District has facilities at Iroquois Landing near the river mouth and farther inland at Lake Calumet. Those terminals serve commerce, not sightseeing access.</p>
+  <p>At the 95th Street Bridge, the machinery is the spectacle. Listen for the interruption in traffic, look at the counterweighted leaves and notice how slowly a long hull threads through the crossing. You may see no ships during your visit. The pleasure of a working port is knowing what the bridges and docks are built to accomplish.</p>
+  <a href="https://www.iipd.com/about">Understand the Port of Chicago ↗</a>
+ </section>
+ <details class="sources"><summary>Sources, access evidence and what remains unknown</summary>
+  <div><p><a href="https://nauticalcharts.noaa.gov/publications/coast-pilot/index.html">NOAA Coast Pilot 6</a> supplies charted river context and historic bridge reference geometry. <a href="https://www.navcen.uscg.gov/local-notices-to-mariners-by-cg-district">Coast Guard Local Notices to Mariners</a> provide dated advisories, not a verified current bridge status at this page's load time.</p>
+  <p><a href="https://www.chicagomag.com/city-life/the-best-place-in-the-city-to-watch-boats/">Chicago Magazine</a> documents ship watching at 95th Street; <a href="https://www.chicagoparkdistrict.com/parks-facilities/calumet-park">Chicago Park District</a> manages Calumet Park. Exact sidewalk or lakefront sightlines, legal parking and current closures have not been independently checked. <a href="https://www.iipd.com/about">The Port District</a> describes terminals, which are not public visitor destinations.</p></div>
+ </details>
+</main>
+<footer class="footer"><a href="/">© 2026 Chris Izworski</a><span>For public shore watching only, not navigation or arrival predictions.</span><a href="/cuyahoga-freighter-watch/">Explore Cleveland's Cuyahoga ↗</a></footer>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script defer src="/assets/visitor-map-links.js"></script>
+<script defer src="/assets/calumet-watch-core.js"></script>
+<script defer src="/assets/calumet-watch-app.js"></script>
+</body></html>
