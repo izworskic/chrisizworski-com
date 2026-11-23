@@ -1,0 +1,575 @@
+{
+ "region": "northwest-michigan",
+ "checked": "2026-11-23",
+ "sourceBoundary": "Autocomplete is a demand proxy, not volume; only towns with an official DNR trail feature within a 5 km spatial query are retained. Generalized lines are for build-time context, not closures or legal condition evidence.",
+ "towns": [
+  {
+   "name": "Kalkaska",
+   "lat": 44.7316,
+   "lon": -85.1843,
+   "proxy": {
+    "seed": "snowmobile trail conditions k",
+    "suggestion": "snowmobile trail conditions kalkaska michigan",
+    "source": "Google autocomplete, US/en; demand proxy not volume",
+    "checked": "2026-11-23"
+   },
+   "dnr": {
+    "source": "Michigan DNR DNRTrailsOPENDATA layer 15",
+    "radiusKm": 5,
+    "query": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/15/query?where=1%3D1&geometry=-85.1843%2C44.7316&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=5000&units=esriSRUnit_Meter&outFields=OBJECTID%2CDNRTrail%2CTrailNamePrimary%2CTrailNetwork%2CCounty&returnGeometry=true&outSR=4326&f=geojson&geometryPrecision=5&maxAllowableOffset=0.0002&resultRecordCount=250",
+    "hitCount": 11,
+    "features": [
+     {
+      "id": 11619,
+      "code": "LP 55",
+      "county": "Kalkaska",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.21616,
+         44.72796
+        ],
+        [
+         -85.21716,
+         44.72776
+        ],
+        [
+         -85.22044,
+         44.72526
+        ],
+        [
+         -85.22078,
+         44.72343
+        ],
+        [
+         -85.22204,
+         44.72179
+        ],
+        [
+         -85.2239,
+         44.72112
+        ],
+        [
+         -85.23089,
+         44.72106
+        ],
+        [
+         -85.23395,
+         44.71887
+        ],
+        [
+         -85.23602,
+         44.71829
+        ],
+        [
+         -85.2383,
+         44.71713
+        ],
+        [
+         -85.24059,
+         44.71679
+        ],
+        [
+         -85.24461,
+         44.71538
+        ],
+        [
+         -85.24663,
+         44.71427
+        ],
+        [
+         -85.24954,
+         44.71197
+        ],
+        [
+         -85.25445,
+         44.70918
+        ],
+        [
+         -85.2569,
+         44.70733
+        ],
+        [
+         -85.26162,
+         44.70655
+        ],
+        [
+         -85.26209,
+         44.70753
+        ],
+        [
+         -85.2632,
+         44.7077
+        ],
+        [
+         -85.26449,
+         44.70843
+        ],
+        [
+         -85.27226,
+         44.70787
+        ],
+        [
+         -85.27337,
+         44.70813
+        ],
+        [
+         -85.27837,
+         44.70813
+        ],
+        [
+         -85.28143,
+         44.70774
+        ],
+        [
+         -85.28442,
+         44.70778
+        ],
+        [
+         -85.28542,
+         44.70758
+        ],
+        [
+         -85.28645,
+         44.70554
+        ]
+       ]
+      }
+     },
+     {
+      "id": 11624,
+      "code": "LP 55",
+      "county": "Kalkaska",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.23164,
+         44.73265
+        ],
+        [
+         -85.22053,
+         44.73319
+        ],
+        [
+         -85.21891,
+         44.733
+        ],
+        [
+         -85.21719,
+         44.7318
+        ]
+       ]
+      }
+     },
+     {
+      "id": 12772,
+      "code": "LP 55",
+      "county": "Kalkaska",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.2322,
+         44.73261
+        ],
+        [
+         -85.23346,
+         44.73342
+        ],
+        [
+         -85.23629,
+         44.73386
+        ],
+        [
+         -85.23762,
+         44.73456
+        ]
+       ]
+      }
+     },
+     {
+      "id": 13272,
+      "code": "LP 55",
+      "county": "Kalkaska",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.24135,
+         44.73722
+        ],
+        [
+         -85.24177,
+         44.73751
+        ]
+       ]
+      }
+     },
+     {
+      "id": 13281,
+      "code": "LP 55",
+      "county": "Kalkaska",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.21719,
+         44.7318
+        ],
+        [
+         -85.21688,
+         44.72883
+        ],
+        [
+         -85.21616,
+         44.72797
+        ]
+       ]
+      }
+     },
+     {
+      "id": 13286,
+      "code": "LP 55",
+      "county": "Kalkaska",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.23875,
+         44.73539
+        ],
+        [
+         -85.24135,
+         44.73722
+        ]
+       ]
+      }
+     },
+     {
+      "id": 13287,
+      "code": "LP 55",
+      "county": "Kalkaska",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.24177,
+         44.73751
+        ],
+        [
+         -85.24353,
+         44.73874
+        ],
+        [
+         -85.2446,
+         44.73909
+        ],
+        [
+         -85.24929,
+         44.73848
+        ],
+        [
+         -85.25124,
+         44.73866
+        ],
+        [
+         -85.25237,
+         44.73944
+        ]
+       ]
+      }
+     },
+     {
+      "id": 13643,
+      "code": "LP 55",
+      "county": "Kalkaska",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.2322,
+         44.73261
+        ],
+        [
+         -85.23164,
+         44.73265
+        ]
+       ]
+      }
+     },
+     {
+      "id": 18924,
+      "code": "LP 55",
+      "county": "Kalkaska",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.23753,
+         44.7346
+        ],
+        [
+         -85.23875,
+         44.73539
+        ]
+       ]
+      }
+     },
+     {
+      "id": 19626,
+      "code": "LP 55",
+      "county": "Kalkaska",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.20585,
+         44.72784
+        ],
+        [
+         -85.21181,
+         44.72791
+        ]
+       ]
+      }
+     },
+     {
+      "id": 19627,
+      "code": "LP 55",
+      "county": "Kalkaska",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.21181,
+         44.72791
+        ],
+        [
+         -85.21616,
+         44.72796
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "reportClub": null
+  },
+  {
+   "name": "East Jordan",
+   "lat": 45.1522,
+   "lon": -85.1304,
+   "proxy": {
+    "seed": "snowmobile trail report j",
+    "suggestion": "east jordan snowmobile trail report",
+    "source": "Google autocomplete, US/en; demand proxy not volume",
+    "checked": "2026-11-23"
+   },
+   "dnr": {
+    "source": "Michigan DNR DNRTrailsOPENDATA layer 15",
+    "radiusKm": 5,
+    "query": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/15/query?where=1%3D1&geometry=-85.1304%2C45.1522&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=5000&units=esriSRUnit_Meter&outFields=OBJECTID%2CDNRTrail%2CTrailNamePrimary%2CTrailNetwork%2CCounty&returnGeometry=true&outSR=4326&f=geojson&geometryPrecision=5&maxAllowableOffset=0.0002&resultRecordCount=250",
+    "hitCount": 3,
+    "features": [
+     {
+      "id": 2886,
+      "code": "LP 4",
+      "county": "Charelvoix",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.11897,
+         45.13291
+        ],
+        [
+         -85.11918,
+         45.13843
+        ],
+        [
+         -85.11882,
+         45.13982
+        ],
+        [
+         -85.11909,
+         45.14329
+        ],
+        [
+         -85.11962,
+         45.14387
+        ],
+        [
+         -85.12149,
+         45.14438
+        ],
+        [
+         -85.12163,
+         45.14712
+        ],
+        [
+         -85.12289,
+         45.1506
+        ],
+        [
+         -85.1236,
+         45.15132
+        ],
+        [
+         -85.12557,
+         45.15243
+        ],
+        [
+         -85.12579,
+         45.15351
+        ]
+       ]
+      }
+     },
+     {
+      "id": 6527,
+      "code": "LP 4",
+      "county": "Antrim",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.06446,
+         45.01597
+        ],
+        [
+         -85.06423,
+         45.01602
+        ],
+        [
+         -85.06397,
+         45.01782
+        ],
+        [
+         -85.06462,
+         45.02172
+        ],
+        [
+         -85.06437,
+         45.02213
+        ],
+        [
+         -85.06445,
+         45.02335
+        ],
+        [
+         -85.07072,
+         45.05756
+        ],
+        [
+         -85.07171,
+         45.05814
+        ],
+        [
+         -85.07198,
+         45.05922
+        ],
+        [
+         -85.07178,
+         45.06001
+        ],
+        [
+         -85.07279,
+         45.06244
+        ],
+        [
+         -85.08558,
+         45.08921
+        ],
+        [
+         -85.08678,
+         45.09087
+        ],
+        [
+         -85.09749,
+         45.09915
+        ],
+        [
+         -85.09768,
+         45.10038
+        ],
+        [
+         -85.09682,
+         45.10208
+        ],
+        [
+         -85.09702,
+         45.10371
+        ],
+        [
+         -85.10411,
+         45.10949
+        ],
+        [
+         -85.1097,
+         45.11487
+        ],
+        [
+         -85.11509,
+         45.1181
+        ]
+       ]
+      }
+     },
+     {
+      "id": 97536,
+      "code": "LP 4",
+      "county": "Charelvoix",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.11509,
+         45.1181
+        ],
+        [
+         -85.11812,
+         45.12027
+        ],
+        [
+         -85.11931,
+         45.12198
+        ],
+        [
+         -85.11929,
+         45.12238
+        ],
+        [
+         -85.11881,
+         45.12273
+        ],
+        [
+         -85.11568,
+         45.12354
+        ],
+        [
+         -85.11376,
+         45.12472
+        ],
+        [
+         -85.1157,
+         45.12899
+        ],
+        [
+         -85.11641,
+         45.13262
+        ],
+        [
+         -85.11897,
+         45.13291
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "reportClub": "Jordan Valley Trails Council"
+  }
+ ]
+}
