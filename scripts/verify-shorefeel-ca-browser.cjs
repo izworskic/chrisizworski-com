@@ -120,6 +120,14 @@ async function main(){
  const zoomOut=zoomPage.locator('#shore-map .leaflet-control-zoom-out');
  assert.ok(await zoomIn.isVisible(),'visible zoom-in control');
  assert.ok(await zoomOut.isVisible(),'visible zoom-out control');
+ const touchSettings=await mapSurface.evaluate(el=>({
+  touchAction:getComputedStyle(el).touchAction,
+  pinch:el.classList.contains('leaflet-touch-zoom'),
+  drag:el.classList.contains('leaflet-touch-drag')
+ }));
+ assert.equal(touchSettings.pinch,true,'Leaflet pinch handler active');
+ assert.equal(touchSettings.drag,true,'Leaflet drag handler active');
+ assert.equal(touchSettings.touchAction,'none','Prevent native touch cancellation');
  const readTileZoom=()=>zoomPage.evaluate(()=>{
   const imgs=[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')];
   return Math.max(-1,...imgs.map(img=>{
@@ -145,6 +153,32 @@ async function main(){
    return m&&Number(m[1])===before;
   });
  },before,{timeout:10000});
+ // Prove pinch-zoom using two real touchscreen contacts, not map controls.
+ await mapSurface.scrollIntoViewIfNeeded();
+ const rect=await mapSurface.boundingBox();
+ assert.ok(rect&&rect.width>150&&rect.height>150,'Visible map gesture surface');
+ const cx=rect.x+rect.width/2,cy=rect.y+rect.height/2;
+ const zoomBeforePinch=await readTileZoom();
+ const cdp=await zoomCtx.newCDPSession(zoomPage);
+ const finger=(id,x,y)=>({id,x,y,force:1});
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[
+  finger(1,cx-24,cy),finger(2,cx+24,cy)
+ ]});
+ for(let step=1;step<=12;step++){
+  const spread=24+step*7;
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[
+   finger(1,cx-spread,cy),finger(2,cx+spread,cy)
+  ]});
+  await zoomPage.waitForTimeout(24);
+ }
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+ await zoomPage.waitForFunction(before=>{
+  const imgs=[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')];
+  return imgs.some(img=>{
+   const z=Number(new URL(img.src).pathname.split('/')[1]);
+   return Number.isFinite(z)&&z>before;
+  });
+ },zoomBeforePinch,{timeout:10000});
  assert.equal(await zoomPage.locator('#map-fallback').isVisible(),false);
  await zoomPage.screenshot({path:path.join(OUT,'canada-mobile-working-map-zoom-390.png')});
  await zoomCtx.close();
