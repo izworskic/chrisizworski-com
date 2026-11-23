@@ -46,6 +46,13 @@
  }
  function plotParks(){
   if(!state.parks)return;
+  // Fit all four sourced park-area references on the initial phone map.
+  // A center chosen for desktop clipped Wendy Park at narrow widths.
+  if(state.map&&state.parks.spots.length){
+   state.map.fitBounds(state.parks.spots.map(p=>[p.lat,p.lon]),{
+    paddingTopLeft:[44,52],paddingBottomRight:[44,46],maxZoom:14,animate:false
+   });
+  }
   for(const park of state.parks.spots){
    const btn=document.querySelector('[data-park="'+park.id+'"]');
    if(btn){
