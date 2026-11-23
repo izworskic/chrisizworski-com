@@ -11,6 +11,7 @@
 <meta property="og:type" content="website"><meta property="og:title" content="Calumet River Freighter Watch"><meta property="og:description" content="Chicago's working ship corridor: where to stand, what ships are reported, and how its bridges work.">
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="stylesheet" href="/assets/calumet-watch.css">
+<link rel="stylesheet" href="/assets/river-watch-vessel-ui.css">
 <script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/calumet-freighter-watch/#page","url":"https://chrisizworski.com/calumet-freighter-watch/","name":"Calumet River Freighter Watch","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}</script>
 </head>
 <body>
@@ -43,6 +44,9 @@
      <div id="calumet-map" role="region" aria-label="Map of public viewing areas, published bridge references and fresh vessel reports" tabindex="0"><p class="map-loading">Map loading. Use the public-place links and bridge list to the right if tiles do not appear.</p></div>
     </div>
     <div class="map-foot"><span><i class="legend-spot"></i> Viewing area</span><span><i class="legend-bridge"></i> Bridge reference</span><span><i class="legend-ship"></i> Reported ship</span><details><summary>Map accuracy &amp; safety</summary><p>Bridge pins are rounded published reference coordinates, not measured crossing axes. Public place markers are approximate areas, not certified parking entrances or clear sightlines. Industrial docks and port terminals are private or controlled areas, not visitor destinations. The map is not for navigation.</p></details></div>
+    <div class="river-type-strip"><p class="river-type-kicker">RECENT AIS TYPES · Select to filter the map and list</p>
+    <div id="calumet-type-counts" class="river-type-counts" role="group" aria-label="Filter recent Calumet AIS vessels by reported type"><span class="river-type-note">Vessel type counts will appear with fresh AIS positions.</span></div>
+   </div>
     <div id="selection" class="selection" aria-live="polite">
      <p class="selection-kicker">SELECTED PUBLIC VIEW</p><h3>95th Street Bridge approaches</h3>
      <p>Watch from a lawful public sidewalk near the bridge, not an active road lane or industrial property. Confirm access and closures on arrival.</p>
@@ -115,5 +119,7 @@
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script defer src="/assets/visitor-map-links.js"></script>
 <script defer src="/assets/calumet-watch-core.js"></script>
+<script defer src="/assets/seaway-vessel-icons.js"></script>
+<script defer src="/assets/river-watch-vessel-ui.js"></script>
 <script defer src="/assets/calumet-watch-app.js"></script>
 </body></html>

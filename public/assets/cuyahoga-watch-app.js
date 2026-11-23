@@ -1,10 +1,10 @@
 /* Live-first Cuyahoga shore watch. Shared AIS positions, no synthetic tracks. */
 (function(){
  'use strict';
- const core=window.CuyahogaWatchCore;
+ const core=window.CuyahogaWatchCore,shipUI=window.RiverWatchVesselUI;
  const $=id=>document.getElementById(id);
  if(!core){$('vessel-status').textContent='Interactive data is unavailable. Use the official source links below.';return;}
- const state={parks:null,bridges:null,bridgeNotices:null,live:null,selectedParkId:null,selectedBridgeId:null,map:null,selectedShip:null};
+ const state={parks:null,bridges:null,bridgeNotices:null,live:null,selectedParkId:null,selectedBridgeId:null,map:null,selectedShip:null,shipKindFilter:'all'};
  const mapGroup={parks:null,bridges:null,ships:null};
  const featuredBridgeIds=new Set(['center-st-139','columbus-193','carter-243','west-third-369','eagle-280']);
  const locClock=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
@@ -42,6 +42,11 @@
   for(const key of ['parks','bridges','ships'])mapGroup[key]=L.layerGroup().addTo(state.map);
   state.map.on('tileerror',function(){
    $('map-heading').title='Some map tiles are unavailable. Public parks and text links remain usable.';
+  });
+  state.map.on('zoomend',()=>{
+   if(!shipUI||!mapGroup.ships)return;
+   mapGroup.ships.eachLayer(marker=>{if(marker.options.shipReport)marker.setIcon(liveVesselIcon(marker.options.shipReport));});
+   syncShipSelection();
   });
  }
  function plotParks(){
@@ -203,6 +208,14 @@
    core.vesselVisual(v).reportedCourseDegrees!==null;
  }
  function liveVesselIcon(v){
+  if(shipUI){
+   // Reuse the established Seaway/Soo ship silhouette instead of circles,
+   // diamonds or rotated side-view sprites. Only a separate compass arrow
+   // rotates for reported moving course; ship drawing stays upright.
+   const g=shipUI.marker(v,{zoom:state.map?.getZoom()||14,selected:state.selectedShip===String(v.mmsi)});
+   return L.divIcon({className:g.className+' cuyahoga-vessel-icon cuyahoga-ship-'+g.kind,
+     html:g.html,iconSize:g.size,iconAnchor:[g.size[0]/2,g.size[1]/2]});
+  }
   const info=core.vesselVisual(v);
   if(!markerHasTravelCourse(v)){
    const html='<span class="cuyahoga-ship-marker cuyahoga-ship-neutral pin-vessel" title="Reported position; direction unverified">'+
@@ -242,13 +255,16 @@
   return v.speedKnots===null?'Speed not reported':v.speedKnots.toFixed(1)+' kn reported';
  }
  function selectShip(v,move=true){
+  if(shipUI&&state.shipKindFilter!=='all'&&!shipUI.match(v,state.shipKindFilter)){
+   state.shipKindFilter='all';renderLive();
+  }
   state.selectedParkId=null;state.selectedBridgeId=null;
   for(const btn of document.querySelectorAll('[data-park]'))btn.setAttribute('aria-current','false');
   state.selectedShip=String(v.mmsi);
   syncShipSelection();
   const visual=core.vesselVisual(v);
   replaceFocus('LATEST RECEIVED AIS / OBSERVATION',v.name,
-   'AIS position reported '+locClock.format(new Date(v.seen))+'. '+speedCopy(v)+'. '+visual.label+' (AIS type, if reported). '+
+   'AIS position reported '+locClock.format(new Date(v.seen))+'. '+speedCopy(v)+'. '+(shipUI?.typeName(shipUI.kindOf(v))||visual.label)+' (AIS type, if reported). '+
    (visual.reportedLengthMeters===null?'Length not reported.':'Reported length '+Math.round(visual.reportedLengthMeters*3.28084)+' feet. ')+
    (markerHasTravelCourse(v)?'AIS travel course '+Math.round(visual.reportedCourseDegrees)+' degrees (course over ground, not verified bow heading). ':
     'Travel direction is not shown because course or usable motion is unavailable. ')+
@@ -276,9 +292,21 @@
    link.href='https://openwaters.io/ais/';link.target='_blank';link.rel='noopener noreferrer';
    credits.append(document.createTextNode(' · '),link);
   }
+  const summary=shipUI?.summarize(result);
+  if(!summary?.available||!summary.groups.some(g=>g.kind===state.shipKindFilter))state.shipKindFilter='all';
+  shipUI?.renderTypeFilters($('cuyahoga-type-counts'),result,state.shipKindFilter,kind=>{
+   state.shipKindFilter=kind;
+   if(state.selectedShip&&!shipUI.match(result.vessels.find(v=>v.mmsi===state.selectedShip),kind)){
+    state.selectedShip=null;
+    if(state.parks)choosePark('scranton',false);
+   }
+   renderLive();
+   $('cuyahoga-type-counts')?.querySelector('[data-kind="'+kind+'"]')?.focus({preventScroll:true});
+  });
+  const visible=result.vessels.filter(v=>!shipUI||shipUI.match(v,state.shipKindFilter));
   if(result.state==='REPORTS_AVAILABLE'){
    readout.textContent=result.count+' recent AIS '+(result.count===1?'position':'positions')+' in the greater Cleveland riverfront area';
-   status.textContent=result.reason;
+   status.textContent=result.reason+(state.shipKindFilter==='all'?'':' Showing '+visible.length+' of '+result.count+' vessels.');
   }else{
    readout.textContent=result.state==='UNAVAILABLE'?'AIS reporting unavailable':'No fresh AIS positions in this map area';
    status.textContent=result.reason;
@@ -291,20 +319,25 @@
     'The previous AIS position no longer meets this tool’s freshness limit. Choose a public park or refresh the reports to plan a river watch.',
     [{label:'Check the full Great Lakes tracker ↗',url:'/great-lakes-freighter-tracking/'}]);
   }
-  if(!result.vessels.length){
-   list.append(escText('li',result.reason));
+  if(!visible.length){
+   list.append(escText('li',result.vessels.length?'No vessels match this type filter.':result.reason));
    renderParkSignals();
    if(state.selectedParkId)choosePark(state.selectedParkId,false);
    return;
   }
-  for(const v of result.vessels){
+  for(const v of visible){
    const item=escText('li',''),btn=escText('button','');
-   btn.type='button';btn.dataset.ship=String(v.mmsi);
-   btn.append(escText('strong',v.name),escText('small',core.vesselVisual(v).label+' · '+speedCopy(v)+' · '+locClock.format(new Date(v.seen))));
+   btn.type='button';btn.dataset.ship=String(v.mmsi);btn.classList.add('river-vessel-entry');
+   if(shipUI){const kind=shipUI.kindOf(v),glyph=escText('span','','river-vessel-list-glyph type-'+kind);
+     glyph.innerHTML=shipUI.glyphSvg(kind);glyph.setAttribute('aria-hidden','true');btn.append(glyph);}
+   const info=escText('span','','river-vessel-name');
+   info.append(escText('strong',v.name),escText('small',(shipUI?.typeName(shipUI.kindOf(v))||core.vesselVisual(v).label)+
+     ' · '+speedCopy(v)+' · '+locClock.format(new Date(v.seen))));
+   btn.append(info);
    btn.addEventListener('click',()=>{selectShip(v);revealMobileFocus();});item.append(btn);list.append(item);
    if(mapGroup.ships){
     const hasTravelCourse=markerHasTravelCourse(v);
-    const marker=L.marker([v.lat,v.lon],{title:v.name,alt:v.name+' recent AIS report',shipMmsi:String(v.mmsi),icon:liveVesselIcon(v),zIndexOffset:1000}).addTo(mapGroup.ships);
+    const marker=L.marker([v.lat,v.lon],{title:v.name,alt:v.name+' recent AIS report',shipMmsi:String(v.mmsi),shipReport:v,icon:liveVesselIcon(v),zIndexOffset:1000}).addTo(mapGroup.ships);
     marker.bindTooltip(v.name+' · '+speedCopy(v)+(hasTravelCourse?' · AIS travel course '+Math.round(v.course)+'°':' · direction not shown'));
     marker.on('click',()=>{selectShip(v);revealMobileFocus();});
    }
@@ -313,7 +346,7 @@
   renderParkSignals();
   if(state.selectedParkId)choosePark(state.selectedParkId,false);
   else if(state.selectedShip){
-   const selected=result.vessels.find(v=>String(v.mmsi)===state.selectedShip);
+   const selected=visible.find(v=>String(v.mmsi)===state.selectedShip);
    if(selected)selectShip(selected,false);
   }
  }
@@ -322,7 +355,7 @@
   if(refresh.disabled)return;
   refresh.disabled=true;
   try{
-   // Same bounded Open Waters AIS approach as Soo and Duluth; Cleveland query only.
+   // Same bounded Open Waters AIS request as Soo/Duluth, scoped to Cleveland.
    const response=await fetch('/api/freighter-ais?region=cuyahoga',{cache:'no-store',signal:AbortSignal.timeout(12000)});
    if(!response.ok)throw Error('AIS HTTP failure');
    const data=await response.json();
@@ -359,7 +392,7 @@
 
  }
  initMap();wire();loadReferenceData();getLive();
- // Match Duluth and Soo Locks: refresh every minute only while a visitor is present.
+ // Preserve the latest main branch's visitor-present refresh cadence.
  setInterval(()=>{if(!document.hidden)getLive();},60000);
  document.addEventListener('visibilitychange',()=>{if(!document.hidden)getLive();});
 })();

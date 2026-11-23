@@ -1,4 +1,4 @@
-name: Cuyahoga noindex preview browser QA
+name: River vessel silhouettes browser QA
 
 # One-time read-only local browser smoke; not a deployment or live API test.
 on:
@@ -7,6 +7,12 @@ on:
       - .github/workflows/cuyahoga-preview-browser-qa.yml
       - tests/cuyahoga-public-watch.test.js
       - scripts/cuyahoga-browser-smoke.py
+      - scripts/calumet-ship-browser-smoke.py
+      - public/assets/river-watch-vessel-ui.js
+      - public/assets/river-watch-vessel-ui.css
+      - public/calumet-freighter-watch/index.html
+      - public/assets/calumet-watch-app.js
+      - tests/river-watch-vessel-ui.test.js
       - public/cuyahoga-freighter-watch/index.html
       - public/assets/cuyahoga-watch.css
       - public/assets/cuyahoga-watch-app.js
@@ -38,7 +44,9 @@ jobs:
           node --check public/assets/cuyahoga-watch-core.js
           node --check public/assets/cuyahoga-watch-app.js
           node --check public/assets/cuyahoga-bend-demo.js
-          node --test tests/cuyahoga-public-watch.test.js
+          node --check public/assets/calumet-watch-app.js
+          node --check public/assets/river-watch-vessel-ui.js
+          node --test tests/cuyahoga-public-watch.test.js tests/calumet-watch.test.js tests/river-watch-vessel-ui.test.js
       - name: Create isolated browser-only Python environment
         shell: bash
         run: |
@@ -54,10 +62,11 @@ jobs:
         shell: bash
         run: |
           npm install --prefix "$RUNNER_TEMP/cuyahoga-axe" --ignore-scripts --no-save --package-lock=false 'axe-core@4.10.3'
-      - name: Exercise real map, fresh AIS direction glyphs, public places and no-JS
+      - name: Exercise both river maps, 9 vessel types, fresh AIS counts, filters, source failures and no-JS
         shell: bash
         env:
           CUYAHOGA_QA_OUTPUT: ${{ runner.temp }}/cuyahoga-preview-qa
+          CALUMET_QA_OUTPUT: ${{ runner.temp }}/calumet-ship-qa
           CUYAHOGA_AXE_PATH: ${{ runner.temp }}/cuyahoga-axe/node_modules/axe-core/axe.min.js
         run: |
           set -euo pipefail
@@ -66,6 +75,7 @@ jobs:
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
           sleep 2
           "$RUNNER_TEMP/cuyahoga-browser-env/bin/python" scripts/cuyahoga-browser-smoke.py
+          "$RUNNER_TEMP/cuyahoga-browser-env/bin/python" scripts/calumet-ship-browser-smoke.py
           echo '### Cuyahoga shore-watch preview browser QA' >> "$GITHUB_STEP_SUMMARY"
           echo 'Mocked local AIS; verified static park and bridge source catalogs. Full-width mobile and desktop map UX, 360/390/768/1280/1440 px, no-JavaScript fallback.' >> "$GITHUB_STEP_SUMMARY"
           echo 'Screenshots and browser acceptance JSON in attached short-retention artifact.' >> "$GITHUB_STEP_SUMMARY"
@@ -73,6 +83,8 @@ jobs:
         if: always()
         with:
           name: cuyahoga-preview-browser-qa
-          path: ${{ runner.temp }}/cuyahoga-preview-qa/
+          path: |
+            ${{ runner.temp }}/cuyahoga-preview-qa/
+            ${{ runner.temp }}/calumet-ship-qa/
           if-no-files-found: warn
           retention-days: 3
