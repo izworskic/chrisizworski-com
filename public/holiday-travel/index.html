@@ -54,6 +54,19 @@
 @media(max-width:500px){.airport-weather{padding:16px 12px}.aw-table .aw-airport{min-width:145px;max-width:160px}.aw-table td{min-width:47px}}
 
 
+
+/* The source selects remain functional when scripting fails. Type-to-find replaces their visible UI only after initialization. */
+.holiday-choice{position:relative;min-width:0}
+.field .holiday-choice .holiday-native-select{position:absolute!important;width:1px!important;height:1px!important;min-height:0!important;padding:0!important;margin:0!important;opacity:0!important;clip-path:inset(50%);pointer-events:none}
+.field .holiday-choice input[role=combobox]{width:100%;padding-right:26px;min-width:0}
+.holiday-choice input[aria-expanded=true]{border-color:#137b76;box-shadow:0 0 0 2px #137b7626}
+.holiday-choice-list{position:absolute;z-index:30;left:0;right:0;top:calc(100% + 4px);overflow:auto;max-height:240px;border:1px solid #8fb9b2;border-radius:10px;background:#fff;box-shadow:0 14px 28px #142d3730}
+.holiday-choice-list[hidden]{display:none}
+.holiday-choice-list [role=option]{width:100%;padding:10px 12px;background:#fff;border:0;border-bottom:1px solid #e1ece9;border-radius:0;color:#17313a;text-align:left;white-space:normal;line-height:1.3;min-height:44px}
+.holiday-choice-list [role=option]:hover,.holiday-choice-list [role=option][aria-selected=true]{background:#e7f4ef;color:#093e3f}
+.holiday-choice-empty{font-size:.88rem;color:#49616a;padding:12px;margin:0}
+@media(max-width:370px){.pair{grid-template-columns:1fr 1fr}.field .holiday-choice input[role=combobox]{padding:10px 8px;font-size:.9rem}}
+
 </style>
 </head>
 <body>
@@ -484,6 +497,7 @@ if(typeof globalThis!=='undefined')globalThis.__holidayTravelReady=ready;
 if(typeof globalThis!=='undefined')globalThis.__holidayTravelSettle=function(){return new Promise(function(res){setTimeout(res,0)}).then(function(){return Promise.all(Object.keys(shardReq).map(function(k){return shardReq[k]}).concat(Object.keys(nwsCache).map(function(k){return nwsCache[k].catch(function(){})})))}).then(function(){return new Promise(function(res){setTimeout(res,0)})})};
 })();
 </script>
+<script defer src="/assets/holiday-travel-choices.js"></script>
 <script defer src="/assets/holiday-airport-weather-board.js"></script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
