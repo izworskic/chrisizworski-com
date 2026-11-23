@@ -90,7 +90,14 @@ function renderWindTurn(){
  }else{
   put('wind-turn-answer','No sustained turn toward the bay shown in the available forecast');
  }
+ const paired=payload?.hourlyAirComparison;
+ const gridRows=Array.isArray(paired?.rows)?paired.rows:[];
+ const atTurn=gridRows.find(r=>r.startsAt===value.at);
  let note=value.reason||'The wind information is regional forecast guidance, not a beach thermometer.';
+ if(atTurn&&paired.gridRelationship?.status==='distinct-grid'){
+  const diff=atTurn.shoreMinusInlandF;
+  note+=' At that hour, the NWS shoreline grid is '+(diff===0?'the same temperature as':Math.abs(diff).toFixed(1)+'°F '+(diff<0?'cooler':'warmer')+' than')+' the NWS west Bay County grid about 16 km inland. This is not a measured beach temperature.';
+ }
  if(Number.isFinite(value.forecastAirWaterContrastF)&&value.water){
   if(value.contrastMeaning==='water-cooler-than-air'){
    note+=' NOAA analyzed water in the bay is cooler than the area air forecast for that hour. Cooling at the sand remains unmeasured.';
@@ -103,8 +110,9 @@ function renderWindTurn(){
   note+=' A suitable current inner-bay satellite water reference is not available for this wind period.';
  }
  put('wind-turn-explain',note);
- put('wind-turn-source','Source: NWS Bay City State Park land-area hourly forecast. Each hour is predicted wind FROM that direction, not a measured beach wind. The wind turn is not confirmed lake-breeze onset, an on-sand temperature or a swim-safety decision.');
+ put('wind-turn-source','Source: NWS Bay City State Park land-area hourly forecast. Where present, shore–inland differences compare two distinct NWS model-grid cells about 16 km apart at the same valid hour, not beach thermometers. Wind changes are not confirmed lake-breeze onset or swim-safety decisions.');
  if(!list)return;
+ const matchedByHour=new Map(gridRows.map(r=>[r.startsAt,r]));
  const sectorName={onshore:'From the bay',offshore:'From land',alongshore:'Along shore',unknown:'Wind uncertain'};
  (Array.isArray(value.hours)?value.hours:[]).slice(0,8).forEach(hour=>{
   const li=document.createElement('li');
@@ -120,6 +128,14 @@ function renderWindTurn(){
   details.textContent=(hasWind?Math.round(hour.windMph)+' mph '+hour.windFrom:'Wind unavailable')+
    (hasTemp?' · '+Math.round(hour.areaAirF)+'°F area air':'');
   li.append(time,direction,details);
+  const match=matchedByHour.get(hour.startsAt);
+  if(match&&paired.gridRelationship?.status==='distinct-grid'){
+   const compared=document.createElement('span');
+   compared.className='bay-hour-pair';
+   const diff=match.shoreMinusInlandF;
+   compared.textContent='Shore forecast '+(diff>0?'+':'')+diff.toFixed(1)+'°F vs inland grid';
+   li.append(compared);
+  }
   list.append(li);
  });
 }
