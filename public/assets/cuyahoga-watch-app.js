@@ -320,9 +320,11 @@
  async function getLive(){
   const refresh=$('refresh-ais');refresh.disabled=true;
   try{
-   const response=await fetch('/api/freighter-ais',{cache:'no-store',signal:AbortSignal.timeout(12000)});
+   // Same bounded Open Waters AIS approach as Soo and Duluth; Cleveland query only.
+   const response=await fetch('/api/freighter-ais?region=cuyahoga',{cache:'no-store',signal:AbortSignal.timeout(12000)});
    if(!response.ok)throw Error('AIS HTTP failure');
    const data=await response.json();
+   if(data.scope!=='cuyahoga-regional-openwaters')throw Error('Incorrect AIS area');
    state.live=core.classifyLive(data,Date.now());
   }catch(_){
    state.live=core.classifyLive(null,Date.now());
