@@ -78,16 +78,13 @@ async def run():
             await page.locator("#river-focus button.focus-action").get_by_text("Inspect this reported vessel").click()
             await page.locator("#river-focus h3").get_by_text("BROWSER TEST SHIP").wait_for()
             await page.locator(".bridge-picker summary").click()
-            if await page.locator(".pin-bridge").count() != 4 or await page.locator(".pin-work").count() != 1:
-                raise AssertionError("Opening bridge explorer must reveal five source-labeled landmarks")
+            await page.wait_for_function("document.querySelectorAll('.pin-bridge').length === 4 && document.querySelectorAll('.pin-work').length === 1", timeout=6000)
             if await page.locator("#bridge-select option").count() != 20:
                 raise AssertionError("NOAA main-channel bridge options were not loaded")
             await page.locator("#show-all-bridges").check()
-            if await page.locator(".pin-bridge").count() != 18:
-                raise AssertionError("Opt-in full NOAA bridge set does not render all 19 references")
+            await page.wait_for_function("document.querySelectorAll('.pin-bridge').length === 18", timeout=6000)
             await page.locator("#show-all-bridges").uncheck()
-            if await page.locator(".pin-bridge").count() != 4:
-                raise AssertionError("Default river view did not restore five key bridge landmarks")
+            await page.wait_for_function("document.querySelectorAll('.pin-bridge').length === 4", timeout=6000)
             await page.locator("#bridge-select").select_option("eagle-280")
             await page.locator("#river-focus h3").get_by_text("Eagle Avenue bridge").wait_for()
             if await page.locator("#river-focus a[href*='navcen.uscg.gov']").count() != 1:
