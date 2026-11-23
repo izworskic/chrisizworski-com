@@ -41,6 +41,20 @@ test('20 unique Michigan destinations have complete crawlable summaries and coor
   }
 });
 
+test('cards lead straight into the park planner, local route or selected trip', () => {
+  const expected = {
+    porcupines: '/porcupine-mountains/',
+    tahquamenon: '/tahquamenon-falls/',
+    'torch-lake': '/michigan-boat-launches/?q=Torch%20Lake',
+    'traverse-city': 'https://tcwine.chrisizworski.com/old-mission-peninsula-wineries',
+    'au-sable': 'https://ausable.chrisizworski.com/trip?b=main&amp;from=grayling-public-access&amp;to=stephan-bridge',
+    'tunnel-of-trees': '/michigan-coastal-drives-field-guide/#stop-m119-tunnel-of-trees'
+  };
+  const cards = [...html.matchAll(/<article class="destination" id="([^"]+)"[^>]*>([\s\S]*?)<\/article>/g)];
+  const primaryLinks = new Map(cards.map(([, id, body]) => [id, body.match(/class="primary-link" href="([^"]+)"/)?.[1]]));
+  for (const [id, href] of Object.entries(expected)) assert.equal(primaryLinks.get(id), href, id);
+});
+
 test('indexing, creator identity, navigation, and search intent are protected', () => {
   assert.match(html, /<link rel="canonical" href="https:\/\/chrisizworski.com\/michigan-destinations\/"/);
   const title = html.match(/<title>([^<]+)<\/title>/)?.[1];
@@ -53,7 +67,7 @@ test('indexing, creator identity, navigation, and search intent are protected', 
   assert.equal(nodes.find(x => x['@type'] === 'Person')?.['@id'], 'https://chrisizworski.com/#person');
   assert.equal(nodes.find(x => x['@type'] === 'CollectionPage')?.author?.['@id'], 'https://chrisizworski.com/#person');
   assert.equal(nodes.find(x => x['@type'] === 'ItemList')?.numberOfItems, 20);
-  assert.match(sitemap, /<loc>https:\/\/chrisizworski.com\/michigan-destinations\/<\/loc>\s*<lastmod>2026-11-16<\/lastmod>/);
+  assert.match(sitemap, /<loc>https:\/\/chrisizworski.com\/michigan-destinations\/<\/loc>\s*<lastmod>2026-11-23<\/lastmod>/);
   assert.match(tools, /href="\/michigan-destinations\/"/);
   const node = registry.tools.find(x => x.id === 'michigan-adventure-finder');
   assert.equal(node.canonical, 'https://chrisizworski.com/michigan-destinations/');
