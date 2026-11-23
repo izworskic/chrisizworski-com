@@ -570,6 +570,506 @@
     ]
    },
    "reportClub": "Jordan Valley Trails Council"
+  },
+  {
+   "name": "Mancelona",
+   "lat": 44.9024,
+   "lon": -85.0613,
+   "proxy": {
+    "seed": "mancelona snowmobile trails",
+    "suggestion": "mancelona snowmobile trail report",
+    "source": "Google autocomplete, US/en; demand proxy not volume",
+    "checked": "2026-11-23"
+   },
+   "dnr": {
+    "source": "Michigan DNR DNRTrailsOPENDATA layer 15",
+    "radiusKm": 5,
+    "query": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/15/query?where=1%3D1&geometry=-85.0613%2C44.9024&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=5000&units=esriSRUnit_Meter&outFields=OBJECTID%2CDNRTrail%2CTrailNamePrimary%2CTrailNetwork%2CCounty&returnGeometry=true&outSR=4326&f=geojson&geometryPrecision=5&maxAllowableOffset=0.0002&resultRecordCount=250",
+    "hitCount": 2,
+    "features": [
+     {
+      "id": 16299,
+      "code": "LP 768",
+      "county": "Antrim",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.03054,
+         44.92981
+        ],
+        [
+         -85.05206,
+         44.90981
+        ]
+       ]
+      }
+     },
+     {
+      "id": 16302,
+      "code": "LP 768",
+      "county": "Antrim",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.01307,
+         44.94574
+        ],
+        [
+         -85.03054,
+         44.92981
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "reportClub": null
+  },
+  {
+   "name": "Fife Lake",
+   "lat": 44.5758,
+   "lon": -85.3478,
+   "proxy": {
+    "seed": "fife lake snowmobile trails",
+    "suggestion": "fife lake snowmobile trails",
+    "source": "Google autocomplete, US/en; demand proxy not volume",
+    "checked": "2026-11-23"
+   },
+   "dnr": {
+    "source": "Michigan DNR DNRTrailsOPENDATA layer 15",
+    "radiusKm": 5,
+    "query": "https://gisagoegle.state.mi.us/arcgis/rest/services/DNR/DNRTrailsOPENDATA/FeatureServer/15/query?where=1%3D1&geometry=-85.3478%2C44.5758&geometryType=esriGeometryPoint&inSR=4326&spatialRel=esriSpatialRelIntersects&distance=5000&units=esriSRUnit_Meter&outFields=OBJECTID%2CDNRTrail%2CTrailNamePrimary%2CTrailNetwork%2CCounty&returnGeometry=true&outSR=4326&f=geojson&geometryPrecision=5&maxAllowableOffset=0.0002&resultRecordCount=250",
+    "hitCount": 18,
+    "features": [
+     {
+      "id": 3022,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.3736,
+         44.58442
+        ],
+        [
+         -85.3741,
+         44.58332
+        ]
+       ]
+      }
+     },
+     {
+      "id": 3023,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.3741,
+         44.58332
+        ],
+        [
+         -85.37486,
+         44.58126
+        ]
+       ]
+      }
+     },
+     {
+      "id": 3025,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.3526,
+         44.5762
+        ],
+        [
+         -85.35455,
+         44.57628
+        ],
+        [
+         -85.35512,
+         44.57594
+        ]
+       ]
+      }
+     },
+     {
+      "id": 3026,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.35512,
+         44.57594
+        ],
+        [
+         -85.35523,
+         44.57693
+        ],
+        [
+         -85.35049,
+         44.57697
+        ],
+        [
+         -85.3504,
+         44.57666
+        ]
+       ]
+      }
+     },
+     {
+      "id": 3027,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.35932,
+         44.5736
+        ],
+        [
+         -85.35671,
+         44.5734
+        ],
+        [
+         -85.35672,
+         44.57067
+        ]
+       ]
+      }
+     },
+     {
+      "id": 3028,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.37877,
+         44.56649
+        ],
+        [
+         -85.37376,
+         44.56641
+        ]
+       ]
+      }
+     },
+     {
+      "id": 3395,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.37486,
+         44.58126
+        ],
+        [
+         -85.37566,
+         44.57965
+        ],
+        [
+         -85.37563,
+         44.57915
+        ]
+       ]
+      }
+     },
+     {
+      "id": 3396,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.37379,
+         44.55916
+        ],
+        [
+         -85.37778,
+         44.5545
+        ],
+        [
+         -85.38077,
+         44.54688
+        ],
+        [
+         -85.39531,
+         44.53214
+        ],
+        [
+         -85.39791,
+         44.52872
+        ],
+        [
+         -85.39987,
+         44.52806
+        ],
+        [
+         -85.40413,
+         44.52879
+        ],
+        [
+         -85.40485,
+         44.52861
+        ]
+       ]
+      }
+     },
+     {
+      "id": 5139,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.37376,
+         44.56641
+        ],
+        [
+         -85.37379,
+         44.55916
+        ]
+       ]
+      }
+     },
+     {
+      "id": 11607,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.37564,
+         44.57908
+        ],
+        [
+         -85.37487,
+         44.57795
+        ],
+        [
+         -85.37506,
+         44.57736
+        ],
+        [
+         -85.37817,
+         44.575
+        ]
+       ]
+      }
+     },
+     {
+      "id": 12133,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.35512,
+         44.57594
+        ],
+        [
+         -85.35524,
+         44.57541
+        ],
+        [
+         -85.35597,
+         44.57485
+        ],
+        [
+         -85.35687,
+         44.57481
+        ],
+        [
+         -85.35773,
+         44.57524
+        ],
+        [
+         -85.3584,
+         44.57498
+        ],
+        [
+         -85.35932,
+         44.5736
+        ]
+       ]
+      }
+     },
+     {
+      "id": 12134,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.35932,
+         44.5736
+        ],
+        [
+         -85.36048,
+         44.57304
+        ],
+        [
+         -85.36288,
+         44.57251
+        ],
+        [
+         -85.36437,
+         44.57164
+        ],
+        [
+         -85.36356,
+         44.57046
+        ],
+        [
+         -85.36488,
+         44.56972
+        ],
+        [
+         -85.36527,
+         44.56915
+        ]
+       ]
+      }
+     },
+     {
+      "id": 12136,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.3672,
+         44.56899
+        ],
+        [
+         -85.36361,
+         44.56925
+        ]
+       ]
+      }
+     },
+     {
+      "id": 12137,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.3672,
+         44.56899
+        ],
+        [
+         -85.37079,
+         44.56803
+        ],
+        [
+         -85.37204,
+         44.56663
+        ],
+        [
+         -85.37376,
+         44.56641
+        ]
+       ]
+      }
+     },
+     {
+      "id": 13264,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.37817,
+         44.575
+        ],
+        [
+         -85.37864,
+         44.5748
+        ]
+       ]
+      }
+     },
+     {
+      "id": 14540,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.37354,
+         44.62039
+        ],
+        [
+         -85.37341,
+         44.61484
+        ]
+       ]
+      }
+     },
+     {
+      "id": 14832,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.37341,
+         44.61484
+        ],
+        [
+         -85.3736,
+         44.58442
+        ]
+       ]
+      }
+     },
+     {
+      "id": 16944,
+      "code": "LP 5",
+      "county": "Grand Traverse",
+      "geometry": {
+       "type": "LineString",
+       "coordinates": [
+        [
+         -85.37877,
+         44.56649
+        ],
+        [
+         -85.37864,
+         44.5748
+        ]
+       ]
+      }
+     }
+    ]
+   },
+   "reportClub": "Grand Traverse Area Snowmobile Club"
   }
  ]
 }
