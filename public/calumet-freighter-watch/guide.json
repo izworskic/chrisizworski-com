@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "reviewedOn": "2026-11-22",
+  "dataRules": {
+    "bridgeMarkers": "NOAA Coast Pilot or USCG rounded reference points, not surveyed span axes",
+    "noEta": true,
+    "noLiveBridgeOpenings": true,
+    "access": "Only documented public sidewalk and park area; no parking or exact sightline guarantee",
+    "noRouteToIndustrialFacilities": true
+  },
+  "map": {
+    "center": [
+      41.719,
+      -87.546
+    ],
+    "zoom": 13
+  },
+  "viewpoints": [
+    {
+      "id": "bridge95",
+      "name": "95th Street Bridge approaches",
+      "short": "Best for watching a bridge lift",
+      "lat": 41.722778,
+      "lon": -87.543333,
+      "accessClass": "PUBLIC_SIDEWALK_AREA_VERIFY_ACCESS",
+      "sourceUrl": "https://www.chicagomag.com/city-life/the-best-place-in-the-city-to-watch-boats/",
+      "coordinateSource": "https://websites.umich.edu/~lpt/Divegeek/CoastPilot6.pdf",
+      "coordinateNote": "Rounded bridge location is an orientation reference, NOT an identified public standing spot or parking entrance.",
+      "visit": "This working bridge marks the meeting of South Chicago and the East Side. From a legal public sidewalk near the crossing, watch how two giant leaves swing upward to clear a vessel. Sidewalk access, maintenance closures and safe waiting space must be checked on arrival.",
+      "mapsQuery": "95th Street Bridge over Calumet River, Chicago Illinois"
+    },
+    {
+      "id": "calumetpark",
+      "name": "Calumet Park lakefront",
+      "short": "For the open-water harbor setting",
+      "lat": 41.7151,
+      "lon": -87.5287,
+      "accessClass": "PUBLIC_PARK_SIGHTLINE_NOT_VERIFIED",
+      "sourceUrl": "https://www.chicagoparkdistrict.com/parks-facilities/calumet-park",
+      "coordinateSource": "https://www.chicagoparkdistrict.com/parks-facilities/calumet-park",
+      "coordinateNote": "General park area marker, NOT a surveyed lakefront entrance or promised view into the channel.",
+      "visit": "This Chicago Park District lakefront park is a public alternative near the harbor. A ship may be distant or out of view from a particular part of the shoreline; it is not a close-range bridge viewpoint. Check park rules and access before visiting.",
+      "mapsQuery": "Calumet Park Chicago Illinois"
+    }
+  ],
+  "bridges": [
+    {
+      "id": "92nd",
+      "name": "Ewing Avenue / 92nd Street",
+      "type": "double-leaf bascule",
+      "lat": 41.7275,
+      "lon": -87.541389,
+      "riverMile": 0.76,
+      "mapRole": "ROUNDED_REFERENCE_NOT_SPAN",
+      "sourceUrl": "https://websites.umich.edu/~lpt/Divegeek/CoastPilot6.pdf",
+      "summary": "Near the river mouth, where ships enter from Lake Michigan. A bascule leaf pivots about a trunnion; this is not a status monitor."
+    },
+    {
+      "id": "95th",
+      "name": "95th Street",
+      "type": "double-leaf bascule",
+      "lat": 41.722778,
+      "lon": -87.543333,
+      "riverMile": 1.09,
+      "mapRole": "ROUNDED_REFERENCE_NOT_SPAN",
+      "sourceUrl": "https://websites.umich.edu/~lpt/Divegeek/CoastPilot6.pdf",
+      "summary": "The celebrated ship-watching bridge. Two counterweighted leaves rise to make vertical clearance for a large vessel."
+    },
+    {
+      "id": "100th",
+      "name": "100th Street",
+      "type": "double-leaf bascule",
+      "lat": 41.713889,
+      "lon": -87.5425,
+      "riverMile": 1.78,
+      "mapRole": "ROUNDED_REFERENCE_NOT_SPAN",
+      "sourceUrl": "https://historicbridges.org/coordinates.php",
+      "summary": "An older trunnion bascule crossing in the industrial corridor; position is an approximate chart reference, not surveyed span geometry."
+    },
+    {
+      "id": "106th",
+      "name": "106th Street",
+      "type": "double-leaf bascule",
+      "lat": 41.702778,
+      "lon": -87.545833,
+      "riverMile": 2.58,
+      "mapRole": "ROUNDED_REFERENCE_NOT_SPAN",
+      "sourceUrl": "https://www.wje.com/projects/detail/106th-street-bascule-bridge-over-the-calumet-river",
+      "summary": "A large double-leaf bascule structure built for the river's deep-draft traffic. Operational state is not known from this static catalog."
+    },
+    {
+      "id": "torrence",
+      "name": "Torrence Avenue",
+      "type": "vertical lift",
+      "lat": 41.669167,
+      "lon": -87.559444,
+      "riverMile": 5.26,
+      "mapRole": "ROUNDED_REFERENCE_NOT_SPAN",
+      "sourceUrl": "https://websites.umich.edu/~lpt/Divegeek/CoastPilot6.pdf",
+      "summary": "Unlike a bascule span, a vertical-lift span travels upward between towers. Older references may describe different nearby Torrence crossings; this point is for broad river orientation only."
+    }
+  ],
+  "sources": [
+    {
+      "name": "NOAA Coast Pilot 6",
+      "url": "https://nauticalcharts.noaa.gov/publications/coast-pilot/index.html",
+      "role": "Charted bridge references and navigation context, not live bridge operating data"
+    },
+    {
+      "name": "Coast Guard Local Notices to Mariners",
+      "url": "https://www.navcen.uscg.gov/local-notices-to-mariners-by-cg-district",
+      "role": "Dated restrictions; users must inspect the current notice"
+    },
+    {
+      "name": "Chicago Magazine",
+      "url": "https://www.chicagomag.com/city-life/the-best-place-in-the-city-to-watch-boats/",
+      "role": "95th Street Bridge ship-watching experience"
+    },
+    {
+      "name": "Illinois International Port District",
+      "url": "https://www.iipd.com/about",
+      "role": "Industrial terminals, harbor geography and port history"
+    },
+    {
+      "name": "Chicago Park District",
+      "url": "https://www.chicagoparkdistrict.com/parks-facilities/calumet-park",
+      "role": "Public Calumet Park, access information"
+    }
+  ]
+}
