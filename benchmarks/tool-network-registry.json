@@ -7372,6 +7372,54 @@
       "strength": "optional",
       "surface": "canal-visitor",
       "reason": "Visitors comparing Ontario waterway systems can open Rideau's visitor-first route planner."
+    },
+    {
+      "from": "ship-tracker",
+      "to": "calumet-river-watch",
+      "type": "regional-handoff",
+      "strength": "strong",
+      "surface": "great-lakes-shipping",
+      "reason": "Lake-wide ship watchers can explore the separate bounded AIS and documented public viewing sites along Chicago’s Calumet River."
+    },
+    {
+      "from": "ship-tracker",
+      "to": "cuyahoga-river-watch",
+      "type": "regional-handoff",
+      "strength": "strong",
+      "surface": "great-lakes-shipping",
+      "reason": "Lake-wide ship watchers can explore Cleveland’s winding river, recent AIS observations and documented public waterfront viewing places."
+    },
+    {
+      "from": "calumet-river-watch",
+      "to": "ship-tracker",
+      "type": "broader-tracking",
+      "strength": "optional",
+      "surface": "calumet-river-watch",
+      "reason": "A local AIS river report is not a lake-wide vessel history; return to the full Great Lakes tracker for broader reported positions."
+    },
+    {
+      "from": "cuyahoga-river-watch",
+      "to": "ship-tracker",
+      "type": "broader-tracking",
+      "strength": "optional",
+      "surface": "cuyahoga-river-watch",
+      "reason": "Return from regional Cleveland observations to the wider Great Lakes AIS map without extrapolating arrivals."
+    },
+    {
+      "from": "calumet-river-watch",
+      "to": "cuyahoga-river-watch",
+      "type": "sibling-river-watch",
+      "strength": "optional",
+      "surface": "great-lakes-shipping",
+      "reason": "Chicago and Cleveland river-watch tools offer two distinct ways to understand industrial ship traffic and public shoreline access."
+    },
+    {
+      "from": "cuyahoga-river-watch",
+      "to": "calumet-river-watch",
+      "type": "sibling-river-watch",
+      "strength": "optional",
+      "surface": "great-lakes-shipping",
+      "reason": "Visitors can compare Cuyahoga bend navigation with Calumet’s lift-bridge corridor while keeping each source scoped."
     }
   ],
   "cannibalizationGroups": [
