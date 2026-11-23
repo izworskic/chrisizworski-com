@@ -40,7 +40,10 @@
 <section class="workbench" id="river-workbench" aria-labelledby="map-heading">
  <div class="map-header">
   <div class="map-intro"><p class="kicker">THE RIVER AT A GLANCE</p><h2 id="map-heading">Find your view of the river.</h2></div>
-   <p class="map-wayfinding"><strong>Green pins:</strong> public parks. <strong>Blue marks:</strong> recent AIS reports. <a href="#places-heading">Choose where to watch ↓</a></p>
+   <div class="map-header-tools">
+    <div class="map-view-actions" role="group" aria-label="Choose map framing"><button id="show-ships-on-map" type="button" disabled>Show ships</button><button id="show-parks-on-map" type="button">Viewing parks</button></div>
+    <p class="map-wayfinding"><strong>Blue:</strong> AIS vessels. <strong>Green:</strong> public places. <a href="#places-heading">Choose where to watch ↓</a></p>
+   </div>
  </div>
  <noscript><p class="js-fallback">Interactive vessel markers require JavaScript. You can still use the <a href="/great-lakes-freighter-tracking/">current Great Lakes ship tracker</a>, or choose a park below: <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/scranton-flats-pier">Scranton Flats Pier</a>, <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/rivergate-park">Rivergate Park</a>, <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/heritage-park">Heritage Park</a>, <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/wendy-park">Wendy Park</a>. Park managers provide current access information.</p></noscript>
  <div class="map-layout">
@@ -51,7 +54,7 @@
    </div>
    <div class="map-underbar">
     <div class="map-key" aria-label="Map legend">
-     <span><i class="key-spot"></i>Public parks</span><span><i class="key-ship"></i>Recent AIS vessels</span><span><i class="key-unknown"></i>Direction unknown</span><span data-bridge-legend hidden><i class="key-bridge"></i>Bridge landmarks</span><span data-bridge-legend hidden><i class="key-work"></i>Dated removal notice</span>
+     <span><i class="key-spot"></i>Public parks</span><span><i class="key-ship"></i>Reported vessels</span><span><i class="key-unknown"></i>Unoriented vessel outline</span><span data-bridge-legend hidden><i class="key-bridge"></i>Bridge landmarks</span><span data-bridge-legend hidden><i class="key-work"></i>Dated removal notice</span>
     </div>
     <details class="map-caveat">
      <summary>What do these pins mean?</summary>
@@ -60,9 +63,18 @@
    </div>
   </div>
   <aside class="action-rail" aria-label="Choose a public shore watch and inspect reported ships">
-   <section class="panel places" aria-labelledby="places-heading">
+   <section id="live-controls" class="panel reports-panel">
+    <div class="panel-header"><div><p class="side-eyebrow">STEP 01 / RECENT AIS</p><h3>Recent ship reports</h3></div><button id="refresh-ais" type="button" class="small-button">Refresh</button></div>
+    <p id="vessel-status" aria-live="polite">Checking regional Cleveland AIS reports…</p>
+    <ul id="live-vessels" class="vessel-list" aria-label="Fresh river vessel positions"><li>A missing report does not mean the river is empty.</li></ul>
+    <details class="report-method">
+     <summary>Source, accuracy and limitations</summary>
+     <p class="source-note">From <a href="https://openwaters.io/api/ais/">Open Waters AIS</a>, using a Cleveland-specific area request like the <a href="/soo-locks/">Soo Locks</a> and <a href="/duluth-canal-park/">Duluth</a> tools. Reports can be delayed, sparse or unavailable. Hull shapes illustrate reported AIS type and length band, not true scale. They follow reported moving course over ground or true heading where available. Without either, a symmetrical ship outline has no implied bow direction. No bridge arrival times are calculated.</p>
+     <p id="ais-source-credits" class="source-note" aria-label="AIS source attributions">Individual upstream source credits appear when the AIS report includes them. <a href="https://openwaters.io/ais/">Provider and licensing information ↗</a></p>
+    </details>
+   </section>   <section class="panel places" aria-labelledby="places-heading">
     <div class="panel-header">
-     <div><p class="side-eyebrow">STEP 01 / CHOOSE A VIEW</p><h3 id="places-heading">Where to stand</h3></div>
+     <div><p class="side-eyebrow">STEP 02 / CHOOSE A VIEW</p><h3 id="places-heading">Where to stand</h3></div>
      <span>4 public places</span>
     </div>
     <div id="place-buttons" class="place-buttons">
@@ -86,16 +98,7 @@
     <p>At the bend below Hope Memorial Bridge, Cleveland Metroparks provides a public river observation deck. Choose a place to see its description, last reported nearby AIS evidence, and official access link.</p>
     <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/scranton-flats-pier">Scranton Flats park information ↗</a>
    </section>
-   <section id="live-controls" class="panel reports-panel">
-    <div class="panel-header"><div><p class="side-eyebrow">OBSERVED / NOT A FORECAST</p><h3>Recent ship reports</h3></div><button id="refresh-ais" type="button" class="small-button">Refresh</button></div>
-    <p id="vessel-status" aria-live="polite">Checking regional Cleveland AIS reports…</p>
-    <ul id="live-vessels" class="vessel-list" aria-label="Fresh river vessel positions"><li>A missing report does not mean the river is empty.</li></ul>
-    <details class="report-method">
-     <summary>Source, accuracy and limitations</summary>
-     <p class="source-note">From <a href="https://openwaters.io/api/ais/">Open Waters AIS</a>, using a Cleveland-specific area request like the <a href="/soo-locks/">Soo Locks</a> and <a href="/duluth-canal-park/">Duluth</a> tools. Reports can be delayed, sparse or unavailable. Vessel shapes use broad reported AIS categories and length bands, not true hull scale. Directional ship shapes appear only when usable course over ground and reported motion are present; slow or unknown motion is shown as a neutral marker. Course over ground is travel direction, not confirmed bow heading. No bridge arrival times are calculated.</p>
-     <p id="ais-source-credits" class="source-note" aria-label="AIS source attributions">Individual upstream source credits appear when the AIS report includes them. <a href="https://openwaters.io/ais/">Provider and licensing information ↗</a></p>
-    </details>
-   </section>
+
   </aside>
 
   <section class="bend-lab" id="bend-lab" aria-labelledby="bend-title">
