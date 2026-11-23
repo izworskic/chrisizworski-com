@@ -58,12 +58,12 @@ body.river-family--cuyahoga {--river-accent:#155d6f;--river-accent-soft:#e5f0ef}
 .river-family__switch a {
   display:inline-flex;align-items:center;justify-content:center;
   min-height:33px;padding:5px 13px;
-  border-radius:5px;text-decoration:none!important;
-  color:#deebe8!important;
+  border-radius:5px;text-decoration:none;
+  color:#deebe8;
   font-size:.77rem;font-weight:760;
 }
 .river-family__switch a[aria-current="page"] {
-  background:#fff7e9;color:#17323a!important;
+  background:#fff7e9;color:#17323a;
   box-shadow:0 1px 4px rgba(0,0,0,.15);
 }
 .river-family__switch a:hover:not([aria-current]){background:#375b62}
