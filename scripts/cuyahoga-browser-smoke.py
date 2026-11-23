@@ -22,7 +22,7 @@ async def run():
             launch_options["executable_path"] = executable
         browser = await chromium.launch(**launch_options)
         cases = []
-        for width, height in ((390, 844), (1280, 900)):
+        for width, height in ((360, 780), (390, 844), (768, 1024), (1280, 900), (1440, 900)):
             context = await browser.new_context(viewport={"width": width, "height": height}, reduced_motion="reduce", device_scale_factor=1)
             page = await context.new_page()
             errors = []
@@ -43,6 +43,35 @@ async def run():
             await page.route("**/api/freighter-ais", lambda route: route.fulfill(status=200, content_type="application/json", body=json.dumps(feed)))
             await page.goto(URL, wait_until="domcontentloaded", timeout=40000)
             await page.get_by_text("BROWSER TEST SHIP", exact=True).first.wait_for(timeout=25000)
+            # Check the redesign's actual first screen, not only full-page snapshots.
+            hero = await page.locator(".lead").bounding_box()
+            river = await page.locator("#cuyahoga-map").bounding_box()
+            if not hero or not river or river["y"] > height * 0.67:
+                raise AssertionError(f"River map is still buried below the first screen at {width}px")
+            if river["width"] < width * (0.72 if width < 830 else 0.43):
+                raise AssertionError(f"River canvas too narrow at {width}px")
+            if await page.locator(".place-button[aria-current=true][data-park=scranton]").count() != 1:
+                raise AssertionError("Start at a real public park, not an empty focus panel")
+            if await page.locator("#river-focus h3").inner_text() != "Scranton Flats Pier":
+                raise AssertionError("Default park selection does not answer the visit question")
+            await page.screenshot(path=str(OUT / f"cuyahoga-{width}-first-screen.png"), full_page=False, animations="disabled")
+            axe_path = os.environ.get("CUYAHOGA_AXE_PATH")
+            if axe_path:
+                await page.add_script_tag(path=axe_path)
+                audit = await page.evaluate("""async () => {
+                    const result = await axe.run(document.querySelector('main'), {
+                        runOnly: {type:'tag', values:['wcag2a','wcag2aa','wcag21a','wcag21aa','wcag22aa']}
+                    });
+                    return result.violations.map(v => ({
+                        id:v.id,impact:v.impact,description:v.description,
+                        nodes:v.nodes.map(n => ({target:n.target,summary:n.failureSummary})).slice(0,8)
+                    }));
+                }""")
+                (OUT / f"cuyahoga-{width}-axe.json").write_text(json.dumps(audit, indent=2)+"\\n")
+                if any(x["impact"] in ("critical","serious") for x in audit):
+                    raise AssertionError(f"Serious or critical axe accessibility violations at {width}px: " +
+                                         json.dumps([x for x in audit if x["impact"] in ("critical","serious")])[:1800])
+
             if await page.get_by_text("STALE SHIP", exact=True).count():
                 raise AssertionError("Stale AIS still visible")
             marker_count = await page.locator(".pin-vessel").count()
@@ -52,8 +81,10 @@ async def run():
                 raise AssertionError("Cargo vessel missing its source-category silhouette")
             if await page.locator(".cuyahoga-vessel-icon svg").count() != 1:
                 raise AssertionError("AIS vessel marker missing SVG source category shape")
-            if await page.locator(".pin-bridge").count() != 4 or await page.locator(".pin-work").count() != 1:
-                raise AssertionError("First map screen must show only four key bridges and one work notice")
+            if await page.locator(".pin-bridge").count() or await page.locator(".pin-work").count():
+                raise AssertionError("Default river map should prioritize public parks and observed ships, not bridge pins")
+            if await page.locator(".pin-park").count() != 4:
+                raise AssertionError("Default river map missing four public viewing points")
             await page.screenshot(path=str(OUT / f"cuyahoga-{width}-live.png"), full_page=True, animations="disabled")
             await page.get_by_role("button", name="Scranton Flats Pier").click()
             await page.locator("#river-focus h3").get_by_text("Scranton Flats Pier").wait_for()
@@ -64,14 +95,13 @@ async def run():
             await page.locator("#river-focus button.focus-action").get_by_text("Inspect this reported vessel").click()
             await page.locator("#river-focus h3").get_by_text("BROWSER TEST SHIP").wait_for()
             await page.locator(".bridge-picker summary").click()
+            await page.wait_for_function("document.querySelectorAll('.pin-bridge').length === 4 && document.querySelectorAll('.pin-work').length === 1", timeout=6000)
             if await page.locator("#bridge-select option").count() != 20:
                 raise AssertionError("NOAA main-channel bridge options were not loaded")
             await page.locator("#show-all-bridges").check()
-            if await page.locator(".pin-bridge").count() != 18:
-                raise AssertionError("Opt-in full NOAA bridge set does not render all 19 references")
+            await page.wait_for_function("document.querySelectorAll('.pin-bridge').length === 18", timeout=6000)
             await page.locator("#show-all-bridges").uncheck()
-            if await page.locator(".pin-bridge").count() != 4:
-                raise AssertionError("Default river view did not restore five key bridge landmarks")
+            await page.wait_for_function("document.querySelectorAll('.pin-bridge').length === 4", timeout=6000)
             await page.locator("#bridge-select").select_option("eagle-280")
             await page.locator("#river-focus h3").get_by_text("Eagle Avenue bridge").wait_for()
             if await page.locator("#river-focus a[href*='navcen.uscg.gov']").count() != 1:
@@ -100,6 +130,52 @@ async def run():
             await page.locator("#show-history").click()
             if await page.locator("#history-report").inner_text() != parked_history_report:
                 raise AssertionError("Park-specific historic fix was lost on live → history return")
+            photo = page.locator(".story-photo img")
+            if await photo.count() != 1:
+                raise AssertionError("Exact-subject licensed historical freighter photo missing")
+            await photo.scroll_into_view_if_needed()
+            await page.wait_for_timeout(1200)
+            if not await photo.evaluate("(el) => el.complete && el.naturalWidth > 0"):
+                raise AssertionError("Verified historical Wikimedia photo failed to load")
+            if await page.locator(".story-photo figcaption a[href*='creativecommons.org/licenses/by/2.0']").count() != 1:
+                raise AssertionError("Photo license credit is not visible")
+            # The separate river-bend lesson is illustrative, not the observed AIS map.
+            diagram = page.locator("#bend-diagram")
+            if await diagram.count() != 1:
+                raise AssertionError("River-bend vessel explanation missing")
+            approach = page.locator("[data-bend-step='0']")
+            middle = page.locator("[data-bend-step='1']")
+            exit_turn = page.locator("[data-bend-step='2']")
+            if await middle.is_disabled() or await page.locator("#bend-position").is_disabled():
+                raise AssertionError("River-bend explainer controls did not initialize")
+            original = await page.locator("#bend-ship").get_attribute("transform")
+            await middle.click()
+            if await middle.get_attribute("aria-pressed") != "true":
+                raise AssertionError("Middle bend moment not selected")
+            if "Mind both ends" not in await page.locator("#bend-stage-name").inner_text():
+                raise AssertionError("Missing bow-and-stern explanation")
+            mid_transform = await page.locator("#bend-ship").get_attribute("transform")
+            if original == mid_transform:
+                raise AssertionError("Illustration did not actually change")
+            await exit_turn.click()
+            if "stern" not in (await page.locator("#bend-stage-name").inner_text()).lower():
+                raise AssertionError("Third stage explanation not synchronized")
+            await approach.click()
+            if await page.locator("#bend-ship").get_attribute("transform") != original:
+                raise AssertionError("A → B → C → A did not restore the same scene")
+            await page.locator("#bend-position").focus()
+            await page.keyboard.press("End")
+            if await page.locator("#bend-position").input_value() != "100":
+                raise AssertionError("Native keyboard-accessible slider failed at the final endpoint")
+            await page.keyboard.press("ArrowLeft")
+            if await page.locator("#bend-position").input_value() != "99":
+                raise AssertionError("Range input did not respond to the left arrow key")
+            if not await page.locator("#bend-play").is_disabled():
+                raise AssertionError("Reduced-motion viewport must not autoplay the diagram")
+            await page.locator("#bend-reset").click()
+            if await page.locator("#bend-position").input_value() != "12":
+                raise AssertionError("Bend reset did not return to the approach")
+            await diagram.screenshot(path=str(OUT / f"cuyahoga-{width}-bend-demo.png"))
             overflow = await page.evaluate("document.documentElement.scrollWidth > window.innerWidth + 2")
             if overflow:
                 raise AssertionError(f"Horizontal page overflow at {width}px")
@@ -110,9 +186,39 @@ async def run():
                 raise AssertionError("Map tiles not loaded; browser acceptance blocked")
             filename = OUT / f"cuyahoga-{width}-history.png"
             await page.screenshot(path=str(filename), full_page=True, animations="disabled")
-            cases.append({"viewport":width,"status":"PASS","tilesLoaded":tiles,"liveShipMarkers":marker_count,
+            cases.append({"viewport":width,"status":"PASS","firstScreenMapY":round(river["y"]),"firstScreenMapWidth":round(river["width"]),"tilesLoaded":tiles,"liveShipMarkers":marker_count,
                           "archiveSelected":"laud-2025-08-15","screenshots":filename.name,"jsErrors":errors})
+            if width == 390:
+                failed = await context.new_page()
+                await failed.route("**/api/freighter-ais", lambda route: route.fulfill(status=503, content_type="application/json", body='{"ok":false}'))
+                await failed.goto(URL, wait_until="domcontentloaded")
+                await failed.get_by_text("AIS reporting unavailable").wait_for(timeout=15000)
+                await failed.get_by_role("button", name="Rivergate Park").click()
+                await failed.locator("#river-focus h3").get_by_text("Rivergate Park").wait_for()
+                if await failed.locator("#river-focus a[href*='clevelandmetroparks']").count() != 1:
+                    raise AssertionError("Official park guidance disappeared when AIS was unavailable")
+                await failed.screenshot(path=str(OUT / "cuyahoga-390-ais-unavailable.png"), full_page=True, animations="disabled")
+                cases.append({"viewport":390,"ais":"unavailable","status":"PASS","parkFallback":"Rivergate Park"})
+                await failed.close()
             await context.close()
+        # Optional playback pauses on demand when reduced-motion is NOT requested.
+        motion = await browser.new_context(viewport={"width":390,"height":844}, reduced_motion="no-preference")
+        moving = await motion.new_page()
+        await moving.goto(URL, wait_until="domcontentloaded")
+        await moving.locator("#bend-play:not([disabled])").wait_for(timeout=15000)
+        await moving.locator("#bend-play").click()
+        await moving.wait_for_timeout(650)
+        progress = int(await moving.locator("#bend-position").input_value())
+        if progress <= 12:
+            raise AssertionError("Optional bend playback did not move the teaching ship")
+        await moving.locator("#bend-play").click()
+        paused = await moving.locator("#bend-ship").get_attribute("transform")
+        await moving.wait_for_timeout(240)
+        if paused != await moving.locator("#bend-ship").get_attribute("transform"):
+            raise AssertionError("Optional playback did not pause on command")
+        await moving.locator("#bend-diagram").screenshot(path=str(OUT / "cuyahoga-390-bend-in-motion.png"))
+        cases.append({"viewport":390,"illustrativeAnimation":"play-and-pause","status":"PASS","progressAtPause":progress})
+        await motion.close()
         nojs = await browser.new_context(viewport={"width":390,"height":844}, java_script_enabled=False)
         page = await nojs.new_page()
         await page.goto(URL, wait_until="domcontentloaded")

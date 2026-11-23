@@ -296,3 +296,81 @@ test('first map screen favors four active reference landmarks plus Eagle work no
  assert.match(page,/Showing all 19 charted crossings|Show all 19 charted crossings/);
  assert.match(css,/\.bridge-toggle/);
 });
+
+test('river desk redesign puts public shore decisions and map before expanded technical evidence',()=>{
+ const mapAt=page.indexOf('id="cuyahoga-map"');
+ const parksAt=page.indexOf('id="place-buttons"');
+ const reportAt=page.indexOf('id="live-vessels"');
+ const storyAt=page.indexOf('class="story"');
+ const sourceAt=page.indexOf('class="sources"');
+ assert.ok(mapAt>0&&parksAt>mapAt&&reportAt>parksAt&&storyAt>reportAt&&sourceAt>storyAt);
+ assert.match(page,/<section class="workbench" id="river-workbench"/);
+ assert.match(page,/data-park="scranton"/);
+ assert.match(page,/data-park="rivergate"/);
+ assert.match(page,/data-park="heritage"/);
+ assert.match(page,/data-park="wendy"/);
+ assert.match(page,/<details class="map-caveat">/);
+ assert.match(page,/<details class="report-method">/);
+ assert.match(page,/<details class="sources">/);
+ assert.match(app,/choosePark\('scranton',false\)/);
+ assert.match(css,/#cuyahoga-map\{[^}]*height:clamp/);
+ assert.match(css,/\.map-layout\{[^}]*grid-template-rows/);
+ assert.doesNotMatch(page,/<script[^>]+src="https:\/\/.*(?:react|jquery|gsap|vue)/i);
+});
+test('historic Sam Laud photo is verified exact-subject and properly attributed',()=>{
+ assert.match(page,/class="story-photo"/);
+ assert.match(page,/src="\/assets\/cuyahoga-sam-laud-roy-luck\.jpg"/);
+ assert.match(page,/https:\/\/commons\.wikimedia\.org\/wiki\/File:The_Cuyahoga_River_and_Cleveland_OH\.jpg/);
+ assert.match(page,/alt="The freighter Sam Laud passing downtown Cleveland/);
+ assert.match(page,/Roy Luck/);
+ assert.match(page,/https:\/\/creativecommons\.org\/licenses\/by\/2\.0\//);
+ assert.match(page,/Historical photograph, not a live view/);
+ assert.match(page,/loading="lazy"/);
+ assert.match(page,/decoding="async"/);
+});
+test('optional bridge geography cannot obscure the default current AIS and public parks',()=>{
+ assert.match(page,/data-bridge-legend hidden/);
+ assert.match(app,/const bridgePickerOpen=document\.querySelector\('\.bridge-picker'\)\?\.open===true/);
+ assert.match(app,/if\(!bridgePickerOpen&&!state\.selectedBridgeId\)/);
+ assert.match(app,/\.addEventListener\('toggle',renderBridgeMarkers\)/);
+ assert.match(app,/zIndexOffset:1000/);
+ assert.match(page,/Show all 19 charted crossings/);
+ assert.match(css,/\[hidden\]\{display:none!important\}/);
+});
+
+test('licensed historical photo contains a complete JPEG frame, not a truncated CDN fragment',()=>{
+ const image=readFileSync('public/assets/cuyahoga-sam-laud-roy-luck.jpg');
+ assert.ok(image.length>30000&&image.length<250000,'Reasonable self-hosted historical photo size');
+ assert.equal(image[0],0xff);
+ assert.equal(image[1],0xd8);
+ assert.equal(image[image.length-2],0xff);
+ assert.equal(image[image.length-1],0xd9);
+ assert.match(page,/src="\/assets\/cuyahoga-sam-laud-roy-luck\.jpg"/);
+ assert.match(page,/Roy Luck/);
+ assert.match(page,/creativecommons\.org\/licenses\/by\/2\.0/);
+});
+
+test('sourced river-bend teaching model is optional and never passes itself off as AIS',()=>{
+ const html=readFileSync('public/cuyahoga-freighter-watch/index.html','utf8');
+ const demo=readFileSync('public/assets/cuyahoga-bend-demo.js','utf8');
+ const styles=readFileSync('public/assets/cuyahoga-bend-demo.css','utf8');
+ assert.match(html,/id="bend-lab"/);
+ assert.match(html,/id="bend-diagram"/);
+ assert.match(html,/id="bend-guide"/);
+ assert.match(html,/id="bend-position"[^>]*disabled/);
+ assert.match(html,/data-bend-step="0"[^>]*disabled/);
+ assert.match(html,/id="bend-play"[^>]*disabled/);
+ assert.match(html,/Illustration, not vessel tracking/);
+ assert.match(html,/not NOAA AIS replay/);
+ assert.match(html,/https:\/\/www\.portofcleveland\.com\/tourism-recreation\/tools\/safety-guidelines\//);
+ assert.match(html,/\/assets\/cuyahoga-bend-demo\.js/);
+ assert.match(html,/\/assets\/cuyahoga-bend-demo\.css/);
+ assert.match(demo,/getPointAtLength/);
+ assert.match(demo,/prefers-reduced-motion: reduce/);
+ assert.match(demo,/document\.hidden/);
+ assert.match(demo,/cancelAnimationFrame/);
+ assert.match(demo,/setAttribute\('aria-pressed'/);
+ assert.match(styles,/@media\(max-width:680px\)/);
+ assert.match(styles,/\.bend-lab\{grid-column:1/);
+ assert.doesNotMatch(demo,/fetch\(|\/api\/|getUserMedia|geolocation|AIS endpoint/);
+});

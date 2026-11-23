@@ -154,7 +154,14 @@
  function renderBridgeMarkers(){
   if(!state.bridges)return;
   const showAll=$('show-all-bridges')?.checked===true;
+  const bridgePickerOpen=document.querySelector('.bridge-picker')?.open===true;
+  for(const item of document.querySelectorAll('[data-bridge-legend]'))item.hidden=!bridgePickerOpen&&!state.selectedBridgeId;
   if(mapGroup.bridges)mapGroup.bridges.clearLayers();
+  if(!bridgePickerOpen&&!state.selectedBridgeId){
+   const status=$('bridge-layer-status');
+   if(status)status.textContent='Bridge pins are hidden until you open the bridge explorer. Public viewing places and observed vessels remain visible.';
+   return;
+  }
   let visible=0;
   for(const bridge of state.bridges.bridges){
    if(bridge.channel!=='main')continue;
@@ -246,10 +253,10 @@
    credits.append(document.createTextNode(' · '),link);
   }
   if(result.state==='REPORTS_AVAILABLE'){
-   readout.textContent=result.count+' fresh AIS '+(result.count===1?'report':'reports')+' within the Cuyahoga research area';
+   readout.textContent=result.count+' recent AIS '+(result.count===1?'position':'positions')+' in the greater Cleveland riverfront area';
    status.textContent=result.reason;
   }else{
-   readout.textContent=result.state==='UNAVAILABLE'?'Live AIS source unavailable':'No confirmed fresh local AIS positions';
+   readout.textContent=result.state==='UNAVAILABLE'?'AIS reporting unavailable':'No fresh AIS positions in this map area';
    status.textContent=result.reason;
   }
   if(mapGroup.ships)mapGroup.ships.clearLayers();
@@ -265,7 +272,7 @@
    btn.append(escText('strong',v.name),escText('small',core.vesselVisual(v).label+' · '+speedCopy(v)+' · '+locClock.format(new Date(v.seen))));
    btn.addEventListener('click',()=>selectShip(v));item.append(btn);list.append(item);
    if(mapGroup.ships && state.mode==='live'){
-    const marker=L.marker([v.lat,v.lon],{title:v.name,alt:v.name+' recent AIS report',icon:liveVesselIcon(v)}).addTo(mapGroup.ships);
+    const marker=L.marker([v.lat,v.lon],{title:v.name,alt:v.name+' recent AIS report',icon:liveVesselIcon(v),zIndexOffset:1000}).addTo(mapGroup.ships);
     marker.bindTooltip(v.name);
     marker.on('click',()=>selectShip(v));
    }
@@ -345,7 +352,7 @@
     safeGet('/cuyahoga-freighter-watch/noaa-historical-2025.json'),
     safeGet('/cuyahoga-freighter-watch/bridge-notices.json')]);
   const parks=results[0].status==='fulfilled'?results[0].value:null;
-  if(core.validCatalog(parks)){state.parks=parks;plotParks();renderParkSignals();}
+  if(core.validCatalog(parks)){state.parks=parks;plotParks();renderParkSignals();choosePark('scranton',false);}
   else replaceFocus('PARK SOURCE UNAVAILABLE','Check Cleveland Metroparks','The park directory could not be verified. Use the official park manager links in the text below.');
   const notices=results[3].status==='fulfilled'?results[3].value:null;
   if(notices?.schemaVersion===1&&Array.isArray(notices.notices))state.bridgeNotices=notices;
@@ -361,6 +368,7 @@
   $('refresh-ais').addEventListener('click',getLive);
   $('bridge-select').addEventListener('change',e=>{if(e.target.value)chooseBridge(e.target.value,true);});
   $('show-all-bridges').addEventListener('change',renderBridgeMarkers);
+  document.querySelector('.bridge-picker')?.addEventListener('toggle',renderBridgeMarkers);
   $('voyage-select').addEventListener('change',e=>{state.historyId=e.target.value;state.historyIndex=core.firstRiverFixIndex(state.history,state.historyId);renderHistory();});
   $('history-scrubber').addEventListener('input',e=>{state.historyIndex=Number(e.target.value);renderHistory();});
   $('history-prev').addEventListener('click',()=>{state.historyIndex--;renderHistory();});
