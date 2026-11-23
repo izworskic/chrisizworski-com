@@ -44,14 +44,41 @@ jobs:
               *) git restore -- "$file" ;;
             esac
           done
-          if ! git diff --quiet; then
-            git add public/michigan-ice/ice-cover-history.html public/michigan-ice/index.html public/soo-locks/index.html public/great-lakes/index.html public/great-lakes-freighter-winter-layup/index.html
-            git commit -m "Stamp freshness for ice-cover routes [ice generated]"
+          # Keep sitemap lastmods precise. Do not stamp unrelated entries in the
+          # large evergreen/winter sitemaps merely because they share a file.
+          node --input-type=module <<'JS'
+          import { readFileSync, writeFileSync } from 'node:fs';
+          const routes = {
+            'public/sitemap.xml': ['/great-lakes/', '/soo-locks/', '/michigan-ice/',
+              '/michigan-ice/ice-cover-history.html'],
+            'public/sitemap-winter.xml': ['/michigan-ice/',
+              '/michigan-ice/ice-cover-history.html', '/great-lakes-freighter-winter-layup/']
+          };
+          for(const [path, targets] of Object.entries(routes)) {
+            let content = readFileSync(path, 'utf8');
+            for(const route of targets) {
+              const target = '<loc>https://chrisizworski.com' + route + '</loc>';
+              const i = content.indexOf(target);
+              if(i < 0 || content.indexOf(target, i+1) >= 0) throw Error('Missing/duplicate sitemap entry: '+route);
+              const end = content.indexOf('</url>', i);
+              if(end < 0) throw Error('Unclosed sitemap entry: '+route);
+              const section = content.slice(i, end);
+              if(!/<lastmod>\\d{4}-\\d{2}-\\d{2}<\\/lastmod>/.test(section))
+                throw Error('Missing lastmod for '+route);
+              content = content.slice(0, i) +
+                section.replace(/<lastmod>\\d{4}-\\d{2}-\\d{2}<\\/lastmod>/,
+                  '<lastmod>2026-11-23</lastmod>') + content.slice(end);
+            }
+            writeFileSync(path, content);
+          }
+          JS
+          git add public/michigan-ice/ice-cover-history.html public/michigan-ice/index.html public/soo-locks/index.html public/great-lakes/index.html public/great-lakes-freighter-winter-layup/index.html public/sitemap.xml public/sitemap-winter.xml
+          if ! git diff --cached --quiet; then
+            git commit -m "Stamp exact changed ice routes and sitemap lastmods [ice generated]"
           fi
+      - name: Push generated changes to review branch
+        run: git push origin HEAD:feature/great-lakes-ice-cover-today-54-year
       - name: Install pinned dependencies
         run: npm ci
       - name: Full-history verification
         run: npm run verify:all
-      - name: Push generated changes to review branch
-        if: success()
-        run: git push origin HEAD:feature/great-lakes-ice-cover-today-54-year
