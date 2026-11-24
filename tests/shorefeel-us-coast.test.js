@@ -65,8 +65,9 @@ test('four NWS shoreline references remain in vetted land locations, within the 
    };
    const got=await handler.lookup(beach,now);
    assert.equal(got.status,'forecast-based',slug);
-   assert.ok(called[0].endsWith('/points/'+expected.lat.toFixed(4)+','+expected.lon.toFixed(4)),slug+' uses its vetted point');
-   assert.equal(called.length,2,slug+' retrieves the source-authenticated hourly forecast');
+   assert.ok(called.find(url=>url.includes('api.weather.gov/points/'))?.endsWith('/points/'+expected.lat.toFixed(4)+','+expected.lon.toFixed(4)),slug+' uses its vetted point');
+   assert.equal(called.filter(url=>url.includes('api.weather.gov/')).length,2,slug+' retrieves two source-authenticated NWS calls');
+   assert.equal(called.filter(url=>url.includes('apps.glerl.noaa.gov/')).length,1,slug+' checks NOAA water context in parallel');
   }
  }finally{global.fetch=saved;}
 });
@@ -131,8 +132,9 @@ test('API only permits the catalog slug, never returns a false beach safety stat
    };
    const got=await handler.lookup(data.beaches[0],now);
    assert.equal(got.status,'forecast-based');
-   assert.equal(calls.length,2);
-   assert.ok(calls.every(url=>url.startsWith('https://api.weather.gov/')));
+   assert.equal(calls.filter(url=>url.startsWith('https://api.weather.gov/')).length,2);
+   assert.equal(calls.filter(url=>url.startsWith('https://apps.glerl.noaa.gov/')).length,1);
+   assert.equal(got.shorelineRealFeel.calibratedOnSand,false);
  }finally{global.fetch=saved;}
 });
 
