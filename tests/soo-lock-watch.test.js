@@ -68,7 +68,7 @@ test('changing the visit changes the answer, and partial overlap offers the cove
   assert.equal(later.ships.find(s => s.id === '366971370').fit, 'gone', 'the in-lock ship is not promised to a later visit');
   const early = core.plan({ data: data(NOV), now: NOV, startOffset: 60, stay: 90 });
   assert.equal(early.status, 'partial');
-  assert.match(early.detail.join(' '), /covers all of it/);
+  assert.match(early.detail.join(' '), /covers the modeled window, not every possible arrival/);
   assert.equal(early.suggestion.id, '366972000');
   const miss = core.plan({ data: data(NOV), now: NOV, startOffset: 30, stay: 45 });
   assert.equal(miss.status, 'none');
@@ -102,8 +102,15 @@ test('missing, failed and empty feeds are explicit and never read as an empty ri
   assert.equal(empty.status, 'no-ships');
   assert.match(empty.detail[0], /not proof of an empty river/);
   const retained = core.plan({ data: data(NOV), failed: true, now: NOV, startOffset: 120 });
-  assert.equal(retained.status, 'match');
+  assert.equal(retained.status, 'unavailable');
   assert.match(retained.notes[0], /latest refresh failed/);
+  assert.equal(retained.ships.length, 0);
+  assert.equal(retained.best, null);
+  assert.equal(retained.suggestion, undefined);
+  const recovered = core.plan({ data: data(NOV), failed: false, now: NOV, startOffset: 120 });
+  assert.equal(recovered.status, 'match');
+  assert.match(recovered.notes[0], /actual arrivals can fall outside/);
+  assert.equal(recovered.best.id, '366972000');
 });
 
 test('the hotline is described only as seasonal outside May through October', () => {

@@ -220,9 +220,10 @@
       return out;
     }
     var n = opts.data && opts.data.nextShip;
-    if (!opts.data || (opts.failed && !n) || !n || !n.ok) {
+    if (!opts.data || opts.failed || !n || !n.ok) {
       out.status = 'unavailable';
-      out.headline = 'Live ship reports are unavailable, so no visit can be lined up';
+      out.headline = opts.failed && opts.data ? 'Arrival estimates paused until the next successful check' : 'Live ship reports are unavailable, so no visit can be lined up';
+      if (opts.failed && opts.data) out.notes.unshift('The latest refresh failed. Earlier vessel positions may remain on the map, but old arrival estimates are not used to plan a visit.');
       out.detail.push('This is not a report of an empty river.' + (vc ? ' Call the boat hotline at 906-202-1333, or see the other ways to check below.' : ' See the other ways to check below.'));
       out.link = { href: '#soo-schedule-answer', label: 'Other ways to check \u2193' };
       return out;
@@ -235,7 +236,7 @@
     entries = entries.filter(function (e) { if (seenIds[e.id]) return false; seenIds[e.id] = true; return true; });
     entries.sort(function (a, b) { return a.start - b.start; });
     out.ships = entries;
-    if (opts.failed) out.notes.unshift('The latest refresh failed; these are the windows from the earlier check.');
+    out.notes.unshift('These are planning estimates, not a lock schedule. Ships can slow down or stop, and actual arrivals can fall outside the windows. Check again before leaving.');
 
     var pickId = n.pick ? String(n.pick.id || n.pick.mmsi) : null;
     var ranked = entries.filter(function (e) { return e.fit === 'now' || e.fit === 'mostly' || e.fit === 'partly'; })
@@ -287,7 +288,7 @@
     out.headline = (best.fit === 'mostly' ? 'Best bet: ' : 'Possible: ') + title(best) + ', about ' + clock(best.start) + '–' + clockZone(best.end);
     out.detail.push(best.fit === 'mostly'
       ? 'Its estimated window falls mostly inside your visit (' + clock(visit.start) + '–' + clock(visit.end) + ').'
-      : 'Its estimated window only partly overlaps your visit (' + clock(visit.start) + '–' + clock(visit.end) + '). Being on the platform ' + clock(best.start) + '–' + clock(best.end) + ' covers all of it.');
+      : 'Its estimated window only partly overlaps your visit (' + clock(visit.start) + '–' + clock(visit.end) + '). Being on the platform ' + clock(best.start) + '–' + clock(best.end) + ' covers the modeled window, not every possible arrival.');
     if (best.afterClose) out.detail.push('That window is outside the park’s posted hours (' + best.parkLabel + ').');
     else if (best.runsPastClose) out.detail.push('That window runs past the park’s posted closing time (' + best.parkLabel + ').');
     if (best.dark) out.detail.push('It falls after dark.');
@@ -504,7 +505,7 @@
     if (s.inLock) {
       fact(dl, 'Last report', s.ageMinutes + ' min ago, inside the chamber');
     } else {
-      fact(dl, 'Estimated at the locks', clock(s.start) + '–' + clockZone(s.end) + dayWord(s.start, p.now));
+      fact(dl, 'Planning estimate at the locks', clock(s.start) + '–' + clockZone(s.end) + dayWord(s.start, p.now));
       var raw = s.raw;
       if (Number.isFinite(raw.channelMilesToLocks) && Number.isFinite(raw.speedKnots)) {
         fact(dl, 'Where it is', raw.channelMilesToLocks + ' river miles out at ' + (raw.speedKnots * 1.15078).toFixed(1) + ' mph, reported ' + raw.ageMinutes + ' min ago');
@@ -531,7 +532,7 @@
       act.append(lock);
     }
     els.dossier.append(act);
-    els.dossier.append(el('p', 'lw-note', 'An estimate from the ship’s latest AIS position, speed and river distance, not a lock schedule. Ships can wait for a chamber or stop at a dock. Not for navigation.'));
+    els.dossier.append(el('p', 'lw-note', 'Based on the latest AIS position, speed and river distance, not a lock schedule. Actual arrivals can fall outside this window. Check again before leaving. Not for navigation.'));
   }
 
   // Hand the selected ship to the page's lock simulator: direction, a same-size hull and a note.
@@ -638,7 +639,7 @@
     renderWeather(p);
     if (els.status) {
       els.status.textContent = state.data && state.data.checkedAt
-        ? 'Lined up from AIS reports checked ' + clockZone(Date.parse(state.data.checkedAt)) + (state.failed ? ' (latest refresh failed)' : '') + '.'
+        ? (state.failed ? 'Last successful AIS check ' : 'Lined up from AIS reports checked ') + clockZone(Date.parse(state.data.checkedAt)) + (state.failed ? ' (latest refresh failed; arrival estimates paused)' : '') + '.'
         : '';
     }
   }

@@ -238,6 +238,30 @@ let base;
       await page.locator('#soo-lock-watch').screenshot({ path: `${out}/feed-failure-390.png` });
       await context.close();
     }
+    // 6b. A successful check, a failed refresh, and recovery must not reuse the old ETA.
+    {
+      const { context, page, errors } = await open(browser, { width: 390, time: NOV });
+      await page.locator('.lw-row-btn').first().waitFor();
+      assert.match(await page.locator('#soo-next-ship .next-ship-window').innerText(), /Planning estimate at the locks/);
+      await page.route('**/api/soo-ais', route => route.fulfill({ status: 503, contentType: 'application/json', body: '{"ok":false}' }));
+      await page.locator('#vesselMapRefresh').click();
+      await page.locator('#soo-next-ship-heading').filter({ hasText: 'Arrival estimates paused' }).waitFor();
+      assert.match(await verdict(page), /Arrival estimates paused/);
+      assert.equal(await page.locator('#soo-next-ship .next-ship-window').count(), 0);
+      assert.equal(await page.locator('[data-lw-board]').isHidden(), true);
+      assert.equal(await page.locator('[data-lw-dossier]').isHidden(), true);
+      assert.equal(await page.locator('.lw-adjust').count(), 0);
+      assert.match(await page.locator('#vesselMapStatus').innerText(), /Refresh unavailable/);
+      assert.ok(await page.locator('#sooVesselList li').count() > 0);
+      await page.locator('#soo-lock-watch').screenshot({ path: `${out}/retained-positions-paused-arrivals-390.png` });
+      await page.unroute('**/api/soo-ais');
+      await page.locator('#vesselMapRefresh').click();
+      await page.locator('.lw-row-btn').first().waitFor();
+      assert.equal(await page.locator('#soo-next-ship .next-ship-window').count(), 1);
+      assert.doesNotMatch(await verdict(page), /paused/);
+      assert.deepEqual(errors, []);
+      await context.close();
+    }
     // 7. Winter shutdown: the planner says so instead of lining up ships.
     {
       const { context, page } = await open(browser, { width: 390, time: Date.parse('2026-02-10T15:00:00Z') });
