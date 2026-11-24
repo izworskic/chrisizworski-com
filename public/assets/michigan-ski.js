@@ -21,44 +21,96 @@ function reportStamp(x){
  return Number.isFinite(time)?new Date(time).toLocaleString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'Date not published';
 }
 function operatingLabel(r){
- const status=r.official?.status;
+ const status=r.official?.status,official=r.official||{};
  if(status==='OPEN_PER_OPERATOR')return 'Open per operator';
  if(status==='CLOSED_PER_OPERATOR')return 'Closed per operator';
- if(status==='STALE_REPORT')return 'Stale report (>36 hours)';
- if(status==='NOT_CONNECTED')return 'Not connected';
- return 'Unverified';
+ if(status==='STALE_REPORT')return 'Outdated operator report';
+ if(status==='NOT_CONNECTED')return 'No connected lift report';
+ if(official.reason==='UNDATED_OPERATOR_REPORT'&&official.lifts?.open===0)return '0 lifts listed · undated';
+ if(official.reason==='UNDATED_OPERATOR_REPORT'&&official.lifts?.open>0)return 'Lift count undated';
+ if(official.reason==='UNRECOGNIZED_REPORT_FORMAT')return 'No readable lift report';
+ if(['SOURCE_HTTP_ERROR','SOURCE_UNAVAILABLE'].includes(official.reason))return 'Report unavailable';
+ return 'Current status not confirmed';
+}
+function evidenceNote(r){
+ const official=r.official||{};
+ if(official.status==='NOT_CONNECTED')return 'No approved operator lift-report connection';
+ if(official.status==='STALE_REPORT')return 'The operator report is older than 36 hours';
+ if(official.reason==='UNDATED_OPERATOR_REPORT'){
+  if(official.lifts?.open>0)return 'Lift numbers have no dated report and cannot confirm current operations';
+  return 'Operator lift counts have no published report date';
+ }
+ if(official.reason==='UNRECOGNIZED_REPORT_FORMAT')return 'This operator page does not expose a usable lift count and dated report';
+ if(official.reason==='SOURCE_HTTP_ERROR'||official.reason==='SOURCE_UNAVAILABLE')return 'The operator page could not be read on this check';
+ return 'A current operating status could not be established';
+}
+function operatorOpeningPlans(){
+ // Reuse the operator-sourced, build-time opening table; no separate list of guessed dates.
+ const plans=new Map();
+ for(const tr of document.querySelectorAll('.ski-opening-evidence tbody tr')){
+  const name=tr.querySelector('th')?.textContent.trim(),value=tr.querySelector('td')?.textContent.trim();
+  if(name&&value&&!value.startsWith('Not announced'))plans.set(name,value);
+ }
+ return plans;
 }
 function operatingBoard(data){
  const count=$('ski-open-count'),host=$('ski-operating-list'),coverage=$('ski-source-coverage'),filter=$('ski-open-filter');
  if(!host||!count)return;
  const hills=data.resorts.filter(r=>r.kind==='downhill');
  const open=hills.filter(r=>r.official?.status==='OPEN_PER_OPERATOR');
+ const closed=hills.filter(r=>r.official?.status==='CLOSED_PER_OPERATOR');
+ const dated=hills.filter(r=>['OPEN_PER_OPERATOR','CLOSED_PER_OPERATOR'].includes(r.official?.status));
+ const undatedZero=hills.filter(r=>r.official?.status==='UNVERIFIED'&&r.official?.reason==='UNDATED_OPERATOR_REPORT'&&r.official?.lifts?.open===0);
  const connected=hills.filter(r=>r.official?.status!=='NOT_CONNECTED');
- const successful=hills.filter(r=>['OPEN_PER_OPERATOR','CLOSED_PER_OPERATOR','STALE_REPORT'].includes(r.official?.status));
+ const plans=operatorOpeningPlans();
  const when=new Date(data.generatedAt).toLocaleString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
- count.textContent=open.length+' of 17 resorts report lifts running, checked '+when+'.';
- if(coverage)coverage.textContent=connected.length+' operator report sources connected · '+successful.length+' dated operator reports parsed. Undated or unavailable reports do not confirm opening.';
+ count.textContent=open.length+' confirmed open · '+closed.length+' confirmed closed from current dated operator reports. Checked '+when+'.';
+ if(coverage)coverage.textContent=dated.length+' current dated reports · '+undatedZero.length+' undated zero-lift listings · '+connected.length+' operator report links checked. No report date means no verified status.';
  if(filter){filter.setAttribute('aria-pressed',String(state.openOnly));filter.textContent=state.openOnly?'Open now · Show all':'Open now';}
  host.replaceChildren();
+ if(!state.openOnly&&plans.size){
+  const upcoming=hills.map(r=>{
+   const detail=plans.get(r.name);if(!detail)return null;
+   const at=Date.parse(detail.split(' · ')[0]);
+   return Number.isFinite(at)?{name:r.name,detail,at}:null;
+  }).filter(Boolean).filter(p=>p.at>=Date.parse(data.generatedAt.slice(0,10)+'T00:00:00Z')).sort((a,b)=>a.at-b.at);
+  const summary=node('p','ski-next-opening');
+  if(upcoming.length)summary.append(document.createTextNode('Next operator-announced opening target: '+upcoming[0].name+' · '+upcoming[0].detail+'. '));
+  else summary.append(document.createTextNode(plans.size+' operator opening plans are listed below. '));
+  const see=node('a',null,'Compare opening dates and original sources');
+  see.href='#ski-opening-heading';add(summary,see);add(host,summary);
+ }
  const visible=hills.filter(r=>!state.openOnly||r.official?.status==='OPEN_PER_OPERATOR')
- .sort((a,b)=>({'OPEN_PER_OPERATOR':0,'CLOSED_PER_OPERATOR':1,'STALE_REPORT':2,'UNVERIFIED':3,'NOT_CONNECTED':4}[a.official?.status]??3)-({'OPEN_PER_OPERATOR':0,'CLOSED_PER_OPERATOR':1,'STALE_REPORT':2,'UNVERIFIED':3,'NOT_CONNECTED':4}[b.official?.status]??3)||a.name.localeCompare(b.name));
- if(!visible.length)add(host,node('p','ski-open-empty','No resort has a dated, current operator report confirming open lifts in this snapshot. This does not mean every hill is closed. Select “Open now” again to see all resorts and their report links.'));
- for(const r of visible){
+  .sort((a,b)=>({'OPEN_PER_OPERATOR':0,'CLOSED_PER_OPERATOR':1,'STALE_REPORT':2,'UNVERIFIED':3,'NOT_CONNECTED':4}[a.official?.status]??3)-({'OPEN_PER_OPERATOR':0,'CLOSED_PER_OPERATOR':1,'STALE_REPORT':2,'UNVERIFIED':3,'NOT_CONNECTED':4}[b.official?.status]??3)||a.name.localeCompare(b.name));
+ if(!visible.length)add(host,node('p','ski-open-empty','No resort has a current dated operator report confirming lifts running. This does not establish that every resort is closed. Clear “Open now” for source details and opening plans.'));
+ function reportRow(r){
   const row=node('div','ski-operation-row'),head=node('div','ski-operation-heading');
   const title=node('strong'),link=node('a',null,r.name);link.href='/michigan-ski-hills/'+r.slug+'/';add(title,link);
-  const status=node('span','ski-evidence-status '+(r.official?.status==='OPEN_PER_OPERATOR'?'evidence-open':'evidence-uncertain'),operatingLabel(r));
+  const status=node('span','ski-evidence-status '+(r.official?.status==='OPEN_PER_OPERATOR'?'evidence-open':r.official?.status==='CLOSED_PER_OPERATOR'?'evidence-closed':'evidence-uncertain'),operatingLabel(r));
   add(head,title,status);
-  const info=node('p','small');
-  const lifts=r.official?.lifts,trail=r.official?.trails;
-  const liftText=lifts?.open!=null?lifts.open+' of '+(lifts.total??'?')+' lifts':'Lift count not verified';
-  const runsText=trail?.open!=null?' · '+trail.open+' of '+(trail.total??'?')+' runs':'';
+  const info=node('p','small'),lifts=r.official?.lifts,trail=r.official?.trails;
+  const confirmed=['OPEN_PER_OPERATOR','CLOSED_PER_OPERATOR'].includes(r.official?.status);
+  const liftText=confirmed&&lifts?.open!=null?lifts.open+' of '+(lifts.total??'?')+' lifts confirmed by the dated report':
+   lifts?.open===0?lifts.open+' of '+(lifts.total??'?')+' lifts listed (undated, not independently confirmed)':
+   lifts?.open>0?'A lift count is shown, but it is undated and cannot confirm an opening':
+   'No usable current lift count';
+  const runsText=confirmed&&trail?.open!=null?' · '+trail.open+' of '+(trail.total??'?')+' runs':'';
   info.textContent=liftText+runsText+' · Operator report: '+reportStamp(r.official?.reportUpdatedAt)+' · Checked: '+reportStamp(r.official?.checkedAt);
   const source=r.official?.url||r.snow;
-  add(row,head,info,external(r.official?.status==='NOT_CONNECTED'?'Visit resort website (no verified lift report)':'Read operator report',source));
-  if(r.official?.operatorStatusText)add(row,node('p','small',r.official.operatorStatusText));
-  add(host,row);
+  add(row,head,info,node('p','small',evidenceNote(r)),external(r.official?.status==='NOT_CONNECTED'?'Visit resort website':'Read operator report',source));
+  if(plans.has(r.name))add(row,node('p','ski-operator-plan','2026–27 opening plan: '+plans.get(r.name)+' · not evidence of lifts running'));
+  if(r.official?.operatorStatusText)add(row,node('p','small','Operator note (may be stale): '+r.official.operatorStatusText));
+  return row;
  }
- if(!successful.length)add(host,node('p','event','No dated operator reports were verified in this snapshot. The sources may be inaccessible, stale or undated. Check the resort reports directly; no current open or closed status is confirmed.'));
+ const confirmedRows=visible.filter(r=>['OPEN_PER_OPERATOR','CLOSED_PER_OPERATOR'].includes(r.official?.status));
+ const otherRows=visible.filter(r=>!['OPEN_PER_OPERATOR','CLOSED_PER_OPERATOR'].includes(r.official?.status));
+ confirmedRows.forEach(r=>add(host,reportRow(r)));
+ if(otherRows.length){
+  const details=node('details','ski-unconfirmed');
+  const summary=node('summary',null,otherRows.length+' resorts without a current dated status · inspect operator evidence');
+  add(details,summary);otherRows.forEach(r=>add(details,reportRow(r)));add(host,details);
+ }
+ if(!dated.length&&!state.openOnly)add(host,node('p','event','No dated operator reports were verified in this snapshot. Undated lift counts and opening targets are useful planning clues, not confirmations of current operations.'));
 }
 function status(r){
  const a=r.weather?.alerts||[];
@@ -66,7 +118,7 @@ function status(r){
  if(r.official?.status==='OPEN_PER_OPERATOR')return 'Open per operator · '+r.official.lifts.open+' of '+r.official.lifts.total+' lifts · report '+reportStamp(r.official.reportUpdatedAt)+' · verify before travel';
  if(r.official?.status==='CLOSED_PER_OPERATOR')return 'Closed per operator · zero lifts on a dated current report';
  if(r.official?.status==='STALE_REPORT')return 'Stale operator report · not evidence of current lift operation';
- if(r.official?.status==='UNVERIFIED')return 'Official report unverified or unavailable · check the operator before leaving';
+ if(r.official?.status==='UNVERIFIED')return 'No confirmed open-lift report · '+evidenceNote(r)+'; check the operator before leaving';
  if(r.official?.status==='NOT_CONNECTED')return 'No approved operating report connection · verify directly with the resort';
  if(r.ranking?.verdict==='OFF_SEASON_PLANNING')return 'Off-season · 2026–27 planning only';
  if(a.some(x=>/Warning/i.test(x.event)))return 'Winter warning · verify safe travel and lift openings';

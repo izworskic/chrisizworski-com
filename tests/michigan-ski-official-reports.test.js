@@ -41,6 +41,9 @@ test('dated operator lift reports define open/closed, never a fetch timestamp',(
 test('stale 2025/26 open message and malformed operator snippets cannot claim open today',()=>{
  const html='We are OPEN for the 2025/2026 season. Season passes are available. Current Conditions. Chair Lift #1: Closed Chair Lift #2: Closed Chair Lift #3: Closed. This is not a dated 2026/27 lift report.';
  assert.notEqual(classifyParsed(parse('pine-knob',html),at).status,'OPEN_PER_OPERATOR');
+ assert.equal(parse('pine-knob',html),null,'last-season OPEN prose alone is not a valid 2026/27 lift report');
+ const currentFixture=fs.readFileSync(path.join(root,'tests/fixtures/michigan-ski/pine-knob.html'),'utf8');
+ assert.equal(parse('pine-knob',currentFixture).operatorStatusText,null,'do not surface last-season OPEN prose from actual operator markup');
  assert.equal(classifyParsed(null,at).status,'UNVERIFIED');
  assert.equal(parse('unknown-hill',html),null);
 });
@@ -68,8 +71,8 @@ test('SEO title cannot contain Open when 9 or fewer source URLs exist',()=>{
 });
 test('static 2026-27 opening table is grounded and labels unknowns',()=>{
  const generator=fs.readFileSync(path.join(root,'scripts/generate-michigan-ski-pages.mjs'),'utf8');
- for(const s of ['Not announced','Nov 23, 2026','ski-opening-evidence','openingEvidence','Projected daily skiing','Target'])assert.ok(generator.includes(s),s);
- assert.equal([...generator.matchAll(/Dec 5, 2026|Nov 26, 2026|Dec 17, 2026/g)].length,4);
+ for(const s of ['Not announced','Nov 24, 2026','ski-opening-evidence','openingEvidence','Projected daily skiing','Target','First scheduled lift hours; weather permitting'])assert.ok(generator.includes(s),s);
+ assert.equal([...generator.matchAll(/Dec 5, 2026|Nov 26, 2026|Dec 17, 2026|Dec 4, 2026|Dec 11, 2026/g)].length,6);
  assert.doesNotMatch(generator,/OnTheSnow|Skiresort\.info/i);
 });
 
