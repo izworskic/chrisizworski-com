@@ -3,7 +3,7 @@
 'use strict';
 const J=window.GardenFieldJournal,R=window.GardenHistory,H=window.GardenHarvest,root=document.getElementById('field-journal');if(!J||!R||!H||!root)return;
 const get=id=>document.getElementById(id),key='fvfFieldJournalV1',places={'bay-city':'Bay City',detroit:'Detroit','grand-rapids':'Grand Rapids',kalamazoo:'Kalamazoo','traverse-city':'Traverse City',marquette:'Marquette',houghton:'Houghton'};
-const labels={'emergence':'Seedlings emerged','flowering':'First flowers','fruit-set':'Fruit set','first-green-harvest':'First green harvest','first-ripe-harvest':'First ripe harvest','first-harvest':'First harvest','harvest':'Harvest','note':'Field note','daily-air':'Full-day air temperature','paired-night':'Paired overnight readings','rain-gauge':'Daily rain gauge','irrigation':'Irrigation applied','soil-feel':'Soil feel'};
+const labels={'emergence':'Seedlings emerged','flowering':'First flowers','fruit-set':'Fruit set','first-green-harvest':'First green harvest','first-ripe-harvest':'First ripe harvest','first-harvest':'First harvest','harvest':'Harvest','note':'Field note','daily-air':'Full-day air temperature','paired-night':'Paired overnight readings','rain-gauge':'Daily rain gauge','irrigation':'Irrigation applied','soil-feel':'Soil feel','leaf-check':'Leaf scouting observation'};
 const parts=Object.fromEntries(new Intl.DateTimeFormat('en-US',{year:'numeric',month:'2-digit',day:'2-digit',timeZone:'America/Detroit'}).formatToParts(new Date()).map(p=>[p.type,p.value])),today=parts.year+'-'+parts.month+'-'+parts.day;
 const fmt=d=>new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'}).format(new Date(d+'T12:00:00Z'));
 function node(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;}
@@ -47,15 +47,15 @@ function paintComparison(summary){
  area.appendChild(node('p','Your notes are self-reported observations. The historical range comes from regional weather and a published cultivar model, not actual Michigan harvests or a validated prediction.','fj-small'));
 }
 function describe(e){
- let s=labels[e.kind];if(e.kind==='rain-gauge'||e.kind==='irrigation')s+=' · '+e.inches+' in';if(e.kind==='soil-feel')s+=' · '+e.feel.replace(/-/g,' ');if(e.kind==='daily-air')s+=' · '+e.minF+' to '+e.maxF+'°F';if(e.kind==='paired-night')s+=' · garden '+e.gardenLowF+'°F, '+e.referenceId+' '+e.referenceLowF+'°F · '+e.regime.replace(/-/g,' ');return s;
+ let s=labels[e.kind];if(e.kind==='rain-gauge'||e.kind==='irrigation')s+=' · '+e.inches+' in';if(e.kind==='leaf-check')s+=' · '+e.leavesAffected+'/'+e.leavesChecked+' leaves with signs · foliage '+e.foliage+' · '+e.sign.replace(/-/g,' ');if(e.kind==='soil-feel')s+=' · '+e.feel.replace(/-/g,' ');if(e.kind==='daily-air')s+=' · '+e.minF+' to '+e.maxF+'°F';if(e.kind==='paired-night')s+=' · garden '+e.gardenLowF+'°F, '+e.referenceId+' '+e.referenceLowF+'°F · '+e.regime.replace(/-/g,' ');return s;
 }
 async function render(){
  const v=++revision,select=get('fj-selected'),area=get('fj-entries');select.replaceChildren();area.replaceChildren();get('fj-comparison').replaceChildren();get('fj-pair-result').replaceChildren();
  if(!data.plantings.some(p=>p.id===selected))selected=data.plantings.at(-1)?.id||null;
  data.plantings.forEach(p=>option(select,p.id,p.bed+' · '+p.crop+' · '+fmt(p.date)));if(selected)select.value=selected;
  get('fj-record').hidden=!selected;get('fj-export').disabled=!data.plantings.length;get('fj-count').textContent=data.plantings.length+' planting'+(data.plantings.length===1?'':'s')+' · '+data.entries.length+' observation'+(data.entries.length===1?'':'s');
- if(!selected){get('fj-empty').hidden=false;resetWater(null);return;}get('fj-empty').hidden=true;
- const s=J.summarize(data,selected,today);resetWater(s);get('fj-entry-date').min=s.planting.date;get('fj-entry-date').value=today;fields();get('fj-confirm-delete').checked=false;get('fj-planting-info').textContent=places[s.planting.siteId]+' · '+s.planting.bed+' · planted '+fmt(s.planting.date);
+ if(!selected){get('fj-empty').hidden=false;resetWater(null);resetDisease(null);return;}get('fj-empty').hidden=true;
+ const s=J.summarize(data,selected,today);resetWater(s);resetDisease(s);get('fj-entry-date').min=s.planting.date;get('fj-entry-date').value=today;fields();get('fj-confirm-delete').checked=false;get('fj-planting-info').textContent=places[s.planting.siteId]+' · '+s.planting.bed+' · planted '+fmt(s.planting.date);
  const list=node('ol',undefined,'fj-timeline');const planted=node('li');planted.append(node('time',fmt(s.planting.date)),node('strong','Planted: '+s.planting.crop));list.appendChild(planted);
  for(const e of s.entries){const li=node('li');li.append(node('time',fmt(e.date)),node('strong',describe(e)));if(e.note)li.appendChild(node('p',e.note));const b=node('button','Remove','gs-secondary');b.type='button';b.setAttribute('aria-label','Remove '+labels[e.kind]+' on '+fmt(e.date));b.addEventListener('click',()=>{if(commit({...data,entries:data.entries.filter(x=>x.id!==e.id)}))render();});li.appendChild(b);list.appendChild(li);}
  area.appendChild(list);paintComparison(s);
@@ -65,14 +65,15 @@ async function render(){
 }
 get('fj-plant-form').addEventListener('submit',e=>{e.preventDefault();const p={id:uid(),crop:get('fj-crop').value,bed:get('fj-bed').value,siteId:get('fj-town').value,date:get('fj-plant-date').value,packetDays:num('fj-packet'),modelId,biofix};if(!commit({...data,plantings:[...data.plantings,p]}))return;selected=p.id;get('fj-crop').value='';get('fj-bed').value='';get('fj-packet').value='';setModel(null,null);render();get('fj-kind').focus();});
 get('fj-selected').addEventListener('change',()=>{selected=get('fj-selected').value;render();});
-function fields(){const kind=get('fj-kind').value;for(const [id,show] of [['fj-air-fields',kind==='daily-air'],['fj-night-fields',kind==='paired-night'],['fj-water-amount-fields',kind==='rain-gauge'||kind==='irrigation'],['fj-feel-fields',kind==='soil-feel']]){const el=get(id);el.hidden=!show;el.disabled=!show;}get('fj-entry-date').max=(kind==='daily-air'||kind==='rain-gauge')?new Date(Date.parse(today+'T00:00:00Z')-86400000).toISOString().slice(0,10):today;if(get('fj-entry-date').value>get('fj-entry-date').max)get('fj-entry-date').value=get('fj-entry-date').max;}
+function fields(){const kind=get('fj-kind').value;for(const [id,show] of [['fj-air-fields',kind==='daily-air'],['fj-night-fields',kind==='paired-night'],['fj-water-amount-fields',kind==='rain-gauge'||kind==='irrigation'],['fj-feel-fields',kind==='soil-feel'],['fj-leaf-fields',kind==='leaf-check']]){const el=get(id);el.hidden=!show;el.disabled=!show;}get('fj-entry-date').max=(kind==='daily-air'||kind==='rain-gauge')?new Date(Date.parse(today+'T00:00:00Z')-86400000).toISOString().slice(0,10):today;if(get('fj-entry-date').value>get('fj-entry-date').max)get('fj-entry-date').value=get('fj-entry-date').max;}
 get('fj-kind').addEventListener('change',fields);fields();
 get('fj-entry-form').addEventListener('submit',e=>{e.preventDefault();if(!selected)return;const kind=get('fj-kind').value,r={id:uid(),plantingId:selected,date:get('fj-entry-date').value,kind,note:get('fj-note').value};
  if(kind==='rain-gauge'||kind==='irrigation')r.inches=num('fj-water-inches');
+ if(kind==='leaf-check')Object.assign(r,{sign:get('fj-leaf-sign').value,foliage:get('fj-leaf-wet').value,leavesChecked:num('fj-leaf-checked'),leavesAffected:num('fj-leaf-affected')});
  if(kind==='soil-feel')r.feel=get('fj-feel').value;
  if(kind==='daily-air')Object.assign(r,{minF:num('fj-min'),maxF:num('fj-max'),fullShieldedDay:get('fj-full-day').checked});
  if(kind==='paired-night')Object.assign(r,{gardenLowF:num('fj-garden-low'),referenceLowF:num('fj-ref-low'),referenceId:get('fj-ref-id').value,regime:get('fj-regime').value,sameNightWindow:get('fj-same-night').checked,comparableShieldedAirHeight:get('fj-same-height').checked});
- if(commit({...data,entries:[...data.entries,r]})){get('fj-note').value='';for(const id of ['fj-min','fj-max','fj-garden-low','fj-ref-low','fj-water-inches'])get(id).value='';for(const id of ['fj-full-day','fj-same-night','fj-same-height'])get(id).checked=false;render();fields();}
+ if(commit({...data,entries:[...data.entries,r]})){get('fj-note').value='';for(const id of ['fj-min','fj-max','fj-garden-low','fj-ref-low','fj-water-inches','fj-leaf-checked','fj-leaf-affected'])get(id).value='';for(const id of ['fj-full-day','fj-same-night','fj-same-height'])get(id).checked=false;render();fields();}
 });
 get('fj-delete').addEventListener('click',()=>{if(!selected||!get('fj-confirm-delete').checked){status('Tick the confirmation box before removing the planting and all its observations.');return;}if(commit({schema:J.schema,plantings:data.plantings.filter(p=>p.id!==selected),entries:data.entries.filter(e=>e.plantingId!==selected)})){delete waterProfiles[selected];try{localStorage.setItem('fvfJournalWaterProfilesV1',JSON.stringify(waterProfiles));}catch{}get('fj-confirm-delete').checked=false;selected=null;render();}});
 get('fj-pair-form').addEventListener('submit',e=>{e.preventDefault();if(!selected)return;const result=get('fj-pair-result');result.replaceChildren();try{const r=J.paired(data,selected,today,{referenceId:get('fj-scenario-ref').value.trim(),regime:get('fj-scenario-regime').value,referenceLowF:num('fj-scenario-low'),referenceDate:get('fj-scenario-date').value});if(!r.scenario){result.appendChild(node('p','Comparable nights available: '+r.sampleCount+'. Five unique past nights within 90 days, matching this reference and regime, are required. No adjustment calculated.'));return;}const s=r.scenario;result.appendChild(node('p','Historical median difference: '+s.medianOffsetF.toFixed(1)+'°F. If that difference recurred: '+s.centralF.toFixed(1)+'°F.','fj-lead'));result.appendChild(node('p','Observed-offset scenario: '+s.lowF.toFixed(1)+' to '+s.highF.toFixed(1)+'°F. This is not a forecast interval or frost-safety guarantee.'));}catch{result.appendChild(node('p','Check the reference low, date and matched readings.'));}});
@@ -119,6 +120,49 @@ get('fj-water-form').addEventListener('submit',async e=>{
  area.appendChild(node('p','NWS forecast reference ET: '+context.referenceEt.daily[0].toFixed(2)+' in/day; next 24h rain: '+context.forecastRain.in24.toFixed(2)+' in. Weather context generated '+new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZone:'America/Detroit'}).format(new Date(r.sourceTime))+' local.','fj-small'));
  area.appendChild(node('p',r.gaugeDaysUsed+' rain-gauge days replaced regional history for matching dates. '+(l.irrigation.length>1?'Multiple irrigation dates remain in the journal; the current soil observation anchors the estimate rather than pretending the owner model replays all events.':r.irrigationUsed?'One recorded irrigation date supplied to the existing model.':'No recent irrigation record supplied; missing is unknown.')+' No independent measurement of root-zone moisture or garden-level forecast validation.','fj-small'));
  }catch{if(v===waterVersion){area.replaceChildren(node('p','Check soil first. Fresh watering evidence is unavailable. No amount calculated.','fj-lead'));}}
+});
+
+
+// Scout only the selected planting. The Pest Watch request sends town, crop and stage,
+// never private notes, symptom counts or sensor readings.
+const D=window.GardenDisease;let diseaseVersion=0,diseasePlant=null;
+function resetDisease(s){
+ diseaseVersion++;get('fj-disease-result').replaceChildren();if(!D||!s){diseasePlant=null;return;}
+ const checks=s.entries.filter(e=>e.kind==='leaf-check').sort((a,b)=>b.date.localeCompare(a.date));
+ get('fj-disease-ledger').textContent=checks.length?'Latest check '+fmt(checks[0].date)+': '+checks[0].leavesAffected+' of '+checks[0].leavesChecked+' inspected leaves showed visible signs. '+checks.length+' recorded checks. These are sample counts, not whole-garden disease prevalence.':'No leaf checks recorded for this planting yet.';
+ if(diseasePlant===s.planting.id)return;diseasePlant=s.planting.id;
+ get('fj-disease-crop').value=D.cropFor(H.models[s.planting.modelId])||'';
+ get('fj-disease-stage').value='growing';get('fj-disease-active').checked=false;
+}
+function sourceLink(url,label){const a=node('a',label);a.href=url;return a;}
+function paintDisease(r,area){
+ area.replaceChildren();
+ area.appendChild(node('p',!r.active?'Plan your next scouting visit':r.diseases.some(d=>d.state==='OBSERVED_SIGN')?'Compare the signs you recorded':'Where to look on your next garden walk','fj-lead'));
+ if(r.latest)area.appendChild(node('p','Most recent check in the last 7 days: '+fmt(r.latest.date)+' · '+r.latest.leavesAffected+' of '+r.latest.leavesChecked+' leaves with visible signs.'));
+ else area.appendChild(node('p','No leaf checks in the last 7 days. That is not evidence of healthy plants.'));
+ area.appendChild(node('p',r.rainDays+'/3 completed rain-gauge days recorded, '+r.rainIn.toFixed(2)+' in total. '+(r.wetFoliageReported?'Wet foliage was reported during at least one recent inspection.':'No recent wet-foliage observation recorded.')+' Rain depth and a spot observation are not measured leaf-wetness duration.','fj-small'));
+ if(r.active){
+  if(r.days.length){const list=node('ul',undefined,'fj-weather-days');for(const day of r.days)list.appendChild(node('li',fmt(day.date)+': '+day.humidHours+' forecast hourly samples at 90% humidity or above; minimum '+Math.round(day.minF)+'°F.'));area.appendChild(node('p','Regional NWS forecast · issued '+new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZone:'America/Detroit'}).format(new Date(r.issuedAt))+' local · '+r.days.length+'/3 complete future local days.','fj-small'));area.appendChild(list);}
+  else area.appendChild(node('p','Fresh complete forecast days are unavailable. Local observations and general scouting guidance remain available.'));
+ }
+ for(const d of r.diseases){
+  const item=node('section',undefined,'fj-add');item.appendChild(node('h3',d.name));item.appendChild(node('p',d.state==='OBSERVED_SIGN'?'Recorded sign resembles this disease; identification unconfirmed.':d.state==='SCOUTING_CUE'?'Weather or foliage observations suggest a closer look, not an outbreak.':d.state==='PLANNING_REFERENCE'?'Season planning reference.':'General scouting reference; absence of a cue does not rule out disease.','fj-small'));
+  if(d.forecastHours!==null)item.appendChild(node('p',d.forecastHours+' matching forecast hourly samples in complete days. Descriptive temperature/humidity cue only, not an infection model.','fj-small'));
+  item.append(node('p',d.where),node('p',d.action),sourceLink(d.source,'Read Extension identification guidance'));area.appendChild(item);
+ }
+ if(r.windows.length){const part=node('section',undefined,'fj-add');part.append(node('h3','Published potato late-blight weather criterion'),node('p',r.windows.map(w=>fmt(w.from)+' to '+fmt(w.to)).join('; ')+': forecast samples meet the Hutton temperature/humidity reference.'),node('p','Developed for Great Britain potatoes. Not validated in Michigan, not a diagnosis, not evidence of pathogen presence or a spray recommendation.','fj-small'),sourceLink(D.sources.hutton,'Published Hutton criteria'));area.appendChild(part);}
+ area.appendChild(node('p','If suspicious lesions spread rapidly, seek expert identification. No local disease or spore report is inferred from weather.'));area.appendChild(sourceLink(r.diagnostic,'MSU Plant & Pest Diagnostics'));
+}
+get('fj-disease-form').addEventListener('input',()=>{diseaseVersion++;get('fj-disease-result').replaceChildren();});
+get('fj-disease-form').addEventListener('submit',async e=>{
+ e.preventDefault();if(!D||!selected)return;
+ const p=data.plantings.find(x=>x.id===selected),v=++diseaseVersion,area=get('fj-disease-result'),crop=get('fj-disease-crop').value,stage=get('fj-disease-stage').value,active=get('fj-disease-active').checked,entries=data.entries.filter(x=>x.plantingId===p.id);
+ const args={crop,stage,active,entries,today,now:Date.now(),siteId:p.siteId};
+ try{paintDisease(D.evaluate(args),area);}catch(e){area.replaceChildren(node('p',e.message));return;}
+ if(!active)return;
+ area.prepend(node('p','Checking regional forecast evidence…','fj-small'));
+ try{const res=await fetch('/api/michigan-garden-pest-watch?mode=disease&site='+encodeURIComponent(p.siteId)+'&crop='+encodeURIComponent(crop)+'&stage='+encodeURIComponent(stage));if(!res.ok)throw Error('Forecast unavailable');const pestResponse=await res.json();if(v!==diseaseVersion)return;paintDisease(D.evaluate({...args,now:Date.now(),pestResponse}),area);}
+ catch{if(v===diseaseVersion)paintDisease(D.evaluate(args),area);}
 });
 
 root.addEventListener('toggle',()=>{if(root.open)render();});function hash(){if(location.hash==='#field-journal')root.open=true;}window.addEventListener('hashchange',hash);hash();
