@@ -152,9 +152,9 @@ test("Tools hub gives Detroit Outdoors a distinct live opportunity-desk spotligh
 test("Great Lakes hub separates live conditions from history and gives each live tool a CTA", () => {
   const html = readFileSync(path.join(__dirname, "../public/great-lakes/index.html"), "utf8");
   assert.ok(html.includes("Live Great Lakes Conditions and Vessel Tools"));
-  // 9 since Aug 4 2026: the Michigan Ice Report card was added to the live grid.
-  assert.equal((html.match(/data-featured-tool=/g) || []).length, 9);
-  assert.equal((html.match(/class="tool-cta"/g) || []).length, 9);
+  // Nine existing live cards plus two new Working Rivers tools in November 2026.
+  assert.equal((html.match(/data-featured-tool=/g) || []).length, 11);
+  assert.equal((html.match(/class="tool-cta"/g) || []).length, 11);
 
   const history = html.match(/<h2 class="sh">History and Heritage<\/h2>([\s\S]*?)<h2 class="sh">/)[1];
   assert.doesNotMatch(history, /\/(?:soo-locks|northern-lights-michigan|great-lakes-buoys)\//);

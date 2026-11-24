@@ -1,6 +1,6 @@
 {
   "version": "1.4.0",
-  "updated": "2026-11-17",
+  "updated": "2026-11-23",
   "objective": "Maintain one source of truth for how Chris Izworski tools own search intent, connect into visitor journeys, avoid cannibalization, and qualify future builds.",
   "rules": {
     "catalogCoverage": "Every first-party tool card on /tools/ must have a registry node.",
@@ -5010,6 +5010,94 @@
         "decisionWindowDays": 28,
         "privacy": "No user geolocation, email, identity or precise location is required."
       }
+    },
+    {
+      "id": "calumet-river-watch",
+      "name": "Calumet River Freighter & Bridge Watch",
+      "canonical": "https://chrisizworski.com/calumet-freighter-watch/",
+      "aliases": [],
+      "kind": "source-backed-live-pilot",
+      "cluster": "great-lakes-shipping",
+      "primaryIntent": "Chicago Calumet River ship watching, recent AIS reports, public viewing and bridge context",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "calumet-river",
+        "chicago",
+        "great-lakes"
+      ],
+      "personas": [
+        "ship-watcher",
+        "visitor",
+        "bridge-enthusiast"
+      ],
+      "networkRole": "supporting-destination",
+      "searchTreatment": {
+        "status": "noindex-pilot",
+        "note": "River watch page explicitly remains noindex,follow. Listed in Great Lakes discovery pages without claiming its own indexed search intent."
+      },
+      "searchEvidence": {
+        "status": "not-measured",
+        "note": "New regional watch; source-bounded 30-minute AIS observations. No GSC traffic or confirmed search indexability."
+      },
+      "measurement": {
+        "product": "Anonymous click handoffs from Great Lakes hub, tools directory and Freighter Central; inspect coverage/accuracy before expansion.",
+        "privacy": "No visitor position or AIS free text tracked; only destination IDs."
+      }
+    },
+    {
+      "id": "cuyahoga-river-watch",
+      "name": "Cuyahoga River Freighter & Bridge Watch",
+      "canonical": "https://chrisizworski.com/cuyahoga-freighter-watch/",
+      "aliases": [],
+      "kind": "source-backed-live-pilot",
+      "cluster": "great-lakes-shipping",
+      "primaryIntent": "Cleveland Cuyahoga River ship watching, recent AIS reports, public viewing and bridge context",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "cuyahoga-river",
+        "cleveland",
+        "great-lakes"
+      ],
+      "personas": [
+        "ship-watcher",
+        "visitor",
+        "bridge-enthusiast"
+      ],
+      "networkRole": "supporting-destination",
+      "searchTreatment": {
+        "status": "noindex-pilot",
+        "note": "River watch page explicitly remains noindex,follow. Listed in Great Lakes discovery pages without claiming its own indexed search intent."
+      },
+      "searchEvidence": {
+        "status": "not-measured",
+        "note": "New regional watch; source-bounded 30-minute AIS observations. No GSC traffic or confirmed search indexability."
+      },
+      "measurement": {
+        "product": "Anonymous click handoffs from Great Lakes hub, tools directory and Freighter Central; inspect coverage/accuracy before expansion.",
+        "privacy": "No visitor position or AIS free text tracked; only destination IDs."
+      }
     }
   ],
   "relationships": [
@@ -7284,6 +7372,54 @@
       "strength": "optional",
       "surface": "canal-visitor",
       "reason": "Visitors comparing Ontario waterway systems can open Rideau's visitor-first route planner."
+    },
+    {
+      "from": "ship-tracker",
+      "to": "calumet-river-watch",
+      "type": "regional-handoff",
+      "strength": "strong",
+      "surface": "great-lakes-shipping",
+      "reason": "Lake-wide ship watchers can explore the separate bounded AIS and documented public viewing sites along Chicago’s Calumet River."
+    },
+    {
+      "from": "ship-tracker",
+      "to": "cuyahoga-river-watch",
+      "type": "regional-handoff",
+      "strength": "strong",
+      "surface": "great-lakes-shipping",
+      "reason": "Lake-wide ship watchers can explore Cleveland’s winding river, recent AIS observations and documented public waterfront viewing places."
+    },
+    {
+      "from": "calumet-river-watch",
+      "to": "ship-tracker",
+      "type": "broader-tracking",
+      "strength": "optional",
+      "surface": "calumet-river-watch",
+      "reason": "A local AIS river report is not a lake-wide vessel history; return to the full Great Lakes tracker for broader reported positions."
+    },
+    {
+      "from": "cuyahoga-river-watch",
+      "to": "ship-tracker",
+      "type": "broader-tracking",
+      "strength": "optional",
+      "surface": "cuyahoga-river-watch",
+      "reason": "Return from regional Cleveland observations to the wider Great Lakes AIS map without extrapolating arrivals."
+    },
+    {
+      "from": "calumet-river-watch",
+      "to": "cuyahoga-river-watch",
+      "type": "sibling-river-watch",
+      "strength": "optional",
+      "surface": "great-lakes-shipping",
+      "reason": "Chicago and Cleveland river-watch tools offer two distinct ways to understand industrial ship traffic and public shoreline access."
+    },
+    {
+      "from": "cuyahoga-river-watch",
+      "to": "calumet-river-watch",
+      "type": "sibling-river-watch",
+      "strength": "optional",
+      "surface": "great-lakes-shipping",
+      "reason": "Visitors can compare Cuyahoga bend navigation with Calumet’s lift-bridge corridor while keeping each source scoped."
     }
   ],
   "cannibalizationGroups": [
