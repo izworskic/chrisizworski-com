@@ -24,4 +24,17 @@ node --test tests/great-lakes-crossing-detection.test.js
 
 ## Evaluation plan
 
-Compare this finite-line and context approach against proximity-only grouping (existing Cuyahoga tool intentionally limited to reference proximity, not a crossing engine). Test forward/reverse, endpoint miss, exact line point, dwell, gaps, duplicate/conflicting fixes, invalid UTC, impossible displacement, repeated/reversing crossings and replay rejection. Use development observations before any holdout passage labels. Independently review axes and candidate brackets using an appropriate second source; do not call self-derived AIS labels independent ground truth. Full CI and actual archive candidate counts pending. No production release or calibration authorized.
+Compare this finite-line and context approach against proximity-only grouping (existing Cuyahoga tool intentionally limited to reference proximity, not a crossing engine). Test forward/reverse, endpoint miss, exact line point, dwell, gaps, duplicate/conflicting fixes, invalid UTC, impossible displacement, repeated/reversing crossings and replay rejection. Use development observations before any holdout passage labels. Independently review axes and candidate brackets using an appropriate second source; do not call self-derived AIS labels independent ground truth. Full repository CI pending; development archive results below. No production release or calibration authorized.
+
+## Development-only execution evidence
+
+Successful exact detector execution in [run 45498395915](https://github.com/izworskic/chrisizworski-com/actions/runs/45498395915), job 138814863136, temporary PR #1937, code at detector commit `03d67251498772ec481a2ea1c2fa45891f61e3ae`. All seven real Node detector tests passed; isolated fixture execution also passed 47 assertions. September 4, 2024 development date only. NOAA archive ETag `0x8DDB02110673996` and ordered range receipt SHA-256 `a2884a44858f22348d4d9df8dd60abeddbff7ab4e98c549f9c006490b47024ab` exactly matched the prior coverage study. All 10,078,124 nationwide rows scanned; 196,943,872 bytes across 81 verified range requests. Detector received 65,713 selected observation rows across 162 vessel tracks, excluding 38,733 non-cargo/tanker rows or unknown types as track barriers. No invalid positions, eligible duplicate or conflicting observations reported. Input SHA-256 `e76e67ba511c29d2781f59f1275a6e87290fcb37c09a3ba68972b28136548ba8`. Aggregate artifact 14970276504 (seven-day retention); temporary raw observations deleted by runner cleanup, not uploaded or committed.
+
+| Provisional reference | Opposite-side pairs considered | Retained unreviewed candidates | Rejected outside corridor |
+| --- | ---: | ---: | ---: |
+| Poe chamber | 9 | 6 | 3 |
+| MacArthur chamber | 9 | 3 | 6 |
+| Duluth bridge | 3 | 3 | 0 |
+| Total | 21 | 12 | 9 |
+
+Counts are candidate gate encounters, not confirmed unique vessel passages, recall, accuracy or verified lock assignment. The same encounter may be considered against multiple axes. No independent crossing label established. The result proves feasibility of source-to-detector execution on one development date. It does not establish target equivalence, surveyed gate widths, observed-time availability, commercial-use authorization, field performance or eligibility for calibration. No holdout observations were used for detection or tuning. Next: independently review historical chart geometry and reconcile each modeled arrival target, then review actual candidate brackets against independent passage evidence. Do not use the provisional reference crossing directly as replay ground truth. No changes to production behavior.
