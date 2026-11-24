@@ -108,7 +108,11 @@ test('one existing U.S. canonical explorer loads every EPA record without 981 th
  assert.equal(registry.beaches.filter(b=>b.country==='US').length,1020);
  assert.equal(registry.beaches.filter(b=>b.country==='CA').length,30);
  const epaRefs=registry.beaches.flatMap(b=>b.refs).filter(r=>r.key.startsWith('epa:'));
- assert.equal(new Set(epaRefs.map(r=>r.key)).size,981,'every original EPA beach identity remains on the shared map');
+ const fullRegistry=require('../lib/shorefeel/beach-registry').buildRegistry();
+ const allEpa=fullRegistry.entries.flatMap(e=>e.refs).filter(r=>r.key.startsWith('epa:'));
+ assert.equal(new Set(allEpa.map(r=>r.key)).size,981,'every original EPA identity remains in the registry');
+ assert.equal(new Set(epaRefs.map(r=>r.key)).size,980,'exclude the explicitly inland record from shoreline discovery');
+ assert.ok(!registry.beaches.some(b=>b.id==='epa:OH318877'));
  assert.match(html,/All Great Lakes <span>Shared beach map<\/span>/);
  assert.match(html,/id="gl-explorer"/);
  assert.match(html,/id="legacy-explorer"/);
