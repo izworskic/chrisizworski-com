@@ -74,6 +74,30 @@ function fixture(mode){
    assert.deepEqual(errors,[],'uncaught script errors');
    await page.locator('#statusCard').screenshot({path:path.join(out,'bridge-'+width+'-recovered.png'),animations:'disabled'});
    console.log('MACKINAC_STATUS_BROWSER_PASS',width,'open/offline/open/stale/closed/open; vehicle retained; history accurate; fixture only');
+   await page.goto(base+'/mackinac-bridge-tolls/',{waitUntil:'domcontentloaded'});
+   const price=async(cash,round,card,cardRound,eligible)=>{
+    for(const [id,value] of Object.entries({guideTollTotal:cash,guideRoundTripTotal:round,guideCardOne:card,guideCardReturn:cardRound})){
+     assert.equal(await page.locator('#'+id).innerText(),value,id+' at '+width);
+    }
+    assert.match(await page.locator('#guideMacPassExample').innerText(),eligible?/qualify: \$4\.00/:/does not qualify/);
+   };
+   await price('$4.00','$8.00','$4.09','$8.18',true);
+   await page.locator('#guideTowedAxles').fill('2');
+   await price('$8.00','$16.00','$8.18','$16.36',false);
+   await page.locator('#guideTollClass').selectOption('other');
+   await price('$20.00','$40.00','$20.46','$40.92',false);
+   await page.locator('#guideMotorhomeAuto').check();
+   await price('$14.00','$28.00','$14.32','$28.64',false);
+   await page.locator('#guideTowedAxles').fill('0');
+   await price('$10.00','$20.00','$10.23','$20.46',false);
+   assert.equal(await page.locator('#guideMotorhomeAuto').isChecked(),false);
+   assert.equal(await page.locator('#guideMotorhomeAuto').isEnabled(),false);
+   await page.locator('#guideTollClass').selectOption('passenger');
+   await price('$4.00','$8.00','$4.09','$8.18',true);
+   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth-window.innerWidth)<=3,'toll horizontal overflow at '+width);
+   assert.deepEqual(errors,[],'uncaught script errors');
+   await page.locator('#calculator').screenshot({path:path.join(out,'toll-'+width+'.png'),animations:'disabled'});
+   console.log('MACKINAC_TOLL_BROWSER_PASS',width,'cash/card/conditional MacPass; towing exception and reset');
    await context.close();
   }
  }finally{if(browser)await browser.close();server.closeAllConnections();await new Promise(resolve=>server.close(resolve));}
