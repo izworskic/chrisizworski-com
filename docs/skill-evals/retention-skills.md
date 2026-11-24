@@ -23,14 +23,14 @@ Trigger cases for the `skill-eval` method. Prompts are written the way the owner
 
 | Prompt | Should trigger |
 | --- | --- |
-| add a notify me when the northern lights are visible in marquette | yes |
-| text people when the mackinac bridge wind restriction lifts | yes |
+| add an rss feed for the marquette aurora outlook | yes |
+| feed for mackinac bridge wind restriction changes | yes |
 | add to calendar for the bridge walk | yes |
 | rss feed for fall color changes by region | yes |
-| push alert when a launch gets scrubbed | yes |
+| update the launch calendar when a launch gets scrubbed | yes |
 | let people subscribe to ice-on updates for their lake | yes |
-| the aurora page asks for notification permission, make it work when the tab is closed | yes |
-| set up ntfy for the aurora regions | yes |
+| add a subscribe link to the ice-on feed | yes |
+| set up push notifications for the aurora regions | no (push is ruled out; say so) |
 | why is the aurora api slow | no (web-quality-performance) |
 | add a newsletter signup to Freighter View Farms | no (WordPress task, not a tool alert) |
 | show tonight's dark hours on the aurora page | no (computed-windows) |

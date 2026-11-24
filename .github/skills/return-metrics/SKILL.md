@@ -21,7 +21,7 @@ Every retention feature needs a baseline and a result. This repository already h
 
 - **Returning share:** returning active users divided by all active users, per tool, per 28 days.
 - **Trigger-day returns:** the same, limited to days when the tool's alert condition fired.
-- **Channel returns:** sessions by `sessionSource` equal to `ntfy`, `calendar` or `rss`, from the `utm_source` tags `condition-alerts` adds.
+- **Channel returns:** sessions by `sessionSource` equal to `calendar` or `rss`, from the `utm_source` tags `condition-alerts` adds.
 
 Write results to `benchmarks/return-baseline.json`: property, query, date range, timestamp, values. Any field not measured stays `null` with a `measurementGap` note, matching `growth-100x-baseline.json`.
 
