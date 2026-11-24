@@ -241,8 +241,12 @@ try{
     assert.match(await google.getAttribute('href'),/^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=/);
     assert.equal(await page.locator('[data-nearby-id="munising-falls"]').count(),0,'closed waterfall cannot be suggested');
     await page.locator('[data-nearby-id="miners-falls"] .nearby-map-action').click();
+    assert.equal(await page.locator('.leaflet-popup-content').count(),1,'only one popup may exist after selection');
     assert.match(await page.locator('.leaflet-popup-content').innerText(),/Miners Falls/);
     assert.equal(await page.locator('.leaflet-popup-content .waterfall-google-link').count(),1,'map popup needs an external location view');
+    await page.evaluate(()=>{window.UPWaterfallFocus('wagner-falls');window.UPWaterfallFocus('miners-falls');});
+    assert.equal(await page.locator('.leaflet-popup-content').count(),1,'rapid successive selections cannot leave overlapping popups');
+    assert.match(await page.locator('.leaflet-popup-content').innerText(),/Miners Falls/);
     await page.locator('[data-nearby-id="miners-falls"] .nearby-save-action').click();
     assert.match(await page.locator('#selected-list').innerText(),/Miners Falls/);
     await page.locator('#clear-list').click();
