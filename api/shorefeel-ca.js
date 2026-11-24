@@ -1,5 +1,6 @@
 'use strict';
 const {bySlug,bboxUrl,interpret,empty}=require('../lib/shorefeel/canada.js');
+const {nearbyWater}=require('../lib/shorefeel/nearshore-noaa.js');
 // ECCC GeoMet's licensed public collection is served by the Government of Canada.
 async function retrieve(url){
   if(typeof url!=='string'||!url.startsWith('https://api.weather.gc.ca/collections/citypageweather-realtime/items?bbox='))
@@ -15,7 +16,10 @@ async function retrieve(url){
 async function lookup(beach,now=new Date()){
   const url=bboxUrl(beach);
   if(!url)return empty(beach,'This location has no approved ECCC source reference.');
-  try{return interpret(beach,await retrieve(url),now);}
+  try{
+    const [forecast,water]=await Promise.all([retrieve(url),nearbyWater(beach,now)]);
+    return interpret(beach,forecast,now,water);
+  }
   catch{return empty(beach,'Environment Canada hourly forecasts could not be retrieved.');}
 }
 async function handler(req,res){

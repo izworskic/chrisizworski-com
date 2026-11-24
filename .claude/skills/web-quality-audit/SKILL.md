@@ -1,6 +1,6 @@
 ---
 name: web-quality-audit
-description: "A measured audit of visitor task, performance, SEO, accessibility and observed failures."
+description: "A measured audit of visitor task, performance, SEO, accessibility and observed failures. Use when asked to audit a page or tool end to end, or before a substantial visitor-facing release."
 ---
 
 # web-quality-audit

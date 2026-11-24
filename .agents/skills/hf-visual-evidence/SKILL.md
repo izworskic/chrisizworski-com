@@ -1,6 +1,6 @@
 ---
 name: hf-visual-evidence
-description: "Optional local vision-assisted photo QA for verified field-guide imagery; never claim the model establishes the photograph's source or location."
+description: "Optional local vision-assisted photo QA for verified field-guide imagery; never claim the model establishes the photograph's source or location. Use when reviewing already-sourced field-guide photos for quality, never to source or locate new ones."
 ---
 # Visual evidence assistant for Experience Foundry
 

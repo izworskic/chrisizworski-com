@@ -1,6 +1,6 @@
 ---
 name: web-quality-best-practices
-description: "Review browser behavior, privacy, third-party scripts and resilience."
+description: "Review browser behavior, privacy, third-party scripts and resilience. Use when adding third-party scripts, embeds, storage, notifications or offline behavior, or when asked for a resilience review."
 ---
 
 # web-quality-best-practices

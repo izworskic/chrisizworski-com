@@ -1,6 +1,6 @@
 ---
 name: web-quality-performance
-description: "Analyze load cost, image size, request timing and JavaScript overhead."
+description: "Analyze load cost, image size, request timing and JavaScript overhead. Use when a page feels slow, adds images, scripts or data, or when asked for a performance review."
 ---
 
 # web-quality-performance

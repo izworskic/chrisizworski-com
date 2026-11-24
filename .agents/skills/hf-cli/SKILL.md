@@ -1,6 +1,6 @@
 ---
 name: hf-cli
-description: "On-demand Hugging Face Hub discovery and read-only repository inspection for local agent workflows; never automatically deploy, pay, download weights or publish."
+description: "On-demand Hugging Face Hub discovery and read-only repository inspection for local agent workflows; never automatically deploy, pay, download weights or publish. Use when the owner asks to look up Hugging Face models, datasets or repos before any ML decision."
 ---
 # Hugging Face Hub CLI (curated adoption)
 

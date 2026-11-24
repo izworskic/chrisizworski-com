@@ -1,6 +1,6 @@
 ---
 name: web-quality-core-web-vitals
-description: "Measure LCP, INP and CLS with honest field versus lab evidence."
+description: "Measure LCP, INP and CLS with honest field versus lab evidence. Use when a change could affect loading, layout shift or interaction speed, or when asked about Core Web Vitals."
 ---
 
 # web-quality-core-web-vitals
