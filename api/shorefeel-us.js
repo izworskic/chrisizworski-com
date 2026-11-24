@@ -10,19 +10,54 @@ async function nws(url){
   if(!r.ok)throw new Error('NWS returned HTTP '+r.status);
   return r.json();
 }
+// The EPA shoreline line may lie on a marine forecast grid. When this happens,
+// check only a few nearby offsets and require NWS itself to classify one as land.
+// Each fallback is approximately 1.4 km from the mapped shoreline point.
+async function landPointFor(beach){
+ const p=beach.forecastReference;
+ const pointUrl=q=>'https://api.weather.gov/points/'+q.lat.toFixed(4)+','+q.lon.toFixed(4);
+ const choose=(point,reference)=>point?.properties?.type==='land'&&
+   officialNwsUrl(point.properties.forecastHourly)?{point,reference}:null;
+ let original=null;
+ try{original=await nws(pointUrl(p));}
+ catch(error){
+  // A mapped EPA line may be just outside NWS' /points land/marine domain.
+  // Retry nearby only for a genuine 404, never on upstream rate limits or outages.
+  if(!beach.epaId||!/HTTP 404/.test(String(error?.message||'')))throw error;
+ }
+ const found=choose(original,p);
+ if(found||!beach.epaId)return found;
+ const candidates=[
+  {lat:p.lat+.014,lon:p.lon},{lat:p.lat-.014,lon:p.lon},
+  {lat:p.lat,lon:p.lon+.020},{lat:p.lat,lon:p.lon-.020}
+ ];
+ const checked=await Promise.allSettled(candidates.map(q=>nws(pointUrl(q))));
+ for(let i=0;i<checked.length;i++){
+  const answer=checked[i];
+  if(answer.status!=='fulfilled')continue;
+  const valid=choose(answer.value,candidates[i]);
+  if(valid)return valid;
+ }
+ return null;
+}
 async function lookup(beach,now=new Date()){
   if(!validLocation(beach))return unavailable(beach,'No verified weather reference for this place.');
   try{
     // NOAA is optional and runs concurrently with the official NWS fetch.
     // A NOAA outage may not replace or invent the NWS air answer.
     const waterPromise=nearbyWater(beach,now);
-    const p=beach.forecastReference;
-    const point=await nws('https://api.weather.gov/points/'+p.lat.toFixed(4)+','+p.lon.toFixed(4));
-    if(point?.properties?.type!=='land')return unavailable(beach,'NWS did not identify the nearby reference as a land forecast.');
-    const url=officialNwsUrl(point.properties.forecastHourly);
+    const selected=await landPointFor(beach);
+    if(!selected)return unavailable(beach,'NWS could not confirm a land-area forecast sufficiently close to this shoreline.');
+    const url=officialNwsUrl(selected.point.properties.forecastHourly);
     if(!url)return unavailable(beach,'No validated official NWS hourly forecast endpoint was provided.');
     const hourly=await nws(url);
-    return interpret(beach,point,hourly,now,await waterPromise);
+    const answer=interpret(beach,selected.point,hourly,now,await waterPromise);
+    if(beach.epaId&&answer.status==='forecast-based'){
+      answer.reference={...selected.reference};
+      answer.epaRecord={beachId:beach.epaId,inventoryYear:2025};
+      answer.scope+=' The NWS land forecast was checked at a point within about 2 km of the EPA shoreline reference; this is not measured air on the sand.';
+    }
+    return answer;
   }catch{return unavailable(beach,'The National Weather Service forecast could not be retrieved.');}
 }
 async function handler(req,res){
@@ -47,3 +82,4 @@ async function handler(req,res){
 module.exports=handler;
 module.exports.lookup=lookup;
 module.exports.nws=nws;
+module.exports.landPointFor=landPointFor;
