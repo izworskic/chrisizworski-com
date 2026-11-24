@@ -52,6 +52,24 @@ function positionFresh(v,now){
  const age=now-utcMs(v?.seen);
  return Number.isFinite(age)&&age>=0&&age<=MAX_AGE_MS&&Number.isFinite(v?.lat)&&Number.isFinite(v?.lon);
 }
-return Object.freeze({MAX_AGE_MS,MOTION_MAX_AGE_MS,utcMs,observedFields,motion,latestReports,eligibleApproach,positionFresh});
+// Circular course alignment is shared; the owner of each waterway supplies
+// its existing local approach bearing and tolerance. No route or ETA inferred.
+function angularDifference(a,b){
+ if(!Number.isFinite(a)||!Number.isFinite(b))return null;
+ return Math.abs((((a-b)%360+540)%360)-180);
+}
+function passageRelation(v,now,towardBearing,toleranceDegrees){
+ const evidence=motion(v,now);
+ const valid=finite(towardBearing,0,360)!==null&&finite(toleranceDegrees,0,89)!==null;
+ if(!valid||!positionFresh(v,now)||!evidence.approachEligible)return {
+  state:'unknown',alignmentDegrees:null,asOf:evidence.asOf,
+  basis:'insufficient recent AIS motion or valid local reference'
+ };
+ const alignment=angularDifference(evidence.courseOverGround,towardBearing);
+ return {state:alignment<=toleranceDegrees?'aligned':alignment>=180-toleranceDegrees?'opposed':'crosswise',
+  alignmentDegrees:alignment,asOf:evidence.asOf,
+  basis:'reported course relative to local reference; not confirmed passage or arrival'};
+}
+return Object.freeze({MAX_AGE_MS,MOTION_MAX_AGE_MS,utcMs,observedFields,motion,latestReports,eligibleApproach,positionFresh,angularDifference,passageRelation});
 
 });
