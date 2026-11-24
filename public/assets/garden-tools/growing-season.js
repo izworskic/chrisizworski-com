@@ -22,7 +22,7 @@ get('gs-crop').value=typeof saved?.crop==='string'?saved.crop:label(H.models['bi
 get('gs-date').value=iso(saved?.date)?saved.date:year+'-05-25';
 get('gs-packet').value=Number.isInteger(saved?.packetDays)&&saved.packetDays>0&&saved.packetDays<=365?saved.packetDays:'';
 get('gs-form').hidden=false;
-function resetWeather(){weatherVersion++;get('gs-weather-result').replaceChildren();get('gs-weather-status').textContent='Check the forecast when you are ready. No current reading has been loaded.';get('gs-weather').disabled=true;}
+function resetWeather(){weatherVersion++;get('gs-weather-result').replaceChildren();get('gs-weather-status').textContent='Check the forecast when you are ready. No current reading has been loaded.';get('gs-weather').disabled=true;get('gs-journal').disabled=true;}
 function node(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;}
 function historyData(){if(!archivePromise)archivePromise=fetch('/assets/garden-tools/garden-daymet-2021-2025.json').then(r=>{if(!r.ok)throw Error('Archive');return r.json()}).catch(e=>{archivePromise=null;throw e});return archivePromise;}
 function input(){const siteId=findPlace(get('gs-place').value),crop=get('gs-crop').value.trim().slice(0,120),model=findModel(crop),date=get('gs-date').value,raw=get('gs-packet').value,packetDays=raw===''?null:Number(raw);
@@ -46,7 +46,7 @@ function paintHistory(result,s){
 async function run(save){
  const v=++version;resetWeather();active=null;const area=get('gs-history');area.replaceChildren();
  const s=input();if(!s){get('gs-status').textContent='Choose one of the seven reference towns, enter a crop and a valid planting date. Packet days must be 1 to 365.';return;}
- active=s;get('gs-weather').disabled=false;
+ active=s;get('gs-weather').disabled=false;get('gs-journal').disabled=false;
  if(save){try{localStorage.setItem(key,JSON.stringify({siteId:s.siteId,crop:s.crop,date:s.date,packetDays:s.packetDays}));get('gs-save-status').textContent='Saved on this device.'}catch{get('gs-save-status').textContent='Browser storage unavailable; this plan is not saved.'}}
  get('gs-status').textContent=places[s.siteId]+' · planted or planned '+fmt(s.date,true);
  if(s.packetDays)area.appendChild(node('p','Packet reference: '+fmt(dateAdd(s.date,s.packetDays),true),'gs-packet'));
@@ -77,6 +77,7 @@ get('gs-weather').addEventListener('click',async()=>{
  }catch{if(v===weatherVersion)status.textContent='The current forecast is unavailable or stale. Check the official forecast and your own garden before acting.';}
  finally{if(v===weatherVersion)get('gs-weather').disabled=false;}
 });
+get('gs-journal').addEventListener('click',()=>{if(!active)return;window.dispatchEvent(new CustomEvent('garden-journal-plan',{detail:{siteId:active.siteId,crop:active.crop,date:active.date,packetDays:active.packetDays,modelId:active.model?.id||null,biofix:active.model?.biofix||null}}));});
 let started=false;function open(){if(root.open&&!started){started=true;run(false);}}
 root.addEventListener('toggle',open);if(location.hash==='#growing-season')root.open=true;window.addEventListener('hashchange',()=>{if(location.hash==='#growing-season')root.open=true;});open();
 })();
