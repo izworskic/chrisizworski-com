@@ -181,6 +181,16 @@
    "href": "/national-tools/garden-water/"
   },
   {
+   "id": "holiday-travel",
+   "title": "Holiday Travel Planner: Best Days to Fly or Drive",
+   "tags": "holiday travel planner thanksgiving christmas new year flights airports flying driving road trip weather delays cancellations fuel best days",
+   "place": "United States · airports and road trips",
+   "kind": "Holiday trip timing",
+   "description": "Compare Thanksgiving and Christmas travel days, test your flight route against historical delays and cancellations, and check forecast weather at the busiest holiday airports. Compare driving windows and estimated fuel costs, too.",
+   "months": "10,11,12,1",
+   "href": "https://chrisizworski.com/holiday-travel/"
+  },
+  {
    "id": "flight-tracker",
    "title": "Flight Tracker — Where Is My Plane?",
    "tags": "flight tracker plane aircraft airport flight number travel air",
