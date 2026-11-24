@@ -17,7 +17,7 @@ test('card comparison and conditional MacPass use existing published fare',()=>{
 test('payment estimates remain monotone and round each crossing separately',()=>{
  for(const cls of ['passenger','other'])for(let lead=2;lead<=12;lead++)for(let tow=0;tow<=12;tow++)for(const auto of [false,true]){
  const t=calculateToll(cls,lead,tow,auto),p=paymentComparison(t.total,cls,lead,tow);
- assert.equal(p.cardOneCents,t.total*100+Math.round(t.total*2.3));
+ assert.equal(p.cardOneCents,t.total*100+Math.floor((t.total*23+5)/10));
  assert.equal(p.cardReturnCents,p.cardOneCents*2);
  assert.equal(p.macPassCandidate,cls==='passenger'&&lead===2&&tow===0);
  }
