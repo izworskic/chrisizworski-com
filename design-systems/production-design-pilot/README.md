@@ -50,3 +50,7 @@ Source inventory and seven color-pair calculations executed. Browser verifier au
 ## Phase 3 extension (2026-11-24)
 
 The original lab now loads [scoped foundations](foundations.css) and includes snow-observation and journey-planning specimens alongside the existing maritime examples. See [foundation contract](FOUNDATION_CONTRACT.md) for source provenance, component ownership, maturity and acceptance. The Duluth source-audit discrepancy above is historical: PR #1918 replaced its generic glyph with the shared factory and passed five-width map QA; the owner confirmed the working site. No live pages are modified by this extension. The independent candidate skill evaluation remains outstanding.
+
+## Phase 5: reviewed-source visual regression
+
+Use [visual-reference.json](visual-reference.json) and [VISUAL_REGRESSION.md](VISUAL_REGRESSION.md). The path-scoped workflow replaces the temporary branch-only lab job, exercises the existing verifier at five widths and compares seven captured states against the reviewed source commit in the same runner. No production route, masks, automatic baseline updates or new runtime dependencies. Preserve the reviewed commit in the repository history when merging this PR.

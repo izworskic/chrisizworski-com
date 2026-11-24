@@ -46,3 +46,7 @@ No shared production widget has been copied out of its owner. A specimen is not 
 Run the existing lab verifier and the static foundation test. Compare the previous and new maritime states, inspect actual mobile/desktop cross-family screenshots, review focus, units, unknown values, native details without JS and no overflow. Contrast checks measure declared pairs, not the complete WCAG audit. Existing full repository gate still required. No automated baseline blessing. Next after review: choose one bounded component adoption on a contrasting live tool, then review stable screenshot baselines as Phase 5. Independent Phase 1 behavioral evaluation remains unrun; no mandatory new instruction or active skill edit.
 
 No new Vercel functions, routes, crons, production dependencies or paid services. The existing isolated browser QA job is reused only for this branch; a preview build may run under existing settings.
+
+## Phase 5 extension
+
+Phase 3 exact head e1795ba95f4777552f091d630ae4751ac53fda27 passed the hosted browser, repository and public-output jobs in run 45439618608. Artifact 14943106834 supplied seven PNGs. Mobile and desktop cross-family states, alternate keyboard focus and mobile no-JS were visually reviewed; no visible clipping or incorrect unknown values. Small glyph size remains a known limitation. Phase 5 pins that source and replaces the branch-only lab workflow with a path-scoped same-run screenshot comparator. This is a reviewed reference for change detection, not a site-wide design approval. New comparator CI is pending.
