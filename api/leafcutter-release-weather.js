@@ -38,6 +38,19 @@ module.exports=async function handler(req,res){
   const timeZone=String(p.timeZone||point?.properties?.timeZone||site.tz||'America/Detroit');
   if(!['America/Detroit','America/Chicago','America/New_York','US/Eastern','US/Central'].includes(timeZone))throw Error('INVALID_NWS_TIMEZONE');
   const now=new Date();
+  // Opt-in consumer contract; reuse the exact same NWS request and location resolver.
+  // The default leafcutter response and cache policy stay unchanged.
+  if(req.query?.mode==='garden-evidence'){
+   const evidence=require('../lib/garden-weather-evidence.cjs').nwsEvidence({
+    periods:p.periods,issuedAt,now,zone:timeZone,siteId:site.id,sourceUrl:url
+   });
+   const usable=evidence.status==='AVAILABLE'||evidence.status==='PARTIAL';
+   res.setHeader('Cache-Control',usable?'public, s-maxage=900, stale-while-revalidate=300':'no-store');
+   return res.status(usable?200:503).json({...evidence,
+    site:{id:site.id,name:site.name,latitude:site.lat,longitude:site.lon,
+     coordinateMeaning:site.coordinateMeaning||'Named city forecast reference coordinate, not a property measurement'},
+    checkedAt:now.toISOString(),forecastOnly:true});
+  }
   const summary=E.reducePeriods(p.periods,issuedAt,now,timeZone);
   const heat=E.summarizeHeat(p.periods,summary.fresh,now,timeZone);
   if(!summary.daily.length)throw Error('NO_USABLE_FORECAST');
