@@ -36,3 +36,25 @@ main{max-width:1250px;margin:auto;padding:0 22px 75px}
  background:#0b5665;color:white;font:750 12px system-ui;box-shadow:0 2px 8px #15394265;
  border:2px solid #fff;font-variant-numeric:tabular-nums}
 @media(max-width:720px){.shore-show-more{order:5;width:100%;margin:7px 0 11px}.map-section{order:6}}
+
+/* U.S. explorer only: preserve page zoom outside the map. */
+#us-shore-map-section .map-shell,
+#us-shore-map-section #shore-map,
+#us-shore-map-section #shore-map * {
+  touch-action:none !important;
+  -ms-touch-action:none;
+}
+#us-shore-map-section #shore-map {overscroll-behavior:contain}
+#map-tile-note{padding:10px 13px;margin:0;background:#fff6e9;color:#4b3821;font-size:13px}
+#map-tile-note[hidden]{display:none}
+@media(pointer:coarse){
+ #us-shore-map-section .leaflet-control-zoom a{width:46px;height:46px;line-height:46px;font-size:25px}
+}
+/* Put the map before the long beach list on narrow screens. */
+@media(max-width:720px){
+ #us-shore-map-section{order:4}
+ .field-layout:has(#us-shore-map-section) .list-heading{order:5}
+ .field-layout:has(#us-shore-map-section) .shore-no-match{order:6}
+ .field-layout:has(#us-shore-map-section) .shore-list{order:7}
+ .field-layout:has(#us-shore-map-section) .shore-show-more{order:8}
+}
