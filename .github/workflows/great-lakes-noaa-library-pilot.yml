@@ -1,13 +1,12 @@
 name: Great Lakes one-time NOAA historical library pilot
 # Bounded branch-only research. Never scheduled; no production deployment or writes.
 on:
-  push:
-    branches: [agent/great-lakes-historical-passage-library-20261124]
-    paths: [.github/workflows/great-lakes-noaa-library-pilot.yml]
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
   historical-pilot:
+    if: github.ref_name == 'agent/great-lakes-historical-passage-library-20261124'
     runs-on: ubuntu-latest
     timeout-minutes: 25
     steps:
@@ -27,7 +26,8 @@ jobs:
             test -s "$archive"
             sha=$(sha256sum "$archive" | cut -d ' ' -f 1)
             echo "$sha  ais-$day.csv.zst" > "research-output/$day.sha256"
-            zstd -dc -- "$archive" | node scripts/great-lakes-historical-library.mjs collect "$day" "$sha" "research-output/$day.json"
+            zstd -dc -- "$archive" | node scripts/great-lakes-historical-library.mjs collect "$day" "$sha" "$RUNNER_TEMP/$day.partial.json"
+            mv "$RUNNER_TEMP/$day.partial.json" "research-output/$day.json"
             rm -f "$archive"
           done
       - name: Summarize completed archive dates without inferring passages
