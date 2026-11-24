@@ -1,6 +1,6 @@
 ---
 name: hf-semantic-discovery
-description: "Offline-first semantic retrieval pilot for an existing destination catalog, tested against the live site's factual HTML and deterministic filters."
+description: "Offline-first semantic retrieval pilot for an existing destination catalog, tested against the live site's factual HTML and deterministic filters. Use when evaluating semantic search for a destination catalog such as Adventure Finder."
 ---
 # Semantic discovery: Adventure Finder pilot
 

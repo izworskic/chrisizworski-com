@@ -1,6 +1,6 @@
 ---
 name: huggingface-best
-description: "Choose and benchmark small, license-appropriate Hugging Face models against measurable visitor tasks and baseline approaches."
+description: "Choose and benchmark small, license-appropriate Hugging Face models against measurable visitor tasks and baseline approaches. Use when choosing whether any ML model should be added to a tool."
 ---
 # Model-selection gate
 

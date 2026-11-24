@@ -1,6 +1,6 @@
 ---
 name: huggingface-tool-builder
-description: "Build bounded local scripts for read-only Hugging Face model/dataset audits and reproducible evidence preparation."
+description: "Build bounded local scripts for read-only Hugging Face model/dataset audits and reproducible evidence preparation. Use when repeated Hugging Face research needs a bounded, reproducible local script."
 ---
 # Reusable Hugging Face research tools
 
