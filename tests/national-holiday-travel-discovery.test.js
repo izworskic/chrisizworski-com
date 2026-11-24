@@ -39,5 +39,8 @@ test('visible cards, finder count, structured list and source year stay in sync'
   assert.equal(list.itemListElement.find(item => item.url === url).name, 'Holiday Travel Flight Planner');
   assert.match(mirror, new RegExp('id="finder-count" aria-live="polite">' + cards + ' tools shown'));
   assert.equal(graph.find(node => node['@id'] === 'https://chrisizworski.com/national-tools/#page')?.dateModified, '2026-11-24');
+  const sitemap = fs.readFileSync('public/sitemap.xml', 'utf8');
+  assert.ok(sitemap.includes('<loc>https://chrisizworski.com/national-tools/</loc>\n    <lastmod>2026-11-24</lastmod>'), 'sitemap lastmod must match the catalog change');
+
   assert.ok(!mirror.includes('Holiday travel flights are live tracked by BTS'), 'must not invent live BTS data');
 });
