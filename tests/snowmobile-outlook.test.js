@@ -29,7 +29,7 @@ test('unknown, null, unit mismatch, missing and overlapping snow intervals never
 test('boundary allocation is proportional, and missing last period withholds total',()=>{
  const g=grid(),issued=now+H;
  const o=threeDayOutlook(g,issued);
- assert.equal(o.startAt,iso(issued));assert.equal(o.days[0].snowInches,4);assert.equal(o.days[2].snowInches,null);assert.equal(o.snowTotalInches,null);
+ assert.equal(o.startAt,iso(issued));assert.ok(Math.abs(o.days[0].snowInches-4)<1e-9);assert.equal(o.days[2].snowInches,null);assert.equal(o.snowTotalInches,null);
 });
 test('cold, warm, missing and stale grids cannot manufacture current riding evidence',()=>{
  const g=grid();g.properties.temperature=series('wmoUnit:degC',-1);
