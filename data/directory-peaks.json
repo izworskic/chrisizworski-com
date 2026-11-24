@@ -1,6 +1,7 @@
 {
   "_about": "Peak windows for directory cards (MM-DD/MM-DD, may wrap the new year; several windows allowed). A card in its window joins 'Worth checking now' on its directory with the note below. Keep notes short, factual and true every year. Apply with: python3 scripts/build-directory-peaks.py",
   "national": {
+    "holiday-travel": {"windows": ["11-15/12-02", "12-10/01-02"], "note": "Compare holiday travel days and weather at the busiest airports"},
     "white-christmas": {"windows": ["11-15/12-25"], "note": "Christmas Day snow odds sharpen as forecasts come into range"},
     "blue-spring": {"windows": ["11-15/03-15"], "note": "Manatee season: cold mornings bring them into the warm spring"},
     "lake-effect-snow": {"windows": ["11-01/02-28"], "note": "Lake-effect snow season on the Great Lakes snowbelts"},
