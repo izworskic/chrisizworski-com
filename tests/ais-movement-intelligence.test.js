@@ -62,3 +62,28 @@ test('256 seeded replays keep newest independent report or abstain on conflict',
   }
  }
 });
+
+test('browser and server use one AIS evidence policy, with exact expiry boundaries',()=>{
+ const fs=require('node:fs'),vm=require('node:vm');
+ const source=fs.readFileSync('public/assets/ais-movement.js','utf8');
+ const context={window:{}};vm.runInNewContext(source,context);
+ const browser=context.window.GreatLakesAisEvidence,server=require('../lib/ais-movement');
+ assert.equal(server,require('../public/assets/ais-movement'));
+ for(const age of [-1,0,899999,900000,900001,1799999,1800000,1800001])
+ for(const speedKnots of [null,0,0.5,1.49,1.5,12,102.2])
+ for(const course of [null,0,270,360]){
+  const v={mmsi:'316001234',lat:46.5,lon:-84.35,seen:new Date(now-age).toISOString(),speedKnots,course};
+  assert.equal(browser.positionFresh(v,now),age>=0&&age<=1800000);
+  assert.equal(browser.positionFresh(v,now),server.positionFresh(v,now));
+  assert.equal(JSON.stringify(browser.motion(v,now)),JSON.stringify(server.motion(v,now)));
+  assert.equal(browser.eligibleApproach(v,now),age>=0&&age<=900000&&speedKnots>=1.5&&speedKnots<102.2&&course!==null&&course<360);
+ }
+ for(const [page,asset] of [['great-lakes-freighter-tracking','freighter-tracker'],['welland-canal','welland-canal']]){
+  const html=fs.readFileSync('public/'+page+'/index.html','utf8');
+  const common=html.indexOf('/assets/ais-movement.js?v='),consumer=html.indexOf('/assets/'+asset+'.js?v=');
+  assert.ok(common>=0&&consumer>common);
+  const js=fs.readFileSync('public/assets/'+asset+'.js','utf8');
+  assert.match(js,/GreatLakesAisEvidence\?\.positionFresh/);
+  assert.match(js,/GreatLakesAisEvidence\?\.motion/);
+ }
+});
