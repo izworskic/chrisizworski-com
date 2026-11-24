@@ -21,7 +21,7 @@
     }
   }catch(_){storageAvailable=false;}
   function persist(next){
-    try{window.localStorage.setItem(key,JSON.stringify(next));saved=next;return true;}
+    try{window.localStorage.setItem(key,JSON.stringify(next));storageAvailable=true;saved=next;return true;}
     catch(_){storageAvailable=false;status.textContent="This browser could not save changes. Your map and finder still work.";return false;}
   }
   function time(value){return new Date(value).toLocaleString("en-US",{month:"short",day:"numeric",hour:"numeric",minute:"2-digit",timeZone:"America/Detroit",timeZoneName:"short"});}
@@ -50,11 +50,13 @@
   function make(tag,text){const node=document.createElement(tag);if(text!==undefined)node.textContent=text;return node;}
   function render(){
     desk.hidden=saved.length===0;
-    const focusId=document.activeElement&&document.activeElement.dataset.savedRemove;
+    const focused=document.activeElement?.dataset;
+    const focusId=focused?.savedRemove||focused?.savedOpen;
+    const focusAttribute=focused?.savedRemove?"data-saved-remove":"data-saved-open";
     list.replaceChildren();
     for(const spot of saved){
       const li=make("li"),link=make("a",labels[spot.id]),detail=make("p",describe(spot)),remove=make("button","Remove");
-      li.dataset.savedWaterway=spot.id;link.href=mapped.includes(spot.id)?tracker+spot.id:specialist[spot.id];
+      li.dataset.savedWaterway=spot.id;link.dataset.savedOpen=spot.id;link.href=mapped.includes(spot.id)?tracker+spot.id:specialist[spot.id];
       link.addEventListener("click",event=>{
         if(!mapped.includes(spot.id)||event.ctrlKey||event.metaKey||event.shiftKey||event.altKey||!current)return;
         const tab=document.querySelector('.view-tab[data-freighter-view="'+spot.id+'"]'),map=document.getElementById("freighterMap");
@@ -69,7 +71,7 @@
       });
       li.append(link,detail,remove);list.append(li);
     }
-    if(focusId){const again=list.querySelector('[data-saved-remove="'+focusId+'"]');if(again)again.focus({preventScroll:true});}
+    if(focusId){const again=list.querySelector('['+focusAttribute+'="'+focusId+'"]');if(again)again.focus({preventScroll:true});}
   }
   function receive(event){
     current=event.detail||null;
