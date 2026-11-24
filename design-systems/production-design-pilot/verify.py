@@ -50,15 +50,53 @@ with sync_playwright() as playwright:
                 assert result.inner_text() == "Selected view: ship reports"
             assert page.locator("[data-state=unavailable] button").is_disabled()
             assert "Current position unavailable" in page.locator("[data-state=stale]").inner_text()
-            assert not errors, errors
             if width in (390, 1280):
                 page.screenshot(path=str(OUT / f"lab-{width}.png"), full_page=True)
+
+            # Changing either specimen must not change the other. Exercise both
+            # directions and keep the mixed states long enough to inspect them.
+            left, right = groups.nth(0), groups.nth(1)
+            left_ships = left.get_by_role("button", name="Show ships")
+            left_places = left.get_by_role("button", name="Viewing places")
+            right_ships = right.get_by_role("button", name="Show ships")
+            right_places = right.get_by_role("button", name="Viewing places")
+            left_result = left.locator("..").locator("[data-result]")
+            right_result = right.locator("..").locator("[data-result]")
+            left_ships.focus()
+            page.keyboard.press("Tab")
+            assert left_places.evaluate("(el) => el === document.activeElement && el.matches(':focus-visible')")
+            page.keyboard.press("Enter")
+            assert left_places.get_attribute("aria-pressed") == "true"
+            assert left_result.inner_text() == "Selected view: viewing places"
+            assert right_ships.get_attribute("aria-pressed") == "true"
+            assert right_result.inner_text() == "Selected view: ship reports"
+            if width in (390, 1280):
+                page.screenshot(path=str(OUT / f"lab-{width}-alternate-focus.png"), full_page=True)
+            right_places.click()
+            assert left_places.get_attribute("aria-pressed") == "true"
+            assert right_places.get_attribute("aria-pressed") == "true"
+            left_ships.click()
+            assert right_places.get_attribute("aria-pressed") == "true"
+            assert right_result.inner_text() == "Selected view: viewing places"
+            assert left_result.inner_text() == "Selected view: ship reports"
+            right_ships.click()
+            assert left_ships.get_attribute("aria-pressed") == "true"
+            assert right_ships.get_attribute("aria-pressed") == "true"
+            assert not errors, errors
             page.close()
         page = browser.new_page(java_script_enabled=False, viewport={"width": 390, "height": 844})
         page.goto(URL)
         assert page.locator("#glyphs li").count() == 9
         assert page.locator("noscript").is_visible()
         assert page.get_by_text("Type unknown", exact=True).is_visible()
+        assert page.locator("#glyphs svg").count() == 0
+        assert page.evaluate("document.documentElement.scrollWidth <= innerWidth")
+        assert "Selection does not change" in page.locator("noscript").inner_text()
+        group = page.locator(".actions[role=group]").first
+        group.get_by_role("button", name="Viewing places").click()
+        assert group.get_by_role("button", name="Show ships").get_attribute("aria-pressed") == "true"
+        assert group.locator("..").locator("[data-result]").inner_text() == "Selected view: ship reports"
+        page.screenshot(path=str(OUT / "lab-390-no-js.png"), full_page=True)
         page.close()
     finally:
         browser.close()
