@@ -585,6 +585,39 @@ function check(value,message){if(!value)throw Error(message);}
       'first personalized day does not use the real Duluth start');
     check(await guide.locator('#ct-opt-nights .ct-opt-day').last().getAttribute('data-to')==='30',
       'optimized route must finish the continuous Duluth loop');
+    const experience=guide.locator('#ct-opt-nights .ct-opt-experience');
+    check(await experience.count()===10,'each optimized day must expose a daily experience decision');
+    const windows=guide.locator('#ct-opt-day-window');
+    const routeIdentity=()=>guide.locator('#ct-opt-nights .ct-opt-day').evaluateAll(nodes=>nodes.map(n=>n.dataset.from+':'+n.dataset.to).join(','));
+    const priorities=()=>experience.evaluateAll(nodes=>nodes.map(n=>[n.dataset.experienceState,n.dataset.remainingMinutes,n.querySelector('[data-ct-experience="priority"]')?.dataset.ctStop||null]));
+    const routeBefore=await routeIdentity(),baseline=await priorities();
+    check(await windows.locator('input[value="8.5"]').isChecked(),'initial sample window must match the existing 8.5-hour optimizer target');
+    check(await experience.locator('[data-ct-experience="priority"][data-ct-stop="11"]').count()===1,
+      'Pictured Rocks must retain one primary planning opportunity');
+    const unresolvedExperience=experience.filter({hasText:'Time available for stops is withheld'});
+    check(await unresolvedExperience.count()===1,'unresolved park approach must withhold available visit time');
+    check(await unresolvedExperience.locator('[data-ct-experience="priority"]').count()===0,'incomplete approach cannot supply an automatic activity priority');
+    await windows.locator('input[value="6"]').check();
+    const short=await priorities();
+    check(await routeIdentity()===routeBefore,'daily experience allowance must not silently change overnight stops');
+    check(short.some((x,i)=>x[1]!==baseline[i][1]),'changing the daily window must change the available time');
+    check(short.every((x,i)=>x[1]===undefined?baseline[i][1]===undefined:Number(x[1])<=Number(baseline[i][1])),
+      'shortening a day must never create more available time');
+    const sampleWindow='circle-tour-experience-window-'+width+'.png';
+    await windows.screenshot({path:path.join(out,sampleWindow),animations:'disabled'});
+    report.screenshots.push(sampleWindow);
+    await windows.locator('input[value="8.5"]').check();
+    check(JSON.stringify(await priorities())===JSON.stringify(baseline),'daily allowance A to B to A must recover exactly');
+    check(await routeIdentity()===routeBefore,'returning to the original window must retain the source route');
+    await guide.locator('#ct-prefer-month').selectOption('1');
+    check(await experience.filter({hasText:'Check seasonal access first'}).count()>0,'cold-season park priorities need a separate check');
+    await guide.locator('#ct-prefer-month').selectOption('8');
+    check(JSON.stringify(await priorities())===JSON.stringify(baseline),'season A to B to A must recover the original daily decisions');
+    const priorityCard=guide.locator('#ct-opt-nights .ct-opt-day').filter({has:guide.locator('[data-ct-experience="priority"][data-ct-stop="11"]')});
+    const priorityShot='circle-tour-experience-priority-'+width+'.png';
+    await priorityCard.screenshot({path:path.join(out,priorityShot),animations:'disabled'});
+    report.screenshots.push(priorityShot);
+    report.cases.push({state:width+'px daily experience window',result:'conservative arithmetic, source priority, road and seasonal checks, unchanged route, A-B-A recovery'});
     // A common traveler frustration: day-specific map must select a
     // real source segment rather than show an unrelated full-lake route.
     if(width===390){
