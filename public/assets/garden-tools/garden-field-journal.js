@@ -1,7 +1,7 @@
 /* Local journal core; visitor reports are not independent field validation. */
 (function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory(require('./garden-harvest.js'),require('./garden-microclimate.js'));else root.GardenFieldJournal=factory(root.GardenHarvest,root.GardenMicroclimate);})(typeof globalThis!=='undefined'?globalThis:this,function factory(H,M){
 'use strict';
-const schema='garden-field-journal-v1',DAY=86400000,sites=['bay-city','detroit','grand-rapids','kalamazoo','traverse-city','marquette','houghton'],kinds=['emergence','flowering','fruit-set','first-green-harvest','first-ripe-harvest','first-harvest','harvest','note','daily-air','paired-night','rain-gauge','irrigation','soil-feel'];
+const schema='garden-field-journal-v1',DAY=86400000,sites=['bay-city','detroit','grand-rapids','kalamazoo','traverse-city','marquette','houghton'],kinds=['emergence','flowering','fruit-set','first-green-harvest','first-ripe-harvest','first-harvest','harvest','note','daily-air','paired-night','rain-gauge','irrigation','soil-feel','leaf-check'];
 const dateOK=s=>typeof s==='string'&&/^\d{4}-\d\d-\d\d$/.test(s)&&Number.isFinite(Date.parse(s+'T00:00:00Z'))&&new Date(s+'T00:00:00Z').toISOString().slice(0,10)===s&&s>='1900-01-01'&&s<='2100-12-31';
 const str=(s,n)=>typeof s==='string'&&s.trim().length>0&&s.length<=n;
 const idOK=s=>typeof s==='string'&&/^[a-zA-Z0-9_-]{1,80}$/.test(s);
@@ -39,7 +39,11 @@ function validate(data,today){
    if(!['wet','moist','getting-dry','dry'].includes(e.feel))throw Error('Choose a measured soil feel');
    clean.feel=e.feel;
   }
-  if(['daily-air','paired-night','rain-gauge','irrigation','soil-feel'].includes(e.kind)){
+  if(e.kind==='leaf-check'){
+   if(!['none','rings','small-spots','water-soaked','white-powder','angular-yellow','other'].includes(e.sign)||!['wet','dry','unknown'].includes(e.foliage)||!Number.isInteger(e.leavesChecked)||e.leavesChecked<1||e.leavesChecked>200||!Number.isInteger(e.leavesAffected)||e.leavesAffected<0||e.leavesAffected>e.leavesChecked||(e.sign==='none')!==(e.leavesAffected===0))throw Error('Enter a consistent leaf check and actual leaf counts');
+   Object.assign(clean,{sign:e.sign,foliage:e.foliage,leavesChecked:e.leavesChecked,leavesAffected:e.leavesAffected});
+  }
+  if(['daily-air','paired-night','rain-gauge','irrigation','soil-feel','leaf-check'].includes(e.kind)){
    const key=[e.plantingId,e.date,e.kind].join('|');if(daily.has(key))throw Error('Only one reading of this kind per planting and date; remove the old reading first');daily.add(key);
   }
   ids.add(e.id);entries.push(clean);
