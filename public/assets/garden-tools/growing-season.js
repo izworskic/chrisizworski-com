@@ -15,7 +15,7 @@ const key='fvfGrowingSeasonV1';let saved=null,archivePromise=null,version=0,weat
 try{saved=JSON.parse(localStorage.getItem(key)||'null')}catch{}
 function option(list,value){const e=document.createElement('option');e.value=value;list.appendChild(e);}
 Object.values(places).forEach(v=>option(get('gs-towns'),v));Object.values(H.models).forEach(m=>option(get('gs-crops'),label(m)));
-const now=new Date(),today=new Intl.DateTimeFormat('en-CA',{year:'numeric',month:'2-digit',day:'2-digit',timeZone:'America/Detroit'}).format(now);
+const now=new Date(),parts=Object.fromEntries(new Intl.DateTimeFormat('en-US',{year:'numeric',month:'2-digit',day:'2-digit',timeZone:'America/Detroit'}).formatToParts(now).map(p=>[p.type,p.value])),today=parts.year+'-'+parts.month+'-'+parts.day;
 const year=Number(today.slice(0,4))+(today.slice(5)>'05-25'?1:0);
 get('gs-place').value=places[saved?.siteId]||'Bay City';
 get('gs-crop').value=typeof saved?.crop==='string'?saved.crop:label(H.models['big-beef']);
@@ -29,8 +29,8 @@ function input(){const siteId=findPlace(get('gs-place').value),crop=get('gs-crop
  if(!siteId||!crop||!iso(date)||date<'2020-01-01'||date>'2100-12-31'||(packetDays!==null&&(!Number.isInteger(packetDays)||packetDays<1||packetDays>365)))return null;
  return {siteId,crop,model,date,packetDays};}
 function paintHistory(result,s){
- const area=get('gs-history'),dates=result.seasons.filter(x=>x.heatCrossingDate).map(x=>x.heatCrossingDate.slice(5)).sort();
- const headline=result.allReached?fmt('2025-'+dates[0])+' to '+fmt('2025-'+dates[dates.length-1]):'Not reached in every historical season';
+ const area=get('gs-history'),dates=result.seasons.filter(x=>x.heatCrossingDate).map(x=>x.heatCrossingDate).sort((a,b)=>a.slice(5).localeCompare(b.slice(5)));
+ const headline=result.allReached?fmt(dates[0])+' to '+fmt(dates[dates.length-1]):'Not reached in every historical season';
  area.appendChild(node('p',headline,'gs-range'));
  area.appendChild(node('p','Five historical heat-threshold dates for '+s.model.variety+'. These are not observed harvests or a prediction for '+s.date.slice(0,4)+'.','gs-muted'));
  const max=Math.max(1,...result.seasons.map(x=>x.elapsedDays||x.daysEvaluated),s.packetDays||0);
