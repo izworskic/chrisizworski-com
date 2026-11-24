@@ -4,7 +4,7 @@ const {chromium}=require('playwright');
 const root=path.resolve('public'),out='artifacts/freighter-action';
 fs.mkdirSync(out,{recursive:true});
 const server=http.createServer((req,res)=>{let f=path.resolve(root,'.'+decodeURIComponent(req.url.split('?')[0]));if(!f.startsWith(root+path.sep)){res.writeHead(403).end();return}try{if(fs.statSync(f).isDirectory())f=path.join(f,'index.html')}catch{}fs.readFile(f,(e,b)=>{if(e){res.writeHead(404).end();return}res.setHeader('content-type',({'.js':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json','.jpg':'image/jpeg','.png':'image/png'})[path.extname(f)]||'application/octet-stream');res.end(b)})});
-const fixture=()=>{const now=new Date().toISOString();const ship=(mmsi,name,lat,lon,type,speed,length,seen=now)=>({mmsi,name,lat,lon,shipType:type,speedKnots:speed,lengthMeters:length,seen,course:90,destination:null,source:'QA fixture'});return {ok:true,checkedAt:now,attribution:[{credit:'Fixture only'}],vessels:[ship('367000001','QA LAKER',46.5036,-84.36,70,5,240),ship('367000002','QA TANKER',43.657,-83.874,80,0,100),ship('367000003','QA STALE',46.51,-84.35,70,5,200,new Date(Date.now()-41*60000).toISOString())]}};
+const fixture=()=>{const now=new Date().toISOString();const ship=(mmsi,name,lat,lon,type,speed,length,seen=now)=>({mmsi,name,lat,lon,shipType:type,speedKnots:speed,lengthMeters:length,seen,course:90,destination:null,source:'QA fixture'});return {ok:true,checkedAt:now,attribution:[{credit:'Fixture only'}],vessels:[ship('366904950','LEE A. TREGURTHA',46.5036,-84.36,70,5,240),ship('367000002','QA TANKER',43.657,-83.874,80,0,100),ship('367000003','QA STALE',46.51,-84.35,70,5,200,new Date(Date.now()-41*60000).toISOString())]}};
 (async()=>{await new Promise(r=>server.listen(0,'127.0.0.1',r));const base='http://127.0.0.1:'+server.address().port;const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox']});try{
 for(const width of [360,390,768,1280,1440]){
  const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'}),page=await context.newPage(),errors=[];let failed=false;
@@ -58,7 +58,22 @@ for(const width of [360,390,768,1280,1440]){
  await page.locator('[data-freighter-view=soo]').click();assert.equal(await page.locator('#corridorTitle').innerText(),'Soo Locks');
  await page.locator('#freighterMap .tracker-ship-marker').first().focus();await page.keyboard.press('Enter');
  await page.locator('#freighterMap .leaflet-popup').waitFor();assert.equal(await page.locator('#freighterMap .leaflet-popup').count(),1);
- assert.match(await page.locator('#freighterMap .leaflet-popup').innerText(),/QA LAKER/);
+ assert.match(await page.locator('#freighterMap .leaflet-popup').innerText(),/LEE A. TREGURTHA/);
+ assert.equal(await page.locator('#ship-inspector').isHidden(),true);
+ await page.locator('.hub-meet-ship').click();await page.locator('#ship-story').getByText(/wartime tanker/).first().waitFor();
+ assert.equal(await page.locator('#freighterMap .leaflet-popup').count(),0);
+ assert.match(await page.locator('#ship-inspector-title').innerText(),/LEE A. TREGURTHA/);assert.match(await page.locator('#ship-story').innerText(),/29,360 gross tons/);
+ assert.equal(await page.locator('#ship-story img').evaluate(async img=>{await img.decode();return img.naturalWidth>0}),true);
+ if(width===390)await page.locator('#ship-inspector').screenshot({path:out+'/hub-ship-story-390.png'});
+ await page.locator('#ship-inspector-close').click();assert.equal(await page.locator('#ship-inspector').isHidden(),true);
+ if(width===390){
+   await page.locator('[data-hub-find-ship="366904950"]').click();assert.equal(await page.locator('#freighterNameSearch').inputValue(),'366904950');assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),1);
+   await page.locator('[data-hub-find-ship="366904940"]').click();assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),0);
+   await page.locator('#freighterClearSearch').click();await page.locator('[data-freighter-view=saginaw]').click();
+   await page.locator('#freighterMap .tracker-ship-marker').first().focus();await page.keyboard.press('Enter');
+   await page.locator('.hub-meet-ship').click();await page.locator('#ship-story').getByText(/reviewed history is not available/).waitFor();
+   assert.equal(await page.locator('#ship-story img').count(),0);await page.locator('#ship-inspector-close').click();
+ }
  await page.locator('#live-map').screenshot({path:out+'/hub-map-'+width+'.png'});
  await page.locator('#finder-query').fill('Cleveland');await page.locator('#finder-query').press('Enter');assert.equal(await page.locator('#corridor').inputValue(),'cuyahoga');assert.equal(await page.locator('#finder-go').getAttribute('href'),'/cuyahoga-freighter-watch/');
  await page.locator('#finder-query').fill('unknown location');await page.locator('#finder-search-go').click();assert.match(await page.locator('#finder-search-status').innerText(),/No matching/);assert.equal(await page.locator('#corridor').inputValue(),'cuyahoga');
@@ -94,7 +109,7 @@ for(const width of [360,390,768,1280,1440]){
 const context=await browser.newContext({viewport:{width:390,height:900}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
 await context.route('**/*',route=>{const u=new URL(route.request().url());if(u.pathname==='/api/freighter-ais')return route.fulfill({status:503,contentType:'application/json',body:'{}'});return u.hostname==='127.0.0.1'?route.continue():route.abort()});
 await page.goto(base+'/freighters/',{waitUntil:'domcontentloaded'});await page.getByText(/Vessel reports unavailable/).waitFor();assert.equal(await page.locator('[data-hub-vessel-type=all] strong').innerText(),'—');assert.equal(await page.locator('[data-hub-vessel-type=all]').isDisabled(),true);assert.match(await page.locator('#hub-fleet-status').innerText(),/unknown, not zero/);assert.ok(await page.locator('#freighterMap').evaluate(e=>e.getBoundingClientRect().height)<=120);assert.deepEqual(errors,[]);await context.close();
-const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:900}}),staticPage=await nojs.newPage();await staticPage.goto(base+'/freighters/',{waitUntil:'domcontentloaded'});assert.equal(await staticPage.locator('#corridors .corridor-card').count(),10);assert.ok(await staticPage.locator('#corridors a[href="/calumet-freighter-watch/"]').isVisible());assert.equal(await staticPage.locator('#my-waterways').isHidden(),true);assert.equal(await staticPage.locator('#save-waterway-row').isHidden(),true);assert.equal(await staticPage.locator('#hub-fleet-filter').isHidden(),true);await nojs.close();
+const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:900}}),staticPage=await nojs.newPage();await staticPage.goto(base+'/freighters/',{waitUntil:'domcontentloaded'});assert.equal(await staticPage.locator('#corridors .corridor-card').count(),10);assert.ok(await staticPage.locator('#corridors a[href="/calumet-freighter-watch/"]').isVisible());assert.equal(await staticPage.locator('#my-waterways').isHidden(),true);assert.equal(await staticPage.locator('#save-waterway-row').isHidden(),true);assert.equal(await staticPage.locator('#hub-fleet-filter').isHidden(),true);assert.equal(await staticPage.locator('#ship-inspector').isHidden(),true);assert.equal(await staticPage.locator('[data-library-mmsi]').count(),8);assert.equal(await staticPage.locator('[data-hub-find-ship]').first().isHidden(),true);await nojs.close();
 const blocked=await browser.newContext({viewport:{width:390,height:900}}),blockedPage=await blocked.newPage();
 await blocked.addInitScript(()=>{Storage.prototype.getItem=function(){throw Error('blocked')};Storage.prototype.setItem=function(){throw Error('blocked')};});
 await blocked.route('**/*',route=>{const u=new URL(route.request().url());if(u.pathname==='/api/freighter-ais')return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(fixture())});return u.hostname==='127.0.0.1'?route.continue():route.abort()});
