@@ -59,6 +59,7 @@ function evaluateCandidate(c,tracks,engine,options={}){
  const baseline=issue+distance/v.speedKnots*60*MIN;
  const row={status:'scored',model:bounds(mid,lo,hi),baseline:bounds(baseline,lo,hi),coverage:start<=lo&&end>=hi?'contained':end<lo||start>hi?'disjoint':'partial',width:(end-start)/MIN};
  if(options.arrivalResiduals===true)row.signedResidual=[(lo-mid)/MIN,(hi-mid)/MIN];
+ if(options.windowEvidence===true)row.windowEvidence={issuedAt:issue,midpoint:mid,start,end,lo,hi};
  if(options.routeProgress===true)row.routeProgress=routeProgress.compare(routeProgress.estimate(c.site,result,track.filter(([t])=>t<=issue),issue),result,issue,lo,hi,bounds);
  return row;
 }
