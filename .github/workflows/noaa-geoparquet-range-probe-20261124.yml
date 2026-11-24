@@ -1,0 +1,33 @@
+name: One-time NOAA GeoParquet range research
+on:
+  pull_request:
+    types: [opened]
+    paths:
+      - ".github/workflows/noaa-geoparquet-range-probe-20261124.yml"
+permissions:
+  contents: read
+jobs:
+  probe:
+    if: github.head_ref == 'research/noaa-geoparquet-range-probe-20261124' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned temporary research reader
+        run: python -m pip install --disable-pip-version-check --no-deps --only-binary=:all: pyarrow==21.0.0
+      - name: Inspect one official daily object using capped byte ranges
+        env:
+          NOAA_REPORT: ${{ runner.temp }}/noaa-geoparquet-coverage.json
+        run: python scripts/noaa-geoparquet-range-probe-20261124.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: noaa-geoparquet-aggregate-coverage
+          path: ${{ runner.temp }}/noaa-geoparquet-coverage.json
+          if-no-files-found: warn
+          retention-days: 7
