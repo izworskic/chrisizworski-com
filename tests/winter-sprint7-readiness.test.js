@@ -41,11 +41,11 @@ test('all seven indexed riding regions retain evidence hierarchy and no unverifi
   assert.ok(h.includes('not a guarantee of opening or grooming'),key);
   assert.ok(h.includes('/michigan-winter-weekends/#weekend-desk'),key);
   assert.ok(h.includes('data-source-name=')&&h.includes('id="routePlanner"'),key);
-  assert.match(h,/"dateModified":"2026-11-23"/);
+  assert.match(h,/"dateModified":"2026-11-24"/);
   assert.ok(winterMap.includes('https://chrisizworski.com/snowmobile/regions/'+key+'.html'));
  }
  assert.ok(snowGen.includes('s7-region-check'));
- assert.ok(snowGen.includes('dateModified: \'2026-11-23\''));
+ assert.ok(snowGen.includes('dateModified: \'2026-11-24\''));
  assert.ok(snowCss.includes('.s7-readiness-steps'));
  assert.ok(snowCss.includes('@media(max-width:750px)'));
 });
@@ -100,4 +100,20 @@ test('preserve original canonical pages and truthful release dates',()=>{
  }
  assert.equal((snow.match(/adsbygoogle\.js/g)||[]).length,1);
  assert.ok(snow.includes('id="region-list"')&&snow.includes('id="state-map"'));
+});
+
+test('all seven regional pages open with a single usable trail map before the long route controls and evidence panels',()=>{
+ for(const key of regionIds){
+  const h=read('public/snowmobile/regions/'+key+'.html');
+  assert.match(h,/<p class="lede">[\s\S]*?<\/p>\s*<section class="grid">\s*<div class="panel route-planner" id="routePlanner">/);
+  const map=h.indexOf('id="map"');
+  assert.equal((h.match(/id="map"/g)||[]).length,1,key);
+  assert.ok(h.indexOf('id="mapMoveToggle"')<map&&h.indexOf('id="toggleSnowDepth"')<map,key);
+  for(const id of ['routeModeToggle','junctionSearch','loopFinder','routeResult','parkingPlanner','s7-region-title','trustReceipt','outlook72']){
+   assert.ok(h.indexOf('id="'+id+'"')>map,key+': '+id);
+   assert.equal((h.match(new RegExp('id="'+id+'"','g'))||[]).length,1,key+': '+id);
+  }
+  assert.ok(h.includes('draws the one you choose on the map above'));
+  assert.ok(winterMap.includes('/snowmobile/regions/'+key+'.html</loc><lastmod>2026-11-24</lastmod>'));
+ }
 });
