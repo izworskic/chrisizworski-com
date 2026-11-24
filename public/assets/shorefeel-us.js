@@ -1,13 +1,67 @@
 (function(){
   'use strict';
+  // The EPA BEACH Act source list is a local, pinned 2025 snapshot. Its mapped
+  // lines are places, not proof of a current open beach or a safe swim.
+  const EPA_MAP='https://beacon.epa.gov/ords/beacon2/r/beacon_apex/beacon2/map-page';
+  const SOURCE_AUTHORITIES={
+    MI:['Michigan BeachGuard','https://mienviro.michigan.gov/nsite/beach/map/results'],
+    MN:['Minnesota Lake Superior Beach Monitoring Program','https://mnbeaches.org/'],
+    WI:['Wisconsin Beach Health','https://apps.dnr.wi.gov/beachhealth/'],
+    IL:['Illinois BeachGuard','https://idph.illinois.gov/envhealth/ilbeaches/public/'],
+    IN:['Indiana IDEM BeachAlert','https://portal.idem.in.gov/beachalert/'],
+    OH:['Ohio BeachGuard','https://odh.ohio.gov/know-our-programs/bathing-beach-monitoring/BeachGuard'],
+    PA:['Erie County Beach Water Testing','https://eriecountypa.gov/departments/health/services-and-programs/health-and-wellness/beach-water-testing-results/'],
+    NY:['New York Coastal Beach Water Quality','https://beachadvisory.health.ny.gov/']
+  };
+  const source=window.ShoreFeelEPACatalog;
+  const sourceRows=Array.isArray(source?.records)&&source.records.length<=1500?source.records:[];
+  const listRoot=document.getElementById('shore-list');
+  const lakeLabel=lake=>lake==='Great Lakes'||!lake?'Great Lakes coastal site (lake not assigned)':'Lake '+lake;
+  let sourceAdded=0;
+  function addEpaRow(r){
+    if(!listRoot||!r||!/^[A-Z]{2}[A-Z0-9]{4,14}$/.test(r.id||'')||
+       !SOURCE_AUTHORITIES[r.state]||typeof r.name!=='string'||r.name.length>100||
+       typeof r.county!=='string'||r.county.length>70||
+       !Number.isFinite(r.lat)||!Number.isFinite(r.lon)||r.lat<40||r.lat>49||
+       r.lon< -93||r.lon> -75|| (r.lake&&!['Superior','Michigan','Huron','Erie','Ontario'].includes(r.lake)))return;
+    const slug='epa-'+r.id.toLowerCase();
+    if(document.querySelector('[data-slug="'+slug+'"]'))return;
+    const authority=SOURCE_AUTHORITIES[r.state];
+    const li=document.createElement('li');
+    li.className='shore-stop';
+    Object.assign(li.dataset,{
+      slug,lake:r.lake||'Great Lakes',lat:String(r.lat),lon:String(r.lon),
+      state:r.state,city:r.county+' County',name:r.name,epaId:r.id,
+      story:'This shoreline appears in the EPA 2025 public-access Great Lakes BEACH Act inventory for '+
+        r.county+' County, '+r.state+'. Its recorded shoreline location is approximate. Look at the nearby official air forecast and wind, and check the responsible beach authority for current access, water testing and swimming restrictions.',
+      accessAlert:'',coordinateNote:'EPA reported shoreline center, not a verified parking entrance, beach thermometer or swimming boundary',
+      safetyUrl:authority[1],safetyName:authority[0],parkUrl:EPA_MAP
+    });
+    const btn=document.createElement('button');
+    btn.type='button';btn.dataset.select=slug;btn.setAttribute('aria-pressed','false');
+    const title=document.createElement('span');title.className='shore-stop-name';title.textContent=r.name;
+    const meta=document.createElement('span');meta.className='shore-stop-sub';
+    meta.textContent=r.county+' County, '+r.state+' · '+lakeLabel(r.lake);
+    btn.append(title,meta);
+    const links=document.createElement('span');links.className='shore-stop-links';
+    const detail=document.createElement('a');
+    detail.href='/great-lakes-beaches/around-the-lakes/?beach='+encodeURIComponent(slug);
+    detail.textContent='ShoreFeel';detail.setAttribute('aria-label','View ShoreFeel for '+r.name);
+    const official=document.createElement('a');official.href=EPA_MAP;
+    official.target='_blank';official.rel='noopener';
+    official.textContent='EPA map';official.setAttribute('aria-label','Open EPA BEACON map for '+r.name+', ID '+r.id);
+    links.append(detail,official);li.append(btn,links);listRoot.append(li);
+    sourceAdded++;
+  }
+  for(const record of sourceRows)addEpaRow(record);
   const list=[...document.querySelectorAll('.shore-stop[data-slug]')];
   const filters=[...document.querySelectorAll('[data-lake-filter]')];
   const bySlug=new Map(list.map(li=>[li.dataset.slug,li]));
   const lakeInfo={
-    All:'Explore all 16 U.S. shorelines beyond Michigan. Search a beach or town, or choose a lake.',
+    All:'Browse the source-vetted EPA 2025 U.S. Great Lakes beach inventory across eight states. Search a named beach, county or EPA beach ID, or choose a lake. The 16 original guides remain featured.',
     Superior:'From Duluth’s Park Point to the Apostle Islands, the open Lake Superior shore can feel very different from the forest behind it. Watch which way the breeze crosses the water before choosing your beach.',
     Michigan:'Lake Michigan connects quiet dunes with Chicago’s city beaches. Step out of shelter toward the open sand and notice whether the wind feels different from the forecast back in town.',
-    Huron:'The United States shore of Lake Huron is in Michigan. Open the existing Michigan Beach Report to explore its public beaches and official advisories.',
+    Huron:'Lake Huron wraps Michigan’s eastern shore and Saginaw Bay. Select an EPA-listed shoreline here or explore Michigan’s 50 detailed Beach Report guides.',
     Erie:'On Lake Erie, the marsh edges, sandy peninsulas and city beaches each meet the breeze differently. Watch the water, then check the local health authority for current algae and bacteria notices.',
     Ontario:'Dunes, bluffs and long beaches reveal different faces of Lake Ontario. Compare the wind on an exposed shore with sheltered paths, and consult the park’s own beach-health guidance.'
   };
