@@ -1,0 +1,31 @@
+/* Freighter View Farms seasonal notebook; scoped, no ad placement changes. */
+#growing-season{margin:1.1rem auto;max-width:1120px;min-width:0;color:#203a30}
+#growing-season .gs-body{padding:clamp(14px,3vw,28px);background:#fff;border:1px solid #d9ded5;border-top:0}
+#growing-season .gs-body h3{margin:0 0 .4rem;font-size:1.16rem;color:#203a30}
+#growing-season .gs-body p{margin:.45rem 0;line-height:1.5}
+#growing-season .gs-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(16px,3vw,36px);margin:1rem 0;align-items:start}
+#growing-season .gs-grid>*{min-width:0}
+#growing-season .gs-form{display:grid;gap:12px;margin:1rem 0}
+#growing-season .gs-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+#growing-season label{display:grid;gap:4px;font-size:.88rem;font-weight:650;min-width:0}
+#growing-season input{font:inherit;min-width:0;width:100%;box-sizing:border-box;border:1px solid #77867b;border-radius:5px;padding:10px;background:#fff;color:#203a30}
+#growing-season button{font:inherit;font-weight:650;border:1px solid #28513e;border-radius:6px;padding:10px 14px;min-height:44px;background:#28513e;color:#fff;cursor:pointer}
+#growing-season button:disabled{opacity:.65;cursor:default}
+#growing-season button.gs-secondary{background:#fff;color:#28513e}
+#growing-season button:focus-visible,#growing-season input:focus-visible{outline:3px solid #9c651e;outline-offset:2px}
+#growing-season .gs-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+#growing-season .gs-muted,#growing-season .gs-save-status{font-size:.85rem;color:#46574c}
+#growing-season .gs-range{font-size:clamp(1.35rem,3vw,1.85rem);font-weight:700;line-height:1.25;color:#224e39}
+#growing-season .gs-packet{font-weight:650;color:#704b1a}
+#growing-season .gs-history-list,#growing-season .gs-night-list{list-style:none;padding:0;margin:.75rem 0}
+#growing-season .gs-history-list li{margin:0 0 12px}
+#growing-season .gs-row-head{display:flex;justify-content:space-between;gap:10px;font-size:.88rem;flex-wrap:wrap}
+#growing-season .gs-track{height:10px;background:#e7ebe4;border-radius:4px;position:relative;margin-top:5px}
+#growing-season .gs-bar{display:block;background:#547b50;height:100%;border-radius:4px}
+#growing-season .gs-unreached{background:repeating-linear-gradient(135deg,#8b9488 0 4px,#d4dbd1 4px 8px)}
+#growing-season .gs-track i{position:absolute;top:-3px;height:16px;width:2px;background:#9b671c}
+#growing-season .gs-night-list li{display:grid;grid-template-columns:minmax(60px,1fr) auto minmax(0,1.5fr);gap:10px;border-bottom:1px solid #e1e5de;padding:9px 0;align-items:center;font-size:.9rem}
+#growing-season .gs-night-list small{color:#46574c}
+#growing-season .gs-sources{border-top:1px solid #d9ded5;padding-top:.75rem;font-size:.88rem;line-height:1.6}
+#growing-season [hidden]{display:none!important}
+@media(max-width:680px){#growing-season .gs-grid,#growing-season .gs-fields{grid-template-columns:1fr}}
