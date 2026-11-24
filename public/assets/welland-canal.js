@@ -159,11 +159,10 @@
     return {lock,km};
   }
   function heading(v) {
-    const evidence=window.GreatLakesAisEvidence?.motion(v,Date.now());
-    if(!evidence?.approachEligible) return 'Direction not established';
-    const c=evidence.courseOverGround;
-    if(c>=315||c<=45) return 'Northbound (toward Lake Ontario)';
-    if(c>=135&&c<=225) return 'Southbound (toward Lake Erie)';
+    const relation=window.GreatLakesAisEvidence?.passageRelation(v,Date.now(),0,45);
+    if(!relation||relation.state==='unknown') return 'Direction not established';
+    if(relation.state==='aligned') return 'Northbound (toward Lake Ontario)';
+    if(relation.state==='opposed') return 'Southbound (toward Lake Erie)';
     return 'Cross-channel / direction uncertain';
   }
   function currentVessels() {
