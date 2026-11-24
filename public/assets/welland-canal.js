@@ -159,8 +159,9 @@
     return {lock,km};
   }
   function heading(v) {
-    const c=Number(v.course);
-    if(v.course===null||v.course===undefined||!Number.isFinite(c)||v.speedKnots===null||v.speedKnots<1) return 'Direction not established';
+    const evidence=window.GreatLakesAisEvidence?.motion(v,Date.now());
+    if(!evidence?.approachEligible) return 'Direction not established';
+    const c=evidence.courseOverGround;
     if(c>=315||c<=45) return 'Northbound (toward Lake Ontario)';
     if(c>=135&&c<=225) return 'Southbound (toward Lake Erie)';
     return 'Cross-channel / direction uncertain';
@@ -597,7 +598,8 @@
       if(!response.ok)throw new Error('service unavailable');
       const data=await response.json();
       if(!data.ok||!Array.isArray(data.vessels))throw new Error('invalid vessel response');
-      vesselData=data.vessels.filter(v=>Number.isFinite(v.lat)&&Number.isFinite(v.lon)&&minutesOld(v.seen)!==null&&minutesOld(v.seen)<=30);
+      vesselData=data.vessels.filter(v=>window.GreatLakesAisEvidence?.positionFresh(v,Date.now())===true);
+      evidenceKey=movementKey(vesselData,Date.now());
       status.textContent=vesselData.length?'Recent AIS positions available':'No recent AIS positions in returned coverage';
       updated.textContent='Last checked '+when(data.checkedAt)+' · positions at most 30 minutes old';
       aisState='available';renderList();renderTrafficBrief();renderMarkers();renderLockDetail();renderShoreWatch();renderVesselSpotlight();
@@ -657,6 +659,22 @@
   }
   $('mapLockPreviewOpen').addEventListener('click',openFullLockStory);
   $('lockInstantOpen').addEventListener('click',openFullLockStory);
+  let evidenceKey='';
   renderLocks();chooseLock('all');initMap();refresh();
+  // Expire retained reports and direction claims without requesting more AIS.
+  function movementKey(rows,now){
+    return rows.map(v=>String(v.mmsi)+':'+String(window.GreatLakesAisEvidence?.motion(v,now).approachEligible===true)).join('|');
+  }
+  function expireEvidence(){
+    if(document.hidden||aisState!=='available')return;
+    const now=Date.now(),fresh=vesselData.filter(v=>window.GreatLakesAisEvidence?.positionFresh(v,now)===true);
+    const key=movementKey(fresh,now);
+    if(key===evidenceKey)return;
+    evidenceKey=key;vesselData=fresh;
+    status.textContent=vesselData.length?'Recent AIS positions available':'No recent AIS positions in returned coverage';
+    renderList();renderTrafficBrief();renderMarkers();renderLockDetail();renderShoreWatch();renderVesselSpotlight();
+  }
   window.setInterval(refresh,120000);
+  window.setInterval(expireEvidence,15000);
+  document.addEventListener('visibilitychange',expireEvidence);
 })();
