@@ -467,6 +467,13 @@
     L.circleMarker(CANAL, { radius: 9, color: '#fff', weight: 2, fillColor: '#c35f2d', fillOpacity: 1 }).addTo(map).bindTooltip('Duluth Ship Canal', { direction: 'top' }).bindPopup('<strong>Duluth Ship Canal</strong><br>Canal Park watch zone');
   }
 
+  // Reserve room for the zoom controls and popup chrome on narrow maps.
+  // A focus jump must settle the map before Leaflet computes popup autopan.
+  function vesselPopupOptions() {
+    return { maxWidth: Math.max(150, Math.min(300, map.getSize().x - 100)), minWidth: 120,
+      autoPanPaddingTopLeft: [45, 14], autoPanPaddingBottomRight: [14, 18] };
+  }
+
   function renderMap(data) {
     initMap();
     if (!map || !vesselLayer || !candidateLayer) {
@@ -485,7 +492,7 @@
       if (candidateIds.has(String(v.mmsi))) return;
       const state = localShipState(v);
       const marker = L.marker([v.lat, v.lon], { icon: shipIcon(v, state), keyboard: true, title: v.name || `Vessel ${v.mmsi}`, zIndexOffset: 520 })
-        .addTo(vesselLayer).bindTooltip(v.name || `Vessel ${v.mmsi}`, { direction: 'top' }).bindPopup(vesselPopup(v));
+        .addTo(vesselLayer).bindTooltip(v.name || `Vessel ${v.mmsi}`, { direction: 'top' }).bindPopup(vesselPopup(v), vesselPopupOptions());
       markers.set(String(v.mmsi), marker);
     });
 
@@ -493,7 +500,7 @@
       if (!Number.isFinite(Number(c.lat)) || !Number.isFinite(Number(c.lon))) return;
       const selected = String(c.mmsi) === selectedId;
       const marker = L.marker([c.lat, c.lon], { icon: shipIcon(c, selected ? 'selected' : 'candidate'), keyboard: true, title: selected ? `Next watch: ${c.name}` : `Anticipated: ${c.name}`, zIndexOffset: selected ? 1200 : 760 })
-        .addTo(candidateLayer).bindTooltip(selected ? `NEXT WATCH · ${c.name}` : c.name, { direction: 'top' }).bindPopup(candidatePopup(c, selected));
+        .addTo(candidateLayer).bindTooltip(selected ? `NEXT WATCH · ${c.name}` : c.name, { direction: 'top' }).bindPopup(candidatePopup(c, selected), vesselPopupOptions());
       markers.set(String(c.mmsi), marker);
     });
 
@@ -517,7 +524,9 @@
       return;
     }
     const latlng = marker.getLatLng();
-    map.fitBounds([CANAL, [latlng.lat, latlng.lng]], { padding: [55, 55], maxZoom: 11 });
+    map.stop();
+    map.invalidateSize({ pan: false, animate: false });
+    map.fitBounds([CANAL, [latlng.lat, latlng.lng]], { padding: [55, 55], maxZoom: 11, animate: false });
     marker.openPopup();
     scrollMap();
   }

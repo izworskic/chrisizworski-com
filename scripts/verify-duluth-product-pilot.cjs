@@ -84,7 +84,15 @@ async function main(){
    await page.waitForFunction(()=>Array.from(document.querySelectorAll('.leaflet-tile-loaded')).some(i=>i.complete&&i.naturalWidth>0),null,{timeout:20000});
    assert.match(await page.locator('.leaflet-control-attribution').innerText(),/OpenStreetMap/);
    if(width===390||width===1280)await screenshot(page,'duluth-'+width+'-selected');
-   await page.locator('.leaflet-popup-close-button').click();
+   const close=page.locator('.leaflet-popup-close-button');
+   // Assert the real click target is within the map, not clipped by its toolbar.
+   await page.waitForFunction(()=>{
+    const p=document.querySelector('.leaflet-popup-close-button'),m=document.getElementById('duluthVesselMap');
+    if(!p||!m)return false;
+    const a=p.getBoundingClientRect(),b=m.getBoundingClientRect(),x=a.x+a.width/2,y=a.y+a.height/2;
+    return x>=b.left&&x<=b.right&&y>=b.top&&y<=b.bottom&&p.contains(document.elementFromPoint(x,y));
+   },null,{timeout:10000});
+   await close.click();
    await page.locator('.leaflet-control-zoom-in').click();
    await page.locator('.leaflet-control-zoom-out').click();
    await page.locator('#resetCanal').click();
