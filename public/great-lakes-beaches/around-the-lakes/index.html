@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="/assets/shorefeel-us.css">
 <link rel="stylesheet" href="/assets/shorefeel-wayfinding.css">
 <link rel="icon" href="/favicon.ico">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/great-lakes-beaches/around-the-lakes/#page","url":"https://chrisizworski.com/great-lakes-beaches/around-the-lakes/","name":"Great Lakes ShoreFeel: Weather at the Beach","description":"An interpretive selection of verified public US Great Lakes shores outside Michigan with nearby NWS forecasts and links to official swimming safety authorities.","dateModified":"2026-11-24","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Michigan Beach Conditions","item":"https://chrisizworski.com/great-lakes-beaches/"},{"@type":"ListItem","position":3,"name":"Great Lakes ShoreFeel","item":"https://chrisizworski.com/great-lakes-beaches/around-the-lakes/"}]}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebPage","@id":"https://chrisizworski.com/great-lakes-beaches/around-the-lakes/#page","url":"https://chrisizworski.com/great-lakes-beaches/around-the-lakes/","name":"Great Lakes ShoreFeel: Weather at the Beach","description":"A searchable source-dated EPA directory of public-access Great Lakes shoreline listings across eight U.S. states, plus curated ShoreFeel weather guides and official beach authority links.","dateModified":"2026-11-24","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Michigan Beach Conditions","item":"https://chrisizworski.com/great-lakes-beaches/"},{"@type":"ListItem","position":3,"name":"Great Lakes ShoreFeel","item":"https://chrisizworski.com/great-lakes-beaches/around-the-lakes/"}]}]}</script>
 <script defer src="/_vercel/insights/script.js"></script>
 <script>window.va=window.va||function(){(window.vaq=window.vaq||[]).push(arguments)};</script>
 <script defer src="/_vercel/speed-insights/script.js"></script>
@@ -29,18 +29,18 @@
 <header class="site-nav"><a class="brand" href="/">Chris Izworski</a><nav aria-label="Primary"><a href="/great-lakes-beaches/">Michigan beaches</a><a href="/great-lakes-water-temperature/">Water temperatures</a><a href="/tools/">Tools</a></nav></header>
 <main id="shore-main">
 <section class="intro">
-<p class="eyebrow">ShoreFeel · Beyond Michigan · Great Lakes</p>
+<p class="eyebrow">ShoreFeel · Eight U.S. Great Lakes states</p>
 <h1>What will it feel like <em>at the beach?</em></h1>
 <p class="lead">Imagine leaving Duluth's harbor streets, a Chicago sidewalk or a dune trail and stepping onto the sand. The horizon opens, the wind shifts and the lake becomes part of the weather. Choose a shoreline, read the nearby National Weather Service forecast and discover what makes that place different before you go.</p>
-<p class="intro-route" id="coverage">16 source-vetted U.S. shorelines beyond Michigan, with a route to 30 Canadian beaches</p>
+<p class="intro-route" id="coverage">981 EPA-listed Great Lakes shoreline locations across eight U.S. states, plus 16 detailed ShoreFeel guides. EPA inventory is for 2025; current swimming status is not implied.</p>
 <nav class="shore-question-links" aria-label="What can ShoreFeel answer?">
 <a href="#shore-search">I know a beach</a>
 <a href="#shore-list">Help me choose</a>
 <a href="#swimSafety">Can I swim there?</a>
 </nav>
 <nav class="shore-region-tabs" aria-label="ShoreFeel regions">
-<a href="/great-lakes-beaches/">Michigan <span>50 beaches</span></a>
-<a href="/great-lakes-beaches/around-the-lakes/" aria-current="page">Rest of U.S. <span>16 beaches</span></a>
+<a href="/great-lakes-beaches/">Michigan <span>50 in-depth guides</span></a>
+<a href="/great-lakes-beaches/around-the-lakes/" aria-current="page">All U.S. <span>981 EPA sites</span></a>
 <a href="/great-lakes-beaches/canada/">Ontario <span>30 beaches</span></a>
 </nav>
 </section>
@@ -48,7 +48,7 @@
 <section class="field-layout" aria-label="Choose a Great Lakes shore">
 <div class="field-left">
 <label class="shore-search-wrap" for="shore-search">Find a beach or town
-<input id="shore-search" type="search" maxlength="100" autocomplete="off" placeholder="Try Chicago, Sandbanks, or Lake Erie…" aria-controls="shore-list" aria-describedby="shore-search-help">
+<input id="shore-search" type="search" maxlength="100" autocomplete="off" placeholder="Try Milwaukee, Bay City, or Lake Erie…" aria-controls="shore-list" aria-describedby="shore-search-help">
 </label>
 <p class="shore-search-help" id="shore-search-help">Search this region, or choose a lake below.</p>
 <h2 class="visually-hidden">Choose a lake</h2>
@@ -60,8 +60,8 @@
 <button type="button" data-lake-filter="Erie" aria-pressed="false">Lake Erie</button>
 <button type="button" data-lake-filter="Ontario" aria-pressed="false">Lake Ontario</button>
 </div>
-<p id="lake-context" class="lake-context">See all 16 shorelines or narrow your search by lake.</p>
-<h3 class="list-heading">Choose a shoreline <span id="result-count" role="status">16 locations</span></h3>
+<p id="lake-context" class="lake-context">Browse the EPA 2025 Great Lakes shoreline inventory. Search by beach name, county or EPA ID, or choose a lake.</p>
+<h3 class="list-heading">Choose a shoreline <span id="result-count" role="status">16 guide locations</span></h3>
 <p id="shore-no-match" class="shore-no-match" role="status" hidden>No shorelines match. Try another town, lake, or <a href="/great-lakes-beaches/">Michigan beach</a>.</p>
 <ul id="shore-list" class="shore-list">
 <!-- shorefeel-us-list:start -->
@@ -83,7 +83,8 @@
 <li class="shore-stop" data-slug="southwick-beach-state-park" data-lake="Ontario" data-lat="43.7643" data-lon="-76.216" data-state="NY" data-city="Henderson" data-name="Southwick Beach State Park" data-story="Dunes, marshland and a long sand beach line the eastern shore of Lake Ontario. At the lake edge, wind and cloud cover change the rhythm of a visit. The dunes and marsh frame a long sweep of sand. Notice where the grass shelters you and where the open Lake Ontario breeze becomes more apparent." data-access-alert="Consult the park for current parking, beach access and any seasonal notices." data-coordinate-note="New York beach-monitoring reference; not an entrance" data-safety-url="https://beachadvisory.health.ny.gov/" data-safety-name="New York Coastal Beach Water Quality" data-park-url="https://parks.ny.gov/visit/state-parks/southwick-beach-state-park"><button type="button" data-select="southwick-beach-state-park" aria-pressed="false"><span class="shore-stop-name">Southwick Beach State Park</span><span class="shore-stop-sub">Henderson, NY · Lake Ontario</span></button><span class="shore-stop-links"><a href="/great-lakes-beaches/around-the-lakes/southwick-beach-state-park/">ShoreFeel</a><a href="https://parks.ny.gov/visit/state-parks/southwick-beach-state-park" target="_blank" rel="noopener" aria-label="Southwick Beach State Park official park page">Park details</a></span></li>
 <!-- shorefeel-us-list:end -->
 </ul>
-<noscript><div class="noscript"><p>The 16 official park links above work without JavaScript. Live air forecasts require JavaScript. For weather use <a href="https://www.weather.gov/">the National Weather Service</a>. Before swimming, check the relevant official beach-health authority:</p><ul>
+<button type="button" id="shore-show-more" class="shore-show-more" hidden>Show more beaches</button>
+<noscript><div class="noscript"><p>The 16 detailed park links above work without JavaScript. The wider EPA catalog is available from <a href="https://beacon.epa.gov/ords/beacon2/r/beacon_apex/beacon2/map-page">EPA BEACON</a>. Live air forecasts require JavaScript. For weather use <a href="https://www.weather.gov/">the National Weather Service</a>. Before swimming, check the relevant official beach-health authority:</p><ul>
 <li><a href="https://mnbeaches.org/">Minnesota beach monitoring</a></li>
 <li><a href="https://apps.dnr.wi.gov/beachhealth/">Wisconsin Beach Health</a></li>
 <li><a href="https://idph.illinois.gov/envhealth/ilbeaches/public/">Illinois BeachGuard</a></li>
@@ -110,13 +111,14 @@
 <div class="authority-links"><a id="report-safety" href="https://mnbeaches.org/" target="_blank" rel="noopener">Check Minnesota beach health</a><a id="report-park" href="https://duluthmn.gov/parks/parks-trails/parks-listing/park-point/" target="_blank" rel="noopener">Official park page</a><a id="report-maps" href="https://www.google.com/maps/search/?api=1&query=Park%20Point%20Beach%20House%2C%20Duluth%20MN" target="_blank" rel="noopener">View location on Google Maps</a><a id="report-detail" href="/great-lakes-beaches/around-the-lakes/park-point-beach-house/">Read the complete field note</a></div>
 <p class="source-scope" id="report-scope">The NWS forecast is for a nearby land area, not an air thermometer at the beach. This tool does not monitor water bacteria, currents, waves, or whether swimming is permitted.</p>
 </article>
-<section class="map-section" aria-labelledby="map-title"><div class="map-top"><h2 id="map-title">Across the lakes</h2><p>Beach-area reference pins, not parking entrances.</p></div><div class="map-shell"><div id="shore-map" role="region" aria-label="Interactive Great Lakes shoreline reference map"></div><p id="map-fallback" hidden>Map tiles are not available. Use the complete shoreline list and the official park links for directions.</p></div></section>
+<section class="map-section" aria-labelledby="map-title"><div class="map-top"><h2 id="map-title">Across the lakes</h2><p>EPA shoreline reference points, not parking entrances. Numbered groups zoom into nearby beaches.</p></div><div class="map-shell"><div id="shore-map" role="region" aria-label="Interactive Great Lakes shoreline reference map"></div><p id="map-fallback" hidden>Map tiles are not available. Use the complete shoreline list and the official park links for directions.</p></div></section>
 </div>
 </section>
-<section class="interpret" aria-labelledby="interpret-heading"><p class="eyebrow">A field guide to lake air</p><h2 id="interpret-heading">Why the forecast can change at the water's edge</h2><div class="interpret-columns"><p>Try a simple weather lesson when you visit: notice which way the wind blows as you leave trees or city streets for the sand. A breeze coming off cooler water may make the shore feel refreshing even when inland places are warm. Wind from land can tell a different story. Our National Weather Service reading describes the nearby area; it does not invent an exact temperature change at your feet.</p><p>Each beach has its own character: open sand, high dunes, harbor structures or sheltered coves. Select the park you hope to visit, check its official beach-health and access authority, and read the wind and water again when you arrive. The Michigan <a href="/great-lakes-beaches/">Beach Report covers Lake Huron</a> and the rest of the Michigan shoreline separately.</p></div><details><summary>Methods and limits</summary><p>Weather uses National Weather Service hourly forecasts from a separately identified nearby land grid. Temperatures are model forecasts, not measurements on the beach. Wind chill and heat index use the published NWS formulas when their inputs qualify. Each forecast must be recent; otherwise the number is withheld. No NOAA lake buoy is silently substituted for nearshore swimming water. NWS weather, beach-water testing, access rules and posted swimming flags are separate sources.</p><p>Sources: <a href="https://www.weather.gov/documentation/services-web-api">NWS public forecast API</a>, <a href="https://www.weather.gov/apx/lake_breeze">NWS lake-breeze science</a>, <a href="https://www.ndbc.noaa.gov/">NOAA offshore observations</a>, and each destination's linked park and beach-health authority. Curated place coverage: November 21, 2026.</p></details></section>
+<section class="interpret" aria-labelledby="interpret-heading"><p class="eyebrow">A field guide to lake air</p><h2 id="interpret-heading">Why the forecast can change at the water's edge</h2><div class="interpret-columns"><p>Try a simple weather lesson when you visit: notice which way the wind blows as you leave trees or city streets for the sand. A breeze coming off cooler water may make the shore feel refreshing even when inland places are warm. Wind from land can tell a different story. Our National Weather Service reading describes the nearby area; it does not invent an exact temperature change at your feet.</p><p>Each beach has its own character: open sand, high dunes, harbor structures or sheltered coves. Select the park you hope to visit, check its official beach-health and access authority, and read the wind and water again when you arrive. For Michigan, the <a href="/great-lakes-beaches/">Beach Report provides 50 in-depth guides</a> alongside this nationwide EPA shoreline directory.</p></div><details><summary>Methods and limits</summary><p>Weather uses National Weather Service hourly forecasts from a separately identified nearby land grid. Temperatures are model forecasts, not measurements on the beach. Wind chill and heat index use the published NWS formulas when their inputs qualify. Each forecast must be recent; otherwise the number is withheld. No NOAA lake buoy is silently substituted for nearshore swimming water. NWS weather, beach-water testing, access rules and posted swimming flags are separate sources.</p><p>Sources: <a href="https://www.weather.gov/documentation/services-web-api">NWS public forecast API</a>, <a href="https://www.weather.gov/apx/lake_breeze">NWS lake-breeze science</a>, <a href="https://www.ndbc.noaa.gov/">NOAA offshore observations</a>, and each destination's linked park and beach-health authority. EPA source-list year: 2025, retrieved November 24, 2026. Browse the official <a href="https://beacon.epa.gov/ords/beacon2/r/beacon_apex/beacon2/map-page">EPA BEACON map</a> to identify a beach by its EPA ID. Some Michigan sites have no verified lake classification, and are available in All beaches search. The EPA listing is not a live open-beach or water-quality report.</p></details></section>
 </main>
 <footer class="site-footer"><span>Built by <a href="/chris-izworski/">Chris Izworski</a></span><span><a href="/great-lakes-beaches/">Michigan Beach Report</a> · <a href="/privacy/">Privacy</a></span></footer>
 <script src="/assets/leaflet-1.9.4.js" defer></script>
 <script src="/assets/tool-engagement.js" defer></script>
+<script src="/assets/shorefeel-us-epa-2025.js" defer></script>
 <script src="/assets/shorefeel-us.js" defer></script>
 </body></html>

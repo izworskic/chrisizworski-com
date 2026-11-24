@@ -388,3 +388,31 @@ button:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{
 .snow-city-search-note{padding:13px;color:#26485a;font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .trip-intake .origin-controls input[type=search]{font-size:16px;min-height:48px}
 @media(max-width:640px){.origin-controls label:has(.snow-city-search-wrap){max-width:none}.snow-city-search-results:not(:empty){max-height:min(38vh,260px)}.snow-town-find h2{font-size:24px}}
+
+/* Statewide three-day hub forecast: distinct from observed snow and club reports. */
+.sled-outlook{margin:.8rem 0;padding:.75rem;border-top:2px solid var(--accent);background:var(--accent-soft);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.sled-outlook-heading{font-size:.95rem;margin:0 0 .65rem}
+.sled-outlook-days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem}
+.sled-outlook-day{display:flex;flex-direction:column;gap:.12rem;padding:.45rem;min-width:0;border-left:1px solid #9cabb1;overflow-wrap:anywhere}
+.sled-outlook-window{font-size:.75rem;line-height:1.35;color:var(--accent-deep)}
+.sled-outlook-snow{font-size:clamp(1.05rem,3.7vw,1.6rem);line-height:1.3;color:var(--ink)}
+.sled-outlook-temp{font-weight:700;font-size:.9rem;margin-top:.2rem}
+.sled-outlook .small{font-size:.75rem;line-height:1.35;margin:0;color:#384c56}
+.sled-outlook>p.small{margin-top:.65rem}
+@media(max-width:380px){.sled-outlook{padding:.5rem}.sled-outlook-days{gap:.2rem}.sled-outlook-day{padding:.25rem}}
+
+/* Device-local saved places: source changes, not a second trip ranking. */
+.sled-watchlist[hidden],#sled-watch-finder[hidden],#sled-watch-add[hidden],#sled-watch-clear[hidden]{display:none}
+.sled-watchlist{border-top:3px solid var(--accent);margin:16px 0}
+.sled-watchlist h2{margin:0}
+.sled-watch-items{padding:0;margin:.6rem 0;list-style:none}
+.sled-watch-item{border-top:1px solid var(--line);padding:.65rem 0}
+.sled-watch-item-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sled-watch-item-head a{font-weight:700;font-size:1.15rem}
+.sled-watch-item p{margin:.25rem 0}
+.sled-watch-change{font-weight:700;color:var(--accent-deep);font-size:.95rem}
+.sled-watch-stale{font-size:.82rem;color:#69491c}
+.sled-watchlist button,.sled-watch-save,#sled-watch-add{min-height:44px}
+.sled-region-actions{display:flex;flex-direction:column;align-items:stretch;gap:8px}
+.sled-watch-save[aria-pressed=true]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-deep)}
+.sled-watchlist button:focus-visible,.sled-watch-save:focus-visible,#sled-watch-add:focus-visible{outline:3px solid #247bad;outline-offset:2px}

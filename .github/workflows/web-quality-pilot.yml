@@ -4,6 +4,10 @@ on:
     paths:
       - 'public/michigan-destinations/index.html'
       - 'public/michigan-snow-totals/index.html'
+      - 'public/assets/michigan-ski.js'
+      - 'public/assets/michigan-ski.css'
+      - 'scripts/generate-michigan-ski-pages.mjs'
+      - 'scripts/verify-michigan-ski-browser.cjs'
       - '.agents/skills/web-quality-*/SKILL.md'
       - '.claude/skills/web-quality-*/SKILL.md'
       - '.github/skills/web-quality-*/SKILL.md'
@@ -39,6 +43,7 @@ jobs:
         env:
           NODE_PATH: /tmp/web-quality-pilot/node_modules
         run: |
+          node scripts/generate-michigan-ski-pages.mjs
           node scripts/web-quality-static-server.cjs &
           server_pid=$!
           trap 'kill "$server_pid" 2>/dev/null || true' EXIT
