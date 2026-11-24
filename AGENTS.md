@@ -1,3 +1,7 @@
+## Skill lint: every skill is checked in CI (2026-11-24)
+
+`tests/skill-lint.test.js` runs inside `npm test` and covers every folder under `.agents/skills`, `.claude/skills` and `.github/skills` automatically. Each skill needs frontmatter that opens with `name:` matching its folder, a one-line description of at most 1,024 characters that says when to use it ("Use when ..."), no literal `\n` outside code, no en or em dashes, and identical copies in all three folders. `experience-investment`, `penpot-design` and `rea` are Codex and Claude Code only, listed in `NOT_IN_COPILOT`. A commit that changes only skill Markdown, `AGENTS.md`, `CLAUDE.md`, `.github/copilot-instructions.md` or `docs/*.md` skips the Vercel build (`scripts/ignore-docs-build.mjs`); adding a test or any other file still builds.
+
 ## HUGGING_FACE_CAPABILITIES — opt-in agent skills (2026-11-22)
 
 Eight scoped Hugging Face skills now live in `.agents/skills/`, `.claude/skills/` and `.github/skills/`: the five adapted upstream skills `hf-cli`, `huggingface-best`, `huggingface-datasets`, `huggingface-tool-builder`, `transformers-js`, and three project-specific skills `hf-semantic-discovery`, `hf-visual-evidence`, `hf-forecast-benchmark`. See `docs/HUGGING_FACE_CAPABILITY_ADOPTION_20261122.md`.

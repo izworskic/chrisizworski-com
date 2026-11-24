@@ -1,6 +1,6 @@
 ---
 name: web-quality-seo
-description: "Review canonical, indexability, Person identity and answer in HTML."
+description: "Review canonical, indexability, Person identity and answer in HTML. Use when a change touches titles, canonicals, schema, sitemaps or indexable copy, or when asked for an SEO review."
 ---
 
 # web-quality-seo

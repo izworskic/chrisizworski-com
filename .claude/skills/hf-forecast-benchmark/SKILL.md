@@ -1,6 +1,6 @@
 ---
 name: hf-forecast-benchmark
-description: "Opt-in offline challenger testing for seasonal and time-series engines against authoritative observed history and simple baselines."
+description: "Opt-in offline challenger testing for seasonal and time-series engines against authoritative observed history and simple baselines. Use when a seasonal or time-series engine is being changed and must beat observed history and a simple baseline first."
 ---
 # Forecast challenger for Python Intelligence OS
 

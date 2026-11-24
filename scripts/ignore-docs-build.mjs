@@ -1,11 +1,15 @@
 import { execFileSync } from 'node:child_process';
 import { pathToFileURL } from 'node:url';
 
-// Only internal documentation is excluded. Unknown paths and missing history build.
+// Only internal documentation and agent instructions are excluded. Unknown paths and
+// missing history build. Agent skill folders and agent entry points are never served
+// (outputDirectory is public/) and no build script reads them.
+const AGENT_INSTRUCTION = /^(\.agents\/skills|\.claude\/skills|\.github\/skills)\/[^/]+\/.+\.md$/;
 export function documentationOnly(paths) {
   return paths.length > 0 && paths.every(file =>
-    file === 'README.md' || file === 'AGENTS.md' ||
-    /^docs\/.+\.md$/.test(file));
+    file === 'README.md' || file === 'AGENTS.md' || file === 'CLAUDE.md' ||
+    file === '.github/copilot-instructions.md' ||
+    /^docs\/.+\.md$/.test(file) || AGENT_INSTRUCTION.test(file));
 }
 
 export function isMonitorDataBranch(ref) {

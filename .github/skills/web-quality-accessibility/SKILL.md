@@ -1,6 +1,6 @@
 ---
 name: web-quality-accessibility
-description: "Review WCAG 2.2, focus, keyboard, labels and map list alternatives."
+description: "Review WCAG 2.2, focus, keyboard, labels and map list alternatives. Use when a tool, map or form changes, or when asked to check accessibility."
 ---
 
 # web-quality-accessibility
