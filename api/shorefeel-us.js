@@ -2,6 +2,7 @@
 // NWS-only expansion outside Michigan. No Open-Meteo free API, no location
 // inference from the request, no fabricated bathing-water observations.
 const {bySlug,validLocation,officialNwsUrl,interpret,unavailable}=require('../lib/shorefeel/us-coast.js');
+const {nearbyWater}=require('../lib/shorefeel/nearshore-noaa.js');
 const HEADERS={'User-Agent':'ChrisIzworski-ShoreFeel/2.0 (https://chrisizworski.com/great-lakes-beaches/around-the-lakes/)',
   Accept:'application/geo+json, application/json'};
 async function nws(url){
@@ -12,13 +13,16 @@ async function nws(url){
 async function lookup(beach,now=new Date()){
   if(!validLocation(beach))return unavailable(beach,'No verified weather reference for this place.');
   try{
+    // NOAA is optional and runs concurrently with the official NWS fetch.
+    // A NOAA outage may not replace or invent the NWS air answer.
+    const waterPromise=nearbyWater(beach,now);
     const p=beach.forecastReference;
     const point=await nws('https://api.weather.gov/points/'+p.lat.toFixed(4)+','+p.lon.toFixed(4));
     if(point?.properties?.type!=='land')return unavailable(beach,'NWS did not identify the nearby reference as a land forecast.');
     const url=officialNwsUrl(point.properties.forecastHourly);
     if(!url)return unavailable(beach,'No validated official NWS hourly forecast endpoint was provided.');
     const hourly=await nws(url);
-    return interpret(beach,point,hourly,now);
+    return interpret(beach,point,hourly,now,await waterPromise);
   }catch{return unavailable(beach,'The National Weather Service forecast could not be retrieved.');}
 }
 async function handler(req,res){
