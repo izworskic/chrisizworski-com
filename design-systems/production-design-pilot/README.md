@@ -58,3 +58,7 @@ Use [visual-reference.json](visual-reference.json) and [VISUAL_REGRESSION.md](VI
 ## Phase 6: editorial and data presentation
 
 [Editorial and data presentation reference](EDITORIAL_DATA_CONTRACT.md) brings existing plain-voice, data-contract and visual storytelling guidance together with ten explicitly fictional paired examples. The examples exercise seven evidence categories and four availability states; the offline fixture test checks protected facts, numeric tokens, material caveats and representative false claims. No gallery markup or visual baseline changed, no production-wide linter, no active skill edits. Test scope is the examples, not independent semantic evaluation of the site's copy.
+
+## Phase 7: skill maturity
+
+[Skill maturity review](../../docs/skill-evals/SKILL_MATURITY_REVIEW.md) and [machine-readable registry](../../docs/skill-evals/skill-maturity-registry.json) reconcile 42 logical skills, 123 applicable mirror files and dedicated case coverage, with structural regression tests. Independent paired trials remain NOT VERIFIED. No skill body or activation pointer changed. Product proof and skill effectiveness remain separate.
