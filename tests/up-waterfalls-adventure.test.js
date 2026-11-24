@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import vm from 'node:vm';
-const sandbox={module:{exports:{}}};
+const sandbox={module:{exports:{}},URL,URLSearchParams};
 vm.runInNewContext(fs.readFileSync('public/assets/up-waterfalls-adventure.js','utf8'),sandbox);
 const {plan,timeMax,exactTown,distance}=sandbox.module.exports;
 const origin={name:'Munising',lat:46.4309,lon:-86.6194};
@@ -36,4 +36,45 @@ test('town subset exactly matches existing Census place reference rows',()=>{
  assert.equal(exactTown(data.places,'Munising, MI').name,'Munising');assert.equal(exactTown(data.places,'Munsing'),null);
  assert.equal(exactTown([origin,{...origin,lat:46.5}],'Munising'),null);
  assert.ok(distance(origin,a)<1);
+});
+
+const {solarWindow,easternStart,daylightFit,roadPoint,routeHandoff,roadBudget}=sandbox.module.exports;
+test('NOAA solar approximation keeps western sunset on next UTC day and uses Eastern clock',()=>{
+ const d='2027-06-21',west={lat:46.45,lon:-90.15},east={lat:46.49,lon:-84.35};
+ const w=solarWindow(d,west),e=solarWindow(d,east);
+ assert.equal(new Date(w.sunset).toISOString().slice(0,10),'2027-06-22');
+ assert.ok(w.sunset>e.sunset);
+ assert.ok(w.sunset-w.sunrise>15*3600000&&w.sunset-w.sunrise<17*3600000);
+ assert.equal(new Date(easternStart(d,'09:00')).toISOString(),'2027-06-21T13:00:00.000Z');
+ assert.equal(new Date(easternStart('2027-01-12','09:00')).toISOString(),'2027-01-12T14:00:00.000Z');
+ assert.equal(easternStart('2027-03-14','02:30'),null);
+ assert.equal(easternStart(d,'24:00'),null);
+ const start=easternStart(d,'09:00');
+ assert.equal(daylightFit(start,[w,e],240).status,'FIT');
+ assert.equal(daylightFit(easternStart(d,'23:00'),[w,e],30).status,'LATE');
+ assert.equal(daylightFit(easternStart(d,'04:00'),[w,e],30).status,'EARLY');
+ assert.equal(daylightFit(start,[w,null],30).status,'UNAVAILABLE');
+});
+test('daylight filters candidates without inventing driving durations',()=>{
+ const morning=plan({...args,departure:'09:00'});
+ assert.equal(morning.status,'AVAILABLE');assert.ok(morning.options.every(o=>o.light.status==='FIT'));
+ const evening=plan({...args,departure:'22:00'});
+ assert.equal(evening.status,'EMPTY');assert.ok(evening.lightHeld>0);
+ assert.equal(plan({...args,departure:'99:00'}).status,'INVALID');
+});
+test('round trip uses only independently approved parking points and explicit return',()=>{
+ const card={dataset:{status:'verify',arrivalVerified:'verified',parkingLat:'46.388944',parkingLng:'-86.648995',lat:'46.39',lng:'-86.65',parkingSource:'https://www.michigan.gov/example'}};
+ const p=roadPoint(card,true);assert.ok(p);assert.equal(roadPoint(card,false),null);
+ assert.equal(roadPoint({dataset:{...card.dataset,parkingSource:'https://tourism.example/'}},true),null);
+ assert.equal(roadPoint({dataset:{...card.dataset,parkingLat:card.dataset.lat,parkingLng:card.dataset.lng}},true),null);
+ const u=new URL(routeHandoff(origin,[p]));assert.equal(u.searchParams.get('origin'),u.searchParams.get('destination'));assert.equal(u.searchParams.get('waypoints'),'46.388944,-86.648995');
+ assert.equal(routeHandoff(origin,[p,null]),null);assert.equal(routeHandoff(origin,[p,p]),null);
+});
+test('manual travel time is never inferred and checks both total and daylight',()=>{
+ const light={status:'FIT',margin:20};
+ assert.equal(roadBudget(75,240,120,'',light).status,'UNCHECKED');
+ assert.equal(roadBudget(75,240,120,'60',light).status,'FITS_INPUTS');
+ assert.equal(roadBudget(75,240,120,'150',light).status,'OVER');
+ assert.equal(roadBudget(75,240,120,'200',light).status,'OVER');
+ assert.equal(roadBudget(75,240,120,'60',null).status,'DAYLIGHT_UNKNOWN');
 });

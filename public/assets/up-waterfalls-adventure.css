@@ -15,3 +15,9 @@
 .up-waterfall-hub .upfall-adventure-option li button{background:white;color:#164d47;margin:0 8px}
 .up-waterfall-hub .upfall-adventure-option a{color:#164d47;text-decoration:underline}
 .up-waterfall-hub .upfall-adventure-option>button{margin-right:12px}
+
+.up-waterfall-hub .upfall-adventure-light,.up-waterfall-hub .upfall-adventure-road{border-left:3px solid #789d90;padding:9px 12px;margin:12px 0;background:#f1f6ef;color:#17312f}
+.up-waterfall-hub .upfall-adventure-light h5,.up-waterfall-hub .upfall-adventure-road h5{font-size:1rem;margin:0 0 6px}
+.up-waterfall-hub .upfall-adventure-road label{display:grid;gap:6px;font-size:.9rem;font-weight:650;margin-top:10px}
+.up-waterfall-hub .upfall-adventure-road input{max-width:280px}
+.up-waterfall-hub .upfall-adventure-road a{display:inline-block;padding:8px 0}
