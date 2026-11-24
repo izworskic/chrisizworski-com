@@ -1,0 +1,61 @@
+name: One-time decision-time delay diagnostic pilot
+on:
+  pull_request:
+    types: [opened]
+    paths:
+      - ".github/workflows/noaa-decision-delay-diagnostics-probe.yml"
+permissions:
+  contents: read
+jobs:
+  probe:
+    if: github.head_ref == 'research/noaa-decision-delay-diagnostics-probe' && github.event.pull_request.head.repo.full_name == github.repository
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        day: ["2024-09-04", "2024-09-10", "2024-09-15"]
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Test decision-time selection and reproduce frozen challenger
+        run: |
+          node --test tests/great-lakes-crossing-detection.test.js tests/great-lakes-crossing-references.test.js tests/great-lakes-reference-retrospect.test.js tests/great-lakes-passage-replay.test.js tests/great-lakes-route-progress-challenger.test.js tests/great-lakes-arrival-window-research.test.js tests/great-lakes-arrival-window-study.test.js tests/great-lakes-arrival-window-holdout.test.js tests/great-lakes-bias-corrected-window.test.js tests/great-lakes-decision-time-replay.test.js tests/great-lakes-decision-time-delay-diagnostics.test.js
+          node scripts/great-lakes-bias-corrected-window.cjs freeze docs/research/great-lakes-existing-model-development-evidence.json docs/research/great-lakes-arrival-window-frozen.json "${RUNNER_TEMP}/bias-frozen.json"
+          node -e 'const f=require(process.argv[1]);if(f.freezeSha256!=="5af06e866dac2b2ebb603dc553b3924e974d0733182aac29842b363bde495832")process.exit(1)' "${RUNNER_TEMP}/bias-frozen.json"
+      - name: Install temporary pinned archive reader
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps --only-binary=:all: pyarrow==21.0.0
+      - name: Run past-only decision-time development replay
+        shell: bash
+        env:
+          STUDY_DAY: ${{ matrix.day }}
+        run: |
+          set -euo pipefail
+          umask 077
+          private_dir="$(mktemp -d)"
+          trap 'rm -rf "$private_dir"' EXIT
+          export PRIVATE_INPUT="$private_dir/observations.json"
+          export NOAA_REPORT="$private_dir/coverage.json"
+          python scripts/noaa-public-only-reference-probe-20261124.py --self-test
+          python scripts/noaa-public-only-reference-probe-20261124.py "$STUDY_DAY"
+          node scripts/great-lakes-decision-time-replay.cjs evaluate docs/research/great-lakes-existing-model-development-evidence.json docs/research/great-lakes-arrival-window-frozen.json "${RUNNER_TEMP}/bias-frozen.json" "$PRIVATE_INPUT" "${RUNNER_TEMP}/decision-day.json" --delay-diagnostics
+          cp "$NOAA_REPORT" "${RUNNER_TEMP}/decision-coverage.json"
+          cat "${RUNNER_TEMP}/decision-day.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: decision-delay-development-${{ matrix.day }}
+          path: |
+            ${{ runner.temp }}/decision-day.json
+            ${{ runner.temp }}/decision-coverage.json
+            ${{ runner.temp }}/bias-frozen.json
+          if-no-files-found: error
+          retention-days: 7
