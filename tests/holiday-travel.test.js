@@ -173,7 +173,8 @@ test('live NWS panel stays off until the final week, then reports hazards on the
   assert.ok(calm.fetchedUrls.some(u => u.startsWith('https://api.weather.gov/alerts/active?point=')));
 
   const storm = await launch('2026-11-20', { nws: nwsFixture({ storm: true }) });
-  await storm.change('away', 'ORD');
+  // Keep the Chicago warning airport as origin, but use a distinct destination.
+  await storm.change('away', 'DTW');
   assert.match(storm.get('live-panel').innerHTML, /Winter Storm Warning/);
   assert.match(storm.get('live-panel').innerHTML, /worst past season/);
 });
