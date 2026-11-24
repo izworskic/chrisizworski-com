@@ -26,6 +26,34 @@ try{
     assert.ok(await page.locator('#geographic-research').count()===1);
     for(const id of ['mosquito-falls','elliot-falls','manido-falls','bridalveil-falls'])assert.equal(await page.locator('[data-id="'+id+'"]').count(),1);
   });
+  await run('town adventure compares time budgets and saves through existing itinerary',async()=>{
+    await page.locator('#waterfall-adventure summary').click();
+    await page.locator('#adventure-build').waitFor();
+    await page.waitForFunction(()=>document.querySelector('#adventure-build')?.disabled===false);
+    const date=page.locator('#visit-date');
+    const original=await date.inputValue();
+    try{
+      await date.fill('2027-07-12');
+      await page.locator('#adventure-town').fill('Munising');
+      await page.locator('#adventure-build').click();
+      assert.ok(await page.locator('[data-adventure-plan]').count()>0,'summer Munising should have documented candidates');
+      assert.match(await page.locator('#adventure-status').innerText(),/120 minutes/);
+      const ids=(await page.locator('[data-adventure-plan]').first().getAttribute('data-adventure-plan')).split(',');
+      assert.ok(ids.length<=3&&!ids.includes('munising-falls'));
+      await page.locator('[data-adventure-plan]').first().getByRole('button',{name:'Add these stops to my day'}).click();
+      for(const id of ids)assert.equal(await page.locator('[data-id="'+id+'"] .save').getAttribute('aria-pressed'),'true');
+      await page.locator('#clear-list').click();
+      await date.fill('2027-01-12');
+      await page.locator('#adventure-build').click();
+      assert.match(await page.locator('#adventure-status').innerText(),/held outside June through September/);
+      assert.equal(await page.locator('[data-adventure-plan]').count(),0);
+      await page.screenshot({path:screenshots+'/adventure-mobile.png',fullPage:false});
+    }finally{
+      await page.locator('#clear-list').click();
+      await date.fill(original);
+      await page.locator('#waterfall-adventure summary').click();
+    }
+  });
   await run('arrival desk connects real parking, closure, seasonal road and no-route decisions',async()=>{
     const choose=page.locator('#arrival-choice');
     assert.equal(await choose.inputValue(),'wagner-falls');
