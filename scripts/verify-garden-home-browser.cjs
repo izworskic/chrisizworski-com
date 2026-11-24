@@ -135,6 +135,28 @@ const assert=require('node:assert/strict');
    await page.locator('.garden-plant').filter({hasText:'Tomatoes'}).getByRole('button',{name:/Remove/}).click();
    await page.waitForFunction(()=>!document.querySelector('#gardenAhead').textContent.includes('Tomatoes'),null,{timeout:5000});
    assert.doesNotMatch(await ahead.innerText(),/Tomatoes/);
+   // Growing season: real committed archive, mocked forecast only.
+   await page.locator('a[href="#growing-season"]').click();
+   await page.locator('#gs-history .gs-range').waitFor({state:'visible'});
+   assert.match(await page.locator('#gs-history').innerText(),/Aug 11 to Aug 20/);
+   await page.locator('#gs-place').fill('Houghton');
+   await page.locator('#gs-form button[type=submit]').click();
+   await page.waitForFunction(()=>document.querySelector('#gs-history')?.textContent.includes('Aug 31 to Sep 14'));
+   await page.locator('#gs-place').fill('Bay City');await page.locator('#gs-form button[type=submit]').click();
+   await page.waitForFunction(()=>document.querySelector('#gs-history')?.textContent.includes('Aug 11 to Aug 20'));
+   await page.locator('#gs-crop').fill('Brandywine');await page.locator('#gs-packet').fill('80');await page.locator('#gs-form button[type=submit]').click();
+   assert.match(await page.locator('#gs-history').innerText(),/No exact published heat model/);
+   await page.route('**/api/leafcutter-release-weather?mode=garden-evidence&site=*',route=>route.fulfill({status:503,body:'{}'}));
+   await page.locator('#gs-weather').click();
+   await page.waitForFunction(()=>document.querySelector('#gs-weather-status')?.textContent.includes('unavailable or stale'));
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.locator('#gs-form').waitFor({state:'visible'});
+   assert.equal(await page.locator('#gs-crop').inputValue(),'Brandywine');
+   assert.equal(await page.locator('#gs-packet').inputValue(),'80');
+   await page.locator('#gs-clear').click();
+   await page.waitForFunction(()=>document.querySelector('#gs-history')?.textContent.includes('Aug 11 to Aug 20'));
+   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'growing season overflow at '+width);
+   await page.locator('#growing-season').screenshot({path:`artifacts/garden-home-browser/growing-season-${width}.png`,animations:'disabled'});
    await ctx.close();
   }
   // Smooth-scroll motion can keep Playwright's off-screen summary outside the viewport for 30 seconds; test the user-facing no-JS interaction with reduced motion.
@@ -142,6 +164,8 @@ const assert=require('node:assert/strict');
   const fallback=await nojs.newPage();await fallback.goto('http://127.0.0.1:8765/michigan-gardening/',{waitUntil:'domcontentloaded'});
   assert.equal(await fallback.getByRole('link',{name:/Seed trays/}).count(),1);
   assert.equal(await fallback.getByRole('link',{name:/When is frost likely/}).count(),1);
+  await fallback.locator('#growing-season > summary').click();
+  assert.match(await fallback.locator('#growing-season').innerText(),/JavaScript is required/);
   await fallback.locator('#plant-now > summary').click();
   assert.match(await fallback.locator('body').innerText(),/Enable JavaScript to build a list/);await nojs.close();
   const noPhoto=await browser.newContext({viewport:{width:390,height:844},reducedMotion:'reduce'});
