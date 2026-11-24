@@ -1,0 +1,23 @@
+# Freighter Central: first Experience Investment / Foundry improvement, 2026-11-24
+
+Owner: izworskic/chrisizworski-com, /freighters/. Baseline 72c51750a3dce761a3d04f59e62b97e9031e2848. Source audit only; owner reports map and buttons working. Browser screenshots not captured, runtime and field performance not measured.
+
+## Visitor job and opportunities
+1. Find the right river, harbor or lock and get a source-backed place to watch. Current finder has six options while the specialist cards cover four more. High confidence, low-to-medium effort, selected.
+2. Bring the live map higher on mobile (hero CSS min-height 520px). Potential high value; actual viewport/ad evidence not captured, defer to separate visual review.
+3. Add a saved watching corridor / return visit. Useful for repeat watchers, but requires a retention contract and privacy/fallback review; defer.
+
+Concept A: map-first redesign with all corridors as new map tabs; would duplicate four specialist map/data contracts and risk working controls. Concept B: preserve map, use a compact city/river/lock search plus native selection, name shore viewing places and open the existing specialist tools. At 390px the current hero/map remain untouched; finder adds one search row and explicit unknown status. Desktop retains current two-column selection. Selected B for narrow risk, useful destination choice and no new API. Soo Locks answers current lock traffic, Duluth answers canal passage, Freighter Central chooses which specialist corridor to explore. It does not duplicate either specialist's arrival logic.
+
+## Hugging Face skill decision
+Small ten-corridor closed vocabulary: deterministic local aliases first. No model weights, embeddings, tokens, external request, or inference. HF semantic-discovery / huggingface-best / transformers-js review: candidates referenced by skill include MiniLM and CLIP; no model runs, license or latency evaluation performed; model adoption NOT EVALUATED and no production integration justified. Ambiguous or absent aliases leave the existing selection unchanged and say so. A larger catalog and observed failures would justify a frozen held-out relevance benchmark before considering a model. Search text stays in the page.
+
+## Source evidence and scope
+Existing source pages /calumet-freighter-watch/ (95th Street, check access), /cuyahoga-freighter-watch/ (Scranton Flats Pier and Wendy Park), /welland-canal/ (Lock 3 and Lock 7), /st-lawrence-seaway/ (Eisenhower Lock and Iroquois Point) are the authorities for handoffs. No new location or opening assertion. No changes to shared tracker, AIS API, map buttons, canonical, Person, ads, source ages, route indexability or sitemap URLs. Only existing Freighter Central freshness is updated.
+
+Technology fit: keep semantic HTML, CSS, vanilla JS and existing backend/Leaflet. Python offline analysis, Rust/WASM and Java not warranted for ten local aliases. No added functions, routes, crons, dependencies, runtime services, billed features or build step. Roll back the scoped PR if needed.
+
+## Foundry and QA
+Same visitor cases: Chicago / 95th Street, Cleveland, Lock 3, Seaway; source-specific tracking and shore guidance; A→B→A; ambiguous/unknown search does not change selection; existing Duluth map click and no-map fallback; Gazette preserved. Added executable Node VM interaction tests with a minimal DOM harness, not a real-browser substitute. Formal Foundry improve/assess/prove CLI replay, browser screenshots 360/390/768/1280/1440, contrast, no-JS, full repository gate and preview remain NOT VERIFIED until executed. No measured score or claim of uplift. Current main push workflow not exposed by connector; last main merge PR full exact-head acceptance still running at check. Do not merge before current CI and browser evidence.
+
+Handoff: GSC/AdSense not retrieved. Next action: run exact-head CI and actual browser scenarios, then inspect mobile hero/map and ad placement for the next investment.
