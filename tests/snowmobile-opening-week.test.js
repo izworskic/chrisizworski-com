@@ -43,7 +43,7 @@ test('statewide client uses existing endpoint with bounded concurrency and retai
  assert.match(html,/id="club-coverage" role="status"/);
  assert.match(html,/id="club-refresh"/);
  assert.ok(html.includes('/assets/snowmobile-comparison.js?v=20261124-outlook-1'));
- assert.ok(html.includes('/assets/snowmobile-index.js?v=20261124-outlook-1'));
+ assert.ok(html.includes('/assets/snowmobile-index.js?v=20261124-watchlist-1'));
  assert.ok(js.includes('/api/snowmobile-local-reports?region='));
  assert.ok(js.includes('Math.min(3,regions.length)'));
  assert.ok(js.includes('comparison.compare(BUNDLE.regions'));

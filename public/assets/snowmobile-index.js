@@ -3,7 +3,7 @@
 const comparison=window.SnowmobileComparison;
 let BUNDLE=null,ORIGIN=null,DRIVES={},requestId=0;
 const CLUB_CHECKS=new Map();
-let clubRun=0;
+let clubRun=0,WATCH=null;
 const $=id=>document.getElementById(id);
 function track(name,params={}){try{window.gtag?.('event',name,params)}catch{}}
 function context(){return {active:!!BUNDLE?.season?.active,fresh:comparison.bundleFresh(BUNDLE),closuresVerified:BUNDLE?.statewide?.closuresVerified===true};}
@@ -196,6 +196,7 @@ function updateClubReceipts(){
         (r.grooming?' · last groomed '+esc(dateLabel(r.lastGroomedAt)):' · no current dated grooming verified')+
         (r.condition?' · club reports '+esc(r.condition)+' locally':'')+'</p>').join(''):'<p>No current report receipt. Use the regional source links below.</p>';
   }
+  WATCH?.update(BUNDLE,CLUB_CHECKS);
   const status=$('club-coverage');
   if(status){
     status.textContent=complete+failed<regions.length?'Checking club sources in seven riding regions ('+(complete+failed)+' checked)…':
@@ -255,7 +256,8 @@ function regionCard(region,active,decision){
       <details class="rc-planning"><summary>Local reports and staging</summary><p>${esc(region.planning?.note||'Road time ends at the hub; trailhead travel is additional.')}</p>${(region.planning?.reports||[]).map(source=>`<p><a href="${esc(source.url)}" target="_blank" rel="noopener" data-source-name="${esc(source.name)}">${esc(source.name)}</a><br>${esc(source.scope)}</p>`).join('')}<p>Read the report date before relying on its condition. These links are manual checks, not automated evidence for every trail.</p></details>
       <p class="rc-meta">${esc(region.segmentCount||0)} designated trail segments</p>
     </div>
-    <a class="rc-cta" href="${esc(detailUrl(region))}" data-region-open="${esc(region.key)}">Check ${esc(region.shortLabel||region.label)} before driving →</a>
+    <div class="sled-region-actions"><a class="rc-cta" href="${esc(detailUrl(region))}" data-region-open="${esc(region.key)}">Check ${esc(region.shortLabel||region.label)} before driving →</a>
+    ${WATCH?'<button class="secondary-btn sled-watch-save" type="button" data-sled-watch-region="'+esc(region.key)+'" aria-pressed="false">Save this riding region</button>':''}</div>
   </article>`;
 }
 function dotClassFor(region){const d=comparison.evaluate(region,context());return ['UNAVAILABLE','UNVERIFIED','UNKNOWN'].includes(d.state)?'unknown':bandClass(region.route&&region.route.band);}
@@ -301,6 +303,7 @@ async function boot(){
   }catch(error){
     if($('trip-summary'))$('trip-summary').textContent='Live conditions did not load. Explore the regional pages and local sources below; no riding recommendation.';
     if(statusEl)statusEl.textContent=`Live data is unavailable right now (${error.message}). Please refresh in a moment.`;
+    WATCH?.update(null,null);
     if($('club-coverage'))$('club-coverage').textContent='Statewide comparison unavailable. Check club sources on the regional pages.';
     if(listEl)listEl.innerHTML='<div class="panel"><strong>No trip recommendation.</strong><p class="small">The statewide evidence bundle did not load, so conditions were not guessed.</p></div>';
   }
@@ -318,5 +321,9 @@ function drawMap(regions,active){
     marker.bindPopup(`<strong>${esc(region.label)}</strong><br>${esc(scoreTxt)}<br>${esc(snowLine(region))}<br><a href="/snowmobile/regions/${esc(region.key)}.html">Check region →</a>`);
   }
 }
-document.addEventListener('DOMContentLoaded',()=>{setupComparison();boot();});
+document.addEventListener('DOMContentLoaded',()=>{
+  let storage=null;try{storage=window.localStorage;}catch{}
+  try{WATCH=window.SnowmobileWatchlist?.mount({document,storage,comparison,search:window.SnowmobileCitySearch})||null;}catch{}
+  setupComparison();boot();
+});
 })();

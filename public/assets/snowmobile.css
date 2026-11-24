@@ -400,3 +400,19 @@ button:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{
 .sled-outlook .small{font-size:.75rem;line-height:1.35;margin:0;color:#384c56}
 .sled-outlook>p.small{margin-top:.65rem}
 @media(max-width:380px){.sled-outlook{padding:.5rem}.sled-outlook-days{gap:.2rem}.sled-outlook-day{padding:.25rem}}
+
+/* Device-local saved places: source changes, not a second trip ranking. */
+.sled-watchlist[hidden],#sled-watch-finder[hidden],#sled-watch-add[hidden],#sled-watch-clear[hidden]{display:none}
+.sled-watchlist{border-top:3px solid var(--accent);margin:16px 0}
+.sled-watchlist h2{margin:0}
+.sled-watch-items{padding:0;margin:.6rem 0;list-style:none}
+.sled-watch-item{border-top:1px solid var(--line);padding:.65rem 0}
+.sled-watch-item-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sled-watch-item-head a{font-weight:700;font-size:1.15rem}
+.sled-watch-item p{margin:.25rem 0}
+.sled-watch-change{font-weight:700;color:var(--accent-deep);font-size:.95rem}
+.sled-watch-stale{font-size:.82rem;color:#69491c}
+.sled-watchlist button,.sled-watch-save,#sled-watch-add{min-height:44px}
+.sled-region-actions{display:flex;flex-direction:column;align-items:stretch;gap:8px}
+.sled-watch-save[aria-pressed=true]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-deep)}
+.sled-watchlist button:focus-visible,.sled-watch-save:focus-visible,#sled-watch-add:focus-visible{outline:3px solid #247bad;outline-offset:2px}
