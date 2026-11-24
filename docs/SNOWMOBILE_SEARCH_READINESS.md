@@ -1,5 +1,11 @@
 # Snowmobile winter discovery release — October 5, 2026
 
+## 2026-11-24 — Statewide opening-week evidence receipts
+
+The existing seven-region comparison now checks the 21 configured local club sources through the original per-region report API. At most three region requests run at once, independently of the road routing and DNR scoring. Each regional card separates NWS observed snowfall, the hub forecast, source-dated club postings, and dated grooming. An aggregate gives checked-region coverage, unavailable sources, conflicting dates, recent postings and current grooming evidence without implying that any trail is open. Club receipts expire after 30 minutes and calendar dates are independently checked at display time in Michigan time. A current posting is not a groomed trail; pre-season conditions, stale, undated, future or conflicting reports cannot become positive grooming or riding recommendations. No ranking, closure or routing logic changed.
+
+Experience Investment (IMPLEMENT, scoped extension): compare a new standalone statewide readiness matrix versus augmenting the existing comparison cards and one compact coverage receipt. The latter avoids duplicating the seven cards or adding another route, keeps the travel filter and source handoff together, and differs from Snow Totals (amounts) and Ski Hills (operator openings): local club observations are scoped and never establish legal access. Existing semantic HTML, browser JS, cached Node API and native details are sufficient; Python, Rust/WASM, Java and additional frameworks add no demonstrated benefit for a small evidence reconciliation. No new dependency, route, function, paid service, ads or SEO intent changes. Baseline source inspected; actual viewport evidence and full-history CI are required before release. Revert this PR to roll back the enhancement.
+
 ## 2026-11-23 — Type a riding town or an origin, never choose from a city dropdown
 
 The statewide planner's **Find a Michigan riding town** field resolves only the 27 existing, Google-autocomplete-backed towns with verified DNR trail geometry within 5 km. It links to the original generated regional page's exact town-specific `#trail-conditions-near-...` anchor; it does not invent a new URL or local grooming verdict. A missing town explicitly has no matched answer rather than inheriting a neighbor's condition.

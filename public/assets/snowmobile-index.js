@@ -2,6 +2,8 @@
 'use strict';
 const comparison=window.SnowmobileComparison;
 let BUNDLE=null,ORIGIN=null,DRIVES={},requestId=0;
+const CLUB_CHECKS=new Map();
+let clubRun=0;
 const $=id=>document.getElementById(id);
 function track(name,params={}){try{window.gtag?.('event',name,params)}catch{}}
 function context(){return {active:!!BUNDLE?.season?.active,fresh:comparison.bundleFresh(BUNDLE),closuresVerified:BUNDLE?.statewide?.closuresVerified===true};}
@@ -24,6 +26,7 @@ function renderComparison(){
   if(!BUNDLE)return;
   const ctx=context(),rows=comparison.compare(BUNDLE.regions||[],ctx,DRIVES,maxHours(),$('compare-sort')?.value||'evidence');
   $('region-list').innerHTML=rows.map(({region,decision})=>regionCard(region,ctx.active,decision)).join('');
+  updateClubReceipts();
   const candidates=rows.filter(x=>x.decision.tripCandidate);
   const pending=Object.values(DRIVES).some(d=>d.pending);
   const summary=$('trip-summary');
@@ -83,7 +86,8 @@ function setupComparison(){
     },{enableHighAccuracy:false,timeout:10000,maximumAge:300000});
   });
   $('region-list').addEventListener('click',e=>{const link=e.target.closest('[data-region-open]');if(link)track('snowmobile_region_open',{region:link.dataset.regionOpen,placement:'statewide-comparison'});const source=e.target.closest('[data-source-name]');if(source)track('snowmobile_source_verify',{source:source.dataset.sourceName,placement:'statewide-comparison'});});
-  setInterval(()=>{if(BUNDLE&&!comparison.bundleFresh(BUNDLE))renderComparison();},60000);
+  $('club-refresh')?.addEventListener('click',loadClubReceipts);
+  setInterval(()=>{if(BUNDLE&&!comparison.bundleFresh(BUNDLE))renderComparison();else updateClubReceipts();},60000);
 }
 
 const esc=(s)=>String(s==null?'':s).replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -138,6 +142,67 @@ function verdictLine(region,active){
   if(r.score>=58)return`Borderline for a long drive. Current evidence supports riding, but not an easy weekend recommendation.${critical}`;
   return`Current evidence does not support targeting this region for a long drive.${critical}`;
 }
+function forecastLine(region){
+  const w=region.weather,age=Date.now()-Date.parse(w?.generatedAt);
+  if(!comparison.bundleFresh(BUNDLE)||!w?.available||!Number.isFinite(age)||age<0||age>6*3600000)return 'Hub forecast: unavailable or old';
+  const snow=w.snowSignal===true?'snow mentioned':w.snowSignal===false?'no snow mentioned':'snow signal unknown';
+  const rain=w.rainSignal===true?'; rain also mentioned':'';
+  return 'NWS hub outlook (next six forecast periods): '+snow+rain+'. Forecast only.';
+}
+function dateLabel(iso){
+  return iso?new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'}).format(new Date(iso+'T12:00:00Z')):'not verified';
+}
+function updateClubReceipts(){
+  if(!BUNDLE)return;
+  const now=Date.now(),regions=BUNDLE.regions||[];
+  let complete=0,failed=0,available=0,monitored=0,recent=0,groomed=0,conflicts=0;
+  for(const region of regions){
+    const check=CLUB_CHECKS.get(region.key);
+    const result=comparison.clubEvidence(check?.data,region.key,now);
+    const card=$('club-receipt-'+region.key);
+    if(result){
+      complete++;available+=result.available;monitored+=result.monitored;recent+=result.recent;groomed+=result.groomed;conflicts+=result.conflicts;
+    }else if(check?.done)failed++;
+    if(!card)continue;
+    const line=card.querySelector('.club-receipt-line'),details=card.querySelector('.club-receipt-detail');
+    line.textContent=result?(result.recent?result.recent+' of '+result.monitored+' monitored clubs posted within 3 days': 'No recent dated posting verified among '+result.monitored+' monitored clubs')+'; '+result.groomed+' with current dated grooming evidence.':
+      check?.done?'Club evidence unavailable or expired. Check the original sources.':'Checking dated club reports…';
+    const stamp=result?new Date(result.checkedAt).toLocaleString('en-US',{timeZone:'America/Detroit',timeZoneName:'short'}):'';
+    const labels={RECENT:'Recent posting',AGING:'Older posting',STALE:'Stale posting',UNDATED:'Date unverified',DATE_CONFLICT:'Conflicting report dates',UNAVAILABLE:'Source unavailable'};
+    details.innerHTML=result?'<p class="small">Sources checked '+esc(stamp)+'. Check time is not observation time.</p>'+
+      result.reports.map(r=>'<p><strong>'+esc(r.name)+'</strong> · '+esc(labels[r.state])+' · '+esc(dateLabel(r.reportedAt))+
+        (r.grooming?' · last groomed '+esc(dateLabel(r.lastGroomedAt)):' · no current dated grooming verified')+
+        (r.condition?' · club reports '+esc(r.condition)+' locally':'')+'</p>').join(''):'<p>No current report receipt. Use the regional source links below.</p>';
+  }
+  const status=$('club-coverage');
+  if(status){
+    status.textContent=complete+failed<regions.length?'Checking club sources in seven riding regions ('+(complete+failed)+' checked)…':
+      complete===0?'Club sources could not be verified. No grooming or trail readiness has been inferred.':
+      available+' of '+monitored+' monitored club pages retrieved in '+complete+' regions; '+recent+' recent dated postings, '+groomed+' with current dated grooming evidence.'+
+      (failed?' '+failed+' region checks unavailable or expired.':'')+(conflicts?' '+conflicts+' conflicting report dates require direct review.':'')+
+      ' These are local reports, not a statewide opening or riding verdict.';
+  }
+}
+async function loadClubReceipts(){
+  if(!BUNDLE)return;
+  const run=++clubRun,regions=BUNDLE.regions||[],button=$('club-refresh');
+  if(button)button.disabled=true;
+  CLUB_CHECKS.clear();updateClubReceipts();
+  let next=0;
+  await Promise.all(Array.from({length:Math.min(3,regions.length)},async()=>{
+    while(next<regions.length&&run===clubRun){
+      const region=regions[next++];
+      let data=null;
+      try{
+        const response=await fetch('/api/snowmobile-local-reports?region='+encodeURIComponent(region.key),{signal:AbortSignal.timeout(13000)});
+        if(response.ok){const candidate=await response.json();if(comparison.clubEvidence(candidate,region.key))data=candidate;}
+      }catch{}
+      if(run!==clubRun)return;
+      CLUB_CHECKS.set(region.key,{data,done:true});updateClubReceipts();
+    }
+  }));
+  if(run===clubRun&&button)button.disabled=false;
+}
 function regionCard(region,active,decision){
   const r=region.route||{},cls=bandClass(r.band),badge=badgeClass(r.band);
   let label='UNKNOWN';
@@ -157,6 +222,11 @@ function regionCard(region,active,decision){
       <p class="rc-verdict">${decision?.state==='UNAVAILABLE'?'Current evidence is unavailable or too old. No riding recommendation.':decision?.state==='UNVERIFIED'?'Official closure verification is incomplete. Check the official source before a trip.':verdictLine(region,active)}</p>
       <p class="rc-meta"><strong>${esc(bestLine(region,active))}</strong></p>
       <p class="rc-meta">${esc(snowLine(region))} · ${esc(thawLine(region))}</p>
+      <p class="rc-meta">${esc(forecastLine(region))}</p>
+      <div class="rc-meta" id="club-receipt-${esc(region.key)}">
+        <p><strong>Local club check:</strong> <span class="club-receipt-line">Checking dated club reports…</span></p>
+        <details class="rc-planning"><summary>Club names, report dates and grooming evidence</summary><div class="club-receipt-detail"></div><p><a href="${esc(detailUrl(region))}">Open the regional planner and original club sources</a>. A club posting applies locally and does not override a DNR closure.</p></details>
+      </div>
       <p class="rc-meta">${esc(reportLine(region))}</p>
       <p class="rc-meta">Grooming: ${esc(region.grooming?.label||'unverified')}</p>
       <p class="rc-meta">${esc(conf)} · ${esc(evidence)}${age?` · supporting evidence ${esc(age)}`:''}</p>
@@ -203,11 +273,13 @@ async function boot(){
     if(sourceEl)sourceEl.innerHTML=(data.sources||[]).map(s=>`<li><strong>${esc(s.name)}</strong> — ${esc(s.authority||'')}</li>`).join('');
     if(generatedEl)generatedEl.textContent=`Statewide bundle generated ${new Date(data.generatedAt).toLocaleString()}. ${data.operational?.modelBoundary||''}`;
     drawMap(regions,active);
+    loadClubReceipts();
     $('compare-submit').disabled=false;
     $('compare-location').disabled=false;
   }catch(error){
     if($('trip-summary'))$('trip-summary').textContent='Live conditions did not load. Explore the regional pages and local sources below; no riding recommendation.';
     if(statusEl)statusEl.textContent=`Live data is unavailable right now (${error.message}). Please refresh in a moment.`;
+    if($('club-coverage'))$('club-coverage').textContent='Statewide comparison unavailable. Check club sources on the regional pages.';
     if(listEl)listEl.innerHTML='<div class="panel"><strong>No trip recommendation.</strong><p class="small">The statewide evidence bundle did not load, so conditions were not guessed.</p></div>';
   }
 }
