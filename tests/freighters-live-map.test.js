@@ -80,3 +80,19 @@ test("Search canonical, entity, Person byline and intent boundary stay stable", 
   assert.doesNotMatch(html, /<meta[^>]+noindex/);
   assert.match(html, /class="hub-map-legal"/);
 });
+
+ test("Freighter Central supplies every required shared ship-search control and the actual ship-marker styling", () => {
+  for (const id of ["freighterNameSearch","freighterSearchStatus","freighterSearchAll","freighterClearSearch"]) {
+    assert.equal((html.match(new RegExp('id="' + id + '"', 'g')) || []).length, 1, id);
+    assert.ok(tracker.includes('getElementById("' + id + '")'));
+  }
+  assert.match(css, /\.tracker-ship-marker\s*\{/);
+  assert.match(css, /\.tracker-ship-marker\.is-stopped \.ship-hull/);
+  assert.match(css, /\.hub-map-canvas-wrap\.map-stage-unavailable/);
+  assert.ok(html.indexOf('id="freighterNameSearch"') < html.indexOf('id="freighterMap"'));
+});
+ test("The connected corridor guide includes all ten destinations and keeps specialist URLs",()=>{
+  const section=html.slice(html.indexOf('id="corridors"'),html.indexOf('id="fleet"'));
+  assert.equal((section.match(/class="corridor-card"/g)||[]).length,10);
+  for(const url of ["/calumet-freighter-watch/","/cuyahoga-freighter-watch/","/welland-canal/","/st-lawrence-seaway/"])assert.ok(section.includes('href="'+url+'"'));
+});
