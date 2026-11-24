@@ -1,0 +1,62 @@
+name: One-time frozen arrival-window holdout evaluation
+on:
+  pull_request:
+    types: [opened]
+    paths:
+      - ".github/workflows/noaa-frozen-arrival-window-holdout.yml"
+permissions:
+  contents: read
+jobs:
+  probe:
+    if: github.head_ref == 'research/noaa-frozen-arrival-window-holdout-20261124' && github.event.pull_request.head.repo.full_name == github.repository
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        day: ["2024-09-21", "2024-09-25", "2024-09-29"]
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run all research tests and reproduce frozen artifact before source acquisition
+        run: |
+          node --test tests/great-lakes-crossing-detection.test.js tests/great-lakes-crossing-references.test.js tests/great-lakes-reference-retrospect.test.js tests/great-lakes-passage-replay.test.js tests/great-lakes-route-progress-challenger.test.js tests/great-lakes-arrival-window-research.test.js tests/great-lakes-arrival-window-study.test.js tests/great-lakes-arrival-window-holdout.test.js
+          node scripts/great-lakes-arrival-window-holdout.cjs freeze docs/research/great-lakes-existing-model-development-evidence.json "${RUNNER_TEMP}/frozen-reproduced.json"
+          cmp docs/research/great-lakes-arrival-window-frozen.json "${RUNNER_TEMP}/frozen-reproduced.json"
+          cat "${RUNNER_TEMP}/frozen-reproduced.json"
+      - name: Install temporary pinned archive reader
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps --only-binary=:all: pyarrow==21.0.0
+      - name: Evaluate frozen margins on reserved holdout date
+        shell: bash
+        env:
+          STUDY_DAY: ${{ matrix.day }}
+        run: |
+          set -euo pipefail
+          umask 077
+          private_dir="$(mktemp -d)"
+          trap 'rm -rf "$private_dir"' EXIT
+          export PRIVATE_INPUT="$private_dir/observations.json"
+          export NOAA_REPORT="$private_dir/coverage.json"
+          python scripts/noaa-public-only-reference-probe-20261124.py --self-test
+          python scripts/noaa-public-only-reference-probe-20261124.py "$STUDY_DAY"
+          node scripts/great-lakes-arrival-window-holdout.cjs evaluate docs/research/great-lakes-existing-model-development-evidence.json docs/research/great-lakes-arrival-window-frozen.json "$PRIVATE_INPUT" "${RUNNER_TEMP}/holdout-day.json"
+          cp "$NOAA_REPORT" "${RUNNER_TEMP}/holdout-coverage.json"
+          cat "${RUNNER_TEMP}/holdout-day.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: frozen-window-holdout-${{ matrix.day }}
+          path: |
+            ${{ runner.temp }}/holdout-day.json
+            ${{ runner.temp }}/holdout-coverage.json
+            ${{ runner.temp }}/frozen-reproduced.json
+          if-no-files-found: error
+          retention-days: 7
