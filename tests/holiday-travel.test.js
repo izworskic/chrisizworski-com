@@ -414,3 +414,33 @@ test('FAA outage and stale snapshot never imply clear airports',async()=>{
   assert.match(stale.get('faa-status').innerHTML,/out of date/);
   assert.doesNotMatch(stale.get('faa-status').innerHTML,/No event listed/);
 });
+
+
+test('departure dashboard reflects trip date, route, historical recovery and independent source states',async()=>{
+ const app=await launch('2026-11-24',{faa:{status:'available',checkedAt:'2026-11-24T12:00:00Z',events:[{airport:'ORD',label:'Ground stop',reason:'Snow',averageMinutes:null,minimumMinutes:null,maximumMinutes:null}]}});
+ assert.match(app.get('dashboard-route').textContent,/ORD.*LGA/);
+ assert.match(app.get('dashboard-stage').textContent,/Departure tomorrow/);
+ assert.match(app.get('dashboard-timing').innerHTML,/Arrival deadline/);
+ assert.match(app.get('dashboard-recovery').textContent,/hours late if cancelled/);
+ assert.equal(app.get('dashboard-faa').textContent,'Not checked');
+ const risk=app.pct();
+ await app.click('dashboard-refresh');
+ assert.match(app.get('dashboard-faa').textContent,/FAA notices: ORD/);
+ assert.equal(app.pct(),risk);
+ await app.click('dashboard-copy');
+ assert.match(app.copied.at(-1),/y=2026#departure-dashboard$/);
+ await app.change('away','ORD');
+ assert.equal(app.get('dashboard-route').textContent,'Flight route');
+ assert.equal(app.get('dashboard-recovery').textContent,'No estimate yet');
+ assert.equal(app.get('dashboard-refresh').disabled,true);
+ await app.click('drive');
+ assert.equal(app.get('departure-dashboard')['data-mode'],'drive');
+});
+test('dashboard never calls missing weather data clear and can restore a pinned prior-year plan',async()=>{
+ const outage=await launch('2026-11-24',{nws:()=>null});
+ assert.equal(outage.get('dashboard-weather').textContent,'NWS unavailable');
+ assert.doesNotMatch(outage.get('live-panel').innerHTML,/Nothing notable/);
+ const reopened=await launch('2027-01-02',{search:'?h=th&m=fly&d=there&from=ORD&to=LGA&via=nonstop&lay=60&dep=-1.17&due=-1.23&y=2026'});
+ assert.equal(reopened.get('holiday-stat').textContent,'Thanksgiving 2026');
+ assert.equal(reopened.get('dashboard-weather').textContent,'Past departure date');
+});
