@@ -9,7 +9,7 @@ const journal=(plantings,entries)=>J.validate({schema:J.schema,plantings,entries
 const entries=[e('h1','a','2026-08-15','harvest-weight',{usableG:10000,discardedG:1000}),e('h2','a','2026-09-15','harvest-weight',{usableG:8000,discardedG:1000}),e('l','a','2026-07-01','plant-loss',{lostCount:1}),e('first','a','2026-08-15','first-ripe-harvest')];
 test('cohort measures harvest and discard separately; loss rate is not yield loss; first harvest date and area are exact',()=>{
  const d=journal([plant('a')],entries),s=P.summarize(d.plantings[0],d.entries);
- assert.equal(s.usableG,18000);assert.equal(s.discardedG,2000);assert.equal(s.areaSqFt,32);assert.equal(s.lbPerSqFt,P.pounds(18000)/32);assert.equal(s.lossCount,1);assert.equal(s.lossFraction,1/8);assert.equal(s.discardFraction,.1);assert.equal(s.firstHarvestDays,82);assert.equal(s.eligible,true);
+ assert.equal(s.usableG,18000);assert.equal(s.discardedG,2000);assert.equal(s.areaSqFt,32);assert.equal(s.lbPerSqFt,P.pounds(18000)/32);assert.equal(s.lossCount,1);assert.equal(s.lossFraction,1/8);assert.equal(s.discardFraction,.1);assert.equal(s.firstHarvestDays,82);assert.equal(s.occupiedDays,130);assert.equal(s.context.rainDays,0);assert.equal(s.eligible,true);
  assert.deepEqual(J.validate(JSON.parse(JSON.stringify(d)),today),d);
 });
 test('missing weights remain unknown, explicit finished zero allowed, legacy milestone cannot be marked complete without weight',()=>{
@@ -28,7 +28,7 @@ test('comparisons require complete compatible cohorts and do not add shared bed 
  const winter=plant('w',{date:'2025-12-15',productivity:{...q,group:'other',closedOn:'2026-03-01'}});
  const all=journal([plant('a'),b,c,d,f,winter],[...entries,e('b1','b','2025-08-15','harvest-weight',{usableG:12000,discardedG:0}),e('w1','w','2026-02-10','harvest-weight',{usableG:300,discardedG:20})]);
  assert.deepEqual(P.compare(all,'a').rows.map(x=>x.id),['b']);
- const s=P.season(all,2026);assert.equal(s.usableG,18300);assert.equal(s.discardedG,2020);assert.equal(s.plantingsWithWeights,2);assert.equal(P.season(all,2025).usableG,12000);assert.equal(P.season(all,2024).usableG,null);
+ const s=P.season(all,2026);assert.equal(s.usableG,18300);assert.equal(s.discardedG,2020);assert.equal(s.plantingsWithWeights,2);assert.deepEqual(s.months.map(m=>[m.month,m.usableG]),[['2026-02',300],['2026-08',10000],['2026-09',8000]]);assert.equal(P.season(all,2025).usableG,12000);assert.equal(P.season(all,2024).usableG,null);
  assert.equal(Object.hasOwn(s,'areaSqFt'),false);
 });
 test('unit conversions, finite nonnegative validation and deterministic arithmetic invariants',()=>{
