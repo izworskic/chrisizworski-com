@@ -529,6 +529,20 @@ function check(value,message){if(!value)throw Error(message);}
       'fifteen-day route did not render source-reconciled overnight areas');
     check((await guide.locator('#ct-prefer-summary').textContent()).includes('No published day exceeds'),
       'fifteen-day route was wrongly promoted into a five-hour overload');
+    check((await guide.locator('#ct-prefer-summary h3').textContent()).includes('road evidence is incomplete'),
+      'zero sample overloads must not imply complete driving evidence');
+    check((await guide.locator('#ct-prefer-timeline .ct-personal-day[data-state="unverified"] .ct-personal-miles').textContent()).includes('full drive time unverified'),
+      'unverified day must label the estimate next to the mileage');
+    const unresolved=guide.locator('#ct-prefer-timeline .ct-personal-day[data-state="unverified"]');
+    check(await unresolved.locator('a[href="https://files.dnr.state.mn.us/maps/state_parks/spk00173.pdf"]').count()===1,
+      'unverified park approach must expose the official entrance map');
+    check(await unresolved.locator('a[href="https://bwt.cbp.gov/"]').count()===1,
+      'unverified cross-border day must expose U.S. border information');
+    check((await unresolved.textContent()).includes('no arrival time is confirmed'),
+      'source links must not promote the unresolved approach into a timed arrival');
+    const evidencePreview='circle-traveler-road-evidence-'+width+'.png';
+    await guide.locator('#ct-prefer-summary').screenshot({path:path.join(out,evidencePreview),animations:'disabled'});
+    report.screenshots.push(evidencePreview);
     check((await guide.locator('#ct-prefer-map').getAttribute('href')).includes('itinerary=15'),
       'alternative did not link to the actual 15-day source route');
     check((await guide.locator('#ct-prefer-share').inputValue()).includes('ct_days=15'),
