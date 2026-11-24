@@ -337,3 +337,46 @@ test('same-airport selection clears the previous probability and weather verdict
   assert.equal(app.get('live-panel').innerHTML,'');
   assert.equal(app.get('third-stat').textContent,'Unavailable');
 });
+
+
+test('try a lower-risk itinerary and restore the original trip without changing its deadline', async () => {
+  const app = await launch();
+  const original = app.pct();
+  const fields = ['dep-day','dep-time','routing','layover','due-day','due-time'];
+  const saved = fields.map(id => app.get(id).value);
+  const results = app.get('results');
+  assert.match(results.innerHTML, /data-apply-fix="0"/);
+  assert.equal(app.get('plan-compare').hidden, true);
+  results.handlers.click({target:{closest: () => ({getAttribute: () => '0'})}});
+  await app.settle();
+  assert.ok(app.pct() < original, 'applying a modeled fix must actually lower risk');
+  assert.deepEqual(fields.slice(-2).map(id => app.get(id).value), saved.slice(-2));
+  assert.equal(app.get('plan-compare').hidden, false);
+  assert.match(app.get('compare-content').innerHTML, /Original/);
+  assert.match(app.get('compare-content').innerHTML, /Current/);
+  assert.match(app.get('compare-content').innerHTML, /Lower modeled risk/);
+  assert.ok(app.urls.at(-1).includes('due='+saved[4]+'.'+saved[5]));
+  await app.click('restore-plan');
+  assert.equal(app.pct(), original);
+  assert.deepEqual(fields.map(id => app.get(id).value), saved);
+  assert.equal(app.get('plan-compare').hidden, true);
+  results.handlers.click({target:{closest: () => ({getAttribute: () => '0'})}});
+  await app.settle();
+  assert.equal(app.get('plan-compare').hidden, false);
+  await app.change('due-time','22');
+  assert.equal(app.get('plan-compare').hidden, true, 'manual edits start a fresh comparison');
+});
+
+test('late-by-schedule plan offers a recoverable alternative when history supports one', async () => {
+  const app = await launch();
+  await app.change('due-time','18');
+  assert.equal(app.pct(),1);
+  const results=app.get('results');
+  assert.match(results.innerHTML,/data-apply-fix="0"/);
+  results.handlers.click({target:{closest: () => ({getAttribute: () => '0'})}});
+  await app.settle();
+  assert.ok(app.pct()<1);
+  assert.match(app.get('compare-content').innerHTML,/100%/);
+  await app.click('restore-plan');
+  assert.equal(app.pct(),1);
+});
