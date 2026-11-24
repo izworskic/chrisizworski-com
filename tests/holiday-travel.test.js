@@ -21,7 +21,7 @@ function nwsFixture({ storm = false } = {}) {
   };
 }
 
-async function launch(today = '2026-10-19', { failFetch = false, nws = nwsFixture(), search = '' } = {}) {
+async function launch(today = '2026-10-19', { failFetch = false, nws = nwsFixture(), search = '', faa = null } = {}) {
   const SimulatedDate = class extends Date {
     constructor(...args) { super(...(args.length ? args : [today + 'T12:00:00Z'])); }
     static now() { return new Date(today + 'T12:00:00Z').getTime(); }
@@ -51,6 +51,7 @@ async function launch(today = '2026-10-19', { failFetch = false, nws = nwsFixtur
   const fetch = async url => {
     fetchedUrls.push(url);
     if (failFetch) return { ok: false, status: 500 };
+    if (url === '/api/holiday-airport-weather?view=faa') return faa ? {ok:true,json:async()=>faa} : {ok:false,status:503};
     if (url.startsWith('/holiday-travel/data/')) {
       const file = dataDir + url.slice('/holiday-travel/data/'.length);
       if (!fs.existsSync(file)) return { ok: false, status: 404 };
@@ -379,4 +380,37 @@ test('late-by-schedule plan offers a recoverable alternative when history suppor
   assert.match(app.get('compare-content').innerHTML,/100%/);
   await app.click('restore-plan');
   assert.equal(app.pct(),1);
+});
+
+
+test('FAA check is on demand, scoped to the selected route and never changes BTS odds',async()=>{
+  const faa={status:'available',checkedAt:'2026-11-24T12:00:00Z',events:[
+    {airport:'ORD',label:'Ground stop',reason:'Snow',start:'2026-11-24T11:00:00Z',end:'2026-11-24T13:00:00Z',updatedAt:'2026-11-24T11:55:00Z',averageMinutes:null,maximumMinutes:null,minimumMinutes:null},
+    {airport:'LGA',label:'Arrival delay',reason:'Volume',averageMinutes:30,maximumMinutes:null,minimumMinutes:null},
+    {airport:'MCO',label:'Airport closure notice',reason:'OTHER AIRPORT',averageMinutes:null,maximumMinutes:null,minimumMinutes:null}
+  ]};
+  const app=await launch('2026-11-24',{faa});
+  const before=app.pct();
+  assert.ok(!app.fetchedUrls.some(u=>u.includes('view=faa')));
+  await app.click('faa-refresh');
+  assert.match(app.get('faa-status').innerHTML,/Ground stop/);
+  assert.match(app.get('faa-status').innerHTML,/Arrival delay/);
+  assert.doesNotMatch(app.get('faa-status').innerHTML,/OTHER AIRPORT/);
+  assert.equal(app.pct(),before);
+  await app.change('away','MCO');
+  assert.match(app.get('faa-status').innerHTML,/OTHER AIRPORT/);
+  assert.doesNotMatch(app.get('faa-status').innerHTML,/Arrival delay/);
+  assert.equal(app.fetchedUrls.filter(u=>u.includes('view=faa')).length,1);
+  await app.click('drive');
+  assert.equal(app.get('faa-panel').hidden,true);
+});
+
+test('FAA outage and stale snapshot never imply clear airports',async()=>{
+  const app=await launch('2026-11-24');
+  await app.click('faa-refresh');
+  assert.match(app.get('faa-status').innerHTML,/unavailable/);
+  const stale=await launch('2026-11-24',{faa:{status:'available',checkedAt:'2026-11-24T11:30:00Z',events:[]}});
+  await stale.click('faa-refresh');
+  assert.match(stale.get('faa-status').innerHTML,/out of date/);
+  assert.doesNotMatch(stale.get('faa-status').innerHTML,/No event listed/);
 });
