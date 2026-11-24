@@ -224,7 +224,7 @@ get('fj-yield-form').addEventListener('submit',e=>{
  const p=data.plantings.find(x=>x.id===selected),complete=get('fj-yield-complete').checked,closedOn=complete?get('fj-yield-close').value:null;
  const q={group:get('fj-yield-group').value,lengthFt:num('fj-yield-length'),widthFt:num('fj-yield-width'),plantedCount:num('fj-yield-plants'),complete,closedOn};
  if(complete&&P.summarize({...p,productivity:q},data.entries).unweighedDates.length){status('A harvest milestone date has no weighed entry. Keep the record open until the weights are known.');return;}
- if(commit({...data,plantings:data.plantings.map(x=>x.id===selected?{...x,productivity:q}:x)})){resetProductivity({planting:{...p,productivity:q}});status('Planting productivity details saved in this journal.');}
+ if(commit({...data,plantings:data.plantings.map(x=>x.id===selected?{...x,productivity:q}:x)})){resetProductivity({planting:{...p,productivity:q}});}
 });
 
 root.addEventListener('toggle',()=>{if(root.open)render();});function hash(){if(location.hash==='#field-journal')root.open=true;}window.addEventListener('hashchange',hash);hash();
