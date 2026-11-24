@@ -87,3 +87,32 @@ test('browser and server use one AIS evidence policy, with exact expiry boundari
   assert.match(js,/GreatLakesAisEvidence\?\.motion/);
  }
 });
+
+test('shared passage alignment handles circular bearings, boundary tolerance and missing evidence',()=>{
+ const e=require('../lib/ais-movement');
+ const v={mmsi:'316001234',lat:46.5,lon:-84.35,seen:new Date(now-1000).toISOString(),speedKnots:9,course:0};
+ for(const bearing of [0,1,45,90,135,180,225,270,315,359,360])
+ for(const course of [0,1,44,45,46,89,90,134,135,136,180,224,225,226,269,270,314,315,316,359])
+ for(const tolerance of [0,30,45,60,70]){
+  const result=e.passageRelation({...v,course},now,bearing,tolerance);
+  const difference=Math.min(Math.abs(course-bearing),360-Math.abs(course-bearing));
+  assert.equal(result.alignmentDegrees,difference);
+  assert.equal(result.state,difference<=tolerance?'aligned':difference>=180-tolerance?'opposed':'crosswise');
+ }
+ for(const patch of [{course:null},{course:360},{speedKnots:1.49},{speedKnots:102.2},{lat:null},{seen:new Date(now-900001).toISOString()},{seen:new Date(now+1).toISOString()}]){
+  const result=e.passageRelation({...v,...patch},now,0,45);
+  assert.equal(result.state,'unknown');assert.equal(result.alignmentDegrees,null);
+ }
+ for(const [bearing,tolerance] of [[null,45],[NaN,45],[361,45],[0,-1],[0,90]]){
+  assert.equal(e.passageRelation(v,now,bearing,tolerance).state,'unknown');
+ }
+});
+test('Soo and Duluth retain their local approach models and use shared passage evidence',()=>{
+ const fs=require('node:fs');
+ for(const file of ['lib/soo-locks-next.js','lib/duluth-canal.js','public/assets/welland-canal.js'])
+  assert.match(fs.readFileSync(file,'utf8'),/passageRelation\(/);
+ const snapshot=require('./fixtures/soo-river-2026-09-27.json'),t=Date.parse(snapshot.now);
+ const rows=soo.normalize(snapshot.response,t).vessels;
+ assert.deepEqual(soo.buildCandidates(rows,t).map(v=>v.name),['ROBERT S. PIERSON']);
+ assert.deepEqual(soo.inLockList(rows,t).map(v=>v.name),['MESABI MINER']);
+});
