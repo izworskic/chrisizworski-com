@@ -265,7 +265,8 @@
   function initMap(){
     if(typeof window.L!=='object')return mapError();
     try{
-      map=window.L.map('shore-map',{scrollWheelZoom:false,zoomControl:true,touchZoom:false,dragging:!matchMedia('(pointer:coarse)').matches});
+      map=window.L.map('shore-map',{scrollWheelZoom:false,zoomControl:true,
+        touchZoom:false,dragging:!matchMedia('(pointer:coarse)').matches});
       map.setView([44.2,-84.5],5);
       const tiles=window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
         maxZoom:12,attribution:'© OpenStreetMap contributors',crossOrigin:true
@@ -273,32 +274,31 @@
       tiles.on('tileload',()=>{loadedTile=true;});
       tiles.on('tileerror',()=>{tileFails+=1;if(tileFails>=3&&!loadedTile)mapError();});
       for(const li of list){
-        const d=li.dataset;
-        const div=window.L.divIcon({className:'shore-icon',html:'<span class="shore-marker" aria-hidden="true"></span>',iconSize:[19,19],iconAnchor:[9,9]});
-        const marker=window.L.marker([Number(d.lat),Number(d.lon)],{icon:div,title:d.name})
-          .bindPopup('<strong>'+d.name.replaceAll('&','&amp;').replaceAll('<','&lt;')+'</strong><div>'+d.city+', '+d.state+'</div>');
-        marker.on('click',()=>{const t=bySlug.get(d.slug);if(t)setLake(d.lake,t);});
+        const d=li.dataset,lat=Number(d.lat),lon=Number(d.lon);
+        if(!Number.isFinite(lat)||!Number.isFinite(lon))continue;
+        const icon=window.L.divIcon({className:'shore-icon',
+          html:'<span class="shore-marker" aria-hidden="true"></span>',
+          iconSize:[19,19],iconAnchor:[9,9]});
+        const popup=document.createElement('div');
+        const strong=document.createElement('strong');strong.textContent=d.name;
+        const place=document.createElement('div');place.textContent=d.city+', '+d.state;
+        const source=document.createElement('div');
+        source.textContent=d.epaId?'EPA 2025 ID '+d.epaId+' · approximate shoreline':'Curated ShoreFeel guide';
+        popup.append(strong,place,source);
+        const marker=window.L.marker([lat,lon],{icon,title:d.name,keyboard:true}).bindPopup(popup);
+        marker.on('click',()=>{
+          const target=bySlug.get(d.slug);
+          if(target)setLake(d.lake==='Great Lakes'?'All':d.lake,target);
+        });
         markers.set(d.slug,marker);
       }
-      // The selected report already requested its forecast before map creation.
-      // Sync only markers, avoiding a second API request and loading-state flicker.
       mapLive=true;
-      const visible=list.filter(li=>!li.hidden);
-      for(const [slug,marker] of markers){
-        const entry=bySlug.get(slug);
-        if(entry&&!entry.hidden)marker.addTo(map);
-      }
-      if(visible.length>1){
-        const bounds=window.L.latLngBounds(visible.map(li=>[Number(li.dataset.lat),Number(li.dataset.lon)]));
-        map.fitBounds(bounds.pad(.26),{maxZoom:9,animate:false});
-      }else if(visible.length===1)map.setView([Number(visible[0].dataset.lat),Number(visible[0].dataset.lon)],9,{animate:false});
-      else map.setView([44.2,-83.9],7,{animate:false});
-      if(current&&markers.has(current)){
-        const selected=markers.get(current);
-        selected.openPopup();
-        const icon=selected.getElement()?.querySelector('.shore-marker');
-        if(icon)icon.classList.add('selected');
-      }
+      map.on('moveend zoomend',drawMap);
+      const positions=matching.map(li=>[Number(li.dataset.lat),Number(li.dataset.lon)])
+        .filter(v=>v.every(Number.isFinite));
+      if(positions.length>1)map.fitBounds(window.L.latLngBounds(positions).pad(.12),{maxZoom:9,animate:false});
+      else if(positions.length===1)map.setView(positions[0],9,{animate:false});
+      drawMap();
       setTimeout(()=>{if(!loadedTile&&mapLive)mapError();},8000);
     }catch{mapError();}
   }
@@ -307,6 +307,11 @@
     map=null;mapLive=false;$('map-fallback').hidden=false;
     $('shore-map').hidden=true;
   }
+  const moreButton=$('shore-show-more');
+  if(moreButton)moreButton.addEventListener('click',()=>{
+    displayLimit+=48;
+    setLake(lake,null,true);
+  });
   const search=$('shore-search');
   if(search)search.addEventListener('input',()=>{
     query=search.value.trim().toLowerCase();
