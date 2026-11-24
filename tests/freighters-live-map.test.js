@@ -24,7 +24,7 @@ test("Live five-lake AIS map is prominently ahead of finder and directory", () =
 test("Map embeds existing specialized engine and does not introduce another AIS request", () => {
   const paths = [
     "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
-    "/assets/freighter-tracker.js?v=20260917",
+    "/assets/freighter-tracker.js?v=20261124",
     "/assets/freighters-hub.js"
   ];
   for(const p of paths) assert.ok(html.includes(p), "missing "+p);
@@ -95,4 +95,15 @@ test("Search canonical, entity, Person byline and intent boundary stay stable", 
   const section=html.slice(html.indexOf('id="corridors"'),html.indexOf('id="fleet"'));
   assert.equal((section.match(/class="corridor-card"/g)||[]).length,10);
   for(const url of ["/calumet-freighter-watch/","/cuyahoga-freighter-watch/","/welland-canal/","/st-lawrence-seaway/"])assert.ok(section.includes('href="'+url+'"'));
+});
+
+test("Saved desk is hidden before JS, consumes existing corridor activity and uses no new fetch",()=>{
+ const saved=read("public/assets/freighters-waterways.js");
+ assert.match(html,/id="my-waterways"[^>]+hidden/);
+ assert.match(html,/id="save-waterway-row"[^>]+hidden/);
+ assert.ok(html.indexOf("/assets/freighters-waterways.js")<html.indexOf("/assets/freighter-tracker.js"));
+ assert.match(tracker,/if\(!desk\)return;/);
+ assert.match(tracker,/freighter-corridor-report/);
+ assert.doesNotMatch(saved,/\bfetch\s*\(/);
+ assert.match(css,/\.hub-map-canvas-wrap\{isolation:isolate;overflow:hidden\}/);
 });
