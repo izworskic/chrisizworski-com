@@ -212,6 +212,14 @@
         <button class="view-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-freighter-view="mackinac">Mackinac</button>
       </div>
     </div>
+    <details class="hub-vessel-search">
+      <summary>Find a ship by name or MMSI</summary>
+      <div class="hub-vessel-search-body" role="search" aria-label="Search recent vessel reports">
+        <label for="freighterNameSearch">Ship name or MMSI</label>
+        <div class="hub-vessel-search-controls"><input id="freighterNameSearch" type="search" placeholder="Type a ship name" autocomplete="off" spellcheck="false"><button type="button" id="freighterSearchAll">Search all five lakes</button><button type="button" id="freighterClearSearch">Clear</button></div>
+        <p id="freighterSearchStatus" role="status">Search only includes recent AIS reports.</p>
+      </div>
+    </details>
     <div class="hub-map-canvas-wrap">
       <div id="freighterMap" role="region" aria-label="Interactive AIS map of Great Lakes vessel positions"></div>
       <div class="hub-map-tools"><button class="hub-map-refresh" id="mapRefresh" type="button">↻ Refresh vessel reports</button></div>
@@ -239,7 +247,7 @@
     </div>
     <details class="hub-map-reports">
       <summary>Recent vessel reports and source credits <span class="hub-report-hint">View the names behind the markers</span></summary>
-      <p>Only AIS reports less than 30 minutes old appear. Blue indicates movement; amber, little or no movement; gray, unavailable speed. A missing report does not prove a lake is empty.</p>
+      <p>Only AIS reports less than 30 minutes old appear. Ship silhouettes show reported broad vessel types and approximate size bands, not true map scale or direction. Blue indicates movement; amber, little or no movement; gray, unavailable speed. A missing report does not prove a lake is empty.</p>
       <ul id="freighterVessels"><li>Checking reported positions…</li></ul>
       <p id="freighterCredits">Sources will be listed when AIS reports load.</p>
     </details>
@@ -307,7 +315,7 @@
  </div>
 </section>
 <section id="corridors" class="section" aria-labelledby="corridors-title">
- <div class="section-head"><div><p class="eyebrow">Six ship-watching waterways</p><h2 id="corridors-title">Follow the shipping corridors</h2></div><p>Some routes see frequent traffic; others require patience. Open the corridor-specific AIS view to check the current reported position.</p></div>
+ <div class="section-head"><div><p class="eyebrow">Ten ship-watching waterways</p><h2 id="corridors-title">Follow the shipping corridors</h2></div><p>Some routes see frequent traffic; others require patience. Open the corridor-specific AIS view to check the current reported position.</p></div>
  <div class="corridor-grid">
   <article class="corridor-card"><div class="corridor-index">01 <span>Lake Superior / Huron</span></div><h3>Soo Locks</h3><p>Nearly every large vessel traveling between Lake Superior and the lower lakes passes through the St. Marys River system.</p><p class="spot">Watch: Sault Ste. Marie observation deck</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#soo">Live traffic ↗</a><a href="/soo-locks/">Locks schedule →</a></div></article>
   <article class="corridor-card"><div class="corridor-index">02 <span>Western Lake Superior</span></div><h3>Duluth–Superior</h3><p>Incoming and outgoing vessels use the harbor approaches, with close viewing from Canal Park.</p><p class="spot">Watch: Duluth Ship Canal</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#duluth">Live traffic ↗</a><a href="/duluth-canal-park/">Passage planner →</a></div></article>
@@ -315,6 +323,10 @@
   <article class="corridor-card"><div class="corridor-index">04 <span>St. Clair / Erie</span></div><h3>Detroit River</h3><p>A busy international shipping artery with a short-window decision tool for vessels moving near the riverfront.</p><p class="spot">Watch: Belle Isle or the Riverwalk</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#detroit">Live traffic ↗</a><a href="/detroit-river-freighters/">Watch verdict →</a></div></article>
   <article class="corridor-card"><div class="corridor-index">05 <span>Lake Huron</span></div><h3>Saginaw Bay</h3><p>Watch freighters bound for Bay City and Saginaw. Traffic is episodic, so check the bay and Saginaw River reports first.</p><p class="spot">Watch: Bay City riverfront</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#saginaw">Live traffic ↗</a><a href="/great-lakes-ship-watching-spots/">Viewing guide →</a></div></article>
   <article class="corridor-card"><div class="corridor-index">06 <span>Michigan / Huron</span></div><h3>Straits of Mackinac</h3><p>The connection between Lake Michigan and Lake Huron brings large commercial vessels within view of both peninsulas.</p><p class="spot">Watch: Mackinaw City or St. Ignace</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#mackinac">Live traffic ↗</a><a href="/great-lakes-ship-watching-spots/">Viewing guide →</a></div></article>
+  <article class="corridor-card"><div class="corridor-index">07 <span>Lake Michigan / Chicago</span></div><h3>Calumet River</h3><p>Follow the industrial river past working bridges and terminals. Look for recent vessel reports rather than a promised bridge opening.</p><p class="spot">Watch: 95th Street Bridge area; confirm public access</p><div class="corridor-actions"><a href="/calumet-freighter-watch/">River map and viewing guide →</a></div></article>
+  <article class="corridor-card"><div class="corridor-index">08 <span>Lake Erie / Cleveland</span></div><h3>Cuyahoga River</h3><p>Follow freighters through the bends of Cleveland's working river, from the lakefront toward the Flats.</p><p class="spot">Watch: Scranton Flats Pier or Wendy Park</p><div class="corridor-actions"><a href="/cuyahoga-freighter-watch/">River map and viewing guide →</a></div></article>
+  <article class="corridor-card"><div class="corridor-index">09 <span>Erie / Ontario</span></div><h3>Welland Canal</h3><p>Eight locks carry ships past the Niagara Escarpment. Check recent reports and the official order of turn before heading to a lock.</p><p class="spot">Watch: Lock 3 museum viewing platform</p><div class="corridor-actions"><a href="/welland-canal/">Canal map and lock guide →</a></div></article>
+  <article class="corridor-card"><div class="corridor-index">10 <span>Ontario / Montreal</span></div><h3>St. Lawrence Seaway</h3><p>Follow the seven locks connecting Lake Ontario and Montreal, with public viewing choices in Canada and the United States.</p><p class="spot">Watch: Eisenhower Lock or Iroquois Point; confirm access</p><div class="corridor-actions"><a href="/st-lawrence-seaway/">Seaway map and viewing guide →</a></div></article>
  </div>
  <p class="corridor-foot"><a href="/great-lakes-ship-watching-spots/">Compare public freighter-viewing spots around the lakes →</a></p>
 </section>
