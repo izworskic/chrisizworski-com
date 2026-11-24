@@ -93,6 +93,7 @@ async function main(){
     return x>=b.left&&x<=b.right&&y>=b.top&&y<=b.bottom&&p.contains(document.elementFromPoint(x,y));
    },null,{timeout:10000});
    await close.click();
+   assert.equal(await page.locator('.leaflet-popup').count(),0);
    await page.locator('.leaflet-control-zoom-in').click();
    await page.locator('.leaflet-control-zoom-out').click();
    await page.locator('#resetCanal').click();

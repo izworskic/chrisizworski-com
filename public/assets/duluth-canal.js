@@ -90,7 +90,9 @@
   function scrollMap() {
     const node = $('duluthVesselMap');
     if (node) node.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    window.setTimeout(() => { if (map) map.invalidateSize(); }, 250);
+    window.setTimeout(() => {
+      if (map) map.invalidateSize({ pan: false, animate: false });
+    }, 250);
   }
 
   function renderPick(data, failed) {
@@ -461,6 +463,12 @@
     if (map || typeof L === 'undefined') return;
     installMonitorStyles();
     map = L.map('duluthVesselMap', { scrollWheelZoom: false }).setView(CANAL, 12);
+    map.on('popupopen', ({ popup }) => {
+      if (popup.options.className !== 'duluth-vessel-popup') return;
+      // Wait for insertion and layout, then use the rendered bounds instead of
+      // relying on Leaflet's cached popup width during a concurrent map move.
+      requestAnimationFrame(() => requestAnimationFrame(() => fitVesselPopup(popup)));
+    });
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
     vesselLayer = L.layerGroup().addTo(map);
     candidateLayer = L.layerGroup().addTo(map);
@@ -470,8 +478,24 @@
   // Reserve room for the zoom controls and popup chrome on narrow maps.
   // A focus jump must settle the map before Leaflet computes popup autopan.
   function vesselPopupOptions() {
-    return { maxWidth: Math.max(150, Math.min(300, map.getSize().x - 100)), minWidth: 120,
-      autoPanPaddingTopLeft: [45, 14], autoPanPaddingBottomRight: [14, 18] };
+    return { className: 'duluth-vessel-popup', autoPan: false,
+      maxWidth: Math.max(120, Math.min(260, map.getSize().x - 112)), minWidth: 100,
+      maxHeight: Math.max(100, map.getSize().y - 100) };
+  }
+
+  function fitVesselPopup(popup) {
+    if (!map || !map.hasLayer(popup)) return;
+    const element = popup.getElement();
+    if (!element) return;
+    map.stop();
+    const box = element.getBoundingClientRect();
+    const viewport = map.getContainer().getBoundingClientRect();
+    // Account for Leaflet's zoom buttons on the left and attribution below.
+    const left = viewport.left + 48, right = viewport.right - 10;
+    const top = viewport.top + 12, bottom = viewport.bottom - 26;
+    const dx = box.right > right ? box.right - right : box.left < left ? box.left - left : 0;
+    const dy = box.top < top ? box.top - top : box.bottom > bottom ? box.bottom - bottom : 0;
+    if (dx || dy) map.panBy([Math.round(dx), Math.round(dy)], { animate: false });
   }
 
   function renderMap(data) {
@@ -550,7 +574,7 @@
     renderMap(data);
     renderCandidates(data);
     renderSource(data, failed);
-    window.setTimeout(() => { if (map) map.invalidateSize(); }, 80);
+    window.setTimeout(() => { if (map) map.invalidateSize({ pan: false, animate: false }); }, 80);
   }
 
   async function load() {

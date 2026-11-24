@@ -20,7 +20,7 @@ function adapter(factory = Icons) {
 test('Duluth client parses and loads existing shared AIS assets before the renderer', () => {
   assert.doesNotThrow(() => new vm.Script(js));
   const factory = html.indexOf('/assets/seaway-vessel-icons.js?v=20261108a');
-  const renderer = html.indexOf('/assets/duluth-canal.js?v=20261124-type-icons2');
+  const renderer = html.indexOf('/assets/duluth-canal.js?v=20261124-type-icons3');
   assert.ok(factory >= 0 && renderer > factory);
   assert.match(html, /href="\/assets\/soo-vessel-icons.css"/);
 });
