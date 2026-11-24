@@ -32,8 +32,9 @@ function evaluate({plantNow,kit,frost,harvest,history,archive,planting,available
   else if(availableDate>=frostDate)status='PAST_FROST_REFERENCE';
   else if(packet===null)status='PACKET_NEEDED';
   else if(warm&&availableDate<spring)status='BEFORE_SPRING_REFERENCE';
+  else if(Number(availableDate.slice(5,7))<3)status='OUTSIDE_OUTDOOR_SEASON';
   else if(packetDate>deadline)status='SHORT_WINDOW';
-  else if(!supported||(!ref&&current.code==='NEXT_SPRING'&&crop.id!=='beans'))status='CALENDAR_ONLY';
+  else if(!supported||(!ref&&current.code==='NEXT_SPRING'&&crop.id!=='beans')||['NEXT_SPRING','WAIT','WAIT_SOIL','DONE'].includes(current.code)&&crop.id!=='beans')status='CALENDAR_ONLY';
   else status='CALENDAR_FITS';
   let thermal=null;
   if(archive&&c.modelId!==null&&availableDate.slice(5)!=='02-29'&&frostDate&&availableDate<frostDate){
@@ -43,7 +44,7 @@ function evaluate({plantNow,kit,frost,harvest,history,archive,planting,available
   }
   return {cropId:crop.id,name:crop.name,status,rotation,referenceDays:ref?.days??null,referenceBasis:ref?.basis??null,packetDate,remainingDays:remaining,slackDays:packetDate&&deadline?diff(packetDate,deadline):null,frostDate,deadline,latestPacketStart:packet!==null&&plan.ok?plan.planningDate:null,thermal,plantingGuidance:current.detail};
  });
- const rank={CALENDAR_FITS:0,CALENDAR_ONLY:1,PACKET_NEEDED:2,SHORT_WINDOW:3,BEFORE_SPRING_REFERENCE:4,PAST_FROST_REFERENCE:5,NO_FROST_REFERENCE:6,BED_NOT_CONFIRMED:7,REFERENCE_ONLY:8};
+ const rank={CALENDAR_FITS:0,CALENDAR_ONLY:1,PACKET_NEEDED:2,SHORT_WINDOW:3,BEFORE_SPRING_REFERENCE:4,OUTSIDE_OUTDOOR_SEASON:5,PAST_FROST_REFERENCE:5,NO_FROST_REFERENCE:6,BED_NOT_CONFIRMED:7,REFERENCE_ONLY:8};
  rows.sort((a,b)=>rank[a.status]-rank[b.status]||(a.rotation==='SAME_FAMILY')-(b.rotation==='SAME_FAMILY')||(b.slackDays??-Infinity)-(a.slackDays??-Infinity));
  return {station:st.n,stationId:st.s,availableDate,bufferDays,clear,previousCrop:old,rows,rotationSource,scope:'Calendar and historical heat scenarios, not a planting clearance or future harvest forecast'};
 }
