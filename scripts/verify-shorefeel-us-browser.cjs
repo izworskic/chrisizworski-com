@@ -95,7 +95,7 @@ async function start(){
    await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent==='Big Bay State Park');
    assert.match(await page.locator('#report-alert').innerText(),/2027|construction/i);
    assert.match(await page.locator('#report-safety').getAttribute('href'),/dnr.wi.gov\/beachhealth/);
-   await page.waitForFunction(()=>document.querySelector('#map-fallback')?.hidden===false,{timeout:14000});
+   await page.waitForFunction(()=>document.querySelector('#map-tile-note')?.hidden===false,{timeout:14000});
    const metrics=await page.evaluate(()=>{
      const temp=document.querySelector('#report-temp');
      const item=document.querySelector('.shore-stop-name');
@@ -105,12 +105,74 @@ async function start(){
    });
    assert.ok(metrics.scrollWidth<=metrics.clientWidth+2,'horizontal scroll at '+width+' '+JSON.stringify(metrics));
    assert.ok(metrics.itemFont>=14,'readability at '+width);
-   assert.ok(metrics.mapCollapsed,'failed map must collapse, not remain blank');
+   assert.equal(metrics.mapCollapsed,false,'failed tiles must not remove the beach map');
+   assert.ok(await page.locator('#shore-map .shore-marker, #shore-map .shore-cluster').count()>0,'beaches survive blocked background tiles');
    assert.deepEqual(errors,[],'JS errors at '+width);
    await page.screenshot({path:path.join(OUT,'shorefeel-us-'+width+'.png'),fullPage:true});
    report.push({width,...metrics});
    await ctx.close();
   }
+
+  // Working-map acceptance: use deterministic tiles to exercise the actual
+  // Leaflet map and real two-finger touch input, not merely the error fallback.
+  const mapCtx=await browser.newContext({viewport:{width:390,height:850},isMobile:true,hasTouch:true,reducedMotion:'reduce'});
+  const tile=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/pQAAAABJRU5ErkJggg==','base64');
+  await mapCtx.route('https://**/*',route=>route.abort());
+  await mapCtx.route('https://tile.openstreetmap.org/**',route=>route.fulfill({status:200,contentType:'image/png',body:tile}));
+  await mapCtx.route('**/api/shorefeel-us?*',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(fixture(new URL(route.request().url()).searchParams.get('beach')))}));
+  await mapCtx.route('**/assets/shorefeel-us.js*',route=>{
+   const source=fs.readFileSync(path.join(ROOT,'assets/shorefeel-us.js'),'utf8');
+   assert.ok(source.includes('map=window.L.map('));
+   return route.fulfill({status:200,contentType:'application/javascript',body:source.replace('map=window.L.map(','map=window.__shoreTestMap=window.L.map(')});
+  });
+  const mapPage=await mapCtx.newPage(),mapErrors=[];
+  mapPage.on('pageerror',e=>mapErrors.push(String(e)));
+  await mapPage.goto(url,{waitUntil:'domcontentloaded'});
+  await mapPage.waitForFunction(()=>!!document.querySelector('#shore-map .leaflet-tile-loaded'));
+  const surface=mapPage.locator('#shore-map');
+  await surface.scrollIntoViewIfNeeded();
+  assert.ok(await mapPage.locator('#shore-map .shore-cluster').count()>0,'overview contains beach groups');
+  assert.equal(await mapPage.locator('#shore-map .leaflet-popup').count(),0,'no auto popup blocking gesture');
+  assert.equal(await surface.evaluate(el=>getComputedStyle(el).touchAction),'none');
+  assert.equal(await surface.evaluate(el=>getComputedStyle(el.closest('.map-shell')).touchAction),'none');
+  assert.equal(await surface.evaluate(el=>el.classList.contains('leaflet-touch-zoom')&&el.classList.contains('leaflet-touch-drag')),true);
+  const zoom=()=>mapPage.evaluate(()=>window.__shoreTestMap.getZoom());
+  const initialZoom=await zoom();
+  const plus=surface.locator('.leaflet-control-zoom-in');
+  assert.ok(await plus.evaluate(el=>el.getBoundingClientRect().width>=44));
+  await plus.click();
+  await mapPage.waitForFunction(z=>window.__shoreTestMap.getZoom()>z,initialZoom);
+  await mapPage.reload({waitUntil:'domcontentloaded'});
+  await mapPage.waitForFunction(()=>!!document.querySelector('#shore-map .leaflet-tile-loaded'));
+  await surface.scrollIntoViewIfNeeded();
+  await mapPage.waitForTimeout(400);
+  const box=await surface.boundingBox(),cx=box.x+box.width/2,cy=box.y+box.height/2;
+  const before=await zoom(),scale=await mapPage.evaluate(()=>visualViewport.scale);
+  const cdp=await mapCtx.newCDPSession(mapPage);
+  const finger=(id,x,y)=>({id,x,y,force:1});
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[finger(1,cx-24,cy)]});
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[finger(1,cx-24,cy),finger(2,cx+24,cy)]});
+  for(let i=1;i<=12;i++){
+   const spread=24+i*7;
+   await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[finger(1,cx-spread,cy),finger(2,cx+spread,cy)]});
+   await mapPage.waitForTimeout(24);
+  }
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+  await mapPage.waitForFunction(z=>window.__shoreTestMap.getZoom()>z,before,{timeout:10000});
+  assert.ok(Math.abs(await mapPage.evaluate(()=>visualViewport.scale)-scale)<0.02,'pinch zooms map, not page');
+  // Search a source-listed beach not in the original 16, then use the actual
+  // map pin to select its forecast. The search must not be reset.
+  await mapPage.locator('#shore-search').fill('MI000290');
+  await mapPage.waitForFunction(()=>document.querySelector('#result-count')?.textContent.startsWith('1 matching'));
+  const pin=surface.locator('.leaflet-marker-icon[title="Bay City State Recreation Area"]');
+  await pin.click();
+  await mapPage.waitForFunction(()=>document.querySelector('#report-name')?.textContent==='Bay City State Recreation Area');
+  assert.equal(await mapPage.locator('#shore-search').inputValue(),'MI000290');
+  assert.ok(await surface.locator('.leaflet-popup').isVisible(),'beach pin opens its popup without rebuilding map');
+  assert.equal(await mapPage.locator('#map-tile-note').isVisible(),false);
+  assert.deepEqual(mapErrors,[]);
+  await surface.screenshot({path:path.join(OUT,'shorefeel-us-working-map-390.png')});
+  await mapCtx.close();
   const ctx=await browser.newContext({viewport:{width:390,height:850}});
   await ctx.route('**/api/shorefeel-us?*',route=>route.fulfill({
     status:200,contentType:'application/json',
@@ -131,7 +193,7 @@ async function start(){
   assert.equal(await plain.locator('.shore-stop a[href^="https://"]').count(),16);
   await noJs.close();
   console.log(JSON.stringify({passed:true,report,noJs:'16 official source links remain available',
-    missing:'No fabricated temperature',map:'Blocked tile fallback confirmed'},null,2));
+    missing:'No fabricated temperature',map:'Beach markers survive blocked tiles; working map interaction and mobile pinch tested with fixture tiles'},null,2));
  }finally{
   if(browser)await browser.close();
   await new Promise(resolve=>server.close(resolve));
