@@ -112,6 +112,10 @@ test('one existing U.S. canonical explorer loads every EPA record without 981 th
  assert.match(js,/document\.createElement\('li'\)/);
  assert.match(js,/epaId/);
  assert.match(js,/Math\.min\(zoom\+2,11\)/);
+ assert.match(js,/touchZoom:true,dragging:true/);
+ assert.doesNotMatch(js,/crossOrigin:true/);
+ assert.match(html,/id="map-tile-note"/);
+ assert.match(js,/selectFromList/);
  assert.match(js,/displayLimit\+=48/);
  assert.match(js,/URLSearchParams\(location\.search\)/);
  assert.match(js,/sourceAdded/);
