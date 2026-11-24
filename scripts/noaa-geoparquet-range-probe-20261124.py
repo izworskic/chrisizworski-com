@@ -5,14 +5,16 @@ import json
 import math
 import os
 import re
+import struct
+import sys
 import urllib.request
 from collections import defaultdict
 from datetime import datetime, timezone
 
 URL = "https://ocmgeodatastor1.blob.core.windows.net/marinecadastre/ais2024/ais-2024-09-01.parquet"
-CAP = 24 * 1024 * 1024
-MAX_CALLS = 48
-SITES = {"soo": (46.45, -84.50, 46.52, -84.25), "duluth": (46.73, -92.15, 46.85, -91.95)}
+CAP = 220 * 1024 * 1024
+MAX_CALLS = 100
+SITES = {"soo_local": (46.45, -84.50, 46.52, -84.25), "duluth_local": (46.73, -92.15, 46.85, -91.95), "soo_approach": (45.9, -85.2, 47.0, -83.4), "duluth_approach": (46.3, -92.5, 48.4, -86.8)}
 START = datetime(2024, 9, 1, tzinfo=timezone.utc)
 END = datetime(2024, 9, 2, tzinfo=timezone.utc)
 
@@ -62,122 +64,164 @@ class RangeReader(io.RawIOBase):
         self.pos += n
         return n
 
-def overlap(bounds, box):
-    s,w,n,e = box
-    lo_lat,lo_lon,hi_lat,hi_lon = bounds
-    return lo_lat <= n and hi_lat >= s and lo_lon <= e and hi_lon >= w
 
-def bounds_for(group, paths):
-    stats = {}
-    for i in range(group.num_columns):
-        col = group.column(i)
-        if col.path_in_schema in paths:
-            v = col.statistics
-            if v is None or not v.has_min_max:
-                return None
-            try:
-                lo, hi = float(v.min), float(v.max)
-            except (ValueError, TypeError):
-                return None
-            if not math.isfinite(lo) or not math.isfinite(hi) or lo > hi:
-                return None
-            stats[col.path_in_schema] = (lo,hi)
-    if set(stats) != set(paths):
+EXPECTED_ETAG = "0x8DDB021091FE6BF"
+FIELDS = ["geometry", "mmsi", "base_date_time", "vessel_type"]
+LE,BE=struct.Struct("<Idd"),struct.Struct(">Idd")
+MAX_SELECTED=500000
+
+def point(raw):
+    if not isinstance(raw,bytes) or len(raw)!=21 or raw[0] not in (0,1):
         return None
-    if len(paths)==2:
-        lat,lon = (stats[p] for p in paths)
-        return lat[0],lon[0],lat[1],lon[1]
-    xmin,ymin,xmax,ymax = (stats[p] for p in paths)
-    return ymin[0],xmin[0],ymax[1],xmax[1]
+    kind,x,y=(LE if raw[0]==1 else BE).unpack_from(raw,1)
+    if kind!=1 or not math.isfinite(x) or not math.isfinite(y) or not -180<=x<=180 or not -90<=y<=90:
+        return None
+    return y,x
+
+def observed_time(t):
+    if not isinstance(t,datetime):
+        return None
+    # Source README explicitly declares UTC for timezone-naive archive timestamps.
+    if t.tzinfo is None:
+        t=t.replace(tzinfo=timezone.utc)
+    else:
+        t=t.astimezone(timezone.utc)
+    return t if START<=t<END else None
+
+def vessel_class(v):
+    return "cargo_tanker" if isinstance(v,int) and 70<=v<=89 else "unknown" if not isinstance(v,int) or v<=0 or v>99 else "other"
+
+def site_hits(y,x):
+    return [k for k,(s,w,n,e) in SITES.items() if s<=y<=n and w<=x<=e]
+
+def summarize(obs):
+    out={"uniqueVesselTimestampRows":0,"distinctVessels":len(obs),"cargoTankerVessels":0,"cargoTankerRows":0,"unknownTypeRows":0,"adjacentPairs":0,"gapsOverFiveMinutes":0,"cargoTankerAdjacentPairs":0,"cargoTankerGapsOverFiveMinutes":0,"distinctObservedMinutes":0}
+    minutes=set()
+    for stamps in obs.values():
+        ordered=sorted(stamps)
+        out["uniqueVesselTimestampRows"]+=len(ordered)
+        out["cargoTankerVessels"]+=any(stamps[t]=="cargo_tanker" for t in ordered)
+        for t in ordered:
+            minutes.add(int(t.timestamp())//60)
+            out["cargoTankerRows"]+=stamps[t]=="cargo_tanker"
+            out["unknownTypeRows"]+=stamps[t]=="unknown"
+        for a,b in zip(ordered,ordered[1:]):
+            gap=(b-a).total_seconds()>300
+            out["adjacentPairs"]+=1
+            out["gapsOverFiveMinutes"]+=gap
+            if stamps[a]==stamps[b]=="cargo_tanker":
+                out["cargoTankerAdjacentPairs"]+=1
+                out["cargoTankerGapsOverFiveMinutes"]+=gap
+    out["distinctObservedMinutes"]=len(minutes)
+    return out
+
+def self_test():
+    a=point(b"\x01"+LE.pack(1,-84.4,46.48))
+    assert a==(46.48,-84.4)
+    assert point(b"\x00"+BE.pack(1,-92.09,46.78))==(46.78,-92.09)
+    assert point(b"\x01"+LE.pack(2,0,0)) is None
+    assert point(b"\x01"+LE.pack(1,181,0)) is None
+    assert point(b"") is None and point(None) is None
+    assert set(site_hits(*a))=={"soo_local","soo_approach"}
+    assert observed_time(datetime(2024,9,1,1)).tzinfo==timezone.utc
+    assert observed_time(datetime(2024,9,2)) is None
+    assert vessel_class(70)=="cargo_tanker" and vessel_class(0)=="unknown" and vessel_class(60)=="other"
+    t0=START;t1=datetime(2024,9,1,0,1,tzinfo=timezone.utc);t2=datetime(2024,9,1,0,8,tzinfo=timezone.utc)
+    v=summarize({"a":{t0:"cargo_tanker",t1:"cargo_tanker",t2:"cargo_tanker"},"b":{t1:"other"}})
+    assert v["uniqueVesselTimestampRows"]==4 and v["distinctVessels"]==2 and v["cargoTankerVessels"]==1
+    assert v["adjacentPairs"]==2 and v["gapsOverFiveMinutes"]==1 and v["cargoTankerAdjacentPairs"]==2 and v["distinctObservedMinutes"]==3
+    print("Coverage decoder, UTC, spatial boxes and aggregate fixture passed")
 
 def main():
+    import pyarrow as pa
     import pyarrow.parquet as pq
-    import pyarrow
-    raw = RangeReader()
-    report = {"kind":"NOAA_GEOPARQUET_RANGE_COVERAGE_ONLY","source":URL,"objectBytes":raw.size,"etag":raw.etag,"rangeBudgetBytes":CAP,"pyarrowVersion":pyarrow.__version__,"date":"2024-09-01","sites":{k:{"box":v,"validRows":0,"distinctVessels":0,"adjacentPairs":0,"gapsOverFiveMinutes":0} for k,v in SITES.items()},"receiptTimesAvailable":False,"independentCrossingLabels":0,"fieldAccuracyVerified":False,"productionCalibrationAuthorized":False}
+    raw=RangeReader()
+    report={"kind":"NOAA_ORIGINAL_ARCHIVE_ONE_DAY_COVERAGE","source":URL,"etag":raw.etag,"objectBytes":raw.size,"rangeBudgetBytes":CAP,"date":"2024-09-01","pyarrowVersion":pa.__version__,"receiptTimesAvailable":False,"independentCrossingLabels":0,"fieldAccuracyVerified":False,"productionCalibrationAuthorized":False,"sites":None,"scanComplete":False}
     try:
-        reader = pq.ParquetFile(io.BufferedReader(raw), pre_buffer=False)
-        meta = reader.metadata
-        names = reader.schema_arrow.names
-        report.update(schema=[{"name":f.name,"type":str(f.type)} for f in reader.schema_arrow],rowGroups=meta.num_row_groups,objectRows=meta.num_rows)
-        cols = {n.lower():n for n in names}
-        geo = json.loads((meta.metadata or {}).get(b"geo",b"{}"))
-        report["geoVersion"] = geo.get("version")
-        primary = geo.get("primary_column")
-        if primary not in names:
-            raise ValueError("geometry metadata absent")
-        gcol = geo.get("columns",{}).get(primary,{})
-        report["geometryEncoding"] = gcol.get("encoding")
-        report["geometryTypes"] = gcol.get("geometry_types")
-        # NOAA declares WGS84. Require explicit numeric lat/lon or GeoParquet covering statistics.
-        lat,lon = cols.get("lat") or cols.get("latitude"),cols.get("lon") or cols.get("longitude")
-        paths = [lat,lon] if lat and lon else None
-        if not paths:
-            covering=gcol.get("covering",{}).get("bbox",{})
-            if all(isinstance(covering.get(k),list) and covering[k] for k in ("xmin","ymin","xmax","ymax")):
-                paths=[".".join(covering[k]) for k in ("xmin","ymin","xmax","ymax")]
-        if not paths:
-            report["status"]="NO_VERIFIED_SPATIAL_PRUNING"
-            return report
-        report["pruningPaths"]=paths
-        chosen=[]
-        unknown=0
+        if raw.etag.strip('"')!=EXPECTED_ETAG:
+            raise ValueError("archive version changed")
+        reader=pq.ParquetFile(io.BufferedReader(raw),pre_buffer=False)
+        meta=reader.metadata
+        names=reader.schema_arrow.names
+        geo=json.loads((meta.metadata or {}).get(b"geo",b"{}"))
+        gc=geo.get("columns",{}).get("geometry",{})
+        if not all(k in names for k in FIELDS) or geo.get("primary_column")!="geometry" or gc.get("encoding")!="WKB" or gc.get("geometry_types")!=["Point"]:
+            raise ValueError("unexpected point schema")
+        report.update(objectRows=meta.num_rows,rowGroups=meta.num_row_groups,geoVersion=geo.get("version"),selectedColumns=FIELDS,coordinateBasis="NOAA documented WGS84 WKB points; x longitude, y latitude",timestampBasis="NOAA documented UTC; naive archive timestamp interpreted as UTC")
+        projected=sum(meta.row_group(i).column(j).total_compressed_size for i in range(meta.num_row_groups) for j in range(meta.row_group(i).num_columns) if meta.row_group(i).column(j).path_in_schema in FIELDS)
+        report["projectedCompressedBytes"]=projected
+        if projected+2*1024*1024>CAP:
+            raise ValueError("projected columns exceed byte budget")
+        data={k:defaultdict(dict) for k in SITES}
+        duplicates={k:0 for k in SITES}
+        rejected={k:0 for k in SITES}
+        scanned=bad_geom=selected_rows=0
         for i in range(meta.num_row_groups):
-            bounds=bounds_for(meta.row_group(i),paths)
-            if bounds is None:
-                unknown+=1
-            elif any(overlap(bounds,box) for box in SITES.values()):
-                chosen.append(i)
-        report.update(candidateRowGroups=len(chosen),unknownRowGroups=unknown)
-        if unknown:
-            report["status"]="INCOMPLETE_SPATIAL_STATISTICS"
-            return report
-        if not lat or not lon:
-            report["status"]="WKB_ONLY_REQUIRES_REVIEWED_DECODER"
-            return report
-        mmsi=cols.get("mmsi")
-        stamp=cols.get("basedatetime") or cols.get("time") or cols.get("timestamp")
-        if not mmsi or not stamp:
-            report["status"]="UNRECOGNIZED_ID_TIME_SCHEMA"
-            return report
-        selected=[mmsi,stamp,lat,lon]
-        by_site={k:defaultdict(set) for k in SITES}
-        for i in chosen:
             rg=meta.row_group(i)
-            nbytes=sum(rg.column(j).total_uncompressed_size for j in range(rg.num_columns) if rg.column(j).path_in_schema in selected)
-            if rg.num_rows>1000000 or nbytes>64*1024*1024:
+            if rg.num_rows>1000000 or sum(rg.column(j).total_uncompressed_size for j in range(rg.num_columns) if rg.column(j).path_in_schema in FIELDS)>80*1024*1024:
                 raise ValueError("row group exceeds memory limit")
-            for batch in reader.iter_batches(batch_size=32768,row_groups=[i],columns=selected,use_threads=False):
-                data=batch.to_pydict()
-                for identity,t,y,x in zip(*(data[k] for k in selected)):
-                    if not isinstance(t,datetime) or t.tzinfo is None or not START<=t.astimezone(timezone.utc)<END:
-                        continue
-                    if not re.fullmatch(r"\d{9}",str(identity)) or not isinstance(y,(int,float)) or not isinstance(x,(int,float)) or not math.isfinite(y) or not math.isfinite(x):
-                        continue
-                    for site,(s,w,n,e) in SITES.items():
-                        if s<=y<=n and w<=x<=e:
-                            by_site[site][str(identity)].add(t.isoformat())
-        for site,observations in by_site.items():
-            pairs=gaps=0
-            for stamps in observations.values():
-                ordered=sorted(datetime.fromisoformat(t) for t in stamps)
-                for a,b in zip(ordered,ordered[1:]):
-                    pairs+=1
-                    gaps+=(b-a).total_seconds()>300
-            report["sites"][site].update(validRows=sum(map(len,observations.values())),distinctVessels=len(observations),adjacentPairs=pairs,gapsOverFiveMinutes=gaps)
-        report["status"]="COVERAGE_ONLY"
+            geometries=reader.read_row_group(i,columns=["geometry"],use_threads=False).column(0)
+            if len(geometries)!=rg.num_rows:
+                raise ValueError("geometry row count mismatch")
+            indices=[]
+            hits=[]
+            # Cheap wide bounding check first; no raw geometry or identifier is written.
+            for j,blob in enumerate(geometries.to_pylist()):
+                p=point(blob)
+                if p is None:
+                    bad_geom+=1
+                    continue
+                y,x=p
+                if not 45.9<=y<=48.4 or not -92.5<=x<=-83.4:
+                    continue
+                h=site_hits(y,x)
+                if h:
+                    indices.append(j);hits.append(h)
+            scanned+=len(geometries)
+            del geometries
+            selected_rows+=len(indices)
+            if selected_rows>MAX_SELECTED:
+                raise ValueError("selected rows exceed memory budget")
+            if not indices:
+                continue
+            records=reader.read_row_group(i,columns=FIELDS[1:],use_threads=False)
+            if records.num_rows!=rg.num_rows:
+                raise ValueError("attribute row count mismatch")
+            subset=records.take(pa.array(indices,type=pa.int64())).to_pydict()
+            del records
+            for identity,t,kind,locations in zip(subset["mmsi"],subset["base_date_time"],subset["vessel_type"],hits):
+                t=observed_time(t)
+                if not isinstance(identity,int) or not 100000000<=identity<=999999999 or t is None:
+                    for k in locations:rejected[k]+=1
+                    continue
+                cls=vessel_class(kind)
+                for k in locations:
+                    timestamps=data[k][identity]
+                    if t in timestamps:
+                        duplicates[k]+=1
+                        if timestamps[t]!=cls:
+                            timestamps[t]="unknown"
+                    else:
+                        timestamps[t]=cls
+        if scanned!=meta.num_rows:
+            raise ValueError("incomplete geometry scan")
+        report.update(scanComplete=True,rowsScanned=scanned,invalidGeometryRows=bad_geom,selectedGeographicRows=selected_rows,status="COVERAGE_ONLY",sites={k:{"box":SITES[k],"duplicateVesselTimestampRows":duplicates[k],"invalidIdentityOrTimeRows":rejected[k],**summarize(data[k])} for k in SITES})
     except Exception as exc:
-        # Only error type, no upstream content or raw records.
-        report["status"]="BOUNDED_PROBE_UNAVAILABLE"
+        report["status"]="BOUNDED_SCAN_UNAVAILABLE"
         report["errorClass"]=type(exc).__name__
-        if str(exc) in ("range budget exceeded","row group exceeds memory limit","range or object identity not verified","geometry metadata absent"):
-            report["reason"]=str(exc)
+        if isinstance(exc,ValueError):
+            report["reason"]=str(exc)[:200]
     finally:
         report.update(rangeBytesRead=raw.transferred,rangeRequests=raw.calls,rangeReceiptSha256=raw.digest.hexdigest())
     return report
 
 if __name__=="__main__":
-    report=main()
-    print(json.dumps(report,sort_keys=True))
-    with open(os.environ["NOAA_REPORT"],"x",encoding="utf-8") as f:
-        json.dump(report,f,indent=2,sort_keys=True)
+    if sys.argv[1:]==["--self-test"]:
+        self_test()
+    else:
+        report=main()
+        print(json.dumps(report,sort_keys=True))
+        with open(os.environ["NOAA_REPORT"],"x",encoding="utf-8") as f:
+            json.dump(report,f,indent=2,sort_keys=True)
+        if not report["scanComplete"]:
+            sys.exit(1)
