@@ -54,8 +54,8 @@ async function render(){
  if(!data.plantings.some(p=>p.id===selected))selected=data.plantings.at(-1)?.id||null;
  data.plantings.forEach(p=>option(select,p.id,p.bed+' · '+p.crop+' · '+fmt(p.date)));if(selected)select.value=selected;
  get('fj-record').hidden=!selected;get('fj-export').disabled=!data.plantings.length;get('fj-count').textContent=data.plantings.length+' planting'+(data.plantings.length===1?'':'s')+' · '+data.entries.length+' observation'+(data.entries.length===1?'':'s');
- if(!selected){get('fj-empty').hidden=false;resetWater(null);resetDisease(null);resetProductivity(null);return;}get('fj-empty').hidden=true;
- const s=J.summarize(data,selected,today);resetWater(s);resetDisease(s);resetProductivity(s);get('fj-entry-date').min=s.planting.date;get('fj-entry-date').value=today;fields();get('fj-confirm-delete').checked=false;get('fj-planting-info').textContent=places[s.planting.siteId]+' · '+s.planting.bed+' · planted '+fmt(s.planting.date);
+ if(!selected){get('fj-empty').hidden=false;resetWater(null);resetDisease(null);resetProductivity(null);resetSuccession(null);return;}get('fj-empty').hidden=true;
+ const s=J.summarize(data,selected,today);resetWater(s);resetDisease(s);resetProductivity(s);resetSuccession(s);get('fj-entry-date').min=s.planting.date;get('fj-entry-date').value=today;fields();get('fj-confirm-delete').checked=false;get('fj-planting-info').textContent=places[s.planting.siteId]+' · '+s.planting.bed+' · planted '+fmt(s.planting.date);
  const list=node('ol',undefined,'fj-timeline');const planted=node('li');planted.append(node('time',fmt(s.planting.date)),node('strong','Planted: '+s.planting.crop));list.appendChild(planted);
  for(const e of s.entries){const li=node('li');li.append(node('time',fmt(e.date)),node('strong',describe(e)));if(e.note)li.appendChild(node('p',e.note));const b=node('button','Remove','gs-secondary');b.type='button';b.setAttribute('aria-label','Remove '+labels[e.kind]+' on '+fmt(e.date));b.addEventListener('click',()=>{if(commit({...data,plantings:reopenFor(e.kind,e.plantingId),entries:data.entries.filter(x=>x.id!==e.id)}))render();});li.appendChild(b);list.appendChild(li);}
  area.appendChild(list);paintComparison(s);
@@ -227,7 +227,59 @@ get('fj-yield-form').addEventListener('submit',e=>{
  const p=data.plantings.find(x=>x.id===selected),complete=get('fj-yield-complete').checked,closedOn=complete?get('fj-yield-close').value:null;
  const q={group:get('fj-yield-group').value,lengthFt:num('fj-yield-length'),widthFt:num('fj-yield-width'),plantedCount:num('fj-yield-plants'),complete,closedOn};
  if(complete&&P.summarize({...p,productivity:q},data.entries).unweighedDates.length){status('A harvest milestone date has no weighed entry. Keep the record open until the weights are known.');return;}
- if(commit({...data,plantings:data.plantings.map(x=>x.id===selected?{...x,productivity:q}:x)})){resetProductivity({planting:{...p,productivity:q}});}
+ if(commit({...data,plantings:data.plantings.map(x=>x.id===selected?{...x,productivity:q}:x)})){resetProductivity({planting:{...p,productivity:q}});resetSuccession({planting:{...p,productivity:q}});}
+});
+
+
+const S=window.GardenSuccession,PN=window.PlantNow,K=window.GardenKit,F=window.MIFrost;
+let successionPlant=null,successionVersion=0;
+const candidates=get('fj-succession-candidates');
+function field(parent,id,label,control){const l=node('label',label);l.htmlFor=id;control.id=id;l.appendChild(control);parent.appendChild(l);return control;}
+if(S&&PN){
+ const prev=get('fj-succession-previous');option(prev,'unknown','Unknown or other crop');
+ for(const [id,name] of Object.entries({brassicas:'Mixed brassicas',melons:'Melons',corn:'Corn'}))option(prev,id,name);
+ for(const crop of PN.CROPS.filter(x=>Object.hasOwn(S.families,x.id)))option(prev,crop.id,crop.name);
+ for(let i=0;i<3;i++){
+  const box=node('fieldset',undefined,'fj-add'),legend=node('legend','Candidate '+(i+1)+(i?' (optional)':''));box.appendChild(legend);
+  const fields=node('div',undefined,'gs-fields'),crop=field(fields,'fj-next-crop-'+i,'Crop',node('select')),packet=field(fields,'fj-next-packet-'+i,'Packet days from planting',node('input')),model=field(fields,'fj-next-model-'+i,'Exact cultivar heat model (optional)',node('select'));
+  option(crop,'','Choose crop');for(const x of PN.CROPS.filter(x=>PN.fallReference(x.id)||['beans','tomatoes','cucumbers','peppers'].includes(x.id)))option(crop,x.id,x.name);
+  packet.type='number';packet.min='1';packet.max='365';packet.placeholder='Your packet days';
+  const ref=node('p',undefined,'fj-small');box.append(fields,ref);candidates.appendChild(box);
+  const change=()=>{model.replaceChildren();option(model,'','No matching model selected');for(const m of Object.values(H.models).filter(m=>S.modelCrop[m.crop]===crop.value))option(model,m.id,m.variety+' · '+m.biofix.replace(/-/g,' ')+' · '+m.endpoint);const r=PN.fallReference(crop.value);ref.textContent=r?'MSU approximate reference: '+r.days+' days after germination. Use your own packet days from planting, including germination if needed.':'';};
+  crop.addEventListener('change',change);change();
+ }
+}
+function resetSuccession(s){
+ successionVersion++;get('fj-succession-result').replaceChildren();if(!S||!PN||!s){successionPlant=null;return;}
+ const p=s.planting;if(successionPlant===p.id)return;successionPlant=p.id;
+ const date=get('fj-succession-date');date.min=p.date;date.max='2100-12-31';date.value=today;
+ get('fj-succession-free').checked=false;
+ const old=p.productivity?.group||S.modelCrop[H.models[p.modelId]?.crop];get('fj-succession-previous').value=old&&Object.hasOwn(S.families,old)?old:'unknown';
+ for(let i=0;i<3;i++){get('fj-next-crop-'+i).value=['radishes','lettuce','beans'][i];get('fj-next-packet-'+i).value='';get('fj-next-crop-'+i).dispatchEvent(new Event('change'));}
+}
+function paintSuccession(r,area){
+ area.replaceChildren();area.appendChild(node('p',r.station+' frost station · bed available '+fmt(r.availableDate),'fj-lead'));
+ if(!r.clear)area.appendChild(node('p','Confirm the space will be free after the previous planting ends. Timing comparisons are references only.'));
+ const labels={CALENDAR_FITS:'Fits the packet calendar',CALENDAR_ONLY:'Calendar fits; planting guidance limited',PACKET_NEEDED:'Enter packet days',SHORT_WINDOW:'Not enough time with this buffer',BEFORE_SPRING_REFERENCE:'Before the cautious spring reference',PAST_FROST_REFERENCE:'At or past typical fall frost',NO_FROST_REFERENCE:'No published fall frost reference',BED_NOT_CONFIRMED:'Bed availability unconfirmed',REFERENCE_ONLY:'Reference only'};
+ for(const row of r.rows){
+  const card=node('section',undefined,'fj-add');card.append(node('h3',row.name),node('p',labels[row.status],'fj-lead'));
+  if(row.frostDate)card.appendChild(node('p','Typical fall frost '+fmt(row.frostDate)+' · '+row.remainingDays+' days from bed date. Planning cutoff with your buffer: '+fmt(row.deadline)+'.'));
+  if(row.packetDate)card.appendChild(node('p','Packet reference '+fmt(row.packetDate)+' · '+(row.slackDays===null?'no frost comparison':row.slackDays>=0?row.slackDays+' days to spare after buffer':Math.abs(row.slackDays)+' days beyond buffered cutoff')+'.'));
+  if(row.referenceDays!==null)card.appendChild(node('p','MSU reference: about '+row.referenceDays+' days after germination, not from sowing.','fj-small'));
+  card.appendChild(node('p',row.rotation==='SAME_FAMILY'?'Rotation caution: same plant family as the previous crop. Consider another family where space allows.':row.rotation==='DIFFERENT_FAMILY'?'Different family from the selected previous crop; this does not establish a full rotation history.':'Rotation history unknown.','fj-small'));
+  if(row.thermal){card.appendChild(node('p',row.thermal.count+' of five regional historical seasons reached the selected heat threshold by the buffered cutoff.','fj-lead'));card.appendChild(node('p',row.thermal.years.map(y=>y.year+': '+(y.elapsedDays===null?'not reached':y.elapsedDays+' days'+(y.byBuffer?'':' (after cutoff)'))).join(' · '),'fj-small'));card.appendChild(node('p','Published Oregon cultivar model; not Michigan validated. Historical heat crossings are not observed harvests or probabilities.','fj-small'));}
+  card.appendChild(node('p',row.plantingGuidance,'fj-small'));area.appendChild(card);
+ }
+ area.appendChild(node('p','Use the packet starting stage, actual soil, weather, cultivar and bed readiness before planting. No crop is automatically added to your journal.','fj-small'));
+}
+get('fj-succession-form').addEventListener('input',()=>{successionVersion++;get('fj-succession-result').replaceChildren();});
+get('fj-succession-form').addEventListener('submit',async e=>{
+ e.preventDefault();if(!S||!PN||!selected)return;const p=data.plantings.find(x=>x.id===selected),v=++successionVersion,area=get('fj-succession-result');
+ const chosen=Array.from({length:3},(_,i)=>({cropId:get('fj-next-crop-'+i).value,packetDays:num('fj-next-packet-'+i),modelId:get('fj-next-model-'+i).value||null})).filter(x=>x.cropId);
+ const args={plantNow:PN,kit:K,frost:F,harvest:H,history:R,planting:p,availableDate:get('fj-succession-date').value,bufferDays:num('fj-succession-buffer'),previousCrop:get('fj-succession-previous').value,bedFree:get('fj-succession-free').checked,candidates:chosen};
+ try{paintSuccession(S.evaluate(args),area);}catch(e){area.replaceChildren(node('p',e.message));return;}
+ if(!chosen.some(c=>c.modelId))return;
+ try{const archive=await history();if(v!==successionVersion)return;paintSuccession(S.evaluate({...args,archive}),area);}catch{if(v===successionVersion)area.appendChild(node('p','Historical heat archive unavailable. Packet and frost references remain.','fj-small'));}
 });
 
 root.addEventListener('toggle',()=>{if(root.open)render();});function hash(){if(location.hash==='#field-journal')root.open=true;}window.addEventListener('hashchange',hash);hash();
