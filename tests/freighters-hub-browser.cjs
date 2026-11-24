@@ -69,6 +69,14 @@ for(const width of [360,390,768,1280,1440]){
  if(width===390){
    await page.locator('[data-hub-find-ship="366904950"]').click();assert.equal(await page.locator('#freighterNameSearch').inputValue(),'366904950');assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),1);
    await page.locator('[data-hub-find-ship="366904940"]').click();assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),0);
+   // Add a known text-only identity in a new response, not a live claim.
+   await page.unroute('**/*');
+   await page.route('**/*',async route=>{const u=new URL(route.request().url());if(u.hostname==='unpkg.com'&&u.pathname.endsWith('/leaflet.js'))return route.fulfill({status:200,contentType:'text/javascript',body:fs.readFileSync('public/vendor/leaflet/leaflet.js')});if(u.hostname==='unpkg.com'&&u.pathname.endsWith('/leaflet.css'))return route.fulfill({status:200,contentType:'text/css',body:fs.readFileSync('public/vendor/leaflet/leaflet.css')});if(u.pathname==='/api/freighter-ais'){const data=fixture();data.vessels.push({...data.vessels[0],mmsi:'366904940',name:'PAUL R TREGURTHA',lengthMeters:309});return route.fulfill({status:failed?503:200,contentType:'application/json',body:JSON.stringify(failed?{}:data)});}if(u.pathname==='/api/buoys')return route.fulfill({status:503,contentType:'application/json',body:'{}'});if(u.hostname==='127.0.0.1')return route.continue();return route.abort()});
+   await page.locator('#mapRefresh').click();await page.locator('#freighterMap .tracker-ship-marker').waitFor();
+   await page.locator('#freighterMap .tracker-ship-marker').focus();await page.keyboard.press('Enter');await page.locator('.hub-meet-ship').click();
+   await page.locator('#ship-story').getByText(/longest ship on the lakes/).waitFor();
+   assert.match(await page.locator('#ship-story').innerText(),/68,000 gross tons/);assert.equal(await page.locator('#ship-story img').count(),0);
+   await page.locator('#ship-inspector-close').click();await page.unroute('**/*');
    await page.locator('#freighterClearSearch').click();await page.locator('[data-freighter-view=saginaw]').click();
    await page.locator('#freighterMap .tracker-ship-marker').first().focus();await page.keyboard.press('Enter');
    await page.locator('.hub-meet-ship').click();await page.locator('#ship-story').getByText(/reviewed history is not available/).waitFor();
