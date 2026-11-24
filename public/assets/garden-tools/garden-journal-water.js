@@ -15,7 +15,7 @@ function ledger(entries,today){
  if(!dateOK(today)||!Array.isArray(entries))throw Error('Invalid local date or records');
  const rows=entries.filter(e=>dateOK(e.date)&&e.date<=today);
  const rain=rows.filter(e=>e.kind==='rain-gauge'&&e.date>=shift(today,-7)&&e.date<today&&numeric(e.inches,0,10));
- const irrigation=rows.filter(e=>e.kind==='irrigation'&&e.date>=shift(today,-7)&&numeric(e.inches,0.001,10)).sort((a,b)=>b.date.localeCompare(a.date));
+ const irrigation=rows.filter(e=>e.kind==='irrigation'&&e.date>=shift(today,-6)&&numeric(e.inches,0.001,10)).sort((a,b)=>b.date.localeCompare(a.date));
  const feel=rows.find(e=>e.kind==='soil-feel'&&e.date===today&&['wet','moist','getting-dry','dry'].includes(e.feel))?.feel||null;
  return {rain,irrigation,soilFeel:feel,rainDays:rain.length,rainIn:rain.reduce((a,e)=>a+e.inches,0),irrigationIn:irrigation.reduce((a,e)=>a+e.inches,0)};
 }
@@ -27,7 +27,7 @@ function evaluate({engine,context,crops,setup,entries,today,now,latitude,longitu
  const crop=crops?.find(x=>x.id===s.cropId);
  if(!crop||!numeric(crop.rootDepthIn?.[s.stage],1,60)||!numeric(crop.kc?.[s.stage],.1,2)||!numeric(crop.allowableDepletion?.[s.stage],.1,.9))return unavailable('No matching crop profile.');
  const issued=Date.parse(context?.generatedAt),t=typeof now==='number'?now:Date.parse(now);
- if(!Number.isFinite(t)||!Number.isFinite(issued)||issued>t||t-issued>2*3600000||!numeric(context?.location?.lat,-90,90)||!numeric(context?.location?.lon,-180,180)||Math.abs(context.location.lat-latitude)>.001||Math.abs(context.location.lon-longitude)>.001)return unavailable('Fresh weather for this reference town is unavailable.');
+ if(!numeric(latitude,-90,90)||!numeric(longitude,-180,180)||!Number.isFinite(t)||!Number.isFinite(issued)||issued>t||t-issued>2*3600000||!numeric(context?.location?.lat,-90,90)||!numeric(context?.location?.lon,-180,180)||Math.abs(context.location.lat-latitude)>.001||Math.abs(context.location.lon-longitude)>.001)return unavailable('Fresh weather for this reference town is unavailable.');
  const et=context.referenceEt?.daily?.[0],q=context.forecastRain,rr=context.recentRain;
  if(!numeric(et,0,1)||!numeric(q?.in24,0,30)||!numeric(q?.in48,0,50)||!numeric(q?.firstWetHours,0,168)||!String(q?.source||'').includes('NWS')||!String(context.referenceEt?.source||'').includes('NWS'))return unavailable('Drying demand or forecast rain evidence is incomplete.');
  const history=new Map(),conflicts=new Set(),gauge=new Map(l.rain.map(e=>[e.date,e.inches]));
