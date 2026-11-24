@@ -49,9 +49,9 @@ async function run(){
  let browser;
  try{
   browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH||'/usr/bin/chromium',args:['--no-sandbox','--disable-dev-shm-usage']});
-  for(const width of [360,1440]){
+  for(const width of [360,390,768,1280,1440]){
    mode='one-open';
-   const ctx=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:1});
+   const ctx=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:1,reducedMotion:'reduce'});
    const page=await ctx.newPage(),errors=[];
    page.on('pageerror',e=>errors.push(e.message));
    const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:30000});
@@ -71,8 +71,25 @@ async function run(){
    need(await page.locator('#ski-open-filter').getAttribute('aria-pressed')==='true',width+' open filter pressed');
    need(await page.locator('#ski-operating-list .ski-operation-row').count()===1,width+' filtered operating board');
    need(await page.locator('#resort-list .hill').count()===1,width+' filtered all hills list');
+   await page.locator('#ski-plan-filter').click();
+   need(await page.locator('#ski-plan-filter').getAttribute('aria-pressed')==='true',width+' plans filter pressed');
+   need(await page.locator('#ski-open-filter').getAttribute('aria-pressed')==='false',width+' exclusive filters');
+   need(await page.locator('#ski-operating-list .ski-operation-row').count()===6,width+' six published plans');
+   need(await page.locator('#resort-list .hill').count()===6,width+' resort comparison follows planned view');
+   need((await page.locator('#ski-operating-list .ski-operation-row').first().innerText()).includes('Ski Brule'),width+' earliest plan first');
+   need((await page.locator('#ski-filter-result').innerText()).includes('not confirmed openings'),width+' no plan treated as open');
+   await page.locator('#ski-area-filter').selectOption('northern-lower');
+   need(await page.locator('#region').inputValue()==='northern-lower',width+' top area sync');
+   need(await page.locator('#ski-operating-list .ski-operation-row').count()===4,width+' four northern lower plans');
+   need(await page.locator('#resort-list .hill').count()===4,width+' main list area sync');
+   await page.locator('#region').selectOption('western-up');
+   need(await page.locator('#ski-area-filter').inputValue()==='western-up',width+' lower area sync');
+   await page.locator('#ski-area-filter').selectOption('all');
    await page.locator('#ski-open-filter').click();
-   need(await page.locator('#ski-operating-list .ski-operation-row').count()===17,width+' filter restores all hills');
+   need(await page.locator('#ski-operating-list .ski-operation-row').count()===1,width+' plans to open');
+   need(await page.locator('#ski-plan-filter').getAttribute('aria-pressed')==='false',width+' plans mode reset');
+   await page.locator('#ski-open-filter').click();
+   need(await page.locator('#ski-operating-list .ski-operation-row').count()===17,width+' A-B-A restores all');
    need(await page.locator('#resort-list .hill').count()===18,width+' full ranking includes Nordic option');
    mode='all-down';
    await page.reload({waitUntil:'domcontentloaded'});
@@ -94,7 +111,7 @@ async function run(){
    need(uncertain.includes('Lift count undated'),width+' undated positive count cannot claim open');
    need(!uncertain.includes('Open per operator'),width+' no invented opening from a stale one-lift count');
    need(errors.length===0,width+' browser exceptions '+errors.join('; '));
-   report.cases.push({width,initial:17,openFiltered:1,allSourcesDownNoOpen:true,overflow:false,jsErrors:errors.length});
+   report.cases.push({width,initial:17,openFiltered:1,plansFiltered:6,regionFiltered:4,allSourcesDownNoOpen:true,overflow:false,jsErrors:errors.length});
    await ctx.close();
   }
   const ctx=await browser.newContext({javaScriptEnabled:false,viewport:{width:360,height:900}});
@@ -102,6 +119,8 @@ async function run(){
   await page.goto(url,{waitUntil:'domcontentloaded'});
   need(await page.locator('.ski-opening-evidence tbody tr').count()===17,'no-JS opening date table');
   need((await page.locator('.ski-operations').innerText()).includes('Are Michigan ski resorts open?'),'no-JS answer');
+  need(!(await page.locator('#ski-open-filter').isVisible()),'no-JS Open now hidden');
+  need(!(await page.locator('#ski-plan-filter').isVisible()),'no-JS Opening plans hidden');
   const img=path.join(out,'360-no-javascript.png');await page.screenshot({path:img});report.screenshots.push(path.basename(img));
   report.cases.push({width:360,javaScript:false,openingRows:17,answerVisible:true});
   await ctx.close();

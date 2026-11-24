@@ -1,7 +1,7 @@
 module.exports={
  ci:{
   collect:{
-   url:['http://127.0.0.1:4179/michigan-destinations/','http://127.0.0.1:4179/michigan-snow-totals/'],
+   url:['http://127.0.0.1:4179/michigan-destinations/','http://127.0.0.1:4179/michigan-snow-totals/','http://127.0.0.1:4179/michigan-ski-hills/'],
    numberOfRuns:1,
    settings:{
     chromeFlags:'--no-sandbox --disable-dev-shm-usage',

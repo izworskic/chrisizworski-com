@@ -12,7 +12,7 @@ const origin='http://127.0.0.1:4179';
  let criticalCount=0;
  let adventureSeriousCount=0;
  try{
-  for(const route of ['/michigan-destinations/','/michigan-snow-totals/']){
+  for(const route of ['/michigan-destinations/','/michigan-snow-totals/','/michigan-ski-hills/']){
    for(const width of [390,1280]){
     const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'});
     const page=await context.newPage();
