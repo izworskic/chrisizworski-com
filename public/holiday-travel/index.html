@@ -81,6 +81,9 @@
 @media(min-width:640px){.fix-option{grid-template-columns:minmax(0,1fr) auto auto}.fix-apply{grid-column:auto;justify-self:end}}@media(max-width:350px){.compare-grid{grid-template-columns:1fr}}
 /* Operational airport reports are separate from forecast and historical odds. */
 .faa-panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0 18px}.faa-panel[hidden]{display:none}.faa-panel h2{font:700 1.25rem/1.25 Georgia,serif;margin:0 0 8px}.faa-panel p{font-size:.88rem;margin:6px 0;color:#42616a}.faa-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-top:12px}.faa-refresh{min-height:44px;border-radius:8px;background:#136b69;color:white;border:1px solid #136b69;font-weight:750;padding:8px 14px}.faa-route{display:grid;gap:8px;margin:12px 0}.faa-airport{padding:9px 10px;border-left:3px solid #94acac;background:#f4f8f7;min-width:0;overflow-wrap:anywhere}.faa-airport.has-event{border-color:#a85a1e}.faa-airport h3{margin:0;font-size:1rem}.faa-airport ul{margin:4px 0;padding-left:19px}.faa-airport li{font-size:.85rem;margin:5px 0}.faa-airport small{display:block;color:#42616a}.faa-snapshot{font-variant-numeric:tabular-nums}
+/* Departure-day desk: compact itinerary, independent evidence and next actions. */
+.departure-desk{margin:18px 0;background:#fff;border:1px solid #b7d0cb;border-radius:12px;overflow:hidden;scroll-margin-top:12px}.departure-desk[hidden]{display:none}.desk-head{padding:14px 18px;background:#143943;color:#fff}.desk-head h2{font:700 1.35rem/1.2 Georgia,serif;margin:0 0 5px}.desk-head p{font-size:.85rem;margin:0;color:#e0efed}.desk-head .desk-route{font-size:clamp(1.45rem,4vw,2.1rem);font-weight:800;line-height:1.25;letter-spacing:-.02em;color:#fff;margin:5px 0}.desk-route-meta{overflow-wrap:anywhere}.desk-body{padding:14px 18px}.desk-body .callout{margin:0 0 12px;padding:12px 14px;border-radius:8px}.desk-body .callout h2{font:700 clamp(1.3rem,3vw,1.8rem)/1.2 Georgia,serif}.desk-timing{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;border-bottom:1px solid var(--line);padding:0 0 12px;margin-bottom:8px}.desk-timing div{min-width:0}.desk-timing small,.desk-evidence small{display:block;color:#42616a;font-size:.76rem;font-weight:700}.desk-timing strong{display:block;font-size:.88rem;line-height:1.35}.desk-evidence{display:grid;gap:0}.desk-evidence article{min-width:0;padding:10px 0;border-bottom:1px solid var(--line)}.desk-evidence h3{font-size:.9rem;margin:0 0 3px}.desk-evidence p{font-size:.83rem;margin:0 0 5px;overflow-wrap:anywhere}.desk-evidence a{font-size:.83rem;font-weight:750;display:inline-flex;align-items:center;min-height:36px}.desk-evidence .desk-state{font-weight:750;color:#153b43}.desk-evidence .desk-state[data-tone=alert]{color:#a23434}.desk-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:12px}.desk-actions button,.desk-actions a{min-height:44px;padding:8px 12px;border-radius:8px;font-size:.86rem;font-weight:750;display:inline-flex;align-items:center}.desk-actions a{border:1px solid #b7d0cb;text-decoration:none}.desk-action-primary{background:#136b69;color:#fff;border:1px solid #136b69}.desk-action-secondary{background:white;color:#136b69;border:1px solid #136b69}.desk-foot{font-size:.78rem;color:#42616a;margin:9px 0 0}.departure-desk[data-mode=fly] .share-row{display:none}.departure-desk[data-mode=drive] .desk-head,.departure-desk[data-mode=drive] .desk-timing,.departure-desk[data-mode=drive] .desk-evidence,.departure-desk[data-mode=drive] .desk-actions,.departure-desk[data-mode=drive] .desk-foot{display:none}.desk-body .callout .tag{font-size:.74rem}.desk-body .callout p{font-size:.88rem}
+@media(min-width:680px){.desk-evidence{grid-template-columns:repeat(2,minmax(0,1fr));gap:0 20px}.desk-head{display:grid;grid-template-columns:1fr auto;align-items:end;gap:6px 18px}.desk-head .desk-route-meta{grid-column:1/-1}.desk-timing strong{font-size:1rem}}@media(max-width:380px){.desk-head,.desk-body{padding:12px}.desk-timing{grid-template-columns:repeat(2,minmax(0,1fr))}.desk-timing div:last-child{grid-column:1/-1}}
 </style>
 </head>
 <body>
@@ -92,7 +95,7 @@
 <h1>Will you make it home for the holidays?</h1>
 <p>Compare the best days to fly, then check your own route and arrival deadline. See which changes could lower your risk, using six holiday seasons of flight records.</p>
 </div>
-<nav class="desk-links" aria-label="Planner sections"><a href="#flight-calendar">Compare flight days</a><a href="#personal-plan">Check my trip</a><a href="#airport-weather">Airport weather</a></nav>
+<nav class="desk-links" aria-label="Planner sections"><a href="#flight-calendar">Compare flight days</a><a href="#personal-plan">Check my trip</a><a href="#departure-dashboard">Departure dashboard</a><a href="#airport-weather">Airport weather</a></nav>
 <div class="promise" id="planning-banner">Holiday dates and estimates adapt to the year you choose. Historical comparison figures retain their source dates.</div>
 </header>
 </div>
@@ -126,7 +129,25 @@
 <div class="field hidden" id="mpg-field"><label for="mpg">Your vehicle (miles per gallon)</label><input type="number" id="mpg" inputmode="decimal" min="5" max="150" step=".1" value="28"></div>
 </div>
 </section>
+<section class="departure-desk" id="departure-dashboard" aria-labelledby="dashboard-heading">
+<header class="desk-head">
+<div><h2 id="dashboard-heading">Your departure dashboard</h2><p id="dashboard-stage">Choose your flight plan</p></div>
+<p class="desk-route" id="dashboard-route">Flight route</p>
+<p class="desk-route-meta" id="dashboard-meta">Historical estimates and current airport reports are separate.</p>
+</header>
+<div class="desk-body">
+<div class="desk-timing" id="dashboard-timing"><div><small>Departure</small><strong>Choose a date</strong></div><div><small>Estimated arrival</small><strong>Unknown</strong></div><div><small>Arrival deadline</small><strong>Choose a deadline</strong></div></div>
 <div class="callout" aria-live="polite"><span class="tag" id="callout-tag">Will you make it?</span><h2 id="best-label" tabindex="-1">Checking your plan</h2><p id="best-reason">Loading six seasons of holiday flight records.</p><p class="share-row"><button type="button" id="share-plan" class="share">Copy link to this plan</button></p></div>
+<div class="desk-evidence">
+<article><h3>FAA airport operations · now</h3><p class="desk-state" id="dashboard-faa" aria-live="polite">Not checked</p><p id="dashboard-faa-detail">Current notices do not predict future flight status.</p><a href="#faa-panel">Airport disruption details</a></article>
+<article><h3>NWS weather · travel date</h3><p class="desk-state" id="dashboard-weather" aria-live="polite">Not checked</p><p id="dashboard-weather-detail">Available within seven days of departure.</p><a href="#live-panel" id="dashboard-weather-link">Route forecast details</a></article>
+<article><h3>If your flight is cancelled</h3><p class="desk-state" id="dashboard-recovery">No estimate yet</p><p id="dashboard-recovery-detail">Historical rebooking assumptions, not available seats.</p><a href="#flight-alternatives">Compare alternative itineraries</a></article>
+<article><h3>Track your incoming aircraft</h3><p class="desk-state">Check your flight number</p><p>See whether the aircraft assigned to your flight has reached its departure airport. Confirm flight changes with your airline.</p><a href="/flight-tracker/">Open flight tracker</a></article>
+</div>
+<div class="desk-actions"><button type="button" class="desk-action-primary" id="dashboard-refresh" disabled>Refresh airport reports</button><button type="button" class="desk-action-secondary" id="dashboard-copy" disabled>Copy dashboard link</button><a href="#personal-plan">Edit trip</a></div>
+<p class="desk-foot" id="dashboard-return">Save the dashboard link and reopen it before departure. No account is needed. Current reports are not a guarantee of on-time arrival.</p>
+</div>
+</section>
 <section class="plan-compare" id="plan-compare" aria-labelledby="compare-heading" hidden>
 <h2 id="compare-heading" tabindex="-1">Compare your flight plans</h2>
 <p class="compare-note">Same airports and arrival deadline. Only the departure, routing or layover changes.</p>
@@ -259,7 +280,7 @@ function isoFor(offset){return dateFor(offset).toISOString().slice(0,10)}
 function todayISO(){var n=new Date();return new Date(Date.UTC(n.getFullYear(),n.getMonth(),n.getDate(),12)).toISOString().slice(0,10)}
 function populateYears(){
  var year=new Date().getFullYear();
- doc('travel-year').innerHTML='<option value="auto">Next upcoming (automatic)</option>'+[year,year+1,year+2,year+3].map(function(y){return '<option value="'+y+'">'+y+'</option>'}).join('');
+ doc('travel-year').innerHTML='<option value="auto">Next upcoming (automatic)</option>'+[year-1,year,year+1,year+2,year+3].map(function(y){return '<option value="'+y+'">'+y+'</option>'}).join('');
  doc('travel-year').value='auto';
 }
 function pretty(d){return d.toLocaleDateString('en-US',{timeZone:'UTC',weekday:'short',month:'short',day:'numeric'})}
@@ -437,6 +458,65 @@ doc('restore-plan').addEventListener('click',function(){
 });
 // On-demand shared FAA snapshot, never included in the BTS probability model.
 var faaSnapshot=null,faaPlan=null,faaPending=false,faaExpiry=null;
+var dashboardPlan=null,dashboardResult=null,dashboardWeather=null,weatherSeq=0,weatherExpiry=null;
+function deskState(id,value,tone,detail){
+ doc(id).textContent=value;doc(id).setAttribute('data-tone',tone||'neutral');
+ if(detail!==undefined)doc(id+'-detail').textContent=detail;
+}
+function renderDashboard(){
+ var desk=doc('departure-dashboard');desk.setAttribute('data-mode',mode);
+ doc('dashboard-refresh').disabled=!dashboardPlan||faaPending||(dashboardWeather&&dashboardWeather.state==='loading')||mode!=='fly';
+ doc('dashboard-copy').disabled=!dashboardPlan||mode!=='fly';
+ if(mode!=='fly')return;
+ var p=dashboardPlan,r=dashboardResult;
+ if(!p||!r){
+  doc('dashboard-stage').textContent='Choose your flight plan';
+  doc('dashboard-route').textContent='Flight route';
+  doc('dashboard-meta').textContent='Waiting for a measurable route and deadline.';
+  doc('dashboard-timing').innerHTML='<div><small>Departure</small><strong>Unknown</strong></div><div><small>Estimated arrival</small><strong>Unknown</strong></div><div><small>Arrival deadline</small><strong>Unknown</strong></div>';
+  deskState('dashboard-faa','Not checked','neutral','Choose a measurable flight route.');
+  deskState('dashboard-weather','Not checked','neutral','Available within seven days of departure.');
+  deskState('dashboard-recovery','No estimate yet','neutral','Historical rebooking assumptions, not available seats.');
+  return;
+ }
+ var day=Math.floor(p.depart/1440),date=isoFor(day),st=Eng.liveState(todayISO(),date),codes=[p.from].concat(p.via?[p.via]:[]).concat([p.to]);
+ doc('dashboard-stage').textContent=(trip.example?'Example trip · ':'')+(st.past?'Past departure date':st.daysUntil===0?'Departure day (device date)':st.daysUntil===1?'Departure tomorrow (device date)':st.daysUntil+' days until departure (device date)');
+ doc('dashboard-route').textContent=codes.join(' → ');
+ doc('dashboard-meta').textContent=cityOf(p.from)+' to '+cityOf(p.to)+' · '+(p.via?p.layover+' minute connection in '+p.via:'Nonstop')+' · '+planningYear(holiday);
+ doc('dashboard-timing').innerHTML='<div><small>Departure (local)</small><strong>'+esc(whenLabel(p.depart))+'</strong></div><div><small>Estimated arrival (local)</small><strong>'+esc(whenLabel(r.arrive))+'</strong></div><div><small>Arrival deadline (local)</small><strong>'+esc(whenLabel(p.deadline))+'</strong></div>';
+ var age=faaSnapshot?Date.now()-Date.parse(faaSnapshot.checkedAt):NaN;
+ if(faaPending)deskState('dashboard-faa','Checking FAA reports','neutral','Matching current notices to your route.');
+ else if(!faaSnapshot)deskState('dashboard-faa','Not checked','neutral','Use Refresh airport reports to check current notices.');
+ else if(faaSnapshot.status!=='available')deskState('dashboard-faa','FAA unavailable','alert','Check the official FAA status page.');
+ else if(!Number.isFinite(age)||age< -60000||age>300000)deskState('dashboard-faa','Report out of date','alert','Refresh before relying on the current report.');
+ else {
+  var affected=codes.filter(function(c){return faaSnapshot.events.some(function(e){return e.airport===c&&(!e.end||Date.parse(e.end)>Date.now())})});
+  deskState('dashboard-faa',affected.length?'FAA notices: '+affected.join(', '):'No listed notices on route',affected.length?'alert':'neutral','Retrieved '+faaStamp(faaSnapshot.checkedAt)+'. Not a flight clearance or travel-date forecast.');
+ }
+ var wx=dashboardWeather;
+ if(wx&&wx.checkedAt&&Date.now()-Date.parse(wx.checkedAt)>1800000)deskState('dashboard-weather','Forecast check out of date','alert','Refresh to retrieve the latest available NWS forecast.');
+ else if(wx)deskState('dashboard-weather',wx.label,wx.tone,wx.detail);
+ else deskState('dashboard-weather',st.past?'Past departure date':st.active?'Checking forecast':'Forecast window not open','neutral',st.active?'Checking selected airports.':st.past?'Current forecasts cannot describe a past trip.':'NWS route forecasts open seven days before departure.');
+ var ic=r.ifCancelled;
+ if(r.tooLate)deskState('dashboard-recovery','Arrival already after deadline','alert','Compare an earlier departure before planning around a cancellation.');
+ else if(ic&&Number.isFinite(ic.realisticHours)&&Number.isFinite(ic.overnight))deskState('dashboard-recovery','About '+ic.realisticHours+' hours late if cancelled','neutral',Math.round(ic.overnight*100)+'% of historical modeled recoveries rolled to the next day. Seats and fares are not checked.');
+ else deskState('dashboard-recovery','Recovery estimate unavailable','neutral','Confirm rebooking options with the airline.');
+}
+function setDashboardWeather(state,label,tone,detail,checkedAt){
+ dashboardWeather={state:state,label:label,tone:tone,detail:detail,checkedAt:checkedAt||null};
+ renderDashboard();
+ if(typeof window!=='undefined'){
+  if(weatherExpiry)clearTimeout(weatherExpiry);
+  if(checkedAt)weatherExpiry=setTimeout(renderDashboard,1800001);
+ }
+}
+doc('dashboard-refresh').addEventListener('click',function(){
+ if(!dashboardPlan||mode!=='fly'||faaPending||(dashboardWeather&&dashboardWeather.state==='loading'))return;
+ nwsCache={};nwsCacheAge={};
+ requestFaa();renderLive(dashboardPlan,renderSeq);
+});
+doc('dashboard-copy').addEventListener('click',function(){if(dashboardPlan&&mode==='fly')sharePlan(true)});
+
 function faaStamp(value){
  if(!value||!Number.isFinite(Date.parse(value)))return '';
  return new Date(value).toLocaleString('en-US',{timeZone:'UTC',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' UTC';
@@ -456,7 +536,7 @@ function faaEvent(e){
 }
 function renderFaa(){
  var panel=doc('faa-panel'),status=doc('faa-status'),btn=doc('faa-refresh');
- panel.hidden=mode!=='fly';btn.disabled=!faaPlan||faaPending;
+ panel.hidden=mode!=='fly';btn.disabled=!faaPlan||faaPending;renderDashboard();
  if(mode!=='fly')return;
  if(!faaPlan){doc('faa-date-note').textContent='Choose a measurable flight route first.';status.innerHTML='<p>Airport status will be matched to your selected route.</p>';return}
  var p=faaPlan,codes=[p.from].concat(p.via?[p.via]:[]).concat([p.to]);
@@ -473,7 +553,7 @@ function renderFaa(){
  }).join('');
  status.innerHTML='<p class="faa-snapshot">FAA report retrieved '+esc(faaStamp(faaSnapshot.checkedAt))+'. Event update times are shown when supplied.</p><div class="faa-route">'+rows+'</div>';
 }
-doc('faa-refresh').addEventListener('click',function(){
+function requestFaa(){
  if(!faaPlan||faaPending||mode!=='fly')return;
  faaPending=true;renderFaa();
  fetch('/api/holiday-airport-weather?view=faa').then(function(response){
@@ -489,9 +569,10 @@ doc('faa-refresh').addEventListener('click',function(){
    if(faaSnapshot.status==='available')faaExpiry=setTimeout(renderFaa,Math.max(0,300001-(Date.now()-Date.parse(faaSnapshot.checkedAt))));
   }
  });
-});
+}
+doc('faa-refresh').addEventListener('click',requestFaa);
 function renderFly(d,year){
- var my=++renderSeq,results=doc('results');activeFixes=[];faaPlan=null;renderFaa();
+ var my=++renderSeq,results=doc('results');activeFixes=[];dashboardPlan=null;dashboardResult=null;dashboardWeather=null;weatherSeq++;faaPlan=null;renderFaa();
  doc('legend').classList.toggle('hidden',true);
  doc('third-stat').setAttribute('data-p','NaN');
  doc('third-label').textContent='Chance you miss your deadline';
@@ -513,7 +594,7 @@ function renderFly(d,year){
   doc('routing').value=cp.routing;doc('layover-field').classList.toggle('hidden',cp.routing==='nonstop');
   var p=cp.plan,r=eng.evaluate(p);
   if(!r){results.innerHTML='<p class="fine">That routing could not be evaluated.</p>';doc('best-label').textContent='Flight odds unavailable';doc('best-reason').textContent='That routing could not be evaluated with the available records.';doc('third-stat').textContent='Unavailable';return}
-  faaPlan=p;renderFaa();
+  dashboardPlan=p;dashboardResult=r;faaPlan=p;renderFaa();
   writeUrl(cp);
   if(typeof window!=='undefined'&&window.HolidayTravelChoices)window.HolidayTravelChoices.sync();
   renderComparison(p,r);
@@ -559,34 +640,38 @@ function readUrl(){
  if(/^\d{4}$/.test(q.y||''))out.year=q.y;
  return Object.keys(out).length?out:null;
 }
-function planQuery(cp){
+function planQuery(cp,pinYear){
  var t=readTimes(),parts=['h='+(holiday==='thanksgiving'?'th':'xm'),'m='+mode];
  if(mode==='fly')parts=parts.concat(['d='+dir,'from='+trip.home,'to='+trip.away,'via='+(cp?cp.routing:(doc('routing').value||trip.routing)),'lay='+(Number(doc('layover').value)||trip.layover),'dep='+t.depDay+'.'+t.depHour,'due='+t.dueDay+'.'+t.dueHour]);
- if(/^\d{4}$/.test(doc('travel-year').value))parts.push('y='+doc('travel-year').value);
+ if(pinYear)parts.push('y='+planningYear(holiday));else if(/^\d{4}$/.test(doc('travel-year').value))parts.push('y='+doc('travel-year').value);
  return '?'+parts.join('&');
 }
 function writeUrl(cp){
  if(typeof history==='undefined'||!history.replaceState||typeof location==='undefined')return;
  if(trip.example&&!location.search)return; // keep the bare URL until someone builds their own plan
- try{history.replaceState(null,'',location.pathname+planQuery(cp))}catch(e){}
+ try{history.replaceState(null,'',location.pathname+planQuery(cp)+(location.hash||''))}catch(e){}
 }
-function sharePlan(){
- var btn=doc('share-plan'),url=(typeof location!=='undefined'?location.origin+location.pathname:'https://chrisizworski.com/holiday-travel/')+planQuery();
+function sharePlan(pin){
+ var dashboard=pin===true,btn=doc(dashboard?'dashboard-copy':'share-plan'),url=(typeof location!=='undefined'?location.origin+location.pathname:'https://chrisizworski.com/holiday-travel/')+planQuery(null,dashboard)+(dashboard?'#departure-dashboard':'');
  trip.example=false;writeUrl();
- var done=function(ok){btn.textContent=ok?'Link copied':'Copy failed: the link is in your address bar';setTimeout(function(){btn.textContent='Copy link to this plan'},2500)};
+ if(dashboard)renderDashboard();
+ var done=function(ok){btn.textContent=ok?'Link copied':'Copy failed';if(dashboard)doc('dashboard-return').textContent=ok?'Dashboard link copied. Reopen it before departure; the travel year is fixed.':'Copy unavailable. Select the travel year and bookmark this page in your browser.';else if(!ok)btn.textContent='Copy failed: the link is in your address bar';setTimeout(function(){btn.textContent=dashboard?'Copy dashboard link':'Copy link to this plan'},2500)};
  if(typeof navigator!=='undefined'&&navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(function(){done(true)},function(){done(false)});else done(false);
  return url;
 }
-function nws(url){if(!nwsCache[url])nwsCache[url]=fetch(url,{headers:{Accept:'application/geo+json'}}).then(function(r){if(!r.ok)throw new Error(String(r.status));return r.json()});return nwsCache[url]}
+var nwsCacheAge={};
+function nws(url){if(!nwsCache[url]||Date.now()-nwsCacheAge[url]>1800000){nwsCacheAge[url]=Date.now();nwsCache[url]=fetch(url,{headers:{Accept:'application/geo+json'}}).then(function(r){if(!r.ok)throw new Error(String(r.status));return r.json()})}return nwsCache[url]}
 function renderLive(p,my){
- var panel=doc('live-panel'),depDay=Math.floor(p.depart/1440),date=isoFor(depDay),st=Eng.liveState(todayISO(),date);
+ var wxRun=++weatherSeq,panel=doc('live-panel'),depDay=Math.floor(p.depart/1440),date=isoFor(depDay),st=Eng.liveState(todayISO(),date);
  var codes=[p.from].concat(p.via?[p.via]:[]).concat([p.to]);
- if(st.past){panel.innerHTML='';return}
+ if(st.past){panel.innerHTML='<h3>Past departure date</h3><p>NWS current forecasts cannot describe this past trip.</p>';setDashboardWeather('past','Past departure date','neutral','Current forecasts cannot describe a past trip.');return}
  if(!st.active){
   var on=new Date(Date.parse(date+'T12:00:00Z')-7*864e5);
+  setDashboardWeather('early','Forecast opens '+pretty(on),'neutral','NWS forecasts become available within seven days of departure.');
   panel.innerHTML='<h3>Live weather check</h3><p>Starting '+pretty(on)+', this panel pulls National Weather Service forecasts and warnings for '+codes.join(', ')+' on your travel day. The odds above assume a typical holiday; if a storm is forecast, the worst-season figure is the better guide.</p>';
   return;
  }
+ setDashboardWeather('loading','Checking forecast','neutral','Retrieving NWS warnings and forecasts.');
  panel.innerHTML='<h3>Live weather check · '+pretty(dateFor(depDay))+'</h3><p class="fine">Checking National Weather Service forecasts and warnings…</p>';
  var start=date+'T00:00:00',end=isoFor(depDay+1)+'T00:00:00';
  Promise.all(codes.map(function(c){
@@ -598,16 +683,19 @@ function renderLive(p,my){
    nws('https://api.weather.gov/points/'+ll).then(function(pt){return nws(pt.properties.forecast)}).catch(function(){return null})
   ]).then(function(x){return {code:c,alerts:x[0],forecast:x[1]}});
  })).then(function(list){
-  if(my!==renderSeq)return;
-  var anySevere=false,anyFlag=false;
+  if(my!==renderSeq||wxRun!==weatherSeq)return;
+  var anySevere=false,anyFlag=false,partial=0,reported=0;
   var rows=list.map(function(x){
-   if(x.error||(!x.alerts&&!x.forecast))return '<li><b>'+esc(x.code)+'</b>: NWS data unavailable right now.</li>';
+   if(x.error||(!x.alerts&&!x.forecast)){partial++;return '<li><b>'+esc(x.code)+'</b>: NWS data unavailable right now.</li>'}
    var hz=Eng.hazards(x.alerts,start,end),fc=Eng.forecastFor(x.forecast,date);
+   if(!x.alerts||!fc.length)partial++;if(x.alerts||fc.length)reported++;
    hz.forEach(function(h){if(h.severe)anySevere=true});fc.forEach(function(f){if(f.flag)anyFlag=true});
-   return '<li><b>'+esc(shortCity(x.code))+'</b>: '+(hz.length?'<span class="warn">'+hz.map(function(h){return esc(h.event)}).join(', ')+'</span>. ':'No active warnings for that day. ')+(fc.length?fc.map(function(f){return esc(f.name)+': '+esc(f.text)}).join('; '):'Forecast does not reach that day yet.')+'</li>';
+   return '<li><b>'+esc(shortCity(x.code))+'</b>: '+(hz.length?'<span class="warn">'+hz.map(function(h){return esc(h.event)}).join(', ')+'</span>. ':x.alerts?'No active warnings for that day. ':'Warning data unavailable. ')+(fc.length?fc.map(function(f){return esc(f.name)+': '+esc(f.text)}).join('; '):'Forecast does not reach that day yet.')+'</li>';
   }).join('');
   var r=eng.evaluate(p);
-  var note=anySevere?'A significant winter or tropical hazard overlaps your travel day. Expect odds closer to the worst past season ('+band(r?r.worst:null)+') than the typical one. Check your airline for a travel waiver: they often allow free changes before a big storm.':anyFlag?'Some weather in the forecast. The typical-season odds may understate risk; keep an eye on updates.':'Nothing notable in the forecast for your airports that day.';
+  var checked=new Date().toISOString(),suffix=partial?' '+partial+' airport(s) have incomplete coverage.':'';
+  setDashboardWeather('done',anySevere?'Significant weather warning':anyFlag?'Weather hazard in forecast':!reported?'NWS unavailable':partial?'Incomplete forecast coverage':'No named hazards in available forecast',anySevere||anyFlag||partial?'alert':'neutral','Retrieved '+faaStamp(checked)+'.'+suffix+' Not a flight delay forecast.',checked);
+  var note=anySevere?'A significant winter or tropical hazard overlaps your travel day. Expect odds closer to the worst past season ('+band(r?r.worst:null)+') than the typical one. Check your airline for a travel waiver: they often allow free changes before a big storm.':anyFlag?'Some weather in the forecast. The typical-season odds may understate risk; keep an eye on updates.':partial?'Some airport weather coverage is missing. No clear-weather conclusion is possible.':'Nothing notable in the forecast for your airports that day.';if(partial&&(anySevere||anyFlag))note+=' Some airport weather coverage is missing.';
   panel.innerHTML='<h3>Live weather check · '+pretty(dateFor(depDay))+'</h3><ul>'+rows+'</ul><p class="'+(anySevere?'warn':'')+'">'+note+'</p><p class="fine">Source: <a href="https://www.weather.gov/" rel="noopener noreferrer">National Weather Service</a>, fetched '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'. On the day, use <a href="/flight-tracker/">Where Is My Plane?</a> to follow your inbound aircraft.</p>';
  });
 }
@@ -620,7 +708,7 @@ function render(){
  doc('volume-label').textContent='AAA '+d.year+' travel forecast';doc('volume-stat').textContent=d.total;doc('volume-note').textContent=d.source+' · '+d.car+'; '+d.air+' · not a '+year+' count';
  doc('live-panel').classList.toggle('hidden',mode!=='fly');
  if(mode==='fly'){renderFly(d,year);return}
- renderSeq++;faaPlan=null;renderFaa();doc('third-stat').setAttribute('data-p','NaN');doc('legend').classList.toggle('hidden',false);
+ renderSeq++;weatherSeq++;dashboardPlan=null;dashboardResult=null;dashboardWeather=null;faaPlan=null;renderFaa();doc('third-stat').setAttribute('data-p','NaN');doc('legend').classList.toggle('hidden',false);
  var region=doc('region').value,mi=Number(doc('miles').value),mpg=Number(doc('mpg').value);var valid=Number.isFinite(mi)&&mi>0&&mi<=10000&&Number.isFinite(mpg)&&mpg>=5&&mpg<=150;
  doc('third-label').textContent='Estimated one-way fuel';doc('third-stat').textContent=valid?'$'+(mi/mpg*gas[region]).toFixed(2):'Enter valid miles / MPG';doc('third-note').textContent='EIA '+region.replace('us','U.S.')+' regular $'+gas[region].toFixed(3)+'/gal · Oct 12, 2026 (historical price illustration)';
  var offsets=holiday==='thanksgiving'?[-5,-4,-3,-2,-1,0,1,2,3,4,5]:[-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6];
