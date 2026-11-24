@@ -1,0 +1,30 @@
+name: One-time official geographic reference query
+on:
+  pull_request:
+    types: [opened]
+    paths:
+      - ".github/workflows/great-lakes-official-geometry-probe.yml"
+permissions:
+  contents: read
+jobs:
+  probe:
+    if: github.head_ref == 'research/great-lakes-official-geometry-probe-20261124' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Query official public geometry references
+        env:
+          REPORT: ${{ runner.temp }}/official-reference.json
+        run: python scripts/great-lakes-official-geometry-probe.py
+      - uses: actions/upload-artifact@v4
+        with:
+          name: official-geometry-reference
+          path: ${{ runner.temp }}/official-reference.json
+          if-no-files-found: error
+          retention-days: 7
