@@ -32,3 +32,7 @@ Source-level and fixture tests plus same-run before/after browser captures at 39
 | Pictured Rocks | Planning | Independent owner review, no mutation |
 
 For each subsequent product use a separate scoped PR and record baseline/after evidence, exact CI, release and production check, and any actual comparable outcome. Do not bulk migrate or claim the 42 skills have proven effectiveness. Phase 8 started, not complete. No measured visitor improvement yet.
+
+## Portfolio adoption extension
+
+Snow Totals #1921 merged at 0e6e7da984362f4aefb29690d7cfa9daeec55edc after 14/14 workflows passed; production revision not independently confirmed. Waterfall #1914 remains separate draft with green earlier head. [Portfolio inventory and backlog](PRODUCTION_DESIGN_PORTFOLIO_20261124.md) records all current registered entries and evidence gaps. Next reconcile and review #1914; no global activation.
