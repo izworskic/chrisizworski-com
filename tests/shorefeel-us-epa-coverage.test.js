@@ -29,7 +29,9 @@ test('EPA 2025 coverage is source-identified across all eight Great Lakes U.S. s
  for(const b of source){
   assert.match(b.id,/^[A-Z]{2}[A-Z0-9]{4,14}$/);
   assert.equal(typeof b.name,'string');
-  assert.ok(b.name.length>2);
+  // EPA publishes MI000398 with the literal one-character name '3'.
+  // Preserve source fidelity; the stable EPA ID disambiguates the listing.
+  assert.ok(b.name.length>=1);
   assert.ok(Number.isFinite(b.lat)&&b.lat>=40&&b.lat<=49,b.id);
   assert.ok(Number.isFinite(b.lon)&&b.lon>=-93&&b.lon<=-75,b.id);
   assert.doesNotMatch(b.name,/\bhistorical\b|\bprivate beach\b/i,b.id);
