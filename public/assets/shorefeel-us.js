@@ -28,6 +28,7 @@
     put('report-time','Source unavailable');
     put('report-heading','Check the official forecast');
     put('report-guide',message||'No recent local forecast could be confirmed. You can still explore the shore and open its official weather and beach notices.');
+    put('report-lake-effect','Lake influence unavailable. No recent source-qualified wind and nearby NOAA water reading can establish a shoreline air correction.');
     put('report-scope','No temperature is being inferred from a distant weather station or offshore water buoy. Beach water quality and swimming flags have not been checked.');
   }
   function showPlace(li){
@@ -41,6 +42,7 @@
     put('report-story',d.story);
     put('report-heading','Get to know this shore');
     put('report-guide','Checking a nearby NWS air forecast. While it loads, look for the wind and waves described in this place’s field note.');
+    put('report-lake-effect','Checking recent NOAA offshore water alongside the NWS area wind. No observed sand temperature is assumed.');
     put('report-temp','Checking forecast');
     put('report-method','National Weather Service hourly forecast, not a sand thermometer');
     put('report-wind','Checking wind');
@@ -73,6 +75,10 @@
         put('report-time','NWS hourly period '+isoTime(a.asOf)+' · issued '+isoTime(a.issuedAt));
         put('report-heading',a.heading||'At the beach');
         put('report-guide',a.guide||'Watch the wind and local beach conditions.');
+        const influence=a.shorelineRealFeel?.lakeEffect;
+        put('report-lake-effect',influence?.explanation
+          ?influence.label+'. '+influence.explanation+' The temperature above remains NWS apparent air, not a measured sand temperature.'
+          :'No verified nearshore NOAA water context is available. The shoreline air difference is unknown.');
         put('report-scope',(a.scope||'NWS area forecast, not an on-sand observation.')+' '+d.coordinateNote+'. Swimming status and water bacteria are not checked by this forecast.');
       })
       .catch(error=>{if(error.name!=='AbortError'&&current===d.slug)setUnavailable('The NWS forecast request did not succeed. Open the official NWS weather service and the park links.');});

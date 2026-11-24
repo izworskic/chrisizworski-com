@@ -80,3 +80,10 @@ footer{background:#e8f0ee;padding:24px 22px;text-align:center;font-size:.87rem;c
 .shore-water-context{margin:0;padding:11px clamp(20px,3.5vw,32px) 16px;background:#e9f3ef;color:#365d61;font-size:.88rem;line-height:1.45}
 .shore-water-context a{display:block;font-weight:700;margin-bottom:2px}
 .shore-water-context span{display:block}
+
+
+/* Optional NOAA lake evidence is a distinct explanation, never a replacement for air feel. */
+.shore-lake-interpretation{margin:0;padding:15px clamp(20px,3.5vw,32px);
+ border-top:1px solid #c8dddb;background:#edf5f1;color:#1b4650;
+ font-size:clamp(.94rem,2vw,1.02rem);line-height:1.58;overflow-wrap:break-word}
+@media(max-width:680px){.shore-lake-interpretation{padding:14px 18px}}

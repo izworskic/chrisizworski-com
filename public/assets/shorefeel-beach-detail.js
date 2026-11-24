@@ -13,6 +13,14 @@
     return new Intl.DateTimeFormat('en-US',{timeZone:'UTC',month:'short',day:'numeric',
       hour:'2-digit',minute:'2-digit',hour12:false}).format(date)+' UTC';
   };
+  function showLake(data){
+    const v=data?.shorelineRealFeel,context=v?.lakeEffect;
+    const text=context?.explanation;
+    put('feel-lake-effect',v?.status==='forecast-based'&&typeof text==='string'
+      ?context.label+'. '+text+
+       ' This does not change the forecast apparent air temperature shown above.'
+      :'Lake influence unavailable. The current air forecast does not establish how much warmer or cooler the sand is than the nearby town.');
+  }
   function unavailable(reason){
     put('feel-value','No recent forecast');
     put('feel-secondary','No temperature inferred');
@@ -22,6 +30,7 @@
     put('feel-when','Not verified');
     put('feel-guide',reason||'Current forecast could not be verified. Check the official weather and beach authorities.');
     put('feel-evidence','No current source-qualified local forecast was returned. Offshore lake temperatures and current swimming status are not inferred.');
+    showLake(null);
     const report=$('shorefeel-live');if(report)report.dataset.status='unavailable';
   }
   function showUS(data){
@@ -36,6 +45,7 @@
       (data.windFrom?' from '+data.windFrom:''):'Wind not reported');
     put('feel-when',when(data.asOf));
     put('feel-guide',data.guide||'A nearby forecast does not measure small changes beside the water.');
+    showLake(data);
     put('feel-evidence','Nearby NWS land forecast, issued '+when(data.issuedAt)+
       '. The displayed apparent temperature reflects published wind chill or heat-index rules where appropriate. No on-sand air measurement, local water temperature, or observed beach-versus-inland correction is available.');
   }
@@ -51,6 +61,7 @@
       (data.windDirection?' from '+data.windDirection:''):'Wind not reported');
     put('feel-when',when(data.validAt)+(data.isUpcoming?' · upcoming':''));
     put('feel-guide',data.note||'Shoreline wind can change outside the nearby city forecast.');
+    showLake(data);
     put('feel-evidence','ECCC hourly forecast for '+data.forecastPlace+
       ', about '+data.forecastDistanceKm+' km from this beach. Forecast issued '+
       when(data.forecastIssueAt)+'. This is not an on-sand measurement, a swimming-area water reading, or a calibrated shoreline cooling correction.');
