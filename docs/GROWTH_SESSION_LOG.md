@@ -1,3 +1,8 @@
+### 2026-11-24 | Holiday Travel Planner national directory discovery
+- Existing /holiday-travel/ added to Everyday Decisions, trip search and recurring Thanksgiving/Christmas peak windows. No new route, engine, ads or infrastructure.
+- Owner PR: https://github.com/izworskic/national-outdoor-tools-hub/pull/131. Explicit shell mirror sync; card, ItemList order/count, search corpus and freshness aligned. Source checks passed; full CI and production not verified. GSC/AdSense unavailable; no uplift claim.
+- Next action: review both PRs and green CI, then verify public seasonal listing after merge.
+
 ### 2026-11-23 | Snowmobile typed place lookup (PR pending)
 - **Visitor job:** Enter a town to find its existing verified DNR trail evidence, or enter any covered named origin to compare actual road times. Replaced city dropdowns on the statewide planner and seven regional pages; no new public routes or indexable city pages.
 - **HF / Python OS stack decision:** Adopted the Hugging Face semantic-discovery and model-selection *skills* as evaluation guides, not a production model. Deterministic search outranks unvalidated embedding scores for exact named geography. Source-backed, static Census 2025 Gazetteer index (9,465 US incorporated places/CDPs across MI, WI, OH, IN, IL, MN, PA, NY) plus 27 independently DNR-verified trail towns and their exact HTML anchors. Python stdlib source/coordinate/5 km integrity checker and deterministic JS matching; no model weights, paid calls, new services, Redis, or build-time external fetch.
