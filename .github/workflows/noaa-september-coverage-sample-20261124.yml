@@ -1,0 +1,42 @@
+name: One-time NOAA September AIS coverage sample
+on:
+  pull_request:
+    types: [opened]
+    paths:
+      - ".github/workflows/noaa-september-coverage-sample-20261124.yml"
+permissions:
+  contents: read
+jobs:
+  scan:
+    if: github.head_ref == 'research/noaa-september-coverage-sample-20261124' && github.event.pull_request.head.repo.full_name == github.repository
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        day: ["2024-09-04", "2024-09-10", "2024-09-15", "2024-09-21", "2024-09-25", "2024-09-29"]
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned temporary research reader
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps --only-binary=:all: pyarrow==21.0.0
+      - name: Verify decoder, aggregate and missing-minute fixture
+        run: python scripts/noaa-september-coverage-sample-20261124.py --self-test
+      - name: Scan preselected daily archive
+        env:
+          STUDY_DAY: ${{ matrix.day }}
+          NOAA_REPORT: ${{ runner.temp }}/noaa-coverage.json
+        run: python scripts/noaa-september-coverage-sample-20261124.py "$STUDY_DAY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: noaa-coverage-${{ matrix.day }}
+          path: ${{ runner.temp }}/noaa-coverage.json
+          if-no-files-found: warn
+          retention-days: 7
