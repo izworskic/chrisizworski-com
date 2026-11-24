@@ -770,7 +770,7 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
  <summary><span>FREIGHTER VIEW FARMS · FIELD JOURNAL</span><strong>Keep a record of what actually grows</strong><small id="fj-count">Your private garden notes, planting dates and harvests.</small></summary>
  <div class="gs-body">
   <h3>A garden remembers what we write down.</h3>
-  <p>Keep a separate record for each planting, even when you sow the same variety twice. Note the first flowers, fruit, harvests, rainfall, irrigation and measured temperatures. Your observations stay on this device unless you export a backup. <a href="#growing-season">Open the growing-season notebook</a> to copy a modeled crop into the journal.</p>
+  <p>Keep a separate record for each planting, even when you sow the same variety twice. Note the first flowers, fruit, weighed harvests, crop losses, rainfall, irrigation and measured temperatures. Your observations stay on this device unless you export a backup. <a href="#growing-season">Open the growing-season notebook</a> to copy a modeled crop into the journal.</p>
   <div id="fj-controls" hidden>
    <p id="fj-status" role="status" aria-live="polite">Your journal is stored in this browser. Export a backup before clearing browser data.</p>
    <details class="fj-add" open>
@@ -800,12 +800,32 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
        <fieldset id="fj-water-amount-fields" hidden disabled><legend>Measured water depth</legend><label for="fj-water-inches">Daily total (inches)<input id="fj-water-inches" type="number" min="0" max="10" step="any" required></label><p class="fj-small">For rain, use the total for a completed local calendar day. For irrigation, record the combined depth applied to this planting area that day, not rainfall.</p></fieldset>
        <fieldset id="fj-feel-fields" hidden disabled><legend>Soil at root depth</legend><label for="fj-feel">How did the soil feel?<select id="fj-feel"><option value="wet">Wet</option><option value="moist">Moist</option><option value="getting-dry">Getting dry</option><option value="dry">Dry</option></select></label><p class="fj-small">Check beneath the surface near the roots, not only the top crust. Record a new observation today before using the watering calculation.</p></fieldset>
        <fieldset id="fj-leaf-fields" hidden disabled><legend>Leaf scouting observation</legend><div class="gs-fields"><label for="fj-leaf-sign">Main sign you noticed<select id="fj-leaf-sign"><option value="none">No visible signs</option><option value="rings">Brown spots with rings</option><option value="small-spots">Numerous small spots</option><option value="water-soaked">Irregular water-soaked or dark lesions</option><option value="white-powder">White powder-like patches</option><option value="angular-yellow">Angular yellow patches</option><option value="other">Other visible damage</option></select></label><label for="fj-leaf-wet">Foliage at inspection<select id="fj-leaf-wet"><option value="unknown">Not checked</option><option value="wet">Wet</option><option value="dry">Dry</option></select></label><label for="fj-leaf-checked">Leaves inspected<input id="fj-leaf-checked" type="number" min="1" max="200" required></label><label for="fj-leaf-affected">Leaves with visible damage<input id="fj-leaf-affected" type="number" min="0" max="200" required></label></div><p class="fj-small">Record what you saw, not a disease diagnosis. Use comparable leaves and sample sizes on later visits. A wet leaf at one inspection does not measure hours of leaf wetness.</p></fieldset>
+       <fieldset id="fj-harvest-fields" hidden disabled><legend>Weighed harvest for this planting</legend><div class="gs-fields"><label for="fj-usable-weight">Usable produce weight<input id="fj-usable-weight" type="number" min="0" step="any" required></label><label for="fj-discard-weight">Weighed discarded produce<input id="fj-discard-weight" type="number" min="0" step="any" required></label><label for="fj-weight-unit">Weight unit<select id="fj-weight-unit"><option value="lb">Pounds</option><option value="oz">Ounces</option><option value="kg">Kilograms</option><option value="g">Grams</option></select></label></div><p class="fj-small">Enter the combined weight for this planting on this date, without baskets or containers. Enter zero for a category only if none was harvested. Do not count the same produce in two planting records. First harvest milestones are dates, not weights.</p></fieldset>
+       <fieldset id="fj-loss-fields" hidden disabled><legend>Plants lost</legend><label for="fj-lost-count">Number of plants lost on this date<input id="fj-lost-count" type="number" min="1" max="10000" required></label><p class="fj-small">Count plants removed or dead, not damaged leaves. Use notes to record the suspected cause; no unmeasured produce weight is inferred.</p></fieldset>
        <label for="fj-note">Notes (optional)<textarea id="fj-note" rows="3" maxlength="1000" placeholder="What changed since your last visit?"></textarea></label>
        <button type="submit">Record observation</button>
       </form>
      </section>
      <section aria-labelledby="fj-compare-heading"><h3 id="fj-compare-heading">Your season, compared</h3><div id="fj-comparison" aria-live="polite"></div><h3>Field timeline</h3><div id="fj-entries"></div></section>
     </div>
+    <details class="fj-add" id="fj-productivity"><summary>See what this garden produced</summary>
+     <h3>From the garden to the kitchen.</h3><p>Weigh each day's harvest and record plant losses in the journal. Compare measured production with the space and time a planting occupied.</p>
+     <div id="fj-yield-summary" aria-live="polite"></div>
+     <form id="fj-yield-form" class="gs-form">
+      <h3>Space this planting used</h3><div class="gs-fields">
+      <label for="fj-yield-group">Crop group for comparison<select id="fj-yield-group" required><option value="">Choose crop group</option><option value="tomatoes">Tomatoes</option><option value="peppers">Peppers</option><option value="cucumbers">Cucumbers</option><option value="squash">Squash</option><option value="beans">Beans</option><option value="brassicas">Brassicas</option><option value="potatoes">Potatoes</option><option value="corn">Corn</option><option value="leafy">Leafy greens</option><option value="roots">Root crops</option><option value="onions">Onions</option><option value="herbs">Herbs</option><option value="melons">Melons</option><option value="other">Other (no crop comparison)</option></select></label>
+      <label for="fj-yield-length">Allocated length (feet, optional)<input id="fj-yield-length" type="number" min=".1" max="100" step="any"></label>
+      <label for="fj-yield-width">Allocated width (feet, optional)<input id="fj-yield-width" type="number" min=".1" max="100" step="any"></label>
+      <label for="fj-yield-plants">Original plant count (optional)<input id="fj-yield-plants" type="number" min="1" max="10000"></label></div>
+      <p class="fj-small">Enter the area allocated to this planting, not the whole bed unless this crop used all of it. Successive plantings can reuse the same space; their areas are never added into a garden footprint.</p>
+      <label class="fj-check" for="fj-yield-complete"><input id="fj-yield-complete" type="checkbox"> This planting is finished. All harvested produce is included in the weights, or I confirm there was no harvest.</label>
+      <label for="fj-yield-close">Last day of this planting (required if finished)<input id="fj-yield-close" type="date"></label>
+      <button type="submit">Save planting details</button>
+     </form>
+     <h3>Compare finished plantings</h3><div id="fj-yield-compare" aria-live="polite"></div>
+     <div class="fj-add"><h3>Your garden harvest by year</h3><label for="fj-yield-year">Harvest year<input id="fj-yield-year" type="number" min="1900" max="2100"></label><div id="fj-yield-season" aria-live="polite"></div></div>
+     <p class="fj-small">These are your recorded weights, not predicted yields. Compare similar crops and growing conditions. Differences do not prove one variety is better; weather, care, spacing and harvest practices can differ. <a href="/living-garden/">Plan bed layout and succession in The Living Garden</a>.</p>
+    </details>
     <details class="fj-add" id="fj-water"><summary>Water this planting</summary><h3>What does this bed need today?</h3><p id="fj-water-ledger" class="fj-small">Record rainfall, irrigation and a soil check in the journal above.</p>
      <form id="fj-water-form" class="gs-form"><div class="gs-fields">
       <label for="fj-water-crop">Watering crop profile<select id="fj-water-crop" required><option value="">Choose crop</option><option value="tomato">Tomatoes</option><option value="pepper">Peppers</option><option value="cucumber">Cucumbers</option><option value="squash">Squash</option><option value="beans">Beans</option><option value="corn">Sweet corn</option><option value="brassicas">Broccoli, cabbage, cauliflower</option><option value="leafy">Leafy greens</option><option value="roots">Root crops</option><option value="onion">Onions</option><option value="herbs">Herbs</option><option value="melons">Melons</option><option value="generic">Mixed vegetables</option></select></label>
@@ -1278,9 +1298,10 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
 <script defer src="/assets/garden-tools/garden-history.js?v=20261124"></script>
 <script defer src="/assets/garden-tools/growing-season.js?v=20261124b"></script>
 <script defer src="/assets/garden-tools/garden-microclimate.js?v=20261124"></script>
-<script defer src="/assets/garden-tools/garden-field-journal.js?v=20261124"></script>
+<script defer src="/assets/garden-tools/garden-field-journal.js?v=20261124d"></script>
 <script defer src="/assets/garden-tools/garden-journal-water.js?v=20261124"></script>
 <script defer src="/assets/garden-tools/garden-disease.js?v=20261124"></script>
-<script defer src="/assets/garden-tools/field-journal-ui.js?v=20261124c"></script>
+<script defer src="/assets/garden-tools/garden-productivity.js?v=20261124"></script>
+<script defer src="/assets/garden-tools/field-journal-ui.js?v=20261124d"></script>
 </body>
 </html>
