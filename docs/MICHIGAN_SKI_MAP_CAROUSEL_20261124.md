@@ -21,7 +21,7 @@ The static opening announcements table is retained below the interactive planner
 
 ## Design options
 
-**A. Map + horizontal carousel (chosen).** Keep the existing geometrically correct SVG map with NWS forecast pin coloring and official status indicated separately. Add one synchronized card carousel, native previous/next buttons, swipe/scroll-snap, keyboard-accessible map markers, clickable card headings, accurate checked/report-date labels, linked official sources, resort detail handoff and optional cost comparison. Existing official-status and region filters narrow both together. In no-JS mode, the full static source table/directory remains accessible.
+**A. Map + horizontal carousel (chosen).** Keep the existing geometrically correct SVG map with NWS forecast pin coloring and official status indicated separately. Add one synchronized card carousel, native previous/next buttons, swipe/scroll-snap, keyboard-accessible map markers, clickable card headings, accurate checked/report-date labels, linked official sources, resort detail handoff and optional cost comparison. The single area filter and existing official-status mode narrow map, carousel and details together. In no-JS mode, the full static source table/directory remains accessible.
 
 **B. Replace the map with a full sortable table (rejected).** Reduces visual duplication but removes the spatial distinction between Upper Peninsula and lower Michigan resorts and makes visitor exploration less intuitive. It would offer no coordinate-based selection benefit over the existing collapsed rankings.
 
@@ -29,7 +29,7 @@ Comparison surfaces: Michigan Snow Totals (forecast versus observed evidence and
 
 ## One selection spine
 
-Stable identity is each approved `resort.slug`, not a label or ranking. The card, selected SVG pin, selected screen-reader announcement and comparison handoff all use it. Arrow keys on the carousel, native prev/next, swipe scroll, card selection and pin click are reversable A→B→A. The same `region`, `openOnly` and `planOnly` states already used by the operator report board apply to the map. Selecting a day replaces forecast labels without rewriting dated operator statuses.
+Stable identity is each approved `resort.slug`, not a label or ranking. The card, selected SVG pin, selected screen-reader announcement and comparison handoff all use it. Arrow keys on the carousel, native prev/next, swipe scroll, card selection and pin click are reversable A→B→A. One `region` selector drives the operator board, map, carousel and expandable rankings; `openOnly` and `planOnly` remain mutually exclusive. Selecting a day replaces forecast labels without rewriting dated operator statuses.
 
 **Evidence contract:** map dot fill means a forecast amount at an approximate point coordinate. A green/orange outline reflects only a confirmed operator lift report within the existing parser's freshness policy. A positive NWS snow forecast, undated operator count, archival photograph, or operator opening plan never becomes "open now." Mark source and forecast unavailable separately.
 

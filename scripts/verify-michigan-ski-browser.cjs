@@ -96,14 +96,14 @@ async function run(){
    need(await page.locator('#ski-point-map .ski-dot').count()===6,width+' opening plans filter changes map');
    need((await page.locator('#ski-operating-list .ski-operation-row').first().innerText()).includes('Ski Brule'),width+' earliest plan first');
    need((await page.locator('#ski-filter-result').innerText()).includes('not confirmed openings'),width+' no plan treated as open');
-   await page.locator('#ski-area-filter').selectOption('northern-lower');
-   need(await page.locator('#region').inputValue()==='northern-lower',width+' top area sync');
+   await page.locator('#region').selectOption('northern-lower');
+   need(await page.locator('#region').inputValue()==='northern-lower',width+' one shared area selection');
    need(await page.locator('#ski-operating-list .ski-operation-row').count()===4,width+' four northern lower plans');
    need(await page.locator('#resort-list .hill').count()===4,width+' main list area sync');
    need(await page.locator('#ski-resort-carousel .ski-carousel-card').count()===4,width+' region filters map carousel');
    await page.locator('#region').selectOption('western-up');
-   need(await page.locator('#ski-area-filter').inputValue()==='western-up',width+' lower area sync');
-   await page.locator('#ski-area-filter').selectOption('all');
+   need(await page.locator('#ski-resort-carousel .ski-carousel-card').count()===1,width+' western UP filter updates carousel');
+   await page.locator('#region').selectOption('all');
    await page.locator('#ski-open-filter').click();
    need(await page.locator('#ski-operating-list .ski-operation-row').count()===1,width+' plans to open');
    need(await page.locator('#ski-plan-filter').getAttribute('aria-pressed')==='false',width+' plans mode reset');

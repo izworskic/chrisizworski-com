@@ -65,7 +65,7 @@ function operatingBoard(data){
  const connected=hills.filter(r=>r.official?.status!=='NOT_CONNECTED');
  const plans=operatorOpeningPlans();
  const when=new Date(data.generatedAt).toLocaleString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'});
- const area=$('ski-area-filter')?.selectedOptions?.[0]?.textContent||'All Michigan';
+ const area=$('region')?.selectedOptions?.[0]?.textContent||'All Michigan';
  count.textContent=open.length+' confirmed open · '+closed.length+' confirmed closed from current dated operator reports'+(state.region==='all'?'':' in '+area)+'. Checked '+when+'.';
  if(coverage)coverage.textContent=dated.length+' current dated reports · '+undatedZero.length+' undated zero-lift listings · '+connected.length+' operator report links checked out of '+hills.length+' downhill areas. No report date means no verified status.';
  if(filter){filter.setAttribute('aria-pressed',String(state.openOnly));filter.textContent=state.openOnly?'Open now · Show all':'Open now';}
@@ -272,14 +272,7 @@ async function load(){
  }finally{clearTimeout(tm);}
 }
 if($('origin'))$('origin').addEventListener('change',render);
-if($('region'))$('region').addEventListener('change',()=>{
- if($('ski-area-filter'))$('ski-area-filter').value=$('region').value;
- render();
-});
-if($('ski-area-filter'))$('ski-area-filter').addEventListener('change',()=>{
- if($('region'))$('region').value=$('ski-area-filter').value;
- render();
-});
+if($('region'))$('region').addEventListener('change',render);
 if($('ski-open-filter'))$('ski-open-filter').addEventListener('click',()=>{
  state.openOnly=!state.openOnly;state.planOnly=false;if(state.data)render();
 });
