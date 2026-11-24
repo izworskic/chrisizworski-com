@@ -36,7 +36,7 @@ test('EPA 2025 coverage is source-identified across all eight Great Lakes U.S. s
   const found=lookup(b.id);
   assert.ok(found&&validLocation(found),b.id);
   assert.equal(found.country,'US');
-  assert.match(found.coordinateNote,/not a verified parking/);
+  assert.match(found.coordinateNote,/not a verified swim boundary.*parking location/);
   assert.match(found.story,/EPA 2025/);
   assert.ok(found.safety.url.startsWith('https://'));
   assert.ok(found.parkUrl.startsWith('https://beacon.epa.gov/'));
