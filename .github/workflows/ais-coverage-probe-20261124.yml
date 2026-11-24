@@ -1,0 +1,45 @@
+name: One-time NOAA historical AIS coverage probe
+on:
+  pull_request:
+    types: [opened]
+    paths:
+      - ".github/workflows/ais-coverage-probe-20261124.yml"
+permissions:
+  contents: read
+jobs:
+  probe:
+    if: github.head_ref == 'research/ais-coverage-probe-20261124' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Run existing research-only tests with real Node
+        run: node --test tests/great-lakes-historical-coverage.test.js tests/great-lakes-passage-replay.test.js
+      - name: Two bounded NOAA research probes; no raw tracks retained
+        shell: bash
+        run: |
+          set -uo pipefail
+          mkdir -p "${RUNNER_TEMP}/ais-coverage"
+          rc=0
+          for site in soo duluth; do
+            output="${RUNNER_TEMP}/ais-coverage/${site}.json"
+            if node scripts/audit-great-lakes-historical-coverage.cjs --research-fetch "$site" 2024-09-01T12:00:00Z 2024-09-01T12:10:00Z ACKNOWLEDGE_RESEARCH_ONLY "$output"; then
+              cat "$output"
+            else
+              echo "NOAA coverage unavailable: $site"
+              rc=1
+            fi
+          done
+          exit "$rc"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: noaa-ais-aggregate-coverage
+          path: ${{ runner.temp }}/ais-coverage/*.json
+          if-no-files-found: warn
+          retention-days: 7
