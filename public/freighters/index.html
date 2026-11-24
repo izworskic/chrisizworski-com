@@ -183,7 +183,7 @@
   </div>
 </div>
 <div class="quick-rail" aria-label="Jump to freighter resources">
- <a href="#live-map">Live map</a><a href="#watch-finder">Where to watch</a><a href="#corridors">Shipping corridors</a><a href="#live-tools">Live tools</a><a href="#fleet">The fleet</a><a href="#stories">History &amp; news</a>
+ <a href="#live-map">Live map</a><a href="#watch-finder">Where to watch</a><a href="#corridors">Shipping corridors</a><a href="#live-tools">Live tools</a><a href="#fleet">The fleet</a><a href="#ship-library">Meet the ships</a><a href="#stories">History &amp; news</a>
 </div>
 <div class="wrap">
 
@@ -196,8 +196,8 @@
   <div class="hub-map-heading">
     <div>
       <p class="eyebrow">Live vessel tracking · five Great Lakes</p>
-      <h2 id="hub-map-title">The Great Lakes, <em>live on the map.</em></h2>
-      <p>Explore AIS-reported ship positions across all five lakes, or zoom to a shipping corridor. Select a vessel to read its name, speed, course (when reported), and the age of its last position.</p>
+      <h2 id="hub-map-title" tabindex="-1">The Great Lakes, <em>live on the map.</em></h2>
+      <p>Explore AIS-reported ship positions across all five lakes, or zoom to a shipping corridor. Select a vessel to read its name, speed, course (when reported), and the age of its last position. Open Meet this ship to explore its history when a reviewed profile is available.</p>
     </div>
     <a class="hub-map-full-link" href="/great-lakes-freighter-tracking/" data-track-tool="ship-tracker" data-placement="freighters-map">Open the full ship tracker ↗</a>
   </div>
@@ -242,6 +242,12 @@
       <div id="freighterMap" role="region" aria-label="Interactive AIS map of Great Lakes vessel positions"></div>
       <div class="hub-map-tools"><button class="hub-map-refresh" id="mapRefresh" type="button">↻ Refresh vessel reports</button></div>
     </div>
+    <section class="hub-ship-inspector" id="ship-inspector" data-hub-inspector aria-labelledby="ship-inspector-title" hidden>
+      <div class="hub-ship-inspector-top"><div><p class="eyebrow">Meet the ship</p><h3 id="ship-inspector-title" tabindex="-1">Selected vessel</h3></div><button type="button" id="ship-inspector-close">Back to map</button></div>
+      <p id="ship-inspector-status" role="status"></p><dl class="hub-ship-facts" id="ship-inspector-facts"></dl>
+      <div class="hub-ship-story" id="ship-story" hidden></div>
+      <p class="hub-ship-note">AIS details describe the last report, not a confirmed arrival or cargo load. <a href="#ship-library">Explore the ship field guide ↓</a></p>
+    </section>
     <div class="hub-map-bottom">
       <div class="hub-map-route">
         <p class="hub-mini-label" id="corridorLabel">Current map: All Great Lakes</p>
@@ -357,6 +363,53 @@
   <article><span class="fleet-icon" aria-hidden="true">Ⅲ</span><h3>Tug–barge combinations</h3><p>Workboats and barges move fuel, stone and specialized loads through rivers and harbor approaches. They're part of the commercial fleet too.</p></article>
  </div>
  <div class="field-note"><h3>Reading ship reports</h3><p><strong>Upbound</strong> generally means toward Lake Superior; <strong>downbound</strong> generally means toward the lower lakes. A ship's AIS destination may be abbreviated, stale or entered incorrectly. Public AIS reception has gaps, and a reported position is not permission to navigate by it.</p><a href="/great-lakes-freighter-tracking/#how-to-track">How to read the AIS map →</a></div>
+</section>
+<section id="ship-library" class="section ship-library" aria-labelledby="ship-library-title">
+  <div class="section-head"><div><p class="eyebrow">A shipwatcher's field guide</p><h2 id="ship-library-title">Meet the ships of the Great Lakes</h2></div><p>Get to know eight vessels from the Interlake fleet. Compare their published lengths, explore their histories, then look for a recent report on the map.</p></div>
+  <p class="ship-library-note">These are reviewed ship profiles, not a list of ships currently underway. Capacity is published carrying capacity in gross tons, not the amount aboard today. Length bars share a 1,013.5-foot scale. <a href="https://www.interlakesteamship.com/our-fleet/">Operator fleet specifications</a>.</p>
+  <div class="ship-library-list">
+    <article class="ship-library-entry" data-library-mmsi="366904940">
+      <div class="ship-library-name"><h3>Paul R. Tregurtha</h3><p>The longest ship on the lakes</p></div>
+      <div class="ship-library-scale"><span>1,013.5 ft · 1981</span><meter min="0" max="1013.5" value="1013.5" aria-label="Paul R. Tregurtha length: 1,013.5 feet"></meter><small>68,000 gross tons capacity</small></div>
+      <div class="ship-library-actions"><a href="https://www.interlakesteamship.com/our-fleet/m-v-paul-r-tregurtha/">Operator profile and photo ↗</a><button type="button" data-hub-find-ship="366904940" hidden>Find recent report</button></div>
+    </article>
+    <article class="ship-library-entry" data-library-mmsi="366905890">
+      <div class="ship-library-name"><h3>James R. Barker</h3><p>A thousand-footer built for the lakes</p></div>
+      <div class="ship-library-scale"><span>1,004 ft · 1976</span><meter min="0" max="1013.5" value="1004" aria-label="James R. Barker length: 1,004 feet"></meter><small>63,300 gross tons capacity</small></div>
+      <div class="ship-library-actions"><a href="/great-lakes-freighter-winter-layup/vessels/james-r-barker/">Ship history ↗</a><button type="button" data-hub-find-ship="366905890" hidden>Find recent report</button></div>
+    </article>
+    <article class="ship-library-entry" data-library-mmsi="366904880">
+      <div class="ship-library-name"><h3>Mesabi Miner</h3><p>A name from Minnesota's iron country</p></div>
+      <div class="ship-library-scale"><span>1,004 ft · 1977</span><meter min="0" max="1013.5" value="1004" aria-label="Mesabi Miner length: 1,004 feet"></meter><small>63,300 gross tons capacity</small></div>
+      <div class="ship-library-actions"><a href="https://www.interlakesteamship.com/our-fleet/m-v-mesabi-miner/">Operator profile and photo ↗</a><button type="button" data-hub-find-ship="366904880" hidden>Find recent report</button></div>
+    </article>
+    <article class="ship-library-entry" data-library-mmsi="367050550">
+      <div class="ship-library-name"><h3>Stewart J. Cort</h3><p>The first thousand-footer</p></div>
+      <div class="ship-library-scale"><span>1,000 ft · 1972</span><meter min="0" max="1013.5" value="1000" aria-label="Stewart J. Cort length: 1,000 feet"></meter><small>58,000 gross tons capacity</small></div>
+      <div class="ship-library-actions"><a href="/great-lakes-freighter-winter-layup/vessels/stewart-j-cort/">Ship history ↗</a><button type="button" data-hub-find-ship="367050550" hidden>Find recent report</button></div>
+    </article>
+    <article class="ship-library-entry" data-library-mmsi="366904950">
+      <div class="ship-library-name"><h3>Lee A. Tregurtha</h3><p>From wartime tanker to Great Lakes freighter</p></div>
+      <div class="ship-library-scale"><span>826 ft · 1942</span><meter min="0" max="1013.5" value="826" aria-label="Lee A. Tregurtha length: 826 feet"></meter><small>29,360 gross tons capacity</small></div>
+      <div class="ship-library-actions"><a href="/great-lakes-freighter-winter-layup/vessels/lee-a-tregurtha/">Ship history ↗</a><button type="button" data-hub-find-ship="366904950" hidden>Find recent report</button></div>
+    </article>
+    <article class="ship-library-entry" data-library-mmsi="366904910">
+      <div class="ship-library-name"><h3>Kaye E. Barker</h3><p>A classic freighter adapted for new work</p></div>
+      <div class="ship-library-scale"><span>767 ft · 1952</span><meter min="0" max="1013.5" value="767" aria-label="Kaye E. Barker length: 767 feet"></meter><small>25,900 gross tons capacity</small></div>
+      <div class="ship-library-actions"><a href="https://www.interlakesteamship.com/our-fleet/m-v-kaye-e-barker/">Operator profile and photo ↗</a><button type="button" data-hub-find-ship="366904910" hidden>Find recent report</button></div>
+    </article>
+    <article class="ship-library-entry" data-library-mmsi="366904930">
+      <div class="ship-library-name"><h3>Herbert C. Jackson</h3><p>A Michigan-built working ship</p></div>
+      <div class="ship-library-scale"><span>690 ft · 1959</span><meter min="0" max="1013.5" value="690" aria-label="Herbert C. Jackson length: 690 feet"></meter><small>24,800 gross tons capacity</small></div>
+      <div class="ship-library-actions"><a href="https://www.interlakesteamship.com/our-fleet/m-v-herbert-c-jackson/">Operator profile and photo ↗</a><button type="button" data-hub-find-ship="366904930" hidden>Find recent report</button></div>
+    </article>
+    <article class="ship-library-entry" data-library-mmsi="368251670">
+      <div class="ship-library-name"><h3>Mark W. Barker</h3><p>Designed for the bends of a working river</p></div>
+      <div class="ship-library-scale"><span>639 ft · 2022</span><meter min="0" max="1013.5" value="639" aria-label="Mark W. Barker length: 639 feet"></meter><small>26,000 gross tons capacity</small></div>
+      <div class="ship-library-actions"><a href="https://www.interlakesteamship.com/our-fleet/m-v-mark-w-barker/">Operator profile and photo ↗</a><button type="button" data-hub-find-ship="368251670" hidden>Find recent report</button></div>
+    </article>
+  </div>
+  <p class="ship-library-note">Want to compare more vessels and their winter homes? <a href="/great-lakes-freighter-winter-layup/">Explore the winter layup fleet guide</a>.</p>
 </section>
 <section class="image-story" aria-label="Soo Locks ship-watching photographs">
  <img src="/assets/soo-locks/lock-chamber.jpg" loading="lazy" alt="Freighter in the Soo Locks chamber" width="960" height="640">
