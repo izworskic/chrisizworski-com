@@ -43,6 +43,8 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // Nov 24 2026: aurora return features (since-last-check line, share link, calendar file); docs/return-contracts/northern-lights-michigan.md.
+  "/northern-lights-michigan/",
   // November 23: canonical GLERL ice-cover record and measured winter handoffs.
   "/great-lakes-freighter-winter-layup/",
   // New lighthouse winter tool and a relevant directory handoff, November 2026.

@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
 <link rel="stylesheet" href="/assets/aurora-sky-sim.css?v=20261019-ships">
 <link rel="stylesheet" href="/assets/verdict-card.css?v=1">
+<script defer src="/assets/aurora-return.js?v=20261124"></script>
 <script defer src="/assets/verdict-card.js?v=1"></script>
 <link rel="stylesheet" href="/assets/growth-commercial.css">
 <link rel="stylesheet" href="/assets/affiliate-commerce.css">
@@ -159,6 +160,9 @@ h3.subh{font-size:17px;font-weight:bold;color:#2c5f2d;margin:22px 0 10px}
 .hero-btn:hover{background:rgba(255,255,255,.16);text-decoration:none}
 .hero-btn.primary{background:#a8e5ce;border-color:#a8e5ce;color:#14392f}
 .hero-btn.primary:hover{background:#c7f0df}
+.hero-btn[hidden]{display:none}
+.since-last-check{margin:10px 0 0;padding:8px 11px;border-left:3px solid #a8e5ce;background:rgba(255,255,255,.07);font-size:15px;line-height:1.45}
+.return-status{margin:8px 0 0;font-size:14px;color:#d7efe6}
 .decision-context{margin-top:20px;border-top:1px solid rgba(255,255,255,.18);padding-top:14px}
 .decision-context summary{font-size:12px;color:#c5dae0;cursor:pointer;min-height:30px}
 .hero-grid{display:grid;grid-template-columns:150px 1fr;gap:22px;align-items:center;margin-top:14px}
@@ -414,6 +418,7 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}
     <div class="tonight-label" id="localRegion">Tonight near the Straits of Mackinac</div>
     <h2 id="localHeadline">Checking your regional outlook</h2>
     <p id="localDetail">Start with a clear view north, away from shore lights. Your forecast checks whether the strongest hours overlap darkness here.</p>
+    <p class="since-last-check" id="sinceLastCheck" hidden></p>
   </div>
   <noscript><style>#aurora-decision .region-picker,#aurora-decision .local-answer,#aurora-decision .decision-factors,#regionalUpdate,#aurora-decision .hero-action-row button{display:none}</style><p class="sky-note">For tonight’s outlook, open <a href="https://www.spaceweather.gov/products/aurora-30-minute-forecast">NOAA’s short-term aurora map</a> and <a href="https://www.weather.gov/">your local weather forecast</a>. Look for an opening in the clouds toward the northern horizon.</p></noscript>
   <p class="sky-note"><span id="regionalUpdate">Waiting for the latest forecast.</span> <a id="regionalSource" href="https://www.spaceweather.gov/products/aurora-30-minute-forecast" hidden>Open NOAA’s aurora map</a></p>
@@ -433,7 +438,10 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}
     <button class="hero-btn primary" id="findBtn">Find viewing for my location</button>
     <a class="hero-btn" href="#viewing-locations">View the dark-sky map ↓</a>
     <button class="hero-btn" id="refreshBtn">Refresh now</button>
+    <button class="hero-btn" id="shareRegionBtn" type="button" hidden>Share this region's outlook</button>
+    <button class="hero-btn" id="calendarBestBtn" type="button" hidden>Add the best time to my calendar</button>
   </div>
+  <p class="return-status" id="returnStatus" role="status" hidden></p>
   <details class="decision-context">
     <summary>Statewide outlook and tonight's timing details</summary>
     <div class="live-strip" id="liveStrip">
@@ -854,6 +862,19 @@ try {
   if (savedRegion) selectedRegionId = savedRegion;
 } catch (error) {
   // Storage can be disabled; the tool still works with the Straits default.
+}
+try {
+  // A shared ?region= link shows the sender's region; unknown values fall back in setSelectedRegion.
+  const linkedRegion = new URLSearchParams(window.location.search).get('region');
+  if (linkedRegion && /^[a-z-]{3,40}$/.test(linkedRegion)) selectedRegionId = linkedRegion;
+} catch (error) {}
+function announceAuroraDecision(detail){
+  // Read by /assets/aurora-return.js (since-last-check line, share, calendar). Safe when absent.
+  try {
+    if (typeof window.dispatchEvent === 'function' && typeof CustomEvent === 'function')
+      window.dispatchEvent(new CustomEvent('aurora:decision', {detail: detail}));
+    window.__auroraDecision = detail;
+  } catch (error) {}
 }
 
 // === Format helpers ===
@@ -1574,6 +1595,7 @@ function renderLocalPlanningAnswer(region, choice) {
   if (!region || !Number.isFinite(region.planning_kp) || !choice) {
     headline.textContent = 'Nighttime signal unavailable';
     detail.textContent = 'We cannot compare a nighttime forecast with this region\u2019s planning threshold yet. Check the official NOAA short-term forecast and local clouds before traveling.';
+    announceAuroraDecision({regionId: selectedRegionId, regionLabel: name, state: 'unavailable', headline: headline.textContent});
     return;
   }
   const kp = choice.row.kp, threshold = region.planning_kp;
@@ -1586,6 +1608,9 @@ function renderLocalPlanningAnswer(region, choice) {
     : kp >= threshold-1 ? 'If you are already near a dark shoreline, take a look around '+when+'. Check again before making a drive.'
     : 'Keep tonight close to home. Even around '+when+', the strongest dark hours fall short of the usual signal here.';
   detail.textContent = action+' NOAA forecasts Kp '+kp.toFixed(1)+' against a regional planning threshold of Kp '+threshold+'.';
+  announceAuroraDecision({regionId: selectedRegionId, regionLabel: name,
+    state: kp >= threshold ? 'monitor' : kp >= threshold-1 ? 'borderline' : 'low',
+    headline: headline.textContent, kp: kp, threshold: threshold, bestTime: choice.row.time_tag});
 
 }
 
