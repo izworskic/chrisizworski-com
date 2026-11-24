@@ -54,3 +54,7 @@ The original lab now loads [scoped foundations](foundations.css) and includes sn
 ## Phase 5: reviewed-source visual regression
 
 Use [visual-reference.json](visual-reference.json) and [VISUAL_REGRESSION.md](VISUAL_REGRESSION.md). The path-scoped workflow replaces the temporary branch-only lab job, exercises the existing verifier at five widths and compares seven captured states against the reviewed source commit in the same runner. No production route, masks, automatic baseline updates or new runtime dependencies. Preserve the reviewed commit in the repository history when merging this PR.
+
+## Phase 6: editorial and data presentation
+
+[Editorial and data presentation reference](EDITORIAL_DATA_CONTRACT.md) brings existing plain-voice, data-contract and visual storytelling guidance together with ten explicitly fictional paired examples. The examples exercise seven evidence categories and four availability states; the offline fixture test checks protected facts, numeric tokens, material caveats and representative false claims. No gallery markup or visual baseline changed, no production-wide linter, no active skill edits. Test scope is the examples, not independent semantic evaluation of the site's copy.
