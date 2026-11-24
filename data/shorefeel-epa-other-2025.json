@@ -2995,6 +2995,16 @@
       "lake": "Michigan"
     },
     {
+      "id": "WI721390",
+      "name": "North Beach",
+      "state": "WI",
+      "county": "Racine",
+      "lat": 42.74112,
+      "lon": -87.780327,
+      "lake": "Michigan",
+      "coordinateSource": "Wisconsin DNR 2026 Beach List, Racine County (EPA ID WI721390)"
+    },
+    {
       "id": "WI455048",
       "name": "Oconto City Park",
       "state": "WI",
