@@ -21,17 +21,23 @@ function nwsFixture({ storm = false } = {}) {
   };
 }
 
-async function launch(today = '2026-10-19', { failFetch = false, nws = nwsFixture(), search = '' } = {}) {
+async function launch(today = '2026-10-19', { failFetch = false, nws = nwsFixture(), search = '', faa = null } = {}) {
   const SimulatedDate = class extends Date {
     constructor(...args) { super(...(args.length ? args : [today + 'T12:00:00Z'])); }
     static now() { return new Date(today + 'T12:00:00Z').getTime(); }
   };
   const nodes = new Map();
   const document = {
+    querySelectorAll(selector) {
+      const hol = selector.match(/data-holiday="(th|xm)"/)?.[1];
+      return [...page.matchAll(/data-holiday="(th|xm)" data-offset="(-?\d+)" data-avg="(\d+)"/g)]
+        .filter(row => row[1] === hol)
+        .map(row => ({ getAttribute(name) { return {'data-offset': row[2], 'data-avg': row[3]}[name]; } }));
+    },
     getElementById(id) {
       if (!nodes.has(id)) {
         nodes.set(id, {
-          value: { region: 'midwest', miles: '300', mpg: '28' }[id] ?? '',
+          value: { region: 'midwest', miles: '300', mpg: '28', layover: '60' }[id] ?? '',
           textContent: '', innerHTML: '', hidden: false, handlers: {}, classes: new Set(),
           addEventListener(event, fn) { this.handlers[event] = fn; },
           setAttribute(name, val) { this[name] = val; },
@@ -45,6 +51,7 @@ async function launch(today = '2026-10-19', { failFetch = false, nws = nwsFixtur
   const fetch = async url => {
     fetchedUrls.push(url);
     if (failFetch) return { ok: false, status: 500 };
+    if (url === '/api/holiday-airport-weather?view=faa') return faa ? {ok:true,json:async()=>faa} : {ok:false,status:503};
     if (url.startsWith('/holiday-travel/data/')) {
       const file = dataDir + url.slice('/holiday-travel/data/'.length);
       if (!fs.existsSync(file)) return { ok: false, status: 404 };
@@ -167,7 +174,8 @@ test('live NWS panel stays off until the final week, then reports hazards on the
   assert.ok(calm.fetchedUrls.some(u => u.startsWith('https://api.weather.gov/alerts/active?point=')));
 
   const storm = await launch('2026-11-20', { nws: nwsFixture({ storm: true }) });
-  await storm.change('away', 'ORD');
+  // Keep the Chicago warning airport as origin, but use a distinct destination.
+  await storm.change('away', 'DTW');
   assert.match(storm.get('live-panel').innerHTML, /Winter Storm Warning/);
   assert.match(storm.get('live-panel').innerHTML, /worst past season/);
 });
@@ -287,4 +295,152 @@ test('the method, limits and sources are disclosed and nothing implies a daily f
   assert.match(page, /BTS Reporting Carrier On-Time Performance/);
   assert.match(page, /historical odds, not a promise/);
   assert.doesNotMatch(page, /ontimereport\.com|23\.11|34\.41|19\.40|26\.45/);
+});
+
+
+test('calendar reads published comparison, selects a departure without moving the deadline, and tracks reversals', async () => {
+  const app = await launch();
+  const grid = app.get('calendar-days');
+  assert.match(grid.innerHTML, /Thu, Nov 26/);
+  assert.match(grid.innerHTML, /3%/);
+  assert.match(grid.innerHTML, /13%/);
+  const due = [app.get('due-day').value, app.get('due-time').value];
+  const original = app.pct();
+  async function pick(offset) {
+    grid.handlers.click({target:{closest: () => ({getAttribute: () => String(offset)})}});
+    await app.settle();
+  }
+  await pick(-4);
+  assert.equal(app.get('dep-day').value, '-4');
+  assert.deepEqual([app.get('due-day').value, app.get('due-time').value], due);
+  assert.notEqual(app.pct(), original);
+  assert.match(grid.innerHTML, /data-calendar-offset="-4"[^>]*aria-pressed="true"/);
+  assert.match(app.get('calendar-selection').textContent, /Sun, Nov 22/);
+  await pick(-1);
+  assert.equal(app.pct(), original);
+  await app.click('christmas');
+  assert.match(grid.innerHTML, /Sat, Dec 26/);
+  assert.match(grid.innerHTML, /17%/);
+  await app.change('travel-year','2027');
+  assert.match(grid.innerHTML, /Sun, Dec 26/);
+  await app.click('drive');
+  assert.equal(app.get('flight-calendar').hidden,true);
+  await app.click('fly');
+  assert.equal(app.get('flight-calendar').hidden,false);
+});
+
+test('same-airport selection clears the previous probability and weather verdict', async () => {
+  const app = await launch('2026-11-20');
+  assert.ok(Number.isFinite(app.pct()));
+  await app.change('away','ORD');
+  assert.equal(app.get('best-label').textContent,'Choose two different airports');
+  assert.ok(Number.isNaN(app.pct()));
+  assert.equal(app.get('live-panel').innerHTML,'');
+  assert.equal(app.get('third-stat').textContent,'Unavailable');
+});
+
+
+test('try a lower-risk itinerary and restore the original trip without changing its deadline', async () => {
+  const app = await launch();
+  const original = app.pct();
+  const fields = ['dep-day','dep-time','routing','layover','due-day','due-time'];
+  const saved = fields.map(id => app.get(id).value);
+  const results = app.get('results');
+  assert.match(results.innerHTML, /data-apply-fix="0"/);
+  assert.equal(app.get('plan-compare').hidden, true);
+  results.handlers.click({target:{closest: () => ({getAttribute: () => '0'})}});
+  await app.settle();
+  assert.ok(app.pct() < original, 'applying a modeled fix must actually lower risk');
+  assert.deepEqual(fields.slice(-2).map(id => app.get(id).value), saved.slice(-2));
+  assert.equal(app.get('plan-compare').hidden, false);
+  assert.match(app.get('compare-content').innerHTML, /Original/);
+  assert.match(app.get('compare-content').innerHTML, /Current/);
+  assert.match(app.get('compare-content').innerHTML, /Lower modeled risk/);
+  assert.ok(app.urls.at(-1).includes('due='+saved[4]+'.'+saved[5]));
+  await app.click('restore-plan');
+  assert.equal(app.pct(), original);
+  assert.deepEqual(fields.map(id => app.get(id).value), saved);
+  assert.equal(app.get('plan-compare').hidden, true);
+  results.handlers.click({target:{closest: () => ({getAttribute: () => '0'})}});
+  await app.settle();
+  assert.equal(app.get('plan-compare').hidden, false);
+  await app.change('due-time','22');
+  assert.equal(app.get('plan-compare').hidden, true, 'manual edits start a fresh comparison');
+});
+
+test('late-by-schedule plan offers a recoverable alternative when history supports one', async () => {
+  const app = await launch();
+  await app.change('due-time','18');
+  assert.equal(app.pct(),1);
+  const results=app.get('results');
+  assert.match(results.innerHTML,/data-apply-fix="0"/);
+  results.handlers.click({target:{closest: () => ({getAttribute: () => '0'})}});
+  await app.settle();
+  assert.ok(app.pct()<1);
+  assert.match(app.get('compare-content').innerHTML,/100%/);
+  await app.click('restore-plan');
+  assert.equal(app.pct(),1);
+});
+
+
+test('FAA check is on demand, scoped to the selected route and never changes BTS odds',async()=>{
+  const faa={status:'available',checkedAt:'2026-11-24T12:00:00Z',events:[
+    {airport:'ORD',label:'Ground stop',reason:'Snow',start:'2026-11-24T11:00:00Z',end:'2026-11-24T13:00:00Z',updatedAt:'2026-11-24T11:55:00Z',averageMinutes:null,maximumMinutes:null,minimumMinutes:null},
+    {airport:'LGA',label:'Arrival delay',reason:'Volume',averageMinutes:30,maximumMinutes:null,minimumMinutes:null},
+    {airport:'MCO',label:'Airport closure notice',reason:'OTHER AIRPORT',averageMinutes:null,maximumMinutes:null,minimumMinutes:null}
+  ]};
+  const app=await launch('2026-11-24',{faa});
+  const before=app.pct();
+  assert.ok(!app.fetchedUrls.some(u=>u.includes('view=faa')));
+  await app.click('faa-refresh');
+  assert.match(app.get('faa-status').innerHTML,/Ground stop/);
+  assert.match(app.get('faa-status').innerHTML,/Arrival delay/);
+  assert.doesNotMatch(app.get('faa-status').innerHTML,/OTHER AIRPORT/);
+  assert.equal(app.pct(),before);
+  await app.change('away','MCO');
+  assert.match(app.get('faa-status').innerHTML,/OTHER AIRPORT/);
+  assert.doesNotMatch(app.get('faa-status').innerHTML,/Arrival delay/);
+  assert.equal(app.fetchedUrls.filter(u=>u.includes('view=faa')).length,1);
+  await app.click('drive');
+  assert.equal(app.get('faa-panel').hidden,true);
+});
+
+test('FAA outage and stale snapshot never imply clear airports',async()=>{
+  const app=await launch('2026-11-24');
+  await app.click('faa-refresh');
+  assert.match(app.get('faa-status').innerHTML,/unavailable/);
+  const stale=await launch('2026-11-24',{faa:{status:'available',checkedAt:'2026-11-24T11:30:00Z',events:[]}});
+  await stale.click('faa-refresh');
+  assert.match(stale.get('faa-status').innerHTML,/out of date/);
+  assert.doesNotMatch(stale.get('faa-status').innerHTML,/No event listed/);
+});
+
+
+test('departure dashboard reflects trip date, route, historical recovery and independent source states',async()=>{
+ const app=await launch('2026-11-24',{faa:{status:'available',checkedAt:'2026-11-24T12:00:00Z',events:[{airport:'ORD',label:'Ground stop',reason:'Snow',averageMinutes:null,minimumMinutes:null,maximumMinutes:null}]}});
+ assert.match(app.get('dashboard-route').textContent,/ORD.*LGA/);
+ assert.match(app.get('dashboard-stage').textContent,/Departure tomorrow/);
+ assert.match(app.get('dashboard-timing').innerHTML,/Arrival deadline/);
+ assert.match(app.get('dashboard-recovery').textContent,/hours late if cancelled/);
+ assert.equal(app.get('dashboard-faa').textContent,'Not checked');
+ const risk=app.pct();
+ await app.click('dashboard-refresh');
+ assert.match(app.get('dashboard-faa').textContent,/FAA notices: ORD/);
+ assert.equal(app.pct(),risk);
+ await app.click('dashboard-copy');
+ assert.match(app.copied.at(-1),/y=2026#departure-dashboard$/);
+ await app.change('away','ORD');
+ assert.equal(app.get('dashboard-route').textContent,'Flight route');
+ assert.equal(app.get('dashboard-recovery').textContent,'No estimate yet');
+ assert.equal(app.get('dashboard-refresh').disabled,true);
+ await app.click('drive');
+ assert.equal(app.get('departure-dashboard')['data-mode'],'drive');
+});
+test('dashboard never calls missing weather data clear and can restore a pinned prior-year plan',async()=>{
+ const outage=await launch('2026-11-24',{nws:()=>null});
+ assert.equal(outage.get('dashboard-weather').textContent,'NWS unavailable');
+ assert.doesNotMatch(outage.get('live-panel').innerHTML,/Nothing notable/);
+ const reopened=await launch('2027-01-02',{search:'?h=th&m=fly&d=there&from=ORD&to=LGA&via=nonstop&lay=60&dep=-1.17&due=-1.23&y=2026'});
+ assert.equal(reopened.get('holiday-stat').textContent,'Thanksgiving 2026');
+ assert.equal(reopened.get('dashboard-weather').textContent,'Past departure date');
 });
