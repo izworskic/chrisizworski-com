@@ -529,6 +529,13 @@ function check(value,message){if(!value)throw Error(message);}
       'fifteen-day route did not render source-reconciled overnight areas');
     check((await guide.locator('#ct-prefer-summary').textContent()).includes('No published day exceeds'),
       'fifteen-day route was wrongly promoted into a five-hour overload');
+    check((await guide.locator('#ct-prefer-summary h3').textContent()).includes('road evidence is incomplete'),
+      'zero sample overloads must not imply complete driving evidence');
+    check((await guide.locator('#ct-prefer-timeline .ct-personal-day[data-state="unverified"] .ct-personal-miles').textContent()).includes('full drive time unverified'),
+      'unverified day must label the estimate next to the mileage');
+    const evidencePreview='circle-traveler-road-evidence-'+width+'.png';
+    await guide.locator('#ct-prefer-summary').screenshot({path:path.join(out,evidencePreview),animations:'disabled'});
+    report.screenshots.push(evidencePreview);
     check((await guide.locator('#ct-prefer-map').getAttribute('href')).includes('itinerary=15'),
       'alternative did not link to the actual 15-day source route');
     check((await guide.locator('#ct-prefer-share').inputValue()).includes('ct_days=15'),
