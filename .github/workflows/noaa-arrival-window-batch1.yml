@@ -1,0 +1,57 @@
+name: One-time arrival-window development cohort batch 1
+on:
+  pull_request:
+    types: [opened]
+    paths:
+      - ".github/workflows/noaa-arrival-window-batch1.yml"
+permissions:
+  contents: read
+jobs:
+  probe:
+    if: github.head_ref == 'research/noaa-arrival-window-batch1-20261124' && github.event.pull_request.head.repo.full_name == github.repository
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        day: ["2024-08-19","2024-09-01","2024-09-04","2024-09-10","2024-09-15","2024-09-20"]
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Verify research tests
+        run: node --test tests/great-lakes-crossing-detection.test.js tests/great-lakes-crossing-references.test.js tests/great-lakes-reference-retrospect.test.js tests/great-lakes-passage-replay.test.js tests/great-lakes-route-progress-challenger.test.js tests/great-lakes-arrival-window-research.test.js tests/great-lakes-arrival-window-study.test.js
+      - name: Install temporary pinned archive reader
+        run: |
+          python -m pip install --disable-pip-version-check --no-deps --only-binary=:all: pyarrow==21.0.0
+      - name: Extract existing-model signed residuals
+        shell: bash
+        env:
+          STUDY_DAY: ${{ matrix.day }}
+        run: |
+          set -euo pipefail
+          umask 077
+          private_dir="$(mktemp -d)"
+          trap 'rm -rf "$private_dir"' EXIT
+          export PRIVATE_INPUT="$private_dir/observations.json"
+          export NOAA_REPORT="$private_dir/coverage.json"
+          python scripts/noaa-public-only-reference-probe-20261124.py --self-test
+          python scripts/noaa-public-only-reference-probe-20261124.py "$STUDY_DAY"
+          node scripts/retrospect-great-lakes-reference.cjs "$PRIVATE_INPUT" "${RUNNER_TEMP}/proxy-aggregate.json" --arrival-residuals
+          cp "$NOAA_REPORT" "${RUNNER_TEMP}/coverage-aggregate.json"
+          cat "${RUNNER_TEMP}/proxy-aggregate.json"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: arrival-window-batch1-${{ matrix.day }}
+          path: |
+            ${{ runner.temp }}/proxy-aggregate.json
+            ${{ runner.temp }}/coverage-aggregate.json
+          if-no-files-found: error
+          retention-days: 7
