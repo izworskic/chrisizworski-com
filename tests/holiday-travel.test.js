@@ -28,6 +28,12 @@ async function launch(today = '2026-10-19', { failFetch = false, nws = nwsFixtur
   };
   const nodes = new Map();
   const document = {
+    querySelectorAll(selector) {
+      const hol = selector.match(/data-holiday="(th|xm)"/)?.[1];
+      return [...page.matchAll(/data-holiday="(th|xm)" data-offset="(-?\d+)" data-avg="(\d+)"/g)]
+        .filter(row => row[1] === hol)
+        .map(row => ({ getAttribute(name) { return {'data-offset': row[2], 'data-avg': row[3]}[name]; } }));
+    },
     getElementById(id) {
       if (!nodes.has(id)) {
         nodes.set(id, {
@@ -287,4 +293,46 @@ test('the method, limits and sources are disclosed and nothing implies a daily f
   assert.match(page, /BTS Reporting Carrier On-Time Performance/);
   assert.match(page, /historical odds, not a promise/);
   assert.doesNotMatch(page, /ontimereport\.com|23\.11|34\.41|19\.40|26\.45/);
+});
+
+
+test('calendar reads published comparison, selects a departure without moving the deadline, and tracks reversals', async () => {
+  const app = await launch();
+  const grid = app.get('calendar-days');
+  assert.match(grid.innerHTML, /Thu, Nov 26/);
+  assert.match(grid.innerHTML, /3%/);
+  assert.match(grid.innerHTML, /13%/);
+  const due = [app.get('due-day').value, app.get('due-time').value];
+  const original = app.pct();
+  async function pick(offset) {
+    grid.handlers.click({target:{closest: () => ({getAttribute: () => String(offset)})}});
+    await app.settle();
+  }
+  await pick(-4);
+  assert.equal(app.get('dep-day').value, '-4');
+  assert.deepEqual([app.get('due-day').value, app.get('due-time').value], due);
+  assert.notEqual(app.pct(), original);
+  assert.match(grid.innerHTML, /data-calendar-offset="-4"[^>]*aria-pressed="true"/);
+  assert.match(app.get('calendar-selection').textContent, /Sun, Nov 22/);
+  await pick(-1);
+  assert.equal(app.pct(), original);
+  await app.click('christmas');
+  assert.match(grid.innerHTML, /Sat, Dec 26/);
+  assert.match(grid.innerHTML, /17%/);
+  await app.change('travel-year','2027');
+  assert.match(grid.innerHTML, /Sun, Dec 26/);
+  await app.click('drive');
+  assert.equal(app.get('flight-calendar').hidden,true);
+  await app.click('fly');
+  assert.equal(app.get('flight-calendar').hidden,false);
+});
+
+test('same-airport selection clears the previous probability and weather verdict', async () => {
+  const app = await launch('2026-11-20');
+  assert.ok(Number.isFinite(app.pct()));
+  await app.change('away','ORD');
+  assert.equal(app.get('best-label').textContent,'Choose two different airports');
+  assert.ok(Number.isNaN(app.pct()));
+  assert.equal(app.get('live-panel').innerHTML,'');
+  assert.equal(app.get('third-stat').textContent,'Unavailable');
 });
