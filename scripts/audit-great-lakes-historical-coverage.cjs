@@ -42,11 +42,15 @@ function audit(raw,site,start,end,kind='unverified-local-file'){
 async function acquire(site,start,end){
  const q=scope(site,start,end);
  const response=await fetch(q.url,{redirect:'error',signal:AbortSignal.timeout(20000),headers:{accept:'text/csv','user-agent':'GreatLakesPassageResearch/1.0 (+https://chrisizworski.com/)'}});
- if(!response.ok)throw Error('NOAA HTTP '+response.status);
  const declared=Number(response.headers.get('content-length'));expect(!declared||declared<=MAX,'declared size exceeds cap');expect(response.body,'missing response');
  const reader=response.body.getReader(),chunks=[];let bytes=0;
  try{while(true){const {done,value}=await reader.read();if(done)break;bytes+=value.byteLength;expect(bytes<=MAX,'stream exceeds cap');chunks.push(Buffer.from(value));}}finally{await reader.cancel().catch(()=>{});}
- return Buffer.concat(chunks).toString('utf8');
+ const raw=Buffer.concat(chunks).toString('utf8');
+ if(!response.ok){
+  const noMatch=response.status===404&&/no matching results|no data (?:that )?matches|nRows\s*=\s*0/i.test(raw);
+  throw Error('NOAA HTTP '+response.status+(noMatch?' (source reports no matching rows)':' (no confirmed empty-result explanation)'));
+ }
+ return raw;
 }
 module.exports={scope,audit,acquire};
 if(require.main===module){

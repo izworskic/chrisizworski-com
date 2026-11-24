@@ -1,7 +1,7 @@
 name: One-time NOAA historical AIS coverage probe
 on:
   pull_request:
-    types: [opened]
+    types: [synchronize]
     paths:
       - ".github/workflows/ais-coverage-probe-20261124.yml"
 permissions:
@@ -28,7 +28,14 @@ jobs:
           rc=0
           for site in soo duluth; do
             output="${RUNNER_TEMP}/ais-coverage/${site}.json"
-            if node scripts/audit-great-lakes-historical-coverage.cjs --research-fetch "$site" 2024-09-01T12:00:00Z 2024-09-01T12:10:00Z ACKNOWLEDGE_RESEARCH_ONLY "$output"; then
+            if [ "$site" = soo ]; then
+              start=2024-09-01T11:43:00Z
+              end=2024-09-01T11:53:00Z
+            else
+              start=2024-09-01T05:59:00Z
+              end=2024-09-01T06:09:00Z
+            fi
+            if node scripts/audit-great-lakes-historical-coverage.cjs --research-fetch "$site" "$start" "$end" ACKNOWLEDGE_RESEARCH_ONLY "$output"; then
               cat "$output"
             else
               echo "NOAA coverage unavailable: $site"
