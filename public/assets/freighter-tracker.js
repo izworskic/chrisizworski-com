@@ -128,6 +128,19 @@
   function recent(v,now){ var seen=Date.parse(v.seen); return Number.isFinite(seen) && now-seen>=-60000 && now-seen<=1800000; }
   function corridorRadius(key){return key==="saginaw"?60:35;}
   function inCorridor(v,key){var view=views[key];return distanceMiles(view.lat,view.lng,v.lat,v.lon)<=corridorRadius(key);}
+  // Optional Freighter Central consumer. The dedicated tracker has no saved-waterways element.
+  // Reuse the same fresh AIS and corridor-radius rules, without another source request.
+  function publishHubActivity(now) {
+    var desk=document.getElementById("my-waterways");
+    if(!desk)return;
+    var counts=null;
+    if(reports&&!lastFailed){
+      var fresh=reports.vessels.filter(function(v){return recent(v,now);});
+      counts={};
+      corridorKeys.forEach(function(key){counts[key]=fresh.filter(function(v){return inCorridor(v,key);}).length;});
+    }
+    desk.dispatchEvent(new CustomEvent("freighter-corridor-report",{detail:{counts:counts,checkedAt:reports?reports.checkedAt:null,failed:lastFailed}}));
+  }
   function updateActivity(now){
     if(!activityGrid)return;
     var fresh=reports.vessels.filter(function(v){return recent(v,now);});
@@ -229,6 +242,7 @@
     var view=views[activeView], now=Date.now();
     var current=reports.vessels.filter(function(v){return recent(v,now) && (activeView === "overview" || inCorridor(v,activeView));});
     updateActivity(now);
+    publishHubActivity(now);
     var query=vesselSearch.value.trim();
     var vessels=current.filter(function(v){return vesselMatchesSearch(v,query);});
     if(query){
@@ -267,7 +281,7 @@
       var r=await fetch("/api/freighter-ais",{signal:AbortSignal.timeout(12000)}), data=await r.json();
       if(!r.ok||!data.ok||!Array.isArray(data.vessels))throw new Error("AIS unavailable");
       reports=data;lastFailed=false;renderVessels();
-    }catch(_){lastFailed=true;if(reports)renderVessels();else{if(activityChecked)activityChecked.textContent="AIS unavailable; no corridor counts can be shown.";setStatus("Vessel reports unavailable. Try refresh or the passage links below.","slow");vesselList.replaceChildren(node("li","The feed did not return usable data. This is not a zero-traffic report."));vesselSearchStatus.textContent="Search unavailable: no current AIS reports loaded. Try refresh or the external passage sources."; }}
+    }catch(_){lastFailed=true;if(reports)renderVessels();else{publishHubActivity(Date.now());if(activityChecked)activityChecked.textContent="AIS unavailable; no corridor counts can be shown.";setStatus("Vessel reports unavailable. Try refresh or the passage links below.","slow");vesselList.replaceChildren(node("li","The feed did not return usable data. This is not a zero-traffic report."));vesselSearchStatus.textContent="Search unavailable: no current AIS reports loaded. Try refresh or the external passage sources."; }}
     finally{busy=false;refreshButton.disabled=false;}
   }
 
