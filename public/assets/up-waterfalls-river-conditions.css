@@ -16,3 +16,6 @@
 .upfall-seasonal-track{position:relative;margin:12px 6px;height:12px;border-radius:6px;background:#d1ded4}
 .upfall-seasonal-middle{position:absolute;height:100%;background:#729d89;border-radius:4px}
 .upfall-seasonal-marker{position:absolute;top:-4px;width:4px;height:20px;border-radius:2px;background:#163b36;transform:translateX(-50%)}
+
+.upfall-weather-context{margin-top:16px;padding-top:12px;border-top:1px solid #b7c9bc}
+.upfall-weather-context h4{margin:0 0 8px;font-size:1.1rem}

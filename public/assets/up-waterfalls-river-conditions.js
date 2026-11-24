@@ -2,9 +2,9 @@
 (function(root){
 'use strict';
 const stations=Object.freeze([
- {id:'USGS-04045500',name:'Tahquamenon River',place:'Near Paradise'},
- {id:'USGS-04031000',name:'Black River',place:'Near Bessemer'},
- {id:'USGS-04032150',name:'Presque Isle River',place:'Near Connorville'}
+ {id:'USGS-04045500',name:'Tahquamenon River',place:'Near Paradise',areaSqMi:790},
+ {id:'USGS-04031000',name:'Black River',place:'Near Bessemer',areaSqMi:200},
+ {id:'USGS-04032150',name:'Presque Isle River',place:'Near Connorville',areaSqMi:358,shortRecord:true}
 ]);
 const endpoint='https://api.waterdata.usgs.gov/ogcapi/v1/collections/daily/items';
 const DAY=86400000;
@@ -52,6 +52,13 @@ function classify(payload,id,today){
  return {schemaVersion:1,status:'AVAILABLE',day:last.day,age,value:last.value,approval:last.approval,qualifier:last.qualifier,series:last.series,
   prior:comparable?{day:prior.day,value:prior.value,percent:Math.round(100*(last.value-prior.value)/prior.value)}:null};
 }
+// Convert measured outlet volume to equivalent depth spread over published drainage area.
+ // This is not observed rainfall, snowmelt, effective precipitation or a forecast.
+function dischargeDepth(cfs,areaSqMi){
+ if(typeof cfs!=='number'||typeof areaSqMi!=='number'||!Number.isFinite(cfs)||!Number.isFinite(areaSqMi)||cfs<0||areaSqMi<=0)return null;
+ const inches=cfs*86400*12/(areaSqMi*5280*5280);
+ return Number.isFinite(inches)?inches:null;
+}
 function query(id,today){
  const start=new Date(dateMs(today)-14*DAY).toISOString().slice(0,10);
  const end=new Date(dateMs(today)-DAY).toISOString().slice(0,10);
@@ -98,18 +105,21 @@ function seasonal(payload,id,reading){
  const label=v<p10?'Unusually low for the date':v<p25?'Below the typical range':v>p90?'Unusually high for the date':v>p75?'Above the typical range':'Within the typical range';
  return {status:'AVAILABLE',label,p10,p25,p50,p75,p90,count,monthDay:md};
 }
-if(typeof module!=='undefined'&&module.exports){module.exports={stations,classify,query,localDay,seasonal,seasonalQuery,eligible};return;}
+if(typeof module!=='undefined'&&module.exports){module.exports={stations,classify,query,localDay,seasonal,seasonalQuery,eligible,dischargeDepth};return;}
 const doc=root.document,button=doc?.getElementById('river-conditions-load'),results=doc?.getElementById('river-conditions-results'),status=doc?.getElementById('river-conditions-status');
 if(!button||!results||!status)return;
 const fmt=new Intl.NumberFormat('en-US',{maximumFractionDigits:1});
 function add(parent,tag,text){const e=doc.createElement(tag);e.textContent=text;parent.appendChild(e);return e;}
 function show(station,reading){
  const item=doc.createElement('article');item.className='upfall-river-reading';
- add(item,'h4',station.name);add(item,'p',station.place);
+ add(item,'h4',station.name);add(item,'p',station.place);add(item,'p',fmt.format(station.areaSqMi)+' sq mi drain toward this gauge (USGS drainage area).');
+ if(station.shortRecord)add(item,'p','Connorville daily record began in 2023; the older Tula gauge is a different location and is not merged into this record.');
  if(reading.status==='AVAILABLE'){
   const n=add(item,'p',fmt.format(reading.value)+' cfs');n.className='upfall-river-value';
   add(item,'p','Daily mean · '+reading.day+' · '+reading.approval);
   if(reading.qualifier)add(item,'p','USGS qualifier: '+reading.qualifier);
+  const depth=clearQualifier(reading)?dischargeDepth(reading.value,station.areaSqMi):null;
+  if(depth!==null)add(item,'p','Daily outlet volume equals '+(depth>0&&depth<0.001?'<0.001':depth.toFixed(3))+' in spread over the drainage area. Not rainfall or measured snowmelt.');
   if(reading.prior){const p=reading.prior.percent;add(item,'p',(p>0?'+':'')+fmt.format(p)+'% compared with '+reading.prior.day+' at this station.');}
   else add(item,'p','Seven-day comparison unavailable.');
   const season=reading.seasonal;

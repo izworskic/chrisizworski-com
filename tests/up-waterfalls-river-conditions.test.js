@@ -5,7 +5,7 @@ import vm from 'node:vm';
 const code=fs.readFileSync('public/assets/up-waterfalls-river-conditions.js','utf8');
 const sandbox={module:{exports:{}},URLSearchParams,Intl,Date};
 vm.runInNewContext(code,sandbox);
-const {classify,query,localDay,seasonal,seasonalQuery,eligible}=sandbox.module.exports;
+const {classify,query,localDay,seasonal,seasonalQuery,eligible,dischargeDepth}=sandbox.module.exports;
 const id='USGS-04045500',today='2026-11-24';
 const row=(time,value,extra={})=>({properties:{monitoring_location_id:id,parameter_code:'00060',statistic_id:'00003',unit_of_measure:'ft^3/s',time,value,approval_status:'Provisional',qualifier:[],...extra}});
 const read=(...features)=>classify({features},id,today);
@@ -59,4 +59,10 @@ test('daily duplicates from different series fail closed; seven-day trend cannot
  assert.equal(read(row('2026-11-23',50,{time_series_id:'A'}),row('2026-11-23',50,{time_series_id:'B'})).status,'UNAVAILABLE');
  const r=read(row('2026-11-23',50,{time_series_id:'A'}),row('2026-11-16',20,{time_series_id:'B'}));
  assert.equal(r.series,'A');assert.equal(r.prior,null);
+});
+
+test('drainage-area volume conversion, invalid and zero cases',()=>{
+ assert.ok(Math.abs(dischargeDepth(1,1)-86400*12/(5280*5280))<1e-12);
+ assert.equal(dischargeDepth(0,790),0);
+ for(const [q,a] of [[null,790],[-1,790],[100,0],[100,null],[Infinity,790],['100',790]])assert.equal(dischargeDepth(q,a),null);
 });
