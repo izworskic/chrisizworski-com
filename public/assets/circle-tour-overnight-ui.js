@@ -20,25 +20,31 @@ const sourceStops=published.specialists||{};
 const route=trace.route;
 // One local daily time choice, inside the existing overnight planner. It changes
 // experience advice, not the road trace, published route or booking assumptions.
+const hasExperience=Array.isArray(engine.DAY_WINDOWS)&&typeof engine.experiencePlan==='function';
 const dayWindow=element('fieldset',undefined,'ct-personal-choices');
 dayWindow.id='ct-opt-day-window';
 dayWindow.appendChild(element('legend','How much time can you spend out each day?'));
-for(const hours of engine.DAY_WINDOWS){
+for(const hours of hasExperience?engine.DAY_WINDOWS:[]){
  const label=element('label'),input=d.createElement('input');
  input.type='radio';input.name='ct-opt-window';input.value=String(hours);input.checked=hours===8.5;
  label.appendChild(input);label.appendChild(d.createTextNode(' '+hours+' hours'));dayWindow.appendChild(label);
 }
 const windowHelp=element('p','Includes driving, border reserves, meals, breaks, visits and getting to your overnight stop. This local choice changes the daily advice, not the overnight route or shared trip link.','ct-opt-meta');
 windowHelp.id='ct-opt-window-help';dayWindow.setAttribute('aria-describedby',windowHelp.id);
-opt.insertBefore(dayWindow,summary);opt.insertBefore(windowHelp,summary);
-function windowHours(){return Number(dayWindow.querySelector('input:checked')?.value);}
+if(hasExperience){opt.insertBefore(dayWindow,summary);opt.insertBefore(windowHelp,summary);}
+function windowHours(){return Number(dayWindow.querySelector('input:checked')?.value??8.5);}
 function minutesLabel(minutes){
  const hours=Math.floor(minutes/60),mins=minutes%60;
  return hours?(hours+' h'+(mins?' '+mins+' min':'')):mins+' min';
 }
 function appendExperience(box,day,selected){
- const plan=engine.experiencePlan(day,selected,sourceStops,windowHours());
- if(!plan)return;
+ const plan=hasExperience?engine.experiencePlan(day,selected,sourceStops,windowHours()):null;
+ if(!plan){
+  box.appendChild(element('p','Daily time comparison is unavailable. Check individual guides before assigning visit time.','ct-opt-caution'));
+  const fallback=interestsFor(day,selected);
+  if(fallback.length){const ul=element('ul');for(const item of fallback){const li=element('li');li.appendChild(a(item.label,item.toolUrl));ul.appendChild(li);}box.appendChild(ul);}
+  return;
+ }
  const block=element('section',undefined,'ct-opt-experience');
  block.dataset.experienceState=plan.state;
  const title={ROAD_CHECK:'Check the road and border first',DRIVE_LIMIT:'Keep this as a transfer day',
@@ -144,7 +150,7 @@ function render({measure=true}={}){
    result.incompleteDays.join(', ')+'. The sample drive limit is not an access guarantee.','ctp-warning'));
  summary.appendChild(element('p',
   'Each night shown is an area to investigate, not confirmed lodging. Day mileage follows the archived simplified OpenStreetMap road line, not a current routing service.'));
- summary.appendChild(element('p','Daily advice uses your '+windowHours()+'-hour sample day. Actual trip duration, daylight and access remain unverified.'));
+ if(hasExperience)summary.appendChild(element('p','Daily advice uses your '+windowHours()+'-hour sample day. Actual trip duration, daylight and access remain unverified.'));
  list.replaceChildren();
  const selected=result.settings;
  for(const day of result.days){
