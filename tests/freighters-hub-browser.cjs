@@ -77,6 +77,7 @@ for(const width of [360,390,768,1280,1440]){
    await page.locator('#ship-story').getByText(/longest ship on the lakes/).waitFor();
    assert.match(await page.locator('#ship-story').innerText(),/68,000 gross tons/);assert.equal(await page.locator('#ship-story img').count(),0);
    await page.locator('#ship-inspector-close').click();await page.unroute('**/*');
+   await page.locator('#mapRefresh').click();await page.waitForFunction(()=>document.getElementById('hub-fleet-status').textContent.includes('Showing 0 of 0'));
    await page.locator('#freighterClearSearch').click();await page.locator('[data-freighter-view=saginaw]').click();
    await page.locator('#freighterMap .tracker-ship-marker').first().focus();await page.keyboard.press('Enter');
    await page.locator('.hub-meet-ship').click();await page.locator('#ship-story').getByText(/reviewed history is not available/).waitFor();
