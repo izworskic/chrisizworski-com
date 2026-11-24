@@ -1,7 +1,7 @@
 /* Local journal core; visitor reports are not independent field validation. */
 (function(root,factory){if(typeof module==='object'&&module.exports)module.exports=factory(require('./garden-harvest.js'),require('./garden-microclimate.js'));else root.GardenFieldJournal=factory(root.GardenHarvest,root.GardenMicroclimate);})(typeof globalThis!=='undefined'?globalThis:this,function factory(H,M){
 'use strict';
-const schema='garden-field-journal-v1',DAY=86400000,sites=['bay-city','detroit','grand-rapids','kalamazoo','traverse-city','marquette','houghton'],kinds=['emergence','flowering','fruit-set','first-green-harvest','first-ripe-harvest','first-harvest','harvest','note','daily-air','paired-night','rain-gauge','irrigation','soil-feel','leaf-check'];
+const schema='garden-field-journal-v1',DAY=86400000,sites=['bay-city','detroit','grand-rapids','kalamazoo','traverse-city','marquette','houghton'],kinds=['emergence','flowering','fruit-set','first-green-harvest','first-ripe-harvest','first-harvest','harvest','note','daily-air','paired-night','rain-gauge','irrigation','soil-feel','leaf-check','harvest-weight','plant-loss'];
 const dateOK=s=>typeof s==='string'&&/^\d{4}-\d\d-\d\d$/.test(s)&&Number.isFinite(Date.parse(s+'T00:00:00Z'))&&new Date(s+'T00:00:00Z').toISOString().slice(0,10)===s&&s>='1900-01-01'&&s<='2100-12-31';
 const str=(s,n)=>typeof s==='string'&&s.trim().length>0&&s.length<=n;
 const idOK=s=>typeof s==='string'&&/^[a-zA-Z0-9_-]{1,80}$/.test(s);
@@ -17,6 +17,12 @@ function validate(data,today){
   const model=p.modelId===null?null:Object.hasOwn(H.models,p.modelId)?H.models[p.modelId]:null;
   if(p.modelId!==null&&(!model||p.biofix!==model.biofix)||p.modelId===null&&p.biofix!==null)throw Error('Model or starting stage mismatch');
   const clean={id:p.id,crop:p.crop.trim(),bed:p.bed.trim(),siteId:p.siteId,date:p.date,packetDays:p.packetDays,modelId:p.modelId,biofix:p.biofix};
+  if(p.productivity!==undefined&&p.productivity!==null){
+   const q=p.productivity,groups=['tomatoes','peppers','cucumbers','squash','beans','brassicas','potatoes','corn','leafy','roots','onions','herbs','melons','other'];
+   const dimension=v=>typeof v==='number'&&Number.isFinite(v)&&v>=.1&&v<=100;
+   if(!q||!groups.includes(q.group)||!((q.lengthFt===null&&q.widthFt===null)||(dimension(q.lengthFt)&&dimension(q.widthFt)))||q.plantedCount!==null&&(!Number.isInteger(q.plantedCount)||q.plantedCount<1||q.plantedCount>10000)||q.closedOn!==null&&(!dateOK(q.closedOn)||q.closedOn<p.date||q.closedOn>today)||typeof q.complete!=='boolean'||q.complete!==(q.closedOn!==null))throw Error('Invalid productivity profile or completion date');
+   clean.productivity={group:q.group,lengthFt:q.lengthFt,widthFt:q.widthFt,plantedCount:q.plantedCount,closedOn:q.closedOn,complete:q.complete};
+  }
   plantings.push(clean);ids.add(p.id);byId.set(p.id,clean);
  }
  for(const e of data.entries){
@@ -43,11 +49,22 @@ function validate(data,today){
    if(!['none','rings','small-spots','water-soaked','white-powder','angular-yellow','other'].includes(e.sign)||!['wet','dry','unknown'].includes(e.foliage)||!Number.isInteger(e.leavesChecked)||e.leavesChecked<1||e.leavesChecked>200||!Number.isInteger(e.leavesAffected)||e.leavesAffected<0||e.leavesAffected>e.leavesChecked||(e.sign==='none')!==(e.leavesAffected===0))throw Error('Enter a consistent leaf check and actual leaf counts');
    Object.assign(clean,{sign:e.sign,foliage:e.foliage,leavesChecked:e.leavesChecked,leavesAffected:e.leavesAffected});
   }
-  if(['daily-air','paired-night','rain-gauge','irrigation','soil-feel','leaf-check'].includes(e.kind)){
+  if(e.kind==='harvest-weight'){
+   if(!Number.isInteger(e.usableG)||!Number.isInteger(e.discardedG)||e.usableG<0||e.discardedG<0||e.usableG+e.discardedG<=0||e.usableG+e.discardedG>1000000)throw Error('Record a positive weighed harvest or discarded produce amount, in grams');
+   Object.assign(clean,{usableG:e.usableG,discardedG:e.discardedG});
+  }
+  if(e.kind==='plant-loss'){
+   if(!Number.isInteger(e.lostCount)||e.lostCount<1||e.lostCount>10000)throw Error('Record an actual count of lost plants');
+   clean.lostCount=e.lostCount;
+  }
+  if(['harvest-weight','plant-loss','first-green-harvest','first-ripe-harvest','first-harvest','harvest'].includes(e.kind)&&p.productivity?.complete&&e.date>p.productivity.closedOn)throw Error('Reopen this planting before recording a later harvest or loss');
+  if(['daily-air','paired-night','rain-gauge','irrigation','soil-feel','leaf-check','harvest-weight','plant-loss'].includes(e.kind)){
    const key=[e.plantingId,e.date,e.kind].join('|');if(daily.has(key))throw Error('Only one reading of this kind per planting and date; remove the old reading first');daily.add(key);
   }
   ids.add(e.id);entries.push(clean);
  }
+ const losses=new Map();for(const e of entries)if(e.kind==='plant-loss')losses.set(e.plantingId,(losses.get(e.plantingId)||0)+e.lostCount);
+ for(const p of plantings)if(p.productivity?.plantedCount!=null&&(losses.get(p.id)||0)>p.productivity.plantedCount)throw Error('Recorded plant losses exceed the original planted count');
  return {schema,plantings,entries};
 }
 function summarize(data,id,today,history=null){
