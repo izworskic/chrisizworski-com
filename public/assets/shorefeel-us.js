@@ -32,9 +32,9 @@
     Object.assign(li.dataset,{
       slug,lake:r.lake||'Great Lakes',lat:String(r.lat),lon:String(r.lon),
       state:r.state,city:r.county+' County',name:r.name,epaId:r.id,
-      story:'This shoreline appears in the EPA 2025 public-access Great Lakes BEACH Act inventory for '+
-        r.county+' County, '+r.state+'. Its recorded shoreline location is approximate. Look at the nearby official air forecast and wind, and check the responsible beach authority for current access, water testing and swimming restrictions.',
-      accessAlert:'',coordinateNote:'EPA reported shoreline center, not a verified parking entrance, beach thermometer or swimming boundary',
+      story:'This beach is in '+
+        r.county+' County, '+r.state+'. Its mapped location is approximate. Check the nearby air forecast and wind before visiting, and follow local guidance on access and swimming.',
+      accessAlert:'',coordinateNote:'Approximate beach location, not a verified parking entrance, beach thermometer or swimming boundary',
       safetyUrl:authority[1],safetyName:authority[0],parkUrl:EPA_MAP
     });
     const btn=document.createElement('button');
@@ -49,7 +49,7 @@
     detail.textContent='ShoreFeel';detail.setAttribute('aria-label','View ShoreFeel for '+r.name);
     const official=document.createElement('a');official.href=EPA_MAP;
     official.target='_blank';official.rel='noopener';
-    official.textContent='EPA map';official.setAttribute('aria-label','Open EPA BEACON map for '+r.name+', ID '+r.id);
+    official.textContent='Beach map';official.setAttribute('aria-label','Open EPA BEACON map for '+r.name+', ID '+r.id);
     links.append(detail,official);li.append(btn,links);listRoot.append(li);
     sourceAdded++;
   }
@@ -58,10 +58,10 @@
   const filters=[...document.querySelectorAll('[data-lake-filter]')];
   const bySlug=new Map(list.map(li=>[li.dataset.slug,li]));
   const lakeInfo={
-    All:'Browse the source-vetted EPA 2025 U.S. Great Lakes beach inventory across eight states. Search a named beach, county or EPA beach ID, or choose a lake. The 16 original guides remain featured.',
+    All:'Explore Great Lakes beaches across eight states. Search by beach name, town or county, or choose a lake. The 16 detailed guides remain featured.',
     Superior:'From Duluth’s Park Point to the Apostle Islands, the open Lake Superior shore can feel very different from the forest behind it. Watch which way the breeze crosses the water before choosing your beach.',
     Michigan:'Lake Michigan connects quiet dunes with Chicago’s city beaches. Step out of shelter toward the open sand and notice whether the wind feels different from the forecast back in town.',
-    Huron:'Lake Huron wraps Michigan’s eastern shore and Saginaw Bay. Select an EPA-listed shoreline here or explore Michigan’s 50 detailed Beach Report guides.',
+    Huron:'Lake Huron wraps Michigan’s eastern shore and Saginaw Bay. Choose a beach here or explore Michigan’s 50 detailed Beach Report guides.',
     Erie:'On Lake Erie, the marsh edges, sandy peninsulas and city beaches each meet the breeze differently. Watch the water, then check the local health authority for current algae and bacteria notices.',
     Ontario:'Dunes, bluffs and long beaches reveal different faces of Lake Ontario. Compare the wind on an exposed shore with sheltered paths, and consult the park’s own beach-health guidance.'
   };
@@ -106,7 +106,7 @@
     alert.hidden=!d.accessAlert;
     alert.textContent=d.accessAlert||'';
     link('report-safety',d.safetyUrl,'Check '+d.safetyName);
-    link('report-park',d.parkUrl,d.epaId?'Open EPA beach map (search '+d.epaId+')':'Official park page');
+    link('report-park',d.parkUrl,d.epaId?'Open official beach map (search '+d.epaId+')':'Official park page');
     link('report-maps','https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(d.name+', '+d.city+', '+d.state),'Find on Google Maps');
     link('report-detail',d.epaId?'/great-lakes-beaches/around-the-lakes/?beach='+encodeURIComponent(d.slug):'/great-lakes-beaches/around-the-lakes/'+d.slug+'/',d.epaId?'Share this ShoreFeel report':'Read the complete field note');
     if(request)request.abort();
@@ -191,7 +191,7 @@
     }
     const noMatch=$('shore-no-match');
     if(noMatch)noMatch.hidden=matching.length>0;
-    put('result-count',matching.length+' matching · '+list.length+' U.S. listings');
+    put('result-count',matching.length+' matching · '+list.length+' beach listings');
     if(mapLive){
       const coordinates=matching.map(li=>[Number(li.dataset.lat),Number(li.dataset.lon)])
         .filter(a=>a.every(Number.isFinite));
@@ -251,7 +251,7 @@
         const icon=window.L.divIcon({className:'shore-cluster-icon',
           html:'<span class="shore-cluster" aria-hidden="true">'+count+'</span>',
           iconSize:[38,38],iconAnchor:[19,19]});
-        const marker=window.L.marker([lat,lon],{icon,title:count+' source-listed beaches. Zoom in to choose.',keyboard:true});
+        const marker=window.L.marker([lat,lon],{icon,title:count+' beach listings. Zoom in to choose.',keyboard:true});
         marker.on('click',()=>map.setView([lat,lon],Math.min(zoom+2,11),{animate:false}));
         putMarker(marker);
       }
@@ -283,7 +283,7 @@
         const strong=document.createElement('strong');strong.textContent=d.name;
         const place=document.createElement('div');place.textContent=d.city+', '+d.state;
         const source=document.createElement('div');
-        source.textContent=d.epaId?'EPA 2025 ID '+d.epaId+' · approximate shoreline':'Curated ShoreFeel guide';
+        source.textContent=d.epaId?'Approximate beach location':'Curated ShoreFeel guide';
         popup.append(strong,place,source);
         const marker=window.L.marker([lat,lon],{icon,title:d.name,keyboard:true}).bindPopup(popup);
         marker.on('click',()=>{

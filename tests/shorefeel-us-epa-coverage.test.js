@@ -102,7 +102,10 @@ test('one existing U.S. canonical explorer loads every EPA record without 981 th
  const html=fs.readFileSync(path.join(root,'public/great-lakes-beaches/around-the-lakes/index.html'),'utf8');
  const js=fs.readFileSync(path.join(root,'public/assets/shorefeel-us.js'),'utf8');
  const source=fs.readFileSync(path.join(root,'public/assets/shorefeel-us-epa-2025.js'),'utf8');
- assert.match(html,/981 EPA-listed Great Lakes shoreline/);
+ assert.match(html,/Explore 981 Great Lakes beaches/);
+ assert.match(html,/All U.S. <span>981 beaches<\/span>/);
+ assert.doesNotMatch(html,/EPA sites/);
+ assert.match(js,/Approximate beach location/);
  assert.ok(html.indexOf('shorefeel-us-epa-2025.js')<html.indexOf('shorefeel-us.js'));
  assert.match(html,/id="shore-show-more"/);
  assert.match(js,/window\.ShoreFeelEPACatalog/);

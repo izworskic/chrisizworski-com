@@ -55,7 +55,7 @@ async function lookup(beach,now=new Date()){
     if(beach.epaId&&answer.status==='forecast-based'){
       answer.reference={...selected.reference};
       answer.epaRecord={beachId:beach.epaId,inventoryYear:2025};
-      answer.scope+=' The NWS land forecast was checked at a point within about 2 km of the EPA shoreline reference; this is not measured air on the sand.';
+      answer.scope+=' The NWS land forecast was checked at a point within about 2 km of the mapped beach location; this is not measured air on the sand.';
     }
     return answer;
   }catch{return unavailable(beach,'The National Weather Service forecast could not be retrieved.');}
