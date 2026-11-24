@@ -183,6 +183,7 @@ function paintSeason(){
  yieldLine(area,'Weighed discarded produce',weight(r.discardedG));
  area.appendChild(node('p',r.plantingsWithWeights+' of '+r.plantingCount+' recorded planting cohorts have weighed harvests in this year. '+r.openPlantings+' associated plantings are not marked finished. This total is recorded weight, not total production if records are incomplete.','fj-small'));
  for(const g of r.groups)yieldLine(area,g.group==='unclassified'?'Unclassified crop':g.group.replace(/-/g,' '),weight(g.usableG)+' usable');
+ if(r.months.length){area.appendChild(node('h3','When the harvest came in'));const list=node('ol',undefined,'fj-yield-list'),max=Math.max(1,...r.months.map(m=>m.usableG));for(const m of r.months){const li=node('li'),head=node('div',undefined,'gs-row-head');head.append(node('strong',new Intl.DateTimeFormat('en-US',{month:'long',timeZone:'UTC'}).format(new Date(m.month+'-01T12:00:00Z'))),node('span',weight(m.usableG)));li.appendChild(head);const track=node('div',undefined,'gs-track'),bar=node('span',undefined,'gs-bar');track.setAttribute('aria-hidden','true');bar.style.width=100*m.usableG/max+'%';track.appendChild(bar);li.appendChild(track);list.appendChild(li);}area.appendChild(list);area.appendChild(node('p','Only months with weighed entries are shown. Unrecorded months are unknown.','fj-small'));}
  area.appendChild(node('p','Totals use the actual harvest date, even if a planting began in a previous year. Shared and reused bed areas are not added.','fj-small'));
 }
 function paintProductivity(){
@@ -196,6 +197,8 @@ function paintProductivity(){
  yieldLine(area,'Plants reported lost',String(s.lossCount)+(s.plantedCount===null?' (original count unknown)':' of '+s.plantedCount+' planted'));
  if(s.discardFraction!==null)yieldLine(area,'Share of weighed produce discarded',number(s.discardFraction*100)+'%');
  if(s.firstHarvestDays!==null)yieldLine(area,'Days to earliest recorded harvest',String(s.firstHarvestDays));
+ if(s.occupiedDays!==null)yieldLine(area,'Days occupying this planting area',String(s.occupiedDays));
+ const evidence=s.context;area.appendChild(node('p','Growing-condition notes: '+evidence.temperatureDays+' full-day air readings; '+evidence.rainDays+' rain-gauge days ('+number(evidence.rainIn)+' in recorded); '+evidence.irrigationDays+' irrigation dates ('+number(evidence.irrigationIn)+' in recorded); '+evidence.leafChecks+' leaf checks. These are recorded observations, not full-season weather or proof of causes.','fj-small'));
  area.appendChild(node('p',s.recordedHarvestDays+' weighed harvest dates. '+(s.complete?'Finished and attested complete by you.':'Open planting: recorded totals may increase.')+' Missing weights are not inferred. Loss counts are recorded losses, not a survival survey.','fj-small'));
  if(s.unweighedDates.length)area.appendChild(node('p',s.unweighedDates.length+' harvest milestone date(s) lack a corresponding weighed entry. Resolve these before comparing finished yield.','fj-small'));
  if(!s.eligible)compare.appendChild(node('p','Save the crop group, allocated area and completed harvest record before comparing yield. Other crops and incomplete records are excluded.'));
