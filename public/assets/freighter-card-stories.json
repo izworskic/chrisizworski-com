@@ -4,8 +4,13 @@
   "identityMaxAgeDays": 180,
   "stories": [
     {
-      "mmsi": "366904950", "aisName": "LEE A TREGURTHA", "imo": "5385625",
-      "identitySources": ["https://www.vesselfinder.com/vessels/details/5385625", "https://www.myshiptracking.com/vessels/lee-a-tregurtha-mmsi-366904950-imo-5385625"],
+      "mmsi": "366904950",
+      "aisName": "LEE A TREGURTHA",
+      "imo": "5385625",
+      "identitySources": [
+        "https://www.vesselfinder.com/vessels/details/5385625",
+        "https://www.myshiptracking.com/vessels/lee-a-tregurtha-mmsi-366904950-imo-5385625"
+      ],
       "headline": "From wartime tanker to Great Lakes freighter",
       "history": "Built in 1942 as the tanker Chiwawa, she served during World War II before reconstruction for the Great Lakes ore trade.",
       "historySource": "https://interlakesteamship.com/our-fleet/m-v-lee-a-tregurtha/",
@@ -14,11 +19,24 @@
       "imageAlt": "Lee A. Tregurtha transiting the Soo Locks in 2021.",
       "photoCredit": "U.S. Army Corps of Engineers, Detroit District · public domain · 2021",
       "photoSource": "https://commons.wikimedia.org/wiki/File:Lee_A._Tregurtha_in_Soo_MI.jpg",
-      "licenseUrl": null
+      "licenseUrl": null,
+      "displayName": "Lee A. Tregurtha",
+      "specs": {
+        "built": 1942,
+        "lengthFeet": 826,
+        "capacityGrossTons": 29360,
+        "source": "https://www.interlakesteamship.com/our-fleet/m-v-lee-a-tregurtha/"
+      },
+      "lookFor": "Look for the long hull that was extended in 1976, and the unloading boom used to deliver bulk cargo."
     },
     {
-      "mmsi": "366905890", "aisName": "JAMES R BARKER", "imo": "7390260",
-      "identitySources": ["https://www.myshiptracking.com/vessels/james-r-barker-mmsi-366905890-imo-7390260", "https://maritimeoptima.com/public/vessels/pages/imo%3A7390260/mmsi%3A366905890/JAMES_R_BARKER.html"],
+      "mmsi": "366905890",
+      "aisName": "JAMES R BARKER",
+      "imo": "7390260",
+      "identitySources": [
+        "https://www.myshiptracking.com/vessels/james-r-barker-mmsi-366905890-imo-7390260",
+        "https://maritimeoptima.com/public/vessels/pages/imo%3A7390260/mmsi%3A366905890/JAMES_R_BARKER.html"
+      ],
       "headline": "A thousand-footer built for the lakes",
       "history": "Launched in 1976, James R. Barker became the first thousand-foot Great Lakes ship built with its wheelhouse aft.",
       "historySource": "https://wmhs.org/james-r-barker-arrives-at-fincantieri/",
@@ -27,7 +45,147 @@
       "imageAlt": "James R. Barker crossing the Straits of Mackinac in 2014.",
       "photoCredit": "Levi Gates · CC BY-SA 4.0 · 2014",
       "photoSource": "https://commons.wikimedia.org/wiki/File:James_R_Barker.jpg",
-      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/"
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+      "displayName": "James R. Barker",
+      "specs": {
+        "built": 1976,
+        "lengthFeet": 1004,
+        "capacityGrossTons": 63300,
+        "source": "https://www.interlakesteamship.com/our-fleet/m-v-james-r-barker/"
+      },
+      "lookFor": "Notice the bridge near the stern and the uninterrupted cargo deck forward of it."
+    },
+    {
+      "mmsi": "366904940",
+      "aisName": "PAUL R TREGURTHA",
+      "imo": "7729057",
+      "displayName": "Paul R. Tregurtha",
+      "reviewedOn": "2026-11-24",
+      "identitySources": [
+        "https://www.vesselfinder.com/vessels/details/7729057",
+        "https://www.myshiptracking.com/vessels/paul-r-tregurtha-mmsi-366904940-imo-7729057"
+      ],
+      "headline": "The longest ship on the lakes",
+      "history": "Interlake's flagship entered service in 1981. Its unusually long hull is built for carrying large quantities of bulk cargo between Great Lakes ports.",
+      "lookFor": "At more than a thousand feet, the long cargo deck gives you a sense of the scale of the shipping industry.",
+      "historySource": "https://www.interlakesteamship.com/our-fleet/m-v-paul-r-tregurtha/",
+      "storyUrl": "https://www.interlakesteamship.com/our-fleet/m-v-paul-r-tregurtha/",
+      "specs": {
+        "built": 1981,
+        "lengthFeet": 1013.5,
+        "capacityGrossTons": 68000,
+        "source": "https://www.interlakesteamship.com/our-fleet/m-v-paul-r-tregurtha/"
+      }
+    },
+    {
+      "mmsi": "366904880",
+      "aisName": "MESABI MINER",
+      "imo": "7390272",
+      "displayName": "Mesabi Miner",
+      "reviewedOn": "2026-11-24",
+      "identitySources": [
+        "https://www.vesselfinder.com/vessels/details/7390272",
+        "https://www.myshiptracking.com/vessels/mesabi-miner-mmsi-366904880-imo-7390272"
+      ],
+      "headline": "A name from Minnesota's iron country",
+      "history": "Built in Lorain, Ohio, this vessel was named to recognize the people of the Mesabi Iron Range. It is a sister ship of James R. Barker.",
+      "lookFor": "Compare the hull length and cargo capacity with James R. Barker in the fleet guide.",
+      "historySource": "https://www.interlakesteamship.com/our-fleet/m-v-mesabi-miner/",
+      "storyUrl": "https://www.interlakesteamship.com/our-fleet/m-v-mesabi-miner/",
+      "specs": {
+        "built": 1977,
+        "lengthFeet": 1004,
+        "capacityGrossTons": 63300,
+        "source": "https://www.interlakesteamship.com/our-fleet/m-v-mesabi-miner/"
+      }
+    },
+    {
+      "mmsi": "367050550",
+      "aisName": "STEWART J CORT",
+      "imo": "7105495",
+      "displayName": "Stewart J. Cort",
+      "reviewedOn": "2026-11-24",
+      "identitySources": [
+        "https://www.vesselfinder.com/vessels/details/7105495",
+        "https://www.myshiptracking.com/vessels/stewart-j-cort-mmsi-367050550-imo-7105495"
+      ],
+      "headline": "The first thousand-footer",
+      "history": "The ship entered service in 1972. Its bow and stern traveled to the lakes as a short vessel before a long middle section was installed in Erie, Pennsylvania.",
+      "lookFor": "The forward pilothouse and the number 1 on the aft structure distinguish it from other thousand-footers.",
+      "historySource": "https://www.interlakesteamship.com/our-fleet/m-v-stewart-j-cort/",
+      "storyUrl": "/great-lakes-freighter-winter-layup/vessels/stewart-j-cort/",
+      "specs": {
+        "built": 1972,
+        "lengthFeet": 1000,
+        "capacityGrossTons": 58000,
+        "source": "https://www.interlakesteamship.com/our-fleet/m-v-stewart-j-cort/"
+      }
+    },
+    {
+      "mmsi": "366904930",
+      "aisName": "HERBERT C JACKSON",
+      "imo": "5148417",
+      "displayName": "Herbert C. Jackson",
+      "reviewedOn": "2026-11-24",
+      "identitySources": [
+        "https://www.vesselfinder.com/vessels/details/5148417",
+        "https://www.myshiptracking.com/vessels/herbert-c-jackson-mmsi-366904930-imo-5148417"
+      ],
+      "headline": "A Michigan-built working ship",
+      "history": "Built at River Rouge in 1959, the Jackson was fitted with self-unloading equipment at Defoe Shipbuilding in Bay City in 1975.",
+      "lookFor": "Its more compact hull is a contrast to the thousand-foot lake carriers.",
+      "historySource": "https://www.interlakesteamship.com/our-fleet/m-v-herbert-c-jackson/",
+      "storyUrl": "https://www.interlakesteamship.com/our-fleet/m-v-herbert-c-jackson/",
+      "specs": {
+        "built": 1959,
+        "lengthFeet": 690,
+        "capacityGrossTons": 24800,
+        "source": "https://www.interlakesteamship.com/our-fleet/m-v-herbert-c-jackson/"
+      }
+    },
+    {
+      "mmsi": "366904910",
+      "aisName": "KAYE E BARKER",
+      "imo": "5097450",
+      "displayName": "Kaye E. Barker",
+      "reviewedOn": "2026-11-24",
+      "identitySources": [
+        "https://www.vesselfinder.com/vessels/details/5097450",
+        "https://www.myshiptracking.com/vessels/366904910-mmsi-366904910-imo-"
+      ],
+      "headline": "A classic freighter adapted for new work",
+      "history": "Built in Toledo under the name Edward B. Greene, the ship was converted into a self-unloader in 1981.",
+      "lookFor": "Look for the discharge boom, a visible reminder of how older lake ships have been adapted over time.",
+      "historySource": "https://www.interlakesteamship.com/our-fleet/m-v-kaye-e-barker/",
+      "storyUrl": "https://www.interlakesteamship.com/our-fleet/m-v-kaye-e-barker/",
+      "specs": {
+        "built": 1952,
+        "lengthFeet": 767,
+        "capacityGrossTons": 25900,
+        "source": "https://www.interlakesteamship.com/our-fleet/m-v-kaye-e-barker/"
+      }
+    },
+    {
+      "mmsi": "368251670",
+      "aisName": "MARK W BARKER",
+      "imo": "9962445",
+      "displayName": "Mark W. Barker",
+      "reviewedOn": "2026-11-24",
+      "identitySources": [
+        "https://www.vesselfinder.com/vessels/details/9962445",
+        "https://www.myshiptracking.com/vessels/mark-w-barker-mmsi-368251670-imo-9962445"
+      ],
+      "headline": "Designed for the bends of a working river",
+      "history": "Built in Sturgeon Bay, Wisconsin, the ship was designed with maneuverability in Cleveland's winding Cuyahoga River in mind. Its cargo space can accommodate a variety of loads.",
+      "lookFor": "Look for the forward unloading boom and unusually large hatch openings.",
+      "historySource": "https://www.interlakesteamship.com/our-fleet/m-v-mark-w-barker/",
+      "storyUrl": "https://www.interlakesteamship.com/our-fleet/m-v-mark-w-barker/",
+      "specs": {
+        "built": 2022,
+        "lengthFeet": 639,
+        "capacityGrossTons": 26000,
+        "source": "https://www.interlakesteamship.com/our-fleet/m-v-mark-w-barker/"
+      }
     }
   ]
 }
