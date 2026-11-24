@@ -26,8 +26,56 @@
       shoreText:"Compare public waterfront viewing locations, then check the upper St. Clair River AIS reports."},
     mackinac: {name:"Straits of Mackinac", map:"mackinac", shore:"/great-lakes-ship-watching-spots/", location:"Mackinaw City or St. Ignace",
       track:"Check the Straits of Mackinac map for ships between lakes Michigan and Huron.",
-      shoreText:"Use the viewing-spot guide to choose a shoreline, then verify current AIS positions."}
+      shoreText:"Use the viewing-spot guide to choose a shoreline, then verify current AIS positions."},
+    calumet: {name:"Calumet River", shore:"/calumet-freighter-watch/", location:"the 95th Street Bridge area",
+      track:"Chicago's working river has its own recent AIS map and bridge guide. Check the report time before heading out.",
+      shoreText:"Watch for the drawbridge and industrial channel near 95th Street. Confirm public sidewalk access before visiting."},
+    cuyahoga: {name:"Cuyahoga River", shore:"/cuyahoga-freighter-watch/", location:"Scranton Flats Pier or Wendy Park",
+      track:"Check Cleveland's river-specific AIS reports and follow the bends toward Lake Erie.",
+      shoreText:"Compare documented public riverfront parks and harbor views. A ship may not pass during your visit."},
+    welland: {name:"Welland Canal", shore:"/welland-canal/", location:"Lock 3 viewing platform in St. Catharines",
+      track:"Check recent canal AIS reports alongside the official lock order of turn on the Welland tool.",
+      shoreText:"Start at the museum viewing platform at Lock 3, or compare Lock 7 and Port Colborne on the canal guide."},
+    seaway: {name:"St. Lawrence Seaway", shore:"/st-lawrence-seaway/", location:"Eisenhower Lock or Iroquois Point",
+      track:"Follow recent ship reports along the Montreal to Lake Ontario corridor on the Seaway tool.",
+      shoreText:"Compare documented public viewing locations on both sides of the river, then check access and ship reports."}
   };
+  const aliases = {
+    soo:["soo","soo locks","sault ste marie","st marys river"], duluth:["duluth","superior","canal park","duluth ship canal"],
+    detroit:["detroit","belle isle","detroit riverfront"], saginaw:["saginaw","bay city","saginaw bay"],
+    "port-huron":["port huron","blue water bridge","st clair river","vantage point"],
+    mackinac:["mackinac","mackinaw city","st ignace"], calumet:["calumet","chicago","95th street","calumet park"],
+    cuyahoga:["cuyahoga","cleveland","scranton flats","wendy park","rivergate park","heritage park"],
+    welland:["welland","st catharines","thorold","lock 3","lock 7","port colborne","niagara"],
+    seaway:["st lawrence","seaway","eisenhower lock","iroquois point","massena","montreal"]
+  };
+  const normalize = value => String(value).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().replace(/[^a-z0-9]+/g," ").trim();
+  function matchingPlaces(value) {
+    const query = normalize(value);
+    if (!query) return [];
+    const padded = " " + query + " ";
+    return Object.keys(aliases).filter(key => aliases[key].some(alias => padded.includes(" " + alias + " ")));
+  }
+  const search = document.getElementById("finder-search");
+  const query = document.getElementById("finder-query");
+  const searchGo = document.getElementById("finder-search-go");
+  const searchStatus = document.getElementById("finder-search-status");
+  if (search && query && searchGo && searchStatus) {
+    search.hidden = false;
+    const find = () => {
+      const matches = matchingPlaces(query.value);
+      if (matches.length !== 1) {
+        searchStatus.textContent = matches.length ? "More than one corridor matches. Try one place name or choose below." : "No matching corridor. Try a city, river or lock name, or choose below.";
+        return;
+      }
+      select.value = matches[0];
+      update();
+      searchStatus.textContent = "Selected " + places[matches[0]].name + ".";
+    };
+    searchGo.addEventListener("click", find);
+    query.addEventListener("keydown", event => { if (event.key === "Enter") { event.preventDefault(); find(); } });
+    select.addEventListener("change", () => { query.value = ""; searchStatus.textContent = ""; });
+  }
   function update() {
     const place = places[select.value] || places.soo;
     const checked = document.querySelector('input[name="intent"]:checked');
@@ -48,7 +96,7 @@
       title.textContent = place.name + ": locate the ships";
       reason.textContent = place.track;
       caveat.textContent = "Check the vessel's last reported AIS timestamp. Public coverage can be delayed or incomplete.";
-      link.href = "/great-lakes-freighter-tracking/#" + place.map;
+      link.href = place.map ? "/great-lakes-freighter-tracking/#" + place.map : place.shore;
       link.firstChild.textContent = "Show " + place.name + " traffic ";
     }
   }
@@ -64,6 +112,7 @@
     const intentInput = document.querySelector('input[name="intent"]:checked');
     if (!intentInput || intentInput.value !== "track") return;
     const place = places[select.value] || places.soo;
+    if (!place.map) return; // Specialist corridors own their own map and data.
     const mapNode = document.getElementById("freighterMap");
     const tab = document.querySelector('.view-tab[data-freighter-view="' + place.map + '"]');
     if (!mapNode || !tab || typeof window.L === "undefined" || !mapNode.classList.contains("leaflet-container")) return;
