@@ -594,9 +594,9 @@ function check(value,message){if(!value)throw Error(message);}
     check(await windows.locator('input[value="8.5"]').isChecked(),'initial sample window must match the existing 8.5-hour optimizer target');
     check(await experience.locator('[data-ct-experience="priority"][data-ct-stop="11"]').count()===1,
       'Pictured Rocks must retain one primary planning opportunity');
-    const unresolved=experience.filter({hasText:'Time available for stops is withheld'});
-    check(await unresolved.count()===1,'unresolved park approach must withhold available visit time');
-    check(await unresolved.locator('[data-ct-experience="priority"]').count()===0,'incomplete approach cannot supply an automatic activity priority');
+    const unresolvedExperience=experience.filter({hasText:'Time available for stops is withheld'});
+    check(await unresolvedExperience.count()===1,'unresolved park approach must withhold available visit time');
+    check(await unresolvedExperience.locator('[data-ct-experience="priority"]').count()===0,'incomplete approach cannot supply an automatic activity priority');
     await windows.locator('input[value="6"]').check();
     const short=await priorities();
     check(await routeIdentity()===routeBefore,'daily experience allowance must not silently change overnight stops');
