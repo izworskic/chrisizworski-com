@@ -46,3 +46,7 @@ All seven tested pairs exceed 4.5:1; this does not establish contrast for every 
 
 ## Release state
 Source inventory and seven color-pair calculations executed. Browser verifier authored, not executed against a complete checkout in this session; screenshot inspection NOT VERIFIED. Independent baseline/with-reference skill evaluations NOT VERIFIED. Main push workflow status NOT VERIFIED (available connector lookup returned no runs). Full repository verification NOT VERIFIED. Candidate gallery only, no production source or public route changed. A branch preview build may run because non-Markdown files were added; no new build step, runtime dependency, service or deployment infrastructure. No auto-merge or skill activation.
+
+## Phase 3 extension (2026-11-24)
+
+The original lab now loads [scoped foundations](foundations.css) and includes snow-observation and journey-planning specimens alongside the existing maritime examples. See [foundation contract](FOUNDATION_CONTRACT.md) for source provenance, component ownership, maturity and acceptance. The Duluth source-audit discrepancy above is historical: PR #1918 replaced its generic glyph with the shared factory and passed five-width map QA; the owner confirmed the working site. No live pages are modified by this extension. The independent candidate skill evaluation remains outstanding.

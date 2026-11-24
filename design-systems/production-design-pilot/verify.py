@@ -82,6 +82,26 @@ with sync_playwright() as playwright:
             right_ships.click()
             assert left_ships.get_attribute("aria-pressed") == "true"
             assert right_ships.get_attribute("aria-pressed") == "true"
+            # Cross-family roles retain their own palette and actual native behavior.
+            snow = page.locator(".reference-snow")
+            journey = page.locator(".reference-journey")
+            assert snow.get_by_text("Not reported", exact=True).is_visible()
+            assert journey.get_by_text("Not calculated", exact=True).is_visible()
+            assert snow.evaluate("(e) => getComputedStyle(e).getPropertyValue('--pd-type-body').trim()") == "16px"
+            assert journey.evaluate("(e) => getComputedStyle(e).getPropertyValue('--pd-accent').trim()") == "#2c5f2d"
+            assert snow.evaluate("(e) => getComputedStyle(e).getPropertyValue('--pd-accent').trim()") == "#17476f"
+            summary = journey.locator("summary")
+            assert summary.bounding_box()["height"] >= 44
+            summary.focus()
+            summary.press("Enter")
+            assert journey.locator("details").evaluate("(e) => e.open")
+            assert journey.get_by_text("Check actual access,", exact=False).is_visible()
+            summary.press("Enter")
+            assert not journey.locator("details").evaluate("(e) => e.open")
+            if width in (390, 1280):
+                page.locator("#reference-title").scroll_into_view_if_needed()
+                page.screenshot(path=str(OUT / f"lab-{width}-cross-family.png"), full_page=True)
+            assert page.evaluate("document.documentElement.scrollWidth <= innerWidth"), width
             assert not errors, errors
             page.close()
         page = browser.new_page(java_script_enabled=False, viewport={"width": 390, "height": 844})
@@ -96,6 +116,10 @@ with sync_playwright() as playwright:
         group.get_by_role("button", name="Viewing places").click()
         assert group.get_by_role("button", name="Show ships").get_attribute("aria-pressed") == "true"
         assert group.locator("..").locator("[data-result]").inner_text() == "Selected view: ship reports"
+        native_details = page.locator("#journey-details")
+        native_details.locator("summary").click()
+        assert native_details.evaluate("(e) => e.open")
+        assert page.get_by_text("Not calculated", exact=True).is_visible()
         page.screenshot(path=str(OUT / "lab-390-no-js.png"), full_page=True)
         page.close()
     finally:

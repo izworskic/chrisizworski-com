@@ -131,7 +131,7 @@ jobs:
 
   production-design-pilot-qa:
     # Temporary Phase 1 evidence job; review/remove the branch-specific gate before release.
-    if: github.event_name == 'pull_request' && github.head_ref == 'design/production-design-standard-draft-20261124'
+    if: github.event_name == 'pull_request' && (github.head_ref == 'design/production-design-standard-draft-20261124' || github.head_ref == 'design/shared-foundations-20261124')
     runs-on: ubuntu-latest
     timeout-minutes: 8
     steps:
