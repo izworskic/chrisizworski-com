@@ -149,7 +149,18 @@ jobs:
       - name: Run existing five-width design laboratory verification
         run: |
           mkdir -p "$GITHUB_WORKSPACE/artifacts/production-design-pilot"
-          export TMPDIR="$GITHUB_WORKSPACE/artifacts/production-design-pilot"
+          # Chrome's Unix socket must fit in a short path. Keep browser profiles out of artifacts.
+          qa_tmp="$(mktemp -d /tmp/pdq.XXXXXX)"
+          export TMPDIR="$qa_tmp"
+          collect_evidence() {
+            for png in "$qa_tmp"/production-design-pilot-*/lab-*.png; do
+              if [ -f "$png" ]; then
+                cp "$png" "$GITHUB_WORKSPACE/artifacts/production-design-pilot/"
+              fi
+            done
+            rm -rf -- "$qa_tmp"
+          }
+          trap collect_evidence EXIT
           "$RUNNER_TEMP/production-design-pilot-venv/bin/python" design-systems/production-design-pilot/verify.py
       - name: Retain design laboratory evidence for manual inspection
         if: always()
