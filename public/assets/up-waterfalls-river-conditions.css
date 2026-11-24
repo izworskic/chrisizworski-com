@@ -10,3 +10,9 @@
 .upfall-river-reading h4,.upfall-river-reading p{margin:4px 0}
 .upfall-river-reading .upfall-river-value{font-size:1.6rem;font-weight:700;font-variant-numeric:tabular-nums}
 .upfall-river-desk a{color:#124b55;text-decoration:underline}
+
+.upfall-seasonal-band{margin:12px 0;padding:8px 0;border-top:1px solid #b7c9bc}
+.upfall-seasonal-band h5{font-size:1rem;margin:0 0 6px;color:#203d35}
+.upfall-seasonal-track{position:relative;margin:12px 6px;height:12px;border-radius:6px;background:#d1ded4}
+.upfall-seasonal-middle{position:absolute;height:100%;background:#729d89;border-radius:4px}
+.upfall-seasonal-marker{position:absolute;top:-4px;width:4px;height:20px;border-radius:2px;background:#163b36;transform:translateX(-50%)}
