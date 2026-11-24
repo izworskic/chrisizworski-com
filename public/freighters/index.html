@@ -187,6 +187,11 @@
 </div>
 <div class="wrap">
 
+<section id="my-waterways" class="my-waterways" aria-labelledby="my-waterways-title" hidden>
+  <div class="my-waterways-head"><div><p class="eyebrow">Your shipping desk</p><h2 id="my-waterways-title">My waterways</h2></div><button id="clear-waterways" type="button">Clear saved waterways</button></div>
+  <p class="my-waterways-note">Recent AIS reports, not a total of ships on the water. Saved only on this device.</p>
+  <ul id="saved-waterways-list"></ul>
+</section>
 <section id="live-map" class="hub-map-section" aria-labelledby="hub-map-title">
   <div class="hub-map-heading">
     <div>
@@ -286,6 +291,7 @@
   <div><p class="result-label">Your next step</p><h3 id="finder-heading">Soo Locks: locate the ships</h3><p id="finder-reason">Use the map for positions, then check the Soo Locks passage information for named ships.</p><p class="fine" id="finder-caveat">Check report timestamps; a map marker is not a guaranteed viewing time.</p></div>
   <a id="finder-go" class="button dark" href="/great-lakes-freighter-tracking/#soo" data-track-tool="freighter-finder" data-placement="freighters-finder">Show Soo Locks traffic <span aria-hidden="true">↗</span></a>
  </div>
+ <div id="save-waterway-row" class="save-waterway-row" hidden><button type="button" id="save-waterway">Save this waterway</button><span id="save-waterway-status" role="status"></span></div>
  <noscript><p class="noscript">The finder needs JavaScript. <a href="/great-lakes-freighter-tracking/">Open the live map</a> or <a href="/great-lakes-ship-watching-spots/">browse shore-watching spots</a>.</p></noscript>
 </section>
 <section id="live-tools" class="section" aria-labelledby="live-title">
@@ -368,7 +374,8 @@
  <div class="footer-links"><a href="/great-lakes/">Great Lakes</a><a href="/great-lakes-freighter-tracking/">Live AIS</a><a href="/soo-locks/">Soo Locks</a><a href="/great-lakes-freighter-winter-layup/">Winter layup</a><a href="/tools/">All tools</a></div>
 </div><p class="byline">Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · Bay City, Michigan · Updated November 24, 2026</p></footer>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script defer src="/assets/freighter-tracker.js?v=20260917"></script>
+<script defer src="/assets/freighters-waterways.js?v=20261124"></script>
+<script defer src="/assets/freighter-tracker.js?v=20261124"></script>
 <script defer src="/assets/freighters-hub.js"></script>
 <script src="/_vercel/insights/script.js" defer></script>
 <script src="/_vercel/speed-insights/script.js" defer></script>
