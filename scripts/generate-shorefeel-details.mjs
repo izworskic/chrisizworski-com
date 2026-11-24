@@ -26,7 +26,7 @@ function pageFor(b,region,all){
  const sourceCaveat=canada?'An ECCC city forecast may be more than a few kilometres from the beach. Canadian apparent temperature uses published humidex where available and wind chill when conditions qualify.':
   'The NWS point forecast represents a nearby land-area grid. Heat index or wind chill applies only when source values support it.';
  const jsonLd=JSON.stringify({"@context":"https://schema.org","@graph":[
-  {"@type":"WebPage","@id":canonical+"#page","url":canonical,"name":name+" ShoreFeel","description":description,"dateModified":"2026-11-22","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},
+  {"@type":"WebPage","@id":canonical+"#page","url":canonical,"name":name+" ShoreFeel","description":description,"dateModified":"2026-11-24","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},
   {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
   {"@type":"BreadcrumbList","itemListElement":[
    {"@type":"ListItem","position":1,"name":"Great Lakes Beaches","item":"https://chrisizworski.com/great-lakes-beaches/"},
@@ -111,6 +111,6 @@ for(const [region,all] of [['us',us],['ca',ca]]){
  }
 }
 const urls=[...us.map(b=>'/great-lakes-beaches/around-the-lakes/'+b.slug+'/'),...ca.map(b=>'/great-lakes-beaches/canada/'+b.slug+'/')];
-const xml='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+urls.map(u=>'  <url><loc>https://chrisizworski.com'+u+'</loc><lastmod>2026-11-22</lastmod></url>').join('\n')+'\n</urlset>\n';
+const xml='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+urls.map(u=>'  <url><loc>https://chrisizworski.com'+u+'</loc><lastmod>2026-11-24</lastmod></url>').join('\n')+'\n</urlset>\n';
 await writeFile(path.join(root,'public/sitemap-shorefeel-beaches.xml'),xml,'utf8');
 console.log('Generated '+urls.length+' independent canonical ShoreFeel beach pages from vetted online weather-source catalogs');
