@@ -6,6 +6,7 @@ const dateOK=s=>typeof s==='string'&&/^\d{4}-\d\d-\d\d$/.test(s)&&Number.isFinit
 const str=(s,n)=>typeof s==='string'&&s.trim().length>0&&s.length<=n;
 const idOK=s=>typeof s==='string'&&/^[a-zA-Z0-9_-]{1,80}$/.test(s);
 const temp=n=>Number.isFinite(n)&&n>=-80&&n<=140;
+const add=(d,n)=>new Date(Date.parse(d+'T00:00:00Z')+n*DAY).toISOString().slice(0,10);
 const elapsed=(a,b)=>(Date.parse(b+'T00:00:00Z')-Date.parse(a+'T00:00:00Z'))/DAY;
 function blank(){return {schema,plantings:[],entries:[]};}
 function validate(data,today){
@@ -49,7 +50,8 @@ function summarize(data,id,today,history=null){
   comparison={minDays:min,maxDays:max,actualDays:days,relation:days===null?null:days<min?'earlier':days>max?'later':'within'};
  }
  const weather=entries.filter(e=>e.kind==='daily-air').map(e=>({date:e.date,siteId:id,source:'visitor-reported shielded garden air',kind:'observation',minF:e.minF,maxF:e.maxF}));
- const heat=m?H.evaluate({modelId:p.modelId,biofix:p.biofix,asOf:today,plantingDate:p.date,siteId:id,packetDays:p.packetDays,weather}):null;
+ const cutoff=elapsed(p.date,today)>365?add(p.date,365):today;
+ const heat=m?H.evaluate({modelId:p.modelId,biofix:p.biofix,asOf:cutoff,plantingDate:p.date,siteId:id,packetDays:p.packetDays,weather:weather.filter(w=>w.date<cutoff)}):null;
  return {planting:p,entries,firstHarvest:first||null,endpoint,actualDays:days,packetDelta,comparison,heat};
 }
 function paired(data,id,today,{referenceId,regime,referenceLowF,referenceDate}={}){
