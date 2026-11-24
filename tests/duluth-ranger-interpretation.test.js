@@ -47,6 +47,6 @@ test('search build preserves reviewed lead and story without changing core metad
   assert.match(tuner, /NEXT SHIP WORTH WATCHING/);
   assert.match(html, /rel="canonical" href="https:\/\/chrisizworski\.com\/duluth-canal-park\/"/);
   assert.match(html, /https:\/\/chrisizworski\.com\/#person/);
-  assert.match(html, /"dateModified":"2026-11-20"/);
+  assert.match(html, /"dateModified":"2026-11-24"/);
   assert.doesNotMatch(html, /<meta name="robots" content="noindex"/);
 });
