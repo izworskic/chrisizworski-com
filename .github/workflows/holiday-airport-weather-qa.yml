@@ -5,10 +5,12 @@ on:
       - 'api/holiday-airport-weather.js'
       - 'lib/holiday-travel/**'
       - 'public/assets/holiday-airport-weather-board.js'
+      - 'public/assets/holiday-travel-choices.js'
       - 'public/assets/holiday-travel-engine.js'
       - 'public/holiday-travel/index.html'
       - 'scripts/holiday-travel/**'
       - 'tests/holiday-airport-weather.test.js'
+      - 'tests/holiday-choices.test.js'
       - '.github/workflows/holiday-airport-weather-qa.yml'
   workflow_dispatch:
 permissions:
@@ -28,8 +30,21 @@ jobs:
           cache: npm
       - name: Install pinned repository dependencies
         run: npm ci
+      - name: Validate BTS inputs and local type-to-find tests
+        run: |
+          python3 scripts/holiday-travel/audit-search-inputs.py
+          node --test tests/holiday-choices.test.js
       - name: Run complete repository gate
         run: npm run verify:all
+      - name: Independent Rust/JavaScript type-to-find parity
+        shell: bash
+        run: |
+          set -euo pipefail
+          rustup toolchain install 1.90.0 --profile minimal
+          rustc +1.90.0 --edition=2021 --test scripts/holiday-travel/holiday-choice-oracle.rs -o "$RUNNER_TEMP/holiday-choice-tests"
+          "$RUNNER_TEMP/holiday-choice-tests"
+          rustc +1.90.0 --edition=2021 -O scripts/holiday-travel/holiday-choice-oracle.rs -o "$RUNNER_TEMP/holiday-choice-rust"
+          node scripts/holiday-travel/compare-choice-ranking.cjs "$RUNNER_TEMP/holiday-choice-rust"
       - name: Install browser-only Playwright
         shell: bash
         run: |
