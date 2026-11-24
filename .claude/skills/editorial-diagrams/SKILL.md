@@ -1,6 +1,6 @@
 ---
 name: editorial-diagrams
-description: "On-demand explanatory diagram methods for locks, rivers, ships, weather, ecology and technical systems."
+description: "On-demand explanatory diagram methods for locks, rivers, ships, weather, ecology and technical systems. Use when a page needs to explain a physical process (lock lifts, river flow, ship routes, weather, ecology) as a responsive HTML/SVG diagram."
 ---
 
 # editorial-diagrams

@@ -1,6 +1,6 @@
 ---
 name: public-data-scout
-description: "On-demand trustworthy public API discovery, provenance, licensing and observation-freshness validation."
+description: "On-demand trustworthy public API discovery, provenance, licensing and observation-freshness validation. Use when a new real-world feed or API is proposed for a tool, before any code depends on it."
 ---
 
 # public-data-scout

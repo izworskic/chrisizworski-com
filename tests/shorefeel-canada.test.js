@@ -106,7 +106,9 @@ test('user cannot supply an arbitrary URL and endpoint is never indexable',async
   global.fetch=async url=>{calls.push(url);return {ok:true,json:async()=>collection};};
   const got=await handler.lookup(b,now);
   assert.equal(got.status,'forecast-based');
-  assert.equal(calls.length,1);
+  assert.equal(calls.length,2);
+  assert.equal(calls.filter(url=>url.startsWith('https://apps.glerl.noaa.gov/')).length,1);
+  assert.equal(got.shorelineRealFeel.calibratedOnSand,false);
   assert.match(calls[0],/^https:\/\/api\.weather\.gc\.ca\/collections\//);
   assert.equal(calls[0].includes('evil.example'),false);
  }finally{global.fetch=original;}

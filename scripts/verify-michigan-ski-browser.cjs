@@ -15,6 +15,10 @@ function snapshot(){
   const isOpen=mode==='one-open'&&r.slug==='caberfae-peaks';
   return {...r,official:r.slug==='alpine-valley'?{status:'NOT_CONNECTED',url:null,checkedAt:now}:isOpen?
    {status:'OPEN_PER_OPERATOR',url:'https://caberfaepeaks.com/snow-report/',lifts:{open:2,total:5},trails:{open:8,total:27},reportUpdatedAt:report,checkedAt:now}:
+   mode==='undated'&&r.slug==='pine-knob'?
+   {status:'UNVERIFIED',url:r.snow,reason:'UNDATED_OPERATOR_REPORT',lifts:{open:0,total:13},reportUpdatedAt:null,checkedAt:now}:
+   mode==='undated'&&r.slug==='snowriver'?
+   {status:'UNVERIFIED',url:r.snow,reason:'UNDATED_OPERATOR_REPORT',lifts:{open:1,total:10},operatorStatusText:'Anticipated opening December 5',reportUpdatedAt:null,checkedAt:now}:
    {status:'UNVERIFIED',url:r.snow,reason:'SOURCE_UNAVAILABLE',reportUpdatedAt:null,checkedAt:now},
    ranking:{score:null,verdict:'OFF_SEASON_PLANNING',components:{travelValue:0}},
    weather:{alerts:[],weatherCoverage:'NWS_GRID_UNAVAILABLE',skiDays:{
@@ -52,7 +56,7 @@ async function run(){
    page.on('pageerror',e=>errors.push(e.message));
    const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:30000});
    need(response.status()===200,width+' hub loads');
-   await page.waitForFunction(()=>document.querySelector('#ski-open-count')?.textContent.includes('1 of 17'),null,{timeout:20000});
+   await page.waitForFunction(()=>document.querySelector('#ski-open-count')?.textContent.includes('1 confirmed open'),null,{timeout:20000});
    need(await page.locator('#ski-operating-list .ski-operation-row').count()===17,width+' displays all downhill hills');
    need((await page.locator('#ski-operating-list').innerText()).includes('Caberfae Peaks'),width+' shows named official result');
    const overflow=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,viewport:innerWidth}));
@@ -72,13 +76,23 @@ async function run(){
    need(await page.locator('#resort-list .hill').count()===18,width+' full ranking includes Nordic option');
    mode='all-down';
    await page.reload({waitUntil:'domcontentloaded'});
-   await page.waitForFunction(()=>document.querySelector('#ski-open-count')?.textContent.includes('0 of 17'),null,{timeout:20000});
+   await page.waitForFunction(()=>document.querySelector('#ski-open-count')?.textContent.includes('0 confirmed open'),null,{timeout:20000});
    need(await page.locator('#ski-operating-list .ski-operation-row').count()===17,width+' all-down links retained');
    const failure=await page.locator('#ski-operating-list').innerText();
    need(failure.includes('No dated operator reports were verified'),width+' all-down caution visible');
    need(!failure.includes('Open per operator'),width+' no false open when all operator sources fail');
+   need((await page.locator('#ski-operating-list').innerText()).includes('Next operator-announced opening target: Ski Brule'),width+' operator opening plan shown during source failures');
+   need(await page.locator('.ski-unconfirmed').count()===1,width+' groups source gaps into an expandable summary');
    const down=path.join(out,width+'-all-sources-down.png');
    await page.locator('.ski-operations').screenshot({path:down});report.screenshots.push(path.basename(down));
+   mode='undated';
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.waitForFunction(()=>document.querySelector('#ski-open-count')?.textContent.includes('0 confirmed open'),null,{timeout:20000});
+   await page.locator('.ski-unconfirmed summary').click();
+   const uncertain=await page.locator('#ski-operating-list').innerText();
+   need(uncertain.includes('0 lifts listed · undated'),width+' zero-lift count is explicitly undated');
+   need(uncertain.includes('Lift count undated'),width+' undated positive count cannot claim open');
+   need(!uncertain.includes('Open per operator'),width+' no invented opening from a stale one-lift count');
    need(errors.length===0,width+' browser exceptions '+errors.join('; '));
    report.cases.push({width,initial:17,openFiltered:1,allSourcesDownNoOpen:true,overflow:false,jsErrors:errors.length});
    await ctx.close();

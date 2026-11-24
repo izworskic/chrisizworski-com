@@ -1,6 +1,6 @@
 ---
 name: huggingface-datasets
-description: "Inspect Hub datasets read-only as potential offline research inputs, with source, licensing, coverage and quality validation."
+description: "Inspect Hub datasets read-only as potential offline research inputs, with source, licensing, coverage and quality validation. Use when a Hub dataset is proposed as an input to a tool or study."
 ---
 # Dataset inspection for evidence-backed tools
 

@@ -87,5 +87,12 @@
       groomed:reports.filter(r=>r.grooming).length,
       conflicts:reports.filter(r=>r.state==='DATE_CONFLICT').length};
   }
-  return {ORIGINS,bundleFresh,evaluate,compare,detailUrl,clubEvidence};
+  function currentOutlook(weather,now=Date.now()){
+    const o=weather?.outlook,issued=Date.parse(o?.issuedAt),start=Date.parse(o?.startAt),end=Date.parse(o?.endAt);
+    if(o?.version!==1||o.scope!=='HUB_POINT_ONLY'||!['AVAILABLE','PARTIAL'].includes(o.status)||!Number.isFinite(issued)||
+      issued>now||now-issued>6*3600000||!Number.isFinite(start)||!Number.isFinite(end)||now>=start+3600000||end-start!==72*3600000||
+      !Array.isArray(o.days)||o.days.length!==3)return null;
+    return o;
+  }
+  return {ORIGINS,bundleFresh,evaluate,compare,detailUrl,clubEvidence,currentOutlook};
 });

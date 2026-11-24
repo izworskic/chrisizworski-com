@@ -23,10 +23,10 @@ function pageFor(b,region,all){
   lake==='Huron'?'Along Lake Huron and Georgian Bay, points, coves and long beaches face the wind in different directions. The place you choose on shore can matter as much as the nearby town forecast.':
   lake==='Erie'?'Lake Erie is relatively shallow, yet its open beaches can be breezy and changeable. Look at waves and posted notices instead of assuming a warm day means calm or safe water.':
   'Lake Ontario meets dunes, bluffs, city streets and sheltered bays. Air traveling across its water can feel different from the air among buildings or trees, depending on wind direction.';
- const sourceCaveat=canada?'An ECCC city forecast may be more than a few kilometres from the beach, and Canadian apparent temperature is wind chill only when conditions warrant.':
+ const sourceCaveat=canada?'An ECCC city forecast may be more than a few kilometres from the beach. Canadian apparent temperature uses published humidex where available and wind chill when conditions qualify.':
   'The NWS point forecast represents a nearby land-area grid. Heat index or wind chill applies only when source values support it.';
  const jsonLd=JSON.stringify({"@context":"https://schema.org","@graph":[
-  {"@type":"WebPage","@id":canonical+"#page","url":canonical,"name":name+" ShoreFeel","description":description,"dateModified":"2026-11-22","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},
+  {"@type":"WebPage","@id":canonical+"#page","url":canonical,"name":name+" ShoreFeel","description":description,"dateModified":"2026-11-24","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"}},
   {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
   {"@type":"BreadcrumbList","itemListElement":[
    {"@type":"ListItem","position":1,"name":"Great Lakes Beaches","item":"https://chrisizworski.com/great-lakes-beaches/"},
@@ -67,6 +67,7 @@ function pageFor(b,region,all){
 <div class="shore-metric"><span>Valid period</span><strong id="feel-when">Waiting for source</strong></div>
 </div></div></div>
 <p class="shore-guide" id="feel-guide">The lake has its own weather story. Compare the reported wind with the shoreline when you arrive; this is a nearby area forecast, not a thermometer at ${h(name)}.</p>
+<p class="shore-lake-interpretation" id="feel-lake-effect" role="note">Lake influence: checking NOAA water evidence and forecast wind. The temperature above is a nearby area forecast, not an on-sand thermometer.</p>
 <p class="shore-source"><strong>What this reading can tell you</strong><span id="feel-evidence">${sourceName} ${forecastKind}. No measured beach cooling adjustment or current swimming-area water temperature is available from this source.</span></p>
 <p class="shore-water-context"><a href="${h(waterEvidence.href)}">${h(waterEvidence.label)}</a><span>${h(waterEvidence.note)}</span></p>
 ${canada?'<p class="shore-attribution">Contains information licensed under the <a href="https://eccc-msc.github.io/open-data/licence/readme_en/" rel="noopener" target="_blank">Data Server End-use Licence</a> of Environment and Climate Change Canada.</p>':''}
@@ -85,7 +86,7 @@ ${!canada&&b.accessAlert?'<p class="shore-access-notice" role="note"><strong>Par
 <a class="shore-action" href="${regionHub}?beach=${encodeURIComponent(slug)}">Open this beach in the interactive shoreline map</a>
 </div>
 <p class="shore-small">Map link finds the named public place, not a verified parking entrance. This page does not establish the swimming flag, current bacteria status, waves, or safe access.</p>
-<details><summary>Source method and limits</summary><p class="shore-small">The nearby forecast gives you an official picture of the air, not a thermometer planted in the beach. ${canada?'Canadian wind chill is shown only when its formula applies.':'NWS wind chill or heat index is shown only when its inputs qualify.'} Neither tells us the exact difference between town and sand. Without a recent, suitable forecast, ShoreFeel leaves the number unavailable rather than inventing one.</p></details>
+<details><summary>Source method and limits</summary><p class="shore-small">The nearby forecast gives you an official picture of the air, not a thermometer planted in the beach. ${canada?'Canadian wind chill or a published humidex is shown only when its inputs or source value qualify.':'NWS wind chill or heat index is shown only when its inputs qualify.'} Neither tells us the exact difference between town and sand. Without a recent, suitable forecast, ShoreFeel leaves the number unavailable rather than inventing one.</p></details>
 </div></section>
 <nav class="shore-nearby" aria-label="Other shores on Lake ${h(lake)}"><p class="eyebrow">Continue exploring</p><h2>Follow the shoreline</h2>
 <div class="shore-links">${neighbors}<a href="${regionHub}">View all ${canada?'Ontario':'U.S.'} shores</a></div></nav>
@@ -110,6 +111,6 @@ for(const [region,all] of [['us',us],['ca',ca]]){
  }
 }
 const urls=[...us.map(b=>'/great-lakes-beaches/around-the-lakes/'+b.slug+'/'),...ca.map(b=>'/great-lakes-beaches/canada/'+b.slug+'/')];
-const xml='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+urls.map(u=>'  <url><loc>https://chrisizworski.com'+u+'</loc><lastmod>2026-11-22</lastmod></url>').join('\n')+'\n</urlset>\n';
+const xml='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+urls.map(u=>'  <url><loc>https://chrisizworski.com'+u+'</loc><lastmod>2026-11-24</lastmod></url>').join('\n')+'\n</urlset>\n';
 await writeFile(path.join(root,'public/sitemap-shorefeel-beaches.xml'),xml,'utf8');
 console.log('Generated '+urls.length+' independent canonical ShoreFeel beach pages from vetted online weather-source catalogs');

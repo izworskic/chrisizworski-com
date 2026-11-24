@@ -164,3 +164,13 @@ body{background:#edf3f6;background-image:linear-gradient(180deg,#e6f0f5 0,#f6f9f
 .ski-opening-evidence thead th{background:#edf4f7;color:#193f55}
 .ski-opening-evidence tbody th{min-width:140px}
 @media(max-width:600px){.ski-operations{padding:16px}.ski-operation-heading{align-items:start}.ski-evidence-status{font-size:.75rem}.ski-open-count{font-size:1.25rem}}
+
+/* Operator evidence summary: keep the confirmed answer above the undated source details. */
+.ski-next-opening{background:#eef6f8;border-left:3px solid #08788b;padding:10px 13px;margin:10px 0 13px;font-size:.9rem;line-height:1.5}
+.ski-next-opening a{font-weight:750;display:inline-block}
+.ski-unconfirmed{border:1px solid #ccdde5;border-radius:8px;margin:10px 0 0;min-width:0}
+.ski-unconfirmed>summary{cursor:pointer;padding:14px 12px;min-height:48px;font-weight:750;color:#18445c}
+.ski-unconfirmed>.ski-operation-row{margin:0 12px}
+.ski-unconfirmed[open]>summary{border-bottom:1px solid #d6e2e9}
+.ski-evidence-status.evidence-closed{color:#5d401e;background:#fff4e8;border-color:#d2b58f}
+.ski-operator-plan{font-weight:680;color:#155976!important}

@@ -1,6 +1,6 @@
 ---
 name: transformers-js
-description: "Evaluate Hugging Face Transformers.js for browser or offline JS inference, only where its measurable benefit outweighs mobile/download and caching costs."
+description: "Evaluate Hugging Face Transformers.js for browser or offline JS inference, only where its measurable benefit outweighs mobile/download and caching costs. Use when someone proposes running an ML model in the browser or in offline JavaScript."
 ---
 # Transformers.js integration review
 

@@ -87,7 +87,7 @@ function setupComparison(){
   });
   $('region-list').addEventListener('click',e=>{const link=e.target.closest('[data-region-open]');if(link)track('snowmobile_region_open',{region:link.dataset.regionOpen,placement:'statewide-comparison'});const source=e.target.closest('[data-source-name]');if(source)track('snowmobile_source_verify',{source:source.dataset.sourceName,placement:'statewide-comparison'});});
   $('club-refresh')?.addEventListener('click',loadClubReceipts);
-  setInterval(()=>{if(BUNDLE&&!comparison.bundleFresh(BUNDLE))renderComparison();else updateClubReceipts();},60000);
+  setInterval(()=>{if(BUNDLE&&!comparison.bundleFresh(BUNDLE))renderComparison();else{updateClubReceipts();for(const r of BUNDLE?.regions||[]){const slot=document.querySelector('[data-outlook-region="'+r.key+'"]');if(slot)slot.innerHTML=threeDayForecast(r);}}},60000);
 }
 
 const esc=(s)=>String(s==null?'':s).replace(/[&<>"']/g,(c)=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
@@ -148,6 +148,28 @@ function forecastLine(region){
   const snow=w.snowSignal===true?'snow mentioned':w.snowSignal===false?'no snow mentioned':'snow signal unknown';
   const rain=w.rainSignal===true?'; rain also mentioned':'';
   return 'NWS hub outlook (next six forecast periods): '+snow+rain+'. Forecast only.';
+}
+function forecastStamp(iso){
+  return new Intl.DateTimeFormat('en-US',{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZone:'America/Detroit',timeZoneName:'short'}).format(new Date(iso));
+}
+function snowAmount(n){
+  return !Number.isFinite(n)||n<0?'Not available':n===0?'0 in':n<.1?'<0.1 in':n.toFixed(1)+' in';
+}
+function threeDayForecast(region){
+  const o=comparison.bundleFresh(BUNDLE)?comparison.currentOutlook(region.weather):null;
+  if(!o)return '<p class="rc-meta">'+esc(forecastLine(region))+' Quantitative 72-hour outlook unavailable.</p>';
+  const labels={AT_OR_BELOW_FREEZING:'At or below freezing',FREEZE_THAW_POSSIBLE:'Freeze/thaw possible',ABOVE_FREEZING:'Above freezing'};
+  const days=o.days.map((d,i)=>{
+    const t=d.temperature;
+    return '<div class="sled-outlook-day"><span class="sled-outlook-window">Day '+(i+1)+'<br>'+esc(forecastStamp(d.startAt))+'</span>'+
+      '<strong class="sled-outlook-snow">'+esc(snowAmount(d.snowInches))+'</strong><span class="small">forecast snow</span>'+
+      (t?'<span class="sled-outlook-temp">'+esc(t.lowF)+'–'+esc(t.highF)+'°F</span><span class="small">'+esc(t.aboveFreezingHours)+'h above 32°F<br>'+esc(labels[t.signal]||'Temperature signal unavailable')+'</span>':'<span class="small">Temperature unavailable</span>')+'</div>';
+  }).join('');
+  return '<section class="sled-outlook" aria-label="Three-day forecast for '+esc(region.hubTown)+'">'+
+    '<p class="sled-outlook-heading"><strong>Next 72 hours near '+esc(region.hubTown)+'</strong> · '+esc(snowAmount(o.snowTotalInches))+' total forecast snow</p>'+
+    '<div class="sled-outlook-days">'+days+'</div>'+
+    '<p class="small">Through '+esc(forecastStamp(o.endAt))+'. NWS grid issued '+esc(forecastStamp(o.issuedAt))+'. '+(o.status==='PARTIAL'?'Some forecast intervals are missing. ':'')+
+    'Snow amounts are approximate at this hub; temperature exposure is not measured thaw or trail base. All times Eastern.</p></section>';
 }
 function dateLabel(iso){
   return iso?new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'}).format(new Date(iso+'T12:00:00Z')):'not verified';
@@ -222,7 +244,7 @@ function regionCard(region,active,decision){
       <p class="rc-verdict">${decision?.state==='UNAVAILABLE'?'Current evidence is unavailable or too old. No riding recommendation.':decision?.state==='UNVERIFIED'?'Official closure verification is incomplete. Check the official source before a trip.':verdictLine(region,active)}</p>
       <p class="rc-meta"><strong>${esc(bestLine(region,active))}</strong></p>
       <p class="rc-meta">${esc(snowLine(region))} · ${esc(thawLine(region))}</p>
-      <p class="rc-meta">${esc(forecastLine(region))}</p>
+      <div class="sled-outlook-slot" data-outlook-region="${esc(region.key)}">${threeDayForecast(region)}</div>
       <div class="rc-meta" id="club-receipt-${esc(region.key)}">
         <p><strong>Local club check:</strong> <span class="club-receipt-line">Checking dated club reports…</span></p>
         <details class="rc-planning"><summary>Club names, report dates and grooming evidence</summary><div class="club-receipt-detail"></div><p><a href="${esc(detailUrl(region))}">Open the regional planner and original club sources</a>. A club posting applies locally and does not override a DNR closure.</p></details>
