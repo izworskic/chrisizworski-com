@@ -18,6 +18,27 @@ for(const width of [360,390,768,1280,1440]){
  assert.equal(await page.locator('.type-tanker.size-medium.is-stopped').count(),1);
  assert.equal(await page.locator('.type-cargo .ship-hull').evaluate(e=>getComputedStyle(e).fill),'rgb(20, 108, 134)');
  assert.match(await page.locator('#mapStatusText').innerText(),/2 recent reports/);
+ const type=kind=>page.locator('[data-hub-vessel-type="'+kind+'"]');
+ assert.equal(await type('all').locator('strong').innerText(),'2');
+ assert.equal(await type('cargo').locator('strong').innerText(),'1');
+ assert.equal(await type('tanker').locator('strong').innerText(),'1');
+ assert.equal(await type('passenger').locator('strong').innerText(),'0');
+ await type('tanker').click();
+ assert.equal(await type('tanker').getAttribute('aria-pressed'),'true');
+ assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),1);
+ assert.equal(await page.locator('#freighterVessels button').count(),1);
+ assert.match(await page.locator('#freighterVessels').textContent(),/QA TANKER/);
+ assert.match(await page.locator('#hub-fleet-status').innerText(),/Showing 1 of 2/);
+ await page.locator('[data-freighter-view=soo]').click();
+ assert.equal(await type('tanker').locator('strong').innerText(),'0');
+ assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),0);
+ assert.match(await page.locator('#freighterVessels').textContent(),/No recent AIS reports match/);
+ await type('cargo').focus();await page.keyboard.press('Enter');
+ assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),1);
+ await page.locator('[data-freighter-view=overview]').click();
+ assert.equal(await type('cargo').locator('strong').innerText(),'1');
+ await type('all').click();
+ assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),2);
  await page.screenshot({path:out+'/hub-first-'+width+'.png'});
  await page.locator('[data-freighter-view=soo]').click();
  assert.equal(await page.locator('#corridorTitle').innerText(),'Soo Locks');
@@ -25,8 +46,12 @@ for(const width of [360,390,768,1280,1440]){
  await page.locator('.hub-vessel-search summary').click();
  await page.locator('#freighterNameSearch').fill('QA TANKER');
  assert.match(await page.locator('#freighterSearchStatus').innerText(),/0 of 1/);
+ assert.equal(await type('all').locator('strong').innerText(),'0');
  await page.locator('#freighterSearchAll').click();
  assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),1);
+ assert.equal(await type('cargo').locator('strong').innerText(),'0');assert.equal(await type('tanker').locator('strong').innerText(),'1');
+ await type('cargo').click();assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),0);
+ await type('all').click();assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),1);
  await page.locator('#freighterClearSearch').click();
  assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),2);
  await page.locator('[data-freighter-view=saginaw]').click();assert.equal(await page.locator('#corridorTitle').innerText(),'Saginaw Bay');
@@ -54,6 +79,7 @@ for(const width of [360,390,768,1280,1440]){
    await page.locator('[data-saved-waterway=cuyahoga] button').click();assert.equal(await page.locator('#saved-waterways-list li').count(),1);
  }
  failed=true;await page.locator('#mapRefresh').click();await page.waitForFunction(()=>document.getElementById('mapStatusText').textContent.includes('Refresh unavailable'));
+ assert.match(await page.locator('#hub-fleet-status').innerText(),/Refresh unavailable; retained reports/);
  if(width===390){
    assert.match(await page.locator('[data-saved-waterway=soo]').innerText(),/Last known \(not live\)/);
    await page.reload({waitUntil:'domcontentloaded'});
@@ -67,8 +93,8 @@ for(const width of [360,390,768,1280,1440]){
 }
 const context=await browser.newContext({viewport:{width:390,height:900}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
 await context.route('**/*',route=>{const u=new URL(route.request().url());if(u.pathname==='/api/freighter-ais')return route.fulfill({status:503,contentType:'application/json',body:'{}'});return u.hostname==='127.0.0.1'?route.continue():route.abort()});
-await page.goto(base+'/freighters/',{waitUntil:'domcontentloaded'});await page.getByText(/Vessel reports unavailable/).waitFor();assert.ok(await page.locator('#freighterMap').evaluate(e=>e.getBoundingClientRect().height)<=120);assert.deepEqual(errors,[]);await context.close();
-const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:900}}),staticPage=await nojs.newPage();await staticPage.goto(base+'/freighters/',{waitUntil:'domcontentloaded'});assert.equal(await staticPage.locator('#corridors .corridor-card').count(),10);assert.ok(await staticPage.locator('#corridors a[href="/calumet-freighter-watch/"]').isVisible());assert.equal(await staticPage.locator('#my-waterways').isHidden(),true);assert.equal(await staticPage.locator('#save-waterway-row').isHidden(),true);await nojs.close();
+await page.goto(base+'/freighters/',{waitUntil:'domcontentloaded'});await page.getByText(/Vessel reports unavailable/).waitFor();assert.equal(await page.locator('[data-hub-vessel-type=all] strong').innerText(),'—');assert.equal(await page.locator('[data-hub-vessel-type=all]').isDisabled(),true);assert.match(await page.locator('#hub-fleet-status').innerText(),/unknown, not zero/);assert.ok(await page.locator('#freighterMap').evaluate(e=>e.getBoundingClientRect().height)<=120);assert.deepEqual(errors,[]);await context.close();
+const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:900}}),staticPage=await nojs.newPage();await staticPage.goto(base+'/freighters/',{waitUntil:'domcontentloaded'});assert.equal(await staticPage.locator('#corridors .corridor-card').count(),10);assert.ok(await staticPage.locator('#corridors a[href="/calumet-freighter-watch/"]').isVisible());assert.equal(await staticPage.locator('#my-waterways').isHidden(),true);assert.equal(await staticPage.locator('#save-waterway-row').isHidden(),true);assert.equal(await staticPage.locator('#hub-fleet-filter').isHidden(),true);await nojs.close();
 const blocked=await browser.newContext({viewport:{width:390,height:900}}),blockedPage=await blocked.newPage();
 await blocked.addInitScript(()=>{Storage.prototype.getItem=function(){throw Error('blocked')};Storage.prototype.setItem=function(){throw Error('blocked')};});
 await blocked.route('**/*',route=>{const u=new URL(route.request().url());if(u.pathname==='/api/freighter-ais')return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(fixture())});return u.hostname==='127.0.0.1'?route.continue():route.abort()});
