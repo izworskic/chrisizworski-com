@@ -1,0 +1,12 @@
+.upfall-river-desk{margin:1rem 0;border:1px solid #b7c9bc;border-radius:10px;background:#f4f8f4;color:#203d35}
+.upfall-river-desk summary{padding:12px 16px;min-height:44px;cursor:pointer;font-weight:700;line-height:1.45}
+.upfall-river-desk summary span{display:block;font-weight:400;font-size:.85rem}
+.upfall-river-content{padding:0 16px 16px}
+.upfall-river-content button{min-height:44px;background:#174a45;color:#fff;border:0;border-radius:6px;padding:8px 14px;font:inherit;cursor:pointer}
+.upfall-river-content button:disabled{opacity:.75;cursor:wait}
+.upfall-river-desk :focus-visible{outline:3px solid #146a70;outline-offset:3px}
+.upfall-river-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr));gap:12px}
+.upfall-river-reading{border-top:2px solid #6c9381;padding:10px 0;min-width:0;overflow-wrap:anywhere}
+.upfall-river-reading h4,.upfall-river-reading p{margin:4px 0}
+.upfall-river-reading .upfall-river-value{font-size:1.6rem;font-weight:700;font-variant-numeric:tabular-nums}
+.upfall-river-desk a{color:#124b55;text-decoration:underline}
