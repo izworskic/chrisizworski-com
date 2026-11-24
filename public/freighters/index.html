@@ -48,7 +48,7 @@
       "description": "A freighter-watching decision guide and curated directory of Great Lakes vessel tracking, ship-watching locations, ports, maritime news and history.",
       "url": "https://chrisizworski.com/freighters/",
       "inLanguage": "en-US",
-      "dateModified": "2026-11-23",
+      "dateModified": "2026-11-24",
       "isPartOf": {
         "@id": "https://chrisizworski.com/#website"
       },
@@ -252,9 +252,10 @@
   <p>Freighter Central is the <strong>directory and shore-watching guide</strong> for the Great Lakes shipping tools on this site. If you're trying to locate a particular vessel, use the AIS tracker. If you're planning to see one in person, choose a corridor below, then verify a fresh vessel report before you leave. For today's reported movements and port news, use the Great Lakes Gazette.</p>
 </section>
 <section id="watch-finder" class="finder" aria-labelledby="finder-title">
- <div class="finder-header"><div><p class="eyebrow">Freighter watch finder</p><h2 id="finder-title">Where should I look for a ship?</h2><p>Choose a waterway and what you want to accomplish. This guide routes you to the right existing tool; it does not estimate unverified arrival times.</p></div><div class="finder-mark" aria-hidden="true">01 / 03</div></div>
+ <div class="finder-header"><div><p class="eyebrow">Freighter watch finder</p><h2 id="finder-title">Where should I look for a ship?</h2><p>Choose a harbor, river or lock, then decide whether to follow the ships or head to the shore. You can also search by place name. Check recent reports before leaving home.</p></div><div class="finder-mark" aria-hidden="true">01 / 03</div></div>
  <div class="finder-form">
   <div class="field"><label for="corridor">01 · Choose your corridor</label>
+  <div id="finder-search" class="finder-search" hidden><label for="finder-query">Search by city, river or lock</label><div class="finder-search-row"><input id="finder-query" type="search" placeholder="Try Cleveland, Lock 3 or Canal Park" autocomplete="off" aria-describedby="finder-search-status"><button id="finder-search-go" type="button">Find</button></div><p id="finder-search-status" role="status"></p></div>
   <select id="corridor">
    <option value="soo">Soo Locks · Sault Ste. Marie</option>
    <option value="duluth">Duluth · Lake Superior</option>
@@ -262,6 +263,10 @@
    <option value="saginaw">Saginaw Bay · Bay City</option>
    <option value="port-huron">Port Huron · St. Clair River</option>
    <option value="mackinac">Straits of Mackinac</option>
+   <option value="calumet">Chicago · Calumet River</option>
+   <option value="cuyahoga">Cleveland · Cuyahoga River</option>
+   <option value="welland">Welland Canal · Niagara</option>
+   <option value="seaway">St. Lawrence Seaway</option>
   </select></div>
   <fieldset class="field"><legend>02 · What do you want to do?</legend>
    <label class="choice"><input type="radio" name="intent" value="track" checked><span>Find ships now</span></label>
@@ -349,7 +354,7 @@
 <footer class="site-footer"><div class="footer-inner">
  <div><strong>Freighter Central</strong><p>Great Lakes vessel watching, ports, ship stories and shoreline decisions.</p></div>
  <div class="footer-links"><a href="/great-lakes/">Great Lakes</a><a href="/great-lakes-freighter-tracking/">Live AIS</a><a href="/soo-locks/">Soo Locks</a><a href="/great-lakes-freighter-winter-layup/">Winter layup</a><a href="/tools/">All tools</a></div>
-</div><p class="byline">Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · Bay City, Michigan · Updated October 11, 2026</p></footer>
+</div><p class="byline">Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · Bay City, Michigan · Updated November 24, 2026</p></footer>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script defer src="/assets/freighter-tracker.js?v=20260917"></script>
 <script defer src="/assets/freighters-hub.js"></script>
