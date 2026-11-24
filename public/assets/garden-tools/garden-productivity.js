@@ -14,11 +14,11 @@ function summarize(planting,entries){
  const p=planting,q=p.productivity||null,records=entries.filter(e=>e.plantingId===p.id),weighed=records.filter(e=>e.kind==='harvest-weight').sort((a,b)=>a.date.localeCompare(b.date));
  const total=weighed.reduce((s,e)=>({usableG:s.usableG+e.usableG,discardedG:s.discardedG+e.discardedG}),{usableG:0,discardedG:0});
  const losses=records.filter(e=>e.kind==='plant-loss').reduce((n,e)=>n+e.lostCount,0);
- const hasWeight=weighed.length>0||q?.complete===true;
  const area=q?.lengthFt!=null&&q?.widthFt!=null?q.lengthFt*q.widthFt:null;
  const complete=q?.complete===true;
  const milestoneDates=records.filter(e=>['first-green-harvest','first-ripe-harvest','first-harvest','harvest'].includes(e.kind)).map(e=>e.date);
  const unweighedDates=[...new Set(milestoneDates.filter(date=>!weighed.some(e=>e.date===date)))].sort();
+ const hasWeight=weighed.length>0||complete&&unweighedDates.length===0;
  const eligible=complete&&unweighedDates.length===0&&area!==null&&q.group!=='other';
  const observedFirst=[...weighed.map(e=>e.date),...milestoneDates].sort()[0]||null;
  const harvested=total.usableG+total.discardedG;
