@@ -78,3 +78,11 @@
 #field-journal .fj-backup{margin-top:1rem;padding-top:1rem;border-top:1px solid #d9ded5;display:grid;gap:.5rem}
 #field-journal .fj-backup button{justify-self:start}
 #field-journal .fj-backup input{max-width:100%}
+
+/* Harvest notebook: comparison bars and aligned evidence, not a second dashboard. */
+#field-journal .fj-yield-line{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:.5rem 0;border-bottom:1px solid #e1e5de;overflow-wrap:anywhere}
+#field-journal .fj-yield-line span{font-size:.88rem;color:#46574c;min-width:0}
+#field-journal .fj-yield-line strong{text-align:right;max-width:55%;font-variant-numeric:tabular-nums}
+#field-journal .fj-yield-list{list-style:none;margin:1rem 0;padding:0}
+#field-journal .fj-yield-list li{margin:0 0 1rem;overflow-wrap:anywhere}
+#field-journal .fj-yield-list .gs-bar{min-width:0}
