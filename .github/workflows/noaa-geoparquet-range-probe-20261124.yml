@@ -1,14 +1,14 @@
 name: One-time NOAA GeoParquet range research
 on:
   pull_request:
-    types: [opened]
+    types: [synchronize]
     paths:
       - ".github/workflows/noaa-geoparquet-range-probe-20261124.yml"
 permissions:
   contents: read
 jobs:
   probe:
-    if: github.head_ref == 'research/noaa-geoparquet-range-probe-20261124' && github.event.pull_request.head.repo.full_name == github.repository
+    if: ${{ github.head_ref == 'research/noaa-geoparquet-range-probe-20261124' && github.event.pull_request.head.repo.full_name == github.repository }}
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
