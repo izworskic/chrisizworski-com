@@ -132,8 +132,9 @@ const DAY_WINDOWS=Object.freeze([6,8.5,10,12]);
 // daylight, road, admission, or safe-driving prediction. Never modify the route.
 function experiencePlan(day,raw={},catalog={},windowHours=8.5){
  if(!DAY_WINDOWS.includes(windowHours)||!day||!Array.isArray(day.stops)||
-   !Number.isFinite(day.rawDriveHours)||day.rawDriveHours<0||
-   !Number.isFinite(day.borderReserveHours)||day.borderReserveHours<0||
+   !raw||typeof raw!=='object'||!catalog||typeof catalog!=='object'||Array.isArray(catalog)||
+   !Number.isFinite(day.rawDriveHours)||day.rawDriveHours<0||day.rawDriveHours>24||
+   !Number.isFinite(day.borderReserveHours)||day.borderReserveHours<0||day.borderReserveHours>24||
    typeof day.withinCap!=='boolean'||typeof day.incompleteParkApproach!=='boolean')return null;
  const p=standardize(raw),dayMinutes=windowHours*60;
  const driveMinutes=Math.ceil(day.rawDriveHours*60),borderMinutes=Math.ceil(day.borderReserveHours*60);
