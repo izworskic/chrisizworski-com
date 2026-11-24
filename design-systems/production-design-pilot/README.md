@@ -46,3 +46,19 @@ All seven tested pairs exceed 4.5:1; this does not establish contrast for every 
 
 ## Release state
 Source inventory and seven color-pair calculations executed. Browser verifier authored, not executed against a complete checkout in this session; screenshot inspection NOT VERIFIED. Independent baseline/with-reference skill evaluations NOT VERIFIED. Main push workflow status NOT VERIFIED (available connector lookup returned no runs). Full repository verification NOT VERIFIED. Candidate gallery only, no production source or public route changed. A branch preview build may run because non-Markdown files were added; no new build step, runtime dependency, service or deployment infrastructure. No auto-merge or skill activation.
+
+## Phase 3 extension (2026-11-24)
+
+The original lab now loads [scoped foundations](foundations.css) and includes snow-observation and journey-planning specimens alongside the existing maritime examples. See [foundation contract](FOUNDATION_CONTRACT.md) for source provenance, component ownership, maturity and acceptance. The Duluth source-audit discrepancy above is historical: PR #1918 replaced its generic glyph with the shared factory and passed five-width map QA; the owner confirmed the working site. No live pages are modified by this extension. The independent candidate skill evaluation remains outstanding.
+
+## Phase 5: reviewed-source visual regression
+
+Use [visual-reference.json](visual-reference.json) and [VISUAL_REGRESSION.md](VISUAL_REGRESSION.md). The path-scoped workflow replaces the temporary branch-only lab job, exercises the existing verifier at five widths and compares seven captured states against the reviewed source commit in the same runner. No production route, masks, automatic baseline updates or new runtime dependencies. Preserve the reviewed commit in the repository history when merging this PR.
+
+## Phase 6: editorial and data presentation
+
+[Editorial and data presentation reference](EDITORIAL_DATA_CONTRACT.md) brings existing plain-voice, data-contract and visual storytelling guidance together with ten explicitly fictional paired examples. The examples exercise seven evidence categories and four availability states; the offline fixture test checks protected facts, numeric tokens, material caveats and representative false claims. No gallery markup or visual baseline changed, no production-wide linter, no active skill edits. Test scope is the examples, not independent semantic evaluation of the site's copy.
+
+## Phase 7: skill maturity
+
+[Skill maturity review](../../docs/skill-evals/SKILL_MATURITY_REVIEW.md) and [machine-readable registry](../../docs/skill-evals/skill-maturity-registry.json) reconcile 42 logical skills, 123 applicable mirror files and dedicated case coverage, with structural regression tests. Independent paired trials remain NOT VERIFIED. No skill body or activation pointer changed. Product proof and skill effectiveness remain separate.
