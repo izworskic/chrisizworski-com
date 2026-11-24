@@ -128,3 +128,46 @@ jobs:
           path: artifacts/lspp/
           retention-days: 7
           if-no-files-found: warn
+
+  production-design-pilot-qa:
+    # Temporary Phase 1 evidence job; review/remove the branch-specific gate before release.
+    if: github.event_name == 'pull_request' && github.head_ref == 'design/production-design-standard-draft-20261124'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - name: Prepare isolated Python Playwright environment
+        run: |
+          python3 -m venv "$RUNNER_TEMP/production-design-pilot-venv"
+          "$RUNNER_TEMP/production-design-pilot-venv/bin/python" -m pip install --disable-pip-version-check playwright==1.57.0
+          browser="$(command -v google-chrome || command -v chromium-browser || command -v chromium)"
+          test -n "$browser"
+          echo "CHROMIUM_PATH=$browser" >> "$GITHUB_ENV"
+          "$browser" --version
+      - name: Run existing five-width design laboratory verification
+        run: |
+          mkdir -p "$GITHUB_WORKSPACE/artifacts/production-design-pilot"
+          # Chrome's Unix socket must fit in a short path. Keep browser profiles out of artifacts.
+          qa_tmp="$(mktemp -d /tmp/pdq.XXXXXX)"
+          export TMPDIR="$qa_tmp"
+          collect_evidence() {
+            for png in "$qa_tmp"/production-design-pilot-*/lab-*.png; do
+              if [ -f "$png" ]; then
+                cp "$png" "$GITHUB_WORKSPACE/artifacts/production-design-pilot/"
+              fi
+            done
+            rm -rf -- "$qa_tmp"
+          }
+          trap collect_evidence EXIT
+          "$RUNNER_TEMP/production-design-pilot-venv/bin/python" design-systems/production-design-pilot/verify.py
+      - name: Retain design laboratory evidence for manual inspection
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-design-pilot-qa
+          path: artifacts/production-design-pilot/
+          retention-days: 7
+          if-no-files-found: warn
+
