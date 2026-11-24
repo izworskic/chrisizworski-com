@@ -16,7 +16,7 @@
   const source=window.ShoreFeelEPACatalog;
   const sourceRows=Array.isArray(source?.records)&&source.records.length<=1500?source.records:[];
   const listRoot=document.getElementById('shore-list');
-  const lakeLabel=lake=>lake==='Great Lakes'||!lake?'Great Lakes coastal site (lake not assigned)':'Lake '+lake;
+  const lakeLabel=lake=>lake==='Great Lakes'||!lake?'Great Lakes beach (lake not assigned)':'Lake '+lake;
   let sourceAdded=0;
   function addEpaRow(r){
     if(!listRoot||!r||!/^[A-Z]{2}[A-Z0-9]{4,14}$/.test(r.id||'')||
@@ -136,13 +136,9 @@
         put('report-scope',(a.scope||'NWS area forecast, not an on-sand observation.')+' '+d.coordinateNote+'. Swimming status and water bacteria are not checked by this forecast.');
       })
       .catch(error=>{if(error.name!=='AbortError'&&current===d.slug)setUnavailable('The NWS forecast request did not succeed. Open the official NWS weather service and the park links.');});
-    if(mapLive&&markers.has(d.slug)){
-      const location=[Number(d.lat),Number(d.lon)];
-      if(map.getZoom()<9||!map.getBounds().contains(location))map.setView(location,9,{animate:false});
-      drawMap();
-      const point=markers.get(d.slug);
-      if(map.hasLayer(point))point.openPopup();
-    }
+    // Selection updates the report and highlight, not the visitor's map viewport.
+    // A map marker opens its own popup; a list selection can deliberately focus it.
+    if(mapLive)drawMap();
     if(window.va)window.va('event',{name:'ShoreFeel US Beach Select',data:{beach:d.slug,lake:d.lake}});
     try{const u=new URL(location.href);u.searchParams.set('beach',d.slug);history.replaceState(null,'',u);}catch{}
   }
@@ -192,7 +188,7 @@
     const noMatch=$('shore-no-match');
     if(noMatch)noMatch.hidden=matching.length>0;
     put('result-count',matching.length+' matching · '+list.length+' beach listings');
-    if(mapLive){
+    if(mapLive&&!extend){
       const coordinates=matching.map(li=>[Number(li.dataset.lat),Number(li.dataset.lon)])
         .filter(a=>a.every(Number.isFinite));
       if(coordinates.length>1){
@@ -213,15 +209,12 @@
     }
     if(matching.length)showPlace(matching[0]);
   }
-  let displayedMapLayers=[];
+  let displayedMapLayers=new Set();
   function drawMap(){
     if(!mapLive)return;
-    for(const layer of displayedMapLayers){
-      if(map.hasLayer(layer))map.removeLayer(layer);
-    }
-    displayedMapLayers=[];
+    const nextLayers=new Set();
     const visible=map.getBounds().pad(.20),zoom=map.getZoom();
-    const putMarker=marker=>{marker.addTo(map);displayedMapLayers.push(marker)};
+    const putMarker=marker=>nextLayers.add(marker);
     if(zoom>=9){
       for(const li of matching){
         const marker=markers.get(li.dataset.slug);
@@ -256,23 +249,43 @@
         putMarker(marker);
       }
     }
+    // Preserve existing marker instances and their open popups on pan/zoom.
+    for(const layer of displayedMapLayers)if(!nextLayers.has(layer))map.removeLayer(layer);
+    for(const layer of nextLayers)if(!map.hasLayer(layer))layer.addTo(map);
+    displayedMapLayers=nextLayers;
     const active=markers.get(current);
-    if(active&&map.hasLayer(active)){
-      const pin=active.getElement()?.querySelector('.shore-marker');
-      if(pin)pin.classList.add('selected');
+    for(const layer of displayedMapLayers){
+      const pin=layer.getElement()?.querySelector('.shore-marker');
+      if(pin)pin.classList.toggle('selected',layer===active);
+    }
+  }
+  function selectFromList(li){
+    showPlace(li);
+    if(mapLive&&markers.has(li.dataset.slug)){
+      map.setView(markers.get(li.dataset.slug).getLatLng(),Math.max(map.getZoom(),12),{animate:false});
+      drawMap();
     }
   }
   function initMap(){
     if(typeof window.L!=='object')return mapError();
     try{
-      map=window.L.map('shore-map',{scrollWheelZoom:false,zoomControl:true,
-        touchZoom:false,dragging:!matchMedia('(pointer:coarse)').matches});
+      // Match the Canadian ShoreFeel gesture fix, scoped to the map only.
+      const surface=$('shore-map');
+      surface.style.touchAction='none';
+      const keepPinchOnMap=event=>{
+        if(event.touches&&event.touches.length>1&&event.cancelable)event.preventDefault();
+      };
+      surface.addEventListener('touchstart',keepPinchOnMap,{passive:false,capture:true});
+      surface.addEventListener('touchmove',keepPinchOnMap,{passive:false,capture:true});
+      map=window.L.map('shore-map',{scrollWheelZoom:false,zoomControl:true,touchZoom:true,dragging:true,maxZoom:16});
       map.setView([44.2,-84.5],5);
       const tiles=window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
-        maxZoom:12,attribution:'© OpenStreetMap contributors',crossOrigin:true
+        maxZoom:16,attribution:'© OpenStreetMap contributors'
       }).addTo(map);
-      tiles.on('tileload',()=>{loadedTile=true;});
-      tiles.on('tileerror',()=>{tileFails+=1;if(tileFails>=3&&!loadedTile)mapError();});
+      // Tiles are background imagery only. Never remove verified beach pins if
+      // the external tile provider is slow, blocked or temporarily unavailable.
+      tiles.on('tileload',()=>{loadedTile=true;tileFails=0;$('map-tile-note').hidden=true;});
+      tiles.on('tileerror',()=>{tileFails+=1;if(tileFails>=3&&!loadedTile)$('map-tile-note').hidden=false;});
       for(const li of list){
         const d=li.dataset,lat=Number(d.lat),lon=Number(d.lon);
         if(!Number.isFinite(lat)||!Number.isFinite(lon))continue;
@@ -288,7 +301,7 @@
         const marker=window.L.marker([lat,lon],{icon,title:d.name,keyboard:true}).bindPopup(popup);
         marker.on('click',()=>{
           const target=bySlug.get(d.slug);
-          if(target)setLake(d.lake==='Great Lakes'?'All':d.lake,target);
+          if(target)showPlace(target);
         });
         markers.set(d.slug,marker);
       }
@@ -299,7 +312,7 @@
       if(positions.length>1)map.fitBounds(window.L.latLngBounds(positions).pad(.12),{maxZoom:9,animate:false});
       else if(positions.length===1)map.setView(positions[0],9,{animate:false});
       drawMap();
-      setTimeout(()=>{if(!loadedTile&&mapLive)mapError();},8000);
+      setTimeout(()=>{if(!loadedTile&&mapLive)$('map-tile-note').hidden=false;},8000);
     }catch{mapError();}
   }
   function mapError(){
@@ -321,7 +334,7 @@
     query='';if(search)search.value='';
     setLake(b.dataset.lakeFilter);
   }));
-  list.forEach(li=>li.querySelector('button[data-select]').addEventListener('click',()=>setLake(li.dataset.lake,li)));
+  list.forEach(li=>li.querySelector('button[data-select]').addEventListener('click',()=>selectFromList(li)));
   const initial=new URLSearchParams(location.search).get('beach');
   const target=initial&&bySlug.has(initial)?bySlug.get(initial):list[0];
   setLake(initial&&bySlug.has(initial)?target.dataset.lake:'All',target);
