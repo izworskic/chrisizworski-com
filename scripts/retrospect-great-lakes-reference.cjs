@@ -58,6 +58,7 @@ function evaluateCandidate(c,tracks,engine,options={}){
  expect(Number.isFinite(mid)&&Number.isFinite(start)&&Number.isFinite(end)&&start<=mid&&mid<=end&&mid>=issue&&Number.isFinite(distance)&&distance>=0&&v.speedKnots>0,'Invalid forecast contract');
  const baseline=issue+distance/v.speedKnots*60*MIN;
  const row={status:'scored',model:bounds(mid,lo,hi),baseline:bounds(baseline,lo,hi),coverage:start<=lo&&end>=hi?'contained':end<lo||start>hi?'disjoint':'partial',width:(end-start)/MIN};
+ if(options.arrivalResiduals===true)row.signedResidual=[(lo-mid)/MIN,(hi-mid)/MIN];
  if(options.routeProgress===true)row.routeProgress=routeProgress.compare(routeProgress.estimate(c.site,result,track.filter(([t])=>t<=issue),issue),result,issue,lo,hi,bounds);
  return row;
 }
@@ -73,14 +74,16 @@ function retrospect(doc,options={}){
   featureBasis:'archive SOG/COG and available static length/type at observation; no destination, receive-time evidence or future imputation',
   overall:summary(rows),bySite:Object.fromEntries(Object.keys(engines).map(s=>[s,summary(rows.filter(r=>r.site===s))])),
   ...(options.routeProgress===true?{routeProgressChallenger:{kind:'PRESPECIFIED_DEVELOPMENT_CHALLENGER',overall:routeProgress.summarize(rows),bySite:Object.fromEntries(Object.keys(engines).map(s=>[s,routeProgress.summarize(rows.filter(r=>r.site===s))]))}}:{}),
+  ...(options.arrivalResiduals===true?{arrivalResiduals:{site:'soo',model:'existing-reference-v1',date:doc.start.slice(0,10),sourceReceiptSha256:doc.source.receiptSha256,candidateEvents:rows.filter(r=>r.site==='soo').length,eligibleEstimates:rows.filter(r=>r.site==='soo'&&r.status==='scored').length,residuals:rows.filter(r=>r.site==='soo'&&r.signedResidual).map(r=>r.signedResidual).sort((a,b)=>a[0]-b[0]||a[1]-b[1])}}:{}),
   independentlyReviewedCrossings:0,receiptTimesAvailable:false,fieldAccuracyVerified:false,productionCalibrationAuthorized:false,
   note:'Outcome-conditioned sample; scores conditional on detected future proxy crossings and available matching-direction estimates. Not recall, precision, false-positive rate, independent ground truth, or operational forecast performance. Soo corridors and Duluth normal/width provisional; arrival target is not physical structure passage.'};
 }
 module.exports={retrospect,proxyGates,prepare,evaluateCandidate,summary};
 if(require.main===module){
- const [input,output,...extra]=process.argv.slice(2);expect(input&&output&&(extra.length===0||extra.length===1&&extra[0]==='--route-progress-challenger'),'Usage: node scripts/retrospect-great-lakes-reference.cjs input.json output.json [--route-progress-challenger]');
+ const [input,output,...extra]=process.argv.slice(2);expect(input&&output&&(extra.length<=2&&new Set(extra).size===extra.length&&extra.every(x=>['--route-progress-challenger','--arrival-residuals'].includes(x))),'Usage: node scripts/retrospect-great-lakes-reference.cjs input.json output.json [--route-progress-challenger] [--arrival-residuals]');
  expect(fs.statSync(input).size<=MAX_BYTES,'Input exceeds offline byte cap');
- const raw=fs.readFileSync(input,'utf8'),report=retrospect(JSON.parse(raw),{routeProgress:extra.length===1});
+ const raw=fs.readFileSync(input,'utf8'),report=retrospect(JSON.parse(raw),{routeProgress:extra.includes('--route-progress-challenger'),arrivalResiduals:extra.includes('--arrival-residuals')});
  report.inputSha256=crypto.createHash('sha256').update(raw).digest('hex');
+ if(report.arrivalResiduals)report.arrivalResiduals.inputSha256=report.inputSha256;
  fs.writeFileSync(output,JSON.stringify(report,null,2)+'\n',{flag:'wx',mode:0o600});
 }
