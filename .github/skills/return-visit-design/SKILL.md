@@ -25,7 +25,7 @@ These tools answer "is it happening now?" questions: aurora, Soo Locks traffic, 
 
 | Reason | Hook Model phase | What it looks like here | Implemented by |
 | --- | --- | --- | --- |
-| The answer changed and they care | External trigger | Kp crosses the threshold for their town; bridge wind restriction lifts | `condition-alerts` |
+| The answer changed and they care | External trigger | Their region's aurora outlook changes; bridge wind restriction lifts; a calendar event moves | `condition-alerts` (calendar and RSS only) |
 | They saved something | Investment | A saved viewing town, lake, trail system or crossing direction | `my-spots-offline` |
 | A good window is coming | Anticipation, then trigger | Next dark, moon-down hours; projected peak week; Bridge Walk date | `computed-windows`, then `condition-alerts` for the calendar |
 
@@ -48,7 +48,7 @@ What the visitor saves: the smallest thing that personalizes the answer
 Upcoming window: a computed or published date, or none
 Changed answer on return: what they see that they did not see last time
 One action from the alert: the URL or anchor the trigger opens
-Channels: calendar / RSS / push, and why each
+Channels: calendar / RSS, and why each (no push: owner decision 2026-11-24)
 Cost: Vercel functions and builds added (target: none)
 Baseline: returning share now, from return-metrics, or NOT MEASURED
 Success test: the number that must move, the window, the minimum sample
