@@ -11,7 +11,8 @@ const MIN=60000,GRID=15*MIN,FRESH=5*MIN,HORIZON=120*MIN,GAP=5*MIN;
 const DATES=Object.freeze(['2024-09-04','2024-09-10','2024-09-15']);
 const expect=(ok,msg)=>{if(!ok)throw Error(msg);};
 const usable=p=>p&&Number.isFinite(p.lat)&&Math.abs(p.lat)<=85&&Number.isFinite(p.lon)&&Math.abs(p.lon)<=180&&Number.isInteger(p.shipType)&&p.shipType>=70&&p.shipType<=89;
-function issueForecasts(tracks,start,end,engine=soo){
+function issueForecasts(tracks,start,end,engine=soo,maxLead=60){
+ expect(maxLead===30||maxLead===60,'Unsupported prespecified issue policy');
  const issued=[],counts={usableSnapshots:0,modelAbstentions:0,outsideLeadRange:0,duplicateVesselDaySuppressed:0};
  for(const [id,track] of tracks){
   let i=-1,alreadyIssued=false;
@@ -24,7 +25,7 @@ function issueForecasts(tracks,start,end,engine=soo){
    if(!result){counts.modelAbstentions++;continue;}
    const mid=Date.parse(result.window.midpoint),s=Date.parse(result.window.start),t=Date.parse(result.window.end);
    expect([s,mid,t].every(Number.isFinite)&&now<=s&&s<=mid&&mid<=t&&['upbound','downbound'].includes(result.direction),'Invalid issue forecast');
-   if(mid-now<15*MIN||mid-now>60*MIN){counts.outsideLeadRange++;continue;}
+   if(mid-now<15*MIN||mid-now>maxLead*MIN){counts.outsideLeadRange++;continue;}
    issued.push({id,issuedAt:now,observationTime:track[i][0],midpoint:mid,start:s,end:t,direction:result.direction});
    alreadyIssued=true;
   }
