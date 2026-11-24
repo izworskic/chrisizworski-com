@@ -36,7 +36,7 @@ test('US catalog covers 16 verified destinations in seven non-Michigan states an
 
 
 test('four NWS shoreline references remain in vetted land locations, within the beach area',async()=>{
- // Each location was checked against the live NWS /points endpoint on 2026-11-24.
+ // Each location was checked against the live NWS /points endpoint on 2026-11-22.
  // Prior references were classified "marine" and blanked an otherwise available forecast.
  const corrected={
   'park-point-beach-house':{lat:46.722,lon:-92.04},
