@@ -119,8 +119,17 @@ function render(){
   if(day.borderReserveMinutes)card.appendChild(node('p',
     'Add a separate 45-minute unverified border reserve. It is not an observed crossing wait.',
     'ct-personal-note'));
-  if(!day.complete)card.appendChild(node('p',
-    'The Pigeon River-to-park approach is not independently measured. The sample allowance is based only on editorial mileage. Check the road route and border wait before committing to an arrival time.','ctp-warning'));
+  if(!day.complete){
+   const warning=node('p','The sample allowance is based only on editorial mileage. Check the road route and border wait before committing to an arrival time.','ctp-warning');
+   if(day.incompleteLegs?.includes('20→21')){
+    warning.textContent='The Pigeon River-to-park approach is not independently measured. The sample allowance uses editorial mileage. Minnesota DNR identifies the park entrance and visitor parking on Highway 61, separate from the border crossing. ';
+    warning.appendChild(link('Check the official park entrance map','https://files.dnr.state.mn.us/maps/state_parks/spk00173.pdf'));
+    warning.appendChild(node('span',' · '));
+    warning.appendChild(link('Check U.S. border wait information','https://bwt.cbp.gov/'));
+    warning.appendChild(node('span','. If your crossing has no reported wait, allow for uncertainty; no arrival time is confirmed.'));
+   }
+   card.appendChild(warning);
+  }
   if(day.seasonalHold)card.appendChild(node('p',
     'Before booking, check seasonal road, park and trail access directly.','ctp-warning'));
   const body=node('div',undefined,'ct-personal-day-body');
