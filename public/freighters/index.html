@@ -217,6 +217,19 @@
         <button class="view-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-freighter-view="mackinac">Mackinac</button>
       </div>
     </div>
+    <section id="hub-fleet-filter" class="hub-fleet-filter" aria-label="Filter recent AIS vessel reports by type" hidden>
+      <div class="hub-fleet-head"><h3>Ships in this view</h3><span>Choose a type to filter the map and list.</span></div>
+      <div class="hub-fleet-buttons" role="group" aria-label="Vessel type">
+        <button type="button" data-hub-vessel-type="all" aria-pressed="true" disabled><strong>—</strong><span>All ships</span></button>
+        <button type="button" data-hub-vessel-type="cargo" aria-pressed="false" disabled><strong>—</strong><span>Cargo</span></button>
+        <button type="button" data-hub-vessel-type="tanker" aria-pressed="false" disabled><strong>—</strong><span>Tankers</span></button>
+        <button type="button" data-hub-vessel-type="tug" aria-pressed="false" disabled><strong>—</strong><span>Tugs / towing</span></button>
+        <button type="button" data-hub-vessel-type="passenger" aria-pressed="false" disabled><strong>—</strong><span>Passenger</span></button>
+        <button type="button" data-hub-vessel-type="fishing" aria-pressed="false" disabled><strong>—</strong><span>Fishing</span></button>
+        <button type="button" data-hub-vessel-type="other" aria-pressed="false" disabled><strong>—</strong><span>Other / unknown</span></button>
+      </div>
+      <p id="hub-fleet-status" role="status">Checking recent AIS reports.</p>
+    </section>
     <details class="hub-vessel-search">
       <summary>Find a ship by name or MMSI</summary>
       <div class="hub-vessel-search-body" role="search" aria-label="Search recent vessel reports">
@@ -252,7 +265,7 @@
     </div>
     <details class="hub-map-reports">
       <summary>Recent vessel reports and source credits <span class="hub-report-hint">View the names behind the markers</span></summary>
-      <p>Only AIS reports less than 30 minutes old appear. Ship silhouettes show reported broad vessel types and approximate size bands, not true map scale or direction. Blue indicates movement; amber, little or no movement; gray, unavailable speed. A missing report does not prove a lake is empty.</p>
+      <p>Only AIS reports less than 30 minutes old appear. The fleet filter groups reported AIS types, not exact ship classes; cargo includes freighters and other cargo vessels. Other / unknown includes types not separately classified here. Ship silhouettes show reported broad vessel types and approximate size bands, not true map scale or direction. Blue indicates movement; amber, little or no movement; gray, unavailable speed. A missing report does not prove a lake is empty.</p>
       <ul id="freighterVessels"><li>Checking reported positions…</li></ul>
       <p id="freighterCredits">Sources will be listed when AIS reports load.</p>
     </details>
