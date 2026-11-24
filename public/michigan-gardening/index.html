@@ -44,7 +44,7 @@
         "@id": "https://chrisizworski.com/#person"
       },
       "description": "A curated set of Michigan Zone 6a gardening guides covering planting calendars, frost dates, heirloom tomatoes, seed saving, and companion planting.",
-      "dateModified": "2026-11-13",
+      "dateModified": "2026-11-24",
       "hasPart": [
         {
           "@type": "Article",
@@ -469,6 +469,7 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
 <link rel="stylesheet" href="/assets/garden-tools/garden-kit.css">
 <link rel="stylesheet" href="/assets/garden-tools/season-story.css?v=20261113a">
 <link rel="stylesheet" href="/assets/garden-tools/garden-hub.css?v=20261113a">
+<link rel="stylesheet" href="/assets/garden-tools/growing-season.css?v=20261124">
 <link rel="stylesheet" href="/assets/garden-tools/garden-welcome.css?v=20261113a">
 <link rel="stylesheet" href="/assets/garden-tools/fvf-identity.css?v=20261113a">
 
@@ -608,6 +609,7 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
   </section>
  </div>
  <p class="garden-outside">Our planning tools use 78 Michigan frost stations and MSU Extension guidance where available. Your soil, seed packet and forecast get the final say.</p>
+ <p class="garden-outside"><a href="#growing-season">Follow your crop through the growing season</a> with historical heat and upcoming overnight weather.</p>
  <p class="garden-outside">Gardening outside Michigan? <a href="/national-tools/planting/">Open the U.S. planting calendar</a>.</p>
 </section>
 <section class="garden-welcome" aria-labelledby="welcomeTitle">
@@ -738,6 +740,30 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
   </ul>
  </section>
 </div>
+</details>
+
+<details class="planner-door" id="growing-season">
+ <summary><span>FREIGHTER VIEW FARMS · GROWING SEASON</span><strong>Follow a crop from planting to harvest</strong><small>Explore five past growing seasons and check the next cold nights near your garden.</small></summary>
+ <div class="gs-body">
+  <h3>Every garden has its own growing season.</h3>
+  <p>Choose a crop, planting date and one of seven Michigan weather reference towns. See how much the same planting date can vary from year to year, then check the upcoming nights. This is a planning notebook, not a prediction of the day you will harvest.</p>
+  <form id="gs-form" class="gs-form" hidden>
+   <div class="gs-fields">
+    <label for="gs-place">Historical reference town<input id="gs-place" list="gs-towns" autocomplete="off" required><datalist id="gs-towns"></datalist></label>
+    <label for="gs-crop">Crop and variety (choose a matching starting stage or type your own)<input id="gs-crop" list="gs-crops" autocomplete="off" maxlength="120" required><datalist id="gs-crops"></datalist></label>
+    <label for="gs-date">Planting or planned planting date<input id="gs-date" type="date" min="2020-01-01" max="2100-12-31" required></label>
+    <label for="gs-packet">Packet days to maturity (optional)<input id="gs-packet" type="number" min="1" max="365" inputmode="numeric"></label>
+   </div>
+   <div class="gs-actions"><button type="submit">Update and save my season</button><button type="button" class="gs-secondary" id="gs-clear">Clear saved plan</button><span class="gs-save-status" id="gs-save-status" role="status">Saved only in this browser when you choose to save.</span></div>
+  </form>
+  <p id="gs-status" role="status">Open the notebook to compare historic growing seasons.</p>
+  <div class="gs-grid">
+   <section aria-labelledby="gs-history-title"><h3 id="gs-history-title">How past seasons unfolded</h3><div id="gs-history" aria-live="polite"></div></section>
+   <section aria-labelledby="gs-weather-title"><h3 id="gs-weather-title">Watch the nights ahead</h3><button type="button" id="gs-weather" disabled>Check overnight weather</button><p id="gs-weather-status" role="status">No current forecast loaded.</p><div id="gs-weather-result"></div><p><a href="/national-tools/frost/cover-plants-tonight/">Should I cover my plants tonight?</a></p></section>
+  </div>
+  <p class="gs-sources">Historical reference: <a href="https://doi.org/10.3334/ORNLDAAC/2129">NASA Daymet 2021–2025</a>, regional 1 km gridded temperatures, not garden measurements. Cultivar models: <a href="https://extension.oregonstate.edu/catalog/em-9305-vegetable-degree-day-models-introduction-farmers-gardeners">Oregon State University Extension</a>, not independently validated in Michigan. Forecasts: <a href="https://www.weather.gov/">National Weather Service</a>. <a href="/michigan-soil-temperature/">Check soil temperature</a> · <a href="/national-tools/garden-water/">Check watering needs</a> · <a href="/michigan-garden-pest-watch/">Inspect for pests</a> · <a href="/living-garden/">Plan and record your raised-bed harvests</a>.</p>
+  <noscript><p>JavaScript is required for the historical comparison and weather lookup. The source links and existing garden tools above remain available.</p></noscript>
+ </div>
 </details>
 
 <!-- MAIN CONTENT -->
@@ -1172,5 +1198,8 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
 })();
 </script>
 <script src="/assets/garden-tools/seasonal-heat.js?v=20261101"></script>
+<script defer src="/assets/garden-tools/garden-harvest.js?v=20261124"></script>
+<script defer src="/assets/garden-tools/garden-history.js?v=20261124"></script>
+<script defer src="/assets/garden-tools/growing-season.js?v=20261124"></script>
 </body>
 </html>
