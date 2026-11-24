@@ -19,3 +19,15 @@
 
 .upfall-weather-context{margin-top:16px;padding-top:12px;border-top:1px solid #b7c9bc}
 .upfall-weather-context h4{margin:0 0 8px;font-size:1.1rem}
+
+/* Connected visitor journey: keep the chosen waterfall above optional conditions. */
+.up-waterfall-hub .upfall-visit-next{border-top:1px solid #b7c9bc;margin-top:16px;padding-top:12px}
+.up-waterfall-hub .upfall-visit-next p{font-size:.9rem;margin:6px 0;line-height:1.5}
+.up-waterfall-hub .upfall-next-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.up-waterfall-hub .upfall-next-actions button,.up-waterfall-hub .upfall-next-actions a{font:inherit;font-size:.9rem;font-weight:700;min-height:44px;display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border-radius:6px;border:1px solid #164d47;background:#fff;color:#164d47;text-decoration:none;cursor:pointer}
+.up-waterfall-hub .upfall-next-actions #arrival-save:not(:disabled){background:#164d47;color:#fff}
+.up-waterfall-hub .upfall-next-actions button:disabled{background:#e8ece7;color:#42574e;cursor:not-allowed;border-color:#8ca9a0}
+.up-waterfall-hub .upfall-next-actions :focus-visible{outline:3px solid #146a70;outline-offset:3px}
+.up-waterfall-hub .upfall-river-desk{scroll-margin-top:16px;margin:12px 0 0}
+.up-waterfall-hub #river-visit-context{font-weight:650}
+@media(max-width:620px){.up-waterfall-hub .upfall-next-actions>*{flex:1 1 100%}.up-waterfall-hub .upfall-arrival-example,.up-waterfall-hub .upfall-arrival-review{font-size:.875rem}}

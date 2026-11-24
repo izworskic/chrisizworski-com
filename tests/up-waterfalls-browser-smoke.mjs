@@ -62,6 +62,28 @@ try{
     await choose.selectOption('wagner-falls');
     await page.locator('#visit-date').fill('2027-07-15');
   });
+  await run('connected arrival, saved stop and river context survive A-B-A selection',async()=>{
+    const choose=page.locator('#arrival-choice');
+    await choose.selectOption('wagner-falls');
+    const save=page.locator('#arrival-save');
+    const original=page.locator('[data-id="wagner-falls"] button.save');
+    if(await original.getAttribute('aria-pressed')==='true')await save.click();
+    await save.click();
+    assert.equal(await original.getAttribute('aria-pressed'),'true');
+    assert.equal(await save.getAttribute('aria-pressed'),'true');
+    await page.locator('#arrival-water').click();
+    assert.equal(await page.locator('#river-conditions').evaluate(e=>e.open),true);
+    assert.match(await page.locator('#river-visit-context').innerText(),/Wagner Falls/);
+    await choose.selectOption('munising-falls');
+    assert.equal(await save.isDisabled(),true);
+    assert.match(await page.locator('#river-visit-context').innerText(),/Munising Falls/);
+    await choose.selectOption('wagner-falls');
+    assert.equal(await save.getAttribute('aria-pressed'),'true');
+    await save.click();
+    assert.equal(await original.getAttribute('aria-pressed'),'false');
+    await page.locator('#river-conditions-heading').click();
+    await page.screenshot({path:screenshots+'/connected-visit-390.png',fullPage:false});
+  });
   await run('arrival panel keeps 360px and tablet layout inside the viewport',async()=>{
     for(const width of [360,768]){
       await page.setViewportSize({width,height:844});

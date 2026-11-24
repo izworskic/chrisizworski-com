@@ -32,7 +32,7 @@ test('query bounded to completed days and date rollover',()=>{
 test('map first, existing access desk and all 80 cards retained',()=>{
  const html=fs.readFileSync('public/upper-peninsula-waterfalls/index.html','utf8');
  assert.ok(html.indexOf('id="falls-map"')<html.indexOf('id="river-conditions"'));
- assert.ok(html.indexOf('id="river-conditions"')<html.indexOf('id="arrival-desk"'));
+ assert.ok(html.indexOf('id="arrival-desk"')<html.indexOf('id="river-conditions"'));
  assert.equal((html.match(/<article class="waterfall-card" data-fall /g)||[]).length,80);
  assert.match(html,/not the amount going over a particular falls/);
  assert.match(html,/up-waterfalls-river-conditions.js/);
