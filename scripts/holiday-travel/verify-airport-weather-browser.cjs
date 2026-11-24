@@ -79,6 +79,13 @@ async function main() {
       // Exercise the real calendar and itinerary A -> B -> A through native controls.
       await page.waitForFunction(() => Number.isFinite(Number(document.getElementById('third-stat').getAttribute('data-p'))));
       const originalRisk = Number(await page.locator('#third-stat').getAttribute('data-p'));
+      assert.match(await page.locator('#dashboard-route').innerText(),/ORD.*LGA/);
+      await page.route('**/api/holiday-airport-weather?view=faa',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({status:'available',checkedAt:new Date().toISOString(),events:[{airport:'ORD',label:'Ground stop',reason:'Fixture snow',averageMinutes:null,minimumMinutes:null,maximumMinutes:null}]})}));
+      await page.locator('#dashboard-refresh').click();
+      await page.getByText('FAA notices: ORD',{exact:true}).waitFor();
+      assert.equal(Number(await page.locator('#third-stat').getAttribute('data-p')),originalRisk);
+      await assertNoPageOverflow(page,width);
+      await page.locator('#departure-dashboard').screenshot({path:'artifacts/holiday-airport-weather/departure-dashboard-'+width+'.png'});
       const originalDay = await page.locator('#dep-day').inputValue();
       const originalDue = await page.locator('#due-day').inputValue();
       const originalDueHour = await page.locator('#due-time').inputValue();
