@@ -64,7 +64,13 @@ function validate(data,today){
   ids.add(e.id);entries.push(clean);
  }
  const losses=new Map();for(const e of entries)if(e.kind==='plant-loss')losses.set(e.plantingId,(losses.get(e.plantingId)||0)+e.lostCount);
- for(const p of plantings)if(p.productivity?.plantedCount!=null&&(losses.get(p.id)||0)>p.productivity.plantedCount)throw Error('Recorded plant losses exceed the original planted count');
+ for(const p of plantings){
+  if(p.productivity?.plantedCount!=null&&(losses.get(p.id)||0)>p.productivity.plantedCount)throw Error('Recorded plant losses exceed the original planted count');
+  if(p.productivity?.complete){
+   const rows=entries.filter(e=>e.plantingId===p.id),weighed=new Set(rows.filter(e=>e.kind==='harvest-weight').map(e=>e.date));
+   if(rows.some(e=>['first-green-harvest','first-ripe-harvest','first-harvest','harvest'].includes(e.kind)&&!weighed.has(e.date)))throw Error('Finished planting has a harvest milestone without a weighed record');
+  }
+ }
  return {schema,plantings,entries};
 }
 function summarize(data,id,today,history=null){
