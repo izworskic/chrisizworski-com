@@ -22,4 +22,6 @@ Added 2026-11-24. Five single-purpose skills that give visitors a true reason to
 - ntfy topics: reserve them on ntfy.sh (paid tier) or self-host on the network VPS with publish locked to a token. Public unreserved topics can be posted to by anyone who knows the name.
 - GA4: a read-only service account or ADC credential for measurement.
 
+Contracts written so far: [`docs/return-contracts/northern-lights-michigan.md`](return-contracts/northern-lights-michigan.md).
+
 No package is installed, no route is added and no page changes in this PR. Implementations go through Experience OS, Experience Investment, Foundry, Playwright and `npm run verify:all`. Nothing auto-merges.
