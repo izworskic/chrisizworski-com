@@ -215,7 +215,7 @@
         credit.href=story.photoSource;credit.target="_blank";credit.rel="noopener";caption.append(credit);
         if(story.licenseUrl){var license=node("a","License");license.href=story.licenseUrl;license.target="_blank";license.rel="noopener";caption.append(document.createTextNode(" · "),license);}
         caption.append(document.createTextNode(" · Historical photograph, not live"));figure.append(picture,caption);
-        picture.addEventListener("error",function(){figure.hidden=true;storyBox.classList.remove("has-photo");});
+        picture.addEventListener("error",function(){if(request!==storyRequest)return;figure.hidden=true;storyBox.classList.remove("has-photo");});
         storyBox.append(figure);
       }
       storyBox.append(content);storyBox.hidden=false;
