@@ -75,6 +75,10 @@
 .calendar-days{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.calendar-days>p{grid-column:1/-1;margin:0}.calendar-day{min-width:0;min-height:65px;padding:8px 9px;border:1px solid #b7d0cb;border-radius:8px;background:#fff;text-align:left;color:var(--ink);display:grid;grid-template-columns:1fr auto;gap:3px 5px;align-items:center}.calendar-day .calendar-date{font-size:.78rem;font-weight:700;line-height:1.2}.calendar-day strong{font-size:1.15rem;line-height:1;font-variant-numeric:tabular-nums}.calendar-day .calendar-bar{grid-column:1/-1;height:6px;background:#e5efeb;border-radius:3px;overflow:hidden}.calendar-bar i{display:block;height:100%;background:#537a7a}.calendar-day[data-level=low] .calendar-bar i{background:var(--good)}.calendar-day[data-level=high] .calendar-bar i{background:var(--bad)}.calendar-day[aria-pressed=true]{border:2px solid #136b69;background:#e9f5f0;padding:7px 8px}.calendar-day:hover{background:#eef7f3}
 .calendar-selection{font-size:.85rem;font-weight:700;margin:9px 0 0;color:#154b50}.trip-inputs{margin-top:10px!important}.field,.controls>*{min-width:0}.callout{margin:18px 0 0;border-radius:12px;padding:18px}.callout h2{font-size:clamp(1.45rem,3vw,2.2rem)}.summary{margin:20px 0}.summary .stat{padding:12px 14px}.desk-note{margin:0 0 10px;font-size:.85rem;color:#42616a}
 @media(min-width:640px){.calendar-days{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(min-width:900px){.calendar-days{grid-template-columns:repeat(7,minmax(0,1fr))}.hero{padding-top:22px;padding-bottom:36px}}@media(max-width:560px){.picker{padding:14px}.controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.controls>.field:first-child{grid-column:1/-1}.controls .seg{gap:4px}.controls .seg button{padding:8px 7px}.controls .field input{padding-inline:8px}.hero{padding-inline:16px}.hero h1{font-size:1.9rem}}
+/* Alternative itineraries: compare actual modeled plans rather than promising a fare. */
+.fixes{list-style:none;padding:0;margin:10px 0}.fixes li{margin:0;border-top:1px solid var(--line);padding:12px 0}.fixes li b{float:none;margin:0}.fix-option{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 12px}.fix-option small{display:block;color:#42616a;font-size:.82rem}.fix-option strong{display:block;font-size:1rem}.fix-option .fix-risk{color:#086653;font-size:1.13rem;white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}.fix-apply,.compare-restore{min-height:44px;border:1px solid #136b69;border-radius:8px;padding:8px 14px;font-weight:750;background:#136b69;color:#fff}.fix-apply{grid-column:1/-1;justify-self:start}.compare-restore{background:#fff;color:#136b69;margin-top:12px}.fix-apply:hover{background:#0d514f}.compare-restore:hover{background:#e9f5f0}
+.plan-compare{border:1px solid #b7d0cb;background:#fff;border-radius:12px;margin:12px 0;padding:16px}.plan-compare[hidden]{display:none}.plan-compare h2{font:700 1.22rem/1.2 Georgia,serif;margin:0 0 5px}.compare-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.compare-cell{min-width:0;border-top:3px solid #98adae;padding-top:9px;overflow-wrap:anywhere}.compare-cell.current{border-color:#136b69}.compare-cell h3{font-size:.9rem;margin:0;color:#42616a}.compare-risk{display:block;font-size:clamp(1.35rem,4vw,2rem);line-height:1.2;margin:4px 0;font-weight:800}.compare-cell p{font-size:.83rem;margin:4px 0}.compare-note{font-size:.84rem;color:#42616a;margin:8px 0}
+@media(min-width:640px){.fix-option{grid-template-columns:minmax(0,1fr) auto auto}.fix-apply{grid-column:auto;justify-self:end}}@media(max-width:350px){.compare-grid{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -120,7 +124,13 @@
 <div class="field hidden" id="mpg-field"><label for="mpg">Your vehicle (miles per gallon)</label><input type="number" id="mpg" inputmode="decimal" min="5" max="150" step=".1" value="28"></div>
 </div>
 </section>
-<div class="callout" aria-live="polite"><span class="tag" id="callout-tag">Will you make it?</span><h2 id="best-label">Checking your plan</h2><p id="best-reason">Loading six seasons of holiday flight records.</p><p class="share-row"><button type="button" id="share-plan" class="share">Copy link to this plan</button></p></div>
+<div class="callout" aria-live="polite"><span class="tag" id="callout-tag">Will you make it?</span><h2 id="best-label" tabindex="-1">Checking your plan</h2><p id="best-reason">Loading six seasons of holiday flight records.</p><p class="share-row"><button type="button" id="share-plan" class="share">Copy link to this plan</button></p></div>
+<section class="plan-compare" id="plan-compare" aria-labelledby="compare-heading" hidden>
+<h2 id="compare-heading" tabindex="-1">Compare your flight plans</h2>
+<p class="compare-note">Same airports and arrival deadline. Only the departure, routing or layover changes.</p>
+<div id="compare-content" aria-live="polite"></div>
+<button type="button" class="compare-restore" id="restore-plan">Restore original plan</button>
+</section>
 <h2 class="section-title" id="rank-heading">Travel days, ranked</h2>
 <p class="intro" id="rank-intro">Ranked by observed odds of a cancellation or long delay.</p>
 <section class="live" id="live-panel" aria-live="polite"></section>
@@ -361,14 +371,63 @@ doc('calendar-days').addEventListener('click',function(event){
  if(!button||mode!=='fly')return;
  var offset=Number(button.getAttribute('data-calendar-offset'));
  if(!Number.isInteger(offset)||offset< -6||offset>6)return;
- doc('dep-day').value=String(offset);
+ clearComparison();doc('dep-day').value=String(offset);
  trip.example=false;
  render();
  var selected=doc('calendar-day-'+offset);
  if(selected&&selected.focus)selected.focus({preventScroll:true});
 });
+// Comparison state is local to the current trip. A manual edit starts a new comparison.
+var originalPlan=null,activeFixes=[],currentCompared=null;
+function clearComparison(){
+ originalPlan=null;currentCompared=null;activeFixes=[];
+ doc('plan-compare').hidden=true;doc('compare-content').innerHTML='';
+}
+function planRisk(r){return r.tooLate?'100%':band(r.p)}
+function planDescription(p){return whenLabel(p.depart)+' · '+(p.via?'Connect in '+shortCity(p.via)+', '+p.layover+' min layover':'Nonstop')}
+function comparisonCell(label,p,r,style){
+ return '<div class="compare-cell '+style+'"><h3>'+label+'</h3><span class="compare-risk">'+(r?planRisk(r):'Checking…')+'</span><p>'+esc(planDescription(p))+'</p>'+(r?'<p>'+esc(r.tooLate?'Scheduled after deadline':'Worst of six seasons: '+band(r.worst))+'</p>':'')+'</div>';
+}
+function renderComparison(p,r){
+ if(!originalPlan)return;
+ doc('plan-compare').hidden=false;
+ currentCompared={plan:p,result:r};
+ var o=originalPlan, result=r?(r.tooLate?'This option lands after the deadline.':r.p<o.result.p?'Lower modeled risk than your original plan.':r.p>o.result.p?'Higher modeled risk than your original plan.':'Same modeled risk as your original plan.'):'Recalculating the selected plan.';
+ doc('compare-content').innerHTML='<div class="compare-grid">'+comparisonCell('Original',o.plan,o.result,'')+comparisonCell('Current',p,r,'current')+'</div><p class="compare-note">Chance of missing '+esc(dueName(o.plan))+'. '+esc(result)+' Historical estimates, not a live forecast. Fares, schedules and available seats are not checked.</p>';
+}
+function applyComparedPlan(p){
+ var day=Math.floor(p.depart/1440),hour=(p.depart-day*1440)/60;
+ if(!Number.isInteger(day)||day< -6||day>6||!Number.isInteger(hour)||hour<5||hour>23)return false;
+ trip.example=false;trip.routing=p.via||'nonstop';
+ doc('dep-day').value=String(day);doc('dep-time').value=String(hour);
+ doc('routing').value=trip.routing;doc('layover').value=String(p.layover);
+ return true;
+}
+function fixesCard(p,r){
+ var fx=eng.fixes(p,r).filter(function(f){return r.tooLate||bandIndex(f.p)<bandIndex(r.p)});
+ activeFixes=fx.map(function(f){return {plan:f.plan,result:f.result,base:p,baseResult:r}});
+ return '<article class="card" id="flight-alternatives"><h3>'+(fx.length?'Ways to lower the odds':'Already near the best option')+'</h3>'+(fx.length?'<p>Try a different departure or connection without changing your arrival deadline.</p><ol class="fixes">'+fx.map(function(f,i){
+ return '<li class="fix-option"><div><strong>'+esc(fixLabel(f,p))+'</strong><small>'+esc(planDescription(f.plan))+'</small><small>Worst of six seasons: '+band(f.result.worst)+'</small></div><div class="fix-risk">'+planRisk(r)+' → '+band(f.p)+'</div><button type="button" class="fix-apply" data-apply-fix="'+i+'" aria-label="Try '+esc(fixLabel(f,p))+'">Try this plan</button></li>';
+ }).join('')+'</ol><p class="fine">Changes tested: other departure times that day, leaving one or two days earlier, and other routings. Fares, schedules and seat availability are not checked.</p>':'<p>No same-day time, earlier day or other routing lowered the odds meaningfully.</p>')+'</article>';
+}
+doc('results').addEventListener('click',function(event){
+ var btn=event.target.closest('[data-apply-fix]');
+ if(!btn||mode!=='fly')return;
+ var i=Number(btn.getAttribute('data-apply-fix')),f=activeFixes[i];
+ if(!Number.isInteger(i)||!f||!applyComparedPlan(f.plan))return;
+ if(!originalPlan)originalPlan={plan:f.base,result:f.baseResult};
+ renderComparison(f.plan,null);render();
+ var target=doc('compare-heading');if(target&&target.focus)target.focus();
+});
+doc('restore-plan').addEventListener('click',function(){
+ if(mode!=='fly'||!originalPlan)return;
+ var p=originalPlan.plan;
+ if(!applyComparedPlan(p))return;
+ clearComparison();render();
+ var target=doc('best-label');if(target&&target.focus)target.focus();
+});
 function renderFly(d,year){
- var my=++renderSeq,results=doc('results');
+ var my=++renderSeq,results=doc('results');activeFixes=[];
  doc('legend').classList.toggle('hidden',true);
  doc('third-stat').setAttribute('data-p','NaN');
  doc('third-label').textContent='Chance you miss your deadline';
@@ -391,6 +450,8 @@ function renderFly(d,year){
   var p=cp.plan,r=eng.evaluate(p);
   if(!r){results.innerHTML='<p class="fine">That routing could not be evaluated.</p>';doc('best-label').textContent='Flight odds unavailable';doc('best-reason').textContent='That routing could not be evaluated with the available records.';doc('third-stat').textContent='Unavailable';return}
   writeUrl(cp);
+  if(typeof window!=='undefined'&&window.HolidayTravelChoices)window.HolidayTravelChoices.sync();
+  renderComparison(p,r);
   var due=whenLabel(p.deadline),name=dueName(p);
   doc('rank-heading').textContent='Your plan, stress-tested: '+d.name+' '+year;
   doc('rank-intro').textContent=cityOf(p.from)+(p.via?' → '+shortCity(p.via):'')+' → '+cityOf(p.to)+', leaving '+whenLabel(p.depart)+'. Scheduled to land about '+whenLabel(r.arrive)+' (local), '+(r.tooLate?'after':'with '+Math.round(r.slack/60*10)/10+' hours to spare before')+' '+due+'.'+(trip.example?' This is an example plan: pick your own airports and times above.':'');
@@ -398,7 +459,7 @@ function renderFly(d,year){
    doc('callout-tag').textContent='Will you make it? · fly';doc('best-label').textContent='This flight lands after your deadline';
    doc('best-reason').textContent='Even on time, it is scheduled to arrive about '+whenLabel(r.arrive)+'. Leave earlier or move the deadline.';
    doc('third-label').textContent='Chance you miss '+name;doc('third-stat').textContent='100%';doc('third-stat').setAttribute('data-p','1');doc('third-note').textContent='Scheduled arrival is after the deadline';
-   results.innerHTML='';renderLive(p,my);return;
+   results.innerHTML=fixesCard(p,r);renderLive(p,my);return;
   }
   var v=verdict(r.p);
   doc('callout-tag').textContent='Will you make it? · fly';
@@ -407,12 +468,10 @@ function renderFly(d,year){
   doc('best-reason').textContent='Averaged over six holiday seasons this plan fails '+oneIn(r.p)+' times. In a typical year: '+band(r.median)+'. In the worst ('+r.worstSeason+'): '+band(r.worst)+'. '+(r.parts.cancel>=r.parts.delay+r.parts.misconnect?'Most of the risk is a cancellation you cannot recover from in time, not a delay.':r.parts.misconnect>r.parts.delay?'Most of the risk is missing your connection.':'Most of the risk is a long delay eating your buffer.');
   doc('third-label').textContent='Chance you miss '+name;doc('third-stat').textContent=band(r.p);doc('third-stat').setAttribute('data-p',String(r.p));doc('third-note').textContent='Typical year '+band(r.median)+' · worst of six seasons '+band(r.worst)+' ('+r.worstSeason+')';
   var total=r.parts.cancel+r.parts.misconnect+r.parts.delay;
-  var cards=[];
+  var cards=[fixesCard(p,r)];
   cards.push('<article class="card verdict '+v[0]+'"><h3>Where the risk comes from</h3>'+partBar('Cancelled or diverted, no seat in time',r.parts.cancel,total)+(p.via?partBar('Missed connection in '+p.via+', no seat in time',r.parts.misconnect,total):'')+partBar('Flies, but arrives too late',r.parts.delay,total)+strip(r)+'<p class="fine">Each box is how this exact plan would have done in that holiday season. 2020 and 2021 are left out.</p></article>');
   var carriers=ic.carriers.map(function(c){return c[0]+' '+c[1]+'%'}).join(', ');
   cards.push('<article class="card"><h3>If it’s cancelled</h3><p>'+cityOf(p.from)+' to '+(p.via?shortCity(p.via):cityOf(p.to))+' has about <strong>'+ic.perDay+' flights a day</strong> at the holidays ('+esc(carriers)+'). If yours is cancelled at this time of day, the next flight on your airline usually gets you there about <strong>'+ic.optimisticHours+' hours late</strong>, but holiday flights are full, so plan on the one after: about <strong>'+ic.realisticHours+' hours late</strong>. That pushed travelers to the next day '+Math.round(ic.overnight*100)+'% of the time.</p>'+(ic.worstStretch>=1.5?'<p>Bad years are worse: when many flights were cancelled at once, rebooking from '+esc(p.from)+' around that date took about <strong>'+(Math.round(ic.worstStretch*10)/10)+' times as long</strong> in '+ic.worstStretchSeason+', because everyone already cancelled was ahead of you. The odds above include that.</p>':'')+(p.via?'<p>Your connection: with a '+p.layover+'-minute layover, the first flight arrived too late to connect '+band(r.misconnectChance)+' of the time.</p>':'')+'</article>');
-  var fx=eng.fixes(p,r).filter(function(f){return bandIndex(f.p)<bandIndex(r.p)});
-  cards.push('<article class="card"><h3>'+(fx.length?'Ways to lower the odds':'Already near the best option')+'</h3>'+(fx.length?'<ol class="fixes">'+fx.map(function(f){return '<li><span>'+esc(fixLabel(f,p))+'</span><b>'+band(r.p)+' → '+band(f.p)+'</b></li>'}).join('')+'</ol><p class="fine">Changes tested: other departure times that day, leaving one or two days earlier, and other routings. Fares and seat availability are not checked.</p>':'<p>No same-day time, earlier day or other routing lowered the odds meaningfully.</p>')+'</article>');
   cards.push(firstFlightCard(p));
   results.innerHTML=cards.join('');
   renderLive(p,my);
@@ -518,6 +577,7 @@ function fillAirports(){
  doc('home').innerHTML=opts;doc('away').innerHTML=opts;doc('home').value=trip.home;doc('away').value=trip.away;
 }
 function switchOption(group,value){
+ clearComparison();
  if(group==='holiday')holiday=value;else if(group==='mode')mode=value;else dir=value;
  [['thanksgiving','holiday'],['christmas','holiday'],['fly','mode'],['drive','mode'],['dir-there','dir'],['dir-home','dir']].forEach(function(x){var cur=x[1]==='holiday'?holiday:x[1]==='mode'?mode:dir;doc(x[0]).setAttribute('aria-pressed',String(x[0]===cur||x[0]==='dir-'+cur))});
  var driving=mode==='drive';
@@ -530,14 +590,14 @@ function switchOption(group,value){
 doc('thanksgiving').addEventListener('click',function(){switchOption('holiday','thanksgiving')});doc('christmas').addEventListener('click',function(){switchOption('holiday','christmas')});
 doc('fly').addEventListener('click',function(){switchOption('mode','fly')});doc('drive').addEventListener('click',function(){switchOption('mode','drive')});
 doc('dir-there').addEventListener('click',function(){switchOption('dir','there')});doc('dir-home').addEventListener('click',function(){switchOption('dir','home')});
-function onAirport(){trip.example=false;trip.home=doc('home').value||trip.home;trip.away=doc('away').value||trip.away;trip.routing='auto';render()}
+function onAirport(){clearComparison();trip.example=false;trip.home=doc('home').value||trip.home;trip.away=doc('away').value||trip.away;trip.routing='auto';render()}
 ['home','away'].forEach(function(id){doc(id).addEventListener('change',onAirport)});
-doc('routing').addEventListener('change',function(){trip.example=false;trip.routing=doc('routing').value;doc('layover-field').classList.toggle('hidden',trip.routing==='nonstop');render()});
-['layover','dep-day','dep-time','due-day','due-time'].forEach(function(id){var f=function(){trip.example=false;render()};doc(id).addEventListener('change',f);doc(id).addEventListener('input',f)});
+doc('routing').addEventListener('change',function(){clearComparison();trip.example=false;trip.routing=doc('routing').value;doc('layover-field').classList.toggle('hidden',trip.routing==='nonstop');render()});
+['layover','dep-day','dep-time','due-day','due-time'].forEach(function(id){var f=function(){clearComparison();trip.example=false;render()};doc(id).addEventListener('change',f);doc(id).addEventListener('input',f)});
 ['region','miles','mpg'].forEach(function(id){doc(id).addEventListener('change',render);doc(id).addEventListener('input',render)});
 doc('share-plan').addEventListener('click',sharePlan);
 doc('city').addEventListener('input',function(){suggestRegion(doc('city').value);render()});
-doc('travel-year').addEventListener('change',function(){setTimes();render()});
+doc('travel-year').addEventListener('change',function(){clearComparison();setTimes();render()});
 populateYears();
 var fromUrl=readUrl();
 if(fromUrl){
