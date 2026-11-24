@@ -79,6 +79,8 @@
 .fixes{list-style:none;padding:0;margin:10px 0}.fixes li{margin:0;border-top:1px solid var(--line);padding:12px 0}.fixes li b{float:none;margin:0}.fix-option{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:8px 12px}.fix-option small{display:block;color:#42616a;font-size:.82rem}.fix-option strong{display:block;font-size:1rem}.fix-option .fix-risk{color:#086653;font-size:1.13rem;white-space:nowrap;text-align:right;font-variant-numeric:tabular-nums}.fix-apply,.compare-restore{min-height:44px;border:1px solid #136b69;border-radius:8px;padding:8px 14px;font-weight:750;background:#136b69;color:#fff}.fix-apply{grid-column:1/-1;justify-self:start}.compare-restore{background:#fff;color:#136b69;margin-top:12px}.fix-apply:hover{background:#0d514f}.compare-restore:hover{background:#e9f5f0}
 .plan-compare{border:1px solid #b7d0cb;background:#fff;border-radius:12px;margin:12px 0;padding:16px}.plan-compare[hidden]{display:none}.plan-compare h2{font:700 1.22rem/1.2 Georgia,serif;margin:0 0 5px}.compare-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.compare-cell{min-width:0;border-top:3px solid #98adae;padding-top:9px;overflow-wrap:anywhere}.compare-cell.current{border-color:#136b69}.compare-cell h3{font-size:.9rem;margin:0;color:#42616a}.compare-risk{display:block;font-size:clamp(1.35rem,4vw,2rem);line-height:1.2;margin:4px 0;font-weight:800}.compare-cell p{font-size:.83rem;margin:4px 0}.compare-note{font-size:.84rem;color:#42616a;margin:8px 0}
 @media(min-width:640px){.fix-option{grid-template-columns:minmax(0,1fr) auto auto}.fix-apply{grid-column:auto;justify-self:end}}@media(max-width:350px){.compare-grid{grid-template-columns:1fr}}
+/* Operational airport reports are separate from forecast and historical odds. */
+.faa-panel{background:#fff;border:1px solid var(--line);border-radius:12px;padding:16px;margin:12px 0 18px}.faa-panel[hidden]{display:none}.faa-panel h2{font:700 1.25rem/1.25 Georgia,serif;margin:0 0 8px}.faa-panel p{font-size:.88rem;margin:6px 0;color:#42616a}.faa-actions{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin-top:12px}.faa-refresh{min-height:44px;border-radius:8px;background:#136b69;color:white;border:1px solid #136b69;font-weight:750;padding:8px 14px}.faa-route{display:grid;gap:8px;margin:12px 0}.faa-airport{padding:9px 10px;border-left:3px solid #94acac;background:#f4f8f7;min-width:0;overflow-wrap:anywhere}.faa-airport.has-event{border-color:#a85a1e}.faa-airport h3{margin:0;font-size:1rem}.faa-airport ul{margin:4px 0;padding-left:19px}.faa-airport li{font-size:.85rem;margin:5px 0}.faa-airport small{display:block;color:#42616a}.faa-snapshot{font-variant-numeric:tabular-nums}
 </style>
 </head>
 <body>
@@ -133,6 +135,13 @@
 </section>
 <h2 class="section-title" id="rank-heading">Travel days, ranked</h2>
 <p class="intro" id="rank-intro">Ranked by observed odds of a cancellation or long delay.</p>
+<section class="faa-panel" id="faa-panel" aria-labelledby="faa-heading">
+<h2 id="faa-heading">FAA airport disruptions right now</h2>
+<p id="faa-date-note">Check current airport notices for your departure, connection and destination. These reports describe present airport conditions, not a future travel-day forecast.</p>
+<div id="faa-status" role="status" aria-live="polite"><p>Choose your flight route, then check the FAA report. Historical odds remain separate.</p></div>
+<div class="faa-actions"><button class="faa-refresh" id="faa-refresh" type="button" disabled>Check current FAA status</button><a href="https://nasstatus.faa.gov/" rel="noopener noreferrer">Official FAA status</a><a href="/flight-tracker/">Track an individual flight</a></div>
+<p>Ground stops and ground delay programs may affect only certain traffic. An airport not listed in this feed is not confirmed delay-free. Confirm your flight with the airline.</p>
+</section>
 <section class="live" id="live-panel" aria-live="polite"></section>
 <div class="legend" id="legend"><span><i class="dot good"></i> Better window</span><span><i class="dot mid"></i> Crowded</span><span><i class="dot bad"></i> Try to avoid</span></div>
 <div id="results" class="rank-list" aria-live="polite"></div>
@@ -426,8 +435,63 @@ doc('restore-plan').addEventListener('click',function(){
  clearComparison();render();
  var target=doc('best-label');if(target&&target.focus)target.focus();
 });
+// On-demand shared FAA snapshot, never included in the BTS probability model.
+var faaSnapshot=null,faaPlan=null,faaPending=false,faaExpiry=null;
+function faaStamp(value){
+ if(!value||!Number.isFinite(Date.parse(value)))return '';
+ return new Date(value).toLocaleString('en-US',{timeZone:'UTC',month:'short',day:'numeric',hour:'numeric',minute:'2-digit'})+' UTC';
+}
+function faaEvent(e){
+ var parts=[];
+ if(e.reason)parts.push(esc(e.reason));
+ if(Number.isFinite(e.averageMinutes))parts.push('FAA average: '+e.averageMinutes+' min');
+ if(Number.isFinite(e.minimumMinutes))parts.push('FAA minimum: '+e.minimumMinutes+' min');
+ if(Number.isFinite(e.maximumMinutes))parts.push('FAA maximum: '+e.maximumMinutes+' min');
+ var times=[];
+ if(e.start)times.push('Start: '+faaStamp(e.start));
+ if(e.end)times.push('Reported end: '+faaStamp(e.end));
+ if(e.updatedAt)times.push('Event updated: '+faaStamp(e.updatedAt));
+ var timing=e.start&&Date.parse(e.start)>Date.now()?'scheduled':e.start&&e.end?'within reported window':'timing not fully specified';
+ return '<li><strong>'+esc(e.label)+'</strong> ('+esc(timing)+')'+(parts.length?'<br>'+parts.join(' · '):'')+(times.length?'<small>'+esc(times.join(' · '))+'</small>':'')+'</li>';
+}
+function renderFaa(){
+ var panel=doc('faa-panel'),status=doc('faa-status'),btn=doc('faa-refresh');
+ panel.hidden=mode!=='fly';btn.disabled=!faaPlan||faaPending;
+ if(mode!=='fly')return;
+ if(!faaPlan){doc('faa-date-note').textContent='Choose a measurable flight route first.';status.innerHTML='<p>Airport status will be matched to your selected route.</p>';return}
+ var p=faaPlan,codes=[p.from].concat(p.via?[p.via]:[]).concat([p.to]);
+ doc('faa-date-note').textContent='Your route: '+codes.join(' → ')+'. Departure '+pretty(dateFor(Math.floor(p.depart/1440)))+'. FAA reports describe conditions now, not a forecast for that departure.';
+ if(faaPending){status.innerHTML='<p>Checking the current FAA airport report…</p>';return}
+ if(!faaSnapshot){status.innerHTML='<p>Check the current FAA report for these airports.</p>';return}
+ var age=Date.now()-Date.parse(faaSnapshot.checkedAt);
+ if(faaSnapshot.status!=='available'||!Number.isFinite(age)||age< -60000||age>300000){
+  status.innerHTML='<p>Current FAA data is '+(faaSnapshot.status==='available'?'out of date':'unavailable')+'. No current disruption conclusion is possible. Refresh or visit the official FAA status page.</p>';return;
+ }
+ var rows=codes.map(function(code,i){
+  var events=faaSnapshot.events.filter(function(e){return e.airport===code&&(!e.end||Date.parse(e.end)>Date.now())});
+  return '<article class="faa-airport'+(events.length?' has-event':'')+'"><h3>'+esc(code)+' · '+(i===0?'Departure':i===codes.length-1?'Destination':'Connection')+'</h3>'+(events.length?'<ul>'+events.map(faaEvent).join('')+'</ul>':'<p>No event listed for this airport in this snapshot. Not a flight clearance.</p>')+'</article>';
+ }).join('');
+ status.innerHTML='<p class="faa-snapshot">FAA report retrieved '+esc(faaStamp(faaSnapshot.checkedAt))+'. Event update times are shown when supplied.</p><div class="faa-route">'+rows+'</div>';
+}
+doc('faa-refresh').addEventListener('click',function(){
+ if(!faaPlan||faaPending||mode!=='fly')return;
+ faaPending=true;renderFaa();
+ fetch('/api/holiday-airport-weather?view=faa').then(function(response){
+  if(!response.ok)throw new Error('FAA unavailable');return response.json();
+ }).then(function(result){
+  if(!result||result.status!=='available'||!Array.isArray(result.events)||!Number.isFinite(Date.parse(result.checkedAt)))throw new Error('FAA invalid');
+  faaSnapshot=result;
+ }).catch(function(){faaSnapshot={status:'unavailable',checkedAt:new Date().toISOString(),events:[]}}).then(function(){
+  faaPending=false;renderFaa();
+  // Expire the display without another network request or background polling.
+  if(typeof window!=='undefined'){
+   if(faaExpiry)clearTimeout(faaExpiry);
+   if(faaSnapshot.status==='available')faaExpiry=setTimeout(renderFaa,Math.max(0,300001-(Date.now()-Date.parse(faaSnapshot.checkedAt))));
+  }
+ });
+});
 function renderFly(d,year){
- var my=++renderSeq,results=doc('results');activeFixes=[];
+ var my=++renderSeq,results=doc('results');activeFixes=[];faaPlan=null;renderFaa();
  doc('legend').classList.toggle('hidden',true);
  doc('third-stat').setAttribute('data-p','NaN');
  doc('third-label').textContent='Chance you miss your deadline';
@@ -449,6 +513,7 @@ function renderFly(d,year){
   doc('routing').value=cp.routing;doc('layover-field').classList.toggle('hidden',cp.routing==='nonstop');
   var p=cp.plan,r=eng.evaluate(p);
   if(!r){results.innerHTML='<p class="fine">That routing could not be evaluated.</p>';doc('best-label').textContent='Flight odds unavailable';doc('best-reason').textContent='That routing could not be evaluated with the available records.';doc('third-stat').textContent='Unavailable';return}
+  faaPlan=p;renderFaa();
   writeUrl(cp);
   if(typeof window!=='undefined'&&window.HolidayTravelChoices)window.HolidayTravelChoices.sync();
   renderComparison(p,r);
@@ -555,7 +620,7 @@ function render(){
  doc('volume-label').textContent='AAA '+d.year+' travel forecast';doc('volume-stat').textContent=d.total;doc('volume-note').textContent=d.source+' · '+d.car+'; '+d.air+' · not a '+year+' count';
  doc('live-panel').classList.toggle('hidden',mode!=='fly');
  if(mode==='fly'){renderFly(d,year);return}
- renderSeq++;doc('third-stat').setAttribute('data-p','NaN');doc('legend').classList.toggle('hidden',false);
+ renderSeq++;faaPlan=null;renderFaa();doc('third-stat').setAttribute('data-p','NaN');doc('legend').classList.toggle('hidden',false);
  var region=doc('region').value,mi=Number(doc('miles').value),mpg=Number(doc('mpg').value);var valid=Number.isFinite(mi)&&mi>0&&mi<=10000&&Number.isFinite(mpg)&&mpg>=5&&mpg<=150;
  doc('third-label').textContent='Estimated one-way fuel';doc('third-stat').textContent=valid?'$'+(mi/mpg*gas[region]).toFixed(2):'Enter valid miles / MPG';doc('third-note').textContent='EIA '+region.replace('us','U.S.')+' regular $'+gas[region].toFixed(3)+'/gal · Oct 12, 2026 (historical price illustration)';
  var offsets=holiday==='thanksgiving'?[-5,-4,-3,-2,-1,0,1,2,3,4,5]:[-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6];
