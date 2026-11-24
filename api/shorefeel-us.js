@@ -18,7 +18,13 @@ async function landPointFor(beach){
  const pointUrl=q=>'https://api.weather.gov/points/'+q.lat.toFixed(4)+','+q.lon.toFixed(4);
  const choose=(point,reference)=>point?.properties?.type==='land'&&
    officialNwsUrl(point.properties.forecastHourly)?{point,reference}:null;
- const original=await nws(pointUrl(p));
+ let original=null;
+ try{original=await nws(pointUrl(p));}
+ catch(error){
+  // A mapped EPA line may be just outside NWS' /points land/marine domain.
+  // Retry nearby only for a genuine 404, never on upstream rate limits or outages.
+  if(!beach.epaId||!/HTTP 404/.test(String(error?.message||'')))throw error;
+ }
  const found=choose(original,p);
  if(found||!beach.epaId)return found;
  const candidates=[
