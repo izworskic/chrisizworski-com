@@ -58,6 +58,7 @@
     const el = marker.getElement();
     if (!el) return;
     el.setAttribute('aria-label', title(v) + ' · ' + typeLabel(v));
+    marker.sooLabel = title(v) + ' · ' + typeLabel(v);
   }
   function addShipMarker(v, into, selected = false) {
     const icon = shipIcon(v, selected);
@@ -77,14 +78,64 @@
   // One Leaflet popup object is shared by every vessel, so selection cannot stack cards.
   function openShipPopup(marker) {
     if (!map || !marker.sooContent) return;
-    if (!detailPopup) detailPopup = L.popup({ autoClose: true, closeOnClick: true });
+    if (!detailPopup) detailPopup = L.popup({ autoClose: true, closeOnClick: true, maxWidth: 240, autoPanPaddingTopLeft: L.point(50, 12), autoPanPaddingBottomRight: L.point(10, 12) });
     const anchor = marker.options.icon?.options?.popupAnchor || [0, -8];
     detailPopup.options.offset = L.point(anchor[0], anchor[1]);
     detailPopup.setLatLng(marker.getLatLng()).setContent(marker.sooContent).openOn(map);
   }
+  // Moored boats at the same dock draw on top of each other, so a tap there could only ever
+  // reach the top symbol. When symbols overlap the tapped one, offer every vessel at that spot
+  // in the same single popup. A keyboard user has already focused one marker: open it directly.
+  function crowdAt(marker) {
+    const el = marker.getElement && marker.getElement();
+    if (!layer || !el) return [marker];
+    const a = el.getBoundingClientRect();
+    const crowd = [];
+    layer.eachLayer(other => {
+      const o = other.sooContent && other.getElement && other.getElement();
+      if (!o) return;
+      const b = o.getBoundingClientRect();
+      const overlapW = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+      const overlapH = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+      if (overlapW > 0 && overlapH > 0) crowd.push(other);
+    });
+    return crowd.length ? crowd : [marker];
+  }
+  function openCrowdChooser(marker, crowd) {
+    if (!detailPopup) detailPopup = L.popup({ autoClose: true, closeOnClick: true, maxWidth: 240, autoPanPaddingTopLeft: L.point(50, 12), autoPanPaddingBottomRight: L.point(10, 12) });
+    const box = document.createElement('div');
+    box.className = 'soo-ais-crowd';
+    box.append(text('p', crowd.length + ' vessels are reported at this spot. Choose one:', 'soo-ais-crowd-lead'));
+    const ul = document.createElement('ul');
+    crowd.forEach(m => {
+      const li = document.createElement('li');
+      const b = text('button', m.sooLabel || 'Vessel'); b.type = 'button';
+      b.addEventListener('click', () => openShipPopup(m));
+      li.append(b); ul.append(li);
+    });
+    box.append(ul);
+    const anchor = marker.options.icon?.options?.popupAnchor || [0, -8];
+    detailPopup.options.offset = L.point(anchor[0], anchor[1]);
+    detailPopup.setLatLng(marker.getLatLng()).setContent(box).openOn(map);
+    const first = box.querySelector('button');
+    if (first) first.focus({ preventScroll: true });
+  }
   function attachShipPopup(marker, content) {
     marker.sooContent = content;
-    marker.on('click', () => openShipPopup(marker));
+    marker.on('click', e => {
+      const viaKeyboard = /^key/.test(e?.originalEvent?.type || '');
+      const crowd = viaKeyboard ? [marker] : crowdAt(marker);
+      if (crowd.length > 1) openCrowdChooser(marker, crowd);
+      else openShipPopup(marker);
+    });
+    // Leaflet 1.9 only opens popups bound with bindPopup on Enter. This shared popup is opened
+    // by hand, so a focused marker (role="button") needs Enter and Space wired explicitly.
+    marker.on('keydown', e => {
+      const k = e?.originalEvent?.key;
+      if (k !== 'Enter' && k !== ' ') return;
+      e.originalEvent.preventDefault();
+      openShipPopup(marker);
+    });
   }
   function renderLegend() {
     const target = document.getElementById('sooVesselLegend');
@@ -192,7 +243,7 @@
     const zoom = Number(ship.channelMilesToLocks) > 8 ? 11 : 14;
     map.setView([ship.lat, ship.lon], zoom);
     // Re-centre once smooth scrolling settles.
-    setTimeout(() => { map.invalidateSize(); map.setView([ship.lat, ship.lon], zoom); openShipPopup(m); }, 600);
+    setTimeout(() => { map.invalidateSize(); map.setView([ship.lat, ship.lon], zoom, { animate: false }); openShipPopup(m); }, 600);
   }
 
   // ---- map and list ----
@@ -225,7 +276,7 @@
       }
       const item = document.createElement('li');
       if (marker) {
-        const button = text('button', title(v)); button.type = 'button'; button.addEventListener('click', () => { map.setView([v.lat, v.lon], 15); openShipPopup(marker); container.scrollIntoView({ block: 'center', behavior: 'smooth' }); }); item.append(button);
+        const button = text('button', title(v)); button.type = 'button'; button.addEventListener('click', () => { map.setView([v.lat, v.lon], 15, { animate: false }); openShipPopup(marker); container.scrollIntoView({ block: 'center', behavior: 'smooth' }); }); item.append(button);
       } else item.append(text('strong', title(v)));
       const extra = [typeLabel(v), inLock.has(v.mmsi) ? 'in the ' + inLock.get(v.mmsi).chamberName + ' now' : null, size || feet(v.lengthMeters)].filter(Boolean).join(' · ');
       item.append(text('span', (extra ? extra + ' · ' : '') + details(v))); list.append(item);
