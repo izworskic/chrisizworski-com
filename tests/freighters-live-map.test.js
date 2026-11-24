@@ -107,3 +107,13 @@ test("Saved desk is hidden before JS, consumes existing corridor activity and us
  assert.doesNotMatch(saved,/\bfetch\s*\(/);
  assert.match(css,/\.hub-map-canvas-wrap\{isolation:isolate;overflow:hidden\}/);
 });
+
+test("Fleet controls are opt-in to Freighter Central and use the same AIS category as markers",()=>{
+ assert.match(html,/id="hub-fleet-filter"[^>]+hidden/);
+ for(const kind of ["all","cargo","tanker","tug","passenger","fishing","other"])assert.equal((html.match(new RegExp('data-hub-vessel-type="'+kind+'"','g'))||[]).length,1);
+ assert.match(tracker,/counts\[vesselShape\(v\)\.kind\]\+\+/);
+ assert.match(tracker,/vesselShape\(v\)\.kind===kind/);
+ assert.match(tracker,/updateHubFleet\(matches,vessels\.length,query\)/);
+ assert.match(tracker,/updateHubFleet\(null,0,""\)/);
+ assert.match(css,/\.hub-fleet-filter\[hidden\]\{display:none\}/);
+});
