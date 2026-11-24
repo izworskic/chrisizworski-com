@@ -117,3 +117,13 @@ test("Fleet controls are opt-in to Freighter Central and use the same AIS catego
  assert.match(tracker,/updateHubFleet\(null,0,""\)/);
  assert.match(css,/\.hub-fleet-filter\[hidden\]\{display:none\}/);
 });
+
+test("Hub ship learning is optional, source-backed and uses one detail surface",()=>{
+ assert.match(html,/id="ship-inspector" data-hub-inspector[^>]+hidden/);
+ assert.match(html,/id="ship-library"/);
+ assert.match(tracker,/hubShipDesk/);
+ assert.match(tracker,/Meet this ship/);
+ assert.match(tracker,/map\.closePopup\(\)/);
+ assert.match(tracker,/reviewed history is not available/);
+ assert.match(css,/\.hub-ship-inspector\[hidden\]/);
+});
