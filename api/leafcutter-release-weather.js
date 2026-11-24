@@ -41,6 +41,7 @@ module.exports=async function handler(req,res){
   // Opt-in consumer contract; reuse the exact same NWS request and location resolver.
   // The default leafcutter response and cache policy stay unchanged.
   if(req.query?.mode==='garden-evidence'){
+   if(point?.properties?.type!=='land')throw Error('GARDEN_REFERENCE_NOT_VERIFIED_LAND');
    const evidence=require('../lib/garden-weather-evidence.cjs').nwsEvidence({
     periods:p.periods,issuedAt,now,zone:timeZone,siteId:site.id,sourceUrl:url
    });
