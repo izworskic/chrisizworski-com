@@ -507,7 +507,7 @@ function setDashboardWeather(state,label,tone,detail,checkedAt){
  renderDashboard();
  if(typeof window!=='undefined'){
   if(weatherExpiry)clearTimeout(weatherExpiry);
-  if(checkedAt)weatherExpiry=setTimeout(renderDashboard,1800001);
+  if(checkedAt)weatherExpiry=setTimeout(renderDashboard,Math.max(0,1800001-(Date.now()-Date.parse(checkedAt))));
  }
 }
 doc('dashboard-refresh').addEventListener('click',function(){
@@ -654,8 +654,14 @@ function writeUrl(cp){
 function sharePlan(pin){
  var dashboard=pin===true,btn=doc(dashboard?'dashboard-copy':'share-plan'),url=(typeof location!=='undefined'?location.origin+location.pathname:'https://chrisizworski.com/holiday-travel/')+planQuery(null,dashboard)+(dashboard?'#departure-dashboard':'');
  trip.example=false;writeUrl();
- if(dashboard)renderDashboard();
- var done=function(ok){btn.textContent=ok?'Link copied':'Copy failed';if(dashboard)doc('dashboard-return').textContent=ok?'Dashboard link copied. Reopen it before departure; the travel year is fixed.':'Copy unavailable. Select the travel year and bookmark this page in your browser.';else if(!ok)btn.textContent='Copy failed: the link is in your address bar';setTimeout(function(){btn.textContent=dashboard?'Copy dashboard link':'Copy link to this plan'},2500)};
+ if(dashboard){
+  // Pin the open page as well, so browser bookmarking still works if copying fails.
+  doc('travel-year').value=String(planningYear(holiday));
+  if(typeof history!=='undefined'&&history.replaceState&&typeof location!=='undefined')try{history.replaceState(null,'',location.pathname+planQuery(null,true)+'#departure-dashboard')}catch(e){}
+  if(typeof window!=='undefined'&&window.HolidayTravelChoices)window.HolidayTravelChoices.sync();
+  renderDashboard();
+ }
+ var done=function(ok){btn.textContent=ok?'Link copied':'Copy failed';if(dashboard)doc('dashboard-return').textContent=ok?'Dashboard link copied. Reopen it before departure; the travel year is fixed.':'Copy unavailable. The address bar contains your fixed-year dashboard link; bookmark this page in your browser.';else if(!ok)btn.textContent='Copy failed: the link is in your address bar';setTimeout(function(){btn.textContent=dashboard?'Copy dashboard link':'Copy link to this plan'},2500)};
  if(typeof navigator!=='undefined'&&navigator.clipboard&&navigator.clipboard.writeText)navigator.clipboard.writeText(url).then(function(){done(true)},function(){done(false)});else done(false);
  return url;
 }
@@ -677,11 +683,14 @@ function renderLive(p,my){
  Promise.all(codes.map(function(c){
   var a=eng.airport(c);
   if(!a||a.lat===null)return Promise.resolve({code:c,error:true});
-  var ll=a.lat+','+a.lon;
+  var ll=a.lat+','+a.lon,alertsUrl='https://api.weather.gov/alerts/active?point='+ll,pointsUrl='https://api.weather.gov/points/'+ll,forecastUrl=null;
   return Promise.all([
-   nws('https://api.weather.gov/alerts/active?point='+ll).catch(function(){return null}),
-   nws('https://api.weather.gov/points/'+ll).then(function(pt){return nws(pt.properties.forecast)}).catch(function(){return null})
-  ]).then(function(x){return {code:c,alerts:x[0],forecast:x[1]}});
+   nws(alertsUrl).catch(function(){return null}),
+   nws(pointsUrl).then(function(pt){forecastUrl=pt.properties.forecast;return nws(forecastUrl)}).catch(function(){return null})
+  ]).then(function(x){
+   var stamps=[x[0]?nwsCacheAge[alertsUrl]:null,x[1]?nwsCacheAge[forecastUrl]:null].filter(Number.isFinite);
+   return {code:c,alerts:x[0],forecast:x[1],checkedAt:stamps.length?Math.min.apply(null,stamps):null};
+  });
  })).then(function(list){
   if(my!==renderSeq||wxRun!==weatherSeq)return;
   var anySevere=false,anyFlag=false,partial=0,reported=0;
@@ -693,10 +702,10 @@ function renderLive(p,my){
    return '<li><b>'+esc(shortCity(x.code))+'</b>: '+(hz.length?'<span class="warn">'+hz.map(function(h){return esc(h.event)}).join(', ')+'</span>. ':x.alerts?'No active warnings for that day. ':'Warning data unavailable. ')+(fc.length?fc.map(function(f){return esc(f.name)+': '+esc(f.text)}).join('; '):'Forecast does not reach that day yet.')+'</li>';
   }).join('');
   var r=eng.evaluate(p);
-  var checked=new Date().toISOString(),suffix=partial?' '+partial+' airport(s) have incomplete coverage.':'';
+  var stamps=list.map(function(x){return x.checkedAt}).filter(Number.isFinite),checked=new Date(stamps.length?Math.min.apply(null,stamps):Date.now()).toISOString(),suffix=partial?' '+partial+' airport(s) have incomplete coverage.':'';
   setDashboardWeather('done',anySevere?'Significant weather warning':anyFlag?'Weather hazard in forecast':!reported?'NWS unavailable':partial?'Incomplete forecast coverage':'No named hazards in available forecast',anySevere||anyFlag||partial?'alert':'neutral','Retrieved '+faaStamp(checked)+'.'+suffix+' Not a flight delay forecast.',checked);
   var note=anySevere?'A significant winter or tropical hazard overlaps your travel day. Expect odds closer to the worst past season ('+band(r?r.worst:null)+') than the typical one. Check your airline for a travel waiver: they often allow free changes before a big storm.':anyFlag?'Some weather in the forecast. The typical-season odds may understate risk; keep an eye on updates.':partial?'Some airport weather coverage is missing. No clear-weather conclusion is possible.':'Nothing notable in the forecast for your airports that day.';if(partial&&(anySevere||anyFlag))note+=' Some airport weather coverage is missing.';
-  panel.innerHTML='<h3>Live weather check · '+pretty(dateFor(depDay))+'</h3><ul>'+rows+'</ul><p class="'+(anySevere?'warn':'')+'">'+note+'</p><p class="fine">Source: <a href="https://www.weather.gov/" rel="noopener noreferrer">National Weather Service</a>, fetched '+new Date().toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+'. On the day, use <a href="/flight-tracker/">Where Is My Plane?</a> to follow your inbound aircraft.</p>';
+  panel.innerHTML='<h3>Live weather check · '+pretty(dateFor(depDay))+'</h3><ul>'+rows+'</ul><p class="'+(anySevere?'warn':'')+'">'+note+'</p><p class="fine">Source: <a href="https://www.weather.gov/" rel="noopener noreferrer">National Weather Service</a>, retrieved '+esc(faaStamp(checked))+'. On the day, use <a href="/flight-tracker/">Where Is My Plane?</a> to follow your inbound aircraft.</p>';
  });
 }
 
