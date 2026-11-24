@@ -195,6 +195,7 @@
  async function start(){
   host.hidden=false;legacy.hidden=true;document.body.classList.add('gl-active');
   try{
+   if(!geometry)throw Error('Map helpers unavailable');
    const res=await fetch('/assets/great-lakes-beach-registry.json');if(!res.ok)throw Error('Catalog unavailable');
    const data=await res.json();
    if(data.version!==1||!Array.isArray(data.beaches)||data.beaches.length<50||data.beaches.length>5000)throw Error('Catalog unavailable');
