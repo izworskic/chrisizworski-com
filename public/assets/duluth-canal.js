@@ -463,39 +463,22 @@
     if (map || typeof L === 'undefined') return;
     installMonitorStyles();
     map = L.map('duluthVesselMap', { scrollWheelZoom: false }).setView(CANAL, 12);
-    map.on('popupopen', ({ popup }) => {
-      if (popup.options.className !== 'duluth-vessel-popup') return;
-      // Wait for insertion and layout, then use the rendered bounds instead of
-      // relying on Leaflet's cached popup width during a concurrent map move.
-      requestAnimationFrame(() => requestAnimationFrame(() => fitVesselPopup(popup)));
-    });
+    // The narrow-map detail pane is a sibling of Leaflet's moving map pane.
+    // Its contents stay inside the viewport while the user pans or zooms.
+    map.createPane('duluthVesselDetails', map.getContainer()).classList.add('duluth-vessel-details-pane');
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
     vesselLayer = L.layerGroup().addTo(map);
     candidateLayer = L.layerGroup().addTo(map);
     L.circleMarker(CANAL, { radius: 9, color: '#fff', weight: 2, fillColor: '#c35f2d', fillOpacity: 1 }).addTo(map).bindTooltip('Duluth Ship Canal', { direction: 'top' }).bindPopup('<strong>Duluth Ship Canal</strong><br>Canal Park watch zone');
   }
 
-  // Reserve room for the zoom controls and popup chrome on narrow maps.
-  // A focus jump must settle the map before Leaflet computes popup autopan.
   function vesselPopupOptions() {
-    return { className: 'duluth-vessel-popup', autoPan: false,
-      maxWidth: Math.max(120, Math.min(260, map.getSize().x - 112)), minWidth: 100,
-      maxHeight: Math.max(100, map.getSize().y - 100) };
-  }
-
-  function fitVesselPopup(popup) {
-    if (!map || !map.hasLayer(popup)) return;
-    const element = popup.getElement();
-    if (!element) return;
-    map.stop();
-    const box = element.getBoundingClientRect();
-    const viewport = map.getContainer().getBoundingClientRect();
-    // Account for Leaflet's zoom buttons on the left and attribution below.
-    const left = viewport.left + 48, right = viewport.right - 10;
-    const top = viewport.top + 12, bottom = viewport.bottom - 26;
-    const dx = box.right > right ? box.right - right : box.left < left ? box.left - left : 0;
-    const dy = box.top < top ? box.top - top : box.bottom > bottom ? box.bottom - bottom : 0;
-    if (dx || dy) map.panBy([Math.round(dx), Math.round(dy)], { animate: false });
+    const narrow = map.getSize().x < 600;
+    return { className: 'duluth-vessel-popup',
+      pane: narrow ? 'duluthVesselDetails' : 'popupPane',
+      autoPan: !narrow, maxWidth: 280, minWidth: 100,
+      maxHeight: Math.max(100, map.getSize().y - 100),
+      autoPanPaddingTopLeft: [45, 14], autoPanPaddingBottomRight: [14, 26] };
   }
 
   function renderMap(data) {

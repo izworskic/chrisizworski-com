@@ -86,14 +86,24 @@ async function main(){
    if(width===390||width===1280)await screenshot(page,'duluth-'+width+'-selected');
    const close=page.locator('.leaflet-popup-close-button');
    // Assert the real click target is within the map, not clipped by its toolbar.
-   await page.waitForFunction(()=>{
-    const p=document.querySelector('.leaflet-popup-close-button'),m=document.getElementById('duluthVesselMap');
-    if(!p||!m)return false;
-    const a=p.getBoundingClientRect(),b=m.getBoundingClientRect(),x=a.x+a.width/2,y=a.y+a.height/2;
-    return x>=b.left&&x<=b.right&&y>=b.top&&y<=b.bottom&&p.contains(document.elementFromPoint(x,y));
-   },null,{timeout:10000});
+   try {
+    await page.waitForFunction(()=>{
+     const p=document.querySelector('.leaflet-popup-close-button'),m=document.getElementById('duluthVesselMap'),popup=document.querySelector('.duluth-vessel-popup');
+     if(!p||!m||!popup)return false;
+     const a=p.getBoundingClientRect(),b=m.getBoundingClientRect(),c=popup.getBoundingClientRect(),x=a.x+a.width/2,y=a.y+a.height/2;
+     return c.left>=b.left-1&&c.right<=b.right+1&&c.top>=b.top-1&&c.bottom<=b.bottom+1&&x>=b.left&&x<=b.right&&y>=b.top&&y<=b.bottom&&p.contains(document.elementFromPoint(x,y));
+    },null,{timeout:10000});
+   } catch (error) {
+    await screenshot(page,'duluth-'+width+'-popup-failure');
+    console.error('Popup geometry',await page.evaluate(()=>{
+     const read=s=>{const e=document.querySelector(s);return e?{bounds:e.getBoundingClientRect().toJSON(),className:e.className,style:e.getAttribute('style')}:null;};
+     const p=document.querySelector('.leaflet-popup-close-button'),r=p?.getBoundingClientRect();
+     return {map:read('#duluthVesselMap'),popup:read('.duluth-vessel-popup'),close:read('.leaflet-popup-close-button'),hit:r?document.elementFromPoint(r.x+r.width/2,r.y+r.height/2)?.outerHTML.slice(0,300):null};
+    }));
+    throw error;
+   }
    await close.click();
-   assert.equal(await page.locator('.leaflet-popup').count(),0);
+   await page.locator('.leaflet-popup').waitFor({state:'detached'});
    await page.locator('.leaflet-control-zoom-in').click();
    await page.locator('.leaflet-control-zoom-out').click();
    await page.locator('#resetCanal').click();
