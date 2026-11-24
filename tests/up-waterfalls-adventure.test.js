@@ -17,7 +17,7 @@ test('style and origin materially change recommendations',()=>{
  assert.equal(plan({...args,style:'easy'}).options[0].ids,'a,b');
  assert.equal(plan({...args,style:'hike'}).options[0].ids,'a,c');
  assert.equal(plan({...args,origin:{lat:47.4,lon:-88.4}}).options[0].ids,'far');
- assert.equal(plan({...args,reserve:180}).options[0].ids,'b');
+ const shorter=plan({...args,reserve:180});assert.equal(shorter.options[0].ids,'a');assert.equal(shorter.options[1].ids,'b');assert.ok(shorter.options.every(p=>p.onsite<=60));
 });
 test('fails closed for access, unknown duration, shared approaches, winter and invalid inputs',()=>{
  const bad=[stop('closed',46.44,-86.62,10,{status:'closed'}),stop('unknown',46.44,-86.62,10,{verified:'pending'}),stop('season',46.44,-86.62,10,{status:'seasonal'}),stop('bad-policy',46.44,-86.62,10,{policy:'extra-check'}),stop('gabbro-falls',46.44,-86.62,10),stop('missing',46.44,-86.62,null)];
