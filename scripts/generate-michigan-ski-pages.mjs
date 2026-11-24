@@ -49,7 +49,7 @@ function person(){return {'@type':'Person','@id':P,name:'Chris Izworski',url:'ht
 function pageShell({title,description,url,h1,subtitle,content,slug=null}){
  if(title.length>60||description.length>158)throw Error('Search snippet length: '+title+' '+description);
  const json=[
- person(),{'@type':'WebPage','@id':url+'#page',url,name:title,description,dateModified:slug?today:'2026-11-23',author:{'@id':P},publisher:{'@id':P},isPartOf:{'@id':'https://chrisizworski.com/#website'}},
+ person(),{'@type':'WebPage','@id':url+'#page',url,name:title,description,dateModified:slug?today:'2026-11-24',author:{'@id':P},publisher:{'@id':P},isPartOf:{'@id':'https://chrisizworski.com/#website'}},
  {'@type':'SoftwareApplication','@id':url+'#tool',name:h1,applicationCategory:'TravelApplication',operatingSystem:'Web',
  url,isAccessibleForFree:true,creator:{'@id':P},offers:{'@type':'Offer',price:0,priceCurrency:'USD'}}
  ];
@@ -125,18 +125,18 @@ function details(r){
  ].join('');
  return pageShell({title,description:desc.slice(0,158),url:base+r.slug+'/',h1:h,subtitle:r.location+' · '+area+' · NWS snow forecast, lake-effect alerts and published resort sources.',content:html,slug:r.slug});
 }
-// Operator opening-date announcements verified 2026-11-23. Targets are NOT actual lift status.
+// Operator opening-date announcements checked 2026-11-24. Targets are NOT actual lift status.
 // No inferred date from historical patterns, ticket sales, or a year-conflicted announcement.
-const openingEvidence=Object.freeze([["snowriver","Dec 5, 2026","Target","https://www.snowriver.com/mountain-info/hours-of-operation"],["caberfae-peaks","Dec 5, 2026","Target","https://caberfaepeaks.com/snow-report/"],["ski-brule","Nov 26, 2026","Target","https://skibrule.com/ski-brule-snowmaking-thanksgiving-opening-2026/"],["shanty-creek","Dec 17, 2026","Projected daily skiing","https://www.shantycreek.com/ski/lift-tickets-season-passes/"]]);
+const openingEvidence=Object.freeze([["snowriver","Dec 5, 2026","Target","https://www.snowriver.com/mountain-info/hours-of-operation"],["caberfae-peaks","Dec 5, 2026","Target","https://caberfaepeaks.com/snow-report/"],["ski-brule","Nov 26, 2026","Target","https://skibrule.com/ski-brule-snowmaking-thanksgiving-opening-2026/"],["shanty-creek","Dec 17, 2026","Projected daily skiing","https://www.shantycreek.com/ski/lift-tickets-season-passes/"],["the-highlands","Dec 11, 2026","Slopes target","https://www.highlandsharborsprings.com/hours"],["crystal-mountain","Dec 4, 2026","First scheduled lift hours; weather permitting","https://www.crystalmountain.com/ski/our-mountain/lift-hours"]]);
 function openingTable(){
  const selected=new Map(openingEvidence.map(([slug,date,qualification,url])=>[slug,{date,qualification,url}]));
  const rows=RESORTS.filter(r=>r.kind==='downhill').map(r=>{
   const source=selected.get(r.slug),url=source?.url||SOURCES[r.slug]?.url||r.snow;
   return '<tr><th scope="row">'+esc(r.name)+'</th><td>'+(source?esc(source.date)+' · '+esc(source.qualification):'Not announced')+
-  '</td><td><a rel="noopener noreferrer" target="_blank" href="'+esc(url)+'">Operator source</a></td><td>Nov 23, 2026</td></tr>';
+  '</td><td><a rel="noopener noreferrer" target="_blank" href="'+esc(url)+'">Operator source</a></td><td>Nov 24, 2026</td></tr>';
  }).join('');
  return '<section class="panel ski-opening-evidence" aria-labelledby="ski-opening-heading"><h2 id="ski-opening-heading">2026–27 resort opening announcements</h2>'+
- '<p class="small">Operator-published plans checked Nov 23, 2026. A projected opening is weather-dependent, not a confirmation lifts are running. Not announced means no defensible 2026–27 opening date was identified in the referenced operator source.</p>'+
+ '<p class="small">Operator-published plans checked Nov 24, 2026. A projected opening is weather-dependent, not a confirmation lifts are running. Not announced means no defensible 2026–27 opening date was identified in the referenced operator source.</p>'+
  '<div class="ski-table-scroll"><table><thead><tr><th>Resort</th><th>Opening date / plan</th><th>Source</th><th>Checked</th></tr></thead><tbody>'+rows+'</tbody></table></div></section>';
 }
 function index(){
