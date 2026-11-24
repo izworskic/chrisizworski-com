@@ -65,7 +65,8 @@ function evaluateCandidate(c,tracks,engine,options={}){
 function retrospect(doc,options={}){
  // Only prespecified development dates; holdout is never inspected by this pilot.
  expect(doc&&['synthetic','historical-research'].includes(doc.kind),'Unsupported dataset');
- expect(typeof doc.start==='string'&&['2024-09-04','2024-09-10','2024-09-15'].some(d=>doc.start===d+'T00:00:00Z'),'Development date only');
+ const dates=options.arrivalResiduals===true&&options.routeProgress!==true?require('../docs/research/great-lakes-arrival-window-study-plan.json').dates:['2024-09-04','2024-09-10','2024-09-15'];
+ expect(typeof doc.start==='string'&&dates.some(d=>doc.start===d+'T00:00:00Z'),'Development date only');
  expect(utcMs(doc.end)-utcMs(doc.start)===24*60*MIN,'One complete UTC day required');
  const candidates=detect(doc,proxyGates()),tracks=prepare(doc),rows=[];
  for(const c of candidates.review)rows.push({site:c.site,...evaluateCandidate(c,tracks,engines[c.site],options)});
