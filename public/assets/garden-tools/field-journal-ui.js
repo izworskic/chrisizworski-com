@@ -3,7 +3,7 @@
 'use strict';
 const J=window.GardenFieldJournal,R=window.GardenHistory,H=window.GardenHarvest,root=document.getElementById('field-journal');if(!J||!R||!H||!root)return;
 const get=id=>document.getElementById(id),key='fvfFieldJournalV1',places={'bay-city':'Bay City',detroit:'Detroit','grand-rapids':'Grand Rapids',kalamazoo:'Kalamazoo','traverse-city':'Traverse City',marquette:'Marquette',houghton:'Houghton'};
-const labels={'emergence':'Seedlings emerged','flowering':'First flowers','fruit-set':'Fruit set','first-green-harvest':'First green harvest','first-ripe-harvest':'First ripe harvest','first-harvest':'First harvest','harvest':'Harvest','note':'Field note','daily-air':'Full-day air temperature','paired-night':'Paired overnight readings'};
+const labels={'emergence':'Seedlings emerged','flowering':'First flowers','fruit-set':'Fruit set','first-green-harvest':'First green harvest','first-ripe-harvest':'First ripe harvest','first-harvest':'First harvest','harvest':'Harvest','note':'Field note','daily-air':'Full-day air temperature','paired-night':'Paired overnight readings','rain-gauge':'Daily rain gauge','irrigation':'Irrigation applied','soil-feel':'Soil feel'};
 const parts=Object.fromEntries(new Intl.DateTimeFormat('en-US',{year:'numeric',month:'2-digit',day:'2-digit',timeZone:'America/Detroit'}).formatToParts(new Date()).map(p=>[p.type,p.value])),today=parts.year+'-'+parts.month+'-'+parts.day;
 const fmt=d=>new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',year:'numeric',timeZone:'UTC'}).format(new Date(d+'T12:00:00Z'));
 function node(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=text;if(cls)e.className=cls;return e;}
@@ -47,15 +47,15 @@ function paintComparison(summary){
  area.appendChild(node('p','Your notes are self-reported observations. The historical range comes from regional weather and a published cultivar model, not actual Michigan harvests or a validated prediction.','fj-small'));
 }
 function describe(e){
- let s=labels[e.kind];if(e.kind==='daily-air')s+=' · '+e.minF+' to '+e.maxF+'°F';if(e.kind==='paired-night')s+=' · garden '+e.gardenLowF+'°F, '+e.referenceId+' '+e.referenceLowF+'°F · '+e.regime.replace(/-/g,' ');return s;
+ let s=labels[e.kind];if(e.kind==='rain-gauge'||e.kind==='irrigation')s+=' · '+e.inches+' in';if(e.kind==='soil-feel')s+=' · '+e.feel.replace(/-/g,' ');if(e.kind==='daily-air')s+=' · '+e.minF+' to '+e.maxF+'°F';if(e.kind==='paired-night')s+=' · garden '+e.gardenLowF+'°F, '+e.referenceId+' '+e.referenceLowF+'°F · '+e.regime.replace(/-/g,' ');return s;
 }
 async function render(){
  const v=++revision,select=get('fj-selected'),area=get('fj-entries');select.replaceChildren();area.replaceChildren();get('fj-comparison').replaceChildren();get('fj-pair-result').replaceChildren();
  if(!data.plantings.some(p=>p.id===selected))selected=data.plantings.at(-1)?.id||null;
  data.plantings.forEach(p=>option(select,p.id,p.bed+' · '+p.crop+' · '+fmt(p.date)));if(selected)select.value=selected;
  get('fj-record').hidden=!selected;get('fj-export').disabled=!data.plantings.length;get('fj-count').textContent=data.plantings.length+' planting'+(data.plantings.length===1?'':'s')+' · '+data.entries.length+' observation'+(data.entries.length===1?'':'s');
- if(!selected){get('fj-empty').hidden=false;return;}get('fj-empty').hidden=true;
- const s=J.summarize(data,selected,today);get('fj-entry-date').min=s.planting.date;get('fj-entry-date').value=today;fields();get('fj-confirm-delete').checked=false;get('fj-planting-info').textContent=places[s.planting.siteId]+' · '+s.planting.bed+' · planted '+fmt(s.planting.date);
+ if(!selected){get('fj-empty').hidden=false;resetWater(null);return;}get('fj-empty').hidden=true;
+ const s=J.summarize(data,selected,today);resetWater(s);get('fj-entry-date').min=s.planting.date;get('fj-entry-date').value=today;fields();get('fj-confirm-delete').checked=false;get('fj-planting-info').textContent=places[s.planting.siteId]+' · '+s.planting.bed+' · planted '+fmt(s.planting.date);
  const list=node('ol',undefined,'fj-timeline');const planted=node('li');planted.append(node('time',fmt(s.planting.date)),node('strong','Planted: '+s.planting.crop));list.appendChild(planted);
  for(const e of s.entries){const li=node('li');li.append(node('time',fmt(e.date)),node('strong',describe(e)));if(e.note)li.appendChild(node('p',e.note));const b=node('button','Remove','gs-secondary');b.type='button';b.setAttribute('aria-label','Remove '+labels[e.kind]+' on '+fmt(e.date));b.addEventListener('click',()=>{if(commit({...data,entries:data.entries.filter(x=>x.id!==e.id)}))render();});li.appendChild(b);list.appendChild(li);}
  area.appendChild(list);paintComparison(s);
@@ -65,18 +65,62 @@ async function render(){
 }
 get('fj-plant-form').addEventListener('submit',e=>{e.preventDefault();const p={id:uid(),crop:get('fj-crop').value,bed:get('fj-bed').value,siteId:get('fj-town').value,date:get('fj-plant-date').value,packetDays:num('fj-packet'),modelId,biofix};if(!commit({...data,plantings:[...data.plantings,p]}))return;selected=p.id;get('fj-crop').value='';get('fj-bed').value='';get('fj-packet').value='';setModel(null,null);render();get('fj-kind').focus();});
 get('fj-selected').addEventListener('change',()=>{selected=get('fj-selected').value;render();});
-function fields(){const kind=get('fj-kind').value;for(const [id,show] of [['fj-air-fields',kind==='daily-air'],['fj-night-fields',kind==='paired-night']]){const el=get(id);el.hidden=!show;el.disabled=!show;}get('fj-entry-date').max=kind==='daily-air'?new Date(Date.parse(today+'T00:00:00Z')-86400000).toISOString().slice(0,10):today;if(get('fj-entry-date').value>get('fj-entry-date').max)get('fj-entry-date').value=get('fj-entry-date').max;}
+function fields(){const kind=get('fj-kind').value;for(const [id,show] of [['fj-air-fields',kind==='daily-air'],['fj-night-fields',kind==='paired-night'],['fj-water-amount-fields',kind==='rain-gauge'||kind==='irrigation'],['fj-feel-fields',kind==='soil-feel']]){const el=get(id);el.hidden=!show;el.disabled=!show;}get('fj-entry-date').max=(kind==='daily-air'||kind==='rain-gauge')?new Date(Date.parse(today+'T00:00:00Z')-86400000).toISOString().slice(0,10):today;if(get('fj-entry-date').value>get('fj-entry-date').max)get('fj-entry-date').value=get('fj-entry-date').max;}
 get('fj-kind').addEventListener('change',fields);fields();
 get('fj-entry-form').addEventListener('submit',e=>{e.preventDefault();if(!selected)return;const kind=get('fj-kind').value,r={id:uid(),plantingId:selected,date:get('fj-entry-date').value,kind,note:get('fj-note').value};
+ if(kind==='rain-gauge'||kind==='irrigation')r.inches=num('fj-water-inches');
+ if(kind==='soil-feel')r.feel=get('fj-feel').value;
  if(kind==='daily-air')Object.assign(r,{minF:num('fj-min'),maxF:num('fj-max'),fullShieldedDay:get('fj-full-day').checked});
  if(kind==='paired-night')Object.assign(r,{gardenLowF:num('fj-garden-low'),referenceLowF:num('fj-ref-low'),referenceId:get('fj-ref-id').value,regime:get('fj-regime').value,sameNightWindow:get('fj-same-night').checked,comparableShieldedAirHeight:get('fj-same-height').checked});
- if(commit({...data,entries:[...data.entries,r]})){get('fj-note').value='';for(const id of ['fj-min','fj-max','fj-garden-low','fj-ref-low'])get(id).value='';for(const id of ['fj-full-day','fj-same-night','fj-same-height'])get(id).checked=false;render();fields();}
+ if(commit({...data,entries:[...data.entries,r]})){get('fj-note').value='';for(const id of ['fj-min','fj-max','fj-garden-low','fj-ref-low','fj-water-inches'])get(id).value='';for(const id of ['fj-full-day','fj-same-night','fj-same-height'])get(id).checked=false;render();fields();}
 });
-get('fj-delete').addEventListener('click',()=>{if(!selected||!get('fj-confirm-delete').checked){status('Tick the confirmation box before removing the planting and all its observations.');return;}if(commit({schema:J.schema,plantings:data.plantings.filter(p=>p.id!==selected),entries:data.entries.filter(e=>e.plantingId!==selected)})){get('fj-confirm-delete').checked=false;selected=null;render();}});
+get('fj-delete').addEventListener('click',()=>{if(!selected||!get('fj-confirm-delete').checked){status('Tick the confirmation box before removing the planting and all its observations.');return;}if(commit({schema:J.schema,plantings:data.plantings.filter(p=>p.id!==selected),entries:data.entries.filter(e=>e.plantingId!==selected)})){delete waterProfiles[selected];try{localStorage.setItem('fvfJournalWaterProfilesV1',JSON.stringify(waterProfiles));}catch{}get('fj-confirm-delete').checked=false;selected=null;render();}});
 get('fj-pair-form').addEventListener('submit',e=>{e.preventDefault();if(!selected)return;const result=get('fj-pair-result');result.replaceChildren();try{const r=J.paired(data,selected,today,{referenceId:get('fj-scenario-ref').value.trim(),regime:get('fj-scenario-regime').value,referenceLowF:num('fj-scenario-low'),referenceDate:get('fj-scenario-date').value});if(!r.scenario){result.appendChild(node('p','Comparable nights available: '+r.sampleCount+'. Five unique past nights within 90 days, matching this reference and regime, are required. No adjustment calculated.'));return;}const s=r.scenario;result.appendChild(node('p','Historical median difference: '+s.medianOffsetF.toFixed(1)+'°F. If that difference recurred: '+s.centralF.toFixed(1)+'°F.','fj-lead'));result.appendChild(node('p','Observed-offset scenario: '+s.lowF.toFixed(1)+' to '+s.highF.toFixed(1)+'°F. This is not a forecast interval or frost-safety guarantee.'));}catch{result.appendChild(node('p','Check the reference low, date and matched readings.'));}});
 get('fj-scenario-date').value=today;get('fj-scenario-date').min=today;get('fj-scenario-date').max=new Date(Date.parse(today+'T00:00:00Z')+7*86400000).toISOString().slice(0,10);
 get('fj-export').addEventListener('click',()=>{const url=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'})),a=node('a');a.href=url;a.download='freighter-view-field-journal.json';document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);});
 get('fj-import').addEventListener('change',async()=>{const file=get('fj-import').files[0];if(!file)return;try{if(data.plantings.length||storageBlocked)throw Error('Restore is only available in an empty, readable journal. Export your existing records first.');if(file.size>6000000)throw Error('Backup exceeds size limit');const next=J.validate(JSON.parse(await file.text()),today);if(data.plantings.length||storageBlocked)throw Error('Journal changed while reading the backup');if(commit(next))render();}catch(e){status(e.message+'. No records replaced.');}finally{get('fj-import').value='';}});
+
+// Watering uses the canonical extracted tool's existing engine and data API.
+// The journal never uploads its observations; the only request is for the reference town.
+const W=window.GardenJournalWater;
+let waterVersion=0,waterPlant=null,waterModules=null,waterProfiles={};
+const coords={'bay-city':[43.5945,-83.8889],detroit:[42.3314,-83.0458],'grand-rapids':[42.9634,-85.6681],kalamazoo:[42.2917,-85.5872],'traverse-city':[44.7631,-85.6206],marquette:[46.5436,-87.3954],houghton:[47.1211,-88.5694]};
+try{const x=JSON.parse(localStorage.getItem('fvfJournalWaterProfilesV1')||'{}');if(x&&typeof x==='object'&&!Array.isArray(x))waterProfiles=x;}catch{}
+function resetWater(s){
+ waterVersion++;const output=get('fj-water-result');output.replaceChildren();
+ if(!W||!s){waterPlant=null;return;}
+ const p=s.planting,l=W.ledger(s.entries,today);
+ get('fj-water-ledger').textContent='Last 7 completed days: '+l.rainDays+'/7 rain-gauge days, '+l.rainIn.toFixed(2)+' in recorded rain. Irrigation recorded in the last 7 days through today: '+l.irrigationIn.toFixed(2)+' in across '+l.irrigation.length+' watering dates. Missing dates are unknown. Soil today: '+(l.soilFeel?l.soilFeel.replace(/-/g,' '):'not recorded')+'.';
+ if(waterPlant===p.id)return;waterPlant=p.id;
+ const x=Object.hasOwn(waterProfiles,p.id)?waterProfiles[p.id]:null;
+ get('fj-water-crop').value=x?.cropId||W.profileFor(H.models[p.modelId])||'';
+ get('fj-water-stage').value=x?.stage||'developing';get('fj-water-bed').value=x?.bed||'ground';get('fj-water-soil').value=x?.soil||'auto';
+ get('fj-water-length').value=x?.length??'';get('fj-water-width').value=x?.width??'';get('fj-water-mulch').checked=x?.mulch===true;get('fj-water-active').checked=false;
+}
+function waterLib(){if(!waterModules)waterModules=Promise.all([import('/assets/national-garden-water-engine.js?v=20260904-v5'),fetch('/data/national-garden-water-crops.json').then(r=>{if(!r.ok)throw Error('Crop profiles unavailable');return r.json();})]).catch(e=>{waterModules=null;throw e;});return waterModules;}
+get('fj-water-form').addEventListener('input',()=>{waterVersion++;get('fj-water-result').replaceChildren();});
+get('fj-water-form').addEventListener('submit',async e=>{
+ e.preventDefault();if(!W||!selected)return;const p=data.plantings.find(x=>x.id===selected),v=++waterVersion,area=get('fj-water-result');area.replaceChildren();
+ const entries=data.entries.filter(x=>x.plantingId===p.id),l=W.ledger(entries,today);
+ if(!l.soilFeel){area.appendChild(node('p','Check soil first. Record how the soil feels today in your journal before running a watering calculation.','fj-lead'));return;}
+ const length=num('fj-water-length'),width=num('fj-water-width');
+ if((length===null)!==(width===null)){area.appendChild(node('p','Enter both watered dimensions, or leave both blank.'));return;}
+ let setup;try{setup=W.validateSetup({cropId:get('fj-water-crop').value,stage:get('fj-water-stage').value,bed:get('fj-water-bed').value,soil:get('fj-water-soil').value,mulch:get('fj-water-mulch').checked,areaSqFt:length===null?null:length*width});}catch(e){area.appendChild(node('p',e.message));return;}
+ if(!get('fj-water-active').checked){area.appendChild(node('p','Confirm active growth and unfrozen soil first.'));return;}
+ try{waterProfiles[p.id]={...setup,length,width};localStorage.setItem('fvfJournalWaterProfilesV1',JSON.stringify(waterProfiles));}catch{}
+ const [lat,lon]=coords[p.siteId]||[];if(!Number.isFinite(lat)||!Number.isFinite(lon)){area.appendChild(node('p','Reference town unavailable.'));return;}
+ area.appendChild(node('p','Reading the existing Garden Water weather and soil sources…'));
+ try{const [[engine,profiles],context]=await Promise.all([waterLib(),fetch('/api/national-garden-water?lat='+lat+'&lon='+lon).then(r=>{if(!r.ok)throw Error('Weather unavailable');return r.json();})]);if(v!==waterVersion)return;
+ const r=W.evaluate({engine,context,crops:profiles.crops,setup,entries,today,now:Date.now(),latitude:lat,longitude:lon,activeGrowing:true});area.replaceChildren();
+ area.appendChild(node('p',r.state==='WATER TODAY'?'Watering indicated':r.state==='WAIT'?'Wait and check again':r.state==='HOLD FOR RAIN'?'Hold for rain':'Check soil first','fj-lead'));
+ if(!r.decision){area.appendChild(node('p',r.reason));return;}
+ const d=r.decision;if(d.state==='WATER TODAY')area.appendChild(node('p','Modeled application: '+d.applyIn.toFixed(2)+' inches'+(d.gallons===null?'':', about '+d.gallons.toFixed(1)+' gallons over the entered area')+'. Apply slowly and check infiltration.','fj-lead'));
+ area.appendChild(node('p','Based on your recorded soil feel today and the existing model. '+(d.state==='HOLD FOR RAIN'?'Regional forecast rain may reduce the need to irrigate.':'Check the actual bed before acting.')));
+ area.appendChild(node('p','NWS forecast reference ET: '+context.referenceEt.daily[0].toFixed(2)+' in/day; next 24h rain: '+context.forecastRain.in24.toFixed(2)+' in. Weather context generated '+new Intl.DateTimeFormat('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZone:'America/Detroit'}).format(new Date(r.sourceTime))+' local.','fj-small'));
+ area.appendChild(node('p',r.gaugeDaysUsed+' rain-gauge days replaced regional history for matching dates. '+(l.irrigation.length>1?'Multiple irrigation dates remain in the journal; the current soil observation anchors the estimate rather than pretending the owner model replays all events.':r.irrigationUsed?'One recorded irrigation date supplied to the existing model.':'No recent irrigation record supplied; missing is unknown.')+' No independent measurement of root-zone moisture or garden-level forecast validation.','fj-small'));
+ }catch{if(v===waterVersion){area.replaceChildren(node('p','Check soil first. Fresh watering evidence is unavailable. No amount calculated.','fj-lead'));}}
+});
+
 root.addEventListener('toggle',()=>{if(root.open)render();});function hash(){if(location.hash==='#field-journal')root.open=true;}window.addEventListener('hashchange',hash);hash();
 get('fj-count').textContent=data.plantings.length+' planting'+(data.plantings.length===1?'':'s')+' · '+data.entries.length+' observation'+(data.entries.length===1?'':'s');if(root.open)render();
 })();
