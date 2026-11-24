@@ -209,6 +209,7 @@
     wrap.append(el('strong', v.name || `Vessel ${v.mmsi}`));
     const motion = v.speedKnots == null ? 'speed unavailable' : `${(v.speedKnots * 1.15078).toFixed(1)} mph (${Number(v.speedKnots).toFixed(1)} kn)`;
     wrap.append(el('p', `${motion} · report ${age(v)}`));
+    wrap.append(el('p', `AIS type: ${shipTypeLabel(v)}`));
     if (v.destination) wrap.append(el('p', `AIS destination: ${v.destination}`));
     if (v.lengthMeters) wrap.append(el('p', `Length: ${Math.round(v.lengthMeters)} m`));
     wrap.append(button('Open live camera monitor', 'map-jump', () => openCameraMonitor(false)));
@@ -221,6 +222,7 @@
     wrap.append(el('p', `${c.direction === 'departure' ? 'Departure' : 'Arrival'} planning window: ${range(c.window)}`));
     wrap.append(el('p', `${c.distanceNm} NM · ${Number(c.speedKnots).toFixed(1)} kn · AIS ${c.ageMinutes} min old`));
     wrap.append(el('p', `${confidenceLabel(c.confidence)} · ${c.sizeLabel}`));
+    wrap.append(el('p', `AIS type: ${shipTypeLabel(c)}`));
     wrap.append(button('Open live camera monitor', 'map-jump', () => openCameraMonitor(false)));
     return wrap;
   }
@@ -239,17 +241,16 @@
       .watch-spot-marker.is-active span{background:#173f50;transform:scale(1.18)}
       .camera-map-marker span{width:34px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#6a4c86;color:#fff;border:2px solid #fff;box-shadow:0 2px 9px rgba(18,52,64,.4);font:700 10px/1 Arial,sans-serif;transition:transform .15s ease,background .15s ease}
       .camera-map-marker.is-active span{background:#b9572a;transform:scale(1.12)}
-      .ship-map-marker .ship-glyph{display:block;filter:drop-shadow(0 2px 3px rgba(18,52,64,.38));transition:filter .15s ease}
+      .ship-map-marker .ship-glyph{display:block;width:100%;height:100%;filter:drop-shadow(0 2px 3px rgba(18,52,64,.38))}
       .ship-map-marker svg{display:block;width:100%;height:100%;overflow:visible}
-      .ship-map-marker .ship-hull{fill:#146c86;stroke:#fff;stroke-width:2.3;stroke-linejoin:round}
-      .ship-map-marker .ship-house,.ship-map-marker .ship-stack{fill:#f8fbfc;stroke:#fff;stroke-width:1.3}
-      .ship-map-marker .ship-hatch{fill:#d8e8ec;stroke:#fff;stroke-width:1}
-      .ship-map-marker .ship-window{fill:#173f50}
-      .ship-map-marker .ship-waterline{stroke:#fff;stroke-width:1.6;opacity:.9}
-      .ship-map-marker.is-selected .ship-hull{fill:#b9572a}
-      .ship-map-marker.is-selected .ship-glyph{filter:drop-shadow(0 0 6px rgba(185,87,42,.7)) drop-shadow(0 2px 3px rgba(18,52,64,.42))}
+      .ship-map-marker.is-candidate .ship-hull{fill:#146c86}
       .ship-map-marker.is-local .ship-hull{fill:#567d8b}
       .ship-map-marker.is-stopped .ship-hull{fill:#8a6a42}
+      .ship-map-marker.is-motion-unknown .ship-hull{fill:#68797f}
+      .ship-map-marker.is-selected .ship-hull{fill:#b9572a}
+      .ship-map-marker.is-selected .ship-glyph{filter:drop-shadow(0 0 6px rgba(185,87,42,.7)) drop-shadow(0 2px 3px rgba(18,52,64,.42))}
+      .ship-map-marker .ship-fallback{display:flex;align-items:center;justify-content:center;width:100%;height:100%;border:2px solid #fff;border-radius:5px;background:#506873;color:#fff;font-weight:700}
+      .ship-map-marker.is-selected .ship-fallback{background:#b9572a}
     `;
     document.head.append(style);
   }
@@ -262,21 +263,26 @@
     return L.divIcon({ className: `camera-map-marker${active ? ' is-active' : ''}`, html: '<span>CAM</span>', iconSize: [34, 28], iconAnchor: [17, 14], popupAnchor: [0, -15] });
   }
 
-  function shipRotation(vessel) {
-    const heading = Number(vessel?.heading);
-    if (Number.isFinite(heading) && heading >= 0 && heading < 360) return heading;
-    const course = Number(vessel?.course);
-    return Number.isFinite(course) && course >= 0 && course < 360 ? course : 0;
+  function localShipState(vessel) {
+    const speed = vessel?.speedKnots;
+    return typeof speed !== 'number' || !Number.isFinite(speed) || speed < 0
+      ? 'motion-unknown' : speed > 0.5 ? 'local' : 'stopped';
+  }
+
+  function shipTypeLabel(vessel) {
+    const icons = window.SeawayVesselIcons;
+    return icons?.KINDS.find(item => item.kind === icons.classify(vessel))?.label || 'Type display unavailable';
   }
 
   function shipIcon(vessel, state = 'candidate') {
     const selected = state === 'selected';
-    const stopped = state === 'stopped';
-    const local = state === 'local';
-    const width = selected ? 64 : local || stopped ? 38 : 50;
-    const height = selected ? 30 : local || stopped ? 22 : 26;
-    const className = ['ship-map-marker', selected ? 'is-selected' : '', local ? 'is-local' : '', stopped ? 'is-stopped' : ''].filter(Boolean).join(' ');
-    const html = `<span class="ship-glyph" aria-hidden="true"><svg viewBox="0 0 72 32" focusable="false"><path class="ship-hull" d="M3 19 L8 19 L11 24 L58 24 L67 18 L70 14 L62 14 L55 18 Z"/><path class="ship-house" d="M8 19 V10 H20 V19 Z"/><rect class="ship-stack" x="11" y="5" width="4" height="5" rx="1"/><rect class="ship-window" x="10" y="12" width="3" height="2" rx=".5"/><rect class="ship-window" x="15" y="12" width="3" height="2" rx=".5"/><rect class="ship-hatch" x="24" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="34" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="44" y="15" width="8" height="4" rx="1"/><path class="ship-waterline" d="M12 21.5 H59"/></svg></span>`;
+    const shape = window.SeawayVesselIcons?.icon(vessel, { zoom: map?.getZoom() ?? 12, selected });
+    // Category and reported-length band come from the shared AIS factory.
+    // Color continues to describe the local watch state, not vessel type.
+    // Never rotate side profiles by course or infer vessel type from length.
+    const [width, height] = shape?.size || (selected ? [56, 34] : [38, 28]);
+    const className = ['ship-map-marker', 'soo-ais-symbol', 'type-' + (shape?.kind || 'unknown'), 'size-' + (shape?.band || 'unknown'), 'is-' + state].join(' ');
+    const html = shape ? '<span class="ship-glyph" aria-hidden="true">' + shape.html + '</span>' : '<span class="ship-fallback" aria-hidden="true">?</span>';
     return L.divIcon({ className, html, iconSize: [width, height], iconAnchor: [Math.round(width / 2), Math.round(height / 2)], popupAnchor: [0, -Math.round(height / 2)] });
   }
 
@@ -477,8 +483,7 @@
 
     (data.mapVessels || []).forEach(v => {
       if (candidateIds.has(String(v.mmsi))) return;
-      const moving = Number(v.speedKnots) > 0.5;
-      const state = moving ? 'local' : 'stopped';
+      const state = localShipState(v);
       const marker = L.marker([v.lat, v.lon], { icon: shipIcon(v, state), keyboard: true, title: v.name || `Vessel ${v.mmsi}`, zIndexOffset: 520 })
         .addTo(vesselLayer).bindTooltip(v.name || `Vessel ${v.mmsi}`, { direction: 'top' }).bindPopup(vesselPopup(v));
       markers.set(String(v.mmsi), marker);
@@ -501,7 +506,7 @@
     }
 
     const caption = document.querySelector('.map-caption');
-    if (caption) caption.textContent = 'Rust freighter = selected next watch. Blue freighters = other supported passage candidates. Muted blue/brown freighters = recent nearby AIS reports. Purple CAM markers = live cameras. Green 1–3 = in-person viewing spots.';
+    if (caption) caption.textContent = 'Ship shapes show reported AIS vessel types; size follows reported length bands, not map scale. Color shows watch status. Select a vessel for its details and report age. A question mark means the type symbol could not load.';
   }
 
   function focusVessel(mmsi) {
