@@ -37,7 +37,7 @@ async function launch(today = '2026-10-19', { failFetch = false, nws = nwsFixtur
     getElementById(id) {
       if (!nodes.has(id)) {
         nodes.set(id, {
-          value: { region: 'midwest', miles: '300', mpg: '28' }[id] ?? '',
+          value: { region: 'midwest', miles: '300', mpg: '28', layover: '60' }[id] ?? '',
           textContent: '', innerHTML: '', hidden: false, handlers: {}, classes: new Set(),
           addEventListener(event, fn) { this.handlers[event] = fn; },
           setAttribute(name, val) { this[name] = val; },
