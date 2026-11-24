@@ -41,7 +41,9 @@ test('dated operator lift reports define open/closed, never a fetch timestamp',(
 test('stale 2025/26 open message and malformed operator snippets cannot claim open today',()=>{
  const html='We are OPEN for the 2025/2026 season. Season passes are available. Current Conditions. Chair Lift #1: Closed Chair Lift #2: Closed Chair Lift #3: Closed. This is not a dated 2026/27 lift report.';
  assert.notEqual(classifyParsed(parse('pine-knob',html),at).status,'OPEN_PER_OPERATOR');
- assert.equal(parse('pine-knob',html).operatorStatusText,null,'do not surface last-season OPEN prose as current operator evidence');
+ assert.equal(parse('pine-knob',html),null,'last-season OPEN prose alone is not a valid 2026/27 lift report');
+ const currentFixture=fs.readFileSync(path.join(root,'tests/fixtures/michigan-ski/pine-knob.html'),'utf8');
+ assert.equal(parse('pine-knob',currentFixture).operatorStatusText,null,'do not surface last-season OPEN prose from actual operator markup');
  assert.equal(classifyParsed(null,at).status,'UNVERIFIED');
  assert.equal(parse('unknown-hill',html),null);
 });

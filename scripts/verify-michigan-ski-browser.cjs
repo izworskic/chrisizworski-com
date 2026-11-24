@@ -88,6 +88,7 @@ async function run(){
    mode='undated';
    await page.reload({waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.querySelector('#ski-open-count')?.textContent.includes('0 confirmed open'),null,{timeout:20000});
+   await page.locator('.ski-unconfirmed summary').click();
    const uncertain=await page.locator('#ski-operating-list').innerText();
    need(uncertain.includes('0 lifts listed · undated'),width+' zero-lift count is explicitly undated');
    need(uncertain.includes('Lift count undated'),width+' undated positive count cannot claim open');
