@@ -132,6 +132,15 @@ async function start(){
   const surface=mapPage.locator('#shore-map');
   await surface.scrollIntoViewIfNeeded();
   assert.ok(await mapPage.locator('#shore-map .shore-cluster').count()>0,'overview contains beach groups');
+  const represented=await surface.evaluate(el=>[...el.querySelectorAll('.shore-cluster')].reduce((n,p)=>n+Number(p.textContent),0)+el.querySelectorAll('.shore-marker').length);
+  assert.equal(represented,997,'all 997 directory listings represented on the initial map');
+  const cluster=surface.locator('.shore-cluster').first();
+  const clusterZoom=await mapPage.evaluate(()=>window.__shoreTestMap.getZoom());
+  await cluster.click();
+  await mapPage.waitForFunction(z=>window.__shoreTestMap.getZoom()>z,clusterZoom);
+  await mapPage.goto(url,{waitUntil:'domcontentloaded'});
+  await mapPage.waitForFunction(()=>!!document.querySelector('#shore-map .leaflet-tile-loaded'));
+  await surface.scrollIntoViewIfNeeded();
   assert.equal(await mapPage.locator('#shore-map .leaflet-popup').count(),0,'no auto popup blocking gesture');
   assert.equal(await surface.evaluate(el=>getComputedStyle(el).touchAction),'none');
   assert.equal(await surface.evaluate(el=>getComputedStyle(el.closest('.map-shell')).touchAction),'none');
@@ -142,7 +151,7 @@ async function start(){
   assert.ok(await plus.evaluate(el=>el.getBoundingClientRect().width>=44));
   await plus.click();
   await mapPage.waitForFunction(z=>window.__shoreTestMap.getZoom()>z,initialZoom);
-  await mapPage.reload({waitUntil:'domcontentloaded'});
+  await mapPage.goto(url,{waitUntil:'domcontentloaded'});
   await mapPage.waitForFunction(()=>!!document.querySelector('#shore-map .leaflet-tile-loaded'));
   await surface.scrollIntoViewIfNeeded();
   await mapPage.waitForTimeout(400);
