@@ -37,7 +37,7 @@ for(const width of [360,390,768,1280,1440]){
  await page.locator('#finder-query').fill('Cleveland');await page.locator('#finder-query').press('Enter');assert.equal(await page.locator('#corridor').inputValue(),'cuyahoga');assert.equal(await page.locator('#finder-go').getAttribute('href'),'/cuyahoga-freighter-watch/');
  await page.locator('#finder-query').fill('unknown location');await page.locator('#finder-search-go').click();assert.match(await page.locator('#finder-search-status').innerText(),/No matching/);assert.equal(await page.locator('#corridor').inputValue(),'cuyahoga');
  await page.locator('#corridor').selectOption('duluth');await page.locator('#finder-go').click();assert.equal(await page.locator('#corridorTitle').innerText(),'Duluth–Superior');
- failed=true;await page.locator('#mapRefresh').click();await page.locator('#mapStatusText').getByText(/Refresh unavailable/).waitFor();
+ failed=true;await page.locator('#mapRefresh').click();await page.waitForFunction(()=>document.getElementById('mapStatusText').textContent.includes('Refresh unavailable'));
  assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'overflow '+width);
  assert.deepEqual(errors,[]);await context.close();
 }
