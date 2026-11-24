@@ -92,7 +92,7 @@
     current=d.slug;
     for(const el of list)el.querySelector('button[data-select]').setAttribute('aria-pressed',String(el===li));
     put('report-name',d.name);
-    put('report-place',d.city+', '+d.state+' · Lake '+d.lake);
+    put('report-place',d.city+', '+d.state+' · '+lakeLabel(d.lake));
     put('report-story',d.story);
     put('report-heading','Get to know this shore');
     put('report-guide','Checking a nearby NWS air forecast. While it loads, look for the wind and waves described in this place’s field note.');
@@ -106,9 +106,9 @@
     alert.hidden=!d.accessAlert;
     alert.textContent=d.accessAlert||'';
     link('report-safety',d.safetyUrl,'Check '+d.safetyName);
-    link('report-park',d.parkUrl,'Official park page');
+    link('report-park',d.parkUrl,d.epaId?'Open EPA beach map (search '+d.epaId+')':'Official park page');
     link('report-maps','https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(d.name+', '+d.city+', '+d.state),'Find on Google Maps');
-    link('report-detail','/great-lakes-beaches/around-the-lakes/'+d.slug+'/','Read the complete field note');
+    link('report-detail',d.epaId?'/great-lakes-beaches/around-the-lakes/?beach='+encodeURIComponent(d.slug):'/great-lakes-beaches/around-the-lakes/'+d.slug+'/',d.epaId?'Share this ShoreFeel report':'Read the complete field note');
     if(request)request.abort();
     const controller=new AbortController();request=controller;
     fetch('/api/shorefeel-us?beach='+encodeURIComponent(d.slug),{signal:controller.signal,headers:{Accept:'application/json'}})
@@ -137,12 +137,11 @@
       })
       .catch(error=>{if(error.name!=='AbortError'&&current===d.slug)setUnavailable('The NWS forecast request did not succeed. Open the official NWS weather service and the park links.');});
     if(mapLive&&markers.has(d.slug)){
-      for(const [slug,marker] of markers){
-        const icon=marker.getElement()?.querySelector('.shore-marker');
-        if(icon)icon.classList.toggle('selected',slug===d.slug);
-      }
+      const location=[Number(d.lat),Number(d.lon)];
+      if(map.getZoom()<9||!map.getBounds().contains(location))map.setView(location,9,{animate:false});
+      drawMap();
       const point=markers.get(d.slug);
-      point.openPopup();
+      if(map.hasLayer(point))point.openPopup();
     }
     if(window.va)window.va('event',{name:'ShoreFeel US Beach Select',data:{beach:d.slug,lake:d.lake}});
     try{const u=new URL(location.href);u.searchParams.set('beach',d.slug);history.replaceState(null,'',u);}catch{}
@@ -167,44 +166,100 @@
     link('report-detail','/great-lakes-beaches/','Explore Michigan’s Lake Huron beaches');
     try{const u=new URL(location.href);u.searchParams.delete('beach');history.replaceState(null,'',u);}catch{}
   }
-  function setLake(next,desired){
+  let displayLimit=48;
+  let matching=[];
+  function setLake(next,desired,extend=false){
     lake=next;
+    if(!extend)displayLimit=48;
     filters.forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.lakeFilter===next)));
-    $('lake-context').textContent=lakeInfo[next];
-    // A visible, usable first-party handoff is better than pretending Lake Huron
-    // lacks beaches simply because this expansion excludes Michigan.
-    if(next==='Huron'){
-      $('lake-context').innerHTML=lakeInfo.Huron+' <a href="/great-lakes-beaches/">See Michigan’s Lake Huron beaches</a>.';
-    }
-    const visible=list.filter(li=>{
+    $('lake-context').textContent=lakeInfo[next]||lakeInfo.All;
+    // Keep the full EPA result set available. Render only the first 48 rows
+    // until the visitor asks for more; map clustering uses every match.
+    matching=[];
+    for(const li of list){
       const d=li.dataset;
       const byLake=next==='All'||d.lake===next;
-      const text=[d.name,d.city,d.state,d.lake,d.story].join(' ').toLowerCase();
-      const yes=byLake&&(!query||text.includes(query));
-      li.hidden=!yes;return yes;
-    });
-    const noMatch=$('shore-no-match');
-    if(noMatch)noMatch.hidden=visible.length>0||next==='Huron';
-    put('result-count',next==='Huron'?'Michigan guide available':visible.length+' of '+list.length+' locations');
-    if(mapLive){
-      for(const [slug,marker] of markers){
-        const item=bySlug.get(slug);
-        if(!item.hidden)marker.addTo(map);
-        else map.removeLayer(marker);
-      }
-      if(visible.length>1){
-        const bounds=window.L.latLngBounds(visible.map(li=>[Number(li.dataset.lat),Number(li.dataset.lon)]));
-        map.fitBounds(bounds.pad(.26),{maxZoom:9,animate:false});
-      }else if(visible.length===1){
-        map.setView([Number(visible[0].dataset.lat),Number(visible[0].dataset.lon)],9,{animate:false});
-      }else map.setView([44.2,-83.9],7,{animate:false});
+      const haystack=[d.name,d.city,d.state,d.lake,d.story,d.epaId||''].join(' ').toLowerCase();
+      const matched=byLake&&(!query||haystack.includes(query));
+      if(matched)matching.push(li);
+      li.hidden=!matched||matching.length>displayLimit;
     }
-    if(next==='Huron'){$('field-report').hidden=false;handoffToMichigan();}
-    else if(visible.length)showPlace(desired&&visible.includes(desired)?desired:visible[0]);
-    else{
-      if(request)request.abort();
-      current=null;$('field-report').hidden=true;
-      try{const u=new URL(location.href);u.searchParams.delete('beach');history.replaceState(null,'',u);}catch{}
+    const more=$('shore-show-more');
+    if(more){
+      more.hidden=matching.length<=displayLimit;
+      more.textContent='Show more beaches ('+Math.min(matching.length-displayLimit,48)+' more)';
+    }
+    const noMatch=$('shore-no-match');
+    if(noMatch)noMatch.hidden=matching.length>0;
+    put('result-count',matching.length+' matching · '+list.length+' U.S. listings');
+    if(mapLive){
+      const coordinates=matching.map(li=>[Number(li.dataset.lat),Number(li.dataset.lon)])
+        .filter(a=>a.every(Number.isFinite));
+      if(coordinates.length>1){
+        const bounds=window.L.latLngBounds(coordinates);
+        map.fitBounds(bounds.pad(.12),{maxZoom:9,animate:false});
+      }else if(coordinates.length===1)map.setView(coordinates[0],9,{animate:false});
+      else map.setView([44.2,-84.5],5,{animate:false});
+      drawMap();
+    }
+    if(desired&&matching.includes(desired)){showPlace(desired);return;}
+    const active=bySlug.get(current);
+    if(active&&matching.includes(active)&&!$('field-report').hidden)return;
+    if(request)request.abort();
+    current=null;
+    if(query||!matching.length){
+      $('field-report').hidden=true;
+      return;
+    }
+    if(matching.length)showPlace(matching[0]);
+  }
+  let displayedMapLayers=[];
+  function drawMap(){
+    if(!mapLive)return;
+    for(const layer of displayedMapLayers){
+      if(map.hasLayer(layer))map.removeLayer(layer);
+    }
+    displayedMapLayers=[];
+    const visible=map.getBounds().pad(.20),zoom=map.getZoom();
+    const putMarker=marker=>{marker.addTo(map);displayedMapLayers.push(marker)};
+    if(zoom>=9){
+      for(const li of matching){
+        const marker=markers.get(li.dataset.slug);
+        if(marker&&visible.contains(marker.getLatLng()))putMarker(marker);
+      }
+    }else{
+      // Group nearby source points at lower zooms so 981 EPA beach segments
+      // do not become a wall of dots or a slow mobile DOM.
+      const step=zoom<=5?.90:zoom===6?.50:zoom===7?.27:.12;
+      const groups=new Map();
+      for(const li of matching){
+        const lat=Number(li.dataset.lat),lon=Number(li.dataset.lon);
+        if(!Number.isFinite(lat)||!Number.isFinite(lon)||!visible.contains([lat,lon]))continue;
+        const key=Math.floor(lat/step)+':'+Math.floor(lon/step);
+        if(!groups.has(key))groups.set(key,[]);
+        groups.get(key).push(li);
+      }
+      for(const batch of groups.values()){
+        if(batch.length===1){
+          const marker=markers.get(batch[0].dataset.slug);
+          if(marker)putMarker(marker);
+          continue;
+        }
+        const lat=batch.reduce((sum,li)=>sum+Number(li.dataset.lat),0)/batch.length;
+        const lon=batch.reduce((sum,li)=>sum+Number(li.dataset.lon),0)/batch.length;
+        const count=batch.length;
+        const icon=window.L.divIcon({className:'shore-cluster-icon',
+          html:'<span class="shore-cluster" aria-hidden="true">'+count+'</span>',
+          iconSize:[38,38],iconAnchor:[19,19]});
+        const marker=window.L.marker([lat,lon],{icon,title:count+' source-listed beaches. Zoom in to choose.',keyboard:true});
+        marker.on('click',()=>map.setView([lat,lon],Math.min(zoom+2,11),{animate:false}));
+        putMarker(marker);
+      }
+    }
+    const active=markers.get(current);
+    if(active&&map.hasLayer(active)){
+      const pin=active.getElement()?.querySelector('.shore-marker');
+      if(pin)pin.classList.add('selected');
     }
   }
   function initMap(){
