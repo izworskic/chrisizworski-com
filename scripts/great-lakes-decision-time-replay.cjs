@@ -6,6 +6,7 @@ const {detect}=require('./detect-great-lakes-crossings.cjs');
 const {proxyGates,prepare}=require('./retrospect-great-lakes-reference.cjs');
 const {verify,scorePair}=require('./great-lakes-bias-corrected-window.cjs');
 const soo=require('../lib/soo-locks-next');
+const delay=require('./great-lakes-decision-time-delay-diagnostics.cjs');
 const MIN=60000,GRID=15*MIN,FRESH=5*MIN,HORIZON=120*MIN,GAP=5*MIN;
 const DATES=Object.freeze(['2024-09-04','2024-09-10','2024-09-15']);
 const expect=(ok,msg)=>{if(!ok)throw Error(msg);};
@@ -59,7 +60,7 @@ function resolve(issue,track,crossings,dayEnd){
  }
  return {status:continuous(track,issue.observationTime,until)?'no_detected_crossing_continuous':'no_detected_crossing_incomplete'};
 }
-function replay(doc,records,prior,frozen){
+function replay(doc,records,prior,frozen,options={}){
  verify(records,prior,frozen);
  const start=Date.parse(doc?.start),end=Date.parse(doc?.end),date=doc?.start?.slice(0,10);
  expect(doc?.kind==='historical-research'&&DATES.includes(date)&&doc.start===date+'T00:00:00Z'&&end-start===86400000,'Prespecified development date only');
@@ -68,14 +69,15 @@ function replay(doc,records,prior,frozen){
  const {issued,counts:selection}=issueForecasts(tracks,start,end);
  const byId=new Map();
  for(const c of detection.review){if(!byId.has(c.mmsi))byId.set(c.mmsi,[]);byId.get(c.mmsi).push({lo:Date.parse(c.start),hi:Date.parse(c.end),direction:c.direction});}
- const counts={},pairs=[];
- for(const issue of issued){const o=resolve(issue,tracks.get(issue.id),byId.get(issue.id)||[],end);counts[o.status]=(counts[o.status]||0)+1;if(o.status==='matched')pairs.push(scorePair(o.evidence,frozen));}
+ const counts={},pairs=[],diagnostics=[];
+ for(const issue of issued){const track=tracks.get(issue.id),o=resolve(issue,track,byId.get(issue.id)||[],end);counts[o.status]=(counts[o.status]||0)+1;const pair=o.status==='matched'?scorePair(o.evidence,frozen):null;if(pair)pairs.push(pair);if(options.delayDiagnostics===true)diagnostics.push(delay.describe(issue,o,track,pair));}
  const sum=f=>pairs.reduce((n,p)=>n+f(p),0);
  return {schemaVersion:1,kind:'DEVELOPMENT_DECISION_TIME_PROXY_REPLAY',date,sourceReceiptSha256:doc.source.receiptSha256,freezeSha256:frozen.freezeSha256,
  selectionRule:'fixed 15-minute UTC grid; latest observation within five minutes; first existing-model eligible 15–60 minute midpoint per vessel UTC day; two-hour followup',
  selection,issued:issued.length,counts,matched:pairs.length,unresolved:issued.length-pairs.length,detectedCrossings:detection.review.length,
  oldContained:sum(p=>p.old.contained),nextContained:sum(p=>p.next.contained),oldOverlap:sum(p=>p.old.overlap),nextOverlap:sum(p=>p.next.overlap),
  oldWidthSum:sum(p=>p.old.width),nextWidthSum:sum(p=>p.next.width),lossDeltaLowerSum:sum(p=>p.lossDelta[0]),lossDeltaUpperSum:sum(p=>p.lossDelta[1]),maeDeltaLowerSum:sum(p=>p.maeDelta[0]),maeDeltaUpperSum:sum(p=>p.maeDelta[1]),
+ ...(options.delayDiagnostics===true?{delayDiagnostics:delay.aggregate(diagnostics)}:{}),
  fieldAccuracyVerified:false,productionCalibrationAuthorized:false,receiptTimesAvailable:false,note:'Observation-time replay on previously studied development dates. Unresolved does not mean false prediction; detector and archive can miss crossings. No operational probability or recall claim.'};
 }
 function summarize(days){
@@ -92,8 +94,8 @@ module.exports={issueForecasts,continuous,resolve,replay,summarize,DATES};
 if(require.main===module){
  const [mode,a,b,c,d,e,...extra]=process.argv.slice(2);
  const read=p=>{expect(p&&fs.statSync(p).size<=48*1024*1024,'Missing or oversized input');return JSON.parse(fs.readFileSync(p,'utf8'));};
- expect(!extra.length&&['evaluate','summarize'].includes(mode),'Usage: evaluate records prior frozen observations output | summarize reports output');
+ expect((!extra.length||mode==='evaluate'&&extra.length===1&&extra[0]==='--delay-diagnostics')&&['evaluate','summarize'].includes(mode),'Usage: evaluate records prior frozen observations output | summarize reports output');
  let report,output;
- if(mode==='evaluate'){expect(a&&b&&c&&d&&e,'Missing evaluation arguments');report=replay(read(d),read(a),read(b),read(c));output=e;}else{expect(a&&b&&!c&&!d&&!e,'Invalid summary arguments');report=summarize(read(a));output=b;}
+ if(mode==='evaluate'){expect(a&&b&&c&&d&&e,'Missing evaluation arguments');report=replay(read(d),read(a),read(b),read(c),{delayDiagnostics:extra.length===1});output=e;}else{expect(a&&b&&!c&&!d&&!e,'Invalid summary arguments');report=summarize(read(a));output=b;}
  fs.writeFileSync(output,JSON.stringify(report,null,2)+'\n',{flag:'wx',mode:0o600});
 }
