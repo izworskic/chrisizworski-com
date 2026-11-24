@@ -38,7 +38,9 @@ with sync_playwright() as playwright:
                 result = group.locator("..").locator("[data-result]")
                 assert ships.get_attribute("aria-pressed") == "true"
                 assert places.bounding_box()["height"] >= 44
-                places.focus()
+                ships.focus()
+                page.keyboard.press("Tab")
+                assert places.evaluate("(el) => el === document.activeElement")
                 assert places.evaluate("(el) => el.matches(':focus-visible')")
                 places.press("Enter")
                 assert places.get_attribute("aria-pressed") == "true"
