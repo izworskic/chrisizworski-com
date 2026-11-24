@@ -102,8 +102,14 @@ test('missing, failed and empty feeds are explicit and never read as an empty ri
   assert.equal(empty.status, 'no-ships');
   assert.match(empty.detail[0], /not proof of an empty river/);
   const retained = core.plan({ data: data(NOV), failed: true, now: NOV, startOffset: 120 });
-  assert.equal(retained.status, 'match');
-  assert.match(retained.notes[0], /latest refresh failed/);
+  assert.equal(retained.status, 'unavailable');
+  assert.match(retained.detail[0], /latest refresh failed/);
+  assert.equal(retained.ships.length, 0);
+  assert.equal(retained.best, null);
+  assert.equal(retained.suggestion, undefined);
+  const recovered = core.plan({ data: data(NOV), failed: false, now: NOV, startOffset: 120 });
+  assert.equal(recovered.status, 'match');
+  assert.match(recovered.notes[0], /not a confirmed lock time/);
 });
 
 test('the hotline is described only as seasonal outside May through October', () => {
