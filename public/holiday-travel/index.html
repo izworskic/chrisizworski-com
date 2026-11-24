@@ -17,7 +17,7 @@
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Best Days to Fly Thanksgiving &amp; Christmas | Chris Izworski">
 <meta name="twitter:description" content="Odds your holiday flight misses your deadline, by route, time and connection, with stranding risk if it cancels and a live weather check in the final week.">
-<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","@id":"https://chrisizworski.com/holiday-travel/#app","name":"Holiday Travel Day Picker","url":"https://chrisizworski.com/holiday-travel/","description":"Stress-test a Thanksgiving or Christmas flight plan: chance of missing your arrival deadline by route, departure time and connection, stranding risk if cancelled, cheapest fixes, and a live National Weather Service check in the final week. Built from BTS flight records, six holiday seasons.","applicationCategory":"TravelApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"creator":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-11-23"},{"@type":"BreadcrumbList","@id":"https://chrisizworski.com/holiday-travel/#breadcrumbs","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Holiday Travel Day Picker","item":"https://chrisizworski.com/holiday-travel/"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/","mainEntityOfPage":"https://chrisizworski.com/chris-izworski/"}]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[{"@type":"WebApplication","@id":"https://chrisizworski.com/holiday-travel/#app","name":"Holiday Travel Day Picker","url":"https://chrisizworski.com/holiday-travel/","description":"Stress-test a Thanksgiving or Christmas flight plan: chance of missing your arrival deadline by route, departure time and connection, stranding risk if cancelled, cheapest fixes, and a live National Weather Service check in the final week. Built from BTS flight records, six holiday seasons.","applicationCategory":"TravelApplication","operatingSystem":"Any web browser","isAccessibleForFree":true,"author":{"@id":"https://chrisizworski.com/#person"},"creator":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"dateModified":"2026-11-24"},{"@type":"BreadcrumbList","@id":"https://chrisizworski.com/holiday-travel/#breadcrumbs","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},{"@type":"ListItem","position":2,"name":"Tools","item":"https://chrisizworski.com/tools/"},{"@type":"ListItem","position":3,"name":"Holiday Travel Day Picker","item":"https://chrisizworski.com/holiday-travel/"}]},{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/","mainEntityOfPage":"https://chrisizworski.com/chris-izworski/"}]}</script>
 <style>
 :root{color-scheme:light;--ink:#142d37;--muted:#56727a;--teal:#137b76;--deep:#0e303b;--paper:#f4f8f7;--line:#d6e5e3;--gold:#f8b95b;--good:#087660;--warn:#a85a1e;--bad:#a23434}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:var(--paper);font:16px/1.55 system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink)}a{color:#126c72;text-underline-offset:3px}button,input,select{font:inherit}button{cursor:pointer}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible{outline:3px solid #d18b2c;outline-offset:3px}button:disabled{opacity:.5;cursor:not-allowed}
@@ -67,6 +67,14 @@
 .holiday-choice-empty{font-size:.88rem;color:#49616a;padding:12px;margin:0}
 @media(max-width:370px){.pair{grid-template-columns:1fr 1fr}.field .holiday-choice input[role=combobox]{padding:10px 8px;font-size:.9rem}}
 
+/* Decision desk: date comparison is the entry point; no extra engine or request. */
+.nav{padding-block:12px}.hero{padding:18px 20px 34px;gap:10px}.hero h1{font-size:clamp(1.9rem,4.1vw,3.15rem);margin:5px 0;line-height:1.12}.hero p{margin:7px 0;font-size:1rem}.hero .promise{background:none;border:0;padding:0;border-radius:0;font-size:.8rem;color:#d8e8e5}
+.desk-links{display:flex;flex-wrap:wrap;gap:8px 18px;margin:2px 0}.desk-links a{display:inline-flex;align-items:center;min-height:44px;color:#fff;font-weight:700;font-size:.9rem}
+#flight-calendar{margin:18px 0 20px;padding:15px 0 17px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}#flight-calendar[hidden]{display:none}
+#flight-calendar h2,.trip-title{margin:0 0 6px;font:700 1.25rem/1.2 Georgia,serif}.calendar-explain{font-size:.85rem;color:#42616a;margin:0 0 10px}
+.calendar-days{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}.calendar-day{min-width:0;min-height:65px;padding:8px 9px;border:1px solid #b7d0cb;border-radius:8px;background:#fff;text-align:left;color:var(--ink);display:grid;grid-template-columns:1fr auto;gap:3px 5px;align-items:center}.calendar-day .calendar-date{font-size:.78rem;font-weight:700;line-height:1.2}.calendar-day strong{font-size:1.15rem;line-height:1;font-variant-numeric:tabular-nums}.calendar-day .calendar-bar{grid-column:1/-1;height:6px;background:#e5efeb;border-radius:3px;overflow:hidden}.calendar-bar i{display:block;height:100%;background:#537a7a}.calendar-day[data-level=low] .calendar-bar i{background:var(--good)}.calendar-day[data-level=high] .calendar-bar i{background:var(--bad)}.calendar-day[aria-pressed=true]{border:2px solid #136b69;background:#e9f5f0;padding:7px 8px}.calendar-day:hover{background:#eef7f3}
+.calendar-selection{font-size:.85rem;font-weight:700;margin:9px 0 0;color:#154b50}.trip-inputs{margin-top:10px!important}.field,.controls>*{min-width:0}.callout{margin:18px 0 0;border-radius:12px;padding:18px}.callout h2{font-size:clamp(1.45rem,3vw,2.2rem)}.summary{margin:20px 0}.summary .stat{padding:12px 14px}.desk-note{margin:0 0 10px;font-size:.85rem;color:#42616a}
+@media(min-width:640px){.calendar-days{grid-template-columns:repeat(4,minmax(0,1fr))}}@media(min-width:900px){.calendar-days{grid-template-columns:repeat(7,minmax(0,1fr))}.hero{padding-top:22px;padding-bottom:36px}}@media(max-width:560px){.picker{padding:14px}.controls{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.controls>.field:first-child{grid-column:1/-1}.controls .seg{gap:4px}.controls .seg button{padding:8px 7px}.controls .field input{padding-inline:8px}.hero{padding-inline:16px}.hero h1{font-size:1.9rem}}
 </style>
 </head>
 <body>
@@ -76,8 +84,9 @@
 <div>
 <div class="eyebrow">Holiday Travel · Flight stress test</div>
 <h1>Will you make it home for the holidays?</h1>
-<p>Enter your actual route, flight time and the moment you have to be there. Get the odds you miss it, how badly a cancellation would strand you on that route, and the cheapest change that fixes it. Built from six holiday seasons of flight records, with a live weather check in the final week.</p>
+<p>Compare the best days to fly, then check your own route and arrival deadline. See which changes could lower your risk, using six holiday seasons of flight records.</p>
 </div>
+<nav class="desk-links" aria-label="Planner sections"><a href="#flight-calendar">Compare flight days</a><a href="#personal-plan">Check my trip</a><a href="#airport-weather">Airport weather</a></nav>
 <div class="promise" id="planning-banner">Holiday dates and estimates adapt to the year you choose. Historical comparison figures retain their source dates.</div>
 </header>
 </div>
@@ -88,10 +97,19 @@
 <div class="field"><label for="travel-year">Travel year</label><select id="travel-year"><option value="auto">Next upcoming (automatic)</option></select><p class="fine">Automatically advances each year, or choose a year to plan ahead.</p></div>
 <div class="field"><span class="small-label">2 · How will you travel?</span><div class="seg" role="group" aria-label="Travel mode"><button type="button" id="fly" aria-pressed="true">Fly</button><button type="button" id="drive" aria-pressed="false">Drive</button></div></div>
 </div>
+<section id="flight-calendar" aria-labelledby="flight-calendar-title">
+<h2 id="flight-calendar-title">Which day should you fly?</h2>
+<p class="calendar-explain">Share of scheduled U.S. flights cancelled, diverted or 60+ minutes late, averaged over six past holiday seasons. These are national historical rates, not your route's risk or a forecast.</p>
+<div id="calendar-days" class="calendar-days" role="group" aria-label="Selected historical departure days"><p>Thanksgiving Day: 3%; Sunday after: 13%. Christmas December 30 and 31: 7%; December 26: 17%.</p></div>
+<p id="calendar-selection" class="calendar-selection" aria-live="polite">Choose a day to change your flight departure. Your arrival deadline stays the same.</p>
+<p class="fine"><a href="#best-days">Full historical comparison and worst seasons</a>. Other dates are available in the departure field below.</p>
+</section>
+<h2 class="trip-title" id="personal-plan">Check your own trip</h2>
+<p class="desk-note" id="plan-example-note">Start with the example Chicago to New York flight or enter your airports. Set the time you need to arrive.</p>
 <div class="trip-inputs" style="margin-top:18px">
 <div class="field" id="dir-field"><span class="small-label">3 · Which leg?</span><div class="seg" role="group" aria-label="Trip direction"><button type="button" id="dir-there" aria-pressed="true">Getting there</button><button type="button" id="dir-home" aria-pressed="false">Getting home</button></div></div>
-<div class="field" id="home-field"><label for="home" id="home-label">Your home airport</label><select id="home"><option value="DTW">Detroit, MI (DTW)</option></select></div>
-<div class="field" id="away-field"><label for="away" id="away-label">Flying to</label><select id="away"><option value="MCO">Orlando, FL (MCO)</option></select></div>
+<div class="field" id="home-field"><label for="home" id="home-label">Your home airport</label><select id="home"><option value="ORD">Chicago, IL (ORD)</option></select></div>
+<div class="field" id="away-field"><label for="away" id="away-label">Flying to</label><select id="away"><option value="LGA">New York, NY (LGA)</option></select></div>
 <div class="field" id="routing-field"><label for="routing">Routing</label><select id="routing"><option value="nonstop">Nonstop</option></select><p class="fine">Connections are listed only where both legs had enough holiday flights to measure.</p></div>
 <div class="field hidden" id="layover-field"><label for="layover">Layover</label><select id="layover"><option value="45">45 minutes</option><option value="60" selected>1 hour</option><option value="75">1 hr 15 min</option><option value="90">1 hr 30 min</option><option value="120">2 hours</option><option value="180">3 hours</option></select></div>
 <div class="field" id="dep-field"><span class="small-label">Your flight leaves</span><div class="pair"><select id="dep-day" aria-label="Departure day"></select><select id="dep-time" aria-label="Scheduled departure time"></select></div></div>
@@ -102,13 +120,13 @@
 <div class="field hidden" id="mpg-field"><label for="mpg">Your vehicle (miles per gallon)</label><input type="number" id="mpg" inputmode="decimal" min="5" max="150" step=".1" value="28"></div>
 </div>
 </section>
-<div class="summary" aria-live="polite"><div class="stat"><div class="k">Holiday</div><div class="v" id="holiday-stat">Next Thanksgiving</div><div class="s" id="date-stat">Dates calculated automatically</div></div><div class="stat"><div class="k" id="volume-label">Historical travel comparison</div><div class="v" id="volume-stat">81.8 million</div><div class="s" id="volume-note">AAA 2025 national forecast, all modes</div></div><div class="stat"><div class="k" id="third-label">Flight delay history</div><div class="v" id="third-stat">Loading…</div><div class="s" id="third-note">Bureau of Transportation Statistics, 2025</div></div></div>
 <div class="callout" aria-live="polite"><span class="tag" id="callout-tag">Will you make it?</span><h2 id="best-label">Checking your plan</h2><p id="best-reason">Loading six seasons of holiday flight records.</p><p class="share-row"><button type="button" id="share-plan" class="share">Copy link to this plan</button></p></div>
 <h2 class="section-title" id="rank-heading">Travel days, ranked</h2>
 <p class="intro" id="rank-intro">Ranked by observed odds of a cancellation or long delay.</p>
 <section class="live" id="live-panel" aria-live="polite"></section>
 <div class="legend" id="legend"><span><i class="dot good"></i> Better window</span><span><i class="dot mid"></i> Crowded</span><span><i class="dot bad"></i> Try to avoid</span></div>
 <div id="results" class="rank-list" aria-live="polite"></div>
+<div class="summary" aria-live="polite"><div class="stat"><div class="k">Holiday</div><div class="v" id="holiday-stat">Next Thanksgiving</div><div class="s" id="date-stat">Dates calculated automatically</div></div><div class="stat"><div class="k" id="volume-label">Historical travel comparison</div><div class="v" id="volume-stat">81.8 million</div><div class="s" id="volume-note">AAA 2025 national forecast, all modes</div></div><div class="stat"><div class="k" id="third-label">Flight delay history</div><div class="v" id="third-stat">Loading…</div><div class="s" id="third-note">Bureau of Transportation Statistics, 2025</div></div></div>
 <section class="sources airport-weather" id="airport-weather" aria-labelledby="airport-weather-title">
 <h2 id="airport-weather-title">Holiday week weather at the busiest airports</h2>
 <p>Follow the 30 U.S. airports with the most scheduled flights in the historical BTS holiday dataset. A flagged day means the National Weather Service has an active warning overlapping that day or the NWS forecast names snow, ice, freezing rain or thunderstorms. It is <strong>not a prediction of flight delay odds</strong>.</p>
@@ -314,13 +332,55 @@ function firstFlightCard(plan){
  var rows=ff.byBand.map(function(b,i){return '<tr'+(i===ff.band?' class="here"':'')+'><td>'+eng.bands[i]+'</td><td>'+(b.shareHere===null?'n/a':Math.round(b.shareHere*100)+'%')+'</td><td>'+rate(b.first)+'</td><td>'+rate(b.later)+'</td></tr>'}).join('');
  return '<article class="card"><h3>First flight of the day</h3><p>A plane starting its day at your airport has not had time to pick up delays. Across all holiday flights, morning departures that were the aircraft’s first trip had the least trouble. Mid-day “first flights” are rare and often spare aircraft, so the edge fades later in the day.</p><table class="ff"><thead><tr><th>Departs</th><th>Share that are first trips at '+esc(plan.from)+'</th><th>Trouble, first trip</th><th>Trouble, later trip</th></tr></thead><tbody>'+rows+'</tbody></table><p class="fine">Trouble = cancelled, diverted or arrived 60+ minutes late (national, holiday windows). On the day, <a href="/flight-tracker/">Where Is My Plane?</a> shows which aircraft is flying your flight and where it is now.</p></article>';
 }
+// Use the published BTS table itself as the single source of the calendar values.
+var calendarKey='';
+function renderFlightCalendar(year){
+ var section=doc('flight-calendar'),grid=doc('calendar-days');
+ section.hidden=mode!=='fly';
+ doc('plan-example-note').textContent=mode==='drive'?'Enter your starting city, distance and fuel economy for national driving guidance.':'Start with the example Chicago to New York flight or enter your airports. Set the time you need to arrive.';
+ if(mode!=='fly')return;
+ var code=holiday==='thanksgiving'?'th':'xm',selected=readTimes().depDay;
+ var key=code+':'+year+':'+selected;
+ if(key!==calendarKey){
+  var rows=Array.from(document.querySelectorAll('#best-days tr[data-holiday="'+code+'"]')).map(function(row){
+   return {offset:Number(row.getAttribute('data-offset')),avg:Number(row.getAttribute('data-avg'))};
+  }).filter(function(row){return Number.isInteger(row.offset)&&row.offset>=-6&&row.offset<=6&&Number.isFinite(row.avg)&&row.avg>=0&&row.avg<=100}).sort(function(a,b){return a.offset-b.offset});
+  if(rows.length){
+   var low=Math.min.apply(null,rows.map(function(r){return r.avg})),high=Math.max.apply(null,rows.map(function(r){return r.avg}));
+   grid.innerHTML=rows.map(function(r){
+    var date=pretty(dateFor(r.offset)),pressed=r.offset===selected;
+    return '<button type="button" id="calendar-day-'+r.offset+'" class="calendar-day" data-calendar-offset="'+r.offset+'" data-level="'+(r.avg===low?'low':r.avg===high?'high':'mid')+'" aria-pressed="'+pressed+'" aria-label="'+esc(date)+', '+r.avg+' percent historical disruption rate. Select departure day"><span class="calendar-date">'+esc(date)+'</span><strong>'+r.avg+'%</strong><span class="calendar-bar" aria-hidden="true"><i style="width:'+r.avg+'%"></i></span></button>';
+   }).join('');
+  }
+  calendarKey=key;
+ }
+ doc('calendar-selection').textContent='Departure: '+pretty(dateFor(selected))+'. Arrival deadline: '+pretty(dateFor(readTimes().dueDay))+' at '+clockLabel(readTimes().dueHour*60)+'. Selecting another day keeps this deadline.';
+}
+doc('calendar-days').addEventListener('click',function(event){
+ var button=event.target.closest('[data-calendar-offset]');
+ if(!button||mode!=='fly')return;
+ var offset=Number(button.getAttribute('data-calendar-offset'));
+ if(!Number.isInteger(offset)||offset< -6||offset>6)return;
+ doc('dep-day').value=String(offset);
+ trip.example=false;
+ render();
+ var selected=doc('calendar-day-'+offset);
+ if(selected&&selected.focus)selected.focus({preventScroll:true});
+});
 function renderFly(d,year){
  var my=++renderSeq,results=doc('results');
  doc('legend').classList.toggle('hidden',true);
+ doc('third-stat').setAttribute('data-p','NaN');
+ doc('third-label').textContent='Chance you miss your deadline';
+ doc('third-stat').textContent='Checking…';doc('third-note').textContent='BTS flight history';
+ doc('callout-tag').textContent='Flight plan';doc('best-label').textContent='Checking your plan';
+ doc('best-reason').textContent='Comparing your departure and arrival deadline with past holiday flights.';
+ doc('rank-heading').textContent='Your plan, stress-tested';doc('rank-intro').textContent='';
+ doc('live-panel').innerHTML='';results.innerHTML='<p class="fine">Checking route history…</p>';
  if(loadState==='loading'){results.innerHTML='<p class="fine">Loading six seasons of holiday flight records…</p>';doc('third-label').textContent='Chance you miss your deadline';doc('third-stat').textContent='Loading…';doc('third-note').textContent='BTS flight records';return}
  if(loadState==='error'||!eng){results.innerHTML='<p class="fine">The flight history could not be loaded, so no odds are shown. Driving guidance still works.</p>';doc('third-stat').textContent='Unavailable';doc('third-note').textContent='Flight history did not load';doc('best-label').textContent='Flight odds unavailable';doc('best-reason').textContent='Reload the page to try again.';doc('live-panel').innerHTML='';return}
  var lf=legsFromTo();
- if(lf.from===lf.to){results.innerHTML='<p class="fine">Choose two different airports.</p>';return}
+ if(lf.from===lf.to){results.innerHTML='<p class="fine">Choose two different airports.</p>';doc('best-label').textContent='Choose two different airports';doc('best-reason').textContent='Your departure and destination must be different before odds can be calculated.';doc('third-stat').textContent='Unavailable';return}
  var hubs=eng.hubs(lf.from,lf.to,6);
  Promise.all([lf.from].concat(hubs).map(loadShard)).then(function(){
   if(my!==renderSeq)return;
@@ -329,7 +389,7 @@ function renderFly(d,year){
   if(cp.error){doc('routing').innerHTML='';results.innerHTML='<p class="fine">'+esc(cp.error)+'</p>';doc('best-label').textContent='No measurable route';doc('best-reason').textContent=cp.error;doc('third-stat').textContent='n/a';doc('live-panel').innerHTML='';return}
   doc('routing').value=cp.routing;doc('layover-field').classList.toggle('hidden',cp.routing==='nonstop');
   var p=cp.plan,r=eng.evaluate(p);
-  if(!r){results.innerHTML='<p class="fine">That routing could not be evaluated.</p>';return}
+  if(!r){results.innerHTML='<p class="fine">That routing could not be evaluated.</p>';doc('best-label').textContent='Flight odds unavailable';doc('best-reason').textContent='That routing could not be evaluated with the available records.';doc('third-stat').textContent='Unavailable';return}
   writeUrl(cp);
   var due=whenLabel(p.deadline),name=dueName(p);
   doc('rank-heading').textContent='Your plan, stress-tested: '+d.name+' '+year;
@@ -430,13 +490,13 @@ function renderLive(p,my){
 
 function render(){
  if(typeof window!=='undefined'&&window.HolidayTravelChoices)window.HolidayTravelChoices.sync();
- var d=data[holiday];var h=dateFor(0);var year=h.getUTCFullYear();doc('holiday-stat').textContent=d.name+' '+year;doc('date-stat').textContent=fullDate(h);
+ var d=data[holiday];var h=dateFor(0);var year=h.getUTCFullYear();renderFlightCalendar(year);doc('holiday-stat').textContent=d.name+' '+year;doc('date-stat').textContent=fullDate(h);
  doc('planning-banner').textContent=d.name+' '+year+' travel planning · dates recalculate automatically; flight odds come from six past holiday seasons of BTS records, with a live NWS check in the final week.';
  doc('yearly-source-note').textContent='Travel days are generated for '+year+'. Flight odds use observed 2018, 2019, 2022–2025 holiday windows; driving figures are AAA/INRIX 2025 and EIA Oct 12, 2026.';
  doc('volume-label').textContent='AAA '+d.year+' travel forecast';doc('volume-stat').textContent=d.total;doc('volume-note').textContent=d.source+' · '+d.car+'; '+d.air+' · not a '+year+' count';
  doc('live-panel').classList.toggle('hidden',mode!=='fly');
  if(mode==='fly'){renderFly(d,year);return}
- renderSeq++;doc('legend').classList.toggle('hidden',false);
+ renderSeq++;doc('third-stat').setAttribute('data-p','NaN');doc('legend').classList.toggle('hidden',false);
  var region=doc('region').value,mi=Number(doc('miles').value),mpg=Number(doc('mpg').value);var valid=Number.isFinite(mi)&&mi>0&&mi<=10000&&Number.isFinite(mpg)&&mpg>=5&&mpg<=150;
  doc('third-label').textContent='Estimated one-way fuel';doc('third-stat').textContent=valid?'$'+(mi/mpg*gas[region]).toFixed(2):'Enter valid miles / MPG';doc('third-note').textContent='EIA '+region.replace('us','U.S.')+' regular $'+gas[region].toFixed(3)+'/gal · Oct 12, 2026 (historical price illustration)';
  var offsets=holiday==='thanksgiving'?[-5,-4,-3,-2,-1,0,1,2,3,4,5]:[-6,-5,-4,-3,-2,-1,0,1,2,3,4,5,6];
