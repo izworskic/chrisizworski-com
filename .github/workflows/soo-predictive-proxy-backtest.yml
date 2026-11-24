@@ -1,0 +1,32 @@
+name: Soo predictive shipwatching proxy backtest
+on:
+  push:
+    branches: [agent/soo-predictive-shipwatching-20261124]
+    paths: [.github/workflows/soo-predictive-proxy-backtest.yml]
+permissions:
+  contents: read
+  actions: read
+jobs:
+  replay:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify prospective issue and held-out evaluation
+        run: node --test tests/soo-predictive-study.test.js tests/soo-locks-next.test.js
+      - name: Reuse successful NOAA archive extracts
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(gh run view 45390603940 --repo izworskic/chrisizworski-com --json conclusion -q .conclusion)" = success
+          mkdir -p "$RUNNER_TEMP/soo-noaa" research-output
+          gh run download 45390603940 --repo izworskic/chrisizworski-com --name great-lakes-noaa-historical-library-pilot --dir "$RUNNER_TEMP/soo-noaa"
+          node scripts/soo-predictive-backtest.cjs "$RUNNER_TEMP/soo-noaa"/2025-06-15.json "$RUNNER_TEMP/soo-noaa"/2025-08-15.json "$RUNNER_TEMP/soo-noaa"/2025-10-15.json | tee research-output/soo-predictive-proxy.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: soo-predictive-proxy-backtest
+          path: research-output/
+          retention-days: 5
+          if-no-files-found: error
