@@ -220,10 +220,10 @@
       return out;
     }
     var n = opts.data && opts.data.nextShip;
-    if (!opts.data || (opts.failed && !n) || !n || !n.ok) {
+    if (opts.failed || !opts.data || !n || !n.ok) {
       out.status = 'unavailable';
       out.headline = 'Live ship reports are unavailable, so no visit can be lined up';
-      out.detail.push('This is not a report of an empty river.' + (vc ? ' Call the boat hotline at 906-202-1333, or see the other ways to check below.' : ' See the other ways to check below.'));
+      out.detail.push((opts.failed && opts.data ? 'The latest refresh failed. Earlier windows are withheld until fresh reports return. The last-known positions may still be visible on the map. ' : '') + 'This is not a report of an empty river.' + (vc ? ' Call the boat hotline at 906-202-1333, or see the other ways to check below.' : ' See the other ways to check below.'));
       out.link = { href: '#soo-schedule-answer', label: 'Other ways to check \u2193' };
       return out;
     }
@@ -235,7 +235,7 @@
     entries = entries.filter(function (e) { if (seenIds[e.id]) return false; seenIds[e.id] = true; return true; });
     entries.sort(function (a, b) { return a.start - b.start; });
     out.ships = entries;
-    if (opts.failed) out.notes.unshift('The latest refresh failed; these are the windows from the earlier check.');
+    out.notes.unshift('Planning windows describe a modeled arrival, not a confirmed lock time. A ship may slow or stop; check its movement before leaving.');
 
     var pickId = n.pick ? String(n.pick.id || n.pick.mmsi) : null;
     var ranked = entries.filter(function (e) { return e.fit === 'now' || e.fit === 'mostly' || e.fit === 'partly'; })
@@ -504,7 +504,7 @@
     if (s.inLock) {
       fact(dl, 'Last report', s.ageMinutes + ' min ago, inside the chamber');
     } else {
-      fact(dl, 'Estimated at the locks', clock(s.start) + '–' + clockZone(s.end) + dayWord(s.start, p.now));
+      fact(dl, 'Planning window at the locks', clock(s.start) + '–' + clockZone(s.end) + dayWord(s.start, p.now));
       var raw = s.raw;
       if (Number.isFinite(raw.channelMilesToLocks) && Number.isFinite(raw.speedKnots)) {
         fact(dl, 'Where it is', raw.channelMilesToLocks + ' river miles out at ' + (raw.speedKnots * 1.15078).toFixed(1) + ' mph, reported ' + raw.ageMinutes + ' min ago');
@@ -531,7 +531,7 @@
       act.append(lock);
     }
     els.dossier.append(act);
-    els.dossier.append(el('p', 'lw-note', 'An estimate from the ship’s latest AIS position, speed and river distance, not a lock schedule. Ships can wait for a chamber or stop at a dock. Not for navigation.'));
+    els.dossier.append(el('p', 'lw-note', 'This planning window uses reported position, speed and river distance, not a lock schedule. A ship may slow or stop; the actual arrival can be outside this window. Recheck movement before leaving. Not for navigation.'));
   }
 
   // Hand the selected ship to the page's lock simulator: direction, a same-size hull and a note.
@@ -638,7 +638,7 @@
     renderWeather(p);
     if (els.status) {
       els.status.textContent = state.data && state.data.checkedAt
-        ? 'Lined up from AIS reports checked ' + clockZone(Date.parse(state.data.checkedAt)) + (state.failed ? ' (latest refresh failed)' : '') + '.'
+        ? (state.failed ? 'Last successful AIS check: ' : 'Lined up from AIS reports checked ') + clockZone(Date.parse(state.data.checkedAt)) + (state.failed ? ' (latest refresh failed)' : '') + '.'
         : '';
     }
   }
