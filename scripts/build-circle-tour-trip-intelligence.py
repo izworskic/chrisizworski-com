@@ -27,7 +27,8 @@ ROAD_TRACE = ROOT / "data/circle-tour-road-trace-v1.json"
 NIGHT_OPTIONS = ROOT / "data/circle-tour-overnight-options-v1.json"
 OUT = ROOT / "public/lake-superior-circle-tour/10-day/index.html"
 CANONICAL = "https://chrisizworski.com/lake-superior-circle-tour/10-day/"
-VERSION = "2026-11-14"
+VERSION = "2026-11-14"  # source reconciliation version
+PAGE_MODIFIED = "2026-11-24"
 STORY = {
     1: ("Bayfield", "Start beside the harbor. Duluth's Aerial Lift Bridge is a fitting first look at the working lake; Bayfield is the doorway to island country.",
         "Use the afternoon for Bayfield and a view of the islands. A boat cruise is a separate commitment to weather and departure times.",
@@ -477,7 +478,7 @@ def render(data: list[dict], ledger: dict, visual: dict, traveler: dict, route_t
     schema = json.dumps({
         "@context": "https://schema.org", "@type": "Article",
         "headline": "Lake Superior Circle Tour: 10-Day Itinerary, Overnight Stops & What to Do",
-        "mainEntityOfPage": CANONICAL, "dateModified": VERSION,
+        "mainEntityOfPage": CANONICAL, "dateModified": PAGE_MODIFIED,
         "image": visual["hero"]["src"],
         "author": {"@type": "Person", "name": "Chris Izworski", "url": "https://chrisizworski.com/#person"},
         "publisher": {"@type": "Organization", "name": "Chris Izworski", "url": "https://chrisizworski.com/"}
@@ -607,7 +608,7 @@ def render(data: list[dict], ledger: dict, visual: dict, traveler: dict, route_t
 <p>These official sources provide context for roads, border requirements and park access. A link is not evidence that today's route or facility is open. Last editorial reconciliation: {VERSION}.</p>
 <ul>{sources}</ul>
 <p><a href="/lake-superior-circle-tour/">Return to the full Circle Tour map, original itineraries and all 31 stops</a></p></section>
-<footer>Compiled by <a href="https://chrisizworski.com/#person">Chris Izworski</a>. Destination photography is credited beside each image. Route decisions and linked tools are editorial; confirm current conditions with the source. Updated November 14, 2026.</footer>
+<footer>Compiled by <a href="https://chrisizworski.com/#person">Chris Izworski</a>. Destination photography is credited beside each image. Route decisions and linked tools are editorial; confirm current conditions with the source. Updated November 24, 2026.</footer>
 </main>
 <script id="ct-intelligence-days" type="application/json">{embedded}</script>
 <script id="ct-traveler-presets" type="application/json">{traveler_embedded}</script>
