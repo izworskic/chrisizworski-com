@@ -127,7 +127,7 @@ test('static Canada page preserves park links and explicit public-health paths w
  assert.match(page,/noscript/);
  assert.match(page,/data-lake-filter="Michigan"/);
  assert.match(fs.readFileSync(path.join(root,'public/sitemap-beaches.xml'),'utf8'),/great-lakes-beaches\/canada\//);
- assert.match(fs.readFileSync(path.join(root,'public/great-lakes-beaches/around-the-lakes/index.html'),'utf8'),/30 Canadian beaches/);
+ assert.match(fs.readFileSync(path.join(root,'public/great-lakes-beaches/around-the-lakes/index.html'),'utf8'),/Ontario <span>30 beaches<\/span>/);
 });
 test('Canada browser code uses text-only source data, cancels outdated requests, and retains map fallback',()=>{
  const js=fs.readFileSync(path.join(root,'public/assets/shorefeel-ca.js'),'utf8');

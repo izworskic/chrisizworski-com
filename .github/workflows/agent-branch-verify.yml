@@ -71,7 +71,7 @@ jobs:
 
   michigan-ski-browser-qa:
     needs: verify
-    if: github.event_name == 'pull_request' && (github.head_ref == 'feat/michigan-ski-official-open-today' || github.head_ref == 'fix/michigan-ski-evidence-first-status')
+    if: github.event_name == 'pull_request' && (github.head_ref == 'feat/michigan-ski-official-open-today' || github.head_ref == 'fix/michigan-ski-evidence-first-status' || github.head_ref == 'experience/michigan-ski-decision-and-quality-20261124')
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
@@ -126,5 +126,32 @@ jobs:
         with:
           name: lake-superior-park-qa
           path: artifacts/lspp/
+          retention-days: 7
+          if-no-files-found: warn
+
+  duluth-product-pilot-qa:
+    if: github.event_name == 'pull_request' && github.head_ref == 'experience/duluth-product-engineering-pilot-20261124'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated browser test dependencies
+        run: |
+          npm install --prefix /tmp/duluth-pilot-qa --no-save --ignore-scripts --package-lock=false playwright@1.58.2 leaflet@1.9.4
+          echo "NODE_PATH=/tmp/duluth-pilot-qa/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser || command -v chromium)" >> "$GITHUB_ENV"
+      - name: Verify actual Duluth map with deterministic vessel fixtures
+        run: node scripts/verify-duluth-product-pilot.cjs
+      - name: Retain map screenshots and acceptance report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: duluth-product-pilot-qa
+          path: artifacts/duluth-pilot/
           retention-days: 7
           if-no-files-found: warn

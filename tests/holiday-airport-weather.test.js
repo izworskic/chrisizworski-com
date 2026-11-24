@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import { spawnSync } from 'node:child_process';
 import { AIRPORTS } from '../lib/holiday-travel/busiest-airports.mjs';
-import { airportWeather, collectBoard, datesIn, thanksgivingDate, windowState, windowsForYear } from '../lib/holiday-travel/airport-weather.mjs';
+import { airportWeather, collectBoard, datesIn, thanksgivingDate, windowState, windowsForYear, normalizeFaaEvents, collectFaaStatus, FAA_SOURCE } from '../lib/holiday-travel/airport-weather.mjs';
 import handler from '../api/holiday-airport-weather.js';
 
 const DAY = 86400000;
@@ -146,4 +146,38 @@ test('weather board preserves best-days figures, planner links and no em dash', 
     'api/holiday-airport-weather.js', 'lib/holiday-travel/airport-weather.mjs',
     'lib/holiday-travel/busiest-airports.mjs', 'scripts/holiday-travel/build-airport-weather-list.mjs'];
   for (const path of files) assert.doesNotMatch(fs.readFileSync(path, 'utf8'), /—/, path);
+});
+
+
+test('FAA events preserve airport scope, source times, delay values and scheduled notices', async () => {
+  const now=new Date('2026-11-24T12:00:00Z');
+  const rows=[{airportId:'ORD',groundStop:{startTime:'2026-11-24T11:00:00Z',endTime:'2026-11-24T13:00:00Z',updatedAt:'2026-11-24T11:55:00Z',impactingCondition:'Snow'}},
+    {airportId:'LGA',groundDelay:{avgDelay:'98.0',maxDelay:324,startTime:'2026-11-24T13:00:00Z',endTime:'2026-11-24T18:00:00Z'}},
+    {airportId:'MBS',deicing:{eventTime:'2026-11-24T11:08:00Z',expTime:'2026-11-25T07:59:59Z'}},
+    {airportId:'ATL',airportClosure:{endTime:'2026-11-24T10:00:00Z'}}];
+  const events=normalizeFaaEvents(rows,now);
+  assert.equal(events.length,3);
+  assert.equal(events[0].airport,'ORD');
+  assert.equal(events[0].reason,'Snow');
+  assert.equal(events[0].updatedAt,'2026-11-24T11:55:00.000Z');
+  assert.equal(events[1].timing,'scheduled');
+  assert.equal(events[1].averageMinutes,98);
+  assert.equal(events[1].maximumMinutes,324);
+  assert.equal(events[2].type,'deicing');
+  assert.deepEqual(normalizeFaaEvents([],now),[]);
+  assert.throws(()=>normalizeFaaEvents({error:'bad'},now));
+  assert.throws(()=>normalizeFaaEvents([{airportId:'ORD'}],now));
+  const result=await collectFaaStatus(now,async url=>{assert.equal(url,FAA_SOURCE);return ok(rows)});
+  assert.equal(result.status,'available');
+  assert.equal(result.checkedAt,now.toISOString());
+  assert.deepEqual(result.events,events);
+  assert.equal((await collectFaaStatus(now,async()=>{throw Error('outage')})).status,'unavailable');
+});
+test('FAA mode preserves weather query guard and bounded cache key', async()=>{
+  const response=await handler(new Request('https://example.org/api/holiday-airport-weather?view=other'));
+  assert.equal(response.status,400);
+  const src=fs.readFileSync('api/holiday-airport-weather.js','utf8');
+  assert.ok(src.includes("search === '?view=faa'"));
+  assert.match(src,/s-maxage=120, stale-while-revalidate=60/);
+  assert.match(src,/s-maxage=1800/);
 });

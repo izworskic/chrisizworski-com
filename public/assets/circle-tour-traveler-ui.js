@@ -58,14 +58,18 @@ function render(){
  const p=model.settings,chosen=model.chosen;
  el.summary.replaceChildren();
  el.summary.appendChild(node('h3',chosen.over?
-  'This route needs some changes':'This route fits your sample driving preference'));
+  'Some driving days exceed your preference':chosen.uncertain?
+  'The sample driving budget fits, but road evidence is incomplete':chosen.seasonal?
+  'The sample driving budget fits; check seasonal access':'This route fits your sample driving preference'));
  el.summary.appendChild(node('p',
   p.days+' published days from Duluth · '+model.monthName+
   ' · a maximum of '+p.maxDrive+' hours of sample driving each day.'));
  const tooLong=chosen.days.filter(d=>d.exceeds).map(d=>d.day);
  el.summary.appendChild(node('p',chosen.over?
   'Days '+tooLong.join(', ')+' exceed the sample driving limit. Plan for an additional night, lighter stops, or a longer published itinerary.':
-  'No published day exceeds this sample driving limit. This does not confirm actual road travel times.'));
+  'No published day exceeds this sample driving limit. '+(chosen.uncertain?
+   'The incomplete road approach still needs checking before you can confirm the trip fits.':
+   'This does not confirm actual road travel times.')));
  const unknown=chosen.days.filter(d=>!d.complete).map(d=>d.day);
  if(unknown.length)el.summary.appendChild(node('p',
   'Still needs exact road approach evidence: Day '+unknown.join(', ')+'. No border-to-park arrival time is guaranteed.','ctp-warning'));
@@ -109,13 +113,23 @@ function render(){
   card.appendChild(node('p',day.miles===0?
     'Stay day. No transfer miles in the published route.':
     day.miles+' editorial day miles · approximately '+day.driveHours.toFixed(1)+
-      ' hours sample driving allowance'+(day.exceeds?' · above your preference':''),
+      ' hours sample driving allowance'+(day.exceeds?' · above your preference':'')+
+      (!day.complete?' · full drive time unverified':''),
     'ct-personal-miles'));
   if(day.borderReserveMinutes)card.appendChild(node('p',
     'Add a separate 45-minute unverified border reserve. It is not an observed crossing wait.',
     'ct-personal-note'));
-  if(!day.complete)card.appendChild(node('p',
-    'The Pigeon River-to-park approach is not independently measured. Check the road route before committing to an arrival time.','ctp-warning'));
+  if(!day.complete){
+   const warning=node('p','The sample allowance is based only on editorial mileage. Check the road route and border wait before committing to an arrival time.','ctp-warning');
+   if(day.incompleteLegs?.includes('20→21')){
+    warning.textContent='The Pigeon River-to-park approach is not independently measured. The sample allowance uses editorial mileage. Minnesota DNR identifies the park entrance and visitor parking on Highway 61, separate from the border crossing. ';
+    warning.appendChild(link('Check the official park entrance map','https://files.dnr.state.mn.us/maps/state_parks/spk00173.pdf'));
+    warning.appendChild(node('span',' · '));
+    warning.appendChild(link('Check U.S. border wait information','https://bwt.cbp.gov/'));
+    warning.appendChild(node('span','. If your crossing has no reported wait, allow for uncertainty; no arrival time is confirmed.'));
+   }
+   card.appendChild(warning);
+  }
   if(day.seasonalHold)card.appendChild(node('p',
     'Before booking, check seasonal road, park and trail access directly.','ctp-warning'));
   const body=node('div',undefined,'ct-personal-day-body');
