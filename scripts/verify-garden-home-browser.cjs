@@ -245,6 +245,27 @@ const assert=require('node:assert/strict');
    assert.match(await page.locator('#fj-disease-result').innerText(),/Season planning reference/);
    assert.doesNotMatch(await page.locator('#fj-disease-result').innerText(),/Early blight/);
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'disease journal overflow at '+width);
+   await page.locator('#fj-kind').selectOption('harvest-weight');
+   await page.locator('#fj-entry-date').fill('2025-08-10');
+   await page.locator('#fj-usable-weight').fill('20');await page.locator('#fj-discard-weight').fill('2');
+   await page.locator('#fj-entry-form button[type=submit]').click();
+   assert.match(await page.locator('#fj-entries').innerText(),/Weighed harvest.*20 lb usable, 2 lb discarded/);
+   await page.locator('#fj-productivity > summary').click();
+   await page.locator('#fj-yield-group').selectOption('tomatoes');
+   await page.locator('#fj-yield-length').fill('8');await page.locator('#fj-yield-width').fill('4');await page.locator('#fj-yield-plants').fill('8');
+   await page.locator('#fj-yield-complete').check();await page.locator('#fj-yield-close').fill('2025-10-01');
+   await page.locator('#fj-yield-form button[type=submit]').click();
+   assert.match(await page.locator('#fj-yield-summary').innerText(),/0.62 lb\/ft²|0.63 lb\/ft²/);
+   assert.match(await page.locator('#fj-yield-summary').innerText(),/Finished and attested complete/);
+   assert.match(await page.locator('#fj-yield-season').innerText(),/20 lb usable produce recorded in 2025/);
+   await page.locator('#fj-yield-year').fill('2024');
+   assert.match(await page.locator('#fj-yield-season').innerText(),/No weighed harvests recorded for 2024/);
+   await page.locator('#fj-kind').selectOption('plant-loss');await page.locator('#fj-entry-date').fill('2025-07-01');await page.locator('#fj-lost-count').fill('1');
+   await page.locator('#fj-entry-form button[type=submit]').click();
+   assert.equal(await page.locator('#fj-yield-complete').isChecked(),false);
+   assert.match(await page.locator('#fj-yield-summary').innerText(),/Open planting/);
+   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'productivity journal overflow at '+width);
+
 
 
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'field journal overflow at '+width);
