@@ -170,3 +170,71 @@ test("the tool is responsive, reduced-motion aware, and analytics ready", () => 
   assert.ok(html.includes('/_vercel/speed-insights/script.js'));
   assert.ok(js.includes('name: "Bridge Tool Interaction"'));
 });
+
+
+test("official snapshot age gate accepts the endpoint cache window and rejects missing, old and future check times", () => {
+  const start = js.indexOf("function snapshotFresh(");
+  const end = js.indexOf("\n  function invalidateStatus", start);
+  assert.ok(start >= 0 && end > start);
+  const fresh = new Function(js.slice(start, end) + "; return snapshotFresh;")();
+  const now = Date.parse("2026-11-24T18:00:00Z");
+  const data = offset => ({fetched_at:new Date(now+offset).toISOString()});
+  assert.equal(fresh(data(0), now), true);
+  assert.equal(fresh(data(-300000), now), true);
+  assert.equal(fresh(data(-300001), now), false);
+  assert.equal(fresh(data(60000), now), true);
+  assert.equal(fresh(data(60001), now), false);
+  assert.equal(fresh({fetched_at:"unknown"}, now), false);
+  assert.equal(fresh(null, now), false);
+});
+
+test("failed or stale refresh replaces previous open verdict, not merely the ribbon", async () => {
+  const start = js.indexOf("function snapshotFresh(");
+  const end = js.indexOf("\n  function checkRestrictionChange", start);
+  assert.ok(start >= 0 && end > start);
+  const now = Date.parse("2026-11-24T18:00:00Z");
+  const good = {fetched_at:new Date(now).toISOString(),official:{available:true,level:"open"}};
+  const expired = {...good,fetched_at:new Date(now-300001).toISOString()};
+  const state = {data:good,loading:false,selectedHour:null};
+  const button = {disabled:false};
+  let mode = "error",events = [],invalidations = 0,observations = 0,cleared = 0,timeoutDelay = 0;
+  const fakeWindow = {
+    dispatchEvent:event=>events.push(event.detail),
+    setTimeout:(_fn,delay)=>{timeoutDelay=delay;return 1;},
+    clearTimeout:()=>{cleared++;}
+  };
+  const deps = {
+    window:fakeWindow, state, API_URL:"/api/mackinac", byId:()=>button,
+    Date:class extends Date {static now(){return now;}},
+    AbortController:class {constructor(){this.signal={};} abort(){}},
+    CustomEvent:class {constructor(_name,options){this.detail=options.detail;}},
+    fetch:async (_url,options)=>{
+      assert.ok(options.signal);
+      if(mode==="error")throw Error("offline");
+      return {ok:true,json:async()=>mode==="stale"?expired:good};
+    },
+    renderUnavailable:()=>{invalidations++;state.data={official:{available:false,level:"unknown"}};},
+    recordStatusObservation:()=>{observations++;},
+    checkRestrictionChange:()=>{},renderAll:()=>{},track:()=>{}
+  };
+  const load = new Function(...Object.keys(deps),js.slice(start,end)+"; return loadData;")(...Object.values(deps));
+  await load();
+  assert.equal(state.data.official.level,"unknown");
+  assert.deepEqual(events,[null]);
+  assert.equal(observations,0);
+  assert.equal(button.disabled,false);
+  assert.equal(timeoutDelay,15000);
+  assert.equal(cleared,1);
+  mode="good";await load();
+  assert.equal(state.data.official.level,"open");
+  assert.equal(observations,1);
+  mode="stale";await load();
+  assert.equal(state.data.official.level,"unknown");
+  assert.equal(observations,1);
+  assert.equal(invalidations,2);
+  assert.equal(events.at(-1),null);
+  assert.equal(button.disabled,false);
+  state.data=expired;state.loading=true;await load();
+  assert.equal(state.data.official.level,"unknown","expired status on returning to an already-loading tab must be invalidated");
+  assert.equal(invalidations,3);
+});
