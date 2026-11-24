@@ -62,9 +62,9 @@
   const source=current||upcoming?row.method+' · valid '+time(row.validAt)+' · issued '+time(row.issuedAt)+(row.forecastReference?.kind==='city-area'?' · '+row.forecastReference.name+' ('+row.forecastReference.distanceKm+' km away)':''):(row?.reason||(row?'The previous forecast has expired. Select the beach again to refresh.':'Checking the official forecast.'));
   text('gl-source',source);
   text('gl-influence',waterOK&&row?.lakeEffect?.explanation?row.lakeEffect.explanation:'Water and wind can influence the air at the shore. No measured or calibrated beach-air correction is available.');
-  renderHours(row||{});
+  renderHours(current||upcoming?row:{});
  }
- async function select(b,focusMap=false){
+ async function select(b,focusMap=false,userAction=false){
   if(!b)return;
   if(detailRequest)detailRequest.abort();
   selected=b;detailRow=null;$('gl-detail').hidden=false;$('gl-select-hint').hidden=true;
@@ -77,6 +77,7 @@
   renderDetail(null);renderList();
   if(map&&focusMap)map.setView([b.lat,b.lon],Math.max(12,map.getZoom()),{animate:false});
   draw();
+  if(userAction){$('gl-name').focus({preventScroll:true});if(matchMedia('(max-width:760px)').matches)$('gl-detail').scrollIntoView({block:'start',behavior:'instant'});}
   const u=new URL(location.href);u.searchParams.set('id',b.id);u.searchParams.delete('beach');history.replaceState(null,'',u);
   const controller=new AbortController();detailRequest=controller;
   try{
@@ -95,7 +96,7 @@
   for(const b of rows.slice(0,limit)){
    const li=document.createElement('li'),btn=document.createElement('button'),title=document.createElement('strong'),sub=document.createElement('span');
    btn.type='button';btn.dataset.id=b.id;btn.setAttribute('aria-pressed',String(selected?.id===b.id));
-   title.textContent=b.name;sub.textContent=label(b);btn.append(title,sub);btn.addEventListener('click',()=>select(b,true));li.append(btn);target.append(li);
+   title.textContent=b.name;sub.textContent=label(b);btn.append(title,sub);btn.addEventListener('click',()=>select(b,true,true));li.append(btn);target.append(li);
   }
  }
  function fit(rows){
@@ -123,7 +124,7 @@
    const icon=window.L.divIcon({className:'gl-map-icon',html:count>1?'<span class="gl-cluster">'+count+'</span>':'<span class="gl-temperature">•</span>',iconSize:[54,38],iconAnchor:[27,19]});
    const marker=window.L.marker([b.lat,b.lon],{icon,title:count>1?count+' beaches. Zoom in or choose from group.':b.name,keyboard:true}).addTo(layer);
    const el=marker.getElement();if(el&&members.some(x=>x.id===selected?.id))el.classList.add('gl-selected');
-   if(count===1){pins.set(b.id,marker);marker.on('click',()=>select(b,false));}
+   if(count===1){pins.set(b.id,marker);marker.on('click',()=>select(b,false,true));}
    else marker.on('click',()=>{
     group=members;limit=LIST_PAGE;renderList();
     if(map.getZoom()<16){
