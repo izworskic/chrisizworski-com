@@ -66,7 +66,7 @@ button{font:inherit}
 .chips{display:flex;flex-wrap:wrap;gap:.4rem;margin:.8rem 0 .4rem}
 .chips button{font-size:.85rem;font-weight:600;border:1.5px solid var(--line);background:#fff;color:var(--ink);border-radius:999px;padding:.4rem .75rem;min-height:40px;cursor:pointer}
 .chips button span{color:var(--muted);font-weight:700;margin-left:.2rem}
-.chips button.empty{opacity:.6}
+.chips button.empty{opacity:1}
 .chips button[aria-pressed="true"]{background:var(--snow);border-color:var(--snow);color:#fff}
 .chips button[aria-pressed="true"] span{color:#cfe1f0}
 .region-trails{font-size:.92rem;margin:.3rem 0 .6rem}
