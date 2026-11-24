@@ -156,53 +156,55 @@ def main():
         duplicates={k:0 for k in SITES}
         rejected={k:0 for k in SITES}
         scanned=bad_geom=selected_rows=0
+        report["rowGroupRows"]=[meta.row_group(i).num_rows for i in range(meta.num_row_groups)]
+        report["batchRows"]=32768
+        # Arrow batches bound Python allocations even when the source has large row groups.
+        # Project only the four verified columns. No independent full-column buffers or joins.
         for i in range(meta.num_row_groups):
             rg=meta.row_group(i)
-            if rg.num_rows>1000000 or sum(rg.column(j).total_uncompressed_size for j in range(rg.num_columns) if rg.column(j).path_in_schema in FIELDS)>80*1024*1024:
-                raise ValueError("row group exceeds memory limit")
-            geometries=reader.read_row_group(i,columns=["geometry"],use_threads=False).column(0)
-            if len(geometries)!=rg.num_rows:
-                raise ValueError("geometry row count mismatch")
-            indices=[]
-            hits=[]
-            # Cheap wide bounding check first; no raw geometry or identifier is written.
-            for j,blob in enumerate(geometries.to_pylist()):
-                p=point(blob)
-                if p is None:
-                    bad_geom+=1
+            group_bytes=sum(rg.column(j).total_uncompressed_size for j in range(rg.num_columns) if rg.column(j).path_in_schema in FIELDS)
+            if rg.num_rows>2000000 or group_bytes>160*1024*1024:
+                raise ValueError("row group exceeds bounded decoder allowance")
+            group_scanned=0
+            for batch in reader.iter_batches(batch_size=32768,row_groups=[i],columns=FIELDS,use_threads=False):
+                geometries=batch.column(batch.schema.get_field_index("geometry"))
+                indices=[]
+                hits=[]
+                for j,blob in enumerate(geometries.to_pylist()):
+                    p=point(blob)
+                    if p is None:
+                        bad_geom+=1
+                        continue
+                    y,x=p
+                    if not 45.9<=y<=48.4 or not -92.5<=x<=-83.4:
+                        continue
+                    h=site_hits(y,x)
+                    if h:
+                        indices.append(j);hits.append(h)
+                group_scanned+=batch.num_rows
+                scanned+=batch.num_rows
+                selected_rows+=len(indices)
+                if selected_rows>MAX_SELECTED:
+                    raise ValueError("selected rows exceed memory budget")
+                if not indices:
                     continue
-                y,x=p
-                if not 45.9<=y<=48.4 or not -92.5<=x<=-83.4:
-                    continue
-                h=site_hits(y,x)
-                if h:
-                    indices.append(j);hits.append(h)
-            scanned+=len(geometries)
-            del geometries
-            selected_rows+=len(indices)
-            if selected_rows>MAX_SELECTED:
-                raise ValueError("selected rows exceed memory budget")
-            if not indices:
-                continue
-            records=reader.read_row_group(i,columns=FIELDS[1:],use_threads=False)
-            if records.num_rows!=rg.num_rows:
-                raise ValueError("attribute row count mismatch")
-            subset=records.take(pa.array(indices,type=pa.int64())).to_pydict()
-            del records
-            for identity,t,kind,locations in zip(subset["mmsi"],subset["base_date_time"],subset["vessel_type"],hits):
-                t=observed_time(t)
-                if not isinstance(identity,int) or not 100000000<=identity<=999999999 or t is None:
-                    for k in locations:rejected[k]+=1
-                    continue
-                cls=vessel_class(kind)
-                for k in locations:
-                    timestamps=data[k][identity]
-                    if t in timestamps:
-                        duplicates[k]+=1
-                        if timestamps[t]!=cls:
-                            timestamps[t]="unknown"
-                    else:
-                        timestamps[t]=cls
+                subset=batch.select(FIELDS[1:]).take(pa.array(indices,type=pa.int64())).to_pydict()
+                for identity,t,kind,locations in zip(subset["mmsi"],subset["base_date_time"],subset["vessel_type"],hits):
+                    t=observed_time(t)
+                    if not isinstance(identity,int) or not 100000000<=identity<=999999999 or t is None:
+                        for k in locations:rejected[k]+=1
+                        continue
+                    cls=vessel_class(kind)
+                    for k in locations:
+                        timestamps=data[k][identity]
+                        if t in timestamps:
+                            duplicates[k]+=1
+                            if timestamps[t]!=cls:
+                                timestamps[t]="unknown"
+                        else:
+                            timestamps[t]=cls
+            if group_scanned!=rg.num_rows:
+                raise ValueError("incomplete row group scan")
         if scanned!=meta.num_rows:
             raise ValueError("incomplete geometry scan")
         report.update(scanComplete=True,rowsScanned=scanned,invalidGeometryRows=bad_geom,selectedGeographicRows=selected_rows,status="COVERAGE_ONLY",sites={k:{"box":SITES[k],"duplicateVesselTimestampRows":duplicates[k],"invalidIdentityOrTimeRows":rejected[k],**summarize(data[k])} for k in SITES})

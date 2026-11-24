@@ -23,7 +23,7 @@ jobs:
           python -m pip install --disable-pip-version-check --no-deps --only-binary=:all: pyarrow==21.0.0
       - name: Verify point decoder and aggregate fixture
         run: python scripts/noaa-geoparquet-range-probe-20261124.py --self-test
-      - name: Scan geometry and selected attributes from one daily object
+      - name: Scan projected archive columns in bounded Arrow batches
         env:
           NOAA_REPORT: ${{ runner.temp }}/noaa-geoparquet-coverage.json
         run: python scripts/noaa-geoparquet-range-probe-20261124.py
