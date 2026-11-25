@@ -28,8 +28,8 @@ const server=http.createServer((req,res)=>{
   fs.createReadStream(file).pipe(res);
  }catch{res.writeHead(404);res.end('not found');}
 });
-function fixture(){
- const time=new Date(Date.now()-10*60000).toISOString();
+function fixture(now=Date.now()){
+ const time=new Date(now-10*60000).toISOString();
  const weather={startsAt:time,tempF:82,windMph:12,windDirection:'NE',humidity:45,
   summary:'Partly Sunny',daylight:true};
  const water={kind:'satellite',tempF:58.5,observedAt:time,caveat:'NOAA offshore pixel is not a beach thermometer'};
@@ -138,6 +138,62 @@ async function run(){
    await page.screenshot({path:path.join(output,'recovered-'+width+'.png'),fullPage:true});
    report.push({width,mode:'recovery',states:['weather-lost','water-lost','outage','restored'],selectedActivity:'swim'});
    await context.close();
+  }
+  for(const width of [390,1366]){
+   const ctx=await browser.newContext({viewport:{width,height:860},reducedMotion:'reduce'});
+   let mode='temporal',requests=0,advanced=0;
+   await ctx.route('**/api/shorefeel?*',route=>{
+    requests++;
+    const d=fixture(Date.now()+advanced);
+    if(mode==='temporal'){
+     const n=Date.now(),at=offset=>new Date(n+offset).toISOString();
+     d.generatedAt=at(-25*60000);
+     d.weatherNow.startsAt=at(-58*60000);
+     d.beachFeel.startsAt=d.weatherNow.startsAt;
+     d.water.observedAt=at(-72*3600000+60000);
+     d.regionalSatellite.cells[0].measurement.observedAt=d.water.observedAt;
+     d.regionalSatellite.cells[1].measurement={tempF:61,observedAt:at(-3600000),sampleLat:43.799,sampleLon:-83.861};
+    }
+    return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(d)});
+   });
+   await ctx.route('**/api/carto-basemap-config',route=>route.fulfill({status:503,body:'{}'}));
+   await ctx.route('https://**/*',route=>route.abort());
+   const pg=await ctx.newPage(),errors=[];
+   pg.on('pageerror',e=>errors.push(String(e)));
+   await pg.clock.install({time:new Date()});
+   await pg.goto(origin+'/lake-huron-water-temperature/saginaw-bay/',{waitUntil:'domcontentloaded'});
+   await pg.waitForFunction(()=>document.querySelector('#lead-water')?.textContent.includes('58.5°F'),null,{timeout:15000});
+   await pg.locator('button[data-activity="swim"]').click();
+   await pg.locator('[data-point="west-bay"]').first().click();
+   assert.equal(requests,1);
+   advanced+=65000;await pg.clock.fastForward(65000);
+   await pg.waitForFunction(()=>document.querySelector('#lead-water')?.textContent==='Not verified',null,{timeout:15000});
+   assert.match(await pg.locator('#lead-temp').innerText(),/°F/);
+   assert.match(await pg.locator('#value-west-bay').innerText(),/61.0°F/);
+   assert.equal(await pg.locator('button[data-activity="swim"]').getAttribute('aria-pressed'),'true');
+   assert.match(await pg.locator('#selected-heading').innerText(),/Nayanquing/);
+   assert.equal(requests,1,'expiration must not fetch');
+   advanced+=65000;await pg.clock.fastForward(65000);
+   await pg.waitForFunction(()=>document.querySelector('#lead-temp')?.textContent==='Beach feel unavailable',null,{timeout:15000});
+   assert.match(await pg.locator('#value-west-bay').innerText(),/61.0°F/);
+   assert.equal(requests,1);
+   advanced+=180000;await pg.clock.fastForward(180000);
+   await pg.waitForFunction(()=>document.querySelector('#last-updated')?.textContent.includes('Readings expired'),null,{timeout:15000});
+   assert.match(await pg.locator('#value-west-bay').innerText(),/Unavailable/);
+   assert.equal(await pg.locator('#bay-map .bay-marker').count(),3);
+   assert.equal(requests,1);
+   await pg.screenshot({path:path.join(output,'temporal-expired-'+width+'.png'),fullPage:true});
+   mode='normal';
+   const response=pg.waitForResponse(r=>r.url().includes('/api/shorefeel?'));
+   await pg.locator('#refresh-shorefeel').click();
+   await response;
+   await pg.waitForFunction(()=>document.querySelector('#lead-water')?.textContent.includes('58.5°F'),null,{timeout:15000});
+   assert.equal(requests,2);
+   assert.match(await pg.locator('#activity-heading').innerText(),/Swimming preparation/);
+   assert.match(await pg.locator('#selected-heading').innerText(),/Nayanquing/);
+   assert.deepEqual(errors,[]);
+   report.push({width,mode:'temporal-expiry',states:['water','hour','packet','manual-recovery'],requests});
+   await ctx.close();
   }
   const offline=await browser.newContext({viewport:{width:390,height:860}});
   await offline.route('**/api/shorefeel?*',route=>route.fulfill({status:503,body:'offline'}));
