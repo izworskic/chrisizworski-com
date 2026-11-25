@@ -10,8 +10,8 @@
     "claude": 47,
     "copilot": 44,
     "mirrorBlobMismatches": 0,
-    "dedicatedCaseSuites": 28,
-    "withoutDedicatedCasesLocated": 19,
+    "dedicatedCaseSuites": 29,
+    "withoutDedicatedCasesLocated": 18,
     "behaviorallyEvaluated": 0,
     "provenByPairedEvidence": 0
   },
@@ -839,18 +839,18 @@
       "id": "web-quality-seo",
       "family": "Web and browser quality",
       "scope": "Metadata, canonical, schema, indexed answers",
-      "expectedOutput": "Search integrity and comparable evidence",
+      "expectedOutput": "Page checks with title and description lengths, canonical, Person and byline status, gate results",
       "routing": "When relevant",
       "authorization": "relevant-authorized-task",
       "documentedState": "documented",
-      "auditedSkillBlob": "f48e6c7a682fc7854c7976021e7f0b7f01eb3aab",
+      "auditedSkillBlob": "b88c80998070741474ca7b30b9e9875236ee306d",
       "mirrors": [
         ".agents/skills/web-quality-seo/SKILL.md",
         ".claude/skills/web-quality-seo/SKILL.md",
         ".github/skills/web-quality-seo/SKILL.md"
       ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
+      "caseSuite": "docs/skill-evals/web-quality-seo.md",
+      "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
         "runs": [],
