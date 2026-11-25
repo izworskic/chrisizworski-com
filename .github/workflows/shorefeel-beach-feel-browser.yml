@@ -14,6 +14,7 @@ on:
       - 'tests/shorefeel-empirical-evidence.test.js'
       - 'scripts/shorefeel-failure-mode-diagnostic.cjs'
       - 'scripts/shorefeel-physics-regime-diagnostic.py'
+      - 'scripts/shorefeel-physical-signal-comparison.cjs'
       - 'tests/test_shorefeel_physics_regime_diagnostic.py'
       - 'data/shorefeel/**'
       - 'scripts/shorefeel-validate-field.cjs'
@@ -103,14 +104,6 @@ jobs:
           cat artifacts/shorefeel-beach-qa/archive-coverage.json
       - name: Offline preserved ShoreFeel empirical evidence
         run: node --test tests/shorefeel-empirical-evidence.test.js tests/shorefeel-forecast-reliability.test.js
-      - name: One-off pre-decision physics feature diagnostic
-        if: github.head_ref == 'research/shorefeel-actual-october-cohort'
-        run: |
-          python3 -m venv "$RUNNER_TEMP/shorefeel-physics"
-          "$RUNNER_TEMP/shorefeel-physics/bin/pip" install --disable-pip-version-check numpy==2.2.6 netCDF4==1.7.2
-          mkdir -p artifacts/shorefeel-beach-qa
-          "$RUNNER_TEMP/shorefeel-physics/bin/python" scripts/shorefeel-physics-regime-diagnostic.py > artifacts/shorefeel-beach-qa/physics-regime.json
-          cat artifacts/shorefeel-beach-qa/physics-regime.json
       - name: Install isolated pinned browser harness
         run: |
           npm install --prefix "$RUNNER_TEMP/shorefeel-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
