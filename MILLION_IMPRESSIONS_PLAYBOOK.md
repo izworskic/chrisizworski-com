@@ -61,7 +61,7 @@ Do not invent search volumes or claim rank difficulty has been validated. Keywor
 ## 4. Standard context-window mission: finish one small slice
 
 1. **Read the handoff:** this playbook, `docs/GROWTH_SESSION_LOG.md`, the repo's `AGENTS.md`, and the current search/entity governance. Identify the tool's **authoritative owning repository** before editing.
-2. **Measure before:** record the exact URLs, 28-day GSC impressions/clicks/CTR/position, important query families, branded vs non-branded, GA4 use and confirmed AdSense revenue if available. If unavailable, explicitly write **NOT AVAILABLE** rather than guessing.
+2. **Measure before:** read the private growth summary (`search-demand` step 1) or an owner export for the exact URLs and the 28-day window. Record in the log the URLs, window dates, important query families, branded vs non-branded, and each page's direction or pattern (rising, falling, flat, CTR gap, top earner). If unavailable, explicitly write **NOT AVAILABLE** rather than guessing. The figures themselves stay private: never commit impressions, clicks, CTR, position, GA4 or AdSense numbers (AGENTS.md, Private growth data for agents).
 3. **Select a manageable set:** typically **one region and two specific destination pages**, or 1–3 existing related pages/tools. There is **no requirement to create new pages** if the primary canonical can satisfy the intent.
 4. **Research distinct needs:** searcher questions, competitor gaps, official sources, unique data/decisions, access and temporal limits. Do not duplicate search intents or publish thin location variants.
 5. **Implement in the owner repo:** informative initial HTML, truthful date/confidence states, clear decision UX, evidence, relevant links, accurate title/H1/metadata, correct canonical, useful structured data, and true creator/Person identity. Do not sacrifice working features or successful SEO treatments.
@@ -87,9 +87,9 @@ For every completed pilot, record the following in [the session log](docs/GROWTH
 
 - UTC/local date and exact site URLs; owning repo, branch, PR, merge commit and deploy verification.
 - Intended query intent, user decision fixed, sources, title/canonical/structured-data changes and reasons.
-- **Before**: GSC 28-day window, impressions, clicks, CTR, average position, relevant query segments. Distinguish verified from remembered.
-- **After**: same set and comparable windows; index status if known.
-- **Money**: attributable/ad-reported revenue where technically supported, site-wide AdSense earnings, pageviews, page RPM, cost and any non-ad income. If the attribution isn't supported, don't pretend.
+- **Before**: GSC 28-day window dates, which sources were available, and each page's direction or pattern (CTR gap, rising, falling, flat) and relevant query segments. No figures: this repository is public. Distinguish verified from remembered.
+- **After**: same pages and comparable windows, as direction; index status if known.
+- **Money**: whether page-level AdSense attribution was available, direction only (top earner, rising, falling, flat) for page and site-wide revenue, and any cost. No earnings, pageview or RPM figures in the repository. If the attribution isn't supported, don't pretend.
 - Quality: functionality, mobile usability, source trust, ad delivery/cost, known bugs.
 - Decision: protect / revise / extend / rollback / no evidence yet.
 - One precise next move, and what would constitute success.

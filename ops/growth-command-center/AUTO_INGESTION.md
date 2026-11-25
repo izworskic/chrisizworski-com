@@ -28,6 +28,7 @@ Use the **correct Vercel project** owning the GitHub repository `izworskic/chris
 | `GROWTH_DASHBOARD_USER` | Owner username; defaults to `owner` | Dashboard |
 | `GROWTH_DASHBOARD_PASSWORD` | A unique high-entropy password of at least 24 characters, stored only as a Vercel secret | Dashboard |
 | `CRON_SECRET` | Existing collector fallback for internal operations. Never supply this to a browser. | Existing GSC and growth collector |
+| `GROWTH_AGENT_TOKEN` | Separate random bearer token (at least 32 characters) for the read-only agent summary. Must differ from the dashboard password; unset, short or equal disables agent access | Agent summary |
 
 ### Google access
 
@@ -35,6 +36,30 @@ Use the **correct Vercel project** owning the GitHub repository `izworskic/chris
 2. **GA4:** Enable **Google Analytics Data API** in the Google Cloud project. Grant the same service-account email **Viewer** access to the correct Google Analytics 4 property. Enter its numeric Property ID as `GROWTH_GA4_PROPERTY_ID`. The collector requests only `analytics.readonly`, filters precisely to `chrisizworski.com` and `www.chrisizworski.com`, and reads dated pagePath/screenPageViews/sessions. GA4 page sessions can overlap across pages.
 3. **AdSense:** Enable **AdSense Management API v2** and authorize a Google user who owns the appropriate AdSense publisher account using the `adsense.readonly` scope. **AdSense does not accept service accounts**. Obtain a refresh token through the standard OAuth authorization-code/offline-consent flow for your own Google OAuth application; configure the client ID, client secret and refresh token in Vercel. Keep them out of the repository. In Google OAuth Testing mode, refresh-token lifetimes can be limited; ensure the app's consent/publishing status supports unattended scheduled use.
 4. When both source credentials are present, trigger the existing GitHub Actions **Native GSC Analytics** workflow using `workflow_dispatch`, or allow its daily schedule to run. A successful workflow checks the GSC collection first and the owner growth collector second. Visit the protected owner page and verify each source shows **connected** and its as-of timestamp. An HTTP 200 for the collector can mean a configured source was unavailable; verify the per-source statuses.
+
+## Agent read access (read-only)
+
+Coding agents (Codex, Claude Code) read a compact decision summary of the stored snapshot without the dashboard password:
+
+    GET https://chrisizworski.com/api/growth-command-center?view=agent
+    Authorization: Bearer $GROWTH_AGENT_TOKEN
+
+- **What it reads:** the latest stored snapshot only. It makes no Google API call. It is one more view on the existing `api/growth-command-center.js` function: no new function, route, rewrite, cron, build step or dependency. Each agent read is one short function invocation and one private-state read.
+- **What it returns:** the snapshot window and as-of time, `stale` (older than 36 hours), per-source status, the sitewide revenue direction (later half of the window against the earlier half) and observed daily average against the target, top pages by AdSense earnings (only when page attribution is available), top pages by GSC impressions, high-impression low-CTR pages (the dashboard's CTR-gap measure), and the biggest risers and fallers against the prior 28 days. `?limit=` sets list length, 1 to 25, default 10. Pages are paths; account IDs, property IDs and credentials are never included. Responses carry the same `noindex` and `no-store` headers as the owner views.
+- **What agents may do with it:** rank work. The figures never go into commits, PRs, comments, issues, docs or skill files, because the repository is public; agents cite page paths and direction only (AGENTS.md, Private growth data for agents). `search-demand` and `opportunity-scout` read it before ranking work and fall back to NOT MEASURED without it.
+- **Failure states:** 401 without the exact token, 404 before the first snapshot, 503 when private storage is unavailable. The owner health view reports `agentAccessConfigured` without revealing the token.
+
+### Owner setup
+
+1. On your own computer, generate a random value, for example `openssl rand -base64 48`. Do not paste it into chat, GitHub, commits, logs or screenshots.
+2. Vercel, project for `izworskic/chrisizworski-com`, Settings, Environment Variables: add `GROWTH_AGENT_TOKEN` to **Production**, marked **Sensitive**. It takes effect on the next production deployment.
+3. Codex environment for this repository:
+   - Codex removes **secrets** before the agent phase starts, so a secret alone does not reach the agent. Either add `GROWTH_AGENT_TOKEN` as an **environment variable**, or keep it as a secret and add this line to the setup script so the agent's shell gets it: `echo "export GROWTH_AGENT_TOKEN=$GROWTH_AGENT_TOKEN" >> ~/.bashrc`.
+   - Turn on agent internet access for the environment, allowing only the domain `chrisizworski.com` and the `GET` method.
+4. Claude Code sessions that should rank work need the same variable in their environment and network access to `chrisizworski.com`.
+5. Check: the owner health view shows `agentAccessConfigured: true`, and after the next daily collection an agent request returns 200 with `stale: false`.
+
+To rotate, replace the value in Vercel and in the Codex environment; the old token stops working with the next production deployment.
 
 ## Privacy and accuracy
 
@@ -54,7 +79,7 @@ Use the **correct Vercel project** owning the GitHub repository `izworskic/chris
 
 Run:
 
-    node --test tests/growth-auto-ingestion.test.js tests/growth-command-center.test.js
+    node --test tests/growth-auto-ingestion.test.js tests/growth-command-center.test.js tests/growth-agent-summary.test.js
     npm test
 
 Inspect source status via the owner dashboard, not a public health probe. The dashboard is deliberately unavailable until production credentials are configured. This release cannot verify live GA4/AdSense retrieval, authenticated UI access, or actual publisher income without those owner-side configurations.

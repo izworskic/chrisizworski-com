@@ -25,7 +25,7 @@ List the datasets the answer needs. A strong candidate needs at least three inde
 
 ## 4. Demand and timing
 
-Take demand from `search-demand` evidence or known seasonal demand; otherwise write unknown. Ship 6 to 8 weeks before the seasonal ramp.
+Take demand from `search-demand` evidence, which starts from the private growth summary when `GROWTH_AGENT_TOKEN` is set (search-demand step 1), or from known seasonal demand; otherwise write unknown. From the summary, favor ideas that feed or extend pages in `topEarners` or `risers`, and treat the sitewide `revenueTrend` as context, not proof. If the summary is unavailable, say so once and carry on. Ship 6 to 8 weeks before the seasonal ramp.
 
 ## 5. Network fit
 
@@ -39,7 +39,7 @@ Write the top three as one-page briefs: the decision, who asks it and when, the 
 
 ## Output
 
-Three briefs, the rejected ideas with one line each on why, and every unchecked claim marked NOT VERIFIED.
+Three briefs, the rejected ideas with one line each on why, and every unchecked claim marked NOT VERIFIED. Briefs end up in PRs and docs in a public repository, so they cite page paths and direction (rising, falling, top earner) and never a click, impression, CTR, earnings or RPM figure.
 
 ## Boundaries
 

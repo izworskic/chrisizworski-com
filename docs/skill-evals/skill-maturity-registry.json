@@ -567,7 +567,7 @@
       "routing": "When relevant; read-only",
       "authorization": "relevant-authorized-task",
       "documentedState": "documented",
-      "auditedSkillBlob": "bff2f0e8e12471e67a39ce056e65d7053d56c741",
+      "auditedSkillBlob": "75578303b389e0877906e9fc0e581a160946069f",
       "mirrors": [
         ".agents/skills/return-metrics/SKILL.md",
         ".claude/skills/return-metrics/SKILL.md",
@@ -948,11 +948,11 @@
       "id": "search-demand",
       "family": "Search and discovery",
       "scope": "Choosing pages or tools from Search Console evidence, 404s, sitemap errors, demand claims",
-      "expectedOutput": "Ranked evidence table with actions, or NOT MEASURED",
+      "expectedOutput": "Ranked actions with page paths and direction (figures stay private), or NOT MEASURED",
       "routing": "When search demand, 404s or sitemap health is in question",
       "authorization": "relevant-authorized-task",
       "documentedState": "documented",
-      "auditedSkillBlob": "fab521be223da3808f4c42d3c45dfa896dff1ff2",
+      "auditedSkillBlob": "4dc037da57730c998e17afcda01732986431d6e2",
       "mirrors": [
         ".agents/skills/search-demand/SKILL.md",
         ".claude/skills/search-demand/SKILL.md",
@@ -975,7 +975,7 @@
       "routing": "Before experience-investment on any new tool",
       "authorization": "relevant-authorized-task",
       "documentedState": "documented",
-      "auditedSkillBlob": "19dcfffef86c3489f926c59a258404c1d1519d8c",
+      "auditedSkillBlob": "b7a20b84a629fb5df4c0a7944ca8630189f170e3",
       "mirrors": [
         ".agents/skills/opportunity-scout/SKILL.md",
         ".claude/skills/opportunity-scout/SKILL.md",
