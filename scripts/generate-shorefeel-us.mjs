@@ -1,5 +1,6 @@
 import {readFile,writeFile} from 'node:fs/promises';
 import path from 'node:path';
+import registry from '../lib/shorefeel/beach-registry.js';
 const root=path.resolve(import.meta.dirname,'..');
 const source=JSON.parse(await readFile(path.join(root,'data/shorefeel-us-coast.json'),'utf8'));
 const pagePath=path.join(root,'public/great-lakes-beaches/around-the-lakes/index.html');
@@ -18,3 +19,11 @@ if(start<0||end<0||html.indexOf(a,start+1)>=0)throw Error('Missing or duplicate 
 const updated=html.slice(0,start+a.length)+'\n'+rows.join('\n')+'\n'+html.slice(end);
 if(updated!==html)await writeFile(pagePath,updated);
 console.log('Great Lakes US shoreline: '+rows.length+' source-backed places in '+new Set(source.beaches.map(b=>b.state)).size+' states');
+
+ // Publish the cross-border map catalog from the same checked-in sources.
+ // No new network request, runtime service or independent build command.
+ const catalog=JSON.stringify(registry.mapCatalog())+'\n';
+ const catalogPath=path.join(root,'public/assets/great-lakes-beach-registry.json');
+ const previous=await readFile(catalogPath,'utf8').catch(error=>{if(error.code==='ENOENT')return null;throw error;});
+ if(previous!==catalog)await writeFile(catalogPath,catalog);
+ console.log('Unified Great Lakes beach registry: '+registry.buildRegistry().stats.mapEntries+' map records');

@@ -1,7 +1,7 @@
 {
   "schema": 1,
-  "asOf": "2026-11-24",
-  "auditedRevision": "0e6e7da984362f4aefb29690d7cfa9daeec55edc",
+  "asOf": "2026-11-25",
+  "auditedRevision": "a59ffcef52860e71030b37a07fa0f37e3d34480f",
   "registryPath": "benchmarks/tool-network-registry.json",
   "status": "inventory-and-triage-not-quality-certification",
   "scope": "Registered entries, not every page. Proposed family derived from kind, not a required layout. No inferred owner or quality grade.",
@@ -21,12 +21,11 @@
       "no-direct-file-found-owner-review": 11
     },
     "adoptionEvidence": {
-      "NOT_ASSESSED": 137,
-      "merged-bounded-pilot": 2,
-      "separate-draft-branch-proof": 1
+      "NOT_ASSESSED": 135,
+      "merged-bounded-pilot": 5
     },
-    "mappedOpenPRTools": 11,
-    "prioritized": 13
+    "mappedOpenPRTools": 8,
+    "prioritized": 11
   },
   "entries": [
     {
@@ -513,11 +512,7 @@
         "localPath": "public/great-lakes-freighter-tracking/index.html"
       },
       "openPRs": [
-        1894,
-        1902,
-        1903,
-        1904,
-        1908
+        1894
       ],
       "adoptionEvidence": {
         "status": "NOT_ASSESSED",
@@ -588,28 +583,25 @@
         "status": "local-file-present-owner-confirmation-required",
         "localPath": "public/soo-locks/index.html"
       },
-      "openPRs": [
-        1902,
-        1903,
-        1904,
-        1908,
-        1910,
-        1853
-      ],
+      "openPRs": [],
       "adoptionEvidence": {
-        "status": "NOT_ASSESSED",
+        "status": "merged-bounded-pilot",
+        "pr": 1929,
+        "merge": "ba5bfcc16c62ed376733cd6c3647e2fb754da45c",
+        "relatedMergedPRs": [
+          1910,
+          1908,
+          1853
+        ],
         "production": "NOT_VERIFIED",
         "visitorOutcome": "NOT_MEASURED"
       },
-      "priority": {
-        "wave": 5,
-        "reason": "Measured registry search evidence; protect working map and coordinate engine work."
-      },
+      "priority": null,
       "designMaturity": "NOT_GRADED",
       "engineQuality": "NOT_GRADED",
       "visitorUtility": "NOT_GRADED",
       "technicalQuality": "NOT_GRADED",
-      "nextReview": "Reconcile existing work and owner scope"
+      "nextReview": "Verify current production and comparable visitor outcome"
     },
     {
       "id": "great-lakes-buoys",
@@ -677,10 +669,7 @@
         "localPath": "public/great-lakes-beaches/index.html"
       },
       "openPRs": [
-        1911,
-        1913,
-        1915,
-        1919
+        1911
       ],
       "adoptionEvidence": {
         "status": "NOT_ASSESSED",
@@ -2557,7 +2546,7 @@
       "engineQuality": "NOT_GRADED",
       "visitorUtility": "NOT_GRADED",
       "technicalQuality": "NOT_GRADED",
-      "nextReview": "Verify production and comparable visitor outcome"
+      "nextReview": "Verify current production and comparable visitor outcome"
     },
     {
       "id": "bloom-tracker",
@@ -2743,14 +2732,19 @@
         "pr": 1918,
         "ci": "https://github.com/izworskic/chrisizworski-com/actions/runs/45437543443",
         "production": "owner-confirmed-working",
-        "visitorOutcome": "NOT_MEASURED"
+        "visitorOutcome": "NOT_MEASURED",
+        "relatedMergedPRs": [
+          1904,
+          1955
+        ],
+        "currentProduction": "NOT_VERIFIED"
       },
       "priority": null,
       "designMaturity": "NOT_GRADED",
       "engineQuality": "NOT_GRADED",
       "visitorUtility": "NOT_GRADED",
       "technicalQuality": "NOT_GRADED",
-      "nextReview": "Verify production and comparable visitor outcome"
+      "nextReview": "Verify current production and comparable visitor outcome"
     },
     {
       "id": "niagara-border",
@@ -3202,21 +3196,23 @@
         "localPath": "public/great-lakes-water-temperature/index.html"
       },
       "openPRs": [
-        1900,
         1911,
-        1913,
-        1915,
-        1919,
         1823
       ],
       "adoptionEvidence": {
-        "status": "NOT_ASSESSED",
+        "status": "merged-bounded-pilot",
+        "pr": 1925,
+        "merge": "1e362a60a0e095c9d8251cc4b79bcc9c26d879bf",
+        "relatedMergedPRs": [
+          1900,
+          1913
+        ],
         "production": "NOT_VERIFIED",
         "visitorOutcome": "NOT_MEASURED"
       },
       "priority": {
         "wave": 3,
-        "reason": "Reconcile cross-border coverage and source integrity work."
+        "reason": "Reconcile older US and Canada map branches against merged cross-border intelligence before further expansion."
       },
       "designMaturity": "NOT_GRADED",
       "engineQuality": "NOT_GRADED",
@@ -4274,7 +4270,6 @@
       },
       "openPRs": [
         1881,
-        1884,
         1887
       ],
       "adoptionEvidence": {
@@ -4430,9 +4425,7 @@
         "status": "local-file-present-owner-confirmation-required",
         "localPath": "public/michigan-destinations/index.html"
       },
-      "openPRs": [
-        1891
-      ],
+      "openPRs": [],
       "adoptionEvidence": {
         "status": "NOT_ASSESSED",
         "production": "NOT_VERIFIED",
@@ -4443,7 +4436,7 @@
       "engineQuality": "NOT_GRADED",
       "visitorUtility": "NOT_GRADED",
       "technicalQuality": "NOT_GRADED",
-      "nextReview": "Reconcile existing work and owner scope"
+      "nextReview": "Inspect current source, visitor task and prior proof"
     },
     {
       "id": "upper-peninsula-waterfalls",
@@ -4472,25 +4465,21 @@
         "status": "local-file-present-owner-confirmation-required",
         "localPath": "public/upper-peninsula-waterfalls/index.html"
       },
-      "openPRs": [
-        1914
-      ],
+      "openPRs": [],
       "adoptionEvidence": {
-        "status": "separate-draft-branch-proof",
+        "status": "merged-bounded-pilot",
         "pr": 1914,
-        "ci": "https://github.com/izworskic/chrisizworski-com/actions/runs/45419408858",
+        "ci": "https://github.com/izworskic/chrisizworski-com/actions/runs/45454403690",
+        "merge": "20448a78278d78dc99c68dadb3049cc4d8a8fe9c",
         "production": "NOT_VERIFIED",
         "visitorOutcome": "NOT_MEASURED"
       },
-      "priority": {
-        "wave": 1,
-        "reason": "Reconcile tested draft #1914: outing comparison, daylight and road handoff."
-      },
+      "priority": null,
       "designMaturity": "NOT_GRADED",
       "engineQuality": "NOT_GRADED",
       "visitorUtility": "NOT_GRADED",
       "technicalQuality": "NOT_GRADED",
-      "nextReview": "Reconcile existing work and owner scope"
+      "nextReview": "Verify current production and comparable visitor outcome"
     },
     {
       "id": "michigan-winter-activities",

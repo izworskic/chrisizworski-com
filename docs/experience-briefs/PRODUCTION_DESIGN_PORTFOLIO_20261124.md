@@ -1,10 +1,10 @@
 # Phase 8: portfolio adoption inventory and investment backlog
 
-Audited registry at 0e6e7da984362f4aefb29690d7cfa9daeec55edc on 2026-11-24. Candidate adoption planning only. Existing canonical registry, search-authority portfolio and cross-repo adoption audit remain authoritative for their distinct jobs. This frozen quality-evidence overlay is not another SEO score or ownership authority.
+Audited registry at a59ffcef52860e71030b37a07fa0f37e3d34480f on 2026-11-25. Candidate adoption planning only. The canonical registry, search-authority portfolio and cross-repo adoption audit remain authoritative for their distinct jobs. This evidence overlay is not another SEO score or ownership authority.
 
 ## Findings
 
-140 registered entries, including one developer infrastructure entry outside visitor scope. Two bounded pilots merged: Duluth and Snow Totals. Waterfall #1914 has five passing workflows on its existing draft head 401d11a039fef11b40e0ca54bb94dd2723612b0e. Main post-Snow merge CI was in progress at inspection. No independent causal skill evaluation or measured visitor outcome established.
+All 140 registry IDs, canonical URLs, kinds, visitor intents, clusters, seasons and search status fields match the current registry. One entry is developer infrastructure, outside visitor scope. 5 bounded pilots have recorded merged evidence; 135 entries remain NOT_ASSESSED. All four quality dimensions remain NOT_GRADED. Every visitor outcome remains NOT_MEASURED. Historical owner confirmation of the Duluth pilot is not proof of current production health.
 
 | Proposed family | Entries |
 | --- | ---: |
@@ -14,41 +14,25 @@ Audited registry at 0e6e7da984362f4aefb29690d7cfa9daeec55edc on 2026-11-24. Cand
 | out-of-scope | 1 |
 | planning | 47 |
 
-| Source signal | Entries |
-| --- | ---: |
-| exact-external-rewrite-owner-review | 6 |
-| external-host-owner-review | 32 |
-| local-file-present-owner-confirmation-required | 91 |
-| no-direct-file-found-owner-review | 11 |
+Source signals in the [complete snapshot](production-design-portfolio-20261124.json) are retained historical structural observations from 2026-11-24, not current ownership certification. 8 entries retain specifically mapped open PRs; the current list returned 14 open PRs and is not an exhaustive ownership or changed-file audit. Do not infer ownership from a local file or an exact external rewrite.
 
-Local files and exact external rewrites are structural evidence, not verified ownership; generated routes, mirrors and parameterized rewrites may hide the real owner. Read AGENTS.md and existing cross-repo audit before any edit. [Complete snapshot](production-design-portfolio-20261124.json) records canonical, intent, season, family, existing search evidence, source signal, bounded proof and next review for every entry. 11 entries have specifically mapped open PRs, not an exhaustive changed-file review. All four quality dimensions remain NOT_GRADED until direct evidence supports grading.
+## Verified merged release records
+
+- Duluth #1918 (visual pilot), #1904 (changing conditions), #1955 (stale AIS withdrawal).
+- Snow Totals #1921 (bounded missing-versus-zero and stale-state pilot).
+- Waterfall #1914 (bounded warm-season outing comparison), merged at 20448a78278d78dc99c68dadb3049cc4d8a8fe9c; [exact-head CI](https://github.com/izworskic/chrisizworski-com/actions/runs/45454403690). Not actual route travel-time calibration.
+- Soo Locks #1929, #1910 and #1908 (shared movement, changing conditions and returning visitor behavior). No measured arrival calibration.
+- ShoreFeel #1925 integrated the registry and cross-border engine/map, including the work from #1915 and #1919; older US/Canada PRs #1911 and #1823 are still open and must be reconciled rather than blindly merged.
+- Shared historical research #1903 and movement #1902 have merged; historical archive research is not live forecast validation.
+- Skill expansion #1976 and identity governance #1928 have merged. No candidate skill maturity promotion or automatic activation.
 
 ## Ordered investments
 
-| Wave | Product | Reason |
-| --- | --- | --- |
-| 1 | upper-peninsula-waterfalls | Reconcile tested draft #1914: outing comparison, daylight and road handoff. |
-| 2 | circle-tour | Contrasting planning family: inspect route and unknown travel-time semantics. |
-| 3 | shorefeel | Reconcile cross-border coverage and source integrity work. |
-| 4 | holiday-travel | Reconcile holiday planner work; forecast validity. |
-| 4 | michigan-ice | Seasonal observation versus archive and stale-state review. |
-| 4 | michigan-ski-hills | Official dated opening evidence; reconcile carousel PR. |
-| 4 | national-white-christmas | Near-term holiday relevance; verify extracted owner and search evidence. |
-| 4 | snowmobile | Winter access decision; reconcile regional map PR. |
-| 5 | aurora | Measured registry search evidence; model versus actual sighting. |
-| 5 | great-lakes-buoys | Measured registry search evidence; station coverage and observation time. |
-| 5 | mackinac-bridge | Measured registry search evidence; restriction freshness. |
-| 5 | ship-tracker | Measured registry search evidence; coordinate corridor work. |
-| 5 | soo-locks | Measured registry search evidence; protect working map and coordinate engine work. |
+1. Finish existing portfolio, operations and winter release reconciliation. Diagnose #1931 and #1836 against current main. Repair National Tools owner #131 before its mirror #1887; #1881 remains separate.
+2. Verify current public Soo, Duluth, Snow Totals, waterfall and ShoreFeel releases. Verify Welland on its actual current source and release gates before adding another intelligence engine.
+3. Reconcile the open seasonal PRs #1917, #1909 and #1895. Compare #1911 and #1823 against #1925. Reconcile Freighter Central #1894, Michigan destinations #1891, garden #1916 and skills #1871 against merged work.
+4. Resume candidate investment in Circle Tour, Michigan Ice, national White Christmas, Great Lakes buoys and Mackinac Bridge only after intake permits and evidence supports it.
 
-Proposed sequence, not measured ROI. Seasonal urgency may reorder after demand review. Registry search labels are not a fresh GSC pull. Preserve winners, ads, existing engines and canonical routes.
+The proposed priority order is not measured ROI. Preserve winning pages, actual engines, ads, canonical ownership and creator identity. No new route, service, function, cron, dependency, skill or public source changed by this inventory.
 
-## Waterfall next
-
-Existing #1914 implements town discovery, source-gated candidate outings, documented on-site budgets, conservative clustering, solar windows and manual road-time input; cold-season suggestions held. It is not a verified road route, actual travel time or confirmed opening. Existing tests cover budget, source provenance, invalid/unknown and seasonal refusal. Green prior branch; still requires current-main reconciliation, exact merged-head verification, screenshot review and explicit owner approval. Do not duplicate it. Next contrasting family: Circle Tour; then ShoreFeel after active PRs reconcile.
-
-## Product-specific evidence
-
-Use existing Experience Investment, Foundry, Python Intelligence OS and applicable skills, not an additional scorecard. Audit actual visitor task, engine accuracy, sources, uncertainty, mobile/desktop behavior, accessibility, cost and search/ads. For major redesign compare two concepts. Choose HTML/CSS/JS, existing backend, Python, Rust or Java on merits, benchmark before engine migration. Record separate implementation, release, production and outcome proof. Identify one measurable defect or useful opportunity. No broad reskin or inferred grades.
-
-No new production source, services, functions, crons, dependencies or skill edits. Repeat inventory on demand; historical snapshot must not block new registry entries. Independent Phase 1/7 trials remain blocked here. Phase 8 continues incrementally.
+For each product use the existing Experience Investment, Foundry, Python Intelligence OS and owning-repository verification. Measure actual visitor task, sources, uncertainty, mobile/desktop behavior, accessibility, cost and search integrity. Distinguish merged, current deployment, live verification and measured visitor outcomes.
