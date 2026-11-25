@@ -10,8 +10,8 @@
     "claude": 47,
     "copilot": 44,
     "mirrorBlobMismatches": 0,
-    "dedicatedCaseSuites": 26,
-    "withoutDedicatedCasesLocated": 21,
+    "dedicatedCaseSuites": 27,
+    "withoutDedicatedCasesLocated": 20,
     "behaviorallyEvaluated": 0,
     "provenByPairedEvidence": 0
   },
@@ -793,18 +793,18 @@
       "id": "web-quality-core-web-vitals",
       "family": "Web and browser quality",
       "scope": "LCP, INP, CLS",
-      "expectedOutput": "Lab vs field metrics separated",
+      "expectedOutput": "Field and lab values per metric, the responsible element or interaction, and the fix",
       "routing": "When relevant",
       "authorization": "relevant-authorized-task",
       "documentedState": "documented",
-      "auditedSkillBlob": "74c16bf5013333499c0bf18a4cbba3254d25496e",
+      "auditedSkillBlob": "e2d5c5da25c65e33ec2b24899c1d8e8646df37a4",
       "mirrors": [
         ".agents/skills/web-quality-core-web-vitals/SKILL.md",
         ".claude/skills/web-quality-core-web-vitals/SKILL.md",
         ".github/skills/web-quality-core-web-vitals/SKILL.md"
       ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
+      "caseSuite": "docs/skill-evals/web-quality-core-web-vitals.md",
+      "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
         "runs": [],
