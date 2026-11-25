@@ -12,6 +12,7 @@
   'use strict';
 
   var nearMotion = typeof module !== 'undefined' && module.exports ? require('./soo-near-lock-motion') : root.SooNearLockMotion;
+  var changing = typeof module !== 'undefined' && module.exports ? require('./soo-changing-conditions') : root.SooChangingConditions;
   var TZ = 'America/Detroit';
   var SAULT = { lat: 46.4953, lon: -84.3453 };
   var MIN = 60000;
@@ -449,9 +450,10 @@
     legend: section.querySelector('[data-lw-legend]'),
     dossier: section.querySelector('[data-lw-dossier]'),
     status: section.querySelector('[data-lw-status]'),
-    weather: section.querySelector('[data-lw-weather]')
+    weather: section.querySelector('[data-lw-weather]'),
+    changes: section.querySelector('[data-lw-changes]')
   };
-  var state = { data: null, failed: false, selected: null, userSelected: false, plan: null, wx: null, wxFailed: false, wxAt: 0 };
+  var state = { data: null, failed: false, selected: null, userSelected: false, plan: null, wx: null, wxFailed: false, wxAt: 0, changes: changing ? changing.initial() : null, previousBest: null };
 
   function el(tag, cls, text) {
     var e = document.createElement(tag);
@@ -693,6 +695,13 @@
     renderDossier(state.plan);
   }
 
+  function renderChanges(p) {
+    if (!els.changes || !changing) return;
+    var item = p.status === 'season-closed' || p.status === 'loading' || p.status === 'unavailable' ? null : changing.summary(state.changes,p.now,[p.best && p.best.id,state.previousBest].filter(Boolean));
+    var message=item ? (item.kind==='recovered' ? clock(item.to)+' check: ' : 'Since the '+clock(item.from)+' check: ')+item.text : '';
+    if (els.changes.textContent!==message) els.changes.textContent=message;
+    els.changes.hidden=!item;
+  }
   function update() {
     var p = plan({ data: state.data, failed: state.failed, loading: !state.data && !state.failed, now: Date.now(), startOffset: choice('lw-start') || 0, stay: choice('lw-stay') || 90 });
     state.plan = p;
@@ -704,6 +713,7 @@
       state.selected = p.best.id;
     }
     renderVerdict(p);
+    renderChanges(p);
     var showBoard = p.ships.length > 0;
     els.board.hidden = !showBoard;
     els.legend.hidden = !showBoard;
@@ -761,6 +771,12 @@
     if (!detail) return;
     if (detail.data) state.data = detail.data;
     state.failed = !!detail.failed;
+    if (changing) {
+      var now=Date.now(), next=state.failed?null:changing.snapshot(state.data,now,core,nearMotion);
+      var prior=state.changes;
+      state.changes=changing.step(prior,next,state.failed,now);
+      if (state.changes!==prior) state.previousBest=state.plan && state.plan.best ? state.plan.best.id : null;
+    }
     update();
   }
 
@@ -775,6 +791,11 @@
       deadlines.push(Date.parse(s.seen)+REPORT_AGE_MS+1);
       var end=Date.parse(s.window?.end);if(end>now)deadlines.push(end);
     });
+    if (state.changes && state.changes.last) {
+      var expiry=state.changes.last.checked+changing.MAX_GAP+1;
+      if (expiry>now)deadlines.push(expiry);
+      state.changes.events.forEach(function(e){var t=e.to+changing.MAX_GAP+1;if(t>now)deadlines.push(t);});
+    }
     var h=parkHours(now);
     [h.open,h.close].forEach(function(t){if(t>now)deadlines.push(t);});
     if(deadlines.length) ageTimer=setTimeout(function(){update();},Math.max(1,Math.min.apply(null,deadlines)-now));

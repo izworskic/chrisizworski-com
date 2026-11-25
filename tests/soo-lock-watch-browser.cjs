@@ -72,7 +72,7 @@ async function open(browser, { width, time, api = 'ok', js = true, wx = 'ok', pi
     if (u.pathname === '/api/soo-ais') {
       const mode = typeof api === 'function' ? api() : api;
       if (mode === 'fail') return route.fulfill({ status: 503, contentType: 'application/json', body: '{"ok":false}' });
-      const data = fixture(time);
+      const data = typeof mode === 'object' && mode ? mode : fixture(time);
       if (mode === 'slow' || mode === 'slow-stale' || mode === 'slow-mixed') {
         const ship = { id:'366009996', mmsi:'366009996', name:'TEST SLOW FREIGHTER', lat:46.5025, lon:-84.365, seen:iso(time,mode==='slow-stale'?-6:-2), speedKnots:0.6, distanceNm:0.5, state:'near-lock-low-motion' };
         data.nextShip.nearLockMotion = [ship];
@@ -311,6 +311,47 @@ let base;
       assert.match(await verdict(page),/Your visit falls outside posted park hours/);
       assert.equal(await page.locator('.lw-adjust').count(),0);
       await page.locator('#soo-lock-watch').screenshot({path:out+'/visitor-closed-park-'+width+'.png'});
+      assert.deepEqual(errors,[]);await context.close();
+    }
+    // Session change comparisons use new check and observation times, not a control change or cache replay.
+    for (const width of [390,1280]) {
+      let mode=fixture(NOV);
+      const {context,page,errors}=await open(browser,{width,time:NOV,api:()=>mode});
+      await page.locator('.lw-row-btn').first().waitFor();
+      const change=page.locator('[data-lw-changes]');
+      assert.equal(await change.isHidden(),true);
+      await choose(page,'How soon','2 hr');assert.equal(await change.isHidden(),true);
+      const shifted=fixture(NOV+60000),burns=shifted.nextShip.candidates[0];
+      for(const k of ['start','midpoint','end'])burns.window[k]=new Date(Date.parse(burns.window[k])+24*60000).toISOString();
+      mode=shifted;await page.clock.setFixedTime(new Date(NOV+60000));await page.locator('#vesselMapRefresh').click();
+      await change.filter({hasText:'BURNS HARBOR: the estimated arrival midpoint moved 25 min later'}).waitFor();
+      await page.locator('#soo-lock-watch').screenshot({path:out+'/changing-conditions-'+width+'.png'});
+      await choose(page,'How long','45 min');assert.match(await change.innerText(),/25 min later/);
+      const lost=fixture(NOV+120000);lost.nextShip.candidates=lost.nextShip.candidates.slice(1);lost.nextShip.pick=lost.nextShip.candidates[0];
+      mode=lost;await page.clock.setFixedTime(new Date(NOV+120000));await page.locator('#vesselMapRefresh').click();
+      await change.filter({hasText:'the previous arrival estimate is no longer listed'}).waitFor();
+      assert.match(await change.innerText(),/does not establish a departure or passage/);
+      mode='fail';await page.locator('#vesselMapRefresh').click();await change.waitFor({state:'hidden'});
+      mode=fixture(NOV+180000);await page.clock.setFixedTime(new Date(NOV+180000));await page.locator('#vesselMapRefresh').click();
+      await change.filter({hasText:'Fresh check available after an unsuccessful refresh'}).waitFor();
+      assert.deepEqual(errors,[]);await context.close();
+    }
+    // Regression: a sequence of older source fixes must not manufacture a change.
+    {
+      let mode=fixture(NOV);
+      const {context,page,errors}=await open(browser,{width:390,time:NOV,api:()=>mode});
+      await page.locator('.lw-row-btn').first().waitFor();
+      const change=page.locator('[data-lw-changes]');
+      for(const [minute,seen,shift] of [[1,-4,40],[2,-3,45],[3,1,20]]) {
+        mode=fixture(NOV+minute*60000);
+        const ship=mode.nextShip.candidates[0];ship.seen=iso(NOV,seen);
+        for(const k of ['start','midpoint','end'])ship.window[k]=new Date(Date.parse(fixture(NOV).nextShip.candidates[0].window[k])+shift*60000).toISOString();
+        await page.clock.setFixedTime(new Date(NOV+minute*60000));
+        await page.locator('#vesselMapRefresh').click();
+        await page.waitForFunction(()=>!document.getElementById('vesselMapRefresh').disabled);
+        if(minute<3)assert.equal(await change.isHidden(),true);
+        else await change.filter({hasText:'BURNS HARBOR: the estimated arrival midpoint moved 20 min later'}).waitFor();
+      }
       assert.deepEqual(errors,[]);await context.close();
     }
     // 7. Winter shutdown: the planner says so instead of lining up ships.

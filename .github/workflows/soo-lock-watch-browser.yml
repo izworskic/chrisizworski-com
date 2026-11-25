@@ -5,6 +5,8 @@ on:
       - 'public/soo-locks/index.html'
       - 'public/assets/soo-ais.js'
       - 'public/assets/soo-near-lock-motion.js'
+      - 'public/assets/soo-changing-conditions.js'
+      - 'tests/soo-changing-conditions.test.js'
       - 'api/soo-ais.js'
       - 'tests/soo-near-lock-visitor.test.js'
       - 'public/assets/soo-lock-watch.*'
@@ -40,7 +42,7 @@ jobs:
       - run: npm ci
       - run: npm install --no-save --no-package-lock --ignore-scripts playwright@1.56.1 @axe-core/playwright@4.10.2
       - name: Verify consolidated offline intelligence
-        run: node --test tests/great-lakes-historical-library.test.js tests/corridor-intelligence.test.js tests/soo-predictive-study.test.js tests/great-lakes-rolling-forecast-audit.test.js tests/soo-independent-validation.test.js tests/soo-direction-aware-development.test.js tests/soo-continuous-approach.test.js tests/soo-near-lock-low-motion.test.js tests/soo-near-lock-visitor.test.js tests/soo-lock-watch.test.js tests/soo-locks-next.test.js
+        run: node --test tests/great-lakes-historical-library.test.js tests/corridor-intelligence.test.js tests/soo-predictive-study.test.js tests/great-lakes-rolling-forecast-audit.test.js tests/soo-independent-validation.test.js tests/soo-direction-aware-development.test.js tests/soo-continuous-approach.test.js tests/soo-near-lock-low-motion.test.js tests/soo-near-lock-visitor.test.js tests/soo-lock-watch.test.js tests/soo-locks-next.test.js tests/soo-changing-conditions.test.js
       - run: node tests/soo-lock-watch-browser.cjs
       - uses: actions/upload-artifact@v4
         if: always()

@@ -110,3 +110,6 @@
 .lock-sim .lock-live-note[hidden]{display:none}
 .schedule-answer .schedule-crosscheck{font-size:14px;color:#4a5557}
 @media(max-width:480px){.lock-watch .lw-weather{margin-left:14px;margin-right:14px}}
+
+.lock-watch .lw-change{margin:8px 18px;padding:10px 12px;border-left:3px solid #165d71;background:#edf4f3;color:#12384a;font:500 14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-wrap:anywhere}
+.lock-watch .lw-change[hidden]{display:none}
