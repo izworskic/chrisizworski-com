@@ -9,6 +9,7 @@ import tempfile
 import urllib.request
 import statistics
 import sys
+from email.utils import parsedate_to_datetime
 import netCDF4
 import numpy as np
 
@@ -105,31 +106,37 @@ def load_observations(tmp):
         except Exception as e:meta.setdefault(station,{}).update(error=str(e)[:300])
     return obs,meta
 
-def evaluate_cycle(cycle,obs,obs_meta,catalog):
-    cohort=[{"station":s,"cycleAt":cycle.isoformat(),"leadHours":h} for s in STATIONS for h in (24,48)]
+def evaluate_cycle(cycle,obs,obs_meta,catalog,timing=False):
+    # For sensitivity only, at 06Z use a measured 04Z baseline and the
+    # 00Z model's matching f004 reference, f030 and f054 targets.
+    issue=cycle+dt.timedelta(hours=6 if timing else 0)
+    baseline_offset=4 if timing else 0
+    target_offset=6 if timing else 0
+    cohort=[{"station":s,"cycleAt":cycle.isoformat(),"leadHours":h,**({"decisionAt":issue.isoformat(),"baselineAt":(cycle+dt.timedelta(hours=baseline_offset)).isoformat()} if timing else {})} for s in STATIONS for h in (24,48)]
     result={"status":"CYCLE_RELATIVE_DIAGNOSTIC_ONLY","cohort":cohort,"cohortSha256":digest(json.dumps(cohort,sort_keys=True,separators=(",",":")).encode()),"models":{},"observations":{},"pairs":[],"canPromoteModel":False,"limitations":["One fixed 00Z cycle; no statistical inference or nearshore skill.","Station locations from repository catalog; historical deployment coordinates and sensor depth not independently authenticated.","Archive Last-Modified does not establish original forecast or observation publication availability. Cycle-relative diagnostic is not a prospective holdout."]}
     with tempfile.TemporaryDirectory() as tmp:
         tmp=pathlib.Path(tmp);grids={}
-        for h in LEADS:
+        for h in (baseline_offset,24+target_offset,48+target_offset):
             name=f"lmhofs.t00z.{cycle:%Y%m%d}.regulargrid.f{h:03}.nc";path=tmp/name
             try:
                 meta=fetch(f"https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/{cycle:%Y/%m/%d}/"+name,path,MAX_FILE)
                 result["models"][h]=meta
+                if timing and (not meta.get("lastModified") or parsedate_to_datetime(meta["lastModified"])>issue): raise ValueError("AWS object timestamp later than assumed decision time or missing")
                 grids[h]=load_grid(path,h,cycle)
                 result["models"][h].update(grids[h][3])
             except Exception as e:result["models"].setdefault(h,{}).update(error=str(e)[:300])
             finally:path.unlink(missing_ok=True)
-        result["observations"]={s:{**obs_meta.get(s,{}),"samplesC":{str(h):obs.get(s,{}).get(cycle+dt.timedelta(hours=h)) for h in LEADS}} for s in STATIONS}
+        result["observations"]={s:{**obs_meta.get(s,{}),"samplesC":{str(h):obs.get(s,{}).get(cycle+dt.timedelta(hours=h)) for h in (baseline_offset,24+target_offset,48+target_offset)}} for s in STATIONS}
         for entry in cohort:
             s,h=entry["station"],entry["leadHours"];p={**entry}
             result["pairs"].append(p)
-            if 0 not in grids or h not in grids:p["reason"]="missing model";continue
-            la,lo,z,meta=grids[0];_,_,zh,mh=grids[h]
+            if baseline_offset not in grids or h+target_offset not in grids:p["reason"]="missing or timing-ineligible model";continue
+            la,lo,z,meta=grids[baseline_offset];_,_,zh,mh=grids[h+target_offset]
             if meta["geometrySha256"]!=mh["geometrySha256"]:p["reason"]="grid changed";continue
             site=catalog[s];j,i,d=nearest(la,lo,site["lat"],site["lng"])
             p.update(j=j,i=i,distanceKm=round(d,4),cellLat=float(la[j,i]),cellLon=float(lo[j,i]),stationLat=site["lat"],stationLon=site["lng"])
             if d>2.5 or not math.isfinite(z[j,i]) or not math.isfinite(zh[j,i]):p["reason"]="unverified wet grid cell";continue
-            baseline=obs.get(s,{}).get(cycle);actual=obs.get(s,{}).get(cycle+dt.timedelta(hours=h))
+            baseline=obs.get(s,{}).get(cycle+dt.timedelta(hours=baseline_offset));actual=obs.get(s,{}).get(issue+dt.timedelta(hours=h))
             p.update(modelBaseC=float(z[j,i]),modelValidC=float(zh[j,i]),baselineC=baseline,actualC=actual)
             if baseline is None or actual is None:p["reason"]="missing exact-hour independent observation";continue
             f=lambda c:c*1.8+32
@@ -147,12 +154,14 @@ def evaluate_cycle(cycle,obs,obs_meta,catalog):
 EXPANDED_DAYS=(14,17,23,26,29)
 def main():
     args=sys.argv[1:]
-    if args not in ([],["--expanded"]): raise SystemExit("Usage: shorefeel-october-acquisition.py [--expanded]")
+    if args not in ([],["--expanded"],["--timing"]): raise SystemExit("Usage: shorefeel-october-acquisition.py [--expanded|--timing]")
+    timing=args==["--timing"]
     catalog={s["id"]:s for s in json.loads(pathlib.Path("data/buoy-stations.json").read_text())}
-    cycles=[dt.datetime(2026,10,d,tzinfo=UTC) for d in EXPANDED_DAYS] if args else [CYCLE]
+    # Timing sensitivity uses first and last expanded dates, not error-selected cases.
+    cycles=[dt.datetime(2026,10,d,tzinfo=UTC) for d in ((14,29) if timing else EXPANDED_DAYS)] if args else [CYCLE]
     with tempfile.TemporaryDirectory() as folder:
         obs,obs_meta=load_observations(pathlib.Path(folder))
-        results=[evaluate_cycle(c,obs,obs_meta,catalog) for c in cycles]
+        results=[evaluate_cycle(c,obs,obs_meta,catalog,timing) for c in cycles]
     if not args:
         print(json.dumps(results[0],indent=2,allow_nan=False));return
     cohort=[entry for result in results for entry in result["cohort"]]
@@ -167,6 +176,9 @@ def main():
         mean=lambda values:statistics.mean(values) if values else None
         metrics[h]={"expected":len(expected),"n":len(rows),"persistenceMAE_F":mean([abs(p["persistenceErrorF"]) for p in rows]),"modelChangeMAE_F":mean([abs(p["modelChangeErrorF"]) for p in rows]),"biasF":mean([p["modelChangeErrorF"] for p in rows]),"heuristicUnroundedHalfWidthF":half,"heuristicUnroundedCoverage":mean([int(abs(p["modelChangeErrorF"])<=half) for p in rows]),"stationCounts":{s:sum(p["station"]==s for p in rows) for s in STATIONS}}
     out={"status":"EXPANDED_CYCLE_RELATIVE_DIAGNOSTIC_ONLY","cohort":cohort,"cohortSha256":digest(json.dumps(cohort,sort_keys=True,separators=(",",":")).encode()),"cycleResults":results,"metrics":metrics,"canPromoteModel":False,"limitations":["October 20 exploratory result excluded; no model or range tuning.","Expected 20 station-cycle slots per horizon. Missing seasonal observations retained in denominator.","Cycle-relative results, not operational issue-time holdout; original observation availability and historical station positions unverified.","Five cycles within one late-season month are insufficient for calibration; no beach-level skill claim."]}
+    if timing:
+        out["status"]="DECISION_TIME_SENSITIVITY_NOT_PROSPECTIVE_SKILL"
+        out["limitations"]=["First and last expanded dates reused for a sensitivity study, not independent confirmation.","Assumed decision time 06Z; exact 04Z buoy baseline, original 00Z model f004 reference and f030/f054 targets. AWS object Last-Modified must be <=06Z.","Historical buoy receipt times and revisions remain unverified. No claim of real-time availability or exact live-engine parity.","Two dates, eight expected pairs per horizon; no tuning or calibration."]
     print(json.dumps(out,indent=2,allow_nan=False))
 
 if __name__=="__main__": main()
