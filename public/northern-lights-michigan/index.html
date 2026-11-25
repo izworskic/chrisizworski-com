@@ -1446,6 +1446,10 @@ function renderObservedKp(data){
 }
 function renderAuroraUnavailable(data){
   // A current partial payload can still supply independent source context.
+  // A missing peak must not leave contradictory forecast rows available to another renderer.
+  if (data && (data.forecast?.periods?.length || data.forecast?.peak_24h != null || data.forecast?.peak_72h != null)) {
+    data = {...data, forecast:{...data.forecast, peak_24h:null, peak_72h:null, periods:[]}};
+  }
   latestAuroraData = data;
   clearKpForecast();
   renderUnavailableTonightVerdict('A current NOAA Kp forecast is unavailable.');
@@ -1462,7 +1466,7 @@ function renderAuroraUnavailable(data){
     ? 'Kp forecast temporarily unavailable'
     : 'Live NOAA feed temporarily unavailable';
   document.getElementById('tonightDetail').innerHTML = 'Open the <a href="https://www.spaceweather.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener" style="color:#7bc8e8">official NOAA 30-minute forecast</a> before driving. '+(data
-    ? 'Available cloud, moon and short-term observations are shown separately. They do not replace the missing Kp forecast.'
+    ? 'Available cloud, moon, solar-wind and short-term model information are shown separately. They do not replace the missing Kp forecast.'
     : 'The regional thresholds and viewing-location guide below remain available.');
 }
 
