@@ -1,6 +1,7 @@
 'use strict';
 // Offline research only. No network, mutable production state or model promotion.
 const fs=require('node:fs');
+const {createHash}=require('node:crypto');
 const H=3600000,LEADS=[24,48],STATIONS=['45029','45161','45183','45002'];
 const finite=v=>typeof v==='number'&&Number.isFinite(v);
 const water=v=>finite(v)&&v>=28&&v<=97;
@@ -32,6 +33,7 @@ function evaluate(input){
   if(!STATIONS.includes(c.station)||!Number.isFinite(t)||t<cutoff||t>=end||t%H!==0)throw Error('Invalid cohort slot');
   const key=ident(c.station,t);if(expected.has(key))throw Error('Duplicate cohort slot');expected.set(key,{station:c.station,t});
  }
+ const cohortSha256=createHash('sha256').update(JSON.stringify([...expected.keys()].sort())).digest('hex');
  const forecasts=new Map(),observations=new Map(),conflicts=new Set(),obsConflicts=new Set();
  let invalidForecasts=0,invalidObservations=0,offCohort=0;
  for(const f of input.forecasts){
@@ -77,10 +79,10 @@ function evaluate(input){
    meanRangeWidthF:round(mean(rows.map(f=>f.highF-f.lowF))),
    byStation:Object.fromEntries(STATIONS.map(site=>{const subset=rows.filter(f=>f.station===site);return [site,{n:subset.length,maeF:round(mean(subset.map(f=>Math.abs(f.predictionF-f.actualF))))}];}))};
  }
- const cooling={tp:0,fp:0,fn:0,tn:0};
+ const cooling={tp:0,fp:0,fn:0,tn:0,excludedNonExactBaseline:0};
  // Same model-change watch threshold as the archived offshore study.
- for(const f of paired[24]){const flag=f.changeF<=-1.5,actual=f.actualF-f.baselineF<=-3;cooling[flag?(actual?'tp':'fp'):(actual?'fn':'tn')]++;}
- return {status:input.kind==='synthetic'?'SYNTHETIC_NOT_SKILL':'HOLDOUT_METRICS_SOURCE_REVIEW_REQUIRED',kind:input.kind,expectedSlots:expected.size,
+ for(const f of paired[24]){if(f.baseAt!==f.issue){cooling.excludedNonExactBaseline++;continue;}const flag=f.changeF<=-1.5,actual=f.actualF-f.baselineF<=-3;cooling[flag?(actual?'tp':'fp'):(actual?'fn':'tn')]++;}
+ return {status:input.kind==='synthetic'?'SYNTHETIC_NOT_SKILL':'HOLDOUT_METRICS_SOURCE_REVIEW_REQUIRED',kind:input.kind,expectedSlots:expected.size,cohortSha256,
   holdoutStartsAt:input.holdoutStartsAt,holdoutEndsAt:input.holdoutEndsAt,asOf:input.asOf,
   invalidForecasts,invalidObservations,offCohort,conflictingForecastKeys:conflicts.size,conflictingObservationKeys:obsConflicts.size,
   leads:Object.fromEntries(LEADS.map(h=>[h,metrics(paired[h],h)])),
