@@ -429,3 +429,13 @@
 .shipping-continuation{display:flex;flex-direction:column;gap:9px;margin-top:12px}
 .shipping-continuation a{display:block;padding:10px 11px;border-radius:6px;border:1px solid #b9cfd1;background:#f4fafb;color:#0c4b5e;font-size:14px;font-weight:700;line-height:1.4;text-decoration:none}
 .shipping-continuation a:hover,.shipping-continuation a:focus-visible{background:#e2f2f5;text-decoration:underline;outline-offset:2px}
+
+/* Evidence comparison, not a second map or forecast. */
+.shore-watch__comparison{display:flex;align-items:center;justify-content:space-between;gap:12px 20px;padding:16px 24px;background:#f4f9f8;border-bottom:1px solid #dce8e8;color:#173d4e;flex-wrap:wrap}
+.shore-watch__comparison[hidden],.shore-watch__comparison [hidden]{display:none}
+.shore-watch__comparison>div{flex:1 1 250px;min-width:0}
+.shore-watch__comparison strong{display:block;font-size:15px;line-height:1.5;overflow-wrap:anywhere}
+.shore-watch__comparison p{font-size:12px;line-height:1.5;margin:7px 0 0;color:#415b65}
+.shore-watch__comparison button{border:1px solid #21627a;background:#fff;color:#154c61;padding:10px 14px;min-height:44px;border-radius:5px;font:700 13px/1.4 system-ui,sans-serif;cursor:pointer}
+.shore-watch__comparison button:focus-visible{outline:3px solid #c58e37;outline-offset:2px}
+@media(max-width:600px){.shore-watch__comparison{padding:14px 16px}}

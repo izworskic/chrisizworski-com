@@ -138,6 +138,8 @@
   let map=null, shipsLayer=null, vesselData=[], selected='all', selectedVessel=null, busy=false;
   const shipMarkers=new Map(), lockMarkers=new Map();
   let lockLayer=null, flightMarker=null, aisState='loading';
+  const viewingIntelligence=window.WellandViewingIntelligence;
+  let comparisonData=null,lastComparisonCheck=-Infinity,comparisonChoice=null;
 
   function el(tag,text,cls) { const x=document.createElement(tag); if(text!==undefined)x.textContent=text; if(cls)x.className=cls; return x; }
   function when(iso) {
@@ -262,6 +264,34 @@
     return lock?vesselData.filter(v=>distanceKm(v,lock)<=2)
       .sort((a,b)=>distanceKm(a,lock)-distanceKm(b,lock)):[];
   }
+  function renderViewingComparison(){
+    const panel=$('shoreComparison'),message=$('shoreComparisonAnswer'),button=$('shoreComparisonChoose'),detail=$('shoreComparisonDetail');
+    if(!viewingIntelligence||!panel||!message||!button||!detail)return;
+    panel.hidden=false;
+    const result=viewingIntelligence.compare(comparisonData,Date.now(),LOCKS);
+    let answer='',explanation='',suggestion=null;
+    if(aisState==='loading')answer='Checking which public viewing areas have recent freighter reports.';
+    else if(result.status==='unavailable')answer='A fresh comparison is unavailable. Use the official ship queue and check public access before leaving.';
+    else {
+      const names=result.supported.map(id=>'Lock '+id);
+      if(result.status==='single'){
+        const area=result.areas.find(a=>a.id===result.supported[0]);
+        answer=names[0]+' is the only one of these three viewing areas with a qualifying nearby cargo or tanker report.';
+        if(area.id!==activeWatchSpot)suggestion=area.id;
+      }else if(result.status==='multiple'){
+        answer='Recent cargo or tanker reports near '+names.join(', ')+'. No basis to favor one viewing area from these reports alone.';
+        if(result.shared)answer+=' Some reports are shared between overlapping areas.';
+      }else answer='No qualifying cargo or tanker reports near these three viewing areas in this check. That does not mean the canal is empty.';
+      const latest=result.areas.filter(a=>a.latest!==null).map(a=>'Lock '+a.id+': '+a.count+' · latest '+when(new Date(a.latest).toISOString()));
+      explanation='Checked '+when(new Date(result.checked).toISOString())+'. '+(latest.length?latest.join(' / ')+'. ':'')+'Reports within 2 km of the lock landmark, at most 15 minutes old. Not an arrival time, a guarantee of visibility or an access check.';
+    }
+    comparisonChoice=suggestion;
+    if(message.textContent!==answer)message.textContent=answer;
+    if(detail.textContent!==explanation)detail.textContent=explanation;
+    detail.hidden=!explanation;
+    button.hidden=!suggestion;
+    if(suggestion&&button.textContent!=='Compare Lock '+suggestion)button.textContent='Compare Lock '+suggestion;
+  }
   function renderShoreWatch(){
     for(const id of ['3','7','8']){
       const count=recentNearSpot(id).length;
@@ -298,6 +328,7 @@
       });
       if(reports.length>2)vessels.append(el('p','+'+(reports.length-2)+' more recent reports near this lock','shore-watch__more'));
     }
+    renderViewingComparison();
   }
   function hideLockPreview(){
     $('mapLockPreview').hidden=true;
@@ -597,6 +628,9 @@
       if(!response.ok)throw new Error('service unavailable');
       const data=await response.json();
       if(!data.ok||!Array.isArray(data.vessels))throw new Error('invalid vessel response');
+      const check=window.GreatLakesAisEvidence?.utcMs(data.checkedAt),now=Date.now();
+      if(Number.isFinite(check)&&check<=now&&check>=lastComparisonCheck){comparisonData=data;lastComparisonCheck=check;}
+      else comparisonData=null;
       vesselData=data.vessels.filter(v=>window.GreatLakesAisEvidence?.positionFresh(v,Date.now())===true);
       evidenceKey=movementKey(vesselData,Date.now());
       status.textContent=vesselData.length?'Recent AIS positions available':'No recent AIS positions in returned coverage';
@@ -605,6 +639,7 @@
       const credits=$('sourceCredit');credits.replaceChildren();
       (data.attribution||[]).forEach(a=>credits.append(el('span',a.credit||a.source)));
     } catch (_) {
+      comparisonData=null;
       vesselData=[];
       status.textContent='AIS data unavailable — official vessel schedule remains available below';
       updated.textContent='Unable to verify fresh AIS positions';
@@ -635,6 +670,10 @@
   select.addEventListener('change',()=>chooseLock(select.value,true,false));
   $('refreshShips').addEventListener('click',refresh);
   $('showAllLocks').addEventListener('click',()=>chooseLock('all'));
+  $('shoreComparisonChoose')?.addEventListener('click',()=>{
+    renderViewingComparison();
+    if(comparisonChoice)chooseLock(comparisonChoice,false,false);
+  });
   $('shoreWatchChoices').addEventListener('click',event=>{
     const button=event.target.closest('[data-spot]');
     if(!button)return;
@@ -668,6 +707,7 @@
     if(document.hidden||aisState!=='available')return;
     const now=Date.now(),fresh=vesselData.filter(v=>window.GreatLakesAisEvidence?.positionFresh(v,now)===true);
     const key=movementKey(fresh,now);
+    renderViewingComparison();
     if(key===evidenceKey)return;
     evidenceKey=key;vesselData=fresh;
     status.textContent=vesselData.length?'Recent AIS positions available':'No recent AIS positions in returned coverage';
