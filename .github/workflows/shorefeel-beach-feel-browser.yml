@@ -95,14 +95,14 @@ jobs:
           mkdir -p artifacts/shorefeel-beach-qa
           node scripts/shorefeel-archive-coverage.cjs > artifacts/shorefeel-beach-qa/archive-coverage.json
           cat artifacts/shorefeel-beach-qa/archive-coverage.json
-      - name: Collect measured midsummer wind histories and forcing archive inventory
+      - name: Collect atmospheric forcing archive and satellite thermal context
         if: github.head_ref == 'research/shorefeel-actual-october-cohort'
         run: |
           python3 -m venv "$RUNNER_TEMP/shorefeel-archive"
-          "$RUNNER_TEMP/shorefeel-archive/bin/pip" install --disable-pip-version-check numpy==2.2.6 netCDF4==1.7.2
+          "$RUNNER_TEMP/shorefeel-archive/bin/pip" install --disable-pip-version-check numpy==2.2.6 netCDF4==1.7.2 eccodes==2.43.0
           mkdir -p artifacts/shorefeel-beach-qa
-          "$RUNNER_TEMP/shorefeel-archive/bin/python" scripts/shorefeel-warm-season-wind-cause.py > artifacts/shorefeel-beach-qa/warm-season-wind-cause.json
-          cat artifacts/shorefeel-beach-qa/warm-season-wind-cause.json
+          "$RUNNER_TEMP/shorefeel-archive/bin/python" scripts/shorefeel-atmospheric-satellite-cause.py > artifacts/shorefeel-beach-qa/atmospheric-satellite-cause.json
+          cat artifacts/shorefeel-beach-qa/atmospheric-satellite-cause.json
       - name: Install isolated pinned browser harness
         run: |
           npm install --prefix "$RUNNER_TEMP/shorefeel-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
