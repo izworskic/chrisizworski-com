@@ -32,7 +32,7 @@ const waterRecent=(m,kind,now=Date.now())=>{
 function usableSnapshot(data){
  if(!data||!sourceRecent(data))return null;
  const water=data.water&&['satellite','buoy'].includes(data.water.kind)&&waterRecent(data.water,data.water.kind)?data.water:null;
- const weather=currentHour(data.weatherNow?.startsAt)?data.weatherNow:null;
+ const weather=currentHour(data.weatherNow?.startsAt)&&Number.isFinite(data.weatherNow?.tempF)?data.weatherNow:null;
  const feel=weather&&currentHour(data.beachFeel?.startsAt)?data.beachFeel:null;
  const physics=data.shorelinePhysics;
  const modelWater=water?.kind==='satellite'&&Number.isFinite(Date.parse(water.observedAt))&&Date.now()-Date.parse(water.observedAt)>=0&&Date.now()-Date.parse(water.observedAt)<=36*3600000;
@@ -214,7 +214,8 @@ function renderActivity(a){
  }
  put('activity-heading',v.heading);put('on-sand',v.beach);put('in-water',v.water);put('after-water',v.after);
  put('activity-decision',v.decision);
- const win=payload?.weatherWindows?.[a];put('window',win?'NWS daylight weather-only window: '+date(win.startsAt)+'. This is not a swimming or paddling safety determination.':'No suitable forecast weather window can be established.');
+ const candidate=payload?.weatherWindows?.[a],start=Date.parse(candidate?.startsAt||'');
+ const win=Number.isFinite(start)&&start+3600000>Date.now()?candidate:null;put('window',win?'NWS daylight weather-only window: '+date(win.startsAt)+'. This is not a swimming or paddling safety determination.':'No suitable forecast weather window can be established.');
 }
 function buildMap(){
  const host=id('bay-map');if(!host||!window.L||map)return;
