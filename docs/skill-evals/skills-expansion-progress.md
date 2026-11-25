@@ -27,4 +27,4 @@ Read `skills-expansion-plan.md` first. Update this log in the same commit as eac
 
 ## Next action
 
-Build custom-basemap (Protomaps PMTiles with MapLibre), run its pressure test, record it here, commit.
+Build share-and-embed, run its pressure test, record it here, commit.

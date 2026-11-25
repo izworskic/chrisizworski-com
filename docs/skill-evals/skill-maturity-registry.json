@@ -4,13 +4,13 @@
   "auditDate": "2026-11-24",
   "status": "inventory-verified-behavior-not-verified",
   "inventory": {
-    "logicalSkills": 47,
-    "mirrorFiles": 138,
-    "codex": 47,
-    "claude": 47,
-    "copilot": 44,
+    "logicalSkills": 48,
+    "mirrorFiles": 141,
+    "codex": 48,
+    "claude": 48,
+    "copilot": 45,
     "mirrorBlobMismatches": 0,
-    "dedicatedCaseSuites": 30,
+    "dedicatedCaseSuites": 31,
     "withoutDedicatedCasesLocated": 17,
     "behaviorallyEvaluated": 0,
     "provenByPairedEvidence": 0
@@ -1143,6 +1143,29 @@
         ".github/skills/opportunity-scout/SKILL.md"
       ],
       "caseSuite": "docs/skill-evals/opportunity-scout.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "custom-basemap",
+      "family": "Experience and research",
+      "scope": "Tool maps that look stock or depend on third-party tiles, shared network map style",
+      "expectedOutput": "Regional extract, host decision with range test, shared style and one pilot",
+      "routing": "When building or redesigning a tool map",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "1cbe9f8d694d47a2799fe038f641e10bf9a53959",
+      "mirrors": [
+        ".agents/skills/custom-basemap/SKILL.md",
+        ".claude/skills/custom-basemap/SKILL.md",
+        ".github/skills/custom-basemap/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/custom-basemap.md",
       "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
