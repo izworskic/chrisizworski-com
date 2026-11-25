@@ -1,0 +1,105 @@
+{
+  "schemaVersion": 1,
+  "kind": "SOO_CORRIDOR_OBSERVATION_REPLAY_NOT_FORECAST",
+  "sourceRun": 45390603940,
+  "days": [
+    {
+      "date": "2025-06-15",
+      "sourceUrl": "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-2025-06-15.csv.zst",
+      "archiveSha256": "582316049ed53b85a3008dea8d531ebf6dcbb3cd5ab1bd1993275ebb3b04965c",
+      "fixes": 7371,
+      "vessels": 22,
+      "adjacentPairs": 7349,
+      "supportedPairs": 2131,
+      "states": {
+        "OFF_CORRIDOR_MODEL": 3911,
+        "COURSE_SUPPORTS_DIRECTION": 2318,
+        "AMBIGUOUS_CORRIDOR": 92,
+        "POSITION_ONLY_MOTION_UNRESOLVED": 604,
+        "NEAR_MODEL_BOUNDARY": 93,
+        "NEAR_LOCK_CHAMBER_REFERENCE": 351,
+        "CROSS_CHANNEL_OR_UNRESOLVED": 2
+      },
+      "pairStates": {
+        "GAP_OR_TIME_UNRESOLVED": 691,
+        "DIRECTION_UNRESOLVED_OR_CHANGED": 4508,
+        "OBSERVED_PAIR_SUPPORTS_PROGRESS": 2131,
+        "INSUFFICIENT_OR_CONTRADICTORY_PROGRESS": 7,
+        "IMPLIED_PROGRESS_SPEED_DISAGREES": 12
+      },
+      "directions": {
+        "away-from-locks": 1241,
+        "toward-locks": 890
+      },
+      "geometrySource": "lib/soo-locks-next.js:ROUTES (existing OSM-based modeled channel, 2026-09-27; not a surveyed route)",
+      "forecastEnabled": false
+    },
+    {
+      "date": "2025-08-15",
+      "sourceUrl": "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-2025-08-15.csv.zst",
+      "archiveSha256": "653af1f277a299ac557b905b283cde351050f8ae28e250f136cbf609eeaefd52",
+      "fixes": 7013,
+      "vessels": 21,
+      "adjacentPairs": 6992,
+      "supportedPairs": 2417,
+      "states": {
+        "OFF_CORRIDOR_MODEL": 3616,
+        "COURSE_SUPPORTS_DIRECTION": 2585,
+        "POSITION_ONLY_MOTION_UNRESOLVED": 370,
+        "NEAR_MODEL_BOUNDARY": 81,
+        "NEAR_LOCK_CHAMBER_REFERENCE": 292,
+        "AMBIGUOUS_CORRIDOR": 59,
+        "CROSS_CHANNEL_OR_UNRESOLVED": 10
+      },
+      "pairStates": {
+        "DIRECTION_UNRESOLVED_OR_CHANGED": 4280,
+        "OBSERVED_PAIR_SUPPORTS_PROGRESS": 2417,
+        "GAP_OR_TIME_UNRESOLVED": 266,
+        "INSUFFICIENT_OR_CONTRADICTORY_PROGRESS": 16,
+        "IMPLIED_PROGRESS_SPEED_DISAGREES": 13
+      },
+      "directions": {
+        "toward-locks": 1343,
+        "away-from-locks": 1074
+      },
+      "geometrySource": "lib/soo-locks-next.js:ROUTES (existing OSM-based modeled channel, 2026-09-27; not a surveyed route)",
+      "forecastEnabled": false
+    },
+    {
+      "date": "2025-10-15",
+      "sourceUrl": "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-2025-10-15.csv.zst",
+      "archiveSha256": "ed88dd3d16caf99fb34391ac6105744eae331e61b5c30f96e3a0bcc08a319ae6",
+      "fixes": 4713,
+      "vessels": 13,
+      "adjacentPairs": 4700,
+      "supportedPairs": 1948,
+      "states": {
+        "NEAR_LOCK_CHAMBER_REFERENCE": 278,
+        "NEAR_MODEL_BOUNDARY": 68,
+        "COURSE_SUPPORTS_DIRECTION": 2072,
+        "AMBIGUOUS_CORRIDOR": 53,
+        "OFF_CORRIDOR_MODEL": 1994,
+        "POSITION_ONLY_MOTION_UNRESOLVED": 248
+      },
+      "pairStates": {
+        "DIRECTION_UNRESOLVED_OR_CHANGED": 2657,
+        "OBSERVED_PAIR_SUPPORTS_PROGRESS": 1948,
+        "IMPLIED_PROGRESS_SPEED_DISAGREES": 13,
+        "INSUFFICIENT_OR_CONTRADICTORY_PROGRESS": 6,
+        "GAP_OR_TIME_UNRESOLVED": 76
+      },
+      "directions": {
+        "away-from-locks": 840,
+        "toward-locks": 1108
+      },
+      "geometrySource": "lib/soo-locks-next.js:ROUTES (existing OSM-based modeled channel, 2026-09-27; not a surveyed route)",
+      "forecastEnabled": false
+    }
+  ],
+  "totals": {
+    "fixes": 19097,
+    "adjacentPairs": 19041,
+    "supportedPairs": 6496
+  },
+  "forecastEnabled": false
+}

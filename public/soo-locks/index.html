@@ -18,8 +18,8 @@
 <link rel="apple-touch-icon" href="/apple-touch-icon.png">
 <link rel="manifest" href="/site.webmanifest">
 <link rel="stylesheet" href="/assets/soo-lock-sim.css?v=20261019-ships">
-<link rel="stylesheet" href="/assets/soo-vessel-icons.css?v=20261122">
-<link rel="stylesheet" href="/assets/soo-lock-watch.css?v=20261122">
+<link rel="stylesheet" href="/assets/soo-vessel-icons.css?v=20261124">
+<link rel="stylesheet" href="/assets/soo-lock-watch.css?v=20261125c">
 <link rel="stylesheet" href="/assets/growth-commercial.css">
 <link rel="stylesheet" href="/assets/affiliate-commerce.css">
 <link rel="stylesheet" href="/assets/gazette-latest.css">
@@ -53,7 +53,7 @@
       "author": {
         "@id": "https://chrisizworski.com/#person"
       },
-      "dateModified": "2026-11-23",
+      "dateModified": "2026-11-24",
       "inLanguage": "en-US",
       "publisher": {
         "@id": "https://chrisizworski.com/#person"
@@ -261,7 +261,7 @@ figure.fig.hero{margin:6px 0 28px}
 <meta property="og:site_name" content="Chris Izworski">
 <meta name="twitter:title" content="Soo Locks Schedule Today: Ships &amp; Map | Chris Izworski">
 <meta name="twitter:description" content="What ships are in the Soo Locks today: schedule sources, the boat hotline, a live AIS map, webcams, and Sault Ste. Marie locks visitor hours.">
-<style>/* WCAG AA contrast and link-identification fixes found by axe-core, 2026-11-22. */.breadcrumb,.breadcrumb a,.footer{color:#6b6b6b}.map-caption,figure.fig figcaption{color:#5f5f5f}.stat-box .lbl,.stat-box .extra{color:#666}.photo-credit,.field-camera .camera-out{opacity:1;color:#5f5f5f}p>a:not([class]),.footer a{text-decoration:underline;text-underline-offset:2px}</style>
+<style>/* WCAG AA contrast and link-identification fixes found by axe-core, 2026-11-22. */.breadcrumb,.breadcrumb a,.footer{color:#6b6b6b}.map-caption,figure.fig figcaption{color:#5f5f5f}.stat-box .lbl,.stat-box .extra{color:#666}.photo-credit,.field-camera .camera-out,.field-camera .camera-credit{opacity:1;color:#5f5f5f}p>a:not([class]),.footer a{text-decoration:underline;text-underline-offset:2px}</style>
 </head>
 <body data-analytics-page="soo-locks">
 <div class="header"><p class="site-title"><a href="/">Chris Izworski</a></p></div>
@@ -290,7 +290,7 @@ figure.fig.hero{margin:6px 0 28px}
   <div class="lw-head">
     <p class="lw-kicker">Lock Watch &middot; plan your platform time</p>
     <h2 id="soo-lock-watch-title">Which ships pass while you are on the platform?</h2>
-    <p class="lw-intro">Say when you can reach the viewing platform and how long you can stay. Live AIS arrival windows are lined up against your visit, posted park hours and daylight.</p>
+    <p class="lw-intro">Say when you can reach the viewing platform and how long you can stay. We compare AIS planning windows with the time you can actually be on the platform during posted park hours. Change when you arrive or how long you stay; check movement before leaving. These are not confirmed lock times.</p>
   </div>
   <div class="lw-controls" data-lw-controls hidden>
     <fieldset><legend>How soon can you get there?</legend><div class="lw-chips"><label><input type="radio" name="lw-start" value="0" checked><span>Now</span></label><label><input type="radio" name="lw-start" value="30"><span>30 min</span></label><label><input type="radio" name="lw-start" value="60"><span>1 hr</span></label><label><input type="radio" name="lw-start" value="90"><span>1½ hr</span></label><label><input type="radio" name="lw-start" value="120"><span>2 hr</span></label><label><input type="radio" name="lw-start" value="180"><span>3 hr</span></label><label><input type="radio" name="lw-start" value="240"><span>4 hr</span></label></div></fieldset>
@@ -300,6 +300,8 @@ figure.fig.hero{margin:6px 0 28px}
     <p class="lw-verdict-head">Line up live ship windows with your visit</p>
     <p class="lw-verdict-detail">This planner needs JavaScript and the live AIS feed. Without them, use the posted hours below and the <a href="#soo-schedule-answer">other ways to check</a> further down this page.</p>
   </div>
+  <p class="lw-change" data-lw-changes role="status" aria-live="polite" hidden></p>
+  <div class="lw-memory" data-lw-memory hidden><button type="button" class="lw-memory-button" data-lw-memory-button>Remember my visit choices</button><p class="lw-memory-note" data-lw-memory-note role="status" aria-live="polite"></p></div>
   <p class="lw-weather" data-lw-weather hidden></p>
   <div class="lw-board" data-lw-board hidden>
     <div class="lw-axis" data-lw-axis aria-hidden="true"></div>
@@ -722,8 +724,11 @@ figure.fig.hero{margin:6px 0 28px}
 </script>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script defer src="/assets/seaway-vessel-icons.js?v=20261108a"></script>
-<script defer src="/assets/soo-ais.js?v=20261122f"></script>
-<script defer src="/assets/soo-lock-watch.js?v=20261122"></script>
+<script defer src="/assets/soo-near-lock-motion.js?v=20261125a"></script>
+<script defer src="/assets/soo-ais.js?v=20261125a"></script>
+<script defer src="/assets/soo-changing-conditions.js?v=20261125b"></script>
+<script defer src="/assets/soo-visit-memory.js?v=20261125a"></script>
+<script defer src="/assets/soo-lock-watch.js?v=20261125e"></script>
 <script defer src="/assets/field-camera.js"></script>
 <section aria-label="How this tool was built" style="max-width:900px;margin:28px auto;padding:18px;overflow-wrap:anywhere"><p><a href="https://izworskic.github.io/projects/#soo-locks-method">See how channel distance becomes an arrival window</a>, with a worked example and public code. Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a>.</p></section>
 <section aria-labelledby="soo-visit-companions" style="max-width:900px;margin:26px auto;padding:18px;border:1px solid #cbdad0;border-radius:8px"><h2 id="soo-visit-companions">Plan a visit around actual vessel activity</h2><p><a href="/soo-locks/plan-your-visit/">Plan your Soo Locks visit</a> with the official Visitor Center season, parking and realistic 45-, 90- and 180-minute itineraries. Or compare <a href="/great-lakes-ship-watching-spots/">Great Lakes freighter-watching viewpoints</a> for a broader shore trip.</p><p>Driving north from Lower Michigan via I-75? <a href="/mackinac-bridge-tolls/">Estimate the Mackinac Bridge toll for your vehicle and return trip</a> before heading to Sault Ste. Marie.</p></section>

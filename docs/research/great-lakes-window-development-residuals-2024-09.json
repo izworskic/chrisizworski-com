@@ -1,0 +1,69 @@
+{
+  "schemaVersion": 1,
+  "kind": "RETROSPECTIVE_WINDOW_DEVELOPMENT_RESIDUALS",
+  "sourceRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/45501821539",
+  "modelRevision": "fd5190923a00762c78d44e700fae5fb2505e64ed",
+  "holdoutStartsOn": "2024-09-21",
+  "days": [
+    {
+      "date": "2024-09-04",
+      "site": "soo",
+      "model": "route-progress-v1",
+      "sourceReceiptSha256": "982a6223a037a40e68527f3aeecace17479a594185fc5167c7f9a9eb88eb6bcc",
+      "inputSha256": "47d282f38592ffcf1537295a0566e16211aa17985464a7e8618612aa98ea3161",
+      "candidateEvents": 9,
+      "eligibleEstimates": 5,
+      "residuals": [
+        [
+          8.86598017578125,
+          10.049313509114583
+        ],
+        [
+          21.220835896809895,
+          23.220835896809895
+        ]
+      ],
+      "jobId": 138826792191
+    },
+    {
+      "date": "2024-09-10",
+      "site": "soo",
+      "model": "route-progress-v1",
+      "sourceReceiptSha256": "e632291a71084040c1397d1f3f1c4b05ba70f896a90c93df000002af8e7ba828",
+      "inputSha256": "d5aad68826e65fb9dc5f4721fbcb6afdbb544215107c151e6714bfeda1553fce",
+      "candidateEvents": 7,
+      "eligibleEstimates": 2,
+      "residuals": [
+        [
+          8.230451000976563,
+          10.580451000976563
+        ],
+        [
+          20.40154216308594,
+          22.568208829752603
+        ]
+      ],
+      "jobId": 138826792817
+    },
+    {
+      "date": "2024-09-15",
+      "site": "soo",
+      "model": "route-progress-v1",
+      "sourceReceiptSha256": "529527d34bd92c9f16a584ad1a8281aac5e2181b8bd16e66366892e5e316d0b7",
+      "inputSha256": "bb296521c70bf6f514965fcc8da6ae1c80521e4727a565aaf97a454f57f55fbb",
+      "candidateEvents": 12,
+      "eligibleEstimates": 2,
+      "residuals": [
+        [
+          -0.18455623372395832,
+          0.9654437662760417
+        ],
+        [
+          5.976784090169271,
+          7.1434507568359376
+        ]
+      ],
+      "jobId": 138826792690
+    }
+  ]
+}

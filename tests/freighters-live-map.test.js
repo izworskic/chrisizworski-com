@@ -61,7 +61,7 @@ test("All map tabs correspond to live tracker views and preserve keyboard state"
 test("Mobile responsive, request timestamps, data outage and readable fallback remain", () => {
   assert.match(css, /#freighterMap\{height:360px/);
   assert.match(css, /\.hub-map-tabs\{display:flex;overflow-x:auto/);
-  assert.match(tracker, /1800000/);
+  assert.match(tracker, /GreatLakesAisEvidence\?\.positionFresh\(v,now\)/);
   assert.match(tracker, /Vessel reports unavailable/);
   assert.match(tracker, /No recent reports returned/);
   assert.match(html, /<noscript>/);

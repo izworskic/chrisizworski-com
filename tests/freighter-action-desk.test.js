@@ -10,7 +10,7 @@ test('Python reference validates corridor counts and report-age boundaries',()=>
   const views=js.slice(js.indexOf('  var views ='),js.indexOf('\n\n  var mapFrame'));
   const pick=name=>js.match(new RegExp('  function '+name+'\\([^\\n]+\\n(?:.*\\n)*?  }'))?.[0];
   const line=name=>js.match(new RegExp('  function '+name+'\\([^\\n]+'))?.[0];
-  const context={};
+  const context={window:{GreatLakesAisEvidence:require('../lib/ais-movement')}};
   vm.runInNewContext(views+'\n'+line('recent')+'\n'+line('corridorRadius')+'\n'+line('inCorridor')+'\n'+pick('toRad')+'\n'+pick('distanceMiles'),context);
   const centers={};for(const key of ['soo','mackinac','duluth','port-huron','detroit','saginaw'])centers[key]=context.views[key];
   const oracle=spawnSync('python3',['scripts/freighter-desk-validation.py'],{input:JSON.stringify(centers),encoding:'utf8'});

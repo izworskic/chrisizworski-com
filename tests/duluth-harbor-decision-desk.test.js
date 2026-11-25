@@ -41,9 +41,9 @@ test('CTR-facing search promise is accurate and preserves canonical, Person and 
   assert.match(tuner, /const DESCRIPTION = 'Duluth ship schedule today: see the next AIS-supported passage window, check later published arrivals and departures, and watch Canal Park live cams\.'/);
   assert.match(html, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/duluth-canal-park\/"/);
   assert.match(html, /https:\/\/chrisizworski\.com\/#person/);
-  assert.match(html, /"dateModified":"2026-11-20"/);
+  assert.match(html, /"dateModified":"2026-11-24"/);
   const index = sitemap.indexOf('<loc>https://chrisizworski.com/duluth-canal-park/</loc>');
   assert.ok(index > 0);
-  assert.match(sitemap.slice(index, index + 130), /<lastmod>2026-11-20<\/lastmod>/);
+  assert.match(sitemap.slice(index, index + 130), /<lastmod>2026-11-24<\/lastmod>/);
   assert.doesNotMatch(html, /noindex/i);
 });

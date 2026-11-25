@@ -1,0 +1,47 @@
+name: Mackinac official status browser QA
+on:
+  pull_request:
+    paths:
+      - 'public/mackinac-bridge-live/**'
+      - 'public/mackinac-bridge-tolls/**'
+      - 'public/assets/mackinac-toll-calculator.js'
+      - 'tests/mackinac-toll-payment.test.js'
+      - 'public/assets/mackinac-bridge-live.*'
+      - 'public/assets/mackinac-bridge-v2.js'
+      - 'api/mackinac.js'
+      - 'lib/mackinac/**'
+      - 'scripts/verify-mackinac-status-browser.cjs'
+      - 'tests/mackinac-static.test.js'
+      - '.github/workflows/mackinac-status-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: mackinac-status-browser-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+jobs:
+  browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Run source regression
+        run: node --test tests/mackinac-static.test.js tests/mackinac-toll-payment.test.js
+      - name: Install isolated pinned browser harness
+        run: |
+          npm install --prefix "$RUNNER_TEMP/mackinac-status-browser" --ignore-scripts --no-package-lock playwright@1.56.1
+          "$RUNNER_TEMP/mackinac-status-browser/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Verify crossing verdict, recovery and toll payment choices in Chromium
+        run: BRIDGE_PW_MODULE="$RUNNER_TEMP/mackinac-status-browser/node_modules/playwright" node scripts/verify-mackinac-status-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mackinac-status-browser-evidence
+          path: artifacts/mackinac-status-qa/
+          retention-days: 7
+          if-no-files-found: warn

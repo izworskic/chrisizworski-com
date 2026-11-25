@@ -47,6 +47,15 @@ test('search build preserves reviewed lead and story without changing core metad
   assert.match(tuner, /NEXT SHIP WORTH WATCHING/);
   assert.match(html, /rel="canonical" href="https:\/\/chrisizworski\.com\/duluth-canal-park\/"/);
   assert.match(html, /https:\/\/chrisizworski\.com\/#person/);
-  assert.match(html, /"dateModified":"2026-11-20"/);
+  assert.match(html, /"dateModified":"2026-11-24"/);
   assert.doesNotMatch(html, /<meta name="robots" content="noindex"/);
+});
+
+test('failed refresh clears shared displayed passage candidates before any renderer', () => {
+  assert.match(client, /data = \{ \.\.\.data, watchPick: null, candidates: \[\], mapVessels:/);
+  assert.match(client, /seen <= now && now - seen <= 30 \* 60 \* 1000/);
+  assert.match(client, /currentData = data;\s*renderPick\(data, failed\);\s*renderMonitorSummary\(data, failed\);\s*renderMap\(data, failed\);\s*renderCandidates\(data, failed\);/);
+  assert.match(client, /focus.disabled = failed \|\| !pick/);
+  assert.match(client, /Last-known position/);
+  assert.match(client, /Earlier passage windows are withheld until fresh reports return/);
 });

@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Production design lab | Local reference only</title>
+<link rel="stylesheet" href="../../public/assets/soo-vessel-icons.css">
+<link rel="stylesheet" href="foundations.css">
+<style>
+.lab{margin:0;background:var(--pd-paper);color:var(--pd-ink);font:var(--pd-type-body)/var(--pd-body-line) var(--pd-font-operational)}
+*{box-sizing:border-box}
+main{max-width:1120px;margin:auto;padding:24px clamp(16px,4vw,48px) 48px}
+h1,h2,h3,p{margin:0}h1{font:600 clamp(30px,4vw,40px)/1.12 Georgia,serif;max-width:24ch}h2{font-size:var(--pd-type-heading);line-height:1.25}h3{font-size:18px}
+header{border-bottom:1px solid var(--pd-line);padding-bottom:24px}
+header p,section>p{max-width:70ch;margin-top:8px;color:var(--pd-muted)}
+section{padding:28px 0;border-bottom:1px solid var(--pd-line)}
+.eyebrow{font-size:var(--pd-type-caption);font-weight:650;color:var(--pd-muted);margin-bottom:8px}
+.specimens{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--pd-space-lg);margin-top:16px}
+.specimen{min-width:0;background:var(--pd-surface);border:1px solid var(--pd-line);padding:20px;border-radius:var(--pd-radius-control)}
+.specimen p{margin-top:8px}
+.identity{display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.identity span{font:600 18px Georgia,serif;color:var(--pd-accent)}
+.reading{font-size:var(--pd-type-reading);font-weight:750;letter-spacing:-.04em;font-variant-numeric:tabular-nums;line-height:1.1;margin:16px 0 6px}
+.meta{color:var(--pd-muted);font-size:var(--pd-type-caption)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:16px}
+button{font:650 14px/1.3 system-ui;min-height:var(--pd-target-min);padding:8px 14px;border:1px solid var(--pd-accent);border-radius:var(--pd-radius-control);background:var(--pd-surface);color:var(--pd-accent);cursor:pointer}
+button[aria-pressed=true]{background:var(--pd-accent);color:var(--pd-surface)}
+button:disabled{color:var(--pd-muted);border-color:var(--pd-line);cursor:default}
+:focus-visible{outline:var(--pd-focus-width) solid var(--pd-focus);outline-offset:var(--pd-focus-offset)}
+.status-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-top:16px}
+.status{border-left:4px solid var(--pd-recent);padding:12px 16px;background:var(--pd-surface)}
+.status[data-state=stale]{border-color:var(--pd-stale)}
+.status[data-state=unavailable]{border-color:var(--pd-unavailable)}
+.status p{margin:4px 0 0;font-size:14px;color:var(--pd-muted)}
+.glyphs{list-style:none;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 16px;margin:16px 0}
+.glyphs li{display:flex;align-items:center;gap:8px;min-height:var(--pd-target-min);border-bottom:1px solid var(--pd-line);padding:4px 0;font-size:14px;overflow-wrap:anywhere}
+.glyphs .soo-vessel-legend-glyph{flex:0 0 45px}
+.glyphs .soo-vessel-legend-item{white-space:normal}
+details{margin-top:16px}summary{cursor:pointer;font-weight:650;min-height:var(--pd-target-min);padding:10px 0;color:var(--pd-accent)}
+details p{max-width:70ch}
+a{color:var(--pd-accent);text-underline-offset:3px}
+.reference-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);gap:var(--pd-space-xl);margin-top:var(--pd-space-lg)}
+.reference-snow,.reference-journey{min-width:0;padding:var(--pd-space-xl);background:var(--pd-paper);color:var(--pd-ink);border-top:4px solid var(--pd-accent)}
+.reference-grid h3{color:var(--pd-accent);font-size:var(--pd-type-subheading)}
+.reference-grid p{margin-top:var(--pd-space-sm)}
+.reference-grid .reading{font-size:var(--pd-type-reading);margin-top:var(--pd-space-lg)}
+.reference-grid .unit{font-size:var(--pd-type-subheading);letter-spacing:0}
+.evidence-list{margin:var(--pd-space-lg) 0 0;padding:0}
+.evidence-list>div{display:flex;flex-wrap:wrap;justify-content:space-between;gap:var(--pd-space-sm);border-top:1px solid var(--pd-line);padding:var(--pd-space-md) 0}
+.evidence-list dt{color:var(--pd-muted);font-size:var(--pd-type-caption)}
+.evidence-list dd{margin:0;font-weight:650;font-variant-numeric:tabular-nums}
+.reference-journey ol{margin:var(--pd-space-lg) 0 0;padding-left:var(--pd-space-xl)}
+.reference-journey li{padding:var(--pd-space-sm) 0;border-bottom:1px solid var(--pd-line)}
+.reference-journey details{border-top:1px solid var(--pd-line)}
+.reference-journey summary{padding:var(--pd-space-md) 0}
+.detail-contract{margin-top:var(--pd-space-lg);border-left:3px solid var(--pd-accent);padding:var(--pd-space-md) var(--pd-space-lg);background:var(--pd-surface)}
+.detail-contract p{margin-top:var(--pd-space-sm)}
+@media(max-width:680px){.reference-grid{grid-template-columns:1fr}.reference-snow,.reference-journey{padding:var(--pd-space-lg)}}
+@media(max-width:680px){.specimens,.status-grid{grid-template-columns:1fr}.glyphs{grid-template-columns:repeat(2,minmax(0,1fr))}.specimen{padding:16px}}
+@media(max-width:380px){.glyphs{grid-template-columns:1fr}}
+</style>
+</head>
+<body class="lab">
+<main>
+<header><p class="eyebrow">Local reference / evaluation candidate</p><h1>Platform design laboratory</h1><p>Source-derived primitives and component states. All numbers, trip durations and report ages below are fictional test fixtures, not live conditions or trip recommendations. No production route or network feed.</p></header>
+<section aria-labelledby="family-title"><h2 id="family-title">One family, two places</h2><p>Shared reading, selection and status treatment. Different subject accents and local stories. This is a component comparison, not a pair of proposed page layouts.</p>
+<div class="specimens">
+<article class="specimen"><div class="identity"><h3>Cuyahoga</h3><span>Cleveland</span></div><p class="reading">3 <span style="font-size:18px;letter-spacing:0">reports</span></p><p class="meta">Fixture observation · 4 minutes old</p><div class="actions" role="group" aria-label="Cuyahoga map view"><button type="button" aria-pressed="true" data-choice="ships">Show ships</button><button type="button" aria-pressed="false" data-choice="places">Viewing places</button></div><p data-result aria-live="polite">Selected view: ship reports</p><p>Interpretive focus: navigating the river bends.</p></article>
+<article class="specimen specimen--calumet"><div class="identity"><h3>Calumet</h3><span>Chicago</span></div><p class="reading">2 <span style="font-size:18px;letter-spacing:0">reports</span></p><p class="meta">Fixture observation · 7 minutes old</p><div class="actions" role="group" aria-label="Calumet map view"><button type="button" aria-pressed="true" data-choice="ships">Show ships</button><button type="button" aria-pressed="false" data-choice="places">Viewing places</button></div><p data-result aria-live="polite">Selected view: ship reports</p><p>Interpretive focus: lift bridges and working waterfront.</p></article>
+</div>
+<noscript><p>Without JavaScript, these are static component examples. Selection does not change.</p></noscript></section>
+<section aria-labelledby="status-title"><h2 id="status-title">Evidence states</h2><p>The meaning survives without color. Unknown is not zero, and an old report is not live.</p><div class="status-grid"><article class="status" data-state="recent"><h3>Recent report</h3><p>Observed 4 minutes ago. Position was reported, not predicted.</p></article><article class="status" data-state="stale"><h3>Stale report</h3><p>Last received 45 minutes ago. Current position unavailable.</p></article><article class="status" data-state="unavailable"><h3>Reports unavailable</h3><p>Unable to load current positions. Ship count unknown.</p><div class="actions"><button type="button" disabled>Show ships</button></div></article></div></section>
+<section aria-labelledby="symbols-title"><h2 id="symbols-title">Existing vessel silhouettes</h2><p>Uses the actual shared Seaway/Soo icon factory and stylesheet. Symbols represent AIS-reported category, not exact scale. The unknown type must remain distinct from cargo.</p><ul class="glyphs" id="glyphs" aria-label="Vessel categories"><li>Freighter / cargo</li><li>Tanker</li><li>Passenger</li><li>Tug / towing</li><li>Pleasure craft</li><li>Sailboat</li><li>Fishing vessel</li><li>Work / service</li><li>Type unknown</li></ul><p class="meta" id="glyph-status" role="status">Text legend available. Symbols require the local script.</p><details><summary>Source and limits</summary><p>Real assets: <a href="../../public/assets/seaway-vessel-icons.js">Seaway vessel icon factory</a> and <a href="../../public/assets/soo-vessel-icons.css">Soo vessel styles</a>. No illustration claims to represent a particular vessel.</p></details></section>
+<section aria-labelledby="reference-title">
+<h2 id="reference-title">Different decisions, shared foundations</h2>
+<p>Snowfall needs a prominent reading and an observation period. A journey needs sequence and tradeoffs. Neither should imitate the maritime decision desk.</p>
+<div class="reference-grid">
+<article class="reference-snow" aria-labelledby="snow-example">
+<p class="eyebrow">Observation specimen / fictional</p><h3 id="snow-example">Reported snowfall</h3>
+<p class="reading">6.4 <span class="unit">inches</span></p><p class="meta">Example station observation · past 24 hours</p>
+<dl class="evidence-list"><div><dt>Observation</dt><dd>Example station</dd></div><div><dt>Report age</dt><dd>2 hours</dd></div><div><dt>Snow depth</dt><dd>Not reported</dd></div></dl>
+<p>Snowfall is the amount that fell, not the depth currently on the ground.</p>
+</article>
+<article class="reference-journey" aria-labelledby="journey-example">
+<p class="eyebrow">Planning specimen / fictional</p><h3 id="journey-example">A morning along the shore</h3>
+<p>Two stops with time left to explore. Example durations are planning assumptions, not travel forecasts.</p>
+<ol><li><strong>First viewpoint</strong><p class="meta">Allow 45 minutes.</p></li><li><strong>Short trail</strong><p class="meta">Allow 75 minutes.</p></li></ol>
+<dl class="evidence-list"><div><dt>Time at stops</dt><dd>2 hours</dd></div><div><dt>Driving time</dt><dd>Not calculated</dd></div></dl>
+<details id="journey-details"><summary>Before choosing this plan</summary><p>Check actual access, driving time and trail conditions. The example does not establish that either place is open.</p></details>
+</article>
+</div>
+</section>
+<section aria-labelledby="detail-title"><h2 id="detail-title">Map selection that stays usable</h2>
+<p>Duluth's first production pilot uses an anchored desktop popup and a bounded detail pane on narrow maps. Both present the same reported vessel type, speed or unavailable state, and camera action. Preserve the close action and report age; do not force one positioning mode on every map.</p>
+<div class="detail-contract"><h3>Verified pattern, not a copied map</h3><p>Reuse the <a href="../../public/assets/duluth-canal.js">owning Duluth adapter</a> and <a href="../../public/duluth-canal-park/index.html">its responsive detail-pane implementation</a> as evidence. The actual map behavior was tested in PR #1918. This gallery has no map or simulated live feed.</p></div>
+</section>
+<p class="meta" style="margin-top:24px">Candidate only. Do not deploy, link from the public site, or treat this lab as a visual approval.</p>
+</main>
+<script src="../../public/assets/seaway-vessel-icons.js"></script>
+<script>
+for(const group of document.querySelectorAll('.actions[role=group]')){
+ group.addEventListener('click',event=>{
+  const button=event.target.closest('button[data-choice]');
+  if(!button||!group.contains(button))return;
+  for(const other of group.querySelectorAll('button'))other.setAttribute('aria-pressed',String(other===button));
+  group.parentElement.querySelector('[data-result]').textContent='Selected view: '+(button.dataset.choice==='ships'?'ship reports':'viewing places');
+ });
+}
+const factory=window.SeawayVesselIcons;
+if(factory&&Array.isArray(factory.KINDS)&&typeof factory.svg==='function'){
+ const list=document.getElementById('glyphs');
+ list.replaceChildren(...factory.KINDS.map(kind=>{
+  const item=document.createElement('li');item.className='soo-vessel-legend-item type-'+kind.kind;
+  const glyph=document.createElement('span');glyph.className='soo-vessel-legend-glyph';glyph.innerHTML=factory.svg(kind.kind);
+  const name=document.createElement('span');name.textContent=kind.label;item.append(glyph,name);return item;
+ }));
+ document.getElementById('glyph-status').textContent='Shared icon factory loaded.';
+}
+</script>
+</body>
+</html>
