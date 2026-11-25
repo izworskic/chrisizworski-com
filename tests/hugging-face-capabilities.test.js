@@ -6,8 +6,7 @@ const fs=require('node:fs');
 const path=require('node:path');
 const {spawnSync}=require('node:child_process');
 const root=path.join(__dirname,'..');
-const names=['hf-cli','huggingface-best','huggingface-datasets','huggingface-tool-builder',
-  'transformers-js','hf-semantic-discovery','hf-forecast-benchmark'];
+const names=['hf-cli','huggingface-datasets','huggingface-tool-builder','ml-justification'];
 const get=p=>fs.readFileSync(path.join(root,p),'utf8');
 
 test('review-only Hugging Face skills are mirrored exactly for all three agent harnesses',()=>{

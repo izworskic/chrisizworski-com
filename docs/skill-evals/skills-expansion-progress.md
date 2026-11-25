@@ -27,4 +27,4 @@ Read `skills-expansion-plan.md` first. Update this log in the same commit as eac
 
 ## Next action
 
-Build ml-justification by folding huggingface-best, transformers-js, hf-semantic-discovery and hf-forecast-benchmark into it; update calibrated-prediction, the HF test and registry; pressure-test against the old huggingface-best and transformers-js; record; commit.
+Build hf-hub-research by folding hf-cli, huggingface-datasets and huggingface-tool-builder into it; update the HF test and registry; pressure-test against the old hf-cli; record; commit.
