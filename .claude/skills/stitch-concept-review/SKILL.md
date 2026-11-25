@@ -1,6 +1,6 @@
 ---
 name: stitch-concept-review
-description: "Explicitly requested Google Stitch visual concept evaluation with an offline design fallback."
+description: "Explicitly requested Google Stitch visual concept evaluation with an offline design fallback. Use only when the owner explicitly asks for Google Stitch concepts."
 ---
 
 # stitch-concept-review

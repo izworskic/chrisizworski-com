@@ -16,7 +16,72 @@
   function vehicleView(result,label){label=label||'Selected vehicle';if(!result||result.state==='NOT_EVALUATED')return{tone:'unknown',icon:'?',title:'Vehicle not evaluated',copy:'Choose a vehicle to check the current CBBT restriction.'};if(result.decision==='ALLOWED')return{tone:'allowed',icon:'✓',title:label+' is allowed under the current CBBT restriction.',copy:reasonText(result.reason)};if(result.decision==='RESTRICTED')return{tone:'restricted',icon:'×',title:label+' cannot cross under the current CBBT restriction.',copy:reasonText(result.reason)};return{tone:'unknown',icon:'?',title:'We cannot determine this configuration automatically.',copy:reasonText(result.reason)};}
   function freshnessText(freshness,prefix){prefix=prefix||'Updated';if(!freshness||freshness.state==='unavailable'||freshness.ageMinutes==null)return prefix+' time unavailable';var age=Math.max(0,Number(freshness.ageMinutes)||0);if(freshness.state==='stale')return 'Delayed · last available '+age+' min ago';if(freshness.state==='aging')return 'Last updated '+age+' min ago';return age<=0?prefix+' just now':prefix+' '+age+' min ago';}
   function tollView(result){if(!result||result.state==='NOT_EVALUATED')return{tone:'unknown',label:'Not estimated',amount:null,copy:'Add trip details to estimate the toll.'};if(result.state==='ESTIMATED')return{tone:'ok',label:'Estimated CBBT toll',amount:Number(result.amount),copy:'Calculated by the backend using official CBBT class logic and the assumptions shown below.'};if(result.state==='ESTIMATE_REQUIRES_APPROVAL')return{tone:'caution',label:'Estimate requires CBBT approval',amount:Number(result.amount),copy:'This configuration requires prior approval; the returned amount may not be the complete trip cost.'};var reasons={TOLL_CLASS_UNRESOLVED:'The CBBT toll class could not be resolved from these details. Add vehicle class information or check the official toll schedule.',INVALID_TRAVEL_TIME:'The travel time could not be interpreted.',CLASS_75_REQUIRES_EZPASS_AND_29_PRIOR_TRIPS_IN_720_HOURS:'This discount class requires additional E-ZPass trip history.'};return{tone:'unknown',label:'Toll not resolved',amount:null,copy:reasons[result.reason]||'The backend could not determine a toll from these inputs.'};}
-  return{statusView:statusView,vehicleView:vehicleView,freshnessText:freshnessText,tollView:tollView,restrictionLabel:restrictionLabel,reasonText:reasonText};
+  // Session-only comparison of successive authoritative snapshots. This is
+  // detection time, not the time an operator changed the crossing.
+  function observedStatus(snapshot,now){
+    var status=snapshot&&snapshot.officialStatus,f=snapshot&&snapshot.freshness&&snapshot.freshness.officialStatus;
+    var checked=Date.parse(snapshot&&snapshot.engine&&snapshot.engine.generatedAt||'');
+    var known=status&&['OPEN','OPEN_WITH_RESTRICTIONS','CLOSED'].includes(status.state);
+    // Same existing backend 10-minute status age limit. Age must include
+    // time since the API assembled a cached response.
+    var valid=known&&f&&['fresh','aging'].includes(f.state)&&typeof f.ageMs==='number'&&Number.isFinite(f.ageMs)&&f.ageMs>=0&&Number.isFinite(checked)&&checked<=now&&f.ageMs+now-checked<=600000;
+    if(!valid)return {key:status&&status.state==='OFFICIAL_STATUS_CONFLICT'?'conflict':'unavailable',label:status&&status.state==='OFFICIAL_STATUS_CONFLICT'?'official reports disagree':'official status unavailable',checked:Number.isFinite(checked)&&checked<=now?checked:null};
+    var level=status.restrictionLevel;
+    if(status.state==='OPEN_WITH_RESTRICTIONS'&&!['ADVISORY','LEVEL_1','LEVEL_2','LEVEL_3','OTHER'].includes(level))return {key:'unavailable',label:'official restriction not resolved',checked:checked};
+    if(status.state==='OPEN'&&level!=='NONE')return {key:'unavailable',label:'official restriction not resolved',checked:checked};
+    var label=status.state==='CLOSED'?'closed':status.state==='OPEN'?'open, no official wind restriction identified':'open with '+restrictionLabel(level);
+    return {key:status.state==='CLOSED'?'CLOSED':status.state+':'+level,label:label,checked:checked};
+  }
+  function statusChange(previous,snapshot,now=Date.now()){
+    var current=observedStatus(snapshot,now);
+    // Ignore older or duplicate API packets while still allowing a fresh
+    // local assessment of an expired packet to withdraw confirmation.
+    if(previous&&current.checked!==null&&previous.lastChecked!==null&&current.checked<previous.lastChecked)return previous;
+    if(previous&&current.checked!==null&&current.checked===previous.lastChecked&&current.key!=='unavailable'&&current.key!==previous.current.key)return previous;
+    var lastChecked=current.checked===null?(previous?previous.lastChecked:null):current.checked;
+    if(!previous)return {current:current,lastChecked:lastChecked,event:null};
+    if(current.key===previous.current.key)return {current:current,lastChecked:lastChecked,event:previous.event};
+    var wasKnown=!['unavailable','conflict'].includes(previous.current.key),isKnown=!['unavailable','conflict'].includes(current.key);
+    var kind=isKnown?(wasKnown?'reported-change':'source-recovered'):(current.key==='conflict'?'source-conflict':'source-lost');
+    return {current:current,lastChecked:lastChecked,event:{kind:kind,detectedAt:new Date(now).toISOString(),from:previous.current.label,to:current.label}};
+  }
+  function changeText(event){
+    if(!event)return '';
+    if(event.kind==='reported-change')return 'Official status now reports '+event.to+'; the preceding confirmed check reported '+event.from+'.';
+    if(event.kind==='source-recovered')return 'Official status is available again: '+event.to+'. What happened during the gap is not known.';
+    if(event.kind==='source-conflict')return 'Official sources now disagree. Confirm the crossing directly with CBBT.';
+    return 'Current official status can no longer be confirmed. This is not a report of a closure.';
+  }
+  // Compare only backend eligibility results for exactly the same vehicle.
+  // An unknown operational state never establishes a new permission.
+  function decisionImpact(previous,snapshot,configuration,now=Date.now()){
+    var official=observedStatus(snapshot,now),result=snapshot&&snapshot.vehicleEligibility;
+    var confirmed=!['unavailable','conflict'].includes(official.key);
+    var decision=confirmed&&result&&['ALLOWED','RESTRICTED','UNKNOWN'].includes(result.decision)?result.decision:'UNKNOWN';
+    var reason=decision==='UNKNOWN'&&!confirmed?'OFFICIAL_STATUS_UNRESOLVED':result&&result.reason||null;
+    var current={configuration:configuration,official:official.key,decision:decision,reason:reason,checked:official.checked,confirmed:confirmed,event:null};
+    if(!previous||previous.configuration!==configuration)return current;
+    if(current.checked!==null&&previous.checked!==null&&current.checked<previous.checked)return previous;
+    if(current.checked!==null&&current.checked===previous.checked&&confirmed&&current.official!==previous.official)return previous;
+    if(current.official===previous.official&&current.decision===previous.decision&&current.reason===previous.reason)return {...current,event:previous.event};
+    // Do not infer the vehicle effect of an operating change across an
+    // evidence gap, or from changed form inputs.
+    var kind=!confirmed?'confirmation-lost':!previous.confirmed?'confirmation-restored':
+      previous.official===current.official?'result-revised':
+      previous.decision!==decision?'eligibility-changed':'eligibility-unchanged';
+    current.event={kind:kind,from:previous.decision,to:decision,reason:reason};
+    return current;
+  }
+  function impactText(event){
+    if(!event)return '';
+    if(event.kind==='confirmation-lost')return 'The live eligibility check cannot be confirmed now. Verify with CBBT; standing vehicle rules still apply.';
+    if(event.kind==='confirmation-restored')return 'A current check for this vehicle is available again. No eligibility conclusion is made about the gap.';
+    if(event.kind==='eligibility-unchanged')return event.to==='UNKNOWN'?'The official report changed, but this configuration still needs confirmation.': 'The official report changed, but the backend eligibility result for this same configuration is unchanged. Review the current restriction.';
+    if(event.to==='RESTRICTED')return 'This configuration is now restricted under the backend check. '+reasonText(event.reason);
+    if(event.to==='ALLOWED')return 'The backend check now reports this configuration allowed under the current official restriction. Verify before travel.';
+    return 'The backend can no longer determine eligibility for this configuration. '+reasonText(event.reason);
+  }
+  return{statusView:statusView,vehicleView:vehicleView,freshnessText:freshnessText,tollView:tollView,restrictionLabel:restrictionLabel,reasonText:reasonText,statusChange:statusChange,changeText:changeText,decisionImpact:decisionImpact,impactText:impactText};
 });
 
 (function(){

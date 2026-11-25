@@ -1,0 +1,115 @@
+{
+  "schemaVersion": 1,
+  "source": "NOAA Office for Coastal Management, Nationwide AIS 2025",
+  "sourceUrl": "https://www.fisheries.noaa.gov/inport/item/77594",
+  "license": "CC0-1.0",
+  "archiveIndex": "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/index.html",
+  "dates": [
+    "2025-06-15",
+    "2025-08-15",
+    "2025-10-15"
+  ],
+  "sampling": "Three fixed pilot calendar days, not a representative random sample. August 15 overlaps the prior Cuyahoga study. All valid reported cargo/tanker codes 70-89 in each box; type is source-reported, not independently verified. Canada-only coverage not guaranteed.",
+  "regions": [
+    {
+      "id": "soo",
+      "bbox": [
+        45.9,
+        -85.2,
+        47,
+        -83.4
+      ],
+      "reference": "lib/soo-locks-next.js:RIVER_BBOX"
+    },
+    {
+      "id": "duluth",
+      "bbox": [
+        46.3,
+        -92.5,
+        48.4,
+        -86.8
+      ],
+      "reference": "lib/duluth-canal.js:WESTERN_LAKE_BBOX"
+    },
+    {
+      "id": "welland",
+      "bbox": [
+        42.83,
+        -79.34,
+        43.28,
+        -79.1
+      ],
+      "reference": "api/welland-canal.js:BBOX"
+    },
+    {
+      "id": "cuyahoga",
+      "bbox": [
+        41.44,
+        -81.75,
+        41.54,
+        -81.65
+      ],
+      "reference": "public/assets/cuyahoga-watch-core.js:REGION"
+    },
+    {
+      "id": "calumet",
+      "bbox": [
+        41.66,
+        -87.59,
+        41.75,
+        -87.5
+      ],
+      "reference": "public/assets/calumet-watch-core.js:REGION"
+    },
+    {
+      "id": "massena",
+      "bbox": [
+        44.91,
+        -75,
+        45.06,
+        -74.62
+      ],
+      "reference": "data/seaway/places.json:massena"
+    },
+    {
+      "id": "iroquois",
+      "bbox": [
+        44.76,
+        -75.5,
+        44.97,
+        -75
+      ],
+      "reference": "data/seaway/places.json:iroquois"
+    },
+    {
+      "id": "thousand-islands",
+      "bbox": [
+        44.1,
+        -76.55,
+        44.77,
+        -75.45
+      ],
+      "reference": "data/seaway/places.json:thousand-islands"
+    },
+    {
+      "id": "beauharnois",
+      "bbox": [
+        45,
+        -74.65,
+        45.38,
+        -73.84
+      ],
+      "reference": "data/seaway/places.json:beauharnois"
+    },
+    {
+      "id": "montreal",
+      "bbox": [
+        45.35,
+        -73.75,
+        45.56,
+        -73.4
+      ],
+      "reference": "data/seaway/places.json:montreal"
+    }
+  ]
+}

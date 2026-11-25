@@ -49,7 +49,7 @@ function person(){return {'@type':'Person','@id':P,name:'Chris Izworski',url:'ht
 function pageShell({title,description,url,h1,subtitle,content,slug=null}){
  if(title.length>60||description.length>158)throw Error('Search snippet length: '+title+' '+description);
  const json=[
- person(),{'@type':'WebPage','@id':url+'#page',url,name:title,description,dateModified:slug?today:'2026-11-23',author:{'@id':P},publisher:{'@id':P},isPartOf:{'@id':'https://chrisizworski.com/#website'}},
+ person(),{'@type':'WebPage','@id':url+'#page',url,name:title,description,dateModified:slug?today:'2026-11-24',author:{'@id':P},publisher:{'@id':P},isPartOf:{'@id':'https://chrisizworski.com/#website'}},
  {'@type':'SoftwareApplication','@id':url+'#tool',name:h1,applicationCategory:'TravelApplication',operatingSystem:'Web',
  url,isAccessibleForFree:true,creator:{'@id':P},offers:{'@type':'Offer',price:0,priceCurrency:'USD'}}
  ];
@@ -125,18 +125,18 @@ function details(r){
  ].join('');
  return pageShell({title,description:desc.slice(0,158),url:base+r.slug+'/',h1:h,subtitle:r.location+' · '+area+' · NWS snow forecast, lake-effect alerts and published resort sources.',content:html,slug:r.slug});
 }
-// Operator opening-date announcements verified 2026-11-23. Targets are NOT actual lift status.
+// Operator opening-date announcements checked 2026-11-24. Targets are NOT actual lift status.
 // No inferred date from historical patterns, ticket sales, or a year-conflicted announcement.
-const openingEvidence=Object.freeze([["snowriver","Dec 5, 2026","Target","https://www.snowriver.com/mountain-info/hours-of-operation"],["caberfae-peaks","Dec 5, 2026","Target","https://caberfaepeaks.com/snow-report/"],["ski-brule","Nov 26, 2026","Target","https://skibrule.com/ski-brule-snowmaking-thanksgiving-opening-2026/"],["shanty-creek","Dec 17, 2026","Projected daily skiing","https://www.shantycreek.com/ski/lift-tickets-season-passes/"]]);
+const openingEvidence=Object.freeze([["snowriver","Dec 5, 2026","Target","https://www.snowriver.com/mountain-info/hours-of-operation"],["caberfae-peaks","Dec 5, 2026","Target","https://caberfaepeaks.com/snow-report/"],["ski-brule","Nov 26, 2026","Target","https://skibrule.com/ski-brule-snowmaking-thanksgiving-opening-2026/"],["shanty-creek","Dec 17, 2026","Projected daily skiing","https://www.shantycreek.com/ski/lift-tickets-season-passes/"],["the-highlands","Dec 11, 2026","Slopes target","https://www.highlandsharborsprings.com/hours"],["crystal-mountain","Dec 4, 2026","First scheduled lift hours; weather permitting","https://www.crystalmountain.com/ski/our-mountain/lift-hours"]]);
 function openingTable(){
  const selected=new Map(openingEvidence.map(([slug,date,qualification,url])=>[slug,{date,qualification,url}]));
  const rows=RESORTS.filter(r=>r.kind==='downhill').map(r=>{
   const source=selected.get(r.slug),url=source?.url||SOURCES[r.slug]?.url||r.snow;
   return '<tr><th scope="row">'+esc(r.name)+'</th><td>'+(source?esc(source.date)+' · '+esc(source.qualification):'Not announced')+
-  '</td><td><a rel="noopener noreferrer" target="_blank" href="'+esc(url)+'">Operator source</a></td><td>Nov 23, 2026</td></tr>';
+  '</td><td><a rel="noopener noreferrer" target="_blank" href="'+esc(url)+'">Operator source</a></td><td>Nov 24, 2026</td></tr>';
  }).join('');
  return '<section class="panel ski-opening-evidence" aria-labelledby="ski-opening-heading"><h2 id="ski-opening-heading">2026–27 resort opening announcements</h2>'+
- '<p class="small">Operator-published plans checked Nov 23, 2026. A projected opening is weather-dependent, not a confirmation lifts are running. Not announced means no defensible 2026–27 opening date was identified in the referenced operator source.</p>'+
+ '<p class="small">Operator-published plans checked Nov 24, 2026. A projected opening is weather-dependent, not a confirmation lifts are running. Not announced means no defensible 2026–27 opening date was identified in the referenced operator source.</p>'+
  '<div class="ski-table-scroll"><table><thead><tr><th>Resort</th><th>Opening date / plan</th><th>Source</th><th>Checked</th></tr></thead><tbody>'+rows+'</tbody></table></div></section>';
 }
 function index(){
@@ -146,8 +146,10 @@ function index(){
  '<section class="panel ski-operations" aria-labelledby="ski-operations-title"><p class="eyebrow">Operator lift report · Today</p>'+
  '<h2 id="ski-operations-title">Which Michigan ski resorts are open today?</h2>'+
  '<p class="ski-open-count" id="ski-open-count" aria-live="polite">Checking 17 downhill resorts against their official, dated lift reports…</p>'+
- '<div class="ski-status-controls"><button id="ski-open-filter" type="button" aria-pressed="false" class="ski-filter-chip">Open now</button><span class="small" id="ski-source-coverage">Only operator reports count as opening evidence.</span></div>'+
- '<div id="ski-operating-list" aria-live="polite"><p>Checking published reports. The operator links in the resort directory remain available if reports cannot be retrieved.</p></div>'+
+ '<div class="ski-status-controls js-only"><button id="ski-open-filter" type="button" aria-controls="ski-operating-list resort-list" aria-pressed="false" class="ski-filter-chip">Open now</button><button id="ski-plan-filter" type="button" aria-controls="ski-operating-list resort-list" aria-pressed="false" class="ski-filter-chip">Opening plans</button><label class="ski-area-label" for="ski-area-filter">Area <select id="ski-area-filter"><option value="all">All Michigan</option><option value="southern-lower">Southern Lower</option><option value="northern-lower">Northern Lower</option><option value="central-up">Central Upper</option><option value="western-up">Western Upper</option></select></label></div>'+
+ '<p class="small" id="ski-source-coverage">Only operator reports count as opening evidence.</p>'+
+ '<p class="ski-filter-result" id="ski-filter-result" role="status" aria-live="polite" aria-atomic="true"></p>'+
+ '<div id="ski-operating-list" aria-live="off"><p>Checking published reports. The operator links in the resort directory remain available if reports cannot be retrieved.</p></div>'+
  '<p class="small">Checked time means we fetched the page; it does not mean the resort updated its report. “Open” requires an operator-reported lift count dated within 36 hours; weather and forecasts cannot create an open claim.</p>'+
  '<h3>Are Michigan ski resorts open?</h3><p>'+esc("Michigan’s downhill ski season typically begins in late November or December, but that does not mean every resort opens together. Early-season snowmaking hills can prepare limited terrain during sustained cold weather, even when nearby fields are bare. Natural-snow-dependent slopes often need more accumulation before their first lift spins. The operator opening dates listed below show announced or targeted plans for the 2026–27 season; these dates can change and are not evidence that lifts actually opened. For today’s answer, use the dated mountain reports above. We mark a resort open only when its own report is no more than 36 hours old and explicitly counts at least one operating lift. A report showing zero lifts can establish a closure only under the same timestamp rule. Older reports are stale, inaccessible or undated pages remain unverified, and places without a usable official report connection remain not connected. Snow forecasts, webcam scenery and the calendar never substitute for an operator’s lift report.")+'</p></section>',
  openingTable(),
@@ -182,8 +184,8 @@ function index(){
 '<section class="panel"><p class="eyebrow">03 / All monitored hills</p><h2>Complete Michigan hill comparison</h2>',
  '<p class="small">Composite 0–100 score is <strong>provisional</strong>: nearby storm reports (20), NWS weekend snow forecast (25), drive-time value (27), ticket value (14), and base depth if confirmed (14). An active winter warning suspends a resort’s rank instead of increasing its powder score. Saturday and Sunday snow outlooks use separate 4 PM-to-4 PM Michigan local-time intervals. Missing resort data gets no positive points; a high score is not proof of open lifts, good roads or available tickets.</p>',
  '<div class="controls"><label>Region<select id="region"><option value="all">All Michigan</option><option value="southern-lower">Southern Lower</option><option value="northern-lower">Northern Lower</option><option value="central-up">Central Upper</option><option value="western-up">Western Upper</option></select></label></div>',
- '<p class="count" id="count">18 destinations · 17 downhill ski areas and one Nordic center</p>',
- '<div id="resort-list" class="ranking" aria-live="polite"><p>Requesting NWS conditions…</p></div></section>',
+ '<p class="count" id="count" aria-live="polite" aria-atomic="true">18 destinations · 17 downhill ski areas and one Nordic center</p>',
+ '<div id="resort-list" class="ranking" aria-live="off"><p>Requesting NWS conditions…</p></div></section>',
  '<section class="panel"><h2>All 18 mountain and winter-ski pages</h2><p>Each destination has its own forecast coordinates, matching NWS zones, ticket link, terrain context and travel comparisons.</p><ul>'+links+'</ul></section>',
  '<section class="panel faq"><h2>Michigan ski and lake-effect questions</h2>',
  '<details><summary>Where is Michigan getting lake-effect snow right now?</summary><p>Active NWS warning zones show where hazardous lake-effect conditions are expected or occurring. Actual snowfall observations are a different evidence layer, and ski-base depth must come from the resort.</p></details>',

@@ -1,0 +1,342 @@
+{
+  "status": "FROZEN_CONFIRMATION_OBSERVATION_COVERAGE_AUDIT_ONLY",
+  "sourceDatasetSha256": "63ca4323f6f14363f22c74d06f190b97de1a2f2fe6a7bcd141c221625a0b9a32",
+  "sourceCohortSha256": "5fb9599ae7442338a541651f5880b714747e5d311edc1956556f247221315563",
+  "maximumNearTimeMinutes": 15,
+  "leads": {
+    "24": {
+      "expected": 100,
+      "exact": 72,
+      "potentialNearTime": 18,
+      "otherMissing": 10
+    },
+    "48": {
+      "expected": 100,
+      "exact": 69,
+      "potentialNearTime": 17,
+      "otherMissing": 14
+    }
+  },
+  "stations": {
+    "45002": {
+      "24": {
+        "expected": 10,
+        "exact": 10,
+        "potentialNearTime": 0,
+        "otherMissing": 0
+      },
+      "48": {
+        "expected": 10,
+        "exact": 10,
+        "potentialNearTime": 0,
+        "otherMissing": 0
+      }
+    },
+    "45013": {
+      "24": {
+        "expected": 10,
+        "exact": 7,
+        "potentialNearTime": 0,
+        "otherMissing": 3
+      },
+      "48": {
+        "expected": 10,
+        "exact": 7,
+        "potentialNearTime": 0,
+        "otherMissing": 3
+      }
+    },
+    "45024": {
+      "24": {
+        "expected": 10,
+        "exact": 10,
+        "potentialNearTime": 0,
+        "otherMissing": 0
+      },
+      "48": {
+        "expected": 10,
+        "exact": 9,
+        "potentialNearTime": 1,
+        "otherMissing": 0
+      }
+    },
+    "45026": {
+      "24": {
+        "expected": 10,
+        "exact": 10,
+        "potentialNearTime": 0,
+        "otherMissing": 0
+      },
+      "48": {
+        "expected": 10,
+        "exact": 10,
+        "potentialNearTime": 0,
+        "otherMissing": 0
+      }
+    },
+    "45029": {
+      "24": {
+        "expected": 10,
+        "exact": 10,
+        "potentialNearTime": 0,
+        "otherMissing": 0
+      },
+      "48": {
+        "expected": 10,
+        "exact": 10,
+        "potentialNearTime": 0,
+        "otherMissing": 0
+      }
+    },
+    "45161": {
+      "24": {
+        "expected": 10,
+        "exact": 6,
+        "potentialNearTime": 0,
+        "otherMissing": 4
+      },
+      "48": {
+        "expected": 10,
+        "exact": 5,
+        "potentialNearTime": 0,
+        "otherMissing": 5
+      }
+    },
+    "45168": {
+      "24": {
+        "expected": 10,
+        "exact": 9,
+        "potentialNearTime": 1,
+        "otherMissing": 0
+      },
+      "48": {
+        "expected": 10,
+        "exact": 9,
+        "potentialNearTime": 1,
+        "otherMissing": 0
+      }
+    },
+    "45183": {
+      "24": {
+        "expected": 10,
+        "exact": 10,
+        "potentialNearTime": 0,
+        "otherMissing": 0
+      },
+      "48": {
+        "expected": 10,
+        "exact": 9,
+        "potentialNearTime": 0,
+        "otherMissing": 1
+      }
+    },
+    "45210": {
+      "24": {
+        "expected": 10,
+        "exact": 0,
+        "potentialNearTime": 10,
+        "otherMissing": 0
+      },
+      "48": {
+        "expected": 10,
+        "exact": 0,
+        "potentialNearTime": 10,
+        "otherMissing": 0
+      }
+    },
+    "45214": {
+      "24": {
+        "expected": 10,
+        "exact": 0,
+        "potentialNearTime": 7,
+        "otherMissing": 3
+      },
+      "48": {
+        "expected": 10,
+        "exact": 0,
+        "potentialNearTime": 5,
+        "otherMissing": 5
+      }
+    }
+  },
+  "dates": {
+    "2026-07-06": {
+      "24": {
+        "expected": 10,
+        "exact": 7,
+        "potentialNearTime": 1,
+        "otherMissing": 2
+      },
+      "48": {
+        "expected": 10,
+        "exact": 5,
+        "potentialNearTime": 2,
+        "otherMissing": 3
+      }
+    },
+    "2026-07-12": {
+      "24": {
+        "expected": 10,
+        "exact": 7,
+        "potentialNearTime": 1,
+        "otherMissing": 2
+      },
+      "48": {
+        "expected": 10,
+        "exact": 7,
+        "potentialNearTime": 1,
+        "otherMissing": 2
+      }
+    },
+    "2026-07-18": {
+      "24": {
+        "expected": 10,
+        "exact": 8,
+        "potentialNearTime": 1,
+        "otherMissing": 1
+      },
+      "48": {
+        "expected": 10,
+        "exact": 8,
+        "potentialNearTime": 1,
+        "otherMissing": 1
+      }
+    },
+    "2026-07-24": {
+      "24": {
+        "expected": 10,
+        "exact": 8,
+        "potentialNearTime": 2,
+        "otherMissing": 0
+      },
+      "48": {
+        "expected": 10,
+        "exact": 7,
+        "potentialNearTime": 1,
+        "otherMissing": 2
+      }
+    },
+    "2026-07-30": {
+      "24": {
+        "expected": 10,
+        "exact": 7,
+        "potentialNearTime": 2,
+        "otherMissing": 1
+      },
+      "48": {
+        "expected": 10,
+        "exact": 7,
+        "potentialNearTime": 2,
+        "otherMissing": 1
+      }
+    },
+    "2026-08-06": {
+      "24": {
+        "expected": 10,
+        "exact": 7,
+        "potentialNearTime": 2,
+        "otherMissing": 1
+      },
+      "48": {
+        "expected": 10,
+        "exact": 7,
+        "potentialNearTime": 2,
+        "otherMissing": 1
+      }
+    },
+    "2026-08-12": {
+      "24": {
+        "expected": 10,
+        "exact": 8,
+        "potentialNearTime": 2,
+        "otherMissing": 0
+      },
+      "48": {
+        "expected": 10,
+        "exact": 8,
+        "potentialNearTime": 1,
+        "otherMissing": 1
+      }
+    },
+    "2026-08-18": {
+      "24": {
+        "expected": 10,
+        "exact": 7,
+        "potentialNearTime": 2,
+        "otherMissing": 1
+      },
+      "48": {
+        "expected": 10,
+        "exact": 7,
+        "potentialNearTime": 2,
+        "otherMissing": 1
+      }
+    },
+    "2026-08-24": {
+      "24": {
+        "expected": 10,
+        "exact": 7,
+        "potentialNearTime": 2,
+        "otherMissing": 1
+      },
+      "48": {
+        "expected": 10,
+        "exact": 7,
+        "potentialNearTime": 2,
+        "otherMissing": 1
+      }
+    },
+    "2026-08-30": {
+      "24": {
+        "expected": 10,
+        "exact": 6,
+        "potentialNearTime": 3,
+        "otherMissing": 1
+      },
+      "48": {
+        "expected": 10,
+        "exact": 6,
+        "potentialNearTime": 3,
+        "otherMissing": 1
+      }
+    }
+  },
+  "stationProvenance": {
+    "45210": {
+      "status": "operator-deployment-confirmed",
+      "source": "https://cdip.ucsd.edu/a/stations/269p1/deployments/",
+      "crossReference": "https://seagull-erddap.glos.org/erddap/info/45210_archive/index.htmlTable",
+      "retrievedOn": "2026-11-25",
+      "operator": "CDIP / Scripps Institution of Oceanography",
+      "deployment": 4,
+      "mooredDate": "2026-04-30",
+      "recoveredDate": "2026-11-15",
+      "latitude": 44.0554,
+      "longitude": -87.0501,
+      "waterDepthM": 145,
+      "temperatureSensorDepthM": null,
+      "receiptTimesAuthenticated": false,
+      "notes": "Operator's deployment spans all ten research cycles; water depth is not sensor depth. GLOS gives nominal 15-minute resolution, not proof of exact sample or original receipt time."
+    },
+    "45214": {
+      "status": "platform-identity-and-archive-location-only",
+      "source": "https://seagull-erddap.glos.org/erddap/info/SPOT-31964C_archive/index.htmlTable",
+      "retrievedOn": "2026-11-25",
+      "operator": "Michigan Technological University",
+      "platform": "SPOT-31964C",
+      "latitude": 42.674,
+      "longitude": -87.0265,
+      "temperatureSensorDepthM": null,
+      "receiptTimesAuthenticated": false,
+      "notes": "GLOS identifies the WMO alias and overwinter observing purpose; no deployment interval for July/August authenticated. NDBC monthly samples do exist, so do not infer seasonal absence."
+    }
+  },
+  "sourceTimingDocumentation": "https://www.ndbc.noaa.gov/faq/acq.shtml",
+  "canPromoteModel": false,
+  "limitations": [
+    "Gap counts are computed from frozen archive diagnostics; potential near-time is not a newly acquired pair.",
+    "No exact observation is added, dropped, interpolated or replaced.",
+    "Archive times describe measurement acquisition, not proof of original receipt time.",
+    "No production qualification or historical sensor depth claim."
+  ]
+}

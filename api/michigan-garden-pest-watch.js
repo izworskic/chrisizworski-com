@@ -41,7 +41,7 @@ function parseForecast(data,nowMs=Date.now()){
   forecastLowF:Math.round(low),forecastHighF:Math.round(high),tags,
   summary:explanation,method:'Uncalibrated, qualitative 72-hour scouting cue from NWS hourly gridded forecast, not observed local pest activity or a validated infection model'};
 }
-async function nws(site,fetcher=fetch,nowMs=Date.now()){
+async function nws(site,fetcher=fetch,nowMs=Date.now(),includeDisease=false){
  const base=NWS+'/points/'+site.lat.toFixed(4)+','+site.lon.toFixed(4);
  const opts={headers:{accept:'application/geo+json','user-agent':UA},redirect:'error',signal:AbortSignal.timeout(6500)};
  const a=await fetcher(base,opts);
@@ -53,7 +53,9 @@ async function nws(site,fetcher=fetch,nowMs=Date.now()){
  if(url.protocol!=='https:'||url.hostname!=='api.weather.gov'||!/^(?:\/gridpoints\/[A-Za-z]{3}\/\d+,\d+\/forecast\/hourly\/?)$/.test(url.pathname)||url.search||url.hash)throw Error('NWS_UNTRUSTED_URL');
  const b=await fetcher(url.href,opts);
  if(!b.ok)throw Error('NWS_HOURLY_ERROR');
- return parseForecast(await b.json(),nowMs);
+ const raw=await b.json(),weather=parseForecast(raw,nowMs);
+ if(includeDisease)weather.diseaseEvidence=require('../lib/garden-disease-evidence.cjs').evaluate(raw,nowMs,d.properties?.timeZone);
+ return weather;
 }
 module.exports=async function handler(req,res){
  res.setHeader('X-Robots-Tag','noindex, nofollow');
@@ -75,12 +77,12 @@ module.exports=async function handler(req,res){
   return res.status(missing?404:503).json({status:'UNAVAILABLE',code:missing?'ZIP_NOT_MAPPED':'ZIP_LOOKUP_UNAVAILABLE',error:missing?'ZIP area not mapped. Choose a named city.':'ZIP mapping temporarily unavailable. Try a reference city.'});
  }
  let weather=UNKNOWN;
- try{weather=await nws(site);}catch(_error){weather={...UNKNOWN};}
+ try{weather=await nws(site,fetch,Date.now(),req.query?.mode==='disease');}catch(_error){weather={...UNKNOWN};}
  const result=core.decision({crop,stage,observed,weather});
  // Observations are voluntarily entered in the URL, not saved to a database.
  res.setHeader('Cache-Control',observed?'private, no-store':weather.status==='AVAILABLE'?'public, s-maxage=1800, stale-while-revalidate=300':'public, s-maxage=120');
  return res.status(200).json({...result,asOfDate:core.michiganDateParts().date,
-   location:{name:site.name||'Michigan ZIP area',kind:site.kind||'named-city',zip:site.zip||null,
+   location:{id:hasZip?null:siteId,name:site.name||'Michigan ZIP area',kind:site.kind||'named-city',zip:site.zip||null,
     coordinateMeaning:site.coordinateMeaning||'Reference city coordinate, not your property',
     source:hasZip?'US Census 2020 ZCTA interior point':'named Michigan reference city'},
    weather,regionalObservation:{status:'UNAVAILABLE',note:'Verified current Michigan scouting reports not yet ingested; absence of a report is not evidence that pests are absent.'},
