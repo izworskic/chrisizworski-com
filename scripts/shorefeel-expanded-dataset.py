@@ -66,16 +66,18 @@ def gap(sorted_times,target,past_only=False):
 EARLY_DATES=("2026-10-02","2026-10-05","2026-10-08","2026-10-11")
 WARM_DATES=("2026-07-15","2026-08-15","2026-09-15","2026-09-28")
 RELIABILITY_DATES=("2026-07-03","2026-07-09","2026-07-21","2026-07-27","2026-08-03","2026-08-09","2026-08-21","2026-08-27")
+CONFIRM_DATES=("2026-07-06","2026-07-12","2026-07-18","2026-07-24","2026-07-30","2026-08-06","2026-08-12","2026-08-18","2026-08-24","2026-08-30")
 def main():
     args=sys.argv[1:]
-    if args not in ([],["--early-october"],["--warm-season"],["--reliability"]):raise SystemExit("Usage: shorefeel-expanded-dataset.py [--early-october|--warm-season]")
+    if args not in ([],["--early-october"],["--warm-season"],["--reliability"],["--confirm-reliability"]):raise SystemExit("Usage: shorefeel-expanded-dataset.py [--early-october|--warm-season]")
     early=args==["--early-october"]
     warm=args==["--warm-season"]
     reliability=args==["--reliability"]
-    cycles=[dt.datetime.fromisoformat(day).replace(tzinfo=a.UTC) for day in (RELIABILITY_DATES if reliability else EARLY_DATES if early else WARM_DATES)] if early or warm or reliability else CYCLES
+    confirm=args==["--confirm-reliability"]
+    cycles=[dt.datetime.fromisoformat(day).replace(tzinfo=a.UTC) for day in (CONFIRM_DATES if confirm else RELIABILITY_DATES if reliability else EARLY_DATES if early else WARM_DATES)] if early or warm or reliability or confirm else CYCLES
     catalog={s["id"]:s for s in json.loads(pathlib.Path("data/buoy-stations.json").read_text())}
     with tempfile.TemporaryDirectory() as folder:
-        obs,meta=observations(pathlib.Path(folder),(7,8) if reliability else (7,8,9) if warm else (10,) if early else (10,11))
+        obs,meta=observations(pathlib.Path(folder),(7,8,9) if confirm else (7,8) if reliability else (7,8,9) if warm else (10,) if early else (10,11))
         results=[a.evaluate_cycle(c,obs,meta,catalog,True,STATIONS) for c in cycles]
     rows=[p for c in results for p in c["pairs"]]
     cohort=[p for c in results for p in c["cohort"]]
@@ -92,7 +94,7 @@ def main():
         groups[label]={}
         for lead in (24,48):
             subset=[p for p in rows if p["station"] in stations and p["leadHours"]==lead]
-            groups[label][lead]={"all":measure(subset),("monthly-quality-controlled-only" if warm or reliability else "october-quality-controlled-only"):measure([p for p in subset if p["baselineSourceKind"]==p["outcomeSourceKind"]=="monthly-quality-controlled"]),"includes-november-provisional":measure([p for p in subset if "provisional-realtime" in (p["baselineSourceKind"],p["outcomeSourceKind"])])}
+            groups[label][lead]={"all":measure(subset),("monthly-quality-controlled-only" if warm or reliability or confirm else "october-quality-controlled-only"):measure([p for p in subset if p["baselineSourceKind"]==p["outcomeSourceKind"]=="monthly-quality-controlled"]),"includes-november-provisional":measure([p for p in subset if "provisional-realtime" in (p["baselineSourceKind"],p["outcomeSourceKind"])])}
     for result in results:
         # Retain only one copy of observation file metadata in this dataset.
         result.pop("observations")
@@ -108,5 +110,8 @@ def main():
     if reliability:
         out["status"]="FROZEN_WARM_SEASON_RELIABILITY_REVIEW_ONLY"
         out["limitations"]=["Eight previously unscored dates fixed before acquisition, July/August only. Retrospective, not prospective.","160 expected exact slots. No date replacement or missing-data imputation. Same 06Z assumption and 04Z measured baseline.","Original source hashes and grid geometry retained. No production promotion."]
+    if confirm:
+        out["status"]="FROZEN_HORIZON_RELIABILITY_CONFIRMATION_ONLY"
+        out["limitations"]=["Ten fixed previously unscored dates, disjoint from development and eight-date review; retrospective and weather regimes may overlap.","200 expected exact slots. No date replacement or imputation. 06Z assumed decision, 04Z measured baseline, original f004/f030/f054.","No promotion, historical deployment and receipt times unauthenticated."]
     print(json.dumps(out,indent=2,allow_nan=False))
 if __name__=="__main__":main()
