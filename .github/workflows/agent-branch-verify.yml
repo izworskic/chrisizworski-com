@@ -130,7 +130,7 @@ jobs:
           if-no-files-found: warn
 
   duluth-product-pilot-qa:
-    if: github.event_name == 'pull_request' && github.head_ref == 'experience/duluth-product-engineering-pilot-20261124'
+    if: github.event_name == 'pull_request' && (github.head_ref == 'experience/duluth-product-engineering-pilot-20261124' || github.head_ref == 'fix/duluth-watch-failed-refresh-evidence')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
