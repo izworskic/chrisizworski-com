@@ -826,6 +826,17 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
      <div class="fj-add"><h3>Your garden harvest by year</h3><label for="fj-yield-year">Harvest year<input id="fj-yield-year" type="number" min="1900" max="2100"></label><div id="fj-yield-season" aria-live="polite"></div></div>
      <p class="fj-small">These are your recorded weights, not predicted yields. Compare similar crops and growing conditions. Differences do not prove one variety is better; weather, care, spacing and harvest practices can differ. <a href="/living-garden/">Plan bed layout and succession in The Living Garden</a>.</p>
     </details>
+    <details class="fj-add" id="fj-succession"><summary>Plan what to plant next</summary>
+     <h3>Make the most of a vacant bed.</h3><p>Compare up to three crops for the next planting in this space. Use the days to maturity from your own seed packet and allow extra time for slower fall growth.</p>
+     <form id="fj-succession-form" class="gs-form">
+      <div class="gs-fields"><label for="fj-succession-date">Date the space will be available<input id="fj-succession-date" type="date" required></label><label for="fj-succession-buffer">Extra days before typical fall frost<input id="fj-succession-buffer" type="number" min="0" max="60" value="14" required></label><label for="fj-succession-previous">Previous crop (confirm for rotation)<select id="fj-succession-previous"></select></label></div>
+      <label class="fj-check" for="fj-succession-free"><input id="fj-succession-free" type="checkbox"> This planting area will be free by the selected date, with no overlapping crop still growing.</label>
+      <div id="fj-succession-candidates"></div>
+      <button type="submit">Compare next crops</button>
+     </form>
+     <div id="fj-succession-result" role="status" aria-live="polite"></div>
+     <p class="fj-small">The spring date is a historical 25% freeze reference; the typical fall frost date is not a forecast or a frost-free guarantee. The extra days are your planning allowance, not a measured local adjustment. Use <a href="/michigan-soil-temperature/">soil temperature</a> and <a href="/national-tools/frost/cover-plants-tonight/">current frost guidance</a> before planting. <a href="https://www.canr.msu.edu/uploads/resources/pdfs/fall_vegetable_crops_%28e3172%29.pdf">MSU fall vegetable guide</a> · <a href="https://hort.extension.wisc.edu/articles/using-crop-rotation-home-vegetable-garden-0/">Extension crop rotation guidance</a>.</p>
+    </details>
     <details class="fj-add" id="fj-water"><summary>Water this planting</summary><h3>What does this bed need today?</h3><p id="fj-water-ledger" class="fj-small">Record rainfall, irrigation and a soil check in the journal above.</p>
      <form id="fj-water-form" class="gs-form"><div class="gs-fields">
       <label for="fj-water-crop">Watering crop profile<select id="fj-water-crop" required><option value="">Choose crop</option><option value="tomato">Tomatoes</option><option value="pepper">Peppers</option><option value="cucumber">Cucumbers</option><option value="squash">Squash</option><option value="beans">Beans</option><option value="corn">Sweet corn</option><option value="brassicas">Broccoli, cabbage, cauliflower</option><option value="leafy">Leafy greens</option><option value="roots">Root crops</option><option value="onion">Onions</option><option value="herbs">Herbs</option><option value="melons">Melons</option><option value="generic">Mixed vegetables</option></select></label>
@@ -1302,6 +1313,7 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
 <script defer src="/assets/garden-tools/garden-journal-water.js?v=20261124"></script>
 <script defer src="/assets/garden-tools/garden-disease.js?v=20261124"></script>
 <script defer src="/assets/garden-tools/garden-productivity.js?v=20261124"></script>
-<script defer src="/assets/garden-tools/field-journal-ui.js?v=20261124d"></script>
+<script defer src="/assets/garden-tools/garden-succession.js?v=20261124"></script>
+<script defer src="/assets/garden-tools/field-journal-ui.js?v=20261124e"></script>
 </body>
 </html>

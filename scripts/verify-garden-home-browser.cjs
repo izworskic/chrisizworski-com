@@ -265,6 +265,23 @@ const assert=require('node:assert/strict');
    assert.equal(await page.locator('#fj-yield-complete').isChecked(),false);
    assert.match(await page.locator('#fj-yield-summary').innerText(),/Open planting/);
    assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'productivity journal overflow at '+width);
+   await page.locator('#fj-succession > summary').click();
+   await page.locator('#fj-succession-date').fill('2025-07-15');
+   await page.locator('#fj-succession-previous').selectOption('tomatoes');
+   await page.locator('#fj-succession-free').check();
+   await page.locator('#fj-next-packet-0').fill('30');
+   await page.locator('#fj-next-packet-1').fill('80');
+   await page.locator('#fj-next-packet-2').fill('50');
+   await page.locator('#fj-next-model-2').selectOption('provider');
+   await page.locator('#fj-succession-form button[type=submit]').click();
+   await page.waitForFunction(()=>document.querySelector('#fj-succession-result')?.textContent.includes('of five regional historical seasons'));
+   assert.match(await page.locator('#fj-succession-result').innerText(),/Fits the packet calendar/);
+   assert.match(await page.locator('#fj-succession-result').innerText(),/Not enough time with this buffer/);
+   await page.locator('#fj-succession-free').uncheck();
+   await page.locator('#fj-succession-form button[type=submit]').click();
+   assert.match(await page.locator('#fj-succession-result').innerText(),/Bed availability unconfirmed/);
+   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+1),'succession journal overflow at '+width);
+
 
 
 

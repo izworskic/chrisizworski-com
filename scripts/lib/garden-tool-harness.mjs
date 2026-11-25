@@ -37,10 +37,12 @@ class Node {
     if (v && this.attrs.type === 'radio' && this.ownerDocument) for (const r of this.ownerDocument.all()) if (r !== this && r.attrs.type === 'radio' && r.attrs.name === this.attrs.name) r._checked = false;
   }
   get id() { return this.attrs.id || ''; }
+  set id(v) { this.setAttribute('id',v); }
   get className() { return this.attrs.class || ''; }
   set className(v) { this.attrs.class = v; }
   get name() { return this.attrs.name || ''; }
   get type() { return this.attrs.type || ''; }
+  set type(v) { this.setAttribute('type',v); }
   get href() { return this.attrs.href || ''; }
   set href(v) { this.attrs.href = String(v); }
   get disabled() { return 'disabled' in this.attrs; }
@@ -174,7 +176,7 @@ export function loadTool(file, { search = '', today = '2026-04-20', width = 760,
   class FixedDate extends RealDate { constructor(...a) { if (a.length) super(...a); else super(y, mo - 1, d, 12); } static now() { return new RealDate(y, mo - 1, d, 12).getTime(); } }
   const location = { href: 'https://chrisizworski.com' + route + search, search, hash: '', pathname: route, origin: 'https://chrisizworski.com' };
   const Blob = class extends globalThis.Blob { constructor(parts, o) { super(parts, o); doc.downloads.push(parts.join('')); } };
-  const ctx = vm.createContext({ document, location, navigator: {}, URL, URLSearchParams, Blob, Date: FixedDate, Math, JSON, Intl, setTimeout: fn => { fn(); return 0; }, clearTimeout() {}, console, history: { replaceState: (_s, _t, u) => doc.replaced.push(String(u)) }, print() { doc.printed = true; }, isSecureContext: false });
+  const ctx = vm.createContext({ document, location, navigator: {}, URL, URLSearchParams, Blob, Event, Date: FixedDate, Math, JSON, Intl, setTimeout: fn => { fn(); return 0; }, clearTimeout() {}, console, history: { replaceState: (_s, _t, u) => doc.replaced.push(String(u)) }, print() { doc.printed = true; }, isSecureContext: false });
   if (fetchStub) ctx.fetch = makeFetch(fetchStub, doc.fetched);
   ctx.window = ctx; ctx.innerWidth = width; ctx.addEventListener = () => {}; ctx.matchMedia = () => ({ matches: false, addEventListener() {} });
   // Scripts in document order: local garden-tool assets and inline code. Analytics and ad loaders are skipped.
