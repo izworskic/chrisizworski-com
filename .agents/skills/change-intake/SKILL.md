@@ -47,7 +47,7 @@ While unavailable, put new work as a comment on the existing PR for that tool, o
 
 ## 5. Limits
 
-Owner-adjustable defaults, proposed 2026-11-25 and pending owner confirmation:
+Owner-confirmed defaults (2026-11-25):
 
 - Open PRs per tool: 1.
 - Open agent PRs across the repository: 5.

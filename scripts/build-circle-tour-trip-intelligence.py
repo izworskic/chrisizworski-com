@@ -664,7 +664,7 @@ def main() -> None:
             raise SystemExit("Circle Tour 10-day static page is missing or stale")
     else:
         OUT.parent.mkdir(parents=True, exist_ok=True)
-        OUT.write_text(output, encoding="utf8")
+        OUT.write_text(output, encoding="utf8", newline="\n")
     print(f"Circle Tour: 10 days, {sum(x['miles'] for x in days)} editorial miles, "
           f"{sum(not x['complete'] for x in days)} days with an unresolved gateway; "
           f"{'checked' if args.check else 'generated'}")

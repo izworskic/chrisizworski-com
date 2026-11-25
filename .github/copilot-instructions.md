@@ -1,6 +1,6 @@
 # Repository-level coding instructions
 
-Read the repository root `AGENTS.md` before any change. Preserve authoritative extracted-tool repositories, SEO/canonical/Person identity, existing ad configuration, source accuracy, no-Redis policy and all owning-repo test gates.
+Read the repository root `AGENTS.md` before any change, and route tasks and single-lead skills via `docs/PRODUCT_ENGINEERING_OS.md` (`change-intake` before opening a PR). Preserve authoritative extracted-tool repositories, SEO/canonical/Person identity, existing ad configuration, source accuracy, no-Redis policy and all owning-repo test gates.
 
 **Growth figures stay private:** never put Search Console, GA4 or AdSense figures (clicks, impressions, CTR, position, earnings, RPM, views, sessions) in commits, PRs, reviews, comments, issues or docs. Cite page paths and direction only (AGENTS.md, Private growth data for agents).
 

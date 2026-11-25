@@ -62,7 +62,7 @@ test('outputs cannot escape through traversal or symlinks, and never overwrite',
   const temp=await fs.mkdtemp(path.join(os.tmpdir(),'foundry-output-'));
   try{
     await fs.mkdir(path.join(temp,'build'));
-    await fs.symlink(path.join(temp,'build'),path.join(temp,'linked'));
+    await fs.symlink(path.join(temp,'build'),path.join(temp,'linked'),process.platform==='win32'?'junction':'dir');
     await assert.rejects(restrictedOutput(temp,'linked/test','linked'),/symbolic link/);
     await assert.rejects(restrictedOutput(temp,'build/../public/x','build'),/inside/);
     const target=await restrictedOutput(temp,'build/test','build');

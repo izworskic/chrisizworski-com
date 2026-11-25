@@ -1,8 +1,8 @@
 {
   "schema": 1,
-  "auditedRevision": "5a8fc9ba1ddd94718aebd9061d5bc246b82262d4",
-  "auditDate": "2026-11-24",
-  "status": "inventory-verified-behavior-not-verified",
+  "auditedRevision": "0e42ef28fffb7ab8bb9653b4e02a8ca1c7561faa",
+  "auditDate": "2026-11-25",
+  "status": "inventory-and-framework-evaluated-per-skill-not-verified",
   "inventory": {
     "logicalSkills": 46,
     "mirrorFiles": 135,
@@ -10,8 +10,8 @@
     "claude": 46,
     "copilot": 43,
     "mirrorBlobMismatches": 0,
-    "dedicatedCaseSuites": 36,
-    "withoutDedicatedCasesLocated": 10,
+    "dedicatedCaseSuites": 46,
+    "withoutDedicatedCasesLocated": 0,
     "behaviorallyEvaluated": 0,
     "provenByPairedEvidence": 0
   },
@@ -27,26 +27,54 @@
     {
       "id": "orchestration-routing",
       "suite": "docs/skill-evals/product-engineering-os.md",
-      "planned": 25,
-      "baselineExecuted": 0,
-      "candidateExecuted": 0,
-      "status": "NOT_VERIFIED"
+      "planned": 32,
+      "baselineExecuted": 32,
+      "candidateExecuted": 32,
+      "status": "EVALUATED",
+      "baselinePassed": 29,
+      "candidatePassed": 32,
+      "gains": [
+        "O07",
+        "O21",
+        "O27"
+      ],
+      "regressions": 0,
+      "unauthorizedExplicitTriggers": 0,
+      "evaluatedAt": "2026-11-25",
+      "harness": "isolated-fresh-context-paired-workflow-flash",
+      "evidenceDoc": "docs/skill-evals/product-engineering-os-phase-1-results-20261124.md"
     },
     {
       "id": "design-trigger",
       "suite": "docs/skill-evals/production-design-standard.md",
       "planned": 20,
-      "baselineExecuted": 0,
-      "candidateExecuted": 0,
-      "status": "NOT_VERIFIED"
+      "baselineExecuted": 20,
+      "candidateExecuted": 20,
+      "status": "EVALUATED",
+      "baselinePassed": 20,
+      "candidatePassed": 20,
+      "gains": [],
+      "regressions": 0,
+      "unauthorizedExplicitTriggers": 0,
+      "evaluatedAt": "2026-11-25",
+      "harness": "isolated-fresh-context-paired-workflow-flash",
+      "evidenceDoc": "docs/skill-evals/product-engineering-os-phase-1-results-20261124.md"
     },
     {
       "id": "design-paired",
       "suite": "docs/skill-evals/production-design-standard.md",
       "planned": 8,
-      "baselineExecuted": 0,
-      "candidateExecuted": 0,
-      "status": "NOT_VERIFIED"
+      "baselineExecuted": 8,
+      "candidateExecuted": 8,
+      "status": "EVALUATED",
+      "baselinePassed": 8,
+      "candidatePassed": 8,
+      "gains": [],
+      "regressions": 0,
+      "unauthorizedExplicitTriggers": 0,
+      "evaluatedAt": "2026-11-25",
+      "harness": "isolated-fresh-context-paired-workflow-flash",
+      "evidenceDoc": "docs/skill-evals/product-engineering-os-phase-1-results-20261124.md"
     }
   ],
   "skills": [
@@ -63,8 +91,8 @@
         ".agents/skills/experience-investment/SKILL.md",
         ".claude/skills/experience-investment/SKILL.md"
       ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
+      "caseSuite": "docs/skill-evals/experience-and-specialist-design-skills.md",
+      "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
         "runs": [],
@@ -92,8 +120,8 @@
         ".claude/skills/design-reconnaissance/SKILL.md",
         ".github/skills/design-reconnaissance/SKILL.md"
       ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
+      "caseSuite": "docs/skill-evals/experience-and-specialist-design-skills.md",
+      "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
         "runs": [],
@@ -115,8 +143,8 @@
         ".claude/skills/editorial-diagrams/SKILL.md",
         ".github/skills/editorial-diagrams/SKILL.md"
       ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
+      "caseSuite": "docs/skill-evals/experience-and-specialist-design-skills.md",
+      "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
         "runs": [],
@@ -138,8 +166,8 @@
         ".claude/skills/interactive-2d-scenes/SKILL.md",
         ".github/skills/interactive-2d-scenes/SKILL.md"
       ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
+      "caseSuite": "docs/skill-evals/experience-and-specialist-design-skills.md",
+      "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
         "runs": [],
@@ -160,8 +188,8 @@
         ".agents/skills/penpot-design/SKILL.md",
         ".claude/skills/penpot-design/SKILL.md"
       ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
+      "caseSuite": "docs/skill-evals/explicit-only-capabilities.md",
+      "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
         "runs": [],
@@ -183,8 +211,8 @@
         ".claude/skills/stitch-concept-review/SKILL.md",
         ".github/skills/stitch-concept-review/SKILL.md"
       ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
+      "caseSuite": "docs/skill-evals/explicit-only-capabilities.md",
+      "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
         "runs": [],
@@ -205,8 +233,8 @@
         ".agents/skills/rea/SKILL.md",
         ".claude/skills/rea/SKILL.md"
       ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
+      "caseSuite": "docs/skill-evals/explicit-only-capabilities.md",
+      "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
         "runs": [],
@@ -458,8 +486,8 @@
         ".claude/skills/public-data-scout/SKILL.md",
         ".github/skills/public-data-scout/SKILL.md"
       ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
+      "caseSuite": "docs/skill-evals/experience-and-specialist-design-skills.md",
+      "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
         "runs": [],
@@ -734,8 +762,8 @@
         ".claude/skills/playwright-browser-qa/SKILL.md",
         ".github/skills/playwright-browser-qa/SKILL.md"
       ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
+      "caseSuite": "docs/skill-evals/browser-qa-skills.md",
+      "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
         "runs": [],
@@ -768,8 +796,8 @@
         ".claude/skills/agent-browser-qa/SKILL.md",
         ".github/skills/agent-browser-qa/SKILL.md"
       ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
+      "caseSuite": "docs/skill-evals/browser-qa-skills.md",
+      "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
         "runs": [],
@@ -860,7 +888,7 @@
       "routing": "Before any PR in this repository",
       "authorization": "relevant-authorized-task",
       "documentedState": "documented",
-      "auditedSkillBlob": "5c7451c5fc114ecde41980667c783afd0a794cd7",
+      "auditedSkillBlob": "300f7fe26538de738795b413ac1ede28a14c288f",
       "mirrors": [
         ".agents/skills/change-intake/SKILL.md",
         ".claude/skills/change-intake/SKILL.md",
@@ -952,7 +980,7 @@
       "routing": "When search demand, 404s or sitemap health is in question",
       "authorization": "relevant-authorized-task",
       "documentedState": "documented",
-      "auditedSkillBlob": "fab521be223da3808f4c42d3c45dfa896dff1ff2",
+      "auditedSkillBlob": "74380e3f9bfac7be735218933aea7342f0b59d84",
       "mirrors": [
         ".agents/skills/search-demand/SKILL.md",
         ".claude/skills/search-demand/SKILL.md",
@@ -998,7 +1026,7 @@
       "routing": "When building or redesigning a tool map",
       "authorization": "relevant-authorized-task",
       "documentedState": "documented",
-      "auditedSkillBlob": "1cbe9f8d694d47a2799fe038f641e10bf9a53959",
+      "auditedSkillBlob": "e2cce8ce4721ca20f632e77b62e5da1563e71d2c",
       "mirrors": [
         ".agents/skills/custom-basemap/SKILL.md",
         ".claude/skills/custom-basemap/SKILL.md",
@@ -1257,6 +1285,60 @@
         "freshness-watch"
       ],
       "boundary": "freshness-watch detects stale or dead data; incident-rollback recovers production after a bad deploy. A dead feed is not fixed by a rollback.",
+      "disposition": "retain-distinct"
+    },
+    {
+      "skills": [
+        "search-demand",
+        "opportunity-scout",
+        "experience-investment",
+        "web-quality-seo"
+      ],
+      "boundary": "search-demand gathers read-only query and 404/sitemap evidence; opportunity-scout selects or rejects new tools with registry bestFitScoring; experience-investment designs the selected tool; web-quality-seo protects on-page metadata, canonical and Person integrity.",
+      "disposition": "evaluate-routing-overlap"
+    },
+    {
+      "skills": [
+        "share-and-embed",
+        "tool-handoffs",
+        "my-spots-offline"
+      ],
+      "boundary": "tool-handoffs routes visitors between owned registry tools (one tool per PR); share-and-embed handles external stateful URLs, static share images and noindex embeds; my-spots-offline stores personal saved places on device only.",
+      "disposition": "retain-distinct"
+    },
+    {
+      "skills": [
+        "photo-sourcing",
+        "editorial-diagrams",
+        "design-reconnaissance"
+      ],
+      "boundary": "photo-sourcing verifies real-place photograph provenance, location and license; editorial-diagrams explains physical mechanisms in HTML/SVG; design-reconnaissance studies comparable external interfaces without copying assets.",
+      "disposition": "retain-distinct"
+    },
+    {
+      "skills": [
+        "custom-basemap",
+        "geospatial-intelligence"
+      ],
+      "boundary": "custom-basemap governs regional vector basemap presentation, MapLibre styling and static range-request hosting; geospatial-intelligence governs spatial joins, proximity math, geometry validity and legal access caveats.",
+      "disposition": "retain-distinct"
+    },
+    {
+      "skills": [
+        "return-visit-design",
+        "return-metrics",
+        "answer-feedback"
+      ],
+      "boundary": "return-visit-design defines the return contract; answer-feedback instruments one-tap answer usefulness at launch or redesign; return-metrics reads back cohort retention and feedback events from GA4 without writing code.",
+      "disposition": "retain-narrow-routing"
+    },
+    {
+      "skills": [
+        "change-intake",
+        "skill-eval",
+        "vercel-cost-guard"
+      ],
+      "boundary": "change-intake checks PR overlap and review-limit gates before starting work; skill-eval validates skill triggers and paired agent behavior; vercel-cost-guard audits incremental build, function, cron and caching cost.",
       "disposition": "retain-distinct"
     }
   ]

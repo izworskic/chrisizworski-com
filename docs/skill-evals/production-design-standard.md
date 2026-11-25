@@ -1,5 +1,5 @@
 # Production Design Standard: candidate evaluation
-Status: DRAFT, NOT VERIFIED. Written before any activation or skill edit. No independent baseline or candidate agent runs have been executed. Existing skill-eval requirements remain in force.
+Status: EVALUATED (2026-11-25, 40 fresh-context trigger sessions + 16 fresh-context paired behavioral sessions; see `product-engineering-os-phase-1-results-20261124.md`). Kept scoped as an Experience OS reference without adding a standalone skill or root instruction bloat.
 
 ## Trigger cases for the proposed Experience Investment / Experience OS reference
 Use the same owning-repo context and current instructions in fresh sessions. "Yes" means load the proposed production design reference, not a new standalone skill.

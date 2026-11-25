@@ -56,10 +56,21 @@ test('no unevaluated skill receives invented validation or retirement',()=>{
  assert.equal(reg.inventory.provenByPairedEvidence,0);
  for(const x of reg.frameworkEvaluations){
   assert.ok(fs.statSync(path.join(root,x.suite)).isFile());
-  assert.equal(x.status,'NOT_VERIFIED');
-  assert.equal(x.baselineExecuted,0);
-  assert.equal(x.candidateExecuted,0);
   assert.ok(x.planned>0);
+  if(x.status==='NOT_VERIFIED'){
+   assert.equal(x.baselineExecuted,0);
+   assert.equal(x.candidateExecuted,0);
+  }else if(x.status==='EVALUATED'){
+   assert.equal(x.baselineExecuted,x.planned,x.id);
+   assert.equal(x.candidateExecuted,x.planned,x.id);
+   assert.ok(x.baselinePassed>=0&&x.baselinePassed<=x.planned,x.id);
+   assert.ok(x.candidatePassed>=x.baselinePassed&&x.candidatePassed<=x.planned,x.id);
+   assert.equal(x.regressions,0,x.id);
+   assert.equal(x.unauthorizedExplicitTriggers,0,x.id);
+   assert.ok(fs.statSync(path.join(root,x.evidenceDoc)).isFile(),x.id);
+  }else{
+   assert.fail(x.id+' has unsupported framework evaluation status: '+x.status);
+  }
  }
  for(const o of reg.overlapReview){
   assert.ok(o.skills.length>=2&&o.boundary.length>0&&o.disposition.startsWith('retain')||o.skills.length>=2&&o.boundary.length>0&&o.disposition==='evaluate-routing-overlap');

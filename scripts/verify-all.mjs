@@ -18,10 +18,23 @@
 // a branch pass: fix the code, or fix the assertion in a commit whose message says so (AGENTS.md §6c).
 
 import { spawnSync } from 'node:child_process';
+import fs from 'node:fs';
 import path from 'node:path';
 
 const root = path.resolve(import.meta.dirname, '..');
 const FAIL_FAST = process.argv.includes('--fail-fast');
+
+function spawnNpm(args, options) {
+  const cli = process.env.npm_execpath
+    || path.join(path.dirname(process.execPath), 'node_modules', 'npm', 'bin', 'npm-cli.js');
+  if (fs.existsSync(cli)) {
+    return spawnSync(process.execPath, [cli, ...args], options);
+  }
+  if (process.platform === 'win32') {
+    return spawnSync(process.env.ComSpec || 'cmd.exe', ['/d', '/s', '/c', 'npm.cmd', ...args], options);
+  }
+  return spawnSync('npm', args, options);
+}
 
 // The step list lives in package.json ("verify:all": "node scripts/verify-all.mjs test verify ...")
 // so that each benchmark's own "am I still in the gate?" guard keeps working, and so an agent
@@ -92,12 +105,12 @@ for (const step of STEPS) {
 
   const args = ['run', script, ...(extra.length ? ['--', ...extra] : [])];
   const t = Date.now();
-  const r = spawnSync('npm', args, { cwd: root, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
+  const r = spawnNpm(args, { cwd: root, encoding: 'utf8', maxBuffer: 64 * 1024 * 1024 });
   const secs = ((Date.now() - t) / 1000).toFixed(1);
   if (r.status === 0) {
     console.log(`ok    ${label}  (${secs}s)`);
   } else {
-    const out = `${r.stdout || ''}${r.stderr || ''}`;
+    const out = `${r.stdout || ''}${r.stderr || ''}${r.error ? `\n${r.error.message}` : ''}`;
     failures.push({ label, tail: excerpt(out) });
     console.log(`FAIL  ${label}  (${secs}s)`);
     if (FAIL_FAST) break;
