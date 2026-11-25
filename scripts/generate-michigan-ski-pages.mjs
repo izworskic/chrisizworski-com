@@ -3,6 +3,7 @@ import path from 'node:path';
 import { createRequire } from 'node:module';
 const require=createRequire(import.meta.url);
 const {RESORTS}=require('../lib/michigan-ski/resorts');
+const {placeSearch}=require('../public/assets/visitor-map-links.js');
 const {SOURCES}=require('../lib/michigan-ski/official-reports');
 const {hubTitle,titleCanClaimOpen}=require('../lib/michigan-ski/title-gate');
 const base='https://chrisizworski.com/michigan-ski-hills/';
@@ -78,7 +79,7 @@ function pageShell({title,description,url,h1,subtitle,content,slug=null}){
  content,
  '<footer class="foot"><p>Conditions and ski operations can change quickly. NWS forecast, nearby snow observations, active alerts and resort-reported operations are distinct sources. A warning is never a promise of powder or safe travel.</p>',
  '<p>Built by <a rel="author" href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · © 2026 Chris Izworski · <a href="/michigan-ski-hills/">Michigan Ski Hills</a> · <a href="https://www.weather.gov/">National Weather Service</a></p></footer></main>',
- '<script defer src="/assets/michigan-ski.js"></script><script defer src="/assets/michigan-ski-decision.js"></script><script defer src="/assets/michigan-ski-map.js"></script></body></html>'
+ '<script defer src="/assets/michigan-ski.js"></script><script defer src="/assets/michigan-ski-decision.js"></script><script defer src="/assets/visitor-map-links.js"></script><script defer src="/assets/michigan-ski-map.js"></script></body></html>'
  ].join('\n');
 }
 function details(r){
@@ -141,7 +142,11 @@ function openingTable(){
 }
 function index(){
  const url=base;
- const links=RESORTS.map(r=>'<li><a href="/michigan-ski-hills/'+r.slug+'/">'+esc(r.name)+'</a> — '+esc(r.location)+' ('+esc(r.region.replaceAll('-',' '))+')</li>').join('');
+ const links=RESORTS.map(r=>{
+  const mapsUrl=placeSearch({role:'public-place',query:r.name+', '+r.location+', Michigan'});
+  return '<li><a href="/michigan-ski-hills/'+r.slug+'/">'+esc(r.name)+'</a> — '+esc(r.location)+' ('+esc(r.region.replaceAll('-',' '))+')'+
+   (mapsUrl?' · <a class="ski-directory-maps" href="'+esc(mapsUrl)+'" target="_blank" rel="noopener noreferrer" aria-label="View '+esc(r.name)+' in Google Maps">View in Google Maps</a>':'')+'</li>';
+ }).join('');
  const html=[
  '<section class="panel ski-operations" aria-labelledby="ski-operations-title"><p class="eyebrow">Operator lift report · Today</p>'+
  '<h2 id="ski-operations-title">Which Michigan ski resorts are open today?</h2>'+

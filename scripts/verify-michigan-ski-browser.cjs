@@ -62,6 +62,8 @@ async function run(){
    await page.waitForFunction(()=>document.querySelectorAll('#ski-resort-carousel .ski-carousel-card').length===18,null,{timeout:20000});
    need(await page.locator('#ski-point-map .ski-dot').count()===18,width+' map contains all 18 resort markers');
    need(await page.locator('#ski-resort-carousel .is-selected').count()===1,width+' exactly one selected card');
+   const dynamicMaps=await page.locator('.ski-carousel-card').evaluateAll(cards=>cards.map(card=>({name:card.querySelector('.ski-card-select').textContent,href:card.querySelector('.ski-card-maps')?.href,staticHref:document.querySelector('.ski-directory a[href="/michigan-ski-hills/'+card.dataset.slug+'/"]')?.parentElement.querySelector('.ski-directory-maps')?.href})));
+   need(dynamicMaps.every(v=>v.href&&v.href===v.staticHref&&new URL(v.href).pathname==='/maps/search/'&&new URL(v.href).searchParams.get('query').startsWith(v.name+',')),width+' named resort search matches no-JS link');
    const first=await page.locator('#ski-resort-carousel .is-selected').getAttribute('data-slug');
    await page.locator('#ski-carousel-next').click();
    need(await page.locator('#ski-resort-carousel .is-selected').getAttribute('data-slug')!==first,width+' next arrow changes selected hill');
@@ -154,7 +156,10 @@ async function run(){
   need(!(await page.locator('#ski-open-filter').isVisible()),'no-JS Open now hidden');
   need(!(await page.locator('#ski-plan-filter').isVisible()),'no-JS Opening plans hidden');
   need(!(await page.locator('#ski-resort-carousel').isVisible()),'no-JS map carousel hidden without working script');
-  need(await page.locator('.ski-directory a').count()===18,'all 18 guide links available with no JavaScript');
+  need(await page.locator('.ski-directory a:not(.ski-directory-maps)').count()===18,'all 18 guide links available with no JavaScript');
+  need(await page.locator('.ski-directory-maps').count()===18,'all 18 named Google Maps searches available with no JavaScript');
+  const staticMaps=await page.locator('.ski-directory-maps').evaluateAll(links=>links.map(a=>a.href));
+  need(staticMaps.every(h=>new URL(h).pathname==='/maps/search/'&&new URL(h).searchParams.has('query')),'static links are searches, not directions');
   const img=path.join(out,'360-no-javascript.png');await page.screenshot({path:img});report.screenshots.push(path.basename(img));
   report.cases.push({width:360,javaScript:false,openingRows:17,answerVisible:true});
   await ctx.close();

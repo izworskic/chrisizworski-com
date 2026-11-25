@@ -98,7 +98,14 @@ function cardFor(r){
  source.target='_blank';source.rel='noopener noreferrer';
  const compare=html('button',null,'Compare trip cost');compare.type='button';
  compare.addEventListener('click',()=>document.dispatchEvent(new CustomEvent('michigan-ski:select',{detail:r.slug})));
- links.append(detail,source,compare);
+ links.append(detail,source);
+ const mapsUrl=window.VisitorMapLinks?.placeSearch({role:'public-place',query:r.name+', '+r.location+', Michigan'});
+ if(mapsUrl){
+  const maps=html('a','ski-card-maps','View in Google Maps');maps.href=mapsUrl;
+  maps.target='_blank';maps.rel='noopener noreferrer';maps.setAttribute('aria-label','View '+r.name+' in Google Maps');
+  links.append(maps);
+ }
+ links.append(compare);
  card.append(heading,location,weather,operating,date);
  if(alerts.length)card.append(html('p','event','NWS winter warning: check travel conditions'));
  if(filters.planOnly){

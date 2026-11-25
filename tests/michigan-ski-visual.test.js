@@ -56,3 +56,10 @@ test('map and carousel respond to day selection and preserve keyboard operation'
   assert.doesNotThrow(()=>new Function(read(p)),p);
  }
 });
+
+test('resort location searches use shared place contract and static fallback, never directions',()=>{
+ const map=read('public/assets/michigan-ski-map.js'),g=read('scripts/generate-michigan-ski-pages.mjs');
+ assert.match(map,/VisitorMapLinks\?\.placeSearch\(/);assert.match(g,/placeSearch\(\{role:'public-place'/);
+ assert.ok(g.includes('ski-directory-maps'));assert.ok(g.includes('/assets/visitor-map-links.js'));
+ assert.doesNotMatch(map,/verifiedDirections|maps\/dir/);
+});
