@@ -209,3 +209,31 @@ test('decision-time model regimes reproduce without using realized temperature t
  assert.equal(expected.cohorts.confirmation.leads[48].largeChange.FP,6);
  assert.equal(expected.canPromoteModel,false);
 });
+
+test('physical signal comparison reproduces with equal feature-complete denominators and no future features',()=>{
+ const {compare}=require('../scripts/shorefeel-physical-signal-comparison.cjs');
+ const src=require('../data/shorefeel/physics-regime-actual-20261125.json');
+ const expected=require('../data/shorefeel/physical-signal-comparison-actual-20261125.json');
+ const fs=require('node:fs'),crypto=require('node:crypto'),path=require('node:path');
+ const hash=n=>crypto.createHash('sha256').update(fs.readFileSync(path.join(__dirname,'../data/shorefeel/'+n+'-actual-20261125.json'))).digest('hex');
+ assert.equal(src.cohorts.review.sourceSha256,hash('reliability-cohort'));
+ assert.equal(src.cohorts.confirmation.sourceSha256,hash('horizon-confirm-cohort'));
+ assert.equal(Object.keys(src.sourceFiles).length,20);
+ assert.ok(Object.values(src.sourceFiles).every(s=>!s.error&&/^[a-f0-9]{64}$/.test(s.sha256)));
+ const r=compare(src);assert.deepEqual(r,expected);assert.equal(r.canPromoteModel,false);
+ for(const [name,n24,n48] of [['review',53,50],['confirmation',69,66]]){
+  for(const [h,n] of [[24,n24],[48,n48]]){
+   const l=r.cohorts[name][h];assert.equal(l.paired,n);
+   for(const s of Object.values(l.pairedScores)){
+    assert.equal(s.n,n);assert.equal(s.TP+s.FP+s.TN+s.FN,n);
+    assert.equal(s.TP+s.FN,l.actualLarge);
+   }
+  }
+ }
+ assert.equal(r.cohorts.confirmation[48].pairedScores.either.TP,7);
+ assert.equal(r.cohorts.confirmation[48].pairedScores.either.FP,5);
+ const late=structuredClone(src);late.cohorts.review.histories[0].latestMeasurementAt=late.cohorts.review.histories[0].cutoffExclusive;
+ assert.throws(()=>compare(late),/timing/);
+ const incomplete=structuredClone(src);incomplete.cohorts.review.rows.pop();
+ assert.throws(()=>compare(incomplete),/denominators/);
+});
