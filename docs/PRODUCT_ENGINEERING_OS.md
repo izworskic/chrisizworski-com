@@ -72,7 +72,7 @@ Share semantic type roles, spacing, focus, source/time/status vocabulary, select
 
 Eight standard responsibilities already mapped to existing authorities (not eight new skills): visual design and art direction (Experience OS candidate); interaction and geography (Experience OS and existing Google Maps standard); editorial voice (plain-voice and interpretive guidance); data presentation (source contracts and visual-data-storytelling candidate); scientific engineering (Python Intelligence OS); performance and accessibility (web quality and Playwright); evidence and release (Foundry and owning-repo gates). These should eventually share the proven component library, not duplicate rules in each skill.
 
-## 5. Skill catalog: all 42 documented capabilities
+## 5. Skill catalog: all 45 documented capabilities
 
 The linked SKILL.md is the actual method. This index describes routing and expected output, not a substitute for reading it. Candidate means independent behavioral validation is pending; documented or available does not mean proven. Do not infer maturity from a file's presence. Mirror copies remain governed by skill-lint; experience-investment, penpot-design and rea are explicitly exempt from a Copilot folder copy (Copilot can reference the Codex files through its instructions).
 
@@ -147,6 +147,16 @@ The linked SKILL.md is the actual method. This index describes routing and expec
 | [skill-eval](../.agents/skills/skill-eval/SKILL.md) | Skill creation, edits, audit or suspected misrouting | Fresh-context trigger/paired evidence | Required for skill changes; not a substitute for CI |
 | [plain-voice](../.agents/skills/plain-voice/SKILL.md) | Visible copy or generated-sounding text | Human readable copy, unchanged facts and pinned fields | When relevant |
 | [vercel-cost-guard](../.agents/skills/vercel-cost-guard/SKILL.md) | Functions, cron, middleware, rewrites, caching, images or build cost | Actual usage and incremental cost record | When relevant |
+
+### Network operations (3)
+
+Added 2026-11-25 for running the agent crew and keeping shipped tools alive. Cases in [crew operations skill evals](skill-evals/crew-operations-skills.md); behavioral evaluation pending.
+
+| Skill | Select when | Required output | Routing |
+| --- | --- | --- | --- |
+| [change-intake](../.agents/skills/change-intake/SKILL.md) | Opening or starting any PR, overlapping PRs, Codex review limit | Intake line in the PR body; extend, supersede or hold instead of a duplicate | Before any PR in this repository |
+| [freshness-watch](../.agents/skills/freshness-watch/SKILL.md) | Live feeds, crons, scheduled commits, silently stale data | Freshness contract and portfolio-sentinel entry, or NOT MONITORED | When a live or scheduled-data tool ships or changes |
+| [incident-rollback](../.agents/skills/incident-rollback/SKILL.md) | Production broken after a deploy, rollback or revert requests | Prepared rollback or revert, live verification, postmortem entry | When production is affected; owner runs rollback and merge |
 
 ## 6. Practical routing recipes (examples, not mandatory packs)
 

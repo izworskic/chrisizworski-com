@@ -4,13 +4,13 @@
   "auditDate": "2026-11-24",
   "status": "inventory-verified-behavior-not-verified",
   "inventory": {
-    "logicalSkills": 42,
-    "mirrorFiles": 123,
-    "codex": 42,
-    "claude": 42,
-    "copilot": 39,
+    "logicalSkills": 45,
+    "mirrorFiles": 132,
+    "codex": 45,
+    "claude": 45,
+    "copilot": 42,
     "mirrorBlobMismatches": 0,
-    "dedicatedCaseSuites": 18,
+    "dedicatedCaseSuites": 21,
     "withoutDedicatedCasesLocated": 24,
     "behaviorallyEvaluated": 0,
     "provenByPairedEvidence": 0
@@ -1035,6 +1035,75 @@
         "decision": "retain-pending-evidence"
       },
       "implementationEvidence": []
+    },
+    {
+      "id": "change-intake",
+      "family": "Network operations",
+      "scope": "Opening or starting any PR, overlapping PRs, Codex review limit",
+      "expectedOutput": "Intake line in the PR body; extend, supersede or hold instead of a duplicate PR",
+      "routing": "Before any PR in this repository",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "bb8196f34c78534b841ab2e1d8ee9a716ddc4754",
+      "mirrors": [
+        ".agents/skills/change-intake/SKILL.md",
+        ".claude/skills/change-intake/SKILL.md",
+        ".github/skills/change-intake/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/crew-operations-skills.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "freshness-watch",
+      "family": "Network operations",
+      "scope": "Live feeds, crons, scheduled commits and silently stale data",
+      "expectedOutput": "Freshness contract table and a portfolio-sentinel feed entry, or NOT MONITORED",
+      "routing": "When a live or scheduled-data tool ships or changes",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "51b81c360c69d18fe061cadc19783ef093a6a718",
+      "mirrors": [
+        ".agents/skills/freshness-watch/SKILL.md",
+        ".claude/skills/freshness-watch/SKILL.md",
+        ".github/skills/freshness-watch/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/crew-operations-skills.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "incident-rollback",
+      "family": "Network operations",
+      "scope": "Production broken after a deploy, rollback or revert requests",
+      "expectedOutput": "Prepared rollback or revert, live verification and a postmortem entry",
+      "routing": "When production is affected; owner runs rollback and merge",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "d67a90aa2f48070382a791b156205c6a0e859410",
+      "mirrors": [
+        ".agents/skills/incident-rollback/SKILL.md",
+        ".claude/skills/incident-rollback/SKILL.md",
+        ".github/skills/incident-rollback/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/crew-operations-skills.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
     }
   ],
   "overlapReview": [
@@ -1154,6 +1223,23 @@
       ],
       "boundary": "Distinct explicit-only capabilities. Similar design vocabulary never grants invocation; connection and target must be verified.",
       "disposition": "retain-explicit-only"
+    },
+    {
+      "skills": [
+        "freshness-watch",
+        "data-contract-validation",
+        "condition-alerts"
+      ],
+      "boundary": "Data contracts validate sources at ingestion; condition alerts serve visitor calendars and feeds; freshness-watch keeps shipped tools registered with the existing portfolio-sentinel monitor.",
+      "disposition": "retain-distinct"
+    },
+    {
+      "skills": [
+        "incident-rollback",
+        "freshness-watch"
+      ],
+      "boundary": "freshness-watch detects stale or dead data; incident-rollback recovers production after a bad deploy. A dead feed is not fixed by a rollback.",
+      "disposition": "retain-distinct"
     }
   ]
 }
