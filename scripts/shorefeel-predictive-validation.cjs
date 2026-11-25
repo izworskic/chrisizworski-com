@@ -22,7 +22,7 @@ function summaryAudit(report){
  const w=report.coolingWatch;
  return {status:'AGGREGATE_ONLY_NOT_REPRODUCED',period:report.period,leads,cooling:{reportedTP:w.caught,reportedFP:w.flagged-w.caught,reportedFN:w.realDrops3F-w.caught,reportedTN:w.of-w.flagged-w.realDrops3F+w.caught,reportedPrecision:round(w.caught/w.flagged),reportedRecall:round(w.caught/w.realDrops3F)},rowLevelEvidence:false,canPromoteModel:false};
 }
-function evaluate(input){
+function evaluate(input,{includePairs=false}={}){
  if(!input||input.schemaVersion!==1||!['synthetic','historical-review'].includes(input.kind))throw Error('Invalid schema or evidence kind');
  const cutoff=stamp(input.holdoutStartsAt),end=stamp(input.holdoutEndsAt),asOf=stamp(input.asOf);
  if(!Number.isFinite(cutoff)||!Number.isFinite(end)||!Number.isFinite(asOf)||cutoff<=Date.parse('2026-10-13T23:59:59Z')||end<=cutoff||asOf<end+48*H)throw Error('Holdout must follow original backtest and fully mature before audit');
@@ -67,7 +67,7 @@ function evaluate(input){
   if(!f){missing[h].forecast++;continue;}
   const o=observations.get(ident(c.station,c.t+h*H));
   if(!o){missing[h].outcome++;continue;}
-  paired[h].push({...f,actualF:o.tempF});
+  paired[h].push({...f,actualF:o.tempF,outcomeAvailableAt:o.available});
  }
  function metrics(rows,h){
   const n=rows.length,errors=rows.map(f=>f.predictionF-f.actualF),baseline=rows.map(f=>Math.abs(f.baselineF-f.actualF));
@@ -87,7 +87,7 @@ function evaluate(input){
   invalidForecasts,invalidObservations,offCohort,conflictingForecastKeys:conflicts.size,conflictingObservationKeys:obsConflicts.size,
   leads:Object.fromEntries(LEADS.map(h=>[h,metrics(paired[h],h)])),
   cooling:{...cooling,precision:cooling.tp+cooling.fp?round(cooling.tp/(cooling.tp+cooling.fp)):null,recall:cooling.tp+cooling.fn?round(cooling.tp/(cooling.tp+cooling.fn)):null},
-  canPromoteModel:false,limits:['Archive hashes and publication timestamps require independent source verification; this evaluator does not fetch or authenticate source bytes.','Buoy-level model change only; no nearshore/shallow correction, water safety, calibrated probability or automatic model promotion.','Overlapping forecasts and stations may be dependent; no iid confidence intervals or significance claim.']};
+  ...(includePairs?{paired}:{}),canPromoteModel:false,limits:['Archive hashes and publication timestamps require independent source verification; this evaluator does not fetch or authenticate source bytes.','Buoy-level model change only; no nearshore/shallow correction, water safety, calibrated probability or automatic model promotion.','Overlapping forecasts and stations may be dependent; no iid confidence intervals or significance claim.']};
 }
 if(require.main===module){
  try{
