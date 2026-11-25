@@ -59,6 +59,39 @@ async function run(){
    await page.waitForFunction(()=>document.querySelector('#ski-open-count')?.textContent.includes('1 confirmed open'),null,{timeout:20000});
    need(await page.locator('#ski-operating-list .ski-operation-row').count()===17,width+' displays all downhill hills');
    need((await page.locator('#ski-operating-list').innerText()).includes('Caberfae Peaks'),width+' shows named official result');
+   await page.waitForFunction(()=>document.querySelectorAll('#ski-resort-carousel .ski-carousel-card').length===18,null,{timeout:20000});
+   need(await page.locator('#ski-point-map .ski-dot').count()===18,width+' map contains all 18 resort markers');
+   need(await page.locator('#ski-resort-carousel .is-selected').count()===1,width+' exactly one selected card');
+   const dynamicMaps=await page.locator('.ski-carousel-card').evaluateAll(cards=>cards.map(card=>({name:card.querySelector('.ski-card-select').textContent,href:card.querySelector('.ski-card-maps')?.href,staticHref:document.querySelector('.ski-directory a[href="/michigan-ski-hills/'+card.dataset.slug+'/"]')?.parentElement.querySelector('.ski-directory-maps')?.href})));
+   need(dynamicMaps.every(v=>v.href&&v.href===v.staticHref&&new URL(v.href).pathname==='/maps/search/'&&new URL(v.href).searchParams.get('query').startsWith(v.name+',')),width+' named resort search matches no-JS link');
+   const first=await page.locator('#ski-resort-carousel .is-selected').getAttribute('data-slug');
+   await page.locator('#ski-carousel-next').click();
+   need(await page.locator('#ski-resort-carousel .is-selected').getAttribute('data-slug')!==first,width+' next arrow changes selected hill');
+   need(await page.locator('#ski-point-map .ski-dot.selected').getAttribute('data-slug')===await page.locator('#ski-resort-carousel .is-selected').getAttribute('data-slug'),width+' pin and carousel match');
+   await page.locator('#ski-carousel-prev').click();
+   need(await page.locator('#ski-resort-carousel .is-selected').getAttribute('data-slug')===first,width+' A-B-A selection is reversible');
+   await page.locator('#ski-point-map .ski-dot[data-slug="mt-bohemia"]').click();
+   need(await page.locator('#ski-resort-carousel .is-selected').getAttribute('data-slug')==='mt-bohemia',width+' selecting map pin opens the correct card');
+   // Horizontal scrolling must reach every trailing card, not just the arrows.
+   const cardSlugs=await page.locator('#ski-resort-carousel .ski-carousel-card').evaluateAll(cards=>cards.map(card=>card.dataset.slug));
+   for(const slug of cardSlugs.slice(-3)){
+    await page.locator('#ski-resort-carousel').evaluate((track,slug)=>{
+     const card=Array.from(track.querySelectorAll('.ski-carousel-card')).find(card=>card.dataset.slug===slug);
+     const origin=track.getBoundingClientRect().left+parseFloat(getComputedStyle(track).scrollPaddingLeft);
+     track.scrollTo({left:track.scrollLeft+card.getBoundingClientRect().left-origin,behavior:'instant'});
+    },slug);
+    try{
+     await page.waitForFunction(slug=>document.querySelector('#ski-resort-carousel .is-selected')?.dataset.slug===slug,slug,{timeout:5000});
+    }catch(error){
+     const state=await page.locator('#ski-resort-carousel').evaluate(track=>({left:track.scrollLeft,max:track.scrollWidth-track.clientWidth,selected:track.querySelector('.is-selected')?.dataset.slug,positions:Array.from(track.querySelectorAll('.ski-carousel-card')).slice(-3).map(card=>({slug:card.dataset.slug,left:card.getBoundingClientRect().left-track.getBoundingClientRect().left}))}));
+     throw Error(width+' trailing scroll failed for '+slug+' '+JSON.stringify(state),{cause:error});
+    }
+    need(await page.locator('#ski-point-map .ski-dot.selected').getAttribute('data-slug')===slug,width+' trailing scroll selects matching pin '+slug);
+   }
+   need(await page.locator('#ski-carousel-next').isDisabled(),width+' last card disables next');
+   await page.locator('#ski-day').selectOption('sunday');
+   need((await page.locator('#ski-resort-carousel .is-selected').innerText()).includes('Sunday'),width+' carousel switches the NWS day');
+   await page.locator('#ski-day').selectOption('saturday');
    const overflow=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,viewport:innerWidth}));
    need(overflow.scroll<=overflow.viewport+2,width+' horizontal overflow '+JSON.stringify(overflow));
    const title=await page.title();
@@ -71,26 +104,32 @@ async function run(){
    need(await page.locator('#ski-open-filter').getAttribute('aria-pressed')==='true',width+' open filter pressed');
    need(await page.locator('#ski-operating-list .ski-operation-row').count()===1,width+' filtered operating board');
    need(await page.locator('#resort-list .hill').count()===1,width+' filtered all hills list');
+   need(await page.locator('#ski-resort-carousel .ski-carousel-card').count()===1,width+' open-now filter changes carousel');
+   need(await page.locator('#ski-point-map .ski-dot').count()===1,width+' open-now filter changes map');
    await page.locator('#ski-plan-filter').click();
    need(await page.locator('#ski-plan-filter').getAttribute('aria-pressed')==='true',width+' plans filter pressed');
    need(await page.locator('#ski-open-filter').getAttribute('aria-pressed')==='false',width+' exclusive filters');
    need(await page.locator('#ski-operating-list .ski-operation-row').count()===6,width+' six published plans');
    need(await page.locator('#resort-list .hill').count()===6,width+' resort comparison follows planned view');
+   need(await page.locator('#ski-resort-carousel .ski-carousel-card').count()===6,width+' opening plans filter changes carousel');
+   need(await page.locator('#ski-point-map .ski-dot').count()===6,width+' opening plans filter changes map');
    need((await page.locator('#ski-operating-list .ski-operation-row').first().innerText()).includes('Ski Brule'),width+' earliest plan first');
    need((await page.locator('#ski-filter-result').innerText()).includes('not confirmed openings'),width+' no plan treated as open');
-   await page.locator('#ski-area-filter').selectOption('northern-lower');
-   need(await page.locator('#region').inputValue()==='northern-lower',width+' top area sync');
+   await page.locator('#region').selectOption('northern-lower');
+   need(await page.locator('#region').inputValue()==='northern-lower',width+' one shared area selection');
    need(await page.locator('#ski-operating-list .ski-operation-row').count()===4,width+' four northern lower plans');
    need(await page.locator('#resort-list .hill').count()===4,width+' main list area sync');
+   need(await page.locator('#ski-resort-carousel .ski-carousel-card').count()===4,width+' region filters map carousel');
    await page.locator('#region').selectOption('western-up');
-   need(await page.locator('#ski-area-filter').inputValue()==='western-up',width+' lower area sync');
-   await page.locator('#ski-area-filter').selectOption('all');
+   need(await page.locator('#ski-resort-carousel .ski-carousel-card').count()===1,width+' western UP filter updates carousel');
+   await page.locator('#region').selectOption('all');
    await page.locator('#ski-open-filter').click();
    need(await page.locator('#ski-operating-list .ski-operation-row').count()===1,width+' plans to open');
    need(await page.locator('#ski-plan-filter').getAttribute('aria-pressed')==='false',width+' plans mode reset');
    await page.locator('#ski-open-filter').click();
    need(await page.locator('#ski-operating-list .ski-operation-row').count()===17,width+' A-B-A restores all');
    need(await page.locator('#resort-list .hill').count()===18,width+' full ranking includes Nordic option');
+   need(await page.locator('#ski-resort-carousel .ski-carousel-card').count()===18,width+' reset restores all map carousel cards');
    mode='all-down';
    await page.reload({waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.querySelector('#ski-open-count')?.textContent.includes('0 confirmed open'),null,{timeout:20000});
@@ -118,9 +157,14 @@ async function run(){
   const page=await ctx.newPage();
   await page.goto(url,{waitUntil:'domcontentloaded'});
   need(await page.locator('.ski-opening-evidence tbody tr').count()===17,'no-JS opening date table');
-  need((await page.locator('.ski-operations').innerText()).includes('Are Michigan ski resorts open?'),'no-JS answer');
+  need((await page.locator('.ski-operations').innerText()).includes('Which Michigan ski resorts are open today?'),'no-JS answer');
   need(!(await page.locator('#ski-open-filter').isVisible()),'no-JS Open now hidden');
   need(!(await page.locator('#ski-plan-filter').isVisible()),'no-JS Opening plans hidden');
+  need(!(await page.locator('#ski-resort-carousel').isVisible()),'no-JS map carousel hidden without working script');
+  need(await page.locator('.ski-directory a:not(.ski-directory-maps)').count()===18,'all 18 guide links available with no JavaScript');
+  need(await page.locator('.ski-directory-maps').count()===18,'all 18 named Google Maps searches available with no JavaScript');
+  const staticMaps=await page.locator('.ski-directory-maps').evaluateAll(links=>links.map(a=>a.href));
+  need(staticMaps.every(h=>new URL(h).pathname==='/maps/search/'&&new URL(h).searchParams.has('query')),'static links are searches, not directions');
   const img=path.join(out,'360-no-javascript.png');await page.screenshot({path:img});report.screenshots.push(path.basename(img));
   report.cases.push({width:360,javaScript:false,openingRows:17,answerVisible:true});
   await ctx.close();

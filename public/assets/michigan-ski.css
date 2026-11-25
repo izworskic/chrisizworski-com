@@ -182,3 +182,41 @@ html:not(.ski-js) .ski-operations .js-only{display:none}
 .ski-status-controls select{min-height:44px;max-width:100%;padding:7px 10px;background:#fff;border:1px solid #abbeca;border-radius:7px;font:inherit;color:var(--ink)}
 .ski-filter-result{min-height:1.3em;font-size:.85rem;font-weight:680;color:#365164;margin:4px 0 9px}
 @media(max-width:600px){.ski-status-controls .ski-area-label{width:100%;justify-content:space-between}.ski-status-controls select{flex:1;max-width:calc(100% - 48px)}}
+
+/* Synchronized ski map carousel replaces the redundant snow chart and separate selected-hill panel. */
+.ski-map-explorer{margin:13px 0 16px}
+.ski-map-explorer .ski-point-map{max-width:100%;margin-top:8px}
+.ski-map-explorer .michigan-point-svg{max-height:440px;min-height:0;width:100%;height:auto}
+.ski-carousel-heading{display:flex;justify-content:space-between;align-items:center;gap:12px;margin:12px 0 7px}
+.ski-carousel-heading p{margin:0;max-width:75ch}
+.ski-carousel-arrows{display:flex;gap:7px;flex-shrink:0}
+.ski-carousel-arrows button{background:#fff;color:#17455d;border:1px solid #94b2c1;border-radius:7px;padding:7px 12px;min-height:44px;font:700 .84rem system-ui;cursor:pointer}
+.ski-carousel-arrows button:disabled{opacity:.45;cursor:not-allowed}
+.ski-carousel-arrows button:focus-visible,.ski-card-select:focus-visible,.ski-resort-carousel:focus-visible{outline:3px solid #cf7919;outline-offset:3px}
+.ski-resort-carousel{--ski-card-basis:clamp(255px,32%,365px);display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:4px;padding:4px 4px 15px;overscroll-behavior-x:contain;min-width:0;touch-action:pan-x pan-y}
+.ski-carousel-card{flex:0 0 var(--ski-card-basis);scroll-snap-align:start;min-width:0;background:#fff;border:1.5px solid #c9dce5;border-radius:11px;padding:13px;display:flex;flex-direction:column;gap:7px}
+/* Allow every trailing card to reach the normal scroll-snap origin. */
+.ski-resort-carousel:has(> .ski-carousel-card:nth-child(2))::after{content:"";flex:0 0 max(0px,calc(100% - var(--ski-card-basis) - 12px));pointer-events:none}
+.ski-carousel-card.is-selected{border-color:#0e657f;box-shadow:0 0 0 2px rgba(14,101,127,.14)}
+.ski-carousel-card .ski-card-select{font:800 1.02rem/1.3 system-ui;border:0;background:transparent;color:#16455d;text-align:left;text-decoration:underline;text-decoration-color:transparent;cursor:pointer;padding:4px 0}
+.ski-carousel-card .ski-card-select:hover{text-decoration-color:currentColor}
+.ski-carousel-card p{font-size:.83rem;color:#385769;margin:0;line-height:1.45}
+.ski-carousel-card .ski-carousel-forecast{font-size:1rem;font-weight:800;color:#174b63}
+.ski-carousel-card .ski-carousel-status{font-weight:750;color:#284f63}
+.ski-carousel-card .ski-carousel-status.open{color:#176145}
+.ski-carousel-card .ski-carousel-status.closed{color:#8b4a25}
+.ski-carousel-links{display:flex;gap:10px 14px;flex-wrap:wrap;margin-top:auto;padding-top:5px}
+.ski-carousel-links a,.ski-carousel-links button{font-size:.82rem;font-weight:750;color:#0c597c;min-height:40px}
+.ski-carousel-links button{border:0;background:none;cursor:pointer;padding:0}
+.ski-carousel-links a{display:inline-flex;align-items:center}
+.ski-carousel-plan{background:#edf6f9;border-left:3px solid #167e9a;padding:7px 9px}
+.ski-map-explorer .ski-dot{cursor:pointer;outline:none}
+.ski-map-explorer .ski-dot:focus-visible .ski-map-pin,.ski-map-explorer .ski-dot.selected .ski-map-pin{stroke:#b96a16;stroke-width:4}
+.ski-map-explorer .ski-dot .ski-status-ring.open{stroke:#176b4e}
+.ski-map-explorer .ski-dot .ski-status-ring.closed{stroke:#a26532}
+.ski-method{margin:8px 0;font-size:.88rem}
+.ski-method summary,.ski-advanced-comparison>summary,.ski-directory>summary,.photo-reference-panel>summary{font-weight:760;color:#16465f;cursor:pointer;min-height:44px;padding:7px 0}
+.ski-advanced-comparison>summary,.ski-directory>summary,.photo-reference-panel>summary{font-size:1.04rem}
+html:not(.ski-js) .ski-map-explorer{display:none}
+@media(max-width:650px){.ski-map-explorer .michigan-point-svg{max-height:320px}.ski-carousel-heading{align-items:flex-start;flex-wrap:wrap}.ski-carousel-arrows{width:100%;justify-content:space-between}.ski-resort-carousel{--ski-card-basis:min(85vw,325px)}}
+@media(prefers-reduced-motion:reduce){.ski-resort-carousel{scroll-behavior:auto}}

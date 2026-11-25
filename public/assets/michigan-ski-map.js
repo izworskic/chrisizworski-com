@@ -1,126 +1,209 @@
 (function(){'use strict';
-const mount=document.getElementById('ski-point-map');if(!mount)return;
-const NS='http://www.w3.org/2000/svg',MINLON=-90.7,MAXLON=-82.0,MINLAT=41.35,MAXLAT=48.45;
-const W=920,H=620,P=30;
-const pos=(lat,lon)=>({x:P+(lon-MINLON)/(MAXLON-MINLON)*(W-2*P),
- y:H-P-(lat-MINLAT)/(MAXLAT-MINLAT)*(H-2*P)});
-const node=(tag,attributes={},text)=>{const e=document.createElementNS(NS,tag);
- for(const [k,v]of Object.entries(attributes))e.setAttribute(k,String(v));
- if(text!==undefined)e.textContent=String(text);return e;};
-const text=(tag,cls,value)=>{const x=document.createElement(tag);if(cls)x.className=cls;x.textContent=String(value);return x;};
-const safe=val=>Number.isFinite(val)?Number(val).toFixed(1).replace(/\.0$/,''):'Unknown';
-const wind=val=>val==='FAVORS_SNOWBELT'?'Wind direction supports a broad lake-effect snowbelt (not a verified band)':
- val==='NOT_ALIGNED'?'Wind direction not in the established snowbelt sector':'Wind alignment unverified';
-const color=inches=>!Number.isFinite(inches)?'#889aa4':inches>=6?'#12456d':inches>=3?'#187b9b':inches>=1?'#39a7ad':inches>=0.1?'#a1d6d4':'#d3e0e5';
-let resorts=null,outline=null,selected=null;
-function snowChart(day){
- const pane=document.getElementById('ski-snow-bars');if(!pane||!resorts)return;
- pane.replaceChildren();
- const rows=resorts.filter(r=>r.kind==='downhill'&&Number.isFinite(r.weather?.skiDays?.[day]?.snowInches))
-   .sort((a,b)=>b.weather.skiDays[day].snowInches-a.weather.skiDays[day].snowInches||a.name.localeCompare(b.name)).slice(0,6);
- const max=Math.max(1,...rows.map(r=>r.weather.skiDays[day].snowInches));
- const heading=text('p','small',rows.length&&rows[0].weather.skiDays[day].snowInches<0.5?
-   'Little or no snow forecast at the sampled hills. These are still the six largest available point forecasts.':
-   'Highest available NWS point forecasts for '+day+'. Forecast only, not an on-hill measurement.');
- pane.append(heading);
- if(!rows.length){pane.append(text('p','event','Forecast snowfall unavailable. Do not infer zero snow.'));return;}
- for(const r of rows){
-   const v=r.weather.skiDays[day].snowInches,button=document.createElement('button');
-   button.type='button';button.className='snow-chart-row'+(r.slug===selected?' is-selected':'');
-   button.setAttribute('aria-label','Select '+r.name+', '+safe(v)+' inches '+day+' forecast');
-   const cap=document.createElement('span');cap.className='snow-chart-cap';
-   const name=document.createElement('span');name.className='snow-chart-name';name.textContent=r.name;
-   const amt=document.createElement('strong');amt.textContent=safe(v)+'″';
-   cap.append(name,amt);
-   const track=document.createElement('span');track.className='snow-chart-track';
-   const fill=document.createElement('span');fill.className='snow-chart-fill';
-   fill.style.width=(100*v/max).toFixed(1)+'%';track.append(fill);
-   button.append(cap,track);
-   button.addEventListener('click',()=>{selected=r.slug;render();});
-   pane.append(button);
+// One selection spine: the forecast map and the native resort carousel always show the same hill.
+// An NWS forecast color never establishes the operating status of a resort.
+const mount=document.getElementById('ski-point-map');
+const track=document.getElementById('ski-resort-carousel');
+if(!mount||!track)return;
+const statusEl=document.getElementById('ski-carousel-status');
+const prev=document.getElementById('ski-carousel-prev'),next=document.getElementById('ski-carousel-next');
+const NS='http://www.w3.org/2000/svg',W=920,H=620,P=30;
+const MINLON=-90.7,MAXLON=-82.0,MINLAT=41.35,MAXLAT=48.45;
+const pos=(lat,lon)=>({x:P+(lon-MINLON)/(MAXLON-MINLON)*(W-2*P),y:H-P-(lat-MINLAT)/(MAXLAT-MINLAT)*(H-2*P)});
+const svgNode=(tag,attrs={},value)=>{const el=document.createElementNS(NS,tag);for(const [k,v] of Object.entries(attrs))el.setAttribute(k,String(v));if(value!==undefined)el.textContent=String(value);return el;};
+const html=(tag,cls,value)=>{const el=document.createElement(tag);if(cls)el.className=cls;if(value!==undefined)el.textContent=String(value);return el;};
+const fmt=v=>Number.isFinite(v)?Number(v).toFixed(1).replace(/\.0$/,''):'Unavailable';
+const color=v=>!Number.isFinite(v)?'#889aa4':v>=6?'#12456d':v>=3?'#187b9b':v>=1?'#39a7ad':v>=.1?'#a1d6d4':'#d3e0e5';
+const isConfirmed=r=>['OPEN_PER_OPERATOR','CLOSED_PER_OPERATOR'].includes(r.official?.status);
+function reportDate(value){
+ if(!value)return 'No dated operator report';
+ if(/^\d{4}-\d{2}-\d{2}$/.test(value))return 'Report dated '+new Date(value+'T12:00:00Z').toLocaleDateString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',year:'numeric'});
+ const n=Date.parse(value);
+ return Number.isFinite(n)?'Report updated '+new Date(n).toLocaleString('en-US',{timeZone:'America/Detroit',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}):'No dated operator report';
+}
+function liftStatus(r){
+ const off=r.official||{};
+ if(off.status==='OPEN_PER_OPERATOR')return 'Operator confirms '+off.lifts.open+' of '+off.lifts.total+' lifts open';
+ if(off.status==='CLOSED_PER_OPERATOR')return 'Operator reports 0 operating lifts';
+ if(off.status==='STALE_REPORT')return 'Operator lift report is outdated';
+ if(off.status==='NOT_CONNECTED')return 'No connected operator lift report';
+ return 'Current lift operations not verified';
+}
+function plans(){
+ const out=new Map();
+ for(const tr of document.querySelectorAll('.ski-opening-evidence tbody tr')){
+  const label=tr.querySelector('th')?.textContent.trim();
+  const detail=tr.querySelector('td')?.textContent.trim();
+  if(label&&detail&&!detail.startsWith('Not announced'))out.set(label,detail);
+ }
+ return out;
+}
+let resorts=[],outline=null,outlineFailed=false,selected=null,visible=[],scrollFrame=0;
+let filters={region:'all',openOnly:false,planOnly:false};
+const currentDay=()=>document.getElementById('ski-day')?.value||'saturday';
+const dayLabel=()=>currentDay()==='saturday'?'Saturday':'Sunday';
+function candidates(){
+ const announced=plans();
+ const list=resorts.filter(r=>(filters.region==='all'||r.region===filters.region)&&
+  (filters.planOnly?announced.has(r.name):!filters.openOnly||r.official?.status==='OPEN_PER_OPERATOR'));
+ if(filters.planOnly)list.sort((a,b)=>{
+  const aDate=Date.parse(announced.get(a.name)?.split(' · ')[0]||'');
+  const bDate=Date.parse(announced.get(b.name)?.split(' · ')[0]||'');
+  return (Number.isFinite(aDate)?aDate:Infinity)-(Number.isFinite(bDate)?bDate:Infinity)||a.name.localeCompare(b.name);
+ });
+ return list;
+}
+function selectedIndex(){return visible.findIndex(r=>r.slug===selected);}
+function updateSelection(announce=true){
+ const i=selectedIndex();
+ for(const card of track.querySelectorAll('.ski-carousel-card')){
+  const on=card.dataset.slug===selected;
+  card.classList.toggle('is-selected',on);
+  if(on)card.setAttribute('aria-current','true');else card.removeAttribute('aria-current');
+  card.querySelector('.ski-card-select')?.setAttribute('aria-pressed',String(on));
+ }
+ if(prev)prev.disabled=i<=0;
+ if(next)next.disabled=i<0||i>=visible.length-1;
+ if(statusEl&&announce){
+  if(i<0){statusEl.textContent='No resort matches these filters. Clear a filter to inspect more hills.';return;}
+  const r=visible[i],forecast=r.weather?.skiDays?.[currentDay()]?.snowInches;
+  statusEl.textContent=(i+1)+' of '+visible.length+': '+r.name+'. '+liftStatus(r)+'. '+(Number.isFinite(forecast)?fmt(forecast)+' inches NWS forecast '+dayLabel():'No NWS forecast for '+dayLabel())+'.';
  }
 }
-function selectedForecast(day){
- const r=resorts?.find(x=>x.slug===selected);
- if(!r)return;
- const panel=document.getElementById('ski-day-bars');if(!panel)return;
- panel.replaceChildren();
- const entries=[['Saturday',r.weather?.skiDays?.saturday?.snowInches],['Sunday',r.weather?.skiDays?.sunday?.snowInches]];
- const max=Math.max(1,...entries.map(x=>Number.isFinite(x[1])?x[1]:0));
- for(const [label,v]of entries){
-   const row=document.createElement('div');row.className='ski-day-bar'+(label.toLowerCase()===day?' is-current':'');
-   const top=document.createElement('div');top.className='ski-day-bar-cap';
-   top.append(text('span',null,label),text('strong',null,Number.isFinite(v)?safe(v)+'″':'Unavailable'));
-   const track=document.createElement('span');track.className='ski-day-bar-track';
-   const bar=document.createElement('span');bar.className='ski-day-bar-fill';bar.style.width=Number.isFinite(v)?(v/max*100)+'%':'0%';
-   track.append(bar);row.append(top,track);panel.append(row);
- }
+// Use the actual snap origin for both explicit choices and native scroll events.
+function scrollOrigin(){return track.getBoundingClientRect().left+track.clientLeft+(parseFloat(getComputedStyle(track).scrollPaddingLeft)||0);}
+function scrollCard(){
+ const i=selectedIndex();if(i<0)return;
+ const card=track.querySelectorAll('.ski-carousel-card')[i];if(!card)return;
+ track.scrollTo({left:track.scrollLeft+card.getBoundingClientRect().left-scrollOrigin(),behavior:'instant'});
 }
-
-function render(){
- if(!resorts||!outline)return;
- if(!selected){const withoutWarning=resorts.filter(r=>r.kind==='downhill'&&!(r.weather?.alerts||[]).some(a=>/Warning/i.test(a.event)));
-   const eligible=withoutWarning.filter(r=>Number.isFinite(r.weather?.skiDays?.saturday?.snowInches));
-   selected=(eligible.sort((a,b)=>b.weather.skiDays.saturday.snowInches-a.weather.skiDays.saturday.snowInches)[0]||withoutWarning[0]||resorts[0])?.slug||null;
+function pick(slug,fromMapKeyboard=false){
+ if(!visible.some(r=>r.slug===slug))return;
+ selected=slug;updateSelection();drawMap(fromMapKeyboard);scrollCard();
+}
+function cardFor(r){
+ const card=html('article','ski-carousel-card');card.dataset.slug=r.slug;
+ const heading=html('h4',null);
+ const choose=html('button','ski-card-select',r.name);choose.type='button';
+ choose.setAttribute('aria-label','Show '+r.name+' on the map');choose.addEventListener('click',()=>pick(r.slug));
+ heading.append(choose);
+ const location=html('p','small',r.location+' · '+(r.kind==='nordic'?'Nordic trails':'Downhill skiing'));
+ const d=r.weather?.skiDays?.[currentDay()]||{},v=d.snowInches;
+ const weather=html('p','ski-carousel-forecast',Number.isFinite(v)?fmt(v)+'″ NWS forecast '+dayLabel():'NWS forecast unavailable for '+dayLabel());
+ const operating=html('p','ski-carousel-status '+(r.official?.status==='OPEN_PER_OPERATOR'?'open':r.official?.status==='CLOSED_PER_OPERATOR'?'closed':''),liftStatus(r));
+ const date=html('p','small',reportDate(r.official?.reportUpdatedAt));
+ const alerts=(r.weather?.alerts||[]).filter(a=>/Warning/i.test(a.event));
+ const links=html('div','ski-carousel-links');
+ const detail=html('a',null,'Resort details');detail.href='/michigan-ski-hills/'+r.slug+'/';
+ const source=html('a',null,'Official report');source.href=r.official?.url||r.snow;
+ source.target='_blank';source.rel='noopener noreferrer';
+ const compare=html('button',null,'Compare trip cost');compare.type='button';
+ compare.addEventListener('click',()=>document.dispatchEvent(new CustomEvent('michigan-ski:select',{detail:r.slug})));
+ links.append(detail,source);
+ const mapsUrl=window.VisitorMapLinks?.placeSearch({role:'public-place',query:r.name+', '+r.location+', Michigan'});
+ if(mapsUrl){
+  const maps=html('a','ski-card-maps','View in Google Maps');maps.href=mapsUrl;
+  maps.target='_blank';maps.rel='noopener noreferrer';maps.setAttribute('aria-label','View '+r.name+' in Google Maps');
+  links.append(maps);
  }
- const day=document.getElementById('ski-day')?.value||'saturday';
- const svg=node('svg',{viewBox:'0 0 '+W+' '+H,'aria-label':'Michigan ski area map with NWS forecast snow points',role:'group',class:'michigan-point-svg'});
- const defs=node('defs');const grad=node('linearGradient',{id:'ski-map-sea',x1:0,y1:0,x2:0,y2:1});
- grad.append(node('stop',{offset:'0%','stop-color':'#dbeaf1'}),node('stop',{offset:'100%','stop-color':'#e9f4f6'}));
- defs.append(grad);svg.append(defs,node('rect',{x:0,y:0,width:W,height:H,rx:15,fill:'url(#ski-map-sea)'}));
- for(let i=0;i<outline.coordinates.length;i++){
-  const polygon=outline.coordinates[i];
+ links.append(compare);
+ card.append(heading,location,weather,operating,date);
+ if(alerts.length)card.append(html('p','event','NWS winter warning: check travel conditions'));
+ if(filters.planOnly){
+  const plan=plans().get(r.name);if(plan)card.append(html('p','ski-carousel-plan','Opening plan: '+plan+'. Target only, not confirmed open.'));
+ }
+ card.append(links);return card;
+}
+function renderCarousel(){
+ track.replaceChildren();
+ if(!visible.length){
+  track.append(html('p','event','No ski hills match these filters. Clear an operating-status or area filter to see the full map.'));
+  selected=null;updateSelection();return;
+ }
+ if(!visible.some(r=>r.slug===selected)){
+  selected=(visible.find(r=>r.official?.status==='OPEN_PER_OPERATOR')||visible[0]).slug;
+ }
+ for(const r of visible)track.append(cardFor(r));
+ updateSelection();scrollCard();
+}
+function drawMap(focusSelected=false){
+ if(outlineFailed){mount.replaceChildren(html('p','event','Map outline is unavailable. Use the resort carousel and official links below.'));return;}
+ if(!outline){mount.replaceChildren(html('p','small','Loading Michigan outline. Resort cards remain available below.'));return;}
+ const svg=svgNode('svg',{viewBox:'0 0 '+W+' '+H,role:'group','aria-label':'Michigan ski areas, resort markers selectable by keyboard',class:'michigan-point-svg'});
+ const defs=svgNode('defs'),grad=svgNode('linearGradient',{id:'ski-map-sea',x1:0,y1:0,x2:0,y2:1});
+ grad.append(svgNode('stop',{offset:'0%','stop-color':'#dbeaf1'}),svgNode('stop',{offset:'100%','stop-color':'#e9f4f6'}));
+ defs.append(grad);svg.append(defs,svgNode('rect',{x:0,y:0,width:W,height:H,rx:15,fill:'url(#ski-map-sea)'}));
+ for(const polygon of outline.coordinates){
   for(const ring of polygon){
-   const p=ring.map((xy,j)=>{const {x,y}=pos(xy[1],xy[0]);return (j?'L':'M')+x.toFixed(1)+','+y.toFixed(1)}).join('')+'Z';
-   svg.append(node('path',{d:p,fill:'#f6f9ef',stroke:'#8aaca4','stroke-width':2,'stroke-linejoin':'round'}));
+   const path=ring.map((xy,i)=>{const p=pos(xy[1],xy[0]);return (i?'L':'M')+p.x.toFixed(1)+','+p.y.toFixed(1)}).join('')+'Z';
+   svg.append(svgNode('path',{d:path,fill:'#f6f9ef',stroke:'#8aaca4','stroke-width':2,'stroke-linejoin':'round'}));
   }
  }
- svg.append(node('text',{x:102,y:168,class:'ski-map-water'},'Lake Superior'),
-  node('text',{x:250,y:440,class:'ski-map-water'},'Lake Michigan'),
-  node('text',{x:710,y:375,class:'ski-map-water'},'Lake Huron'));
+ svg.append(svgNode('text',{x:102,y:168,class:'ski-map-water'},'Lake Superior'),
+  svgNode('text',{x:250,y:440,class:'ski-map-water'},'Lake Michigan'),
+  svgNode('text',{x:710,y:375,class:'ski-map-water'},'Lake Huron'));
  const seen=[];
- for(const r of resorts){
-  const p=pos(r.lat,r.lon),d=r.weather?.skiDays?.[day]||{},v=d.snowInches;
+ for(const r of visible){
+  const p=pos(r.lat,r.lon),d=r.weather?.skiDays?.[currentDay()]||{},v=d.snowInches;
   let x=p.x,y=p.y;
   for(let pass=0;pass<5;pass++){
    if(!seen.some(e=>Math.hypot(x-e.x,y-e.y)<24))break;
-   const a=(pass+1)*2.1;x=p.x+Math.cos(a)*14*(pass+1);y=p.y+Math.sin(a)*14*(pass+1);
+   const angle=(pass+1)*2.1;x=p.x+Math.cos(angle)*14*(pass+1);y=p.y+Math.sin(angle)*14*(pass+1);
   }
   seen.push({x,y});
-  const g=node('g',{role:'button',tabindex:0,'aria-label':r.name+', '+safe(v)+' inches forecast '+day+'; select hill',class:'ski-dot'+(r.slug===selected?' selected':'')});
-  g.append(node('line',{x1:p.x,y1:p.y,x2:x,y2:y,stroke:'#7fa9b4','stroke-width':1.5}));
-  const warn=(r.weather?.alerts||[]).some(a=>/Warning/i.test(a.event));
-  if(warn)g.append(node('circle',{cx:x,cy:y,r:15,fill:'none',stroke:'#af5e22','stroke-width':3,'stroke-dasharray':'4 3'}));
-  g.append(node('circle',{cx:x,cy:y,r:10,fill:color(v),stroke:'#164456','stroke-width':1.6}));
-  g.append(node('title',{},r.name+': '+safe(v)+'″ NWS forecast '+day+(warn?'; active winter warning':'')));
-  g.addEventListener('click',()=>{selected=r.slug;render();});
-  g.addEventListener('keydown',ev=>{if(ev.key==='Enter'||ev.key===' '){ev.preventDefault();selected=r.slug;render();}});
+  const g=svgNode('g',{role:'button',tabindex:0,'data-slug':r.slug,'aria-label':'Show '+r.name+' on the carousel; '+(Number.isFinite(v)?fmt(v)+' inches NWS forecast':'NWS forecast unavailable'),class:'ski-dot'+(r.slug===selected?' selected':'')});
+  g.append(svgNode('line',{x1:p.x,y1:p.y,x2:x,y2:y,stroke:'#7fa9b4','stroke-width':1.5}));
+  const warning=(r.weather?.alerts||[]).some(a=>/Warning/i.test(a.event));
+  if(warning)g.append(svgNode('circle',{cx:x,cy:y,r:16,fill:'none',stroke:'#b96a16','stroke-width':2.5,'stroke-dasharray':'4 3'}));
+  if(isConfirmed(r))g.append(svgNode('circle',{cx:x,cy:y,r:13,fill:'none',stroke:'#8fa7af','stroke-width':3,class:'ski-status-ring '+(r.official.status==='OPEN_PER_OPERATOR'?'open':'closed')}));
+  g.append(svgNode('circle',{cx:x,cy:y,r:10,fill:color(v),stroke:'#164456','stroke-width':1.6,class:'ski-map-pin'}));
+  g.append(svgNode('title',{},r.name+': '+(Number.isFinite(v)?fmt(v)+' inches NWS forecast':'forecast unavailable')+'; '+liftStatus(r)));
+  g.addEventListener('click',()=>pick(r.slug));
+  g.addEventListener('keydown',event=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();pick(r.slug,true);}});
   svg.append(g);
  }
  mount.replaceChildren(svg);
- snowChart(day);
- const panel=document.getElementById('ski-map-selected');if(panel){
-  panel.replaceChildren();
-  const r=resorts.find(x=>x.slug===selected);
-  if(r){
-   const d=r.weather?.skiDays?.[day]||{},box=text('div','map-selection','');
-   const title=text('h3',null,r.name),detail=text('p',null,
-    safe(d.snowInches)+'″ forecast snowfall · '+(Number.isFinite(d.lowF)?d.lowF+'–'+d.highF+'°F':'temperature unavailable')+
-    ' · '+wind(d.lakeWindStatus));
-   const disclaimer=text('p','small','Official lift/trail status: '+(r.official?.status==='PUBLISHED_OFFICIAL_REPORT'?
-     r.official.lifts.open+'/'+r.official.lifts.total+' lifts; '+r.official.trails.open+'/'+r.official.trails.total+' trails as checked':'not verified')+
-    '. Forecast amount is NOT measured mountain snow.');
-   const a=document.createElement('a');a.href='/michigan-ski-hills/'+r.slug+'/';a.textContent='View hill details ↗';
-   const btn=document.createElement('button');btn.type='button';btn.textContent='Compare this hill';btn.className='outline-button';
-   btn.addEventListener('click',()=>document.dispatchEvent(new CustomEvent('michigan-ski:select',{detail:r.slug})));
-   const dayCompare=document.createElement('div');dayCompare.id='ski-day-bars';dayCompare.className='ski-day-bars';
-   box.append(title,dayCompare,detail,disclaimer,a,btn);panel.append(box);selectedForecast(day);
-  }else panel.append(text('p','small','Select a mountain point to see its forecast, warnings and official operating-source coverage.'));
- }
+ if(focusSelected)svg.querySelector('.ski-dot.selected')?.focus();
 }
-document.addEventListener('michigan-ski:data',e=>{resorts=e.detail.resorts;render();});
-document.getElementById('ski-day')?.addEventListener('change',render);
-fetch('/assets/michigan-ski-outline.json',{cache:'force-cache'}).then(r=>{if(!r.ok)throw Error('MAP_OUTLINE_UNAVAILABLE');return r.json();})
- .then(data=>{if(data.type!=='MultiPolygon'||!Array.isArray(data.coordinates))throw Error('MAP_SHAPE_INVALID');outline=data;render();})
- .catch(()=>{mount.replaceChildren(text('p','event','Map outline unavailable. The text-based ski comparisons remain operational.'));});
+function refresh(){
+ if(!resorts.length)return;
+ visible=candidates();renderCarousel();drawMap();
+}
+track.addEventListener('scroll',()=>{
+ if(scrollFrame||!visible.length)return;
+ scrollFrame=requestAnimationFrame(()=>{
+  scrollFrame=0;if(!visible.length)return;
+  const left=scrollOrigin();
+  let nearest=null,distance=Infinity;
+  for(const card of track.querySelectorAll('.ski-carousel-card')){
+   const d=Math.abs(card.getBoundingClientRect().left-left);
+   if(d<distance){distance=d;nearest=card.dataset.slug;}
+  }
+  if(nearest&&nearest!==selected){selected=nearest;updateSelection();drawMap();}
+ });
+},{passive:true});
+track.addEventListener('keydown',e=>{
+ if(e.target!==track||!['ArrowLeft','ArrowRight'].includes(e.key))return;
+ e.preventDefault();
+ const i=selectedIndex(),n=Math.max(0,Math.min(visible.length-1,i+(e.key==='ArrowRight'?1:-1)));
+ if(visible[n])pick(visible[n].slug);
+});
+prev?.addEventListener('click',()=>{const r=visible[selectedIndex()-1];if(r)pick(r.slug);});
+next?.addEventListener('click',()=>{const r=visible[selectedIndex()+1];if(r)pick(r.slug);});
+document.addEventListener('michigan-ski:data',event=>{resorts=event.detail.resorts||[];refresh();});
+document.addEventListener('michigan-ski:filters',event=>{
+ filters={region:event.detail?.region||'all',openOnly:!!event.detail?.openOnly,planOnly:!!event.detail?.planOnly};refresh();
+});
+document.addEventListener('michigan-ski:error',()=>{
+ mount.replaceChildren(html('p','event','Live ski conditions are unavailable. Use the static resort guides below.'));
+ track.replaceChildren(html('p','event','Resort reports unavailable. The dated opening announcement table remains available.'));
+ if(statusEl)statusEl.textContent='Live map and carousel unavailable.';
+ if(prev)prev.disabled=true;if(next)next.disabled=true;
+});
+document.getElementById('ski-day')?.addEventListener('change',refresh);
+fetch('/assets/michigan-ski-outline.json',{cache:'force-cache'}).then(response=>{
+ if(!response.ok)throw Error('MAP_OUTLINE_UNAVAILABLE');return response.json();
+}).then(data=>{
+ if(data.type!=='MultiPolygon'||!Array.isArray(data.coordinates))throw Error('MAP_SHAPE_INVALID');
+ outline=data;drawMap();
+}).catch(()=>{outlineFailed=true;drawMap();});
 })();

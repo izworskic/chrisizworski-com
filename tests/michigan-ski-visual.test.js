@@ -1,11 +1,16 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
 const root=path.resolve(__dirname,'..'),read=p=>fs.readFileSync(path.join(root,p),'utf8');
-test('premium Michigan hub uses one map, one snowfall bar chart, and simple primary selectors',()=>{
+test('premium Michigan hub uses one map carousel and simple primary selectors',()=>{
  const h=read('scripts/generate-michigan-ski-pages.mjs');
  const i=h.slice(h.indexOf('function index(){'));
  assert.ok(i.includes('id="ski-point-map"'));
- assert.ok(i.includes('id="ski-snow-bars"'));
+ assert.ok(i.includes('id="ski-resort-carousel"'));
+ assert.ok(i.includes('id="ski-carousel-prev"'));
+ assert.ok(i.includes('id="ski-carousel-next"'));
+ assert.ok(!i.includes('id="ski-snow-bars"'),'no duplicate snow-leaders chart');
+ assert.ok(!i.includes('Three checks before you buy or drive'),'repeated checklist removed');
+ assert.ok(i.includes('ski-advanced-comparison')&&i.includes('ski-directory'),'optional detail and no-JS directory preserved');
  assert.ok(i.includes('id="ski-decision-results"'));
  assert.ok(i.includes('id="ski-goal"'));
  assert.ok(i.includes('id="ski-day"'));
@@ -34,12 +39,14 @@ test('no hero photo; factual archival image strip appears after decision and mat
  assert.ok(g.includes('loading="lazy"'));
 });
 
-test('map and graph respond to day selection and preserve keyboard operation',()=>{
+test('map and carousel respond to day selection and preserve keyboard operation',()=>{
  const map=read('public/assets/michigan-ski-map.js');
  const d=read('public/assets/michigan-ski-decision.js');
  const board=read('public/assets/michigan-ski.js');
- for(const k of ['snowChart(day)','selectedForecast(day)','snow-chart-row','ski-day-bar',"addEventListener('keydown'"])assert.ok(map.includes(k),k);
- assert.ok(map.includes("document.getElementById('ski-day')?.addEventListener('change',render)"));
+ for(const k of ['renderCarousel()','drawMap(','ski-card-select','ski-carousel-card',"addEventListener('keydown'","michigan-ski:filters",'requestAnimationFrame'])assert.ok(map.includes(k),k);
+ assert.ok(map.includes('OPEN_PER_OPERATOR')&&map.includes('CLOSED_PER_OPERATOR'));
+ assert.ok(!map.includes('PUBLISHED_OFFICIAL_REPORT'),'no obsolete status contract');
+ assert.ok(map.includes("document.getElementById('ski-day')?.addEventListener('change',refresh)"));
  assert.ok(d.includes("stale||(offSeason&&S.goal==='powder')?[]:candidates()")); // Fails closed for old/invalid forecasts
  assert.ok(d.includes('snapshotAge>2*3600000'));
  assert.match(d,/function childTicket\(\)\{return null/);
@@ -48,4 +55,11 @@ test('map and graph respond to day selection and preserve keyboard operation',()
  for(const p of ['public/assets/michigan-ski.js','public/assets/michigan-ski-decision.js','public/assets/michigan-ski-map.js']){
   assert.doesNotThrow(()=>new Function(read(p)),p);
  }
+});
+
+test('resort location searches use shared place contract and static fallback, never directions',()=>{
+ const map=read('public/assets/michigan-ski-map.js'),g=read('scripts/generate-michigan-ski-pages.mjs');
+ assert.match(map,/VisitorMapLinks\?\.placeSearch\(/);assert.match(g,/placeSearch\(\{role:'public-place'/);
+ assert.ok(g.includes('ski-directory-maps'));assert.ok(g.includes('/assets/visitor-map-links.js'));
+ assert.doesNotMatch(map,/verifiedDirections|maps\/dir/);
 });

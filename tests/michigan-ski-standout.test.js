@@ -99,7 +99,7 @@ test('generated Michigan decision experience includes keyless map, selection con
  '/assets/michigan-ski-map.js','/assets/michigan-ski-decision.js'])assert.ok(script.includes(required),required);
  assert.equal(source.type,'MultiPolygon');
  assert.equal(source.coordinates.length,4);
- assert.ok(map.includes('ski-map-selected'));
+ assert.ok(map.includes('ski-resort-carousel'));
  assert.ok(map.includes('michigan-ski:select'));
  assert.ok(decision.includes('r.official'));
  assert.ok(decision.includes('adultDayPrice2026'));
