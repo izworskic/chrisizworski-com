@@ -90,3 +90,26 @@ test('confirmation missingness audit accounts for every slot without promoting n
  assert.equal(a.stationProvenance['45210'].temperatureSensorDepthM,null);
  assert.equal(a.stationProvenance['45214'].receiptTimesAuthenticated,false);
 });
+
+test('completed confirmation recovery preserves all 35 near-time pairs without changing exact coverage',()=>{
+ const fs=require('node:fs'),crypto=require('node:crypto'),path=require('node:path');
+ const raw=fs.readFileSync(path.join(__dirname,'../data/shorefeel/horizon-confirm-cohort-actual-20261125.json'));
+ const d=JSON.parse(raw),r=require('../data/shorefeel/horizon-confirm-near-time-actual-20261125.json');
+ const k=p=>[p.station,p.cycleAt,p.leadHours].join('|');
+ assert.equal(r.sourceDatasetSha256,crypto.createHash('sha256').update(raw).digest('hex'));
+ assert.equal(r.originalCohortSha256,d.cohortSha256);assert.equal(r.canPromoteModel,false);
+ const missing=new Set(d.cycles.flatMap(c=>c.pairs).filter(p=>p.reason).map(k));
+ const all=[...r.recovered,...r.unresolved].map(k);
+ assert.equal(r.recovered.length,35);assert.equal(r.unresolved.length,24);
+ assert.equal(new Set(all).size,59);assert.deepEqual(all.sort(),[...missing].sort());
+ assert.equal(r.exactObservationRevisionChecks.length,0);
+ for(const x of r.recovered){
+  assert.ok(x.baselineOffsetMinutes>=-15&&x.baselineOffsetMinutes<=0);
+  assert.ok(Math.abs(x.targetOffsetMinutes)<=15);
+  assert.match(x.baselineSha256,/^[a-f0-9]{64}$/);assert.match(x.targetSha256,/^[a-f0-9]{64}$/);
+ }
+ for(const [h,exact,near] of [[24,72,18],[48,69,17]]){
+  assert.equal(r.metrics[h].originalExact,exact);assert.equal(r.metrics[h].newNearTime,near);
+  assert.equal(evaluate(d).leads[h].confirmation.gates.exactCoverage,false);
+ }
+});
