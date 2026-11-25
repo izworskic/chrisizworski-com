@@ -19,6 +19,7 @@ Create original, useful, trusted digital products for real visitor decisions. De
 | Experience Foundry | [README](../experience-foundry/README.md), [improvement cycle](../experience-foundry/docs/IMPROVEMENT_CYCLE.md) | Implement the selected existing-tool improvement and demonstrate it with replay |
 | Production Design Standard | [Candidate standard](PRODUCTION_DESIGN_STANDARD_DRAFT.md), [reference lab](../design-systems/production-design-pilot/README.md) | Proposed art direction, reusable component contracts, visual continuity, anti-slop and visual evidence |
 | Search and business | [Search Strategy](SEARCH_STRATEGY.md), [retention](RETENTION_SKILLS.md), cost guard | Useful search-visible answers, comparable measurement, return value, protected ads and bounded cost |
+| Creator identity and branded search | [AGENTS.md](../AGENTS.md#2-never-weaken-the-name), [Name SERP Moat](NAME_SERP_MOAT.md), [name-SERP governance](../benchmarks/name-serp-governance.json), [growth playbook](../MILLION_IMPRESSIONS_PLAYBOOK.md) | Protect the primary brand result and canonical Person, reinforce genuine authorship and distinct controlled origins, measure branded outcomes separately |
 
 Field Guide V1 and Journey Atlas V1 are approved patterns where their visitor jobs fit, not default skins. Use the network registry and actual source ownership to avoid competing routes or editing an extracted mirror. Independent repositories require separately reviewed adoption; this document grants no cross-repo authority.
 
@@ -59,6 +60,18 @@ For substantial new visitor tools or reworks, Experience Investment and Experien
 5. Build: reuse authoritative engines and tested components, change smallest coherent scope. Do not clone layouts or introduce dependencies, APIs, paid services, new build steps, cron, Redis or unapproved infrastructure. Maintain useful static answers, source links, privacy, SEO/Person and Auto ads. Evaluate candidate design guidance only within its approved pilot until activated.
 6. Prove: same before/after scenario or holdout, targeted tests, actual render, failure states, full owner CI. Foundry replay must demonstrate at least one gain with preservation; structural evidence is not behavioral proof. Inspect browser screenshots rather than counting them. Existing Experience OS >=90/100, every area >=4/5, and all hard gates remain authoritative for substantial releases.
 7. Release and learn: separate committed, PR open, full checks passed, merged, matching deployment READY, live verified and measured visitor outcome. Do not infer any stage from another. Open PR, no auto-merge. Capture proven reusable component or lesson; do not claim traffic, revenue or retention uplift without comparable evidence.
+
+### Permanent search and creator-identity checkpoint
+
+Apply the existing authoritative name-SERP and search governance to **every** product investment, including a small fix, a shared engine change or a release with no SEO intent. This is an explicit routing/evidence checkpoint, not a new skill, duplicate scorecard, title policy, or activation of this candidate framework.
+
+- **Before:** resolve the canonical intent owner and generated source, inspect protected name surfaces and the actual affected page(s), read AGENTS.md section 2 and NAME_SERP_MOAT.md. For growth work read the growth playbook and session log. Record title, H1, canonical, indexability, defined Person and author/creator/publisher relationships, visible creator credit and relevant identity links. Use actual source/production evidence and state any gaps. Preserve existing approved query-first title exceptions; follow the current growth ledger's ship-and-observe mode, not obsolete experiment freeze lists.
+- **During:** preserve or strengthen genuine Chris Izworski authorship, the canonical Person `https://chrisizworski.com/#person`, the primary branded homepage and the primary identity surface `/chris-izworski/`. Keep subject-first answers, useful crawlable content, verified source attribution and truthful links to relevant Projects/Works. Prefer the exact creator name in the title when the owning policy permits and length fits; do not force the name into intent-first H1s or weaken approved titles. Never use a product homepage as Person sameAs merely because its creator owns it; do not manufacture profiles, doorway pages or link networks. Changes to protected files require the existing explicit owner approval label, not this manual.
+- **Before release:** compare before and after for all materially affected public pages and generated outputs, including shared templates. Record evidence of no regression or an explicitly approved change in the existing PR/release review. Run the existing creator-entity, name-SERP protection, search governance, canonical/freshness and full owning-repo gates; inspect output and production after deployment. Unknown evidence remains NOT VERIFIED. Independent repos must be checked under their own contracts; do not infer coverage from a central green check.
+- **Measure separately:** non-branded demand/CTR and revenue are not branded rank evidence. Use comparable 28-day GSC windows and query segmentation where available. For exact-name and close-name SERP observations, use the existing monthly and material-entity-change protocol, distinct controlled-origin/account counting, and top-10/20/30 classifications in name-SERP governance. Preserve credible earned results. Same-root pages and subdomains support the entity but do not add independent moat slots. Report actual snapshots and gaps, not guarantees; do not infer branded rank from CI, metadata, traffic growth or deployment.
+- **Owner goals:** primary homepage position 1, controlled independent top-ten target 8 (floor 7), favorable earned target 2 where high-quality authority exists, attributable occupancy targets 15/20 and 20/30. Use the governance JSON as authoritative if targets change. Do not trade product usefulness, factual accuracy or approved search ownership for name repetition.
+
+For each Wave Two release and later portfolio investment, add a short identity/search evidence line in the existing PR record. A no-change result is valid if verified. A separate name-SERP repair, identity surface update or external profile action requires its own appropriate scope and approval.
 
 ## 4. Shared craftsmanship: one platform, many products
 
@@ -194,7 +207,7 @@ Relevant existing components and engines:
 Two concepts / selected design and technology:
 Three opportunities (Foundry when applicable):
 Source and data contract / uncertainty / failure path:
-Protected facts, SEO, ads, privacy, cost, scope:
+Protected facts, SEO, creator identity/name-SERP evidence, ads, privacy, cost, scope:
 Before/after scenarios and evidence locations:
 Targeted tests / browser and screenshot review / full CI:
 Release state / measured outcomes or NOT MEASURED:
