@@ -32,7 +32,10 @@
     text('statusChangeTime','Detected during this visit · '+formatTime(event.detectedAt)+' · exact change time unknown');
     host.hidden=false;
   }
-  function renderAll(snapshot){state.snapshot=snapshot;renderStatusChange(snapshot);renderStatus(snapshot);renderVehicle(snapshot);renderIncidents(snapshot);renderWeather(snapshot);renderForecast(snapshot);renderAdvisories(snapshot);renderAlerts(snapshot);renderSources(snapshot);}
+  function renderAll(snapshot){
+    var checked=Date.parse(snapshot&&snapshot.engine&&snapshot.engine.generatedAt||'');
+    if(state.statusHistory&&Number.isFinite(checked)&&checked<state.statusHistory.lastChecked)return;
+    state.snapshot=snapshot;renderStatusChange(snapshot);renderStatus(snapshot);renderVehicle(snapshot);renderIncidents(snapshot);renderWeather(snapshot);renderForecast(snapshot);renderAdvisories(snapshot);renderAlerts(snapshot);renderSources(snapshot);}
   function renderApiFailure(){renderStatusChange(null);renderStatus({officialStatus:{state:'UNKNOWN',restrictionLevel:'UNKNOWN'},freshness:{officialStatus:{state:'unavailable'}}});var box=$('vehicleResult');box.dataset.tone='unknown';text('vehicleResultTitle','Vehicle check unavailable');text('vehicleResultCopy','The CBBT decision engine could not be reached. Verify current conditions with CBBT.');text('incidentSummary','Live incident check unavailable');renderWeather(null);renderForecast(null);}
   function populateDetailSelect(){var el=$('vehicleTypeDetail');el.innerHTML=(detailOptions[state.vehicleUi]||detailOptions.other).map(function(row){return '<option value="'+row[0]+'">'+row[1]+'</option>';}).join('');if(state.vehicleUi==='commercial')el.value=$('commercialType').value;}
   function showConditional(){document.querySelectorAll('.conditional').forEach(function(el){el.hidden=el.dataset.showFor!==state.vehicleUi;});$('propaneValveWrap').hidden=state.vehicleUi!=='rv'||$('propaneCarried').value!=='true';}
