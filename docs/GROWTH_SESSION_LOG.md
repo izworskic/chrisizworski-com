@@ -2498,3 +2498,9 @@ This is an operational journal, not a record of proven ranking lift unless measu
 - Soo Returning Visitor #1908 merged d335b9947ba41a8d51e46b0eb992dfc179fb4609 and Vercel production success; public behavioral outcome unmeasured.
 - Duluth first transfer: shared change-state engine, direction-aware adapter, capped-candidate wording, no new prediction or storage. Current main push CI not indexed; last exact reviewed synthetic gate passed. GSC/AdSense current comparable data unavailable; no uplift claim. No known production regression established.
 - Exactly one next action: verify Duluth pilot exact-head unit/browser/full gate and independent review.
+
+
+## 2026-11-25 — Wave 2A ad-policy reconciliation
+- Production network coverage rerun 45690260159 confirms Whitetail standard loader repair; five missing-code classifications correspond to existing intentional owner exclusions in Phenology and Isle Royale Ferry. Remaining missing integration, client-rendered documents and fetch failures stay unresolved; no ad delivery or revenue claim.
+- Reconcile existing exceptions in the central config, regenerate the existing network runtime, and fail the audit if a directly loaded Google or manual script bypasses an exception. Standard Auto ads and disabled manual placements otherwise unchanged. No public page, title, canonical, Person or new infrastructure change. Main Agent branch verification 45710209852 passed. Review, CI and production verification pending. GSC/AdSense comparable data NOT MEASURED.
+- Exactly one next action: run the production coverage audit after the reviewed policy reconciliation deploys and resolve remaining findings by owner.

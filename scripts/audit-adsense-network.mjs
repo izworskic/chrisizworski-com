@@ -53,10 +53,7 @@ await Promise.all([...hosts].filter(h => !h.startsWith('www.') && h !== 'chrisiz
 let runtime = {state:'unverified'};
 try {
   const r = await read('https://chrisizworski.com/assets/network-ads-v1.js');
-  const match = r.text.match(/var settings = (\{[^\n]+\});/);
-  const settings = match ? JSON.parse(match[1]) : null;
-  runtime = {status:r.status,contentType:r.contentType,loaderMode:settings?.loaderMode,manualPlacements:settings?.enabled,
-    state:r.status===200 && /javascript/.test(r.contentType || '') && settings?.loaderMode==='standard' && settings?.publisherId==='ca-pub-8222782620788075' ? 'standard-runtime' : 'invalid-runtime'};
+  runtime = audit.classifyRuntime(r.text, r.status, r.contentType);
 } catch(e) { runtime = {state:'fetch-error',error:e.message}; }
 const queue = [...urls].sort(), pages = []; let index = 0;
 console.log(`Auditing ${queue.length} discovered documents across ${hosts.size} production hosts`);
