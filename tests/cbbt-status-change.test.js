@@ -71,7 +71,7 @@ function evaluated(at,state,level,vehicle){
 }
 test('same official change has different impact on a car and a motorcycle',()=>{
  for(const [type,expected] of [['car','eligibility-unchanged'],['motorcycle','eligibility-changed']]){
-  const v={vehicleType:type};
+  const v={type:type};
   const a=decisionImpact(null,evaluated(NOW,'OPEN','NONE',v),type,NOW);
   assert.equal(a.decision,'ALLOWED');
   assert.equal(a.event,null);
@@ -84,7 +84,7 @@ test('same official change has different impact on a car and a motorcycle',()=>{
  }
 });
 test('changed vehicle inputs reset baseline and loss of evidence never grants permission',()=>{
- const car={vehicleType:'car'},bike={vehicleType:'motorcycle'};
+ const car={type:'car'},bike={type:'motorcycle'};
  const a=decisionImpact(null,evaluated(NOW,'OPEN_WITH_RESTRICTIONS','LEVEL_1',car),'car',NOW);
  const b=decisionImpact(a,evaluated(NOW+M,'OPEN_WITH_RESTRICTIONS','LEVEL_1',bike),'motorcycle',NOW+M);
  assert.equal(b.event,null);
@@ -97,9 +97,9 @@ test('changed vehicle inputs reset baseline and loss of evidence never grants pe
  assert.doesNotMatch(impactText(d.event),/now allowed/);
 });
 test('unchanged status with revised backend result is not an operating transition',()=>{
- const a=evaluated(NOW,'OPEN','NONE',{vehicleType:'car'});
+ const a=evaluated(NOW,'OPEN','NONE',{type:'car'});
  const p=decisionImpact(null,a,'car',NOW);
- const b=evaluated(NOW+M,'OPEN','NONE',{vehicleType:'car'});
+ const b=evaluated(NOW+M,'OPEN','NONE',{type:'car'});
  b.vehicleEligibility={decision:'UNKNOWN',reason:'MANUAL_REVIEW_REQUIRED_FOR_SPECIAL_VEHICLE'};
  const q=decisionImpact(p,b,'car',NOW+M);
  assert.equal(q.event.kind,'result-revised');
