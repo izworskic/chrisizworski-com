@@ -4,14 +4,14 @@
   "auditDate": "2026-11-24",
   "status": "inventory-verified-behavior-not-verified",
   "inventory": {
-    "logicalSkills": 48,
-    "mirrorFiles": 141,
-    "codex": 48,
-    "claude": 48,
-    "copilot": 45,
+    "logicalSkills": 46,
+    "mirrorFiles": 135,
+    "codex": 46,
+    "claude": 46,
+    "copilot": 43,
     "mirrorBlobMismatches": 0,
-    "dedicatedCaseSuites": 35,
-    "withoutDedicatedCasesLocated": 13,
+    "dedicatedCaseSuites": 36,
+    "withoutDedicatedCasesLocated": 10,
     "behaviorallyEvaluated": 0,
     "provenByPairedEvidence": 0
   },
@@ -457,75 +457,6 @@
         ".agents/skills/public-data-scout/SKILL.md",
         ".claude/skills/public-data-scout/SKILL.md",
         ".github/skills/public-data-scout/SKILL.md"
-      ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
-      "behavioralEvidence": {
-        "status": "NOT_VERIFIED",
-        "runs": [],
-        "decision": "retain-pending-evidence"
-      },
-      "implementationEvidence": []
-    },
-    {
-      "id": "hf-cli",
-      "family": "Hugging Face and machine learning",
-      "scope": "Hub metadata and repository discovery",
-      "expectedOutput": "Pinned revision and usage/rights assessment",
-      "routing": "Bounded, opt-in",
-      "authorization": "bounded-opt-in",
-      "documentedState": "documented",
-      "auditedSkillBlob": "39a69557845b74f8a1ec3e85dfc9ba62c020d9f7",
-      "mirrors": [
-        ".agents/skills/hf-cli/SKILL.md",
-        ".claude/skills/hf-cli/SKILL.md",
-        ".github/skills/hf-cli/SKILL.md"
-      ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
-      "behavioralEvidence": {
-        "status": "NOT_VERIFIED",
-        "runs": [],
-        "decision": "retain-pending-evidence"
-      },
-      "implementationEvidence": []
-    },
-    {
-      "id": "huggingface-datasets",
-      "family": "Hugging Face and machine learning",
-      "scope": "Inspect a candidate corpus",
-      "expectedOutput": "Schema, coverage, provenance and rights review",
-      "routing": "Bounded, opt-in",
-      "authorization": "bounded-opt-in",
-      "documentedState": "documented",
-      "auditedSkillBlob": "2238ffc7e59a872e58e29b0268c30b6055cd77de",
-      "mirrors": [
-        ".agents/skills/huggingface-datasets/SKILL.md",
-        ".claude/skills/huggingface-datasets/SKILL.md",
-        ".github/skills/huggingface-datasets/SKILL.md"
-      ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
-      "behavioralEvidence": {
-        "status": "NOT_VERIFIED",
-        "runs": [],
-        "decision": "retain-pending-evidence"
-      },
-      "implementationEvidence": []
-    },
-    {
-      "id": "huggingface-tool-builder",
-      "family": "Hugging Face and machine learning",
-      "scope": "Repeated research requiring local scripts",
-      "expectedOutput": "Bounded reproducible read-only script",
-      "routing": "Bounded, opt-in",
-      "authorization": "bounded-opt-in",
-      "documentedState": "documented",
-      "auditedSkillBlob": "7ff95d27db946281fe657a62a71026aee415d9de",
-      "mirrors": [
-        ".agents/skills/huggingface-tool-builder/SKILL.md",
-        ".claude/skills/huggingface-tool-builder/SKILL.md",
-        ".github/skills/huggingface-tool-builder/SKILL.md"
       ],
       "caseSuite": null,
       "caseCoverage": "dedicated-cases-not-located",
@@ -1173,6 +1104,29 @@
         "decision": "retain-pending-evidence"
       },
       "implementationEvidence": []
+    },
+    {
+      "id": "hf-hub-research",
+      "family": "Hugging Face and machine learning",
+      "scope": "Read-only Hub model, dataset, license and revision research; recurring research scripts",
+      "expectedOutput": "Source ledger and an ACCEPT, EXPERIMENT, REJECT or NOT VERIFIED verdict",
+      "routing": "Bounded, opt-in",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "eb67e24bf4ee621bae48e3e3d104199908a56d96",
+      "mirrors": [
+        ".agents/skills/hf-hub-research/SKILL.md",
+        ".claude/skills/hf-hub-research/SKILL.md",
+        ".github/skills/hf-hub-research/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/hf-hub-research.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
     }
   ],
   "overlapReview": [
@@ -1220,7 +1174,7 @@
       "skills": [
         "public-data-scout",
         "data-contract-validation",
-        "huggingface-datasets"
+        "hf-hub-research"
       ],
       "boundary": "Discover authoritative feeds, then validate contracts; HF dataset review only for a bounded corpus question. Never substitute model metadata for source truth.",
       "disposition": "retain-distinct"
@@ -1248,8 +1202,7 @@
     {
       "skills": [
         "ml-justification",
-        "hf-cli",
-        "huggingface-tool-builder"
+        "hf-hub-research"
       ],
       "boundary": "Decide whether a model is needed, then choose authorized metadata, task-specific benchmark or runtime fit. No default downloads or inference.",
       "disposition": "evaluate-routing-overlap"
