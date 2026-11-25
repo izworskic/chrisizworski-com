@@ -55,6 +55,12 @@ async function weatherFor(place){
   const href=point?.properties?.forecastHourly;
   if(typeof href!=='string'||!href.startsWith('https://api.weather.gov/'))throw new Error('missing official hourly forecast');
   const response=await jsonResponse(href);
+  // Match the existing US regional ShoreFeel NWS issuance policy. Retrieval
+  // time and valid forecast hours do not establish when a forecast was issued.
+  const issueMs=Date.parse(response?.properties?.updateTime||'');
+  const age=Date.now()-issueMs;
+  if(!Number.isFinite(age)||age>18*3600000||age< -3600000)
+    throw new Error('NWS hourly forecast issue time is missing or stale');
   const props=point?.properties||{};
   const grid=typeof props.gridId==='string'&&Number.isInteger(props.gridX)&&Number.isInteger(props.gridY)
     ?{office:props.gridId,x:props.gridX,y:props.gridY,resolutionKm:2.5}
