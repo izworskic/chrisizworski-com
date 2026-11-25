@@ -1,7 +1,7 @@
 'use strict';
 // Bounded, one-off research probe: no scheduled collection or production requests.
 const {createHash}=require('node:crypto');
-const DATES=['2026-10-20','2026-11-21','2026-11-22'];
+const DATES=['2026-10-20','2026-11-21','2026-11-22','2026-11-23'];
 const STATIONS=['45029','45161','45183','45002'];
 const BASE='https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LMHOFS/MODELS/';
 function plan(){
