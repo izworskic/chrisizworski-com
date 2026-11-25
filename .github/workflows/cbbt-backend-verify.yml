@@ -11,6 +11,11 @@ on:
       - 'tests/cbbt.test.js'
       - 'tests/fixtures/cbbt/**'
       - 'scripts/test-cbbt-live.mjs'
+      - 'scripts/verify-cbbt-change-browser.cjs'
+      - 'tests/cbbt-status-change.test.js'
+      - 'public/assets/cbbt-live.js'
+      - 'public/assets/cbbt-view.js'
+      - 'public/chesapeake-bay-bridge-tunnel/**'
       - '.github/workflows/cbbt-backend-verify.yml'
   pull_request:
     branches:
@@ -21,6 +26,11 @@ on:
       - 'tests/cbbt.test.js'
       - 'tests/fixtures/cbbt/**'
       - 'scripts/test-cbbt-live.mjs'
+      - 'scripts/verify-cbbt-change-browser.cjs'
+      - 'tests/cbbt-status-change.test.js'
+      - 'public/assets/cbbt-live.js'
+      - 'public/assets/cbbt-view.js'
+      - 'public/chesapeake-bay-bridge-tunnel/**'
       - '.github/workflows/cbbt-backend-verify.yml'
 
 permissions:
@@ -29,7 +39,7 @@ permissions:
 jobs:
   verify-cbbt:
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -38,6 +48,19 @@ jobs:
       - name: Install pinned dependencies
         run: npm ci
       - name: Run deterministic CBBT tests
-        run: node --test tests/cbbt.test.js
+        run: node --test tests/cbbt.test.js tests/cbbt-frontend.test.js tests/cbbt-status-change.test.js
       - name: Run strict live-source smoke test
         run: node scripts/test-cbbt-live.mjs --strict
+      - name: Install isolated Chromium harness
+        run: |
+          npm install --prefix "$RUNNER_TEMP/cbbt-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
+          "$RUNNER_TEMP/cbbt-playwright/node_modules/.bin/playwright" install --with-deps chromium
+      - name: Replay observed status changes
+        run: CBBT_PW_MODULE="$RUNNER_TEMP/cbbt-playwright/node_modules/playwright" node scripts/verify-cbbt-change-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cbbt-change-qa
+          path: artifacts/cbbt-change-qa/
+          if-no-files-found: ignore
+          retention-days: 7
