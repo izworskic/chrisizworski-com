@@ -7,10 +7,10 @@ const pad=n=>String(n).padStart(2,'0');
 const makeResponse=(body,ok=true)=>({ok,status:ok?200:503,
  text:async()=>typeof body==='string'?body:JSON.stringify(body),
  json:async()=>typeof body==='string'?JSON.parse(body):body});
-function hourly(temp){
+function hourly(temp,issueOffset=0){
  const date=new Date(),h=new Date(Date.UTC(date.getUTCFullYear(),
    date.getUTCMonth(),date.getUTCDate(),date.getUTCHours()));
- return {properties:{periods:[{
+ return {properties:{updateTime:new Date(date.getTime()+issueOffset).toISOString(),periods:[{
   startTime:h.toISOString(),temperature:temp,temperatureUnit:'F',
   windSpeed:'8 mph',windDirection:'NE',relativeHumidity:{value:48},
   isDaytime:true,shortForecast:'Mostly Clear'}]}};
@@ -22,7 +22,7 @@ function buoy(now){
 }
 test('NWS points grid identity and NOAA SBLM4 sensor have honest API provenance',async()=>{
  const original=global.fetch;
- let same=false,fixed=true,wrongMarine=false;
+ let same=false,fixed=true,wrongMarine=false,shoreIssueOffset=0;
  const now=new Date();
  global.fetch=async target=>{
   const u=String(target);
@@ -32,7 +32,7 @@ test('NWS points grid identity and NOAA SBLM4 sensor have honest API provenance'
   if(u.includes('api.weather.gov/points/43.6714,-84.1000'))return makeResponse({
    properties:{forecastHourly:'https://api.weather.gov/gridpoints/DTX/95,60/forecast/hourly',
     type:'land',gridId:'DTX',gridX:same?100:95,gridY:60}});
-  if(u.includes('/gridpoints/DTX/100,60/forecast/hourly'))return makeResponse(hourly(82));
+  if(u.includes('/gridpoints/DTX/100,60/forecast/hourly'))return makeResponse(hourly(82,shoreIssueOffset));
   if(u.includes('/gridpoints/DTX/95,60/forecast/hourly'))return makeResponse(hourly(86));
   if(u.includes('/SBLM4.txt'))return makeResponse(fixed?buoy(now):'',fixed);
   return makeResponse('',false);
@@ -51,6 +51,12 @@ test('NWS points grid identity and NOAA SBLM4 sensor have honest API provenance'
   assert.equal(d.shorelinePhysics.independentMarineAir.stationId,'SBLM4');
   assert.equal(d.shorelinePhysics.independentMarineAir.tempF,58.1);
   assert.match(d.shorelinePhysics.independentMarineAir.location,/20 km from the park beach/);
+  shoreIssueOffset=-19*3600000;
+  const expired=await call();
+  assert.equal(expired.weatherNow,null);
+  assert.equal(expired.beachFeel.status,'unavailable');
+  assert.equal(expired.shorelinePhysics.independentMarineAir.stationId,'SBLM4');
+  shoreIssueOffset=0;
   same=true;
   const s=await call();
   assert.equal(s.shorelinePhysics.gridRelationship.status,'same-grid');

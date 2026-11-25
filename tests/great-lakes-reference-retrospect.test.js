@@ -1,0 +1,16 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict');
+const {retrospect,proxyGates,prepare,evaluateCandidate,summary}=require('../scripts/retrospect-great-lakes-reference.cjs');
+const {replay}=require('../scripts/benchmark-great-lakes-passage.cjs');
+const {CANAL}=require('../lib/duluth-canal');
+const t=Date.parse('2024-09-04T12:00:00Z'),iso=m=>new Date(t+m*60000).toISOString();
+const row=(m,extra={})=>({mmsi:'366123456',seen:iso(m),lat:46.78,lon:-92.08,shipType:70,sog:8,cog:240,length:200,...extra});
+const doc=observations=>({schemaVersion:1,kind:'synthetic',source:{url:'https://example.invalid/fixture',receiptSha256:'a'.repeat(64),review:'constructed'},start:'2024-09-04T00:00:00Z',end:'2024-09-05T00:00:00Z',observations});
+const c={site:'duluth',mmsi:'366123456',direction:'arrival',start:iso(30),end:iso(31)};
+const rows=Array.from({length:32},(_,i)=>row(i));
+const engine={buildCandidate(v,issue){assert.equal(v.seen,iso(0));assert.equal(v.destination,null);assert.equal(v.speedKnots,8);assert.equal(issue,t);return {direction:'arrival',distanceNm:4,window:{start:iso(25),midpoint:iso(30),end:iso(35)}};}};
+test('same-model target proxy remains distinct from physical bridge',()=>{const g=proxyGates();assert.deepEqual(g[2].center,CANAL);assert.equal(g[2].id,'duluth-model-reference');assert.equal(g[2].geometryStatus,'PROVISIONAL_REFERENCE_NOT_SURVEYED');});
+test('fixed issue before outcome, same-distance baseline, interval error bounds',()=>{const r=evaluateCandidate(c,prepare(doc(rows)),engine);assert.equal(r.status,'scored');assert.deepEqual(r.model,[0,1]);assert.deepEqual(r.baseline,[0,1]);assert.equal(r.coverage,'contained');assert.equal(r.width,10);});
+test('gaps, duplicate conflict and missing issue withhold rather than select a later fix',()=>{assert.equal(evaluateCandidate(c,prepare(doc(rows.slice(3))),engine).status,'no_issue_snapshot');assert.equal(evaluateCandidate(c,prepare(doc(rows.filter(r=>Date.parse(r.seen)<t+10*60000||Date.parse(r.seen)>t+15*60000))),engine).status,'discontinuous_observation');assert.equal(evaluateCandidate(c,prepare(doc([...rows,row(10,{sog:9})])),engine).status,'discontinuous_observation');});
+test('abstentions and direction disagreements remain visible',()=>{const tracks=prepare(doc(rows));assert.equal(evaluateCandidate(c,tracks,{buildCandidate:()=>null}).status,'model_abstained');assert.equal(evaluateCandidate(c,tracks,{buildCandidate:()=>({direction:'departure'})}).status,'direction_mismatch');assert.equal(summary([{status:'model_abstained'}]).modelMaeLowerMinutes,null);});
+test('holdout excluded, output explicitly not independent validation',()=>{const a=retrospect(doc([]));assert.equal(a.overall.pairedScored,0);assert.equal(a.fieldAccuracyVerified,false);assert.equal(a.productionCalibrationAuthorized,false);assert.equal(a.receiptTimesAvailable,false);assert.throws(()=>retrospect({...doc([]),start:'2024-09-21T00:00:00Z',end:'2024-09-22T00:00:00Z'}));assert.throws(()=>replay(a));});

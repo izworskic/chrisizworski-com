@@ -16,7 +16,7 @@ Trigger cases for `skill-eval`, `plain-voice` and `vercel-cost-guard`. Status: N
 | add pressure tests for the no-auto-merge rule | yes |
 | run the test suite | no (npm test) |
 | the skill-lint test failed on a mirror | no (fix the mirror; lint already explains) |
-| install the Hugging Face CLI | no (hf-cli) |
+| install the Hugging Face CLI | no (hf-hub-research) |
 | build the aurora alert | no (condition-alerts) |
 
 ## plain-voice

@@ -52,7 +52,7 @@ const checks={
   trust:[
     ['nearby AIS list uses true lock distance',js.includes('v=>distanceKm(v,lock)<=1.5')],
     ['nearby AIS detail count uses same distance',js.includes('v=>distanceKm(v,lock)<=1.5).length')],
-    ['AIS freshness gate preserved',js.includes('minutesOld(v.seen)<=30')],
+    ['AIS freshness gate preserved',js.includes('GreatLakesAisEvidence?.positionFresh(v,Date.now())===true')&&html.indexOf('/assets/ais-movement.js?v=')>=0&&html.indexOf('/assets/ais-movement.js?v=')<html.indexOf('/assets/welland-canal.js?v=')],
     ['no AIS lock-occupancy claim',js.includes('Not a lock occupancy count.')],
     ['Lock 7 photo names the correct lock',js.includes("caption:'Lock 7 chamber · Thorold, Ontario'")],
     ['photo creators and licences linked',html.includes('id="lockDetailImageLicense"')&&html.includes('id="lockDetailImageCredit"')],

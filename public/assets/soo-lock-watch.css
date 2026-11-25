@@ -18,7 +18,7 @@
 .lock-watch .lw-verdict-head{margin:0 0 6px;font-size:19px;line-height:1.35;color:#12384a;font-weight:bold}
 .lock-watch .lw-status-match .lw-verdict-head{color:#1d5a26}
 .lock-watch .lw-status-in-lock-now .lw-verdict-head{color:#1d5a26}
-.lock-watch .lw-status-none .lw-verdict-head,.lock-watch .lw-status-no-ships .lw-verdict-head{color:#6a4a10}
+.lock-watch .lw-status-park-hours .lw-verdict-head,.lock-watch .lw-status-stale-reports .lw-verdict-head,.lock-watch .lw-status-none .lw-verdict-head,.lock-watch .lw-status-no-ships .lw-verdict-head{color:#6a4a10}
 .lock-watch .lw-status-unavailable .lw-verdict-head,.lock-watch .lw-status-season-closed .lw-verdict-head{color:#7a2a24}
 .lock-watch .lw-verdict-detail{margin:0 0 8px;font-size:14px;line-height:1.6;color:#33403f}
 .lock-watch .lw-adjust{margin:2px 0 10px;font:700 13px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#fff;background:#165d71;border:1px solid #165d71;border-radius:4px;padding:9px 12px;cursor:pointer;min-height:40px}
@@ -110,3 +110,12 @@
 .lock-sim .lock-live-note[hidden]{display:none}
 .schedule-answer .schedule-crosscheck{font-size:14px;color:#4a5557}
 @media(max-width:480px){.lock-watch .lw-weather{margin-left:14px;margin-right:14px}}
+
+.lock-watch .lw-change{margin:8px 18px;padding:10px 12px;border-left:3px solid #165d71;background:#edf4f3;color:#12384a;font:500 14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-wrap:anywhere}
+.lock-watch .lw-change[hidden]{display:none}
+
+.lock-watch .lw-memory{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;margin:6px 18px 10px;color:#33403f}
+.lock-watch .lw-memory[hidden]{display:none}
+.lock-watch .lw-memory-button{min-height:44px;border:1px solid #9cb5bd;background:transparent;border-radius:4px;color:#165d71;font:700 13px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:8px 10px;cursor:pointer;text-align:left}
+.lock-watch .lw-memory-button:focus-visible{outline:3px solid #f2a93b;outline-offset:2px}
+.lock-watch .lw-memory-note{flex:1 1 220px;margin:0;font:400 12.5px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-wrap:anywhere}

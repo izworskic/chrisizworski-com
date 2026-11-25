@@ -1,0 +1,489 @@
+{
+  "schemaVersion": 1,
+  "kind": "SOO_CONTINUOUS_APPROACH_DEVELOPMENT",
+  "dates": [
+    "2025-06-15",
+    "2025-08-15",
+    "2025-10-15"
+  ],
+  "policy": {
+    "initialGridMinutes": 15,
+    "updateGridMinutes": 5,
+    "maxAgeMinutes": 5,
+    "horizonMinutes": 480,
+    "maxLateralNm": 0.8
+  },
+  "sourceRun": 45390603940,
+  "daily": [
+    {
+      "date": "2025-06-15",
+      "archiveSha256": "582316049ed53b85a3008dea8d531ebf6dcbb3cd5ab1bd1993275ebb3b04965c",
+      "fixes": 7371,
+      "vessels": 22,
+      "noIssue": 13,
+      "episodes": 9,
+      "outcomes": {
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 9
+      }
+    },
+    {
+      "date": "2025-08-15",
+      "archiveSha256": "653af1f277a299ac557b905b283cde351050f8ae28e250f136cbf609eeaefd52",
+      "fixes": 7013,
+      "vessels": 21,
+      "noIssue": 9,
+      "episodes": 12,
+      "outcomes": {
+        "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 1,
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 10,
+        "RIGHT_CENSORED_BY_DAY_END": 1
+      }
+    },
+    {
+      "date": "2025-10-15",
+      "archiveSha256": "ed88dd3d16caf99fb34391ac6105744eae331e61b5c30f96e3a0bcc08a319ae6",
+      "fixes": 4713,
+      "vessels": 13,
+      "noIssue": 4,
+      "episodes": 9,
+      "outcomes": {
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 9
+      }
+    }
+  ],
+  "episodes": 30,
+  "matchedInitialEpisodes": 28,
+  "outcomes": {
+    "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 1,
+    "OBSERVED_CHAMBER_REFERENCE_BRACKET": 28,
+    "RIGHT_CENSORED_BY_DAY_END": 1
+  },
+  "allSlots": 2598,
+  "allStates": {
+    "after_observed_chamber": 1544,
+    "forecast_available": 692,
+    "low_reported_speed": 220,
+    "model_chamber_presence": 4,
+    "off_route": 105,
+    "other_side": 10,
+    "stale_or_missing": 23
+  },
+  "unbanded": {
+    "episodesWithOpportunity": 30,
+    "episodesWithForecast": 0,
+    "slots": 1682,
+    "available": 0,
+    "availability": 0,
+    "states": {
+      "after_observed_chamber": 1544,
+      "off_route": 105,
+      "other_side": 10,
+      "stale_or_missing": 23
+    },
+    "motionStates": {},
+    "matchedEpisodes": 0,
+    "matchedUpdates": 0,
+    "episodeWeightedMAE": null,
+    "episodeWeightedNaiveMAE": null,
+    "episodeWeightedContainment": null,
+    "episodeWeightedWidth": null,
+    "episodeWeightedWarning": null,
+    "episodeWeightedSignedError": null,
+    "meanFirstAvailableWarning": null
+  },
+  "bands": {
+    "10_to_15": {
+      "episodesWithOpportunity": 29,
+      "episodesWithForecast": 29,
+      "slots": 176,
+      "available": 176,
+      "availability": 1,
+      "states": {
+        "forecast_available": 176
+      },
+      "motionStates": {
+        "supported": 174,
+        "disagreement": 2
+      },
+      "matchedEpisodes": 27,
+      "matchedUpdates": 169,
+      "episodeWeightedMAE": 53.51,
+      "episodeWeightedNaiveMAE": 69.56,
+      "episodeWeightedContainment": 0.26,
+      "episodeWeightedWidth": 63.88,
+      "episodeWeightedWarning": 155.29,
+      "episodeWeightedSignedError": -51.68,
+      "meanFirstAvailableWarning": 168.44
+    },
+    "5_to_10": {
+      "episodesWithOpportunity": 30,
+      "episodesWithForecast": 30,
+      "slots": 162,
+      "available": 161,
+      "availability": 0.99,
+      "states": {
+        "forecast_available": 161,
+        "low_reported_speed": 1
+      },
+      "motionStates": {
+        "disagreement": 3,
+        "supported": 124,
+        "off_route": 33,
+        "slow_progress": 1
+      },
+      "matchedEpisodes": 28,
+      "matchedUpdates": 157,
+      "episodeWeightedMAE": 49.64,
+      "episodeWeightedNaiveMAE": 65.53,
+      "episodeWeightedContainment": 0.18,
+      "episodeWeightedWidth": 43.59,
+      "episodeWeightedWarning": 116.39,
+      "episodeWeightedSignedError": -44.51,
+      "meanFirstAvailableWarning": 133.86
+    },
+    "3_to_5": {
+      "episodesWithOpportunity": 30,
+      "episodesWithForecast": 30,
+      "slots": 102,
+      "available": 102,
+      "availability": 1,
+      "states": {
+        "forecast_available": 102
+      },
+      "motionStates": {
+        "supported": 100,
+        "disagreement": 2
+      },
+      "matchedEpisodes": 28,
+      "matchedUpdates": 97,
+      "episodeWeightedMAE": 40.73,
+      "episodeWeightedNaiveMAE": 55.73,
+      "episodeWeightedContainment": 0.2,
+      "episodeWeightedWidth": 26.25,
+      "episodeWeightedWarning": 90.37,
+      "episodeWeightedSignedError": -40.52,
+      "meanFirstAvailableWarning": 96.53
+    },
+    "1_to_3": {
+      "episodesWithOpportunity": 30,
+      "episodesWithForecast": 30,
+      "slots": 174,
+      "available": 158,
+      "availability": 0.91,
+      "states": {
+        "forecast_available": 158,
+        "low_reported_speed": 16
+      },
+      "motionStates": {
+        "disagreement": 50,
+        "supported": 103,
+        "slow_progress": 2,
+        "insufficient_history": 3
+      },
+      "matchedEpisodes": 28,
+      "matchedUpdates": 147,
+      "episodeWeightedMAE": 33.67,
+      "episodeWeightedNaiveMAE": 42.5,
+      "episodeWeightedContainment": 0.19,
+      "episodeWeightedWidth": 20.79,
+      "episodeWeightedWarning": 67.55,
+      "episodeWeightedSignedError": -32.94,
+      "meanFirstAvailableWarning": 79.21
+    },
+    "0_to_1": {
+      "episodesWithOpportunity": 30,
+      "episodesWithForecast": 30,
+      "slots": 302,
+      "available": 95,
+      "availability": 0.31,
+      "states": {
+        "forecast_available": 95,
+        "low_reported_speed": 203,
+        "model_chamber_presence": 4
+      },
+      "motionStates": {
+        "disagreement": 38,
+        "supported": 49,
+        "slow_progress": 7,
+        "insufficient_history": 1
+      },
+      "matchedEpisodes": 28,
+      "matchedUpdates": 89,
+      "episodeWeightedMAE": 17.53,
+      "episodeWeightedNaiveMAE": 17.29,
+      "episodeWeightedContainment": 0.52,
+      "episodeWeightedWidth": 19.64,
+      "episodeWeightedWarning": 34.91,
+      "episodeWeightedSignedError": -15.77,
+      "meanFirstAvailableWarning": 49.75
+    }
+  },
+  "byDirection": {
+    "upbound": {
+      "10_to_15": {
+        "episodesWithOpportunity": 13,
+        "episodesWithForecast": 13,
+        "slots": 92,
+        "available": 92,
+        "availability": 1,
+        "states": {
+          "forecast_available": 92
+        },
+        "motionStates": {
+          "supported": 91,
+          "disagreement": 1
+        },
+        "matchedEpisodes": 13,
+        "matchedUpdates": 92,
+        "episodeWeightedMAE": 50.25,
+        "episodeWeightedNaiveMAE": 64.23,
+        "episodeWeightedContainment": 0.34,
+        "episodeWeightedWidth": 73.09,
+        "episodeWeightedWarning": 164.36,
+        "episodeWeightedSignedError": -46.45,
+        "meanFirstAvailableWarning": 179.55
+      },
+      "5_to_10": {
+        "episodesWithOpportunity": 14,
+        "episodesWithForecast": 14,
+        "slots": 109,
+        "available": 108,
+        "availability": 0.99,
+        "states": {
+          "forecast_available": 108,
+          "low_reported_speed": 1
+        },
+        "motionStates": {
+          "disagreement": 3,
+          "supported": 104,
+          "slow_progress": 1
+        },
+        "matchedEpisodes": 14,
+        "matchedUpdates": 108,
+        "episodeWeightedMAE": 56.12,
+        "episodeWeightedNaiveMAE": 71.25,
+        "episodeWeightedContainment": 0.1,
+        "episodeWeightedWidth": 49.85,
+        "episodeWeightedWarning": 125.47,
+        "episodeWeightedSignedError": -46.42,
+        "meanFirstAvailableWarning": 142.46
+      },
+      "3_to_5": {
+        "episodesWithOpportunity": 14,
+        "episodesWithForecast": 14,
+        "slots": 51,
+        "available": 51,
+        "availability": 1,
+        "states": {
+          "forecast_available": 51
+        },
+        "motionStates": {
+          "supported": 50,
+          "disagreement": 1
+        },
+        "matchedEpisodes": 14,
+        "matchedUpdates": 51,
+        "episodeWeightedMAE": 43.46,
+        "episodeWeightedNaiveMAE": 57.53,
+        "episodeWeightedContainment": 0.16,
+        "episodeWeightedWidth": 28.63,
+        "episodeWeightedWarning": 96.92,
+        "episodeWeightedSignedError": -43.46,
+        "meanFirstAvailableWarning": 103.53
+      },
+      "1_to_3": {
+        "episodesWithOpportunity": 14,
+        "episodesWithForecast": 14,
+        "slots": 71,
+        "available": 71,
+        "availability": 1,
+        "states": {
+          "forecast_available": 71
+        },
+        "motionStates": {
+          "disagreement": 19,
+          "supported": 49,
+          "insufficient_history": 3
+        },
+        "matchedEpisodes": 14,
+        "matchedUpdates": 71,
+        "episodeWeightedMAE": 41.28,
+        "episodeWeightedNaiveMAE": 51.74,
+        "episodeWeightedContainment": 0.07,
+        "episodeWeightedWidth": 20.26,
+        "episodeWeightedWarning": 74.99,
+        "episodeWeightedSignedError": -41.28,
+        "meanFirstAvailableWarning": 85.31
+      },
+      "0_to_1": {
+        "episodesWithOpportunity": 14,
+        "episodesWithForecast": 14,
+        "slots": 177,
+        "available": 47,
+        "availability": 0.27,
+        "states": {
+          "forecast_available": 47,
+          "low_reported_speed": 126,
+          "model_chamber_presence": 4
+        },
+        "motionStates": {
+          "disagreement": 18,
+          "supported": 22,
+          "slow_progress": 6,
+          "insufficient_history": 1
+        },
+        "matchedEpisodes": 14,
+        "matchedUpdates": 46,
+        "episodeWeightedMAE": 22.59,
+        "episodeWeightedNaiveMAE": 23.05,
+        "episodeWeightedContainment": 0.5,
+        "episodeWeightedWidth": 19.44,
+        "episodeWeightedWarning": 39.71,
+        "episodeWeightedSignedError": -21.11,
+        "meanFirstAvailableWarning": 59.24
+      }
+    },
+    "downbound": {
+      "10_to_15": {
+        "episodesWithOpportunity": 16,
+        "episodesWithForecast": 16,
+        "slots": 84,
+        "available": 84,
+        "availability": 1,
+        "states": {
+          "forecast_available": 84
+        },
+        "motionStates": {
+          "supported": 83,
+          "disagreement": 1
+        },
+        "matchedEpisodes": 14,
+        "matchedUpdates": 77,
+        "episodeWeightedMAE": 56.54,
+        "episodeWeightedNaiveMAE": 74.5,
+        "episodeWeightedContainment": 0.18,
+        "episodeWeightedWidth": 55.33,
+        "episodeWeightedWarning": 146.86,
+        "episodeWeightedSignedError": -56.54,
+        "meanFirstAvailableWarning": 158.11
+      },
+      "5_to_10": {
+        "episodesWithOpportunity": 16,
+        "episodesWithForecast": 16,
+        "slots": 53,
+        "available": 53,
+        "availability": 1,
+        "states": {
+          "forecast_available": 53
+        },
+        "motionStates": {
+          "off_route": 33,
+          "supported": 20
+        },
+        "matchedEpisodes": 14,
+        "matchedUpdates": 49,
+        "episodeWeightedMAE": 43.17,
+        "episodeWeightedNaiveMAE": 59.81,
+        "episodeWeightedContainment": 0.26,
+        "episodeWeightedWidth": 37.32,
+        "episodeWeightedWarning": 107.3,
+        "episodeWeightedSignedError": -42.6,
+        "meanFirstAvailableWarning": 125.26
+      },
+      "3_to_5": {
+        "episodesWithOpportunity": 16,
+        "episodesWithForecast": 16,
+        "slots": 51,
+        "available": 51,
+        "availability": 1,
+        "states": {
+          "forecast_available": 51
+        },
+        "motionStates": {
+          "supported": 50,
+          "disagreement": 1
+        },
+        "matchedEpisodes": 14,
+        "matchedUpdates": 46,
+        "episodeWeightedMAE": 37.99,
+        "episodeWeightedNaiveMAE": 53.93,
+        "episodeWeightedContainment": 0.24,
+        "episodeWeightedWidth": 23.87,
+        "episodeWeightedWarning": 83.83,
+        "episodeWeightedSignedError": -37.58,
+        "meanFirstAvailableWarning": 89.54
+      },
+      "1_to_3": {
+        "episodesWithOpportunity": 16,
+        "episodesWithForecast": 16,
+        "slots": 103,
+        "available": 87,
+        "availability": 0.84,
+        "states": {
+          "forecast_available": 87,
+          "low_reported_speed": 16
+        },
+        "motionStates": {
+          "disagreement": 31,
+          "supported": 54,
+          "slow_progress": 2
+        },
+        "matchedEpisodes": 14,
+        "matchedUpdates": 76,
+        "episodeWeightedMAE": 26.07,
+        "episodeWeightedNaiveMAE": 33.26,
+        "episodeWeightedContainment": 0.31,
+        "episodeWeightedWidth": 21.32,
+        "episodeWeightedWarning": 60.1,
+        "episodeWeightedSignedError": -24.6,
+        "meanFirstAvailableWarning": 73.11
+      },
+      "0_to_1": {
+        "episodesWithOpportunity": 16,
+        "episodesWithForecast": 16,
+        "slots": 125,
+        "available": 48,
+        "availability": 0.38,
+        "states": {
+          "forecast_available": 48,
+          "low_reported_speed": 77
+        },
+        "motionStates": {
+          "disagreement": 20,
+          "supported": 27,
+          "slow_progress": 1
+        },
+        "matchedEpisodes": 14,
+        "matchedUpdates": 43,
+        "episodeWeightedMAE": 12.48,
+        "episodeWeightedNaiveMAE": 11.53,
+        "episodeWeightedContainment": 0.54,
+        "episodeWeightedWidth": 19.84,
+        "episodeWeightedWarning": 30.11,
+        "episodeWeightedSignedError": -10.43,
+        "meanFirstAvailableWarning": 40.26
+      }
+    }
+  },
+  "withdrawals": 67,
+  "resumptions": 37,
+  "meanAbsoluteRevisionMinutes": 4.13,
+  "consecutiveRevisions": 625,
+  "scope": "First eligible vessel-day, fixed five-minute ticks until eight hours or UTC day end. Closure only when a strict chamber fix has actually been observed by tick. After-closure slots remain visible; conditional metrics use same initial bracket and only ticks at or before previous outside fix. Bands are observed position, not inferred crossings; stale slots have unknown band. Per-episode averaging within bands, not independent update counts. No fitting, no field ground truth, no fresh holdout, no production changes.",
+  "freshHoldout": false,
+  "officialLockEntryGroundTruth": false,
+  "productionCalibrationAuthorized": false,
+  "forecastEnabled": false,
+  "verifiedWorkflowRun": 45612405911,
+  "verifiedWorkflowJob": 139199042522,
+  "sourceCommit": "db4ac4d495cc094aed15abca1888bffdeed20468",
+  "sourceArtifact": 14917313872,
+  "reportArtifact": 15019849814,
+  "reportArtifactZipSha256": "d04d174e1c3028b272901259c622f3b51f9ac865c8b20bfcc1e0310ea00fba4d",
+  "tests": {
+    "total": 16,
+    "pass": 16,
+    "fail": 0
+  },
+  "decision": "LOW_SPEED_NEAR_LOCK_AVAILABILITY_GAP_NO_MODEL_PROMOTION"
+}
