@@ -1,0 +1,55 @@
+name: Soo independent-date proxy validation
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches: ['research/freighter-intelligence-consolidation-20261125']
+permissions:
+  contents: read
+jobs:
+  validate:
+    if: github.head_ref == 'research/soo-independent-2025-validation-20261125'
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify frozen research and regression tests before data access
+        run: node --test tests/soo-predictive-study.test.js tests/great-lakes-historical-library.test.js tests/soo-independent-validation.test.js
+      - name: Acquire only four fixed NOAA dates
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v zstd
+          mkdir -p "$RUNNER_TEMP/soo-validation" research-output
+          for day in 2025-10-22 2025-11-05 2025-11-19 2025-12-03; do
+            archive="$RUNNER_TEMP/soo-validation/$day.csv.zst"
+            output="$RUNNER_TEMP/soo-validation/$day.json"
+            if curl --fail --silent --show-error --connect-timeout 15 --max-time 350 --max-filesize 400000000 "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-$day.csv.zst" -o "$archive" && test -s "$archive"; then
+              sha=$(sha256sum "$archive" | cut -d ' ' -f 1)
+              if zstd -dc -- "$archive" | node scripts/soo-independent-validation.cjs collect "$day" "$sha" "$output"; then
+                echo "Completed $day"
+              else
+                rm -f "$output"
+                echo "Collection failed for $day" >&2
+              fi
+            else
+              echo "Archive unavailable for $day" >&2
+            fi
+            rm -f "$archive"
+          done
+      - name: Score frozen candidate without fitting on holdout
+        shell: bash
+        run: |
+          set -euo pipefail
+          shopt -s nullglob
+          files=("$RUNNER_TEMP"/soo-validation/*.json)
+          node scripts/soo-independent-validation.cjs report research-output/soo-independent-validation.json "${files[@]}" | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: soo-independent-aggregate
+          path: research-output/soo-independent-validation.json
+          retention-days: 5
+          if-no-files-found: warn
