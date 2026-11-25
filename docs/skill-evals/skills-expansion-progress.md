@@ -23,11 +23,11 @@ Read `skills-expansion-plan.md` first. Update this log in the same commit as eac
 | 17 | answer-feedback | Done | Fail, Pass | Commit 10ec7ce |
 | 18 | ml-justification | Done | Pass, Pass | Folds huggingface-best, transformers-js, hf-semantic-discovery, hf-forecast-benchmark. Commit de666b7 |
 | 19 | hf-hub-research | Done | Pass, Pass | Folds hf-cli, huggingface-datasets, huggingface-tool-builder. Commit "Fold three Hugging Face skills into hf-hub-research" |
-| 20 | Shared files commit | Next | | AGENTS.md, OS manual section 5, HF adoption note |
+| 20 | Shared files commit | Done | | AGENTS.md, OS manual section 5 (46 skills), capability library, HF adoption note |
 
 ## Next action
 
-Make the shared files commit: add a short AGENTS.md section for waves 2 to 4, update the HUGGING_FACE_CAPABILITIES section to name ml-justification and hf-hub-research, and update docs/PRODUCT_ENGINEERING_OS.md section 5 so its catalog matches the skill folders (46). Then run the skill tests, `node --test tests/*.test.js` and `node scripts/verify-quick.mjs`, push, and update the PR description.
+All twenty items are built and committed on PR #1976. Nothing is merged. The owner's next step is the single Codex prompt that merges these skills into the Product Engineering OS; settle the open notes below and the open questions in `skills-expansion-plan.md` in that pass.
 
 ## Open notes for the Codex merge
 

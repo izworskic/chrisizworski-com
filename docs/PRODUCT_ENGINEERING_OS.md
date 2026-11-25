@@ -72,11 +72,11 @@ Share semantic type roles, spacing, focus, source/time/status vocabulary, select
 
 Eight standard responsibilities already mapped to existing authorities (not eight new skills): visual design and art direction (Experience OS candidate); interaction and geography (Experience OS and existing Google Maps standard); editorial voice (plain-voice and interpretive guidance); data presentation (source contracts and visual-data-storytelling candidate); scientific engineering (Python Intelligence OS); performance and accessibility (web quality and Playwright); evidence and release (Foundry and owning-repo gates). These should eventually share the proven component library, not duplicate rules in each skill.
 
-## 5. Skill catalog: all 45 documented capabilities
+## 5. Skill catalog: all 46 documented capabilities
 
 The linked SKILL.md is the actual method. This index describes routing and expected output, not a substitute for reading it. Candidate means independent behavioral validation is pending; documented or available does not mean proven. Do not infer maturity from a file's presence. Mirror copies remain governed by skill-lint; experience-investment, penpot-design and rea are explicitly exempt from a Copilot folder copy (Copilot can reference the Codex files through its instructions).
 
-### Experience and research (7)
+### Experience and research (9)
 
 | Skill | Select when | Required output | Routing |
 | --- | --- | --- | --- |
@@ -87,6 +87,8 @@ The linked SKILL.md is the actual method. This index describes routing and expec
 | [penpot-design](../.agents/skills/penpot-design/SKILL.md) | Explicit Penpot request | Verified editable design and review | Explicit owner request only |
 | [stitch-concept-review](../.agents/skills/stitch-concept-review/SKILL.md) | Explicit Google Stitch request | Concept comparison, including local alternative | Explicit owner request only |
 | [rea](../.agents/skills/rea/SKILL.md) | Explicit authorized reverse engineering target | Reproducible observations, not copied code/assets | Explicit owner request only |
+| [photo-sourcing](../.agents/skills/photo-sourcing/SKILL.md) | Real-place photos for a tool, unknown photo source or license, photo QA | Credit record, place confirmation and license verdict per photo | When a page needs or reviews real-place photos |
+| [custom-basemap](../.agents/skills/custom-basemap/SKILL.md) | Tool maps that look stock or depend on third-party tiles | Regional extract, host decision with range test, shared style and one pilot | When building or redesigning a tool map |
 
 ### Scientific and analytical intelligence (11)
 
@@ -104,20 +106,14 @@ The linked SKILL.md is the actual method. This index describes routing and expec
 | [historical-data-intelligence](../.agents/skills/historical-data-intelligence/SKILL.md) | Archives, seasonal baselines, backtests | Versioned joins, coverage and reproducible comparisons | Candidate; evaluate first |
 | [public-data-scout](../.agents/skills/public-data-scout/SKILL.md) | New external data feed | Primary-source ledger, rights and failure handling | When relevant |
 
-### Hugging Face and machine learning (8)
+### Hugging Face and machine learning (2)
 
 | Skill | Select when | Required output | Routing |
 | --- | --- | --- | --- |
-| [hf-cli](../.agents/skills/hf-cli/SKILL.md) | Hub metadata and repository discovery | Pinned revision and usage/rights assessment | Bounded, opt-in |
-| [huggingface-best](../.agents/skills/huggingface-best/SKILL.md) | Determine whether ML is justified | No-model and competing-model benchmark | Bounded, opt-in |
-| [huggingface-datasets](../.agents/skills/huggingface-datasets/SKILL.md) | Inspect a candidate corpus | Schema, coverage, provenance and rights review | Bounded, opt-in |
-| [huggingface-tool-builder](../.agents/skills/huggingface-tool-builder/SKILL.md) | Repeated research requiring local scripts | Bounded reproducible read-only script | Bounded, opt-in |
-| [transformers-js](../.agents/skills/transformers-js/SKILL.md) | Consider browser or offline inference | Measured bytes, latency, privacy and fallback | Bounded, opt-in |
-| [hf-semantic-discovery](../.agents/skills/hf-semantic-discovery/SKILL.md) | Semantic discovery/search experiment | Held-out query relevance vs lexical baseline | Bounded, opt-in |
-| [hf-visual-evidence](../.agents/skills/hf-visual-evidence/SKILL.md) | Already-sourced photo QA | Review-only captions/duplicates, human confirmation | Bounded, opt-in |
-| [hf-forecast-benchmark](../.agents/skills/hf-forecast-benchmark/SKILL.md) | Offline forecast model challenger | Out-of-time comparison and calibration | Bounded, opt-in |
+| [ml-justification](../.agents/skills/ml-justification/SKILL.md) | Proposed model, embeddings, semantic search, forecast challenger or browser inference | Offline three-way comparison against no-model baselines and a go or no-go | Bounded, opt-in |
+| [hf-hub-research](../.agents/skills/hf-hub-research/SKILL.md) | Hub model, dataset, license or revision research; recurring read-only research scripts | Source ledger and an ACCEPT, EXPERIMENT, REJECT or NOT VERIFIED verdict | Bounded, opt-in |
 
-### Visitor retention (5)
+### Visitor retention (6)
 
 | Skill | Select when | Required output | Routing |
 | --- | --- | --- | --- |
@@ -126,6 +122,7 @@ The linked SKILL.md is the actual method. This index describes routing and expec
 | [my-spots-offline](../.agents/skills/my-spots-offline/SKILL.md) | Useful saved places or low-signal use | Local storage, clear controls and timestamped cache | Only after valid return contract |
 | [computed-windows](../.agents/skills/computed-windows/SKILL.md) | Astronomical/light windows | Validated local-time calculations | When relevant; calendar only if justified |
 | [return-metrics](../.agents/skills/return-metrics/SKILL.md) | Measure return contract | Comparable GA4 evidence or NOT MEASURED | When relevant; read-only |
+| [answer-feedback](../.agents/skills/answer-feedback/SKILL.md) | Whether visitors got their answer after a tool ships or changes | One-tap GA4 event and a read-back with sample size, or NOT MEASURED | When a new or redesigned tool ships |
 
 ### Web and browser quality (8)
 
@@ -148,7 +145,7 @@ The linked SKILL.md is the actual method. This index describes routing and expec
 | [plain-voice](../.agents/skills/plain-voice/SKILL.md) | Visible copy or generated-sounding text | Human readable copy, unchanged facts and pinned fields | When relevant |
 | [vercel-cost-guard](../.agents/skills/vercel-cost-guard/SKILL.md) | Functions, cron, middleware, rewrites, caching, images or build cost | Actual usage and incremental cost record | When relevant |
 
-### Network operations (3)
+### Network operations (4)
 
 Added 2026-11-25 for running the agent crew and keeping shipped tools alive. Cases in [crew operations skill evals](skill-evals/crew-operations-skills.md); behavioral evaluation pending.
 
@@ -157,6 +154,17 @@ Added 2026-11-25 for running the agent crew and keeping shipped tools alive. Cas
 | [change-intake](../.agents/skills/change-intake/SKILL.md) | Opening or starting any PR, overlapping PRs, Codex review limit | Intake line in the PR body; extend, supersede or hold instead of a duplicate | Before any PR in this repository |
 | [freshness-watch](../.agents/skills/freshness-watch/SKILL.md) | Live feeds, crons, scheduled commits, silently stale data | Freshness contract and portfolio-sentinel entry, or NOT MONITORED | When a live or scheduled-data tool ships or changes |
 | [incident-rollback](../.agents/skills/incident-rollback/SKILL.md) | Production broken after a deploy, rollback or revert requests | Prepared rollback or revert, live verification, postmortem entry | When production is affected; owner runs rollback and merge |
+| [tool-handoffs](../.agents/skills/tool-handoffs/SKILL.md) | Cross-tool links, shared place IDs, carrying place and date between tools | Registry-backed handoffs with state parameters and a measurement plan | When a tool should send visitors to another tool; one tool per PR |
+
+### Search and discovery (3)
+
+Added 2026-11-25 for choosing what to build and helping visitors find and pass on tools. Cases and pressure results in [skill evals](skill-evals/) (one file per skill); behavioral evaluation pending.
+
+| Skill | Select when | Required output | Routing |
+| --- | --- | --- | --- |
+| [search-demand](../.agents/skills/search-demand/SKILL.md) | Choosing pages or tools from Search Console evidence, 404s, sitemap errors | Ranked evidence table with actions, or NOT MEASURED | When search demand, 404s or sitemap health is in question; read-only |
+| [opportunity-scout](../.agents/skills/opportunity-scout/SKILL.md) | Choosing the next tool or vetting a new tool idea | Existing-answer check, then three scored briefs or a rejection | Before experience-investment on any new tool |
+| [share-and-embed](../.agents/skills/share-and-embed/SKILL.md) | Share links with state, Open Graph images, embeddable widgets | Stateful links, static share images, noindex embed with ads exception | When launching or redesigning a tool, or when sharing comes up |
 
 ## 6. Practical routing recipes (examples, not mandatory packs)
 
