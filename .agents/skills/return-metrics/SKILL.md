@@ -23,7 +23,7 @@ Every retention feature needs a baseline and a result. This repository already h
 - **Trigger-day returns:** the same, limited to days when the tool's alert condition fired.
 - **Channel returns:** sessions by `sessionSource` equal to `calendar` or `rss`, from the `utm_source` tags `condition-alerts` adds.
 
-Write to `benchmarks/return-baseline.json` the query, date range, timestamp and each result's direction (rising, falling, flat), never the GA4 figures: the repository is public (AGENTS.md, Private growth data for agents). Any field not measured stays `null` with a `measurementGap` note.
+Write results to `benchmarks/return-baseline.json`: property, query, date range, timestamp, values. Any field not measured stays `null` with a `measurementGap` note, matching `growth-100x-baseline.json`.
 
 ## Reading it honestly
 
@@ -34,4 +34,4 @@ Write to `benchmarks/return-baseline.json` the query, date range, timestamp and 
 
 ## Output
 
-A short table per tool: window, active users, returning share, trigger-day share, channel sessions, and NOT MEASURED where applicable, plus the one-line verdict the return contract's success test asked for. The figures go to the owner in the private session only; anything committed or posted to GitHub carries the tool path, the direction and the verdict. Changes to code follow the owning repository's gates; Experience OS and Auto ads are unaffected by measurement. Do not auto-merge.
+A short table per tool: window, active users, returning share, trigger-day share, channel sessions, and NOT MEASURED where applicable, plus the one-line verdict the return contract's success test asked for. Changes to code follow the owning repository's gates; Experience OS and Auto ads are unaffected by measurement. Do not auto-merge.

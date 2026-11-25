@@ -44,7 +44,7 @@ For substantial new visitor tools or reworks, Experience Investment and Experien
 ### Decision routing
 
 - Is the next new tool undecided? Opportunity-scout first, using the network registry scoring; search-demand supplies demand evidence. For a chosen tool whose visitor decision is unclear, Experience Investment leads, not animation or layout.
-- Which existing page or tool deserves the next fix? Search-demand reads the private growth summary (`GET /api/growth-command-center?view=agent` with `GROWTH_AGENT_TOKEN`) before ranking: CTR gaps and fallers first, top earners protected. Without the token or a fresh snapshot, the evidence is NOT MEASURED; do not guess.
+- Which existing page or tool deserves the next fix? For an explicitly authorized private measurement task, the private growth summary can supply evidence. Without the token or a fresh snapshot, the evidence is NOT MEASURED; do not guess. Automatic skill routing to this view is deferred until trigger and paired behavioral evaluations pass.
 - Is the answer scientifically wrong or missing? Fix the engine or source contract first, select the matching intelligence skill and compare an actual baseline.
 - Is the answer correct but hard to use? Select experience/design methods, reuse verified components, inspect the first phone screen and prove the changed journey.
 - Is there meaningful changing state that would bring someone back? Apply the return contract. "No return contract" is valid. No push notifications of any kind.
@@ -177,7 +177,7 @@ Added 2026-11-25 for choosing what to build and helping visitors find and pass o
 
 | Skill | Select when | Required output | Routing |
 | --- | --- | --- | --- |
-| [search-demand](../.agents/skills/search-demand/SKILL.md) | Choosing pages or tools from the private growth summary or Search Console evidence, 404s, sitemap errors | Ranked actions with page paths and direction (figures stay private), or NOT MEASURED | When search demand, 404s or sitemap health is in question; read-only |
+| [search-demand](../.agents/skills/search-demand/SKILL.md) | Choosing pages or tools from Search Console evidence, 404s, sitemap errors | Ranked evidence table with actions, or NOT MEASURED | When search demand, 404s or sitemap health is in question; read-only |
 | [opportunity-scout](../.agents/skills/opportunity-scout/SKILL.md) | Choosing the next tool or vetting a new tool idea | Existing-answer check, then three briefs scored using the registry bestFitScoring or a rejection | Before experience-investment on any new tool |
 | [share-and-embed](../.agents/skills/share-and-embed/SKILL.md) | Share links with state, Open Graph images, embeddable widgets | Stateful links, static share images, noindex embed with ads exception | When external sharing or embedding is useful; not internal handoffs |
 
