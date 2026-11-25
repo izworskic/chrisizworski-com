@@ -73,3 +73,22 @@ test('runtime audit requires deployed pageExceptions and manual-placement parity
  assert.equal(classifyRuntime(wrongPub,200,'application/javascript').state,'invalid-runtime');
  void staleExceptions;
 });
+
+test('Next.js Script loaders are verified from the exact src and strategy in the page payload',()=>{
+ // Same shape Next.js 15 and 16 emit for <Script strategy="afterInteractive">: a preload link and a flight row.
+ const nextPage=(props,extra='')=>'<html><head><link rel="preload" href="'+props.src+'" as="script"/></head><body>Tool'+extra+
+  '<script>(self.__next_f=self.__next_f||[]).push([0])</script><script>self.__next_f.push([1,'+JSON.stringify('a:["$","$L14",null,'+JSON.stringify(props)+']\n')+'])</script></body></html>';
+ const network={src:'https://chrisizworski.com/assets/network-ads-v1.js',strategy:'afterInteractive'};
+ const google={async:true,strategy:'afterInteractive',src:'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075',crossOrigin:'anonymous'};
+ assert.deepEqual(classify(nextPage(network),url),{state:'next-script-code',loader:'next-script'});
+ assert.equal(classify(nextPage(google),url).state,'next-script-code');
+ assert.equal(classify(nextPage({...network,strategy:'lazyOnload'}),url).state,'next-script-code');
+ assert.equal(classify(nextPage({...google,src:google.src.replace('8222782620788075','0000000000000000')}),url).state,'legacy-or-wrong-publisher');
+ // A loader named without a Next.js loading strategy, or in another form, still needs a browser.
+ assert.equal(classify(nextPage({...network,strategy:'worker'}),url).state,'client-rendered-needs-browser');
+ assert.equal(classify(nextPage({children:'see network-ads-v1.js'}),url).state,'client-rendered-needs-browser');
+ assert.equal(classify(nextPage({src:'https://example.com/network-ads-v1.js',strategy:'afterInteractive'}),url).state,'client-rendered-needs-browser');
+ // A static loader plus a Next.js loader is a duplicate, and an owner exception is not satisfied by a Next.js loader.
+ assert.equal(classify(nextPage(google,tag),url).state,'duplicate-loader');
+ assert.notEqual(classify(nextPage(google),'https://chrisizworski.com/isle-royale-ferry/').state,'page-exception');
+});

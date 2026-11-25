@@ -71,7 +71,7 @@ const report = { runtime, checkedAt:new Date().toISOString(), registeredTools:to
 fs.mkdirSync(path.dirname(output),{recursive:true});fs.writeFileSync(output,JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify({output,...counts,sitemapErrors:sitemapErrors.length}));
 // Name each open finding in the job log, so a failed run can be resolved by owner without downloading the artifact.
-const passing = ['standard-code','network-code','excluded-document','page-exception'];
+const passing = ['standard-code','network-code','next-script-code','excluded-document','page-exception'];
 const open = pages.filter(p => !passing.includes(p.state));
 if (runtime.state !== 'standard-runtime') console.log(`runtime\t${runtime.state}`);
 for (const e of sitemapErrors) console.log(`sitemap-error\t${e.url}\t${e.status ?? e.error}`);
