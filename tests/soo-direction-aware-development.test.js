@@ -27,3 +27,19 @@ test('no fresh holdout, duplicate or partial dates can enter development evaluat
  assert.throws(()=>evaluate([{date:'2025-10-22'}]),/original three/);
  assert.throws(()=>evaluate(Array(3).fill({date:'2025-06-15'})),/original three/);
 });
+
+test('actual directional report reconciles source coverage and preserves failed gates',()=>{
+ const a=require('../data/freighter-history/soo-directional-development-actual-20261125.json');
+ assert.equal(a.verifiedWorkflowRun,45610987186);
+ assert.equal(a.daily.reduce((n,d)=>n+d.fixes,0),19097);
+ assert.equal(a.daily.reduce((n,d)=>n+d.issued,0),a.all.issued);
+ assert.equal(a.daily.reduce((n,d)=>n+d.matched,0),a.all.matched);
+ for(const key of ['byDirection','byDistance','byLead','byMotion']){
+  assert.equal(Object.values(a[key]).reduce((n,d)=>n+d.issued,0),a.all.issued);
+  assert.equal(Object.values(a[key]).reduce((n,d)=>n+d.matched,0),a.all.matched);
+ }
+ assert.equal(a.gates.containment,false);assert.equal(a.gates.width,false);
+ assert.equal(a.screenPassed,false);assert.equal(a.productionCalibrationAuthorized,false);
+ assert.equal(a.forecastEnabled,false);assert.equal(a.freshHoldout,false);
+ assert.equal(a.decision,'DEVELOPMENT_SCREEN_FAILED_NO_MODEL_PROMOTION');
+});
