@@ -9,7 +9,9 @@ test('premium Michigan hub uses one map carousel and simple primary selectors',(
  assert.ok(i.includes('id="ski-carousel-prev"'));
  assert.ok(i.includes('id="ski-carousel-next"'));
  assert.ok(!i.includes('id="ski-snow-bars"'),'no duplicate snow-leaders chart');
- assert.ok(!i.includes('Three checks before you buy or drive'),'repeated checklist removed');
+ assert.equal((i.match(/Three checks before you buy or drive/g)||[]).length,1,'one readiness checklist, not repeated');
+ assert.match(i,/<details class="panel s7-ski-readiness"[^>]*><summary id="s7-ski-title">Three checks before you buy or drive/);
+ assert.ok(i.indexOf('id="ski-decision-results"')<i.indexOf('id="s7-ski-title"'),'checklist remains secondary to the planner');
  assert.ok(i.includes('ski-advanced-comparison')&&i.includes('ski-directory'),'optional detail and no-JS directory preserved');
  assert.ok(i.includes('id="ski-decision-results"'));
  assert.ok(i.includes('id="ski-goal"'));
