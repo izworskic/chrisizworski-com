@@ -4,13 +4,13 @@
   "auditDate": "2026-11-24",
   "status": "inventory-verified-behavior-not-verified",
   "inventory": {
-    "logicalSkills": 50,
-    "mirrorFiles": 147,
-    "codex": 50,
-    "claude": 50,
-    "copilot": 47,
+    "logicalSkills": 51,
+    "mirrorFiles": 150,
+    "codex": 51,
+    "claude": 51,
+    "copilot": 48,
     "mirrorBlobMismatches": 0,
-    "dedicatedCaseSuites": 33,
+    "dedicatedCaseSuites": 34,
     "withoutDedicatedCasesLocated": 17,
     "behaviorallyEvaluated": 0,
     "provenByPairedEvidence": 0
@@ -1212,6 +1212,29 @@
         ".github/skills/tool-handoffs/SKILL.md"
       ],
       "caseSuite": "docs/skill-evals/tool-handoffs.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "answer-feedback",
+      "family": "Visitor retention",
+      "scope": "Whether visitors got their answer after a tool ships or changes",
+      "expectedOutput": "One-tap GA4 event and a read-back with sample size, or NOT MEASURED",
+      "routing": "When a new or redesigned tool ships",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "a6f39b33232f5173c753f919f2d4591682fe8d06",
+      "mirrors": [
+        ".agents/skills/answer-feedback/SKILL.md",
+        ".claude/skills/answer-feedback/SKILL.md",
+        ".github/skills/answer-feedback/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/answer-feedback.md",
       "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
