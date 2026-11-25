@@ -29,6 +29,8 @@
   let previous = null;
   let currentData = null;
   let busy = false;
+  const changes=window.DuluthChanges;
+  let changeState=changes?changes.initial():null,changeTimer;
   let activeCameraId = CAMERAS[0].id;
   const markers = new Map();
   const spotMarkers = new Map();
@@ -566,6 +568,22 @@
     $('updated').textContent = failed ? 'Last successful live check retained' : `Live AIS checked ${time(data.checkedAt)} CT`;
   }
 
+  function renderChanges() {
+    if(!changes)return;
+    let note=$('duluthWatchChanges');
+    if(!note){note=el('p','','duluth-watch-changes');note.id='duluthWatchChanges';note.setAttribute('role','status');note.setAttribute('aria-live','polite');note.hidden=true;$('watchPick').append(note);}
+    const item=changes.summary(changeState,Date.now(),currentData?.watchPick);
+    const text=item?(item.kind==='recovered'?dayTime(item.to)+' CT: ':'Since '+dayTime(item.from)+' CT: ')+item.text:'';
+    if(note.textContent!==text)note.textContent=text;
+    note.hidden=!item;
+    clearTimeout(changeTimer);
+    if(item){
+      const dates=[item.to+15*60000+1,changeState.last.checked+15*60000+1];
+      for(const s of Object.values(changeState.last.ships))dates.push(s.seen+15*60000+1,s.end);
+      const future=dates.filter(t=>t>Date.now());
+      if(future.length)changeTimer=setTimeout(renderChanges,Math.max(1,Math.min(...future)-Date.now()));
+    }
+  }
   function render(data, failed) {
     // A single display snapshot prevents retained candidates leaking into map, card or controls.
     if (failed) {
@@ -575,12 +593,14 @@
         return Number.isFinite(seen) && seen <= now && now - seen <= 30 * 60 * 1000;
       }) };
     }
+    if(changes)changeState=changes.step(changeState,data,failed,Date.now());
     currentData = data;
     renderPick(data, failed);
     renderMonitorSummary(data, failed);
     renderMap(data, failed);
     renderCandidates(data, failed);
     renderSource(data, failed);
+    renderChanges();
     window.setTimeout(() => { if (map) map.invalidateSize({ pan: false, animate: false }); }, 80);
   }
 
@@ -597,6 +617,8 @@
     } catch (_) {
       if (previous) render(previous, true);
       else {
+        if(changes)changeState=changes.step(changeState,null,true,Date.now());
+        renderChanges();
         $('watchPick').className = 'watch-card quiet';
         $('watchPick').replaceChildren(
           el('div', 'LIVE DATA TEMPORARILY UNAVAILABLE', 'watch-kicker'),
@@ -615,6 +637,7 @@
     }
   }
 
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)renderChanges();});
   $('refreshVessels').addEventListener('click', load);
   initMap();
   setupWatchSpots();

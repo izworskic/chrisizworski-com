@@ -134,7 +134,7 @@
    if(e.kind==='slow'||e.kind==='chamber')return s.kind===e.kind;
    return s.kind==='timed'&&s.end>now;
  }
- function summary(state,now,preferred=[]){
+ function selectEvent(state,now,preferred=[]){
    if(!state||state.failed)return null;
    const order={recovered:0,withdrawn:1,chamber:2,slow:3,resumed:4,shifted:5,'window-changed':6,'new-estimate':7};
    const available=state.events.filter(e=>supports(e,state.last,now)).sort((a,b)=>{
@@ -142,7 +142,11 @@
      const aRank=preferred.indexOf(a.id),bRank=preferred.indexOf(b.id);
      return (aRank<0?999:aRank)-(bRank<0?999:bRank)||order[a.kind]-order[b.kind]||String(a.id).localeCompare(String(b.id));
    });
-   const e=available[0];if(!e)return null;
+   return available.length?{event:available[0],count:available.length}:null;
+ }
+ function summary(state,now,preferred=[]){
+   const selected=selectEvent(state,now,preferred);if(!selected)return null;
+   const e=selected.event;
    const messages={
      recovered:'Fresh check available after an unsuccessful refresh. Review your current visit plan.',
      withdrawn:e.name+': the previous arrival estimate is no longer listed. This does not establish a departure or passage.',
@@ -153,7 +157,7 @@
      'window-changed':e.name+': the estimated arrival window changed. Review your visit timing.',
      'new-estimate':e.name+': an arrival estimate is now listed. Review the current window.'
    };
-   return {kind:e.kind,text:messages[e.kind],from:e.from,to:e.to,count:available.length};
+   return {kind:e.kind,text:messages[e.kind],from:e.from,to:e.to,count:selected.count};
  }
- return {MIN,MAX_GAP,THRESHOLD,snapshot,initial,step,summary};
+ return {MIN,MAX_GAP,THRESHOLD,snapshot,initial,step,selectEvent,summary};
 });

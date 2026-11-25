@@ -10,9 +10,9 @@ const leaflet=path.dirname(require.resolve('leaflet/dist/leaflet.js'));
 fs.mkdirSync(out,{recursive:true});
 let mode='reports';
 function fixture(){
- const now=Date.now(),seen=new Date(now-120000).toISOString();
+ const now=Date.now(),seen=new Date(now-120000).toISOString(),shift=mode==='shifted'?25*60000:0;
  const ship=(n,shipType,speedKnots,lat,lon,lengthMeters)=>({mmsi:String(366000000+n),name:'QA FIXTURE '+n,shipType,speedKnots,lat,lon,lengthMeters,seen,destination:'DULUTH'});
- const pick={...ship(1,70,10,46.79,-92.035,300),direction:'arrival',evidenceType:'lake-approach',confidence:.85,distanceNm:3,ageMinutes:2,sizeLabel:'cargo vessel',window:{start:new Date(now+900000).toISOString(),midpoint:new Date(now+1200000).toISOString(),end:new Date(now+1500000).toISOString()}};
+ const pick={...ship(1,70,10,46.79,-92.035,300),direction:'arrival',evidenceType:'lake-approach',confidence:.85,distanceNm:3,ageMinutes:2,sizeLabel:'cargo vessel',window:{start:new Date(now+900000+shift).toISOString(),midpoint:new Date(now+1200000+shift).toISOString(),end:new Date(now+1500000+shift).toISOString()}};
  return {ok:true,checkedAt:new Date(now).toISOString(),attribution:[{credit:'QA fixture, not live AIS'}],mapVessels:mode==='empty'?[]:[pick,ship(2,52,5,46.80,-92.065,25),ship(3,null,null,46.77,-92.05,200),ship(4,37,0,46.76,-92.075,12)],candidates:mode==='empty'?[]:[pick],watchPick:mode==='empty'?null:pick};
 }
 const mime={'.html':'text/html; charset=utf-8','.js':'application/javascript','.css':'text/css','.json':'application/json','.png':'image/png','.jpg':'image/jpeg','.webp':'image/webp','.svg':'image/svg+xml'};
@@ -143,6 +143,22 @@ async function main(){
    }
    report.cases.push({width,result:'PASS',tiles:width===390?'live OSM':'fixture',markerCount:4});
    await ctx.close();
+  }
+  for(const width of [390,1280]){
+   mode='reports';const ctx=await context(width),page=await ctx.newPage(),errors=[];
+   page.on('pageerror',e=>errors.push(e.message));await page.goto(url,{waitUntil:'domcontentloaded'});
+   await page.locator('#watchPick .arrival-time').waitFor();
+   assert.equal(await page.locator('#duluthWatchChanges').isHidden(),true);
+   mode='shifted';await page.locator('#refreshVessels').click();
+   await page.locator('#duluthWatchChanges').filter({hasText:'inbound passage estimate midpoint moved 25 min later'}).waitFor();
+   await page.locator('#watchPick').screenshot({path:path.join(out,'duluth-changing-'+width+'.png')});
+   mode='empty';await page.locator('#refreshVessels').click();
+   await page.locator('#duluthWatchChanges').filter({hasText:'no longer listed among the current candidates'}).waitFor();
+   mode='failed';await page.locator('#refreshVessels').click();
+   await page.locator('#watchPick .stale-warning').waitFor();assert.equal(await page.locator('#duluthWatchChanges').isHidden(),true);
+   mode='reports';await page.locator('#refreshVessels').click();
+   await page.locator('#duluthWatchChanges').filter({hasText:'Fresh AIS check available again'}).waitFor();
+   await overflow(page);assert.deepEqual(errors,[]);await ctx.close();
   }
   mode='reports';
   const noMap=await context(390,{noLeaflet:true}),p=await noMap.newPage();
