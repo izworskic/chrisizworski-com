@@ -32,7 +32,10 @@ test('cooling tiers use the 24h change measured from now and match the backtest 
  assert.equal(run(-1.6).tier,'watch');
  assert.equal(run(-3.2).tier,'sharp');
  assert.equal(run(+4),null);                      // no warming alert: backtest skill was weak
- assert.match(run(-1.6).text,/never missed/);
+ assert.match(run(-1.6).text,/7 of 22 watches/);
+ assert.match(run(-3.2).text,/5 of 10 sharp watches/);
+ assert.match(run(-1.6).text,/Beach-level skill is not established/);
+ assert.doesNotMatch(run(-3.2).text,/likely/);
 });
 test('ranges follow backtest half-widths',()=>{
  const f=BF.beachForecast(beach,level,grid(60,60),[lead(0,60,60),lead(24,60,60),lead(48,60,60)]);

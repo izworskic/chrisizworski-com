@@ -1,0 +1,255 @@
+{
+  "status": "PHYSICAL_SIGNAL_COMPARISON_DIAGNOSTIC_ONLY",
+  "cohorts": {
+    "review": {
+      "24": {
+        "expected": 80,
+        "modelAndOutcome": 54,
+        "featureComplete": 59,
+        "paired": 53,
+        "missingFeatureAmongObserved": 1,
+        "actualLarge": 5,
+        "modelAllObserved": {
+          "TP": 3,
+          "FP": 4,
+          "TN": 45,
+          "FN": 2,
+          "n": 54,
+          "precision": 0.42857142857142855,
+          "recall": 0.6,
+          "specificity": 0.9183673469387755
+        },
+        "pairedScores": {
+          "model": {
+            "TP": 3,
+            "FP": 4,
+            "TN": 44,
+            "FN": 2,
+            "n": 53,
+            "precision": 0.42857142857142855,
+            "recall": 0.6,
+            "specificity": 0.9166666666666666
+          },
+          "physics": {
+            "TP": 0,
+            "FP": 4,
+            "TN": 44,
+            "FN": 5,
+            "n": 53,
+            "precision": 0,
+            "recall": 0,
+            "specificity": 0.9166666666666666
+          },
+          "either": {
+            "TP": 3,
+            "FP": 8,
+            "TN": 40,
+            "FN": 2,
+            "n": 53,
+            "precision": 0.2727272727272727,
+            "recall": 0.6,
+            "specificity": 0.8333333333333334
+          },
+          "both": {
+            "TP": 0,
+            "FP": 0,
+            "TN": 48,
+            "FN": 5,
+            "n": 53,
+            "precision": null,
+            "recall": 0,
+            "specificity": 1
+          }
+        }
+      },
+      "48": {
+        "expected": 80,
+        "modelAndOutcome": 51,
+        "featureComplete": 59,
+        "paired": 50,
+        "missingFeatureAmongObserved": 1,
+        "actualLarge": 13,
+        "modelAllObserved": {
+          "TP": 9,
+          "FP": 2,
+          "TN": 36,
+          "FN": 4,
+          "n": 51,
+          "precision": 0.8181818181818182,
+          "recall": 0.6923076923076923,
+          "specificity": 0.9473684210526315
+        },
+        "pairedScores": {
+          "model": {
+            "TP": 9,
+            "FP": 2,
+            "TN": 35,
+            "FN": 4,
+            "n": 50,
+            "precision": 0.8181818181818182,
+            "recall": 0.6923076923076923,
+            "specificity": 0.9459459459459459
+          },
+          "physics": {
+            "TP": 2,
+            "FP": 2,
+            "TN": 35,
+            "FN": 11,
+            "n": 50,
+            "precision": 0.5,
+            "recall": 0.15384615384615385,
+            "specificity": 0.9459459459459459
+          },
+          "either": {
+            "TP": 9,
+            "FP": 4,
+            "TN": 33,
+            "FN": 4,
+            "n": 50,
+            "precision": 0.6923076923076923,
+            "recall": 0.6923076923076923,
+            "specificity": 0.8918918918918919
+          },
+          "both": {
+            "TP": 2,
+            "FP": 0,
+            "TN": 37,
+            "FN": 11,
+            "n": 50,
+            "precision": 1,
+            "recall": 0.15384615384615385,
+            "specificity": 1
+          }
+        }
+      }
+    },
+    "confirmation": {
+      "24": {
+        "expected": 100,
+        "modelAndOutcome": 72,
+        "featureComplete": 72,
+        "paired": 69,
+        "missingFeatureAmongObserved": 3,
+        "actualLarge": 8,
+        "modelAllObserved": {
+          "TP": 5,
+          "FP": 6,
+          "TN": 58,
+          "FN": 3,
+          "n": 72,
+          "precision": 0.45454545454545453,
+          "recall": 0.625,
+          "specificity": 0.90625
+        },
+        "pairedScores": {
+          "model": {
+            "TP": 5,
+            "FP": 5,
+            "TN": 56,
+            "FN": 3,
+            "n": 69,
+            "precision": 0.5,
+            "recall": 0.625,
+            "specificity": 0.9180327868852459
+          },
+          "physics": {
+            "TP": 1,
+            "FP": 2,
+            "TN": 59,
+            "FN": 7,
+            "n": 69,
+            "precision": 0.3333333333333333,
+            "recall": 0.125,
+            "specificity": 0.9672131147540983
+          },
+          "either": {
+            "TP": 5,
+            "FP": 7,
+            "TN": 54,
+            "FN": 3,
+            "n": 69,
+            "precision": 0.4166666666666667,
+            "recall": 0.625,
+            "specificity": 0.8852459016393442
+          },
+          "both": {
+            "TP": 1,
+            "FP": 0,
+            "TN": 61,
+            "FN": 7,
+            "n": 69,
+            "precision": 1,
+            "recall": 0.125,
+            "specificity": 1
+          }
+        }
+      },
+      "48": {
+        "expected": 100,
+        "modelAndOutcome": 69,
+        "featureComplete": 72,
+        "paired": 66,
+        "missingFeatureAmongObserved": 3,
+        "actualLarge": 11,
+        "modelAllObserved": {
+          "TP": 6,
+          "FP": 6,
+          "TN": 52,
+          "FN": 5,
+          "n": 69,
+          "precision": 0.5,
+          "recall": 0.5454545454545454,
+          "specificity": 0.896551724137931
+        },
+        "pairedScores": {
+          "model": {
+            "TP": 6,
+            "FP": 4,
+            "TN": 51,
+            "FN": 5,
+            "n": 66,
+            "precision": 0.6,
+            "recall": 0.5454545454545454,
+            "specificity": 0.9272727272727272
+          },
+          "physics": {
+            "TP": 2,
+            "FP": 1,
+            "TN": 54,
+            "FN": 9,
+            "n": 66,
+            "precision": 0.6666666666666666,
+            "recall": 0.18181818181818182,
+            "specificity": 0.9818181818181818
+          },
+          "either": {
+            "TP": 7,
+            "FP": 5,
+            "TN": 50,
+            "FN": 4,
+            "n": 66,
+            "precision": 0.5833333333333334,
+            "recall": 0.6363636363636364,
+            "specificity": 0.9090909090909091
+          },
+          "both": {
+            "TP": 1,
+            "FP": 0,
+            "TN": 55,
+            "FN": 10,
+            "n": 66,
+            "precision": 1,
+            "recall": 0.09090909090909091,
+            "specificity": 1
+          }
+        }
+      }
+    }
+  },
+  "canPromoteModel": false,
+  "limitations": [
+    "Fixed descriptive rules, not trained or selected; both cohorts previously inspected.",
+    "All four rules compared on the same feature-complete exact outcomes. Unknown features remain unavailable, not a negative signal.",
+    "Archived prior measurements do not establish historical receipt time. No stratification, causal attribution, calibrated probability or production promotion."
+  ]
+}

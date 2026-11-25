@@ -1,4 +1,4 @@
-(function(){
+window.startLegacyShoreFeel=function(){
   'use strict';
   // The EPA BEACH Act source list is a local, pinned 2025 snapshot. Its mapped
   // lines are places, not proof of a current open beach or a safe swim.
@@ -326,4 +326,5 @@
   const target=initial&&bySlug.has(initial)?bySlug.get(initial):list[0];
   setLake(initial&&bySlug.has(initial)?target.dataset.lake:'All',target);
   initMap();
-})();
+};
+if(!document.getElementById('gl-explorer'))window.startLegacyShoreFeel();

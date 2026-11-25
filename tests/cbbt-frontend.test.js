@@ -95,3 +95,22 @@ test('required traveler workflows are present and mobile-first markup avoids gia
   assert.doesNotMatch(html, /<img[^>]+fetchpriority="high"/i);
   assert.match(html, /loading="lazy"/i);
 });
+
+test('actual weather renderer distinguishes missing values from zero and clears on outage', () => {
+  const vm=require('node:vm');
+  const elements=new Map();
+  const $=id=>{if(!elements.has(id))elements.set(id,{textContent:'',innerHTML:''});return elements.get(id);};
+  const source=js.slice(js.indexOf('function text('),js.indexOf('function renderStatus('))+
+    js.slice(js.indexOf('function renderWeather('),js.indexOf('function renderAdvisories('));
+  const {renderWeather,renderForecast}=vm.runInNewContext(source+'\n({renderWeather,renderForecast})',{$,CBBTView:view});
+  renderWeather({weatherNow:{available:true,wind:{sustainedMph:0,gustMph:null,directionDegrees:null},airTemperatureF:null,observedAt:'2026-10-01T14:54:00Z'},freshness:{weatherObservation:{state:'fresh',ageMinutes:6}}});
+  assert.equal($('windSpeed').textContent,'0 mph');
+  assert.equal($('windGust').textContent,'—');
+  assert.equal($('windDirection').textContent,'—');
+  assert.equal($('airTemp').textContent,'—');
+  renderWeather(null);
+  renderForecast(null);
+  assert.equal($('windSpeed').textContent,'—');
+  assert.match($('forecastStrip').innerHTML,/unavailable/);
+  assert.match($('weatherFreshness').textContent,/checked separately/);
+});

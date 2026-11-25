@@ -174,7 +174,12 @@ add('sharer', 4, 'a share button is on the page and uses the phone share sheet o
 // F. Trust guardrails (7)
 add('trust', 2, 'NWS source names are cleaned up (CoCoRaHS, co-op)', () =>
   core.sourceLabel('Cocorahs') === 'CoCoRaHS observer' && core.sourceLabel('CO-OP Observer') === core.sourceLabel('Co-Op Observer'));
-add('trust', 2, 'a quiet week labels old dots with the day they are from', () => js.includes('Showing the last day snow was reported'));
+add('trust', 2, 'a quiet week labels old dots with their archived date and never treats them as current or region-filtered', () =>
+  js.includes('Historical map: last archived report day, ') &&
+  js.includes('C.when(d.lastSnow.reportedAt)') &&
+  js.includes('Not current snowfall.') &&
+  js.includes('var historical = quiet && !state.region') &&
+  js.includes('if (historical) mapRows = d.lastSnow.sameDay'));
 add('trust', 3, 'a dead report feed says so; a dead alert feed does not take the page down', async () => {
   const dead = await callApi({}, { failLsr: true }); const noAlerts = await callApi({}, { failAlerts: true });
   return dead.status === 503 && dead.body?.ok === false && noAlerts.status === 200 && noAlerts.body?.ok === true && noAlerts.body?.degraded === true;
