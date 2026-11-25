@@ -130,7 +130,7 @@ jobs:
           if-no-files-found: warn
 
   duluth-product-pilot-qa:
-    if: github.event_name == 'pull_request' && github.head_ref == 'experience/duluth-product-engineering-pilot-20261124'
+    if: github.event_name == 'pull_request' && (github.head_ref == 'experience/duluth-product-engineering-pilot-20261124' || github.head_ref == 'fix/duluth-watch-failed-refresh-evidence')
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
@@ -153,5 +153,32 @@ jobs:
         with:
           name: duluth-product-pilot-qa
           path: artifacts/duluth-pilot/
+          retention-days: 7
+          if-no-files-found: warn
+
+  aurora-recovery-browser-qa:
+    if: github.event_name == 'pull_request' && github.head_ref == 'fix/aurora-independent-source-recovery'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated Playwright runtime
+        run: |
+          npm install --prefix /tmp/aurora-recovery-qa --no-save --ignore-scripts --package-lock=false playwright@1.58.2
+          echo "NODE_PATH=/tmp/aurora-recovery-qa/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser || command -v chromium)" >> "$GITHUB_ENV"
+      - name: Replay actual Aurora page with source outage and recovery fixtures
+        run: node scripts/verify-aurora-recovery-browser.cjs
+      - name: Retain viewport screenshots and recovery report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: aurora-recovery-browser-qa
+          path: artifacts/aurora-recovery/
           retention-days: 7
           if-no-files-found: warn

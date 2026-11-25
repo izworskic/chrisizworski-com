@@ -1,0 +1,154 @@
+{
+  "sourceRun": 45390603940,
+  "corridorReplayRun": 45391192438,
+  "schemaVersion": 1,
+  "kind": "SOO_HISTORICAL_CHAMBER_REFERENCE_PROXY_BACKTEST",
+  "policy": {
+    "minDistanceNm": 5,
+    "maxDistanceNm": 15,
+    "horizonMinutes": 480,
+    "maxBracketSeconds": 180,
+    "maxChordKnots": 40,
+    "minTrain": 5,
+    "minCalibration": 5,
+    "minVessels": 3
+  },
+  "splits": {
+    "training": "2025-06-15",
+    "calibration": "2025-08-15",
+    "holdout": "2025-10-15"
+  },
+  "groups": [
+    {
+      "date": "2025-06-15",
+      "fixes": 7371,
+      "vessels": 22,
+      "noIssue": 13,
+      "issued": 9,
+      "matched": 9,
+      "outcomes": {
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 9
+      }
+    },
+    {
+      "date": "2025-08-15",
+      "fixes": 7013,
+      "vessels": 21,
+      "noIssue": 9,
+      "issued": 12,
+      "matched": 10,
+      "outcomes": {
+        "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 1,
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 10,
+        "RIGHT_CENSORED_BY_DAY_END": 1
+      }
+    },
+    {
+      "date": "2025-10-15",
+      "fixes": 4713,
+      "vessels": 13,
+      "noIssue": 4,
+      "issued": 9,
+      "matched": 9,
+      "outcomes": {
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 9
+      }
+    }
+  ],
+  "fit": {
+    "trainMatched": 9,
+    "trainVessels": 9,
+    "medianResidualMinutes": 49.77,
+    "calibrationMatched": 10,
+    "calibrationVessels": 10,
+    "diagnosticRadiusMinutes": 74.47
+  },
+  "holdout": {
+    "matched": 9,
+    "distinctVessels": 9,
+    "all": {
+      "naive": {
+        "matched": 9,
+        "meanAbsoluteErrorMinutes": 74.82,
+        "medianAbsoluteErrorMinutes": 70.55,
+        "meanSignedErrorMinutes": -74.82
+      },
+      "existing": {
+        "matched": 9,
+        "meanAbsoluteErrorMinutes": 58.13,
+        "medianAbsoluteErrorMinutes": 53.74,
+        "meanSignedErrorMinutes": -58.13,
+        "meanIntervalWidthMinutes": 74.88,
+        "fullBracketContained": 2,
+        "bracketOverlaps": 2
+      },
+      "adjusted": {
+        "matched": 9,
+        "meanAbsoluteErrorMinutes": 29.25,
+        "medianAbsoluteErrorMinutes": 20.1,
+        "meanSignedErrorMinutes": -8.36,
+        "meanIntervalWidthMinutes": 148.94,
+        "fullBracketContained": 8,
+        "bracketOverlaps": 8
+      }
+    },
+    "byDirection": {
+      "upbound": {
+        "naive": {
+          "matched": 5,
+          "meanAbsoluteErrorMinutes": 71.19,
+          "medianAbsoluteErrorMinutes": 70.55,
+          "meanSignedErrorMinutes": -71.19
+        },
+        "existing": {
+          "matched": 5,
+          "meanAbsoluteErrorMinutes": 56.16,
+          "medianAbsoluteErrorMinutes": 53.74,
+          "meanSignedErrorMinutes": -56.16,
+          "meanIntervalWidthMinutes": 89.21,
+          "fullBracketContained": 1,
+          "bracketOverlaps": 1
+        },
+        "adjusted": {
+          "matched": 5,
+          "meanAbsoluteErrorMinutes": 29.87,
+          "medianAbsoluteErrorMinutes": 10.06,
+          "meanSignedErrorMinutes": -6.39,
+          "meanIntervalWidthMinutes": 148.94,
+          "fullBracketContained": 4,
+          "bracketOverlaps": 4
+        }
+      },
+      "downbound": {
+        "naive": {
+          "matched": 4,
+          "meanAbsoluteErrorMinutes": 79.37,
+          "medianAbsoluteErrorMinutes": 74.77,
+          "meanSignedErrorMinutes": -79.37
+        },
+        "existing": {
+          "matched": 4,
+          "meanAbsoluteErrorMinutes": 60.59,
+          "medianAbsoluteErrorMinutes": 55.88,
+          "meanSignedErrorMinutes": -60.59,
+          "meanIntervalWidthMinutes": 56.97,
+          "fullBracketContained": 1,
+          "bracketOverlaps": 1
+        },
+        "adjusted": {
+          "matched": 4,
+          "meanAbsoluteErrorMinutes": 28.48,
+          "medianAbsoluteErrorMinutes": 23.77,
+          "meanSignedErrorMinutes": -10.81,
+          "meanIntervalWidthMinutes": 148.94,
+          "fullBracketContained": 4,
+          "bracketOverlaps": 4
+        }
+      }
+    }
+  },
+  "officialLockEntryGroundTruth": false,
+  "forecastEnabled": false,
+  "releaseStatus": "RESEARCH_ONLY_INDEPENDENT_OUTCOMES_AND_MORE_DATES_REQUIRED",
+  "note": "Proxy labels are later AIS fixes near modeled chamber rectangles; not independently confirmed lock entries. Conditional timing error excludes unresolved outcomes, not a measured false-positive rate. Three sampled dates and repeated vessel identities do not establish calibrated probabilities."
+}

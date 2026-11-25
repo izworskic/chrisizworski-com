@@ -11,8 +11,9 @@
   const cardHeading = document.getElementById('soo-next-ship-heading');
   const cardBody = document.getElementById('sooNextBody');
   const cardNow = document.getElementById('sooNextNow');
-  let map, layer, focusLayer, detailPopup, fitted = false, busy = false, mapStarted = false, polling = false, previous;
-  let selectedMarker = null;
+  let map, layer, focusLayer, detailPopup, fitted = false, busy = false, mapStarted = false, polling = false, previous, previousFailed = false;
+  let selectedMarker = null, nearExpiryTimer = null;
+  const nearMotion = window.SooNearLockMotion;
   const visibleMarkers = new Map();
   // Shared local SVG silhouettes, also used by the Seaway map.
   const Icons = window.SeawayVesselIcons;
@@ -162,10 +163,11 @@
     const n = data && data.nextShip;
     cardBody.replaceChildren();
     if (cardNow) { cardNow.hidden = true; cardNow.replaceChildren(); }
-    if (failed && !n) {
+    if (failed) {
       cardKicker.textContent = 'Next ship at the locks';
       cardHeading.textContent = 'Live ship reports are unavailable right now';
-      cardBody.append(text('p', hotlineSeason() ? 'Call the official boat hotline at 906-202-1333 while the Visitor Center is open, or see the other ways to check further down this page.' : 'See the other ways to check further down this page. The USACE boat hotline is maintained only while the Visitor Center is open, May 1 to October 31.'));
+      cardBody.append(text('p', data ? 'The last refresh failed. Earlier arrival estimates and chamber observations are not current. Check the last-known positions on the map, then refresh before planning your visit.' : 'The feed did not return usable reports. This does not mean the river is empty.')); 
+      cardBody.append(text('p', checkElsewhere()));
       return;
     }
     if (!n || !n.ok) {
@@ -176,6 +178,7 @@
     }
     const inLock = n.inLock || [];
     const pick = n.pick;
+    const nearby = nearMotion?.visitorState(data, failed, Date.now());
     if (inLock.length) {
       const s = inLock[0];
       if (pick && cardNow) {
@@ -187,11 +190,18 @@
         cardBody.append(tags([s.sizeLabel, s.lengthFeet ? s.lengthFeet.toLocaleString('en-US') + ' ft' : null, s.chamberName]));
         cardBody.append(text('p', directionText(s.direction) + '. ' + chamberWhere(s.chamber) + ' Reported ' + s.ageMinutes + ' min ago.'));
         cardBody.append(actions(s));
-        cardBody.append(text('p', 'No other freighter is clearly heading for the locks in reports under 30 minutes old.', 'next-ship-also'));
+        if (nearby) appendNearMotion(nearby, false);
+        else cardBody.append(text('p', 'No other freighter is clearly heading for the locks in reports under 30 minutes old.', 'next-ship-also'));
         return;
       }
     }
     if (!pick) {
+      if (nearby) {
+        cardKicker.textContent = 'Vessel observation near the locks';
+        cardHeading.textContent = nearby.headline;
+        appendNearMotion(nearby, true);
+        return;
+      }
       cardKicker.textContent = 'Next ship at the locks';
       cardHeading.textContent = 'No ship is clearly heading for the locks right now';
       cardBody.append(text('p', 'Nothing in reports under 30 minutes old shows a freighter moving toward the locks. That does not mean none is coming: ships wait at docks and anchorages, and AIS coverage has gaps. ' + checkElsewhere()));
@@ -201,15 +211,29 @@
     cardHeading.textContent = title(pick);
     cardBody.append(tags([pick.sizeLabel, pick.lengthFeet ? pick.lengthFeet.toLocaleString('en-US') + ' ft' : null]));
     const win = document.createElement('div'); win.className = 'next-ship-window';
-    win.append(text('span', 'Estimated at the locks'), text('strong', clock(pick.window.start) + '–' + clockZone(pick.window.end)),
+    win.append(text('span', 'Planning window at the locks'), text('strong', clock(pick.window.start) + '–' + clockZone(pick.window.end)),
       text('small', pick.channelMilesToLocks + ' river miles away at ' + (pick.speedKnots * 1.15078).toFixed(1) + ' mph, reported ' + pick.ageMinutes + ' min ago'));
     cardBody.append(win);
     cardBody.append(text('p', directionText(pick.direction) + '. ' + (pick.lockCertain ? pick.lockNote + ' ' + chamberWhere('poe') : 'Small enough for either chamber; the lockmaster assigns it. ' + chamberWhere('macarthur'))));
     cardBody.append(actions(pick));
     const others = (n.candidates || []).filter(c => c.id !== pick.id).slice(0, 3);
     if (others.length) cardBody.append(text('p', 'Also heading in: ' + others.map(c => title(c) + ' (' + c.direction + ', about ' + clock(c.window.start) + '–' + clock(c.window.end) + ')').join('; ') + '.', 'next-ship-also'));
-    const how = n.selection && n.selection.mode === 'shared-harness-jev' ? 'Picked by JEV.' : 'Picked by timing rules.';
-    cardBody.append(text('p', how + ' An estimate from live AIS position, speed and river distance, not a lock schedule; ships can wait for a chamber or stop at a dock. Not for navigation.', 'next-ship-note'));
+    cardBody.append(text('p', 'This planning window uses reported position, speed and river distance. It is not a lock schedule. Ships can slow or stop before reaching the locks. Recheck movement on the map before leaving; the actual arrival can be outside this window. Not for navigation.', 'next-ship-note'));
+    if (nearby) appendNearMotion(nearby, false);
+  }
+  function appendNearMotion(nearby, primary) {
+    const box = document.createElement('div'); box.className = 'next-ship-near-motion';
+    if (!primary) box.append(text('strong', nearby.headline));
+    box.append(text('p', nearby.detail));
+    if (nearby.additional) box.append(text('p', nearby.additional + ' other nearby low-speed vessel report' + (nearby.additional === 1 ? '' : 's') + ' on the map.'));
+    const acts = document.createElement('div'); acts.className = 'next-ship-actions';
+    const button = text('button', nearby.action); button.type = 'button';
+    button.addEventListener('click', () => {
+      const fresh = nearMotion?.freshNearLock(previous, previousFailed, Date.now()).find(v => v.id === nearby.ship.id);
+      if (fresh) focusShip(fresh);
+      else refreshNearMotion();
+    });
+    acts.append(button); box.append(acts); cardBody.append(box);
   }
   function tags(items) {
     const ul = document.createElement('ul'); ul.className = 'next-ship-tags';
@@ -248,8 +272,8 @@
 
   // ---- map and list ----
   function render(data, failed) {
-    const vessels = data.vessels.filter(v => Number.isFinite(Date.parse(v.seen)) && Date.now() - Date.parse(v.seen) <= 1800000);
-    const inLock = new Map(((data.nextShip && data.nextShip.inLock) || []).map(s => [s.mmsi, s]));
+    const vessels = data.vessels.filter(v => Number.isFinite(Date.parse(v.seen)) && Date.now() >= Date.parse(v.seen) && Date.now() - Date.parse(v.seen) <= 1800000);
+    const inLock = new Map((failed ? [] : ((data.nextShip && data.nextShip.inLock) || [])).map(s => [s.mmsi, s]));
     list.replaceChildren();
     if (detailPopup && map?.hasLayer(detailPopup)) map.removeLayer(detailPopup);
     if (layer) layer.clearLayers();
@@ -281,15 +305,27 @@
       const extra = [typeLabel(v), inLock.has(v.mmsi) ? 'in the ' + inLock.get(v.mmsi).chamberName + ' now' : null, size || feet(v.lengthMeters)].filter(Boolean).join(' · ');
       item.append(text('span', (extra ? extra + ' · ' : '') + details(v))); list.append(item);
     });
-    if (!vessels.length) list.append(text('li', 'No reports less than 30 minutes old were returned for this area. This does not mean there are no ships.'));
+    if (!vessels.length) list.append(text('li', failed ? 'No last-known positions remain within 30 minutes. Live reports are unavailable; this is not a zero-traffic report.' : 'No reports less than 30 minutes old were returned for this area. This does not mean there are no ships.'));
     if (map && points.length && !fitted) { map.fitBounds(points, { padding: [30, 30], maxZoom: 13 }); fitted = true; }
-    const count = vessels.length + ' recent vessel report' + (vessels.length === 1 ? '' : 's');
+    const count = vessels.length + (failed ? ' last-known vessel report' : ' recent vessel report') + (vessels.length === 1 ? '' : 's');
     status.textContent = failed ? 'Refresh unavailable. ' + count + ' retained from the earlier check; see report ages below.' :
       count + ' near the Soo · checked ' + new Date(data.checkedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: TZ, timeZoneName: 'short' }) + (map || !mapStarted ? '' : ' · map unavailable; vessel list below');
     dot.className = 'vessel-map-status-dot' + (failed ? ' offline' : vessels.length ? ' live' : '');
     credits.textContent = 'Source credits: ' + data.attribution.map(a => a.credit).join(' · ');
     renderCard(data, failed);
     share(data, failed);
+    scheduleNearExpiry(data, failed);
+  }
+  function scheduleNearExpiry(data, failed) {
+    clearTimeout(nearExpiryTimer); nearExpiryTimer = null;
+    const expiry = nearMotion?.nextExpiry(data, failed, Date.now());
+    if (Number.isFinite(expiry)) nearExpiryTimer = setTimeout(refreshNearMotion, Math.max(1, expiry - Date.now()));
+  }
+  function refreshNearMotion() {
+    if (!previous || !previous.nextShip?.nearLockMotion?.length) return;
+    renderCard(previous, previousFailed);
+    share(previous, previousFailed);
+    scheduleNearExpiry(previous, previousFailed);
   }
   // Hand each check to the Lock Watch planner (public/assets/soo-lock-watch.js).
   function share(data, failed) {
@@ -302,8 +338,9 @@
     try {
       const r = await fetch('/api/soo-ais', { signal: AbortSignal.timeout(15000) }); const data = await r.json();
       if (!r.ok || !data.ok || !Array.isArray(data.vessels)) throw new Error('AIS unavailable');
-      previous = data; render(data, false);
+      previous = data; previousFailed = false; render(data, false);
     } catch (_) {
+      previousFailed = true;
       if (previous) render(previous, true);
       else {
         status.textContent = 'Vessel reports are temporarily unavailable. Try again, or see the other ways to check above the map.'; dot.className = 'vessel-map-status-dot offline';
@@ -335,11 +372,12 @@
         }
       });
     } else container.textContent = 'Map could not load. Recent vessel reports remain available in the list below.';
-    if (previous) render(previous, false);
+    if (previous) render(previous, previousFailed);
   }
   window.SooAis = { focusShip, last: null };
   refresh.addEventListener('click', () => { startMap(); load(); });
   renderLegend();
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshNearMotion(); });
   startPolling();
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(entries => { if (entries.some(e => e.isIntersecting)) { observer.disconnect(); startMap(); } }, { rootMargin: '300px' });

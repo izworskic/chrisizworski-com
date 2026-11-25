@@ -20,7 +20,7 @@ function adapter(factory = Icons) {
 test('Duluth client parses and loads existing shared AIS assets before the renderer', () => {
   assert.doesNotThrow(() => new vm.Script(js));
   const factory = html.indexOf('/assets/seaway-vessel-icons.js?v=20261108a');
-  const renderer = html.indexOf('/assets/duluth-canal.js?v=20261124-type-icons4');
+  const renderer = html.search(/\/assets\/duluth-canal\.js\?v=[^"\s]+/);
   assert.ok(factory >= 0 && renderer > factory);
   assert.match(html, /href="\/assets\/soo-vessel-icons.css"/);
 });
@@ -85,7 +85,7 @@ test('missing shared module retains a neutral selectable report symbol, never an
 test('nearby and anticipated markers retain existing popups, camera actions and map caption', () => {
   assert.match(js, /icon: shipIcon\(c, selected \? 'selected' : 'candidate'\)/);
   assert.match(js, /icon: shipIcon\(v, state\)/);
-  assert.match(js, /bindPopup\(vesselPopup\(v\), vesselPopupOptions\(\)\)/);
+  assert.match(js, /bindPopup\(vesselPopup\(v, failed\), vesselPopupOptions\(\)\)/);
   assert.match(js, /bindPopup\(candidatePopup\(c, selected\), vesselPopupOptions\(\)\)/);
   assert.match(js, /AIS type: \$\{shipTypeLabel\(v\)\}/);
   assert.match(js, /AIS type: \$\{shipTypeLabel\(c\)\}/);

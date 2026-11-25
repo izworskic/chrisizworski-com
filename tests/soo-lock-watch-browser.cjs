@@ -70,8 +70,16 @@ async function open(browser, { width, time, api = 'ok', js = true, wx = 'ok', pi
       return route.fulfill({ status: 404, body: '' });
     }
     if (u.pathname === '/api/soo-ais') {
-      if (api === 'fail') return route.fulfill({ status: 503, contentType: 'application/json', body: '{"ok":false}' });
-      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(fixture(time)) });
+      const mode = typeof api === 'function' ? api() : api;
+      if (mode === 'fail') return route.fulfill({ status: 503, contentType: 'application/json', body: '{"ok":false}' });
+      const data = fixture(time);
+      if (mode === 'slow' || mode === 'slow-stale' || mode === 'slow-mixed') {
+        const ship = { id:'366009996', mmsi:'366009996', name:'TEST SLOW FREIGHTER', lat:46.5025, lon:-84.365, seen:iso(time,mode==='slow-stale'?-6:-2), speedKnots:0.6, distanceNm:0.5, state:'near-lock-low-motion' };
+        data.nextShip.nearLockMotion = [ship];
+        data.vessels.push({...ship,shipType:70,course:null,heading:null,lengthMeters:200,source:'fixture'});
+        if (mode !== 'slow-mixed') Object.assign(data.nextShip,{inLock:[],candidates:[],pick:null});
+      }
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(data) });
     }
     if (u.hostname === 'api.weather.gov') {
       if (wx === 'fail') return route.fulfill({ status: 503, contentType: 'application/json', body: '{}' });
@@ -133,7 +141,7 @@ let base;
         await page.locator('#sooVesselMap').screenshot({ path: out + '/vessel-map-' + width + '.png' });
       }
       // 1. Default "Now, 1½ hr": the ship already in a chamber is the answer.
-      assert.match(await verdict(page), /EDWIN H\. GOTT is in the Poe Lock right now/);
+      assert.match(await verdict(page), /EDWIN H\. GOTT last reported in the Poe Lock/);
       assert.match(await dossier(page), /EDWIN H\. GOTT[\s\S]*Poe Lock, now/);
       assert.equal(await page.locator('.lw-row-btn').count(), 3);
       assert.match(await page.locator('.lw-notes').innerText(), /hotline is not maintained now/);
@@ -168,14 +176,14 @@ let base;
       assert.equal(await page.locator('.lw-row-btn[aria-pressed="true"]').count(), 1);
       // The visit weather follows the visit: 2 hr out, 1½ hr stay covers 11:45 a.m. to 1:15 p.m.
       assert.match(await page.locator('[data-lw-weather]').innerText(), /32.34°F[\s\S]*up to 40%/);
-      // 4. A visit that misses every window offers a one-tap adjustment that covers the next one.
+      // 4. A missed window offers a feasible alternative without increasing the stay.
       await choose(page, 'How soon', '30 min');
       await choose(page, 'How long', '45 min');
-      assert.match(await verdict(page), /No reported ship is due during that visit/);
+      assert.match(await verdict(page), /No modeled arrival overlaps your available platform time/);
       await page.locator('.lw-adjust').click();
-      assert.match(await verdict(page), /^Best bet: BURNS HARBOR/);
-      assert.equal(await page.locator('input[name="lw-start"]:checked').getAttribute('value'), '90');
-      assert.equal(await page.locator('input[name="lw-stay"]:checked').getAttribute('value'), '180');
+      assert.match(await verdict(page), /^Possible: BURNS HARBOR/);
+      assert.equal(await page.locator('input[name="lw-start"]:checked').getAttribute('value'), '120');
+      assert.equal(await page.locator('input[name="lw-stay"]:checked').getAttribute('value'), '45');
       // web-quality-accessibility: axe-core WCAG 2.0 to 2.2 A/AA over the whole page, after interaction.
       if (AxeBuilder && (width === 390 || width === 1280)) {
         // The camera credit is part of the scan: wait for the fixture camera to render it.
@@ -237,6 +245,73 @@ let base;
       await page.getByText('the NWS forecast is unavailable right now.').waitFor();
       await page.locator('#soo-lock-watch').screenshot({ path: `${out}/feed-failure-390.png` });
       await context.close();
+    }
+    // 6b. A successful check followed by failure and recovery must not show stale ETA or lock-now claims.
+    {
+      let api = 'ok';
+      const { context, page, errors } = await open(browser, { width: 390, time: NOV, api: () => api });
+      await page.locator('.lw-row-btn').first().waitFor();
+      assert.equal(await page.locator('#soo-next-ship .next-ship-window').count(), 1);
+      api = 'fail';
+      await page.locator('#vesselMapRefresh').click();
+      await page.getByText('Live ship reports are unavailable, so no visit can be lined up').waitFor();
+      assert.equal(await page.locator('#soo-next-ship .next-ship-window').count(), 0);
+      assert.equal(await page.locator('#sooNextNow').isHidden(), true);
+      assert.equal(await page.locator('[data-lw-board]').isHidden(), true);
+      assert.equal(await page.locator('[data-lw-dossier]').isHidden(), true);
+      assert.match(await page.locator('#vesselMapStatus').innerText(), /Refresh unavailable.*last-known/);
+      assert.doesNotMatch(await page.locator('#sooVesselList').innerText(), /in the Poe Lock now/i);
+      assert.equal(await page.locator('#sooVesselList button').count(), 6);
+      await page.locator('#sooVesselList button').filter({hasText:'EDWIN H. GOTT'}).click();
+      assert.doesNotMatch(await page.locator('#sooVesselMap .leaflet-popup-content').innerText(), /in the Poe Lock now/i);
+      await page.locator('#soo-lock-watch').screenshot({path: `${out}/retained-feed-failure-390.png`});
+      api = 'ok';
+      await page.locator('#vesselMapRefresh').click();
+      await page.locator('#soo-next-ship .next-ship-window').waitFor();
+      await page.locator('.lw-row-btn').first().waitFor();
+      assert.equal(await page.locator('#sooNextNow').isVisible(), true);
+      assert.doesNotMatch(await page.locator('#vesselMapStatus').innerText(), /Refresh unavailable/);
+      assert.deepEqual(errors, []);
+      await context.close();
+    }
+    // Near-lock observations do not turn into forecast rows or survive failed/stale reports.
+    for (const width of [390, 1280]) {
+      let mode='slow';
+      const {context,page,errors}=await open(browser,{width,time:NOV,api:()=>mode});
+      await page.locator('#soo-next-ship-heading').filter({hasText:'TEST SLOW FREIGHTER reported moving slowly'}).waitFor();
+      assert.match(await verdict(page),/TEST SLOW FREIGHTER reported moving slowly/);
+      assert.match(await page.locator('#sooNextBody').innerText(),/Arrival timing is uncertain/);
+      assert.equal(await page.locator('#soo-next-ship .next-ship-window').count(),0);
+      assert.equal(await page.locator('[data-lw-board]').isHidden(),true);
+      assert.equal(await page.locator('.lw-adjust').count(),0);
+      await page.locator('#soo-next-ship').screenshot({path:out+'/near-lock-slow-card-'+width+'.png'});
+      await page.locator('#soo-lock-watch').screenshot({path:out+'/near-lock-slow-planner-'+width+'.png'});
+      await page.locator('#soo-next-ship button').filter({hasText:'Show this vessel on the live map'}).click();
+      await page.locator('#sooVesselMap .leaflet-popup-content').filter({hasText:'TEST SLOW FREIGHTER'}).waitFor();
+      mode='slow-stale'; await page.locator('#vesselMapRefresh').click();
+      await page.locator('#soo-next-ship-heading').filter({hasText:'No ship is clearly heading'}).waitFor();
+      assert.doesNotMatch(await verdict(page),/TEST SLOW FREIGHTER/);
+      mode='slow-mixed'; await page.locator('#vesselMapRefresh').click();
+      await page.locator('#soo-next-ship .next-ship-window').waitFor();
+      assert.match(await page.locator('#sooNextBody').innerText(),/TEST SLOW FREIGHTER/);
+      assert.doesNotMatch(await page.locator('[data-lw-rows]').innerText(),/TEST SLOW FREIGHTER/);
+      mode='fail'; await page.locator('#vesselMapRefresh').click();
+      await page.locator('#soo-next-ship-heading').filter({hasText:'Live ship reports are unavailable'}).waitFor();
+      assert.doesNotMatch(await page.locator('#sooNextBody').innerText(),/TEST SLOW FREIGHTER/);
+      assert.doesNotMatch(await verdict(page),/TEST SLOW FREIGHTER/);
+      mode='slow'; await page.locator('#vesselMapRefresh').click();
+      await page.locator('#soo-next-ship-heading').filter({hasText:'TEST SLOW FREIGHTER'}).waitFor();
+      assert.deepEqual(errors,[]); await context.close();
+    }
+    // A closed park is not a recommended visit even if a forecast window overlaps.
+    for (const width of [390,1280]) {
+      const {context,page,errors}=await open(browser,{width,time:Date.parse('2026-11-21T22:30:00Z')});
+      await page.locator('.lw-row-btn').first().waitFor();
+      await choose(page,'How soon','2 hr');
+      assert.match(await verdict(page),/Your visit falls outside posted park hours/);
+      assert.equal(await page.locator('.lw-adjust').count(),0);
+      await page.locator('#soo-lock-watch').screenshot({path:out+'/visitor-closed-park-'+width+'.png'});
+      assert.deepEqual(errors,[]);await context.close();
     }
     // 7. Winter shutdown: the planner says so instead of lining up ships.
     {

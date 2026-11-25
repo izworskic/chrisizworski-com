@@ -1,0 +1,135 @@
+{
+  "schemaVersion": 1,
+  "kind": "SOO_NEAR_LOCK_LOW_MOTION_DEVELOPMENT",
+  "sourceRun": 45390603940,
+  "priorRun": 45612405911,
+  "dates": [
+    "2025-06-15",
+    "2025-08-15",
+    "2025-10-15"
+  ],
+  "all": {
+    "episodes": 30,
+    "episodesWithLow": 25,
+    "runs": 35,
+    "lowTicks": 203,
+    "oneTickRuns": 9,
+    "runExitStates": {
+      "after_observed_chamber": 9,
+      "forecast_available": 15,
+      "model_chamber_presence": 2,
+      "other_side": 8,
+      "stale_or_missing": 1
+    },
+    "runDurationBands": {
+      "15_to_30": 9,
+      "35_plus": 11,
+      "5_to_10": 6,
+      "single_tick": 9
+    },
+    "meanObservedSpanMinutes": 24,
+    "maxObservedSpanMinutes": 110,
+    "episodesWithLaterForecast": 14,
+    "firstRunExitStates": {
+      "after_observed_chamber": 3,
+      "forecast_available": 14,
+      "model_chamber_presence": 1,
+      "other_side": 6,
+      "stale_or_missing": 1
+    },
+    "initialOutcomes": {
+      "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 1,
+      "OBSERVED_CHAMBER_REFERENCE_BRACKET": 24
+    },
+    "matchedFirstLowEpisodes": 24,
+    "meanFirstLowToReferenceLowerMinutes": 43.41,
+    "meanFirstLowToReferenceUpperMinutes": 44.84
+  },
+  "byDirection": {
+    "upbound": {
+      "episodes": 14,
+      "episodesWithLow": 13,
+      "runs": 18,
+      "lowTicks": 126,
+      "oneTickRuns": 3,
+      "runExitStates": {
+        "after_observed_chamber": 5,
+        "forecast_available": 11,
+        "model_chamber_presence": 2
+      },
+      "runDurationBands": {
+        "15_to_30": 3,
+        "35_plus": 8,
+        "5_to_10": 4,
+        "single_tick": 3
+      },
+      "meanObservedSpanMinutes": 30,
+      "maxObservedSpanMinutes": 110,
+      "episodesWithLaterForecast": 10,
+      "firstRunExitStates": {
+        "after_observed_chamber": 2,
+        "forecast_available": 10,
+        "model_chamber_presence": 1
+      },
+      "initialOutcomes": {
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 13
+      },
+      "matchedFirstLowEpisodes": 13,
+      "meanFirstLowToReferenceLowerMinutes": 51.18,
+      "meanFirstLowToReferenceUpperMinutes": 52.44
+    },
+    "downbound": {
+      "episodes": 16,
+      "episodesWithLow": 12,
+      "runs": 17,
+      "lowTicks": 77,
+      "oneTickRuns": 6,
+      "runExitStates": {
+        "after_observed_chamber": 4,
+        "forecast_available": 4,
+        "other_side": 8,
+        "stale_or_missing": 1
+      },
+      "runDurationBands": {
+        "15_to_30": 6,
+        "35_plus": 3,
+        "5_to_10": 2,
+        "single_tick": 6
+      },
+      "meanObservedSpanMinutes": 17.65,
+      "maxObservedSpanMinutes": 65,
+      "episodesWithLaterForecast": 4,
+      "firstRunExitStates": {
+        "after_observed_chamber": 1,
+        "forecast_available": 4,
+        "other_side": 6,
+        "stale_or_missing": 1
+      },
+      "initialOutcomes": {
+        "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 1,
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 11
+      },
+      "matchedFirstLowEpisodes": 11,
+      "meanFirstLowToReferenceLowerMinutes": 34.23,
+      "meanFirstLowToReferenceUpperMinutes": 35.86
+    }
+  },
+  "freshHoldout": false,
+  "officialLockEntryGroundTruth": false,
+  "productionCalibrationAuthorized": false,
+  "forecastEnabled": false,
+  "note": "Consecutive fresh five-minute grid low reported speed states within 1 NM, observed span only, not continuous stop duration or confirmed waiting. Missing/other states break runs. Later forecast and first-low-to-bracket are retrospective diagnostics only. No countdown, queue inference, model fit, probability or production change.",
+  "verifiedWorkflowRun": 45612812827,
+  "verifiedWorkflowJob": 139200448488,
+  "sourceCommit": "00ba05ab0825c8bb0b207ae801c1d8aa3e5b1e30",
+  "sourceArtifact": 14917313872,
+  "reportArtifact": 15021705579,
+  "reportArtifactZipSha256": "5e12af4b1addf5dfc160bac341f79e541263a5ca90c48a361316289e286f820c",
+  "tests": {
+    "total": 19,
+    "pass": 19,
+    "fail": 0
+  },
+  "decision": "OBSERVED_LOW_SPEED_STATE_ONLY_NO_COUNTDOWN_OR_QUEUE_INFERENCE",
+  "recordMethod": "JSON reproduced from successful GitHub Actions job log."
+}
