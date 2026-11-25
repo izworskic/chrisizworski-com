@@ -70,7 +70,7 @@ async function open(browser, { width, time, api = 'ok', js = true, wx = 'ok', pi
       return route.fulfill({ status: 404, body: '' });
     }
     if (u.pathname === '/api/soo-ais') {
-      if (api === 'fail') return route.fulfill({ status: 503, contentType: 'application/json', body: '{"ok":false}' });
+      if ((typeof api === 'function' ? api() : api) === 'fail') return route.fulfill({ status: 503, contentType: 'application/json', body: '{"ok":false}' });
       return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(fixture(time)) });
     }
     if (u.hostname === 'api.weather.gov') {
@@ -238,27 +238,31 @@ let base;
       await page.locator('#soo-lock-watch').screenshot({ path: `${out}/feed-failure-390.png` });
       await context.close();
     }
-    // 6b. A successful check, a failed refresh, and recovery must not reuse the old ETA.
+    // 6b. A successful check followed by failure and recovery must not show stale ETA or lock-now claims.
     {
-      const { context, page, errors } = await open(browser, { width: 390, time: NOV });
-      await page.locator('.lw-row-btn').first().waitFor();
-      assert.match(await page.locator('#soo-next-ship .next-ship-window').innerText(), /Planning estimate at the locks/);
-      await page.route('**/api/soo-ais', route => route.fulfill({ status: 503, contentType: 'application/json', body: '{"ok":false}' }));
-      await page.locator('#vesselMapRefresh').click();
-      await page.locator('#soo-next-ship-heading').filter({ hasText: 'Arrival estimates paused' }).waitFor();
-      assert.match(await verdict(page), /Arrival estimates paused/);
-      assert.equal(await page.locator('#soo-next-ship .next-ship-window').count(), 0);
-      assert.equal(await page.locator('[data-lw-board]').isHidden(), true);
-      assert.equal(await page.locator('[data-lw-dossier]').isHidden(), true);
-      assert.equal(await page.locator('.lw-adjust').count(), 0);
-      assert.match(await page.locator('#vesselMapStatus').innerText(), /Refresh unavailable/);
-      assert.ok(await page.locator('#sooVesselList li').count() > 0);
-      await page.locator('#soo-lock-watch').screenshot({ path: `${out}/retained-positions-paused-arrivals-390.png` });
-      await page.unroute('**/api/soo-ais');
-      await page.locator('#vesselMapRefresh').click();
+      let api = 'ok';
+      const { context, page, errors } = await open(browser, { width: 390, time: NOV, api: () => api });
       await page.locator('.lw-row-btn').first().waitFor();
       assert.equal(await page.locator('#soo-next-ship .next-ship-window').count(), 1);
-      assert.doesNotMatch(await verdict(page), /paused/);
+      api = 'fail';
+      await page.locator('#vesselMapRefresh').click();
+      await page.getByText('Live ship reports are unavailable, so no visit can be lined up').waitFor();
+      assert.equal(await page.locator('#soo-next-ship .next-ship-window').count(), 0);
+      assert.equal(await page.locator('#sooNextNow').isHidden(), true);
+      assert.equal(await page.locator('[data-lw-board]').isHidden(), true);
+      assert.equal(await page.locator('[data-lw-dossier]').isHidden(), true);
+      assert.match(await page.locator('#vesselMapStatus').innerText(), /Refresh unavailable.*last-known/);
+      assert.doesNotMatch(await page.locator('#sooVesselList').innerText(), /in the Poe Lock now/i);
+      assert.equal(await page.locator('#sooVesselList button').count(), 6);
+      await page.locator('#sooVesselList button').filter({hasText:'EDWIN H. GOTT'}).click();
+      assert.doesNotMatch(await page.locator('#sooVesselMap .leaflet-popup-content').innerText(), /in the Poe Lock now/i);
+      await page.locator('#soo-lock-watch').screenshot({path: `${out}/retained-feed-failure-390.png`});
+      api = 'ok';
+      await page.locator('#vesselMapRefresh').click();
+      await page.locator('#soo-next-ship .next-ship-window').waitFor();
+      await page.locator('.lw-row-btn').first().waitFor();
+      assert.equal(await page.locator('#sooNextNow').isVisible(), true);
+      assert.doesNotMatch(await page.locator('#vesselMapStatus').innerText(), /Refresh unavailable/);
       assert.deepEqual(errors, []);
       await context.close();
     }

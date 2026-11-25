@@ -1,0 +1,1948 @@
+{
+  "status": "EXPANDED_CYCLE_RELATIVE_DIAGNOSTIC_ONLY",
+  "cohort": [
+    {
+      "station": "45029",
+      "cycleAt": "2026-10-14T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45029",
+      "cycleAt": "2026-10-14T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45161",
+      "cycleAt": "2026-10-14T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45161",
+      "cycleAt": "2026-10-14T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45183",
+      "cycleAt": "2026-10-14T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45183",
+      "cycleAt": "2026-10-14T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45002",
+      "cycleAt": "2026-10-14T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45002",
+      "cycleAt": "2026-10-14T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45029",
+      "cycleAt": "2026-10-17T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45029",
+      "cycleAt": "2026-10-17T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45161",
+      "cycleAt": "2026-10-17T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45161",
+      "cycleAt": "2026-10-17T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45183",
+      "cycleAt": "2026-10-17T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45183",
+      "cycleAt": "2026-10-17T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45002",
+      "cycleAt": "2026-10-17T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45002",
+      "cycleAt": "2026-10-17T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45029",
+      "cycleAt": "2026-10-23T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45029",
+      "cycleAt": "2026-10-23T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45161",
+      "cycleAt": "2026-10-23T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45161",
+      "cycleAt": "2026-10-23T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45183",
+      "cycleAt": "2026-10-23T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45183",
+      "cycleAt": "2026-10-23T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45002",
+      "cycleAt": "2026-10-23T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45002",
+      "cycleAt": "2026-10-23T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45029",
+      "cycleAt": "2026-10-26T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45029",
+      "cycleAt": "2026-10-26T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45161",
+      "cycleAt": "2026-10-26T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45161",
+      "cycleAt": "2026-10-26T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45183",
+      "cycleAt": "2026-10-26T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45183",
+      "cycleAt": "2026-10-26T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45002",
+      "cycleAt": "2026-10-26T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45002",
+      "cycleAt": "2026-10-26T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45029",
+      "cycleAt": "2026-10-29T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45029",
+      "cycleAt": "2026-10-29T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45161",
+      "cycleAt": "2026-10-29T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45161",
+      "cycleAt": "2026-10-29T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45183",
+      "cycleAt": "2026-10-29T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45183",
+      "cycleAt": "2026-10-29T00:00:00+00:00",
+      "leadHours": 48
+    },
+    {
+      "station": "45002",
+      "cycleAt": "2026-10-29T00:00:00+00:00",
+      "leadHours": 24
+    },
+    {
+      "station": "45002",
+      "cycleAt": "2026-10-29T00:00:00+00:00",
+      "leadHours": 48
+    }
+  ],
+  "cohortSha256": "2d3f314dc9d90815bf64fe88e9addc284470a9e89e56da67bc36d1e874be4262",
+  "cycleResults": [
+    {
+      "status": "CYCLE_RELATIVE_DIAGNOSTIC_ONLY",
+      "cohort": [
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-14T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-14T00:00:00+00:00",
+          "leadHours": 48
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-14T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-14T00:00:00+00:00",
+          "leadHours": 48
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-14T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-14T00:00:00+00:00",
+          "leadHours": 48
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-14T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-14T00:00:00+00:00",
+          "leadHours": 48
+        }
+      ],
+      "cohortSha256": "40ccb13f233e494b45463cb069ee5d9826e645c13478add70d62e3f10e0eccd5",
+      "models": {
+        "0": {
+          "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/2026/10/14/lmhofs.t00z.20261014.regulargrid.f000.nc",
+          "lastModified": "Wed, 14 Oct 2026 03:19:38 GMT",
+          "etag": "\"05b7c9a7472a65576933e1f0036fca09-18\"",
+          "advertisedBytes": 146239736,
+          "bytes": 146239736,
+          "sha256": "c9a21d61717a525ccd61d5a82930f70de7c3ada71a66da3c230eb2e112ed2963",
+          "validAt": "2026-10-14T00:00:00+00:00",
+          "tempUnits": "Celsius",
+          "surfaceDepth": 0,
+          "geometrySha256": "f4c438c8115240947794c9636ea3d71901022ce9c97d938fb2b4783d949a8a87",
+          "shape": [
+            1,
+            25,
+            478,
+            837
+          ],
+          "modelTitle": "LMHOFS"
+        },
+        "24": {
+          "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/2026/10/14/lmhofs.t00z.20261014.regulargrid.f024.nc",
+          "lastModified": "Wed, 14 Oct 2026 03:19:44 GMT",
+          "etag": "\"2114a108ed3afb3138ab78cda6e4b773-18\"",
+          "advertisedBytes": 146239736,
+          "bytes": 146239736,
+          "sha256": "9b63e200d9cd8e9014534fcdb4d08ba368b16f48ac9f0604f846f73f31f96e63",
+          "validAt": "2026-10-15T00:00:00+00:00",
+          "tempUnits": "Celsius",
+          "surfaceDepth": 0,
+          "geometrySha256": "f4c438c8115240947794c9636ea3d71901022ce9c97d938fb2b4783d949a8a87",
+          "shape": [
+            1,
+            25,
+            478,
+            837
+          ],
+          "modelTitle": "LMHOFS"
+        },
+        "48": {
+          "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/2026/10/14/lmhofs.t00z.20261014.regulargrid.f048.nc",
+          "lastModified": "Wed, 14 Oct 2026 03:19:51 GMT",
+          "etag": "\"e9876098cb557a725259c4a0caaca060-18\"",
+          "advertisedBytes": 146239736,
+          "bytes": 146239736,
+          "sha256": "cd2170e6d6eb61ec7efb1dc5fca40160e8419cb01055c1b2cd068a54526a607c",
+          "validAt": "2026-10-16T00:00:00+00:00",
+          "tempUnits": "Celsius",
+          "surfaceDepth": 0,
+          "geometrySha256": "f4c438c8115240947794c9636ea3d71901022ce9c97d938fb2b4783d949a8a87",
+          "shape": [
+            1,
+            25,
+            478,
+            837
+          ],
+          "modelTitle": "LMHOFS"
+        }
+      },
+      "observations": {
+        "45002": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45002.txt",
+          "lastModified": "Mon, 16 Nov 2026 15:49:38 GMT",
+          "etag": "\"60e8c-66066b9b09153\"",
+          "advertisedBytes": 396940,
+          "bytes": 396940,
+          "sha256": "bceca4333971c611ae5a3118aacb1d9c2b452a8d2fa6b3036d15b80af11072f1",
+          "validWaterRows": 4426,
+          "samplesC": {
+            "0": null,
+            "24": 15.9,
+            "48": 15.7
+          }
+        },
+        "45029": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45029.txt",
+          "lastModified": "Mon, 16 Nov 2026 14:20:09 GMT",
+          "etag": "\"606e6-6606579a76938\"",
+          "advertisedBytes": 394982,
+          "bytes": 394982,
+          "sha256": "80b30a8bc0585113a6705c0771253accb27bb7f13e7ce5de802cf29d727727d8",
+          "validWaterRows": 4436,
+          "samplesC": {
+            "0": 16.5,
+            "24": 16.1,
+            "48": 15.7
+          }
+        },
+        "45161": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45161.txt",
+          "lastModified": "Mon, 16 Nov 2026 14:20:12 GMT",
+          "etag": "\"1b39d-6606579d33b36\"",
+          "advertisedBytes": 111517,
+          "bytes": 111517,
+          "sha256": "86a739f5fac785a276ffbb9bf859e0150b46914beee0a249bc2bcfdc41411680",
+          "validWaterRows": 973,
+          "samplesC": {
+            "0": 16.2,
+            "24": null,
+            "48": null
+          }
+        },
+        "45183": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45183.txt",
+          "lastModified": "Mon, 16 Nov 2026 14:20:48 GMT",
+          "etag": "\"12b55-660657c024e57\"",
+          "advertisedBytes": 76629,
+          "bytes": 76629,
+          "sha256": "df626d8e30fe017e28efd54f3a3401d78c168b35b606d4b6c27143ee2b8feb7f",
+          "validWaterRows": 857,
+          "samplesC": {
+            "0": 15.8,
+            "24": 15.7,
+            "48": null
+          }
+        }
+      },
+      "pairs": [
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-14T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 130,
+          "i": 179,
+          "distanceKm": 0.1629,
+          "cellLat": 42.9,
+          "cellLon": -86.27,
+          "stationLat": 42.9,
+          "stationLon": -86.272,
+          "modelBaseC": 17.567642211914062,
+          "modelValidC": 17.13813591003418,
+          "baselineC": 16.5,
+          "actualC": 16.1,
+          "persistenceF": 61.7,
+          "actualF": 60.980000000000004,
+          "predictedF": 60.926888656616214,
+          "persistenceErrorF": 0.7199999999999989,
+          "modelChangeErrorF": -0.0531113433837902
+        },
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-14T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 130,
+          "i": 179,
+          "distanceKm": 0.1629,
+          "cellLat": 42.9,
+          "cellLon": -86.27,
+          "stationLat": 42.9,
+          "stationLon": -86.272,
+          "modelBaseC": 17.567642211914062,
+          "modelValidC": 16.453062057495117,
+          "baselineC": 16.5,
+          "actualC": 15.7,
+          "persistenceF": 61.7,
+          "actualF": 60.26,
+          "predictedF": 59.6937557220459,
+          "persistenceErrorF": 1.4400000000000048,
+          "modelChangeErrorF": -0.5662442779540982
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-14T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 159,
+          "i": 171,
+          "distanceKm": 0.6436,
+          "cellLat": 43.190000000000005,
+          "cellLon": -86.35000000000001,
+          "stationLat": 43.185,
+          "stationLon": -86.354,
+          "modelBaseC": 17.380640029907227,
+          "modelValidC": 16.950773239135742,
+          "baselineC": 16.2,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-14T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 159,
+          "i": 171,
+          "distanceKm": 0.6436,
+          "cellLat": 43.190000000000005,
+          "cellLon": -86.35000000000001,
+          "stationLat": 43.185,
+          "stationLon": -86.354,
+          "modelBaseC": 17.380640029907227,
+          "modelValidC": 16.313674926757812,
+          "baselineC": 16.2,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-14T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 338,
+          "i": 223,
+          "distanceKm": 0.2359,
+          "cellLat": 44.980000000000004,
+          "cellLon": -85.83,
+          "stationLat": 44.982,
+          "stationLon": -85.831,
+          "modelBaseC": 13.520644187927246,
+          "modelValidC": 13.439201354980469,
+          "baselineC": 15.8,
+          "actualC": 15.7,
+          "persistenceF": 60.44,
+          "actualF": 60.26,
+          "predictedF": 60.293402900695796,
+          "persistenceErrorF": 0.17999999999999972,
+          "modelChangeErrorF": 0.033402900695797655
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-14T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 338,
+          "i": 223,
+          "distanceKm": 0.2359,
+          "cellLat": 44.980000000000004,
+          "cellLon": -85.83,
+          "stationLat": 44.982,
+          "stationLon": -85.831,
+          "modelBaseC": 13.520644187927246,
+          "modelValidC": 13.633404731750488,
+          "baselineC": 15.8,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-14T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 374,
+          "i": 165,
+          "distanceKm": 0.4516,
+          "cellLat": 45.34,
+          "cellLon": -86.41,
+          "stationLat": 45.344,
+          "stationLon": -86.411,
+          "modelBaseC": 14.1243896484375,
+          "modelValidC": 13.985430717468262,
+          "baselineC": null,
+          "actualC": 15.9,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-14T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 374,
+          "i": 165,
+          "distanceKm": 0.4516,
+          "cellLat": 45.34,
+          "cellLon": -86.41,
+          "stationLat": 45.344,
+          "stationLon": -86.411,
+          "modelBaseC": 14.1243896484375,
+          "modelValidC": 13.914732933044434,
+          "baselineC": null,
+          "actualC": 15.7,
+          "reason": "missing exact-hour independent observation"
+        }
+      ],
+      "canPromoteModel": false,
+      "limitations": [
+        "One fixed 00Z cycle; no statistical inference or nearshore skill.",
+        "Station locations from repository catalog; historical deployment coordinates and sensor depth not independently authenticated.",
+        "Archive Last-Modified does not establish original forecast or observation publication availability. Cycle-relative diagnostic is not a prospective holdout."
+      ],
+      "metrics": {
+        "24": {
+          "n": 2,
+          "expected": 4,
+          "persistenceMAE_F": 0.4499999999999993,
+          "modelChangeMAE_F": 0.04325712203979393,
+          "biasF": -0.009854221343996272
+        },
+        "48": {
+          "n": 1,
+          "expected": 4,
+          "persistenceMAE_F": 1.4400000000000048,
+          "modelChangeMAE_F": 0.5662442779540982,
+          "biasF": -0.5662442779540982
+        }
+      }
+    },
+    {
+      "status": "CYCLE_RELATIVE_DIAGNOSTIC_ONLY",
+      "cohort": [
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-17T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-17T00:00:00+00:00",
+          "leadHours": 48
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-17T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-17T00:00:00+00:00",
+          "leadHours": 48
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-17T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-17T00:00:00+00:00",
+          "leadHours": 48
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-17T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-17T00:00:00+00:00",
+          "leadHours": 48
+        }
+      ],
+      "cohortSha256": "3ff191034f0baf31277f05ea5350fa9fa8812a203920d1ee6eda5485812fae45",
+      "models": {
+        "0": {
+          "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/2026/10/17/lmhofs.t00z.20261017.regulargrid.f000.nc",
+          "lastModified": "Sat, 17 Oct 2026 03:19:16 GMT",
+          "etag": "\"f950a4adfd2fda66d1a66ff5c6065a0b-18\"",
+          "advertisedBytes": 146239736,
+          "bytes": 146239736,
+          "sha256": "befcf7e69339ead8943edc1f5873b2e7c6d688ac0e2667c864b696cf2ea7cf85",
+          "validAt": "2026-10-17T00:00:00+00:00",
+          "tempUnits": "Celsius",
+          "surfaceDepth": 0,
+          "geometrySha256": "f4c438c8115240947794c9636ea3d71901022ce9c97d938fb2b4783d949a8a87",
+          "shape": [
+            1,
+            25,
+            478,
+            837
+          ],
+          "modelTitle": "LMHOFS"
+        },
+        "24": {
+          "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/2026/10/17/lmhofs.t00z.20261017.regulargrid.f024.nc",
+          "lastModified": "Sat, 17 Oct 2026 03:19:22 GMT",
+          "etag": "\"048ab4a8a66ed91ba1aee4fb1854c18b-18\"",
+          "advertisedBytes": 146239736,
+          "bytes": 146239736,
+          "sha256": "529d517771b5880e5859571eb6f6aa5760942d69afbed1341313e59001d556c1",
+          "validAt": "2026-10-18T00:00:00+00:00",
+          "tempUnits": "Celsius",
+          "surfaceDepth": 0,
+          "geometrySha256": "f4c438c8115240947794c9636ea3d71901022ce9c97d938fb2b4783d949a8a87",
+          "shape": [
+            1,
+            25,
+            478,
+            837
+          ],
+          "modelTitle": "LMHOFS"
+        },
+        "48": {
+          "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/2026/10/17/lmhofs.t00z.20261017.regulargrid.f048.nc",
+          "lastModified": "Sat, 17 Oct 2026 03:19:27 GMT",
+          "etag": "\"2fe5f00e05278bb115019180328fd7d3-18\"",
+          "advertisedBytes": 146239736,
+          "bytes": 146239736,
+          "sha256": "5e29d0f649da373bc3972248c178d687e54075eec2666dae18c05b2cebf3011a",
+          "validAt": "2026-10-19T00:00:00+00:00",
+          "tempUnits": "Celsius",
+          "surfaceDepth": 0,
+          "geometrySha256": "f4c438c8115240947794c9636ea3d71901022ce9c97d938fb2b4783d949a8a87",
+          "shape": [
+            1,
+            25,
+            478,
+            837
+          ],
+          "modelTitle": "LMHOFS"
+        }
+      },
+      "observations": {
+        "45002": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45002.txt",
+          "lastModified": "Mon, 16 Nov 2026 15:49:38 GMT",
+          "etag": "\"60e8c-66066b9b09153\"",
+          "advertisedBytes": 396940,
+          "bytes": 396940,
+          "sha256": "bceca4333971c611ae5a3118aacb1d9c2b452a8d2fa6b3036d15b80af11072f1",
+          "validWaterRows": 4426,
+          "samplesC": {
+            "0": 15.2,
+            "24": 14.9,
+            "48": 12
+          }
+        },
+        "45029": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45029.txt",
+          "lastModified": "Mon, 16 Nov 2026 14:20:09 GMT",
+          "etag": "\"606e6-6606579a76938\"",
+          "advertisedBytes": 394982,
+          "bytes": 394982,
+          "sha256": "80b30a8bc0585113a6705c0771253accb27bb7f13e7ce5de802cf29d727727d8",
+          "validWaterRows": 4436,
+          "samplesC": {
+            "0": 13.7,
+            "24": 12,
+            "48": 12.5
+          }
+        },
+        "45161": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45161.txt",
+          "lastModified": "Mon, 16 Nov 2026 14:20:12 GMT",
+          "etag": "\"1b39d-6606579d33b36\"",
+          "advertisedBytes": 111517,
+          "bytes": 111517,
+          "sha256": "86a739f5fac785a276ffbb9bf859e0150b46914beee0a249bc2bcfdc41411680",
+          "validWaterRows": 973,
+          "samplesC": {
+            "0": null,
+            "24": null,
+            "48": null
+          }
+        },
+        "45183": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45183.txt",
+          "lastModified": "Mon, 16 Nov 2026 14:20:48 GMT",
+          "etag": "\"12b55-660657c024e57\"",
+          "advertisedBytes": 76629,
+          "bytes": 76629,
+          "sha256": "df626d8e30fe017e28efd54f3a3401d78c168b35b606d4b6c27143ee2b8feb7f",
+          "validWaterRows": 857,
+          "samplesC": {
+            "0": 14.7,
+            "24": null,
+            "48": 14.1
+          }
+        }
+      },
+      "pairs": [
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-17T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 130,
+          "i": 179,
+          "distanceKm": 0.1629,
+          "cellLat": 42.9,
+          "cellLon": -86.27,
+          "stationLat": 42.9,
+          "stationLon": -86.272,
+          "modelBaseC": 15.437051773071289,
+          "modelValidC": 14.798649787902832,
+          "baselineC": 13.7,
+          "actualC": 12,
+          "persistenceF": 56.66,
+          "actualF": 53.6,
+          "predictedF": 55.510876426696775,
+          "persistenceErrorF": 3.059999999999995,
+          "modelChangeErrorF": 1.910876426696774
+        },
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-17T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 130,
+          "i": 179,
+          "distanceKm": 0.1629,
+          "cellLat": 42.9,
+          "cellLon": -86.27,
+          "stationLat": 42.9,
+          "stationLon": -86.272,
+          "modelBaseC": 15.437051773071289,
+          "modelValidC": 14.776053428649902,
+          "baselineC": 13.7,
+          "actualC": 12.5,
+          "persistenceF": 56.66,
+          "actualF": 54.5,
+          "predictedF": 55.4702029800415,
+          "persistenceErrorF": 2.1599999999999966,
+          "modelChangeErrorF": 0.9702029800414991
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-17T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 159,
+          "i": 171,
+          "distanceKm": 0.6436,
+          "cellLat": 43.190000000000005,
+          "cellLon": -86.35000000000001,
+          "stationLat": 43.185,
+          "stationLon": -86.354,
+          "modelBaseC": 15.627666473388672,
+          "modelValidC": 14.935745239257812,
+          "baselineC": null,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-17T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 159,
+          "i": 171,
+          "distanceKm": 0.6436,
+          "cellLat": 43.190000000000005,
+          "cellLon": -86.35000000000001,
+          "stationLat": 43.185,
+          "stationLon": -86.354,
+          "modelBaseC": 15.627666473388672,
+          "modelValidC": 14.023785591125488,
+          "baselineC": null,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-17T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 338,
+          "i": 223,
+          "distanceKm": 0.2359,
+          "cellLat": 44.980000000000004,
+          "cellLon": -85.83,
+          "stationLat": 44.982,
+          "stationLon": -85.831,
+          "modelBaseC": 13.020760536193848,
+          "modelValidC": 12.55139446258545,
+          "baselineC": 14.7,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-17T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 338,
+          "i": 223,
+          "distanceKm": 0.2359,
+          "cellLat": 44.980000000000004,
+          "cellLon": -85.83,
+          "stationLat": 44.982,
+          "stationLon": -85.831,
+          "modelBaseC": 13.020760536193848,
+          "modelValidC": 12.574134826660156,
+          "baselineC": 14.7,
+          "actualC": 14.1,
+          "persistenceF": 58.46,
+          "actualF": 57.379999999999995,
+          "predictedF": 57.65607372283936,
+          "persistenceErrorF": 1.0800000000000054,
+          "modelChangeErrorF": 0.2760737228393637
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-17T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 374,
+          "i": 165,
+          "distanceKm": 0.4516,
+          "cellLat": 45.34,
+          "cellLon": -86.41,
+          "stationLat": 45.344,
+          "stationLon": -86.411,
+          "modelBaseC": 13.465754508972168,
+          "modelValidC": 13.233320236206055,
+          "baselineC": 15.2,
+          "actualC": 14.9,
+          "persistenceF": 59.36,
+          "actualF": 58.82,
+          "predictedF": 58.941618309020996,
+          "persistenceErrorF": 0.5399999999999991,
+          "modelChangeErrorF": 0.12161830902099524
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-17T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 374,
+          "i": 165,
+          "distanceKm": 0.4516,
+          "cellLat": 45.34,
+          "cellLon": -86.41,
+          "stationLat": 45.344,
+          "stationLon": -86.411,
+          "modelBaseC": 13.465754508972168,
+          "modelValidC": 12.397465705871582,
+          "baselineC": 15.2,
+          "actualC": 12,
+          "persistenceF": 59.36,
+          "actualF": 53.6,
+          "predictedF": 57.43708015441894,
+          "persistenceErrorF": 5.759999999999998,
+          "modelChangeErrorF": 3.837080154418942
+        }
+      ],
+      "canPromoteModel": false,
+      "limitations": [
+        "One fixed 00Z cycle; no statistical inference or nearshore skill.",
+        "Station locations from repository catalog; historical deployment coordinates and sensor depth not independently authenticated.",
+        "Archive Last-Modified does not establish original forecast or observation publication availability. Cycle-relative diagnostic is not a prospective holdout."
+      ],
+      "metrics": {
+        "24": {
+          "n": 2,
+          "expected": 4,
+          "persistenceMAE_F": 1.7999999999999972,
+          "modelChangeMAE_F": 1.0162473678588846,
+          "biasF": 1.0162473678588846
+        },
+        "48": {
+          "n": 3,
+          "expected": 4,
+          "persistenceMAE_F": 3,
+          "modelChangeMAE_F": 1.6944522857666016,
+          "biasF": 1.6944522857666016
+        }
+      }
+    },
+    {
+      "status": "CYCLE_RELATIVE_DIAGNOSTIC_ONLY",
+      "cohort": [
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-23T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-23T00:00:00+00:00",
+          "leadHours": 48
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-23T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-23T00:00:00+00:00",
+          "leadHours": 48
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-23T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-23T00:00:00+00:00",
+          "leadHours": 48
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-23T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-23T00:00:00+00:00",
+          "leadHours": 48
+        }
+      ],
+      "cohortSha256": "e31affd8ac461c21346d89917beb984bb8a006e8463c3b3a4efa259a2794a7af",
+      "models": {
+        "0": {
+          "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/2026/10/23/lmhofs.t00z.20261023.regulargrid.f000.nc",
+          "lastModified": "Fri, 23 Oct 2026 03:18:51 GMT",
+          "etag": "\"6848ce9df778f5700f9c0548ba2eb708-18\"",
+          "advertisedBytes": 146239736,
+          "bytes": 146239736,
+          "sha256": "61ea6fb30fbe28d7aea5500bd86d403199a6c2ffb6dd865f9be4ad25a1a5aed8",
+          "validAt": "2026-10-23T00:00:00+00:00",
+          "tempUnits": "Celsius",
+          "surfaceDepth": 0,
+          "geometrySha256": "f4c438c8115240947794c9636ea3d71901022ce9c97d938fb2b4783d949a8a87",
+          "shape": [
+            1,
+            25,
+            478,
+            837
+          ],
+          "modelTitle": "LMHOFS"
+        },
+        "24": {
+          "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/2026/10/23/lmhofs.t00z.20261023.regulargrid.f024.nc",
+          "lastModified": "Fri, 23 Oct 2026 03:18:56 GMT",
+          "etag": "\"587cc040a45f8cf77b35ccd56533bd1d-18\"",
+          "advertisedBytes": 146239736,
+          "bytes": 146239736,
+          "sha256": "9ac7c9c73e7302af0cc5598af5c26af0ea78722fa6ad788513ba972ce377df2d",
+          "validAt": "2026-10-24T00:00:00+00:00",
+          "tempUnits": "Celsius",
+          "surfaceDepth": 0,
+          "geometrySha256": "f4c438c8115240947794c9636ea3d71901022ce9c97d938fb2b4783d949a8a87",
+          "shape": [
+            1,
+            25,
+            478,
+            837
+          ],
+          "modelTitle": "LMHOFS"
+        },
+        "48": {
+          "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/2026/10/23/lmhofs.t00z.20261023.regulargrid.f048.nc",
+          "lastModified": "Fri, 23 Oct 2026 03:19:02 GMT",
+          "etag": "\"f5ce2dbb4c18e494fc16d1d6e5ace2de-18\"",
+          "advertisedBytes": 146239736,
+          "bytes": 146239736,
+          "sha256": "d80fceedec24714daf9586bb9159f95cd09ef4422cd7e244e67020069cd39b0e",
+          "validAt": "2026-10-25T00:00:00+00:00",
+          "tempUnits": "Celsius",
+          "surfaceDepth": 0,
+          "geometrySha256": "f4c438c8115240947794c9636ea3d71901022ce9c97d938fb2b4783d949a8a87",
+          "shape": [
+            1,
+            25,
+            478,
+            837
+          ],
+          "modelTitle": "LMHOFS"
+        }
+      },
+      "observations": {
+        "45002": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45002.txt",
+          "lastModified": "Mon, 16 Nov 2026 15:49:38 GMT",
+          "etag": "\"60e8c-66066b9b09153\"",
+          "advertisedBytes": 396940,
+          "bytes": 396940,
+          "sha256": "bceca4333971c611ae5a3118aacb1d9c2b452a8d2fa6b3036d15b80af11072f1",
+          "validWaterRows": 4426,
+          "samplesC": {
+            "0": 13.9,
+            "24": 13.4,
+            "48": 13.8
+          }
+        },
+        "45029": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45029.txt",
+          "lastModified": "Mon, 16 Nov 2026 14:20:09 GMT",
+          "etag": "\"606e6-6606579a76938\"",
+          "advertisedBytes": 394982,
+          "bytes": 394982,
+          "sha256": "80b30a8bc0585113a6705c0771253accb27bb7f13e7ce5de802cf29d727727d8",
+          "validWaterRows": 4436,
+          "samplesC": {
+            "0": 14.4,
+            "24": 14.9,
+            "48": 14.4
+          }
+        },
+        "45161": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45161.txt",
+          "lastModified": "Mon, 16 Nov 2026 14:20:12 GMT",
+          "etag": "\"1b39d-6606579d33b36\"",
+          "advertisedBytes": 111517,
+          "bytes": 111517,
+          "sha256": "86a739f5fac785a276ffbb9bf859e0150b46914beee0a249bc2bcfdc41411680",
+          "validWaterRows": 973,
+          "samplesC": {
+            "0": null,
+            "24": null,
+            "48": null
+          }
+        },
+        "45183": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45183.txt",
+          "lastModified": "Mon, 16 Nov 2026 14:20:48 GMT",
+          "etag": "\"12b55-660657c024e57\"",
+          "advertisedBytes": 76629,
+          "bytes": 76629,
+          "sha256": "df626d8e30fe017e28efd54f3a3401d78c168b35b606d4b6c27143ee2b8feb7f",
+          "validWaterRows": 857,
+          "samplesC": {
+            "0": null,
+            "24": null,
+            "48": null
+          }
+        }
+      },
+      "pairs": [
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-23T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 130,
+          "i": 179,
+          "distanceKm": 0.1629,
+          "cellLat": 42.9,
+          "cellLon": -86.27,
+          "stationLat": 42.9,
+          "stationLon": -86.272,
+          "modelBaseC": 14.948447227478027,
+          "modelValidC": 15.208154678344727,
+          "baselineC": 14.4,
+          "actualC": 14.9,
+          "persistenceF": 57.92,
+          "actualF": 58.82,
+          "predictedF": 58.38747341156006,
+          "persistenceErrorF": -0.8999999999999986,
+          "modelChangeErrorF": -0.4325265884399414
+        },
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-23T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 130,
+          "i": 179,
+          "distanceKm": 0.1629,
+          "cellLat": 42.9,
+          "cellLon": -86.27,
+          "stationLat": 42.9,
+          "stationLon": -86.272,
+          "modelBaseC": 14.948447227478027,
+          "modelValidC": 14.969160079956055,
+          "baselineC": 14.4,
+          "actualC": 14.4,
+          "persistenceF": 57.92,
+          "actualF": 57.92,
+          "predictedF": 57.957283134460454,
+          "persistenceErrorF": 0,
+          "modelChangeErrorF": 0.03728313446045206
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-23T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 159,
+          "i": 171,
+          "distanceKm": 0.6436,
+          "cellLat": 43.190000000000005,
+          "cellLon": -86.35000000000001,
+          "stationLat": 43.185,
+          "stationLon": -86.354,
+          "modelBaseC": 15.062294960021973,
+          "modelValidC": 15.235647201538086,
+          "baselineC": null,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-23T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 159,
+          "i": 171,
+          "distanceKm": 0.6436,
+          "cellLat": 43.190000000000005,
+          "cellLon": -86.35000000000001,
+          "stationLat": 43.185,
+          "stationLon": -86.354,
+          "modelBaseC": 15.062294960021973,
+          "modelValidC": 14.939599990844727,
+          "baselineC": null,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-23T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 338,
+          "i": 223,
+          "distanceKm": 0.2359,
+          "cellLat": 44.980000000000004,
+          "cellLon": -85.83,
+          "stationLat": 44.982,
+          "stationLon": -85.831,
+          "modelBaseC": 12.856195449829102,
+          "modelValidC": 13.09876823425293,
+          "baselineC": null,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-23T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 338,
+          "i": 223,
+          "distanceKm": 0.2359,
+          "cellLat": 44.980000000000004,
+          "cellLon": -85.83,
+          "stationLat": 44.982,
+          "stationLon": -85.831,
+          "modelBaseC": 12.856195449829102,
+          "modelValidC": 12.723361015319824,
+          "baselineC": null,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-23T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 374,
+          "i": 165,
+          "distanceKm": 0.4516,
+          "cellLat": 45.34,
+          "cellLon": -86.41,
+          "stationLat": 45.344,
+          "stationLon": -86.411,
+          "modelBaseC": 12.649818420410156,
+          "modelValidC": 12.684013366699219,
+          "baselineC": 13.9,
+          "actualC": 13.4,
+          "persistenceF": 57.019999999999996,
+          "actualF": 56.120000000000005,
+          "predictedF": 57.081550903320306,
+          "persistenceErrorF": 0.8999999999999915,
+          "modelChangeErrorF": 0.9615509033203011
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-23T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 374,
+          "i": 165,
+          "distanceKm": 0.4516,
+          "cellLat": 45.34,
+          "cellLon": -86.41,
+          "stationLat": 45.344,
+          "stationLon": -86.411,
+          "modelBaseC": 12.649818420410156,
+          "modelValidC": 12.459794998168945,
+          "baselineC": 13.9,
+          "actualC": 13.8,
+          "persistenceF": 57.019999999999996,
+          "actualF": 56.84,
+          "predictedF": 56.67795783996581,
+          "persistenceErrorF": 0.1799999999999926,
+          "modelChangeErrorF": -0.16204216003418992
+        }
+      ],
+      "canPromoteModel": false,
+      "limitations": [
+        "One fixed 00Z cycle; no statistical inference or nearshore skill.",
+        "Station locations from repository catalog; historical deployment coordinates and sensor depth not independently authenticated.",
+        "Archive Last-Modified does not establish original forecast or observation publication availability. Cycle-relative diagnostic is not a prospective holdout."
+      ],
+      "metrics": {
+        "24": {
+          "n": 2,
+          "expected": 4,
+          "persistenceMAE_F": 0.899999999999995,
+          "modelChangeMAE_F": 0.6970387458801213,
+          "biasF": 0.26451215744017986
+        },
+        "48": {
+          "n": 2,
+          "expected": 4,
+          "persistenceMAE_F": 0.0899999999999963,
+          "modelChangeMAE_F": 0.09966264724732099,
+          "biasF": -0.06237951278686893
+        }
+      }
+    },
+    {
+      "status": "CYCLE_RELATIVE_DIAGNOSTIC_ONLY",
+      "cohort": [
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-26T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-26T00:00:00+00:00",
+          "leadHours": 48
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-26T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-26T00:00:00+00:00",
+          "leadHours": 48
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-26T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-26T00:00:00+00:00",
+          "leadHours": 48
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-26T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-26T00:00:00+00:00",
+          "leadHours": 48
+        }
+      ],
+      "cohortSha256": "d8a4896b142f345d67592acbafa750cccbb4f084a8a92a3c825fe495a6e6be0e",
+      "models": {
+        "0": {
+          "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/2026/10/26/lmhofs.t00z.20261026.regulargrid.f000.nc",
+          "lastModified": "Mon, 26 Oct 2026 03:19:10 GMT",
+          "etag": "\"1980cdc92561b18971f9042b9fe51213-18\"",
+          "advertisedBytes": 146239736,
+          "bytes": 146239736,
+          "sha256": "9522f4083cdb88eab5885b91f5cdf48681170a8582da2363261710f9c5df600b",
+          "validAt": "2026-10-26T00:00:00+00:00",
+          "tempUnits": "Celsius",
+          "surfaceDepth": 0,
+          "geometrySha256": "f4c438c8115240947794c9636ea3d71901022ce9c97d938fb2b4783d949a8a87",
+          "shape": [
+            1,
+            25,
+            478,
+            837
+          ],
+          "modelTitle": "LMHOFS"
+        },
+        "24": {
+          "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/2026/10/26/lmhofs.t00z.20261026.regulargrid.f024.nc",
+          "lastModified": "Mon, 26 Oct 2026 03:19:15 GMT",
+          "etag": "\"b00d4fd628ce83b2dde390d28527a9b9-18\"",
+          "advertisedBytes": 146239736,
+          "bytes": 146239736,
+          "sha256": "2246047ab341b30e20d4553ababc4aeccb4d6ee8d7f915b7ae8c33a922ccd308",
+          "validAt": "2026-10-27T00:00:00+00:00",
+          "tempUnits": "Celsius",
+          "surfaceDepth": 0,
+          "geometrySha256": "f4c438c8115240947794c9636ea3d71901022ce9c97d938fb2b4783d949a8a87",
+          "shape": [
+            1,
+            25,
+            478,
+            837
+          ],
+          "modelTitle": "LMHOFS"
+        },
+        "48": {
+          "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/2026/10/26/lmhofs.t00z.20261026.regulargrid.f048.nc",
+          "lastModified": "Mon, 26 Oct 2026 03:19:21 GMT",
+          "etag": "\"220124f51cc71e706a0d0d5924cd87a2-18\"",
+          "advertisedBytes": 146239736,
+          "bytes": 146239736,
+          "sha256": "4a9bfee14639fa234aec5e464e718f62151d76ac9784221005e89dfc1a2b5e67",
+          "validAt": "2026-10-28T00:00:00+00:00",
+          "tempUnits": "Celsius",
+          "surfaceDepth": 0,
+          "geometrySha256": "f4c438c8115240947794c9636ea3d71901022ce9c97d938fb2b4783d949a8a87",
+          "shape": [
+            1,
+            25,
+            478,
+            837
+          ],
+          "modelTitle": "LMHOFS"
+        }
+      },
+      "observations": {
+        "45002": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45002.txt",
+          "lastModified": "Mon, 16 Nov 2026 15:49:38 GMT",
+          "etag": "\"60e8c-66066b9b09153\"",
+          "advertisedBytes": 396940,
+          "bytes": 396940,
+          "sha256": "bceca4333971c611ae5a3118aacb1d9c2b452a8d2fa6b3036d15b80af11072f1",
+          "validWaterRows": 4426,
+          "samplesC": {
+            "0": 13.8,
+            "24": 13.5,
+            "48": 13.6
+          }
+        },
+        "45029": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45029.txt",
+          "lastModified": "Mon, 16 Nov 2026 14:20:09 GMT",
+          "etag": "\"606e6-6606579a76938\"",
+          "advertisedBytes": 394982,
+          "bytes": 394982,
+          "sha256": "80b30a8bc0585113a6705c0771253accb27bb7f13e7ce5de802cf29d727727d8",
+          "validWaterRows": 4436,
+          "samplesC": {
+            "0": 14.8,
+            "24": 14.8,
+            "48": 14.5
+          }
+        },
+        "45161": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45161.txt",
+          "lastModified": "Mon, 16 Nov 2026 14:20:12 GMT",
+          "etag": "\"1b39d-6606579d33b36\"",
+          "advertisedBytes": 111517,
+          "bytes": 111517,
+          "sha256": "86a739f5fac785a276ffbb9bf859e0150b46914beee0a249bc2bcfdc41411680",
+          "validWaterRows": 973,
+          "samplesC": {
+            "0": null,
+            "24": null,
+            "48": null
+          }
+        },
+        "45183": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45183.txt",
+          "lastModified": "Mon, 16 Nov 2026 14:20:48 GMT",
+          "etag": "\"12b55-660657c024e57\"",
+          "advertisedBytes": 76629,
+          "bytes": 76629,
+          "sha256": "df626d8e30fe017e28efd54f3a3401d78c168b35b606d4b6c27143ee2b8feb7f",
+          "validWaterRows": 857,
+          "samplesC": {
+            "0": null,
+            "24": null,
+            "48": null
+          }
+        }
+      },
+      "pairs": [
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-26T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 130,
+          "i": 179,
+          "distanceKm": 0.1629,
+          "cellLat": 42.9,
+          "cellLon": -86.27,
+          "stationLat": 42.9,
+          "stationLon": -86.272,
+          "modelBaseC": 14.931093215942383,
+          "modelValidC": 14.794464111328125,
+          "baselineC": 14.8,
+          "actualC": 14.8,
+          "persistenceF": 58.64,
+          "actualF": 58.64,
+          "predictedF": 58.39406761169434,
+          "persistenceErrorF": 0,
+          "modelChangeErrorF": -0.24593238830566122
+        },
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-26T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 130,
+          "i": 179,
+          "distanceKm": 0.1629,
+          "cellLat": 42.9,
+          "cellLon": -86.27,
+          "stationLat": 42.9,
+          "stationLon": -86.272,
+          "modelBaseC": 14.931093215942383,
+          "modelValidC": 14.567483901977539,
+          "baselineC": 14.8,
+          "actualC": 14.5,
+          "persistenceF": 58.64,
+          "actualF": 58.1,
+          "predictedF": 57.98550323486328,
+          "persistenceErrorF": 0.5399999999999991,
+          "modelChangeErrorF": -0.11449676513672102
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-26T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 159,
+          "i": 171,
+          "distanceKm": 0.6436,
+          "cellLat": 43.190000000000005,
+          "cellLon": -86.35000000000001,
+          "stationLat": 43.185,
+          "stationLon": -86.354,
+          "modelBaseC": 15.039434432983398,
+          "modelValidC": 14.708954811096191,
+          "baselineC": null,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-26T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 159,
+          "i": 171,
+          "distanceKm": 0.6436,
+          "cellLat": 43.190000000000005,
+          "cellLon": -86.35000000000001,
+          "stationLat": 43.185,
+          "stationLon": -86.354,
+          "modelBaseC": 15.039434432983398,
+          "modelValidC": 14.62056827545166,
+          "baselineC": null,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-26T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 338,
+          "i": 223,
+          "distanceKm": 0.2359,
+          "cellLat": 44.980000000000004,
+          "cellLon": -85.83,
+          "stationLat": 44.982,
+          "stationLon": -85.831,
+          "modelBaseC": 12.455389976501465,
+          "modelValidC": 12.296832084655762,
+          "baselineC": null,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-26T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 338,
+          "i": 223,
+          "distanceKm": 0.2359,
+          "cellLat": 44.980000000000004,
+          "cellLon": -85.83,
+          "stationLat": 44.982,
+          "stationLon": -85.831,
+          "modelBaseC": 12.455389976501465,
+          "modelValidC": 12.269007682800293,
+          "baselineC": null,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-26T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 374,
+          "i": 165,
+          "distanceKm": 0.4516,
+          "cellLat": 45.34,
+          "cellLon": -86.41,
+          "stationLat": 45.344,
+          "stationLon": -86.411,
+          "modelBaseC": 12.415899276733398,
+          "modelValidC": 12.354723930358887,
+          "baselineC": 13.8,
+          "actualC": 13.5,
+          "persistenceF": 56.84,
+          "actualF": 56.3,
+          "predictedF": 56.72988437652588,
+          "persistenceErrorF": 0.5400000000000063,
+          "modelChangeErrorF": 0.42988437652588374
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-26T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 374,
+          "i": 165,
+          "distanceKm": 0.4516,
+          "cellLat": 45.34,
+          "cellLon": -86.41,
+          "stationLat": 45.344,
+          "stationLon": -86.411,
+          "modelBaseC": 12.415899276733398,
+          "modelValidC": 12.330224990844727,
+          "baselineC": 13.8,
+          "actualC": 13.6,
+          "persistenceF": 56.84,
+          "actualF": 56.480000000000004,
+          "predictedF": 56.6857862854004,
+          "persistenceErrorF": 0.35999999999999943,
+          "modelChangeErrorF": 0.2057862854003929
+        }
+      ],
+      "canPromoteModel": false,
+      "limitations": [
+        "One fixed 00Z cycle; no statistical inference or nearshore skill.",
+        "Station locations from repository catalog; historical deployment coordinates and sensor depth not independently authenticated.",
+        "Archive Last-Modified does not establish original forecast or observation publication availability. Cycle-relative diagnostic is not a prospective holdout."
+      ],
+      "metrics": {
+        "24": {
+          "n": 2,
+          "expected": 4,
+          "persistenceMAE_F": 0.2700000000000031,
+          "modelChangeMAE_F": 0.3379083824157725,
+          "biasF": 0.09197599411011126
+        },
+        "48": {
+          "n": 2,
+          "expected": 4,
+          "persistenceMAE_F": 0.4499999999999993,
+          "modelChangeMAE_F": 0.16014152526855696,
+          "biasF": 0.04564476013183594
+        }
+      }
+    },
+    {
+      "status": "CYCLE_RELATIVE_DIAGNOSTIC_ONLY",
+      "cohort": [
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-29T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-29T00:00:00+00:00",
+          "leadHours": 48
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-29T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-29T00:00:00+00:00",
+          "leadHours": 48
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-29T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-29T00:00:00+00:00",
+          "leadHours": 48
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-29T00:00:00+00:00",
+          "leadHours": 24
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-29T00:00:00+00:00",
+          "leadHours": 48
+        }
+      ],
+      "cohortSha256": "8926ae921713a0bd0085a82d16de5cb6dd77980c82d95ad679a152172b9bba46",
+      "models": {
+        "0": {
+          "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/2026/10/29/lmhofs.t00z.20261029.regulargrid.f000.nc",
+          "lastModified": "Thu, 29 Oct 2026 03:19:21 GMT",
+          "etag": "\"fb535201a93675e1fcb7e8f626645be3-18\"",
+          "advertisedBytes": 146239736,
+          "bytes": 146239736,
+          "sha256": "0af199a7449f2f7fd3e69fa2dfeb42bb0a37dee0a97a48d824f75c7af7ff3b19",
+          "validAt": "2026-10-29T00:00:00+00:00",
+          "tempUnits": "Celsius",
+          "surfaceDepth": 0,
+          "geometrySha256": "f4c438c8115240947794c9636ea3d71901022ce9c97d938fb2b4783d949a8a87",
+          "shape": [
+            1,
+            25,
+            478,
+            837
+          ],
+          "modelTitle": "LMHOFS"
+        },
+        "24": {
+          "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/2026/10/29/lmhofs.t00z.20261029.regulargrid.f024.nc",
+          "lastModified": "Thu, 29 Oct 2026 03:19:26 GMT",
+          "etag": "\"8c3e327f324f1c8c461c0a69ddfe0b4b-18\"",
+          "advertisedBytes": 146239736,
+          "bytes": 146239736,
+          "sha256": "75637b3efb0d1a5fd87c11c1a4303d728bbe6d2f41c317db570e7957d6d9f922",
+          "validAt": "2026-10-30T00:00:00+00:00",
+          "tempUnits": "Celsius",
+          "surfaceDepth": 0,
+          "geometrySha256": "f4c438c8115240947794c9636ea3d71901022ce9c97d938fb2b4783d949a8a87",
+          "shape": [
+            1,
+            25,
+            478,
+            837
+          ],
+          "modelTitle": "LMHOFS"
+        },
+        "48": {
+          "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/2026/10/29/lmhofs.t00z.20261029.regulargrid.f048.nc",
+          "lastModified": "Thu, 29 Oct 2026 03:19:32 GMT",
+          "etag": "\"4480b943965a4a215bf32bd168890625-18\"",
+          "advertisedBytes": 146239736,
+          "bytes": 146239736,
+          "sha256": "601d0d84c312754ec491ca7032c60a096ff4a19ddbadbcb2239e8a1578267d09",
+          "validAt": "2026-10-31T00:00:00+00:00",
+          "tempUnits": "Celsius",
+          "surfaceDepth": 0,
+          "geometrySha256": "f4c438c8115240947794c9636ea3d71901022ce9c97d938fb2b4783d949a8a87",
+          "shape": [
+            1,
+            25,
+            478,
+            837
+          ],
+          "modelTitle": "LMHOFS"
+        }
+      },
+      "observations": {
+        "45002": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45002.txt",
+          "lastModified": "Mon, 16 Nov 2026 15:49:38 GMT",
+          "etag": "\"60e8c-66066b9b09153\"",
+          "advertisedBytes": 396940,
+          "bytes": 396940,
+          "sha256": "bceca4333971c611ae5a3118aacb1d9c2b452a8d2fa6b3036d15b80af11072f1",
+          "validWaterRows": 4426,
+          "samplesC": {
+            "0": 13.5,
+            "24": 13.3,
+            "48": 13
+          }
+        },
+        "45029": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45029.txt",
+          "lastModified": "Mon, 16 Nov 2026 14:20:09 GMT",
+          "etag": "\"606e6-6606579a76938\"",
+          "advertisedBytes": 394982,
+          "bytes": 394982,
+          "sha256": "80b30a8bc0585113a6705c0771253accb27bb7f13e7ce5de802cf29d727727d8",
+          "validWaterRows": 4436,
+          "samplesC": {
+            "0": 14.8,
+            "24": 14.4,
+            "48": 13.8
+          }
+        },
+        "45161": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45161.txt",
+          "lastModified": "Mon, 16 Nov 2026 14:20:12 GMT",
+          "etag": "\"1b39d-6606579d33b36\"",
+          "advertisedBytes": 111517,
+          "bytes": 111517,
+          "sha256": "86a739f5fac785a276ffbb9bf859e0150b46914beee0a249bc2bcfdc41411680",
+          "validWaterRows": 973,
+          "samplesC": {
+            "0": null,
+            "24": null,
+            "48": null
+          }
+        },
+        "45183": {
+          "url": "https://www.ndbc.noaa.gov/data/l_stdmet/45183.txt",
+          "lastModified": "Mon, 16 Nov 2026 14:20:48 GMT",
+          "etag": "\"12b55-660657c024e57\"",
+          "advertisedBytes": 76629,
+          "bytes": 76629,
+          "sha256": "df626d8e30fe017e28efd54f3a3401d78c168b35b606d4b6c27143ee2b8feb7f",
+          "validWaterRows": 857,
+          "samplesC": {
+            "0": null,
+            "24": null,
+            "48": null
+          }
+        }
+      },
+      "pairs": [
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-29T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 130,
+          "i": 179,
+          "distanceKm": 0.1629,
+          "cellLat": 42.9,
+          "cellLon": -86.27,
+          "stationLat": 42.9,
+          "stationLon": -86.272,
+          "modelBaseC": 14.802229881286621,
+          "modelValidC": 14.786548614501953,
+          "baselineC": 14.8,
+          "actualC": 14.4,
+          "persistenceF": 58.64,
+          "actualF": 57.92,
+          "predictedF": 58.6117737197876,
+          "persistenceErrorF": 0.7199999999999989,
+          "modelChangeErrorF": 0.6917737197875979
+        },
+        {
+          "station": "45029",
+          "cycleAt": "2026-10-29T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 130,
+          "i": 179,
+          "distanceKm": 0.1629,
+          "cellLat": 42.9,
+          "cellLon": -86.27,
+          "stationLat": 42.9,
+          "stationLon": -86.272,
+          "modelBaseC": 14.802229881286621,
+          "modelValidC": 14.423924446105957,
+          "baselineC": 14.8,
+          "actualC": 13.8,
+          "persistenceF": 58.64,
+          "actualF": 56.84,
+          "predictedF": 57.959050216674804,
+          "persistenceErrorF": 1.7999999999999972,
+          "modelChangeErrorF": 1.1190502166748004
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-29T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 159,
+          "i": 171,
+          "distanceKm": 0.6436,
+          "cellLat": 43.190000000000005,
+          "cellLon": -86.35000000000001,
+          "stationLat": 43.185,
+          "stationLon": -86.354,
+          "modelBaseC": 14.998738288879395,
+          "modelValidC": 14.893546104431152,
+          "baselineC": null,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45161",
+          "cycleAt": "2026-10-29T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 159,
+          "i": 171,
+          "distanceKm": 0.6436,
+          "cellLat": 43.190000000000005,
+          "cellLon": -86.35000000000001,
+          "stationLat": 43.185,
+          "stationLon": -86.354,
+          "modelBaseC": 14.998738288879395,
+          "modelValidC": 14.625374794006348,
+          "baselineC": null,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-29T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 338,
+          "i": 223,
+          "distanceKm": 0.2359,
+          "cellLat": 44.980000000000004,
+          "cellLon": -85.83,
+          "stationLat": 44.982,
+          "stationLon": -85.831,
+          "modelBaseC": 12.358729362487793,
+          "modelValidC": 12.239425659179688,
+          "baselineC": null,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45183",
+          "cycleAt": "2026-10-29T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 338,
+          "i": 223,
+          "distanceKm": 0.2359,
+          "cellLat": 44.980000000000004,
+          "cellLon": -85.83,
+          "stationLat": 44.982,
+          "stationLon": -85.831,
+          "modelBaseC": 12.358729362487793,
+          "modelValidC": 12.049277305603027,
+          "baselineC": null,
+          "actualC": null,
+          "reason": "missing exact-hour independent observation"
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-29T00:00:00+00:00",
+          "leadHours": 24,
+          "j": 374,
+          "i": 165,
+          "distanceKm": 0.4516,
+          "cellLat": 45.34,
+          "cellLon": -86.41,
+          "stationLat": 45.344,
+          "stationLon": -86.411,
+          "modelBaseC": 12.305656433105469,
+          "modelValidC": 12.218843460083008,
+          "baselineC": 13.5,
+          "actualC": 13.3,
+          "persistenceF": 56.3,
+          "actualF": 55.94,
+          "predictedF": 56.14373664855957,
+          "persistenceErrorF": 0.35999999999999943,
+          "modelChangeErrorF": 0.20373664855956974
+        },
+        {
+          "station": "45002",
+          "cycleAt": "2026-10-29T00:00:00+00:00",
+          "leadHours": 48,
+          "j": 374,
+          "i": 165,
+          "distanceKm": 0.4516,
+          "cellLat": 45.34,
+          "cellLon": -86.41,
+          "stationLat": 45.344,
+          "stationLon": -86.411,
+          "modelBaseC": 12.305656433105469,
+          "modelValidC": 12.230988502502441,
+          "baselineC": 13.5,
+          "actualC": 13,
+          "persistenceF": 56.3,
+          "actualF": 55.400000000000006,
+          "predictedF": 56.16559772491455,
+          "persistenceErrorF": 0.8999999999999915,
+          "modelChangeErrorF": 0.7655977249145423
+        }
+      ],
+      "canPromoteModel": false,
+      "limitations": [
+        "One fixed 00Z cycle; no statistical inference or nearshore skill.",
+        "Station locations from repository catalog; historical deployment coordinates and sensor depth not independently authenticated.",
+        "Archive Last-Modified does not establish original forecast or observation publication availability. Cycle-relative diagnostic is not a prospective holdout."
+      ],
+      "metrics": {
+        "24": {
+          "n": 2,
+          "expected": 4,
+          "persistenceMAE_F": 0.5399999999999991,
+          "modelChangeMAE_F": 0.44775518417358384,
+          "biasF": 0.44775518417358384
+        },
+        "48": {
+          "n": 2,
+          "expected": 4,
+          "persistenceMAE_F": 1.3499999999999943,
+          "modelChangeMAE_F": 0.9423239707946713,
+          "biasF": 0.9423239707946713
+        }
+      }
+    }
+  ],
+  "metrics": {
+    "24": {
+      "expected": 20,
+      "n": 10,
+      "persistenceMAE_F": 0.7919999999999987,
+      "modelChangeMAE_F": 0.5084413604736312,
+      "biasF": 0.36212729644775266,
+      "heuristicUnroundedHalfWidthF": 2,
+      "heuristicUnroundedCoverage": 1,
+      "stationCounts": {
+        "45002": 4,
+        "45029": 5,
+        "45161": 0,
+        "45183": 1
+      }
+    },
+    "48": {
+      "expected": 20,
+      "n": 10,
+      "persistenceMAE_F": 1.4219999999999984,
+      "modelChangeMAE_F": 0.8053857421875001,
+      "biasF": 0.6368291015624983,
+      "heuristicUnroundedHalfWidthF": 3,
+      "heuristicUnroundedCoverage": 0.9,
+      "stationCounts": {
+        "45002": 4,
+        "45029": 5,
+        "45161": 0,
+        "45183": 1
+      }
+    }
+  },
+  "canPromoteModel": false,
+  "limitations": [
+    "October 20 exploratory result excluded; no model or range tuning.",
+    "Expected 20 station-cycle slots per horizon. Missing seasonal observations retained in denominator.",
+    "Cycle-relative results, not operational issue-time holdout; original observation availability and historical station positions unverified.",
+    "Five cycles within one late-season month are insufficient for calibration; no beach-level skill claim."
+  ],
+  "sourceRun": {
+    "head": "7dc4916757b54d4d7bcabd5a37952885cfd5282d",
+    "runId": 45523209140,
+    "jobId": 138900102358
+  },
+  "note": "Exact JSON extracted from acquisition log. Original file content is not retained, only hashes and measured values."
+}

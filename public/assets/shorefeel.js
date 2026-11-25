@@ -9,6 +9,54 @@ const format=n=>Number.isFinite(n)?n.toFixed(1)+'°F':'Unavailable';
 const day=s=>{const d=new Date(s+'T12:00:00Z');return Number.isFinite(d.getTime())?d.toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'}):s;};
 const time=s=>{if(!s)return 'time unavailable';const d=new Date(s);return Number.isFinite(d.getTime())?d.toLocaleString('en-US',{month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZone:'America/Detroit',timeZoneName:'short'}):'time unavailable';};
 let payload=null,activity='swim';
+// Source-specific dependencies, not a universal freshness threshold.
+// The four legacy ShoreFeel pages consume the same existing API response.
+const HOUR=3600000;
+function projectEvidence(data,now=Date.now()){
+ if(!data||typeof data!=='object')return null;
+ const age=now-Date.parse(data.generatedAt||'');
+ const packet=Number.isFinite(age)&&age>=-5*60000&&age<=30*60000;
+ const recent=(m,kind)=>{
+  if(!Number.isFinite(m?.tempF))return false;
+  const elapsed=now-Date.parse(m.observedAt||'');
+  return Number.isFinite(elapsed)&&elapsed>=(kind==='satellite'?-HOUR:0)&&elapsed<=(kind==='satellite'?72:6)*HOUR;
+ };
+ const hour=p=>{const t=Date.parse(p?.startsAt||'');return Number.isFinite(t)&&t<=now&&now<t+HOUR;};
+ const validWater=['satellite','buoy'].includes(data.water?.kind)&&recent(data.water,data.water.kind)?data.water:null;
+ const local=data.local?{...data.local,measurement:recent(data.local.measurement,'buoy')?data.local.measurement:null}:null;
+ const cells=(Array.isArray(data.regionalSatellite?.cells)?data.regionalSatellite.cells:[]).map(c=>({...c,measurement:recent(c.measurement,'satellite')?c.measurement:null}));
+ const satellite=data.regionalSatellite?{...data.regionalSatellite,cells}:null;
+ const weather=packet&&hour(data.weatherNow)?data.weatherNow:null;
+ const lakeDate=Date.parse(new Date(now).toISOString().slice(0,10)+'T00:00:00Z');
+ const lakes=Object.fromEntries(Object.entries(data.lakes||{}).map(([key,v])=>{
+  const elapsed=(lakeDate-Date.parse((v?.latest?.date||'')+'T00:00:00Z'))/86400000;
+  return [key,{...v,status:v?.status==='recent'&&Number.isFinite(v?.latest?.tempF)&&elapsed>=0&&elapsed<=3?'recent':v?.latest?'stale':'unavailable'}];
+ }));
+ const windowValid=w=>{const t=Date.parse(w?.startsAt||'');return packet&&Number.isFinite(t)&&t+HOUR>now&&Number.isFinite(w.tempF)&&Number.isFinite(w.windMph);};
+ const windows=Object.fromEntries(Object.entries(data.weatherWindows||{}).map(([key,w])=>[key,windowValid(w)?w:null]));
+ const bf=data.beachForecast;
+ const cycleAge=now-Date.parse(bf?.cycle||'');
+ // Existing model tries three 6-hour cycles after a 5-hour publication lag.
+ const modelCurrent=packet&&Number.isFinite(cycleAge)&&cycleAge>=0&&cycleAge<=23*HOUR;
+ const keys={'clinch-park':'west-bay','tc-state-park':'east-bay','grand-haven-state-park':'open-shore'};
+ const beaches=modelCurrent&&bf?.status==='available'&&Array.isArray(bf.beaches)?bf.beaches.filter(b=>{
+  const level=cells.find(c=>c.key===keys[b.key])?.measurement;
+  return b.levelKind==='satellite'&&level&&b.levelObservedAt===level.observedAt&&Number.isFinite(b.levelTempF)&&Math.abs(b.levelTempF-level.tempF)<=0.1&&
+   Array.isArray(b.points)&&b.points.some(p=>p.leadH===0)&&b.points.every(p=>Number.isFinite(p.tempF)&&Number.isFinite(p.low)&&Number.isFinite(p.high)&&p.low<=p.tempF&&p.tempF<=p.high);
+ }):[];
+ // Assessments contain distinct air, water and combined text. Preserve only
+ // fields that still have their original evidence; never substitute a lake mean.
+ const assessments=Object.fromEntries(Object.entries(data.assessments||{}).filter(([,v])=>v&&typeof v==='object').map(([key,v])=>[key,{
+  ...v,beach:weather?v.beach:'Current shoreline weather is unavailable. Check the official forecast.',
+  water:validWater?v.water:'No current location-specific water reading is verified.',
+  after:weather?v.after:'Wind and wet skin can increase cooling.',
+  decision:packet&&weather&&validWater?v.decision:'Check official beach hazards and prepare for the conditions independently.',
+  band:validWater?v.band:null
+ }]));
+ return {...data,water:validWater,local,regionalSatellite:satellite,weatherNow:weather,lakes,assessments,
+  weatherWindow:windowValid(data.weatherWindow)?data.weatherWindow:null,weatherWindows:windows,
+  beachForecast:bf?{...bf,status:beaches.length?'available':'unavailable',beaches}:null};
+}
 
 /* Water temperature is the product. The lead shows the destination's own water
    (buoy, else nearest valid satellite pixel in that water). The whole-lake daily
@@ -126,8 +174,8 @@ function renderLakes(){
 }
 function applyActivity(a){
  activity=a;document.querySelectorAll('[data-activity]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.activity===a)));
- if(!payload?.assessments){write('feel-title','Choose what brings you to shore.');return;}
- const v=payload.assessments[a];if(!v)return;
+ if(!payload?.assessments){write('feel-title','Current evidence unavailable');return;}
+ const v=payload.assessments[a];if(!v){write('feel-title','Current evidence unavailable');write('feel-beach','Current shoreline weather is unavailable.');write('feel-water','No current location-specific water reading is verified.');write('feel-after','Wind and wet skin can increase cooling.');write('feel-decision','Check official beach hazards before entering the lake.');write('weather-window','No reliable daylight weather window can be selected.');return;}
  write('feel-title',v.heading);
  write('feel-beach',v.beach);
  write('feel-water',v.water);
@@ -146,7 +194,7 @@ function renderPlace(){
   :d.measurementStatus==='offline'?'Station '+d.stationId+' is seasonal and has been recovered for winter'
   :'No buoy observation from the past six hours');
  write('station-note',d.caveat);
- const w=payload.weatherNow||d.periods?.[0]||null;
+ const w=payload.weatherNow||null;
  write('air-temp',Number.isFinite(w?.tempF)?Math.round(w.tempF)+'°F':'Unavailable');
  write('wind-now',Number.isFinite(w?.windMph)?w.windMph+' mph':'Unavailable');
  write('weather-detail',w?'NWS hourly forecast · '+time(w.startsAt)+' · '+w.summary:'NWS forecast currently unavailable');
@@ -188,7 +236,7 @@ function renderBeachForecast(){
  const el=(tag,cls,text)=>{const n=document.createElement(tag);if(cls)n.className=cls;if(text!==undefined)n.textContent=text;return n;};
  if(bf.status!=='available'||!bf.beaches?.length){
   write('bf-lede','');write('bf-method','');
-  host.appendChild(el('p','bf-down','The beach forecast is unavailable right now because NOAA’s lake model server is not responding. The measured reading at the top of the page is not affected. Nothing has been estimated in its place.'));
+  host.appendChild(el('p','bf-down','A current beach-water forecast cannot be verified from the required NOAA water reading and lake model. Any independently verified water reading remains above. Nothing has been estimated in its place.'));
   sec.hidden=false;return;
  }
  const v=bf.validation||{};
@@ -234,9 +282,15 @@ document.querySelectorAll('[data-activity]').forEach(b=>b.addEventListener('clic
   // One retry before saying anything is unavailable: a single slow upstream should not blank the page.
   const load=async()=>{const r=await fetch(url,{headers:{Accept:'application/json'},signal:AbortSignal.timeout?AbortSignal.timeout(15000):undefined});if(!r.ok)throw new Error('Data service unavailable');return r.json();};
   try{payload=await load();}catch(first){await new Promise(r=>setTimeout(r,1200));payload=await load();}
+  payload=projectEvidence(payload);
+  if(!payload)throw Error('No usable source response');
   renderLakes();renderPlace();renderLead();renderBeachForecast();
  }catch(e){
   // A failed refresh is never described as a successful live reading.
+  payload=null;
+  setMarker(NaN);
+  renderBeachForecast();
+  write('weather-window','No reliable daylight weather window can be selected.');
   if(get('lead-temp'))setLead('No current reading','WATER TEMPERATURE · NOT VERIFIED',
     'Official lakewide and local water data unavailable',
     'No recent water temperature can be verified; nothing has been estimated.');

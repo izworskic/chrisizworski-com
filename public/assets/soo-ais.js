@@ -164,9 +164,9 @@
     if (cardNow) { cardNow.hidden = true; cardNow.replaceChildren(); }
     if (failed) {
       cardKicker.textContent = 'Next ship at the locks';
-      cardHeading.textContent = data ? 'Arrival estimates paused until the next successful check' : 'Live ship reports are unavailable right now';
-      if (data) cardBody.append(text('p', 'The last check failed. Earlier vessel positions may still be visible on the map, but their arrival times are no longer used. Refresh before heading to the platform.'));
-      cardBody.append(text('p', hotlineSeason() ? 'Call the official boat hotline at 906-202-1333 while the Visitor Center is open, or see the other ways to check further down this page.' : 'See the other ways to check further down this page. The USACE boat hotline is maintained only while the Visitor Center is open, May 1 to October 31.'));
+      cardHeading.textContent = 'Live ship reports are unavailable right now';
+      cardBody.append(text('p', data ? 'The last refresh failed. Earlier arrival estimates and chamber observations are not current. Check the last-known positions on the map, then refresh before planning your visit.' : 'The feed did not return usable reports. This does not mean the river is empty.')); 
+      cardBody.append(text('p', checkElsewhere()));
       return;
     }
     if (!n || !n.ok) {
@@ -202,14 +202,14 @@
     cardHeading.textContent = title(pick);
     cardBody.append(tags([pick.sizeLabel, pick.lengthFeet ? pick.lengthFeet.toLocaleString('en-US') + ' ft' : null]));
     const win = document.createElement('div'); win.className = 'next-ship-window';
-    win.append(text('span', 'Planning estimate at the locks'), text('strong', clock(pick.window.start) + '–' + clockZone(pick.window.end)),
+    win.append(text('span', 'Planning window at the locks'), text('strong', clock(pick.window.start) + '–' + clockZone(pick.window.end)),
       text('small', pick.channelMilesToLocks + ' river miles away at ' + (pick.speedKnots * 1.15078).toFixed(1) + ' mph, reported ' + pick.ageMinutes + ' min ago'));
     cardBody.append(win);
     cardBody.append(text('p', directionText(pick.direction) + '. ' + (pick.lockCertain ? pick.lockNote + ' ' + chamberWhere('poe') : 'Small enough for either chamber; the lockmaster assigns it. ' + chamberWhere('macarthur'))));
     cardBody.append(actions(pick));
     const others = (n.candidates || []).filter(c => c.id !== pick.id).slice(0, 3);
     if (others.length) cardBody.append(text('p', 'Also heading in: ' + others.map(c => title(c) + ' (' + c.direction + ', about ' + clock(c.window.start) + '–' + clock(c.window.end) + ')').join('; ') + '.', 'next-ship-also'));
-    cardBody.append(text('p', 'Based on the latest reported position, speed and river distance, not a lock schedule. A ship can slow down or stop after this report, so the actual arrival may fall outside this window. Check again before leaving. Not for navigation.', 'next-ship-note'));
+    cardBody.append(text('p', 'This planning window uses reported position, speed and river distance. It is not a lock schedule. Ships can slow or stop before reaching the locks. Recheck movement on the map before leaving; the actual arrival can be outside this window. Not for navigation.', 'next-ship-note'));
   }
   function tags(items) {
     const ul = document.createElement('ul'); ul.className = 'next-ship-tags';
@@ -248,7 +248,7 @@
 
   // ---- map and list ----
   function render(data, failed) {
-    const vessels = data.vessels.filter(v => Number.isFinite(Date.parse(v.seen)) && Date.now() - Date.parse(v.seen) <= 1800000);
+    const vessels = data.vessels.filter(v => Number.isFinite(Date.parse(v.seen)) && Date.now() >= Date.parse(v.seen) && Date.now() - Date.parse(v.seen) <= 1800000);
     const inLock = new Map((failed ? [] : ((data.nextShip && data.nextShip.inLock) || [])).map(s => [s.mmsi, s]));
     list.replaceChildren();
     if (detailPopup && map?.hasLayer(detailPopup)) map.removeLayer(detailPopup);
@@ -281,9 +281,9 @@
       const extra = [typeLabel(v), inLock.has(v.mmsi) ? 'in the ' + inLock.get(v.mmsi).chamberName + ' now' : null, size || feet(v.lengthMeters)].filter(Boolean).join(' · ');
       item.append(text('span', (extra ? extra + ' · ' : '') + details(v))); list.append(item);
     });
-    if (!vessels.length) list.append(text('li', 'No reports less than 30 minutes old were returned for this area. This does not mean there are no ships.'));
+    if (!vessels.length) list.append(text('li', failed ? 'No last-known positions remain within 30 minutes. Live reports are unavailable; this is not a zero-traffic report.' : 'No reports less than 30 minutes old were returned for this area. This does not mean there are no ships.'));
     if (map && points.length && !fitted) { map.fitBounds(points, { padding: [30, 30], maxZoom: 13 }); fitted = true; }
-    const count = vessels.length + ' recent vessel report' + (vessels.length === 1 ? '' : 's');
+    const count = vessels.length + (failed ? ' last-known vessel report' : ' recent vessel report') + (vessels.length === 1 ? '' : 's');
     status.textContent = failed ? 'Refresh unavailable. ' + count + ' retained from the earlier check; see report ages below.' :
       count + ' near the Soo · checked ' + new Date(data.checkedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: TZ, timeZoneName: 'short' }) + (map || !mapStarted ? '' : ' · map unavailable; vessel list below');
     dot.className = 'vessel-map-status-dot' + (failed ? ' offline' : vessels.length ? ' live' : '');
