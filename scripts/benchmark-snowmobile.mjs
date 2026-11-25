@@ -71,7 +71,7 @@ add('Observed snow + recent weather are integrated as supporting evidence',5,
   surface.includes('NWS Local Storm Reports')&&surface.includes('recentWeatherForPoint')&&buildRegion.includes('surfaceEvidence')&&engine.includes('thawRisk')&&regionJs.includes('snowEvidenceLabel')&&regionJs.includes('NOHRSC_Snow_Analysis')
 );
 add('Source provenance + confidence per region',5,buildRegion.includes('truthBoundary')&&buildRegion.includes('confidence:conf')&&buildRegion.includes('sourceSummary')&&api.includes('rankableRegionCount'));
-add('Mobile/map UX',5,css.includes('@media(max-width:640px)')&&flatPage.includes('id="map"')&&regionJs.includes('L.geoJSON')&&flatPage.includes('id="outlook72"')&&flatPage.includes('id="useMyLocation"'));
+add('Mobile/map UX',5,css.includes('@media(max-width:640px)')&&flatPage.includes('id="map"')&&regionJs.includes('L.geoJSON')&&flatPage.includes('id="outlook72"')&&flatPage.includes('id="useMyLocation"')&&REGION_KEYS.every(k=>{const page=regionPages[k],map=page.indexOf('id="map"');return map>page.indexOf('class="lede"')&&map<page.indexOf('id="routeModeToggle"')&&map<page.indexOf('id="s7-region-title"')&&(page.match(/id="map"/g)||[]).length===1;}));
 add('Search/entity architecture covers index + all region pages',5,
   indexPage.includes('rel="canonical" href="https://chrisizworski.com/snowmobile/"')&&indexPage.includes('WebApplication')
   &&REGION_KEYS.every((k)=>sitemap.includes(`https://chrisizworski.com/snowmobile/regions/${k}.html`))&&sitemap.includes('https://chrisizworski.com/snowmobile/')
