@@ -97,6 +97,14 @@ jobs:
           cat artifacts/shorefeel-beach-qa/archive-coverage.json
       - name: Offline preserved ShoreFeel empirical evidence
         run: node --test tests/shorefeel-empirical-evidence.test.js tests/shorefeel-forecast-reliability.test.js
+      - name: One-off confirmation observation recovery
+        if: github.head_ref == 'research/shorefeel-actual-october-cohort'
+        run: |
+          python3 -m venv "$RUNNER_TEMP/shorefeel-confirm"
+          "$RUNNER_TEMP/shorefeel-confirm/bin/pip" install --disable-pip-version-check numpy==2.2.6 netCDF4==1.7.2
+          mkdir -p artifacts/shorefeel-beach-qa
+          "$RUNNER_TEMP/shorefeel-confirm/bin/python" scripts/shorefeel-near-time-recovery.py --confirm-reliability > artifacts/shorefeel-beach-qa/confirmation-near-time.json
+          cat artifacts/shorefeel-beach-qa/confirmation-near-time.json
       - name: Install isolated pinned browser harness
         run: |
           npm install --prefix "$RUNNER_TEMP/shorefeel-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
