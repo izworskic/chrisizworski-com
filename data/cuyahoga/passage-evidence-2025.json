@@ -1,0 +1,335 @@
+{
+  "schemaVersion": 1,
+  "kind": "HISTORICAL_VESSEL_PASSAGE_EVIDENCE_NOT_ETA",
+  "source": "NOAA Office for Coastal Management, USCG NAIS Historical AIS 2025",
+  "sourceUrl": "https://coast.noaa.gov/accessais/",
+  "chartSourceUrl": "https://www.nauticalcharts.noaa.gov/publications/coast-pilot/files/cp6/CPB6_WEB.pdf",
+  "scope": "Cuyahoga, three selected 2025 vessel-days, not representative traffic or complete transits",
+  "policies": {
+    "maxGapSeconds": 180,
+    "maxChordKnots": 40,
+    "lowDisplacementRadiusMeters": 75,
+    "minLowDisplacementSeconds": 600
+  },
+  "voyages": [
+    {
+      "id": "barker-2025-07-07",
+      "date": "2025-07-07",
+      "mmsi": "368251670",
+      "name": "Mark W. Barker",
+      "archive": "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-2025-07-07.csv.zst",
+      "originalArchiveSha256": "2adde9a90ec798920114e4f6951136e2ea61e72eb858e984d9dfb8ae2faf748a",
+      "analysis": {
+        "uniqueFixes": 434,
+        "duplicateFixes": 0,
+        "segments": 96,
+        "gapBreaks": 95,
+        "jumpBreaks": 0,
+        "maxGapSeconds": 385,
+        "eligibleReferenceWindows": 7,
+        "intervals": [
+          {
+            "from": "csx-open-128",
+            "to": "center-st-139",
+            "direction": "increasing-reference-miles",
+            "observedFrom": "2025-07-07T03:57:51.000Z",
+            "observedTo": "2025-07-07T04:02:19.000Z",
+            "observedElapsedSeconds": 268,
+            "referenceBracketMinimumSeconds": 129,
+            "referenceBracketMaximumSeconds": 419,
+            "label": "ELAPSED_BETWEEN_NEAR_REFERENCE_FIXES_NOT_CONFIRMED_CROSSINGS"
+          },
+          {
+            "from": "innerbelt-342",
+            "to": "i490-479",
+            "direction": "increasing-reference-miles",
+            "observedFrom": "2025-07-07T05:02:04.000Z",
+            "observedTo": "2025-07-07T05:39:30.000Z",
+            "observedElapsedSeconds": 2246,
+            "referenceBracketMinimumSeconds": 2113,
+            "referenceBracketMaximumSeconds": 2376,
+            "label": "ELAPSED_BETWEEN_NEAR_REFERENCE_FIXES_NOT_CONFIRMED_CROSSINGS"
+          }
+        ],
+        "withheld": {
+          "overlapping": 2,
+          "discontinuous": 2,
+          "sameMile": 0
+        },
+        "lowDisplacementEpisodes": [
+          {
+            "first": "2025-07-07T03:12:41.000Z",
+            "last": "2025-07-07T03:23:40.000Z",
+            "observations": 9,
+            "durationSeconds": 659
+          },
+          {
+            "first": "2025-07-07T10:38:05.000Z",
+            "last": "2025-07-07T10:50:05.000Z",
+            "observations": 5,
+            "durationSeconds": 720
+          }
+        ],
+        "claims": {
+          "completeTransit": false,
+          "confirmedStop": false,
+          "bridgeCrossing": false,
+          "forecastEnabled": false
+        }
+      }
+    },
+    {
+      "id": "laud-2025-08-15",
+      "date": "2025-08-15",
+      "mmsi": "366938760",
+      "name": "Sam Laud",
+      "archive": "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-2025-08-15.csv.zst",
+      "originalArchiveSha256": "653af1f277a299ac557b905b283cde351050f8ae28e250f136cbf609eeaefd52",
+      "analysis": {
+        "uniqueFixes": 215,
+        "duplicateFixes": 0,
+        "segments": 30,
+        "gapBreaks": 29,
+        "jumpBreaks": 0,
+        "maxGapSeconds": 1151,
+        "eligibleReferenceWindows": 2,
+        "intervals": [],
+        "withheld": {
+          "overlapping": 0,
+          "discontinuous": 1,
+          "sameMile": 0
+        },
+        "lowDisplacementEpisodes": [
+          {
+            "first": "2025-08-15T21:31:51.000Z",
+            "last": "2025-08-15T21:54:31.000Z",
+            "observations": 13,
+            "durationSeconds": 1360
+          },
+          {
+            "first": "2025-08-15T21:58:02.000Z",
+            "last": "2025-08-15T22:10:41.000Z",
+            "observations": 11,
+            "durationSeconds": 759
+          },
+          {
+            "first": "2025-08-15T22:25:21.000Z",
+            "last": "2025-08-15T23:59:42.000Z",
+            "observations": 66,
+            "durationSeconds": 5661
+          }
+        ],
+        "claims": {
+          "completeTransit": false,
+          "confirmedStop": false,
+          "bridgeCrossing": false,
+          "forecastEnabled": false
+        }
+      }
+    },
+    {
+      "id": "barker-2025-08-21",
+      "date": "2025-08-21",
+      "mmsi": "368251670",
+      "name": "Mark W. Barker",
+      "archive": "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-2025-08-21.csv.zst",
+      "originalArchiveSha256": "72926b440ba66990f948059400c0bba09208bbe1b460a85c1ec924a84e446f1a",
+      "analysis": {
+        "uniqueFixes": 353,
+        "duplicateFixes": 0,
+        "segments": 101,
+        "gapBreaks": 100,
+        "jumpBreaks": 0,
+        "maxGapSeconds": 3119,
+        "eligibleReferenceWindows": 8,
+        "intervals": [
+          {
+            "from": "ns-rr-076",
+            "to": "center-st-139",
+            "direction": "increasing-reference-miles",
+            "observedFrom": "2025-08-21T15:19:04.000Z",
+            "observedTo": "2025-08-21T15:38:39.000Z",
+            "observedElapsedSeconds": 1175,
+            "referenceBracketMinimumSeconds": 1040,
+            "referenceBracketMaximumSeconds": 1309,
+            "label": "ELAPSED_BETWEEN_NEAR_REFERENCE_FIXES_NOT_CONFIRMED_CROSSINGS"
+          },
+          {
+            "from": "detroit-superior-142",
+            "to": "union-terminal-189",
+            "direction": "increasing-reference-miles",
+            "observedFrom": "2025-08-21T15:39:47.000Z",
+            "observedTo": "2025-08-21T15:54:15.000Z",
+            "observedElapsedSeconds": 868,
+            "referenceBracketMinimumSeconds": 733,
+            "referenceBracketMaximumSeconds": 999,
+            "label": "ELAPSED_BETWEEN_NEAR_REFERENCE_FIXES_NOT_CONFIRMED_CROSSINGS"
+          },
+          {
+            "from": "columbus-193",
+            "to": "flats-rr-224",
+            "direction": "increasing-reference-miles",
+            "observedFrom": "2025-08-21T15:56:21.000Z",
+            "observedTo": "2025-08-21T16:08:04.000Z",
+            "observedElapsedSeconds": 703,
+            "referenceBracketMinimumSeconds": 577,
+            "referenceBracketMaximumSeconds": 829,
+            "label": "ELAPSED_BETWEEN_NEAR_REFERENCE_FIXES_NOT_CONFIRMED_CROSSINGS"
+          },
+          {
+            "from": "flats-rr-224",
+            "to": "eagle-280",
+            "direction": "increasing-reference-miles",
+            "observedFrom": "2025-08-21T16:08:04.000Z",
+            "observedTo": "2025-08-21T16:33:49.000Z",
+            "observedElapsedSeconds": 1545,
+            "referenceBracketMinimumSeconds": 1417,
+            "referenceBracketMaximumSeconds": 1677,
+            "label": "ELAPSED_BETWEEN_NEAR_REFERENCE_FIXES_NOT_CONFIRMED_CROSSINGS"
+          },
+          {
+            "from": "eagle-280",
+            "to": "hope-314",
+            "direction": "increasing-reference-miles",
+            "observedFrom": "2025-08-21T16:33:49.000Z",
+            "observedTo": "2025-08-21T16:43:08.000Z",
+            "observedElapsedSeconds": 559,
+            "referenceBracketMinimumSeconds": 419,
+            "referenceBracketMaximumSeconds": 704,
+            "label": "ELAPSED_BETWEEN_NEAR_REFERENCE_FIXES_NOT_CONFIRMED_CROSSINGS"
+          }
+        ],
+        "withheld": {
+          "overlapping": 2,
+          "discontinuous": 0,
+          "sameMile": 0
+        },
+        "lowDisplacementEpisodes": [
+          {
+            "first": "2025-08-21T12:14:43.000Z",
+            "last": "2025-08-21T12:29:40.000Z",
+            "observations": 6,
+            "durationSeconds": 897
+          },
+          {
+            "first": "2025-08-21T16:48:09.000Z",
+            "last": "2025-08-21T17:00:06.000Z",
+            "observations": 5,
+            "durationSeconds": 717
+          },
+          {
+            "first": "2025-08-21T18:48:08.000Z",
+            "last": "2025-08-21T19:00:08.000Z",
+            "observations": 5,
+            "durationSeconds": 720
+          },
+          {
+            "first": "2025-08-21T22:03:10.000Z",
+            "last": "2025-08-21T22:15:09.000Z",
+            "observations": 5,
+            "durationSeconds": 719
+          }
+        ],
+        "claims": {
+          "completeTransit": false,
+          "confirmedStop": false,
+          "bridgeCrossing": false,
+          "forecastEnabled": false
+        }
+      }
+    }
+  ],
+  "summary": {
+    "pairs": [
+      {
+        "from": "columbus-193",
+        "to": "flats-rr-224",
+        "direction": "increasing-reference-miles",
+        "samples": 1,
+        "dates": 1,
+        "distinctVessels": 1,
+        "observedElapsedSecondsMin": 703,
+        "observedElapsedSecondsMax": 703,
+        "status": "DESCRIPTIVE_ONLY_NO_VALIDATED_CROSSING_LABELS"
+      },
+      {
+        "from": "csx-open-128",
+        "to": "center-st-139",
+        "direction": "increasing-reference-miles",
+        "samples": 1,
+        "dates": 1,
+        "distinctVessels": 1,
+        "observedElapsedSecondsMin": 268,
+        "observedElapsedSecondsMax": 268,
+        "status": "DESCRIPTIVE_ONLY_NO_VALIDATED_CROSSING_LABELS"
+      },
+      {
+        "from": "detroit-superior-142",
+        "to": "union-terminal-189",
+        "direction": "increasing-reference-miles",
+        "samples": 1,
+        "dates": 1,
+        "distinctVessels": 1,
+        "observedElapsedSecondsMin": 868,
+        "observedElapsedSecondsMax": 868,
+        "status": "DESCRIPTIVE_ONLY_NO_VALIDATED_CROSSING_LABELS"
+      },
+      {
+        "from": "eagle-280",
+        "to": "hope-314",
+        "direction": "increasing-reference-miles",
+        "samples": 1,
+        "dates": 1,
+        "distinctVessels": 1,
+        "observedElapsedSecondsMin": 559,
+        "observedElapsedSecondsMax": 559,
+        "status": "DESCRIPTIVE_ONLY_NO_VALIDATED_CROSSING_LABELS"
+      },
+      {
+        "from": "flats-rr-224",
+        "to": "eagle-280",
+        "direction": "increasing-reference-miles",
+        "samples": 1,
+        "dates": 1,
+        "distinctVessels": 1,
+        "observedElapsedSecondsMin": 1545,
+        "observedElapsedSecondsMax": 1545,
+        "status": "DESCRIPTIVE_ONLY_NO_VALIDATED_CROSSING_LABELS"
+      },
+      {
+        "from": "innerbelt-342",
+        "to": "i490-479",
+        "direction": "increasing-reference-miles",
+        "samples": 1,
+        "dates": 1,
+        "distinctVessels": 1,
+        "observedElapsedSecondsMin": 2246,
+        "observedElapsedSecondsMax": 2246,
+        "status": "DESCRIPTIVE_ONLY_NO_VALIDATED_CROSSING_LABELS"
+      },
+      {
+        "from": "ns-rr-076",
+        "to": "center-st-139",
+        "direction": "increasing-reference-miles",
+        "samples": 1,
+        "dates": 1,
+        "distinctVessels": 1,
+        "observedElapsedSecondsMin": 1175,
+        "observedElapsedSecondsMax": 1175,
+        "status": "DESCRIPTIVE_ONLY_NO_VALIDATED_CROSSING_LABELS"
+      }
+    ],
+    "uniqueFixes": 1002,
+    "sampledDates": 3,
+    "distinctVessels": 2,
+    "intervalCount": 7,
+    "lowDisplacementEpisodes": 9,
+    "withheld": {
+      "overlapping": 4,
+      "discontinuous": 3,
+      "sameMile": 0
+    },
+    "forecastEnabled": false,
+    "validationStatus": "INSUFFICIENT_INDEPENDENT_PASSAGE_OUTCOMES"
+  }
+}
