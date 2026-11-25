@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Recover near-time buoy observations for the already frozen 180-slot cohort.
+"""Recover near-time buoy observations for frozen historical cohorts.
 Do not re-download model files, mutate the original dataset or tune forecasts.
 """
 import datetime as dt
@@ -28,16 +28,17 @@ def select(times,target,prior_only):
 
 def main():
     args=sys.argv[1:]
-    if args not in ([],["--early-october"],["--warm-season"],["--reliability"]):raise SystemExit("Usage: shorefeel-near-time-recovery.py [--early-october|--warm-season|--reliability]")
+    if args not in ([],["--early-october"],["--warm-season"],["--reliability"],["--confirm-reliability"]):raise SystemExit("Usage: shorefeel-near-time-recovery.py [--early-october|--warm-season|--reliability|--confirm-reliability]")
     early=args==["--early-october"]
     warm=args==["--warm-season"]
     reliability=args==["--reliability"]
-    source=pathlib.Path("data/shorefeel/reliability-cohort-actual-20261125.json") if reliability else pathlib.Path("data/shorefeel/warm-season-actual-20261124.json") if warm else pathlib.Path("data/shorefeel/early-october-actual-20261124.json") if early else SOURCE
+    confirm=args==["--confirm-reliability"]
+    source=pathlib.Path("data/shorefeel/horizon-confirm-cohort-actual-20261125.json") if confirm else pathlib.Path("data/shorefeel/reliability-cohort-actual-20261125.json") if reliability else pathlib.Path("data/shorefeel/warm-season-actual-20261124.json") if warm else pathlib.Path("data/shorefeel/early-october-actual-20261124.json") if early else SOURCE
     original=json.loads(source.read_text())
-    assert original["status"]==("FROZEN_WARM_SEASON_RELIABILITY_REVIEW_ONLY" if reliability else "WARM_SEASON_ARCHIVE_COVERAGE_DIAGNOSTIC_NOT_HOLDOUT" if warm else "EARLY_OCTOBER_HISTORICAL_DIAGNOSTIC_NOT_HOLDOUT" if early else "MULTI_STATION_DECISION_TIME_DIAGNOSTIC_ONLY")
-    assert len(original["cohort"])==(160 if reliability else 80 if early or warm else 180)
+    assert original["status"]==("FROZEN_HORIZON_RELIABILITY_CONFIRMATION_ONLY" if confirm else "FROZEN_WARM_SEASON_RELIABILITY_REVIEW_ONLY" if reliability else "WARM_SEASON_ARCHIVE_COVERAGE_DIAGNOSTIC_NOT_HOLDOUT" if warm else "EARLY_OCTOBER_HISTORICAL_DIAGNOSTIC_NOT_HOLDOUT" if early else "MULTI_STATION_DECISION_TIME_DIAGNOSTIC_ONLY")
+    assert len(original["cohort"])==(200 if confirm else 160 if reliability else 80 if early or warm else 180)
     with tempfile.TemporaryDirectory() as tmp:
-        obs,meta=e.observations(pathlib.Path(tmp),(7,8) if reliability else (7,8,9) if warm else (10,) if early else (10,11))
+        obs,meta=e.observations(pathlib.Path(tmp),(7,8,9) if confirm else (7,8) if reliability else (7,8,9) if warm else (10,) if early else (10,11))
     rows=[p for c in original["cycles"] for p in c["pairs"]]
     recovered=[];unresolved=[];revision_checks=[]
     for p in rows:
@@ -84,5 +85,8 @@ def main():
     if reliability:
         out["status"]="RELIABILITY_NEAR_TIME_REVIEW_ONLY"
         out["limitations"].append("Separate timing sensitivity for fixed eight-date candidate comparison; no pooling into exact scores.")
+    if confirm:
+        out["status"]="CONFIRMATION_NEAR_TIME_SENSITIVITY_ONLY"
+        out["limitations"].append("Fixed ten-date confirmation remains failed on exact coverage; near-time rows cannot repair the exact qualification gate.")
     print(json.dumps(out,indent=2,allow_nan=False))
 if __name__=="__main__":main()
