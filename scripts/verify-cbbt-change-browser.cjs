@@ -1,6 +1,7 @@
 'use strict';
 const assert=require('node:assert/strict'),fs=require('node:fs'),http=require('node:http'),path=require('node:path');
 const {chromium}=require(process.env.CBBT_PW_MODULE||'playwright');
+const {vehicleEligibility}=require('../lib/cbbt/core.js');
 const root=path.resolve(__dirname,'../public'),out=path.resolve('artifacts/cbbt-change-qa');
 fs.mkdirSync(out,{recursive:true});
 const mime={'.html':'text/html','.js':'application/javascript','.css':'text/css','.png':'image/png','.jpg':'image/jpeg','.svg':'image/svg+xml'};
@@ -25,7 +26,7 @@ const server=http.createServer((req,res)=>{
     if(mode==='outage')return route.fulfill({status:503,body:'unavailable'});
     const now=Math.max(Date.now(),last+1);last=now;
     const [state,restrictionLevel]=mode==='restricted'?['OPEN_WITH_RESTRICTIONS','LEVEL_1']:mode==='closed'?['CLOSED','LEVEL_3']:mode==='conflict'?['OFFICIAL_STATUS_CONFLICT','UNKNOWN']:['OPEN','NONE'];
-    return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({engine:{generatedAt:new Date(now).toISOString()},officialStatus:{state,restrictionLevel},freshness:{officialStatus:{state:'fresh',ageMs:0,ageMinutes:0}},vehicleEligibility:{decision:'UNKNOWN',reason:'OFFICIAL_STATUS_UNRESOLVED'},activeIncidents:[],plannedAdvisories:[],alerts:[],provenance:[]})});
+    return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({engine:{generatedAt:new Date(now).toISOString()},officialStatus:{state,restrictionLevel},freshness:{officialStatus:{state:'fresh',ageMs:0,ageMinutes:0}},vehicleEligibility:vehicleEligibility({state,restrictionLevel},{vehicleType:new URL(route.request().url()).searchParams.get('vehicleType')||'suv'}),activeIncidents:[],plannedAdvisories:[],alerts:[],provenance:[]})});
    });
    await context.route('https://**/*',route=>route.abort());
    const page=await context.newPage(),errors=[];
@@ -40,13 +41,24 @@ const server=http.createServer((req,res)=>{
    }
    await refresh('restricted','OPEN','open with Level 1');
    assert.match(await page.locator('#statusChangeTime').innerText(),/exact change time unknown/);
+   assert.match(await page.locator('#vehicleImpact').innerText(),/unchanged/);
    const first=await page.locator('#statusChangeTime').innerText();
    await refresh('restricted','OPEN','open with Level 1');
    assert.equal(await page.locator('#statusChangeTime').innerText(),first);
+   const vehicleResponse=page.waitForResponse(r=>r.url().includes('/api/cbbt?'));
+   await page.locator('#vehicleQuickSelect').selectOption('motorcycle');await vehicleResponse;
+   await page.waitForFunction(()=>document.querySelector('#vehicleResultTitle')?.textContent.includes('cannot cross'));
+   assert.equal(await page.locator('#vehicleImpact').isVisible(),false);
+   await refresh('open','OPEN','now reports open');
+   assert.match(await page.locator('#vehicleImpact').innerText(),/now reports this configuration allowed/);
+   await refresh('restricted','OPEN','open with Level 1');
+   assert.match(await page.locator('#vehicleImpact').innerText(),/now restricted/);
    await refresh('closed','CLOSED','reports closed');
    await refresh('outage','UNKNOWN','not a report of a closure');
+   assert.match(await page.locator('#vehicleImpact').innerText(),/cannot be confirmed/);
    await refresh('open','OPEN','available again');
    assert.match(await page.locator('#statusChangeText').innerText(),/What happened during the gap is not known/);
+   assert.match(await page.locator('#vehicleImpact').innerText(),/available again/);
    await refresh('conflict','VERIFY','sources now disagree');
    await refresh('open','OPEN','available again');
    assert.deepEqual(errors,[]);
