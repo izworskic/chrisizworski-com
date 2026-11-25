@@ -475,7 +475,7 @@
   function initMap() {
     if (map || typeof L === 'undefined') return;
     installMonitorStyles();
-    map = L.map('duluthVesselMap', { scrollWheelZoom: false }).setView(CANAL, 12);
+    map = L.map('duluthVesselMap', { scrollWheelZoom: false, fadeAnimation: false }).setView(CANAL, 12);
     // The narrow-map detail pane is a sibling of Leaflet's moving map pane.
     // Its contents stay inside the viewport while the user pans or zooms.
     map.createPane('duluthVesselDetails', map.getContainer()).classList.add('duluth-vessel-details-pane');
@@ -500,6 +500,9 @@
       $('duluthVesselMap').textContent = 'Map could not load. Live vessel details remain available above.';
       return;
     }
+    // Close detail panes before replacing their source markers. Do not leave
+    // fading, outdated AIS detail panels on screen during recovery.
+    map.closePopup();
     vesselLayer.clearLayers();
     candidateLayer.clearLayers();
     markers.clear();
