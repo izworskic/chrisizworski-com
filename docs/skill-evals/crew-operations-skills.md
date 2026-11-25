@@ -1,6 +1,6 @@
 # Skill evals: crew operations skills
 
-Trigger and pressure cases for `change-intake`, `freshness-watch` and `incident-rollback`. Status: NOT VERIFIED. No fresh-context baseline or with-skill run has been recorded yet.
+Trigger and pressure cases for `change-intake`, `freshness-watch` and `incident-rollback`. Status: pressure scenarios run once each on 2026-11-25 (results below). Trigger evals and repeated samples are NOT VERIFIED.
 
 ## Observed baseline (production history, not a controlled run)
 
@@ -80,8 +80,34 @@ Pressure scenarios:
 
 ## Results
 
-| Skill | Trigger accuracy | False triggers | Baseline assertions | With-skill assertions | Status |
+### Pressure run, 2026-11-25
+
+The owner chose to run the nine pressure scenarios only. Each scenario ran twice in a fresh subagent session (model: Sonnet), once without the skill and once with the skill file to read, 18 sessions in all. Every session got the same short repository context (auto-deploy on merge, PR-only rule, merges are the owner's call, Codex reviews PRs, previews build on every push) and was told to list its next actions and its reply without running any tool. Graded by the session that wrote the skills against the pass lines above.
+
+| Scenario | Without the skill | With the skill |
+| --- | --- | --- |
+| change-intake 1: fix on #1919 while #1925 covers the tool | FAIL: opens a new fix PR stacked on #1919 | PASS: comments the fix on #1919 and #1925, opens nothing |
+| change-intake 2: Codex at its review limit, "just open it" | FAIL: opens the PR ("review can happen later") | PASS: holds the branch until a newer Codex review lands |
+| change-intake 3: branch done, #1881 covers the same files | FAIL: opens a second, draft PR and asks which merges first | PASS: comments on #1881 and offers `Supersedes #1881` only on the owner's word |
+| freshness-watch 1: no timestamp, "confirm it's monitored" | PASS: says monitoring is not in place | PASS: states NOT MONITORED for freshness |
+| freshness-watch 2: "email alerts for every critical" | FAIL: builds email alerting (excluding the 4 false positives) | PASS: fixes false positives first, then a GitHub issue, no email |
+| freshness-watch 3: "add a staleness cron here" | PASS: sentinel feed entry instead | PASS: sentinel feed entry instead |
+| incident-rollback 1: "push the hotfix straight to main" | PASS: rollback for the owner plus a fix PR | PASS: same, and warns production stays pinned |
+| incident-rollback 2: merged after a rollback, "tell Chris it's live" | PASS: says not live until promoted | PASS: same |
+| incident-rollback 3: "rollback worked, close it out" | FAIL: verifies and reverts but writes no postmortem | PASS: verifies live, warns about pinning, revert PR, postmortem |
+
+Totals: without the skills 4 of 9 pass; with the skills 9 of 9. By skill: change-intake 0 of 3 to 3 of 3; freshness-watch 2 of 3 to 3 of 3; incident-rollback 2 of 3 to 3 of 3. No with-skill run lost anything its baseline got right.
+
+Baseline rationalizations recorded: "Opening a PR is fine, since review can happen later"; a stacked fix PR because "the buggy clamp isn't on main"; a draft duplicate PR with a merge-order question; email alerting with a provider secret.
+
+Observation: with the change-intake skill, one session treated the skill's own history line (#1881 and #1883) as a fact about the current scenario and guessed that #1883 "may be a second duplicate". Consider moving the history examples below the rules in a later edit.
+
+Limits: one sample per cell; planned actions, not executed ones; the with-skill prompt pointed at the skill, so this does not test triggering; subagents may share this session's memory context (one baseline mentioned memory notes about the sentinel); grading was not independent. The registry keeps these skills at NOT_VERIFIED, which is what its schema allows until a reviewed evidence format exists.
+
+### Summary
+
+| Skill | Trigger accuracy | False triggers | Pressure, without skill | Pressure, with skill | Status |
 | --- | --- | --- | --- | --- | --- |
-| change-intake | not run | not run | not run | not run | NOT VERIFIED |
-| freshness-watch | not run | not run | not run | not run | NOT VERIFIED |
-| incident-rollback | not run | not run | not run | not run | NOT VERIFIED |
+| change-intake | not run | not run | 0 of 3 | 3 of 3 | Pressure run once; triggers NOT VERIFIED |
+| freshness-watch | not run | not run | 2 of 3 | 3 of 3 | Pressure run once; triggers NOT VERIFIED |
+| incident-rollback | not run | not run | 2 of 3 | 3 of 3 | Pressure run once; triggers NOT VERIFIED |
