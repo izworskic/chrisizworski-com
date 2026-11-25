@@ -106,13 +106,13 @@ def load_observations(tmp):
         except Exception as e:meta.setdefault(station,{}).update(error=str(e)[:300])
     return obs,meta
 
-def evaluate_cycle(cycle,obs,obs_meta,catalog,timing=False):
+def evaluate_cycle(cycle,obs,obs_meta,catalog,timing=False,stations=STATIONS):
     # For sensitivity only, at 06Z use a measured 04Z baseline and the
     # 00Z model's matching f004 reference, f030 and f054 targets.
     issue=cycle+dt.timedelta(hours=6 if timing else 0)
     baseline_offset=4 if timing else 0
     target_offset=6 if timing else 0
-    cohort=[{"station":s,"cycleAt":cycle.isoformat(),"leadHours":h,**({"decisionAt":issue.isoformat(),"baselineAt":(cycle+dt.timedelta(hours=baseline_offset)).isoformat()} if timing else {})} for s in STATIONS for h in (24,48)]
+    cohort=[{"station":s,"cycleAt":cycle.isoformat(),"leadHours":h,**({"decisionAt":issue.isoformat(),"baselineAt":(cycle+dt.timedelta(hours=baseline_offset)).isoformat()} if timing else {})} for s in stations for h in (24,48)]
     result={"status":"CYCLE_RELATIVE_DIAGNOSTIC_ONLY","cohort":cohort,"cohortSha256":digest(json.dumps(cohort,sort_keys=True,separators=(",",":")).encode()),"models":{},"observations":{},"pairs":[],"canPromoteModel":False,"limitations":["One fixed 00Z cycle; no statistical inference or nearshore skill.","Station locations from repository catalog; historical deployment coordinates and sensor depth not independently authenticated.","Archive Last-Modified does not establish original forecast or observation publication availability. Cycle-relative diagnostic is not a prospective holdout."]}
     with tempfile.TemporaryDirectory() as tmp:
         tmp=pathlib.Path(tmp);grids={}
@@ -126,7 +126,7 @@ def evaluate_cycle(cycle,obs,obs_meta,catalog,timing=False):
                 result["models"][h].update(grids[h][3])
             except Exception as e:result["models"].setdefault(h,{}).update(error=str(e)[:300])
             finally:path.unlink(missing_ok=True)
-        result["observations"]={s:{**obs_meta.get(s,{}),"samplesC":{str(h):obs.get(s,{}).get(cycle+dt.timedelta(hours=h)) for h in (baseline_offset,24+target_offset,48+target_offset)}} for s in STATIONS}
+        result["observations"]={s:{**obs_meta.get(s,{}),"samplesC":{str(h):obs.get(s,{}).get(cycle+dt.timedelta(hours=h)) for h in (baseline_offset,24+target_offset,48+target_offset)}} for s in stations}
         for entry in cohort:
             s,h=entry["station"],entry["leadHours"];p={**entry}
             result["pairs"].append(p)
@@ -145,7 +145,7 @@ def evaluate_cycle(cycle,obs,obs_meta,catalog,timing=False):
         result["metrics"]={}
         for h in (24,48):
             rows=[p for p in result["pairs"] if p["leadHours"]==h and "modelChangeErrorF" in p]
-            result["metrics"][h]={"n":len(rows),"expected":4,"persistenceMAE_F":statistics.mean(abs(p["persistenceErrorF"]) for p in rows) if rows else None,"modelChangeMAE_F":statistics.mean(abs(p["modelChangeErrorF"]) for p in rows) if rows else None,"biasF":statistics.mean(p["modelChangeErrorF"] for p in rows) if rows else None}
+            result["metrics"][h]={"n":len(rows),"expected":len(stations),"persistenceMAE_F":statistics.mean(abs(p["persistenceErrorF"]) for p in rows) if rows else None,"modelChangeMAE_F":statistics.mean(abs(p["modelChangeErrorF"]) for p in rows) if rows else None,"biasF":statistics.mean(p["modelChangeErrorF"] for p in rows) if rows else None}
     return result
 
 # Fixed 72-hour spacing, omitting the previously inspected October 20 pilot.
