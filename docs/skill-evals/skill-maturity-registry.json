@@ -10,8 +10,8 @@
     "claude": 47,
     "copilot": 44,
     "mirrorBlobMismatches": 0,
-    "dedicatedCaseSuites": 25,
-    "withoutDedicatedCasesLocated": 22,
+    "dedicatedCaseSuites": 26,
+    "withoutDedicatedCasesLocated": 21,
     "behaviorallyEvaluated": 0,
     "provenByPairedEvidence": 0
   },
@@ -770,18 +770,18 @@
       "id": "web-quality-performance",
       "family": "Web and browser quality",
       "scope": "Load, images, JS and requests",
-      "expectedOutput": "Controlled performance comparison",
+      "expectedOutput": "Before and after bytes, requests and LCP with each change named",
       "routing": "When relevant",
       "authorization": "relevant-authorized-task",
       "documentedState": "documented",
-      "auditedSkillBlob": "256dac2445855da829c56e0fb2fe09b91b480155",
+      "auditedSkillBlob": "ada9cec8de1bc0f118dcaf809f7c0ee79487f117",
       "mirrors": [
         ".agents/skills/web-quality-performance/SKILL.md",
         ".claude/skills/web-quality-performance/SKILL.md",
         ".github/skills/web-quality-performance/SKILL.md"
       ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
+      "caseSuite": "docs/skill-evals/web-quality-performance.md",
+      "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
         "runs": [],

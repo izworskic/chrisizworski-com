@@ -27,4 +27,4 @@ Read `skills-expansion-plan.md` first. Update this log in the same commit as eac
 
 ## Next action
 
-Rebuild web-quality-performance, pressure-test it against the version on main, record it here, commit.
+Rebuild web-quality-core-web-vitals, pressure-test it against the version on main, record it here, commit.
