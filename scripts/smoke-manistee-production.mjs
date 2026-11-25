@@ -1,14 +1,28 @@
 #!/usr/bin/env node
+import {fetchWithBoundedRetry} from './manistee-production-retry.mjs';
 
 const ORIGIN=process.env.MANISTEE_PRODUCTION_ORIGIN||'https://chrisizworski.com';
 const checks=[];
 
 async function fetchText(path,{expectNoindex=false}={}){
   const url=new URL(path,ORIGIN);
-  const response=await fetch(url,{redirect:'follow',headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/5.1'},signal:AbortSignal.timeout(25000)});
+  // A fresh timeout per attempt prevents one slow response from poisoning retries.
+  const options=()=>({redirect:'follow',headers:{'user-agent':'ChrisIzworskiManisteeProductionSmoke/5.1'},signal:AbortSignal.timeout(25000)});
+  // Gauge telemetry is external USGS data and can briefly fail even when the
+  // deployment is healthy. Do not retry missing HTML, broken assets or 404s.
+  const response=path==='/api/manistee-river-conditions'
+    ?await fetchWithBoundedRetry(url,options)
+    :await fetch(url,options());
   const text=await response.text();
   const robots=(response.headers.get('x-robots-tag')||'').toLowerCase();
-  if(!response.ok)throw new Error(`${path} returned ${response.status}`);
+  if(!response.ok){
+    let detail='';
+    if(path==='/api/manistee-river-conditions'){
+      try{detail=String(JSON.parse(text)?.detail||'').replace(/\\s+/g,' ').slice(0,180);}
+      catch{}
+    }
+    throw new Error(`${path} returned ${response.status}${detail?': '+detail:''}`);
+  }
   if(expectNoindex&&!robots.includes('noindex'))throw new Error(`${path} should be noindex but x-robots-tag was ${robots||'(missing)'}`);
   if(!expectNoindex&&robots.includes('noindex'))throw new Error(`${path} unexpectedly returned noindex`);
   checks.push({path,status:response.status,robots:robots||null});

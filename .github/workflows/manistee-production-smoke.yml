@@ -14,6 +14,8 @@ on:
       - 'public/sitemap-manistee.xml'
       - 'public/robots.txt'
       - 'scripts/smoke-manistee-production.mjs'
+      - 'scripts/manistee-production-retry.mjs'
+      - 'tests/manistee-production-retry.test.js'
       - '.github/workflows/manistee-production-smoke.yml'
   workflow_dispatch:
 
@@ -23,13 +25,46 @@ permissions:
 
 jobs:
   public-origin:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-    timeout-minutes: 5
+    timeout-minutes: 12
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Verify transient retry semantics
+        run: node --test tests/manistee-production-retry.test.js
+      - name: Wait for Vercel to complete this exact main commit
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          for attempt in $(seq 1 48); do
+            state="$(gh api "repos/${GITHUB_REPOSITORY}/commits/${GITHUB_SHA}/status" --jq '[.statuses[] | select(.context=="Vercel") | .state][0] // "pending"')"
+            case "$state" in
+              success)
+                echo "Vercel status is successful for ${GITHUB_SHA}; allowing propagation."
+                sleep 10
+                exit 0
+                ;;
+              failure|error)
+                echo "Vercel failed for ${GITHUB_SHA}: ${state}" >&2
+                exit 1
+                ;;
+              pending)
+                echo "Waiting for Vercel at ${GITHUB_SHA} (check ${attempt}/48)"
+                sleep 10
+                ;;
+              *)
+                echo "Unrecognized Vercel status ${state}" >&2
+                exit 1
+                ;;
+            esac
+          done
+          echo "No successful Vercel deployment status for ${GITHUB_SHA} within the bound." >&2
+          exit 1
       - name: Verify public chrisizworski.com Manistee release
         run: node scripts/smoke-manistee-production.mjs
       - name: Publish production smoke commit status
