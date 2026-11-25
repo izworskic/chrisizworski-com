@@ -27,4 +27,4 @@ Read `skills-expansion-plan.md` first. Update this log in the same commit as eac
 
 ## Next action
 
-Build tool-handoffs, run its pressure test, record it here, commit.
+Build answer-feedback, run its pressure test, record it here, commit.
