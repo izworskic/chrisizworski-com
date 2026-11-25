@@ -150,6 +150,47 @@ function payload(place,mode){
     'The no-data sentence should not masquerade as a large numeric reading');
   await page.screenshot({path:path.join(out,'network-stale-390.png'),fullPage:true});
   await context.close();
+  // Exercise the legacy shared water-temperature consumer, including independent
+  // model dependencies for the two Traverse City beaches.
+  for(const width of [390,1366]){
+   for(const mode of ['complete','west-expired','weather-expired','packet-expired']){
+    const ctx=await browser.newContext({viewport:{width,height:850},reducedMotion:'reduce'});
+    const n=Date.now(),at=offset=>new Date(n+offset).toISOString(),H=3600000;
+    const west={tempF:60,observedAt:at(-H)},east={tempF:62,observedAt:at(-H)};
+    const model=(key,name,m)=>({key,name,levelKind:'satellite',levelTempF:m.tempF,levelObservedAt:m.observedAt,points:[0,24,48].map(leadH=>({leadH,startsAt:at(leadH*H),tempF:m.tempF,low:m.tempF-2,high:m.tempF+2}))});
+    const today=new Date(n).toISOString().slice(0,10);
+    const data={generatedAt:at(-60000),water:{kind:'satellite',...west,where:'Grand Traverse Bay',label:'NOAA west-bay pixel',caveat:'Offshore analysis'},
+      local:{stationId:'45020',stationName:'NOAA test station',lat:44.8,lon:-85.6,measurement:null,periods:[{startsAt:at(H),tempF:99,windMph:10}],caveat:'Offshore buoy'},
+      regionalSatellite:{cells:[{key:'west-bay',measurement:west},{key:'east-bay',measurement:east}]},
+      weatherNow:{startsAt:at(-H/2),tempF:80,windMph:12,summary:'Sunny'},
+      assessments:{swim:{heading:'Swimming preparation',beach:'Air forecast 80°F',water:'Nearby water 60°F',after:'Wind exposure',decision:'Check hazards'}},
+      weatherWindows:{swim:{startsAt:at(H),tempF:80,windMph:12,summary:'Sunny'}},
+      lakes:{michigan:{status:'recent',latest:{date:today,tempF:50},history:[],trend7:null}},
+      beachForecast:{status:'available',cycle:at(-6*H),beaches:[model('clinch-park','Clinch Park beach',west),model('tc-state-park','Traverse City State Park beach',east)],validation:{error24hF:1.31,error48hF:1.87},method:'Fixture',caveat:'Not a safety forecast'}};
+    if(mode==='west-expired'){west.observedAt=at(-73*H);data.water.observedAt=west.observedAt;}
+    if(mode==='weather-expired')data.weatherNow.startsAt=at(-H);
+    if(mode==='packet-expired')data.generatedAt=at(-31*60000);
+    await ctx.route('**/api/shorefeel?*',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(data)}));
+    await ctx.route('https://**/*',route=>route.abort());
+    const pg=await ctx.newPage(),errors=[];
+    pg.on('pageerror',e=>errors.push(e.message));
+    await pg.goto(origin+'/lake-michigan-water-temperature/traverse-city/',{waitUntil:'domcontentloaded'});
+    await pg.waitForFunction(()=>document.querySelector('#lead-temp')?.textContent==='60.0°F'||document.querySelector('#lead-temp')?.textContent==='No current reading',null,{timeout:15000});
+    const count=mode==='west-expired'?1:mode==='packet-expired'?0:2;
+    assert.equal(await pg.locator('#bf-body .bf-card').count(),count,'independent forecast cell dependencies');
+    if(mode==='west-expired'){
+     assert.match(await pg.locator('#lead-temp').innerText(),/No current reading/);
+     assert.match(await pg.locator('#bf-body').innerText(),/Traverse City State Park beach/);
+     assert.doesNotMatch(await pg.locator('#bf-body').innerText(),/Clinch Park beach/);
+    }else assert.match(await pg.locator('#lead-temp').innerText(),/60.0°F/);
+    assert.equal(await pg.locator('#air-temp').innerText(),['weather-expired','packet-expired'].includes(mode)?'Unavailable':'80°F');
+    if(mode==='packet-expired')assert.match(await pg.locator('#weather-window').innerText(),/No reliable/);
+    assert.deepEqual(errors,[]);
+    await pg.screenshot({path:path.join(out,'dependency-traverse-'+mode+'-'+width+'.png'),fullPage:true});
+    report.push({width,beach:'traverse-city',mode,modelCards:count});
+    await ctx.close();
+   }
+  }
   console.log(JSON.stringify({status:'passed',report,stale:'no fabricated air value'},null,2));
  }finally{
   if(browser)await browser.close();
