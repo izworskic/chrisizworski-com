@@ -1,0 +1,62 @@
+{
+  "schema": 1,
+  "status": "candidate-reference-reviewed-for-regression-not-production-approval",
+  "reviewedSource": "e1795ba95f4777552f091d630ae4751ac53fda27",
+  "reviewDate": "2026-11-24",
+  "evidence": {
+    "run": 45439618608,
+    "job": 138606771962,
+    "artifact": 14943106834,
+    "artifactUrl": "https://github.com/izworskic/chrisizworski-com/actions/runs/45439618608/artifacts/14943106834",
+    "notes": "Five-width browser acceptance passed. Mobile and desktop cross-family screens, alternate focus states and mobile no-JS screen inspected. Readable roles, distinct palettes and explicit unknowns; no visible clipping. Small ship glyphs remain a known improvement opportunity. Historical PNG hashes identify the review artifact, not a universal browser raster baseline. Owner release approval remains separate."
+  },
+  "comparison": {
+    "mode": "same-run-recapture-pinned-source",
+    "pixelTolerance": 0,
+    "mask": "none"
+  },
+  "images": [
+    {
+      "file": "lab-1280.png",
+      "width": 1280,
+      "height": 2431,
+      "sha256": "32fd4838ad2112fd8f0b7d6c83a7acac99a598b032f6b3d9de5fe194bc433761"
+    },
+    {
+      "file": "lab-1280-alternate-focus.png",
+      "width": 1280,
+      "height": 2431,
+      "sha256": "cbe517dc03ec4c973afe94b6b4719b2bc592fe32d5c34af9563aa9206b78cbd7"
+    },
+    {
+      "file": "lab-1280-cross-family.png",
+      "width": 1280,
+      "height": 2431,
+      "sha256": "b62438c082b7fba4f147f488caf6579edefbd9b1bb5a6de0e3219a4fc05b34ee"
+    },
+    {
+      "file": "lab-390.png",
+      "width": 390,
+      "height": 4128,
+      "sha256": "d351b3aac45edc64c2c2c9fa9dda9c73a8668b4411ac843d1b514d5e5d76d2d2"
+    },
+    {
+      "file": "lab-390-alternate-focus.png",
+      "width": 390,
+      "height": 4128,
+      "sha256": "ebb8a1ba686005a51126111db6c0f60a89cf476fffc742bf9ae4d3079dbfe29b"
+    },
+    {
+      "file": "lab-390-cross-family.png",
+      "width": 390,
+      "height": 4128,
+      "sha256": "ab82483da5f227ab3a0f75cf05218d9051d3ecc75e11a08741e67a244ce50c59"
+    },
+    {
+      "file": "lab-390-no-js.png",
+      "width": 390,
+      "height": 4307,
+      "sha256": "f9b01af95f70a74576e6e9d24cecad4ee5ffefa64dfd0e4d0c2eec7053c4678f"
+    }
+  ]
+}

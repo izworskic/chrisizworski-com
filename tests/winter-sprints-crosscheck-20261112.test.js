@@ -27,12 +27,15 @@ test('storm shortcut has a real source link in its selected town/nearby results'
  assert.match(script.slice(script.indexOf('function popup('),script.indexOf('function renderMap(')),/originalReportUrl\(r\.productUrl\)/);
  assert.match(script.slice(script.indexOf('function renderTable('),script.indexOf('function loadPlaces(')),/originalReportUrl\(r\.productUrl\)/);
  assert.match(snow,/original NWS report text when the archive provides a link/);
- assert.match(snow,/michigan-snow-totals\.js\?v=20261117c/);
+ assert.match(snow,/michigan-snow-totals\.js\?v=20261124-evidence1/);
 });
 test('edited sprint pages retain their indexable canonicals, truthful review dates, 12 guides',()=>{
  for(const [html,slug] of [[snow,'michigan-snow-totals'],[weekend,'michigan-winter-weekends']]){
   assert.ok(html.includes('rel="canonical" href="https://chrisizworski.com/'+slug+'/'));
-  assert.ok(html.includes('2026-11-12'));
+  if(slug==='michigan-snow-totals'){
+   assert.ok(html.includes('"dateModified": "2026-11-24"'));
+   assert.ok(sitemap.includes('<loc>https://chrisizworski.com/michigan-snow-totals/</loc>\n    <lastmod>2026-11-24</lastmod>'));
+  }else assert.ok(html.includes('2026-11-12'));
   assert.ok(!html.includes('noindex'));
  }
  assert.equal((weekend.match(/<article class="wf-story" id="stop-\d+"/g)||[]).length,12);

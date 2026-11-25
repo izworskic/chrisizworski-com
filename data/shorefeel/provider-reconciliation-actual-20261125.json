@@ -1,0 +1,1556 @@
+{
+  "status": "PROVIDER_TIMESTAMP_RECONCILIATION_ONLY",
+  "sourceDatasetSha256": "63ca4323f6f14363f22c74d06f190b97de1a2f2fe6a7bcd141c221625a0b9a32",
+  "recoverySha256": "60300f0e462c093b95529e7aaeeb1278cc19c9ce392d200ceefff9a332b2d4be",
+  "cohortSha256": "5fb9599ae7442338a541651f5880b714747e5d311edc1956556f247221315563",
+  "sources": {
+    "cdip269": {
+      "station": "45210",
+      "source": {
+        "url": "https://erddap.cdip.ucsd.edu/erddap/tabledap/sst_agg.csv?station_id,time,latitude,longitude,sstSeaSurfaceTemperature,sstFlagPrimary,sstFlagSecondary&station_id=%22269%22&time%3E=2026-07-06T03:45:00Z&time%3C=2026-09-01T06:15:00Z",
+        "responseUrl": "https://erddap.cdip.ucsd.edu/erddap/tabledap/sst_agg.csv?station_id,time,latitude,longitude,sstSeaSurfaceTemperature,sstFlagPrimary,sstFlagSecondary&station_id=%22269%22&time%3E=2026-07-06T03:45:00Z&time%3C=2026-09-01T06:15:00Z",
+        "bytes": 564735,
+        "sha256": "41ceec7d4a54995229c8e005637c24b6cbe57f9bcca6ff940d5b5b6f00190a9c",
+        "lastModified": "Wed, 25 Nov 2026 11:22:11 GMT",
+        "etag": null
+      },
+      "status": "parsed",
+      "counts": {
+        "rows": 10964,
+        "physical": 10964,
+        "flag_1": 10964,
+        "conflictingTimestamps": 2741
+      },
+      "goodTimestampMinutesSeconds": {},
+      "exactCandidatePairs": 0,
+      "slots": [
+        {
+          "cycleAt": "2026-07-06T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-07-06T04:00:00+00:00",
+          "targetAt": "2026-07-07T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 17.9,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 18.5,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-06T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-07-06T04:00:00+00:00",
+          "targetAt": "2026-07-08T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 17.9,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 19.6,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-12T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-07-12T04:00:00+00:00",
+          "targetAt": "2026-07-13T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 21.1,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.2,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-12T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-07-12T04:00:00+00:00",
+          "targetAt": "2026-07-14T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 21.1,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.8,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-18T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-07-18T04:00:00+00:00",
+          "targetAt": "2026-07-19T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 23.3,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.6,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-18T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-07-18T04:00:00+00:00",
+          "targetAt": "2026-07-20T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 23.3,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.0,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-24T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-07-24T04:00:00+00:00",
+          "targetAt": "2026-07-25T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 20.0,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 20.1,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-24T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-07-24T04:00:00+00:00",
+          "targetAt": "2026-07-26T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 20.0,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 20.1,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-30T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-07-30T04:00:00+00:00",
+          "targetAt": "2026-07-31T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 20.3,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 20.3,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-30T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-07-30T04:00:00+00:00",
+          "targetAt": "2026-08-01T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 20.3,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 20.6,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-06T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-08-06T04:00:00+00:00",
+          "targetAt": "2026-08-07T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 20.7,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.3,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-06T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-08-06T04:00:00+00:00",
+          "targetAt": "2026-08-08T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 20.7,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.3,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-12T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-08-12T04:00:00+00:00",
+          "targetAt": "2026-08-13T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 22.5,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.3,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-12T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-08-12T04:00:00+00:00",
+          "targetAt": "2026-08-14T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 22.5,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.2,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-18T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-08-18T04:00:00+00:00",
+          "targetAt": "2026-08-19T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 22.1,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.0,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-18T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-08-18T04:00:00+00:00",
+          "targetAt": "2026-08-20T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 22.1,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.0,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-24T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-08-24T04:00:00+00:00",
+          "targetAt": "2026-08-25T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 21.5,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.4,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-24T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-08-24T04:00:00+00:00",
+          "targetAt": "2026-08-26T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 21.5,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.5,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-30T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-08-30T04:00:00+00:00",
+          "targetAt": "2026-08-31T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 21.5,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.5,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-30T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-08-30T04:00:00+00:00",
+          "targetAt": "2026-09-01T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 21.5,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.7,
+              "differenceC": null
+            }
+          ]
+        }
+      ]
+    },
+    "glos45210": {
+      "station": "45210",
+      "source": {
+        "url": "https://seagull-erddap.glos.org/erddap/tabledap/45210_archive.csv?time,latitude,longitude,sea_surface_temperature,sea_surface_temperature_aggregate_test&time%3E=2026-07-06T03:45:00Z&time%3C=2026-09-01T06:15:00Z",
+        "responseUrl": "https://seagull-erddap.glos.org/erddap/tabledap/45210_archive.csv?time,latitude,longitude,sea_surface_temperature,sea_surface_temperature_aggregate_test&time%3E=2026-07-06T03:45:00Z&time%3C=2026-09-01T06:15:00Z",
+        "bytes": 197053,
+        "sha256": "6a82c3333cda2b8d7c6d2f5ae85ad87453a56b33a1a2cdc55609d2bc10864b45",
+        "lastModified": "Wed, 25 Nov 2026 11:22:12 GMT",
+        "etag": null
+      },
+      "status": "parsed",
+      "counts": {
+        "rows": 2585,
+        "physical": 2585,
+        "flag_4": 1426,
+        "flag_1": 399,
+        "flag_3": 716,
+        "flag_2": 44,
+        "conflictingTimestamps": 0
+      },
+      "goodTimestampMinutesSeconds": {
+        "00:00": 192,
+        "30:00": 207
+      },
+      "exactCandidatePairs": 0,
+      "slots": [
+        {
+          "cycleAt": "2026-07-06T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-07-06T04:00:00+00:00",
+          "targetAt": "2026-07-07T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 17.9,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 18.5,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-06T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-07-06T04:00:00+00:00",
+          "targetAt": "2026-07-08T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 17.9,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 19.6,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-12T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-07-12T04:00:00+00:00",
+          "targetAt": "2026-07-13T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 21.1,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.2,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-12T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-07-12T04:00:00+00:00",
+          "targetAt": "2026-07-14T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 21.1,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.8,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-18T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-07-18T04:00:00+00:00",
+          "targetAt": "2026-07-19T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 23.3,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.6,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-18T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-07-18T04:00:00+00:00",
+          "targetAt": "2026-07-20T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 23.3,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.0,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-24T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-07-24T04:00:00+00:00",
+          "targetAt": "2026-07-25T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 20.0,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 20.1,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-24T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-07-24T04:00:00+00:00",
+          "targetAt": "2026-07-26T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 20.0,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 20.1,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-30T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-07-30T04:00:00+00:00",
+          "targetAt": "2026-07-31T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 20.3,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 20.3,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-30T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-07-30T04:00:00+00:00",
+          "targetAt": "2026-08-01T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 20.3,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 20.6,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-06T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-08-06T04:00:00+00:00",
+          "targetAt": "2026-08-07T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 20.7,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.3,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-06T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-08-06T04:00:00+00:00",
+          "targetAt": "2026-08-08T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 20.7,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.3,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-12T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-08-12T04:00:00+00:00",
+          "targetAt": "2026-08-13T06:00:00+00:00",
+          "exactBaseline": {
+            "time": "2026-08-12T04:00:00+00:00",
+            "tempC": 22.550012207031273,
+            "latitude": 44.05500030517578,
+            "longitude": -87.05000305175781,
+            "primaryFlag": 1,
+            "secondaryFlag": null
+          },
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [
+            {
+              "time": "2026-08-12T04:00:00+00:00",
+              "tempC": 22.550012207031273,
+              "latitude": 44.05500030517578,
+              "longitude": -87.05000305175781,
+              "primaryFlag": 1,
+              "secondaryFlag": null
+            }
+          ],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 22.5,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.3,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-12T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-08-12T04:00:00+00:00",
+          "targetAt": "2026-08-14T06:00:00+00:00",
+          "exactBaseline": {
+            "time": "2026-08-12T04:00:00+00:00",
+            "tempC": 22.550012207031273,
+            "latitude": 44.05500030517578,
+            "longitude": -87.05000305175781,
+            "primaryFlag": 1,
+            "secondaryFlag": null
+          },
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [
+            {
+              "time": "2026-08-12T04:00:00+00:00",
+              "tempC": 22.550012207031273,
+              "latitude": 44.05500030517578,
+              "longitude": -87.05000305175781,
+              "primaryFlag": 1,
+              "secondaryFlag": null
+            }
+          ],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 22.5,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.2,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-18T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-08-18T04:00:00+00:00",
+          "targetAt": "2026-08-19T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 22.1,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.0,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-18T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-08-18T04:00:00+00:00",
+          "targetAt": "2026-08-20T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 22.1,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.0,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-24T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-08-24T04:00:00+00:00",
+          "targetAt": "2026-08-25T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 21.5,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.4,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-24T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-08-24T04:00:00+00:00",
+          "targetAt": "2026-08-26T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 21.5,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.5,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-30T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-08-30T04:00:00+00:00",
+          "targetAt": "2026-08-31T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 21.5,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.5,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-30T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-08-30T04:00:00+00:00",
+          "targetAt": "2026-09-01T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 21.5,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 21.7,
+              "differenceC": null
+            }
+          ]
+        }
+      ]
+    },
+    "glos45214": {
+      "station": "45214",
+      "source": {
+        "url": "https://seagull-erddap.glos.org/erddap/tabledap/SPOT-31964C_archive.csv?time,latitude,longitude,sea_surface_temperature,sea_surface_temperature_aggregate_test&time%3E=2026-07-06T03:45:00Z&time%3C=2026-09-01T06:15:00Z",
+        "responseUrl": "https://seagull-erddap.glos.org/erddap/tabledap/SPOT-31964C_archive.csv?time,latitude,longitude,sea_surface_temperature,sea_surface_temperature_aggregate_test&time%3E=2026-07-06T03:45:00Z&time%3C=2026-09-01T06:15:00Z",
+        "bytes": 125746,
+        "sha256": "883399f6ef383e7709566b73939abad7ebaf9ac9df872f42b9d6b70962bc80fe",
+        "lastModified": "Wed, 25 Nov 2026 11:22:17 GMT",
+        "etag": null
+      },
+      "status": "parsed",
+      "counts": {
+        "rows": 1652,
+        "invalid": 980,
+        "physical": 672,
+        "flag_3": 233,
+        "flag_1": 92,
+        "flag_4": 247,
+        "flag_2": 100,
+        "conflictingTimestamps": 0
+      },
+      "goodTimestampMinutesSeconds": {
+        "35:00": 4,
+        "00:00": 16,
+        "10:00": 3,
+        "50:00": 69
+      },
+      "exactCandidatePairs": 0,
+      "slots": [
+        {
+          "cycleAt": "2026-07-06T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-07-06T04:00:00+00:00",
+          "targetAt": "2026-07-07T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": []
+        },
+        {
+          "cycleAt": "2026-07-06T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-07-06T04:00:00+00:00",
+          "targetAt": "2026-07-08T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": []
+        },
+        {
+          "cycleAt": "2026-07-12T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-07-12T04:00:00+00:00",
+          "targetAt": "2026-07-13T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": []
+        },
+        {
+          "cycleAt": "2026-07-12T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-07-12T04:00:00+00:00",
+          "targetAt": "2026-07-14T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": []
+        },
+        {
+          "cycleAt": "2026-07-18T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-07-18T04:00:00+00:00",
+          "targetAt": "2026-07-19T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": []
+        },
+        {
+          "cycleAt": "2026-07-18T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-07-18T04:00:00+00:00",
+          "targetAt": "2026-07-20T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": []
+        },
+        {
+          "cycleAt": "2026-07-24T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-07-24T04:00:00+00:00",
+          "targetAt": "2026-07-25T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 22.1,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.0,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-24T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-07-24T04:00:00+00:00",
+          "targetAt": "2026-07-26T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": []
+        },
+        {
+          "cycleAt": "2026-07-30T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-07-30T04:00:00+00:00",
+          "targetAt": "2026-07-31T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 21.8,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.5,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-07-30T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-07-30T04:00:00+00:00",
+          "targetAt": "2026-08-01T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 21.8,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.1,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-06T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-08-06T04:00:00+00:00",
+          "targetAt": "2026-08-07T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [
+            {
+              "time": "2026-08-06T03:50:00+00:00",
+              "tempC": 22.339990234375023,
+              "latitude": 42.67399978637695,
+              "longitude": -87.02649688720703,
+              "primaryFlag": 1,
+              "secondaryFlag": null
+            }
+          ],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": {
+                "time": "2026-08-06T03:50:00+00:00",
+                "tempC": 22.339990234375023,
+                "latitude": 42.67399978637695,
+                "longitude": -87.02649688720703,
+                "primaryFlag": 1,
+                "secondaryFlag": null
+              },
+              "ndbcTempC": 22.3,
+              "differenceC": 0.03999023437502203
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.5,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-06T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-08-06T04:00:00+00:00",
+          "targetAt": "2026-08-08T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [
+            {
+              "time": "2026-08-06T03:50:00+00:00",
+              "tempC": 22.339990234375023,
+              "latitude": 42.67399978637695,
+              "longitude": -87.02649688720703,
+              "primaryFlag": 1,
+              "secondaryFlag": null
+            }
+          ],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": {
+                "time": "2026-08-06T03:50:00+00:00",
+                "tempC": 22.339990234375023,
+                "latitude": 42.67399978637695,
+                "longitude": -87.02649688720703,
+                "primaryFlag": 1,
+                "secondaryFlag": null
+              },
+              "ndbcTempC": 22.3,
+              "differenceC": 0.03999023437502203
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.9,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-12T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-08-12T04:00:00+00:00",
+          "targetAt": "2026-08-13T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 23.1,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 23.3,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-12T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-08-12T04:00:00+00:00",
+          "targetAt": "2026-08-14T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": []
+        },
+        {
+          "cycleAt": "2026-08-18T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-08-18T04:00:00+00:00",
+          "targetAt": "2026-08-19T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 23.5,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 23.2,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-18T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-08-18T04:00:00+00:00",
+          "targetAt": "2026-08-20T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 23.5,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 23.2,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-24T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-08-24T04:00:00+00:00",
+          "targetAt": "2026-08-25T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 22.5,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.6,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-24T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-08-24T04:00:00+00:00",
+          "targetAt": "2026-08-26T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 22.5,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.6,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-30T00:00:00+00:00",
+          "leadHours": 24,
+          "baselineAt": "2026-08-30T04:00:00+00:00",
+          "targetAt": "2026-08-31T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 22.9,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 22.9,
+              "differenceC": null
+            }
+          ]
+        },
+        {
+          "cycleAt": "2026-08-30T00:00:00+00:00",
+          "leadHours": 48,
+          "baselineAt": "2026-08-30T04:00:00+00:00",
+          "targetAt": "2026-09-01T06:00:00+00:00",
+          "exactBaseline": null,
+          "exactTarget": null,
+          "status": "no exact pair",
+          "baselineNearby": [],
+          "targetNearby": [],
+          "sameTimestampNdbc": [
+            {
+              "role": "baseline",
+              "sample": null,
+              "ndbcTempC": 22.9,
+              "differenceC": null
+            },
+            {
+              "role": "target",
+              "sample": null,
+              "ndbcTempC": 23.0,
+              "differenceC": null
+            }
+          ]
+        }
+      ]
+    }
+  },
+  "canPromoteModel": false,
+  "limitations": [
+    "Same buoy data from multiple archives are not independent observations.",
+    "Candidate exact sample times are not proof of historical availability, sensor-depth equivalence, or receipt time.",
+    "No rounding, interpolation, replacement or change to frozen exact coverage. Provider errors remain unavailable.",
+    "Coordinates are nominal station positions; no historical deployment proof added by CSV."
+  ]
+}
