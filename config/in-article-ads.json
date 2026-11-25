@@ -34,6 +34,24 @@
       "path": "/great-lakes-freighter-winter-layup",
       "match": "exact",
       "reason": "Owner-requested UX repair: a large Google anchor/dynamic overlay stayed fixed over the winter layup experience. Turn off Auto ads for this page only, retaining normal ad behavior everywhere else."
+    },
+    {
+      "host": "phenology.chrisizworski.com",
+      "path": "/bloom-tracker",
+      "match": "exact",
+      "reason": "Preserve existing owner implementation excluding Auto ads from the Michigan bloom decision experience; phenology-michigan commit 1113ce3173e1183269c61636753042ca40405f6a."
+    },
+    {
+      "host": "phenology.chrisizworski.com",
+      "path": "/wisconsin-bloom-tracker",
+      "match": "section",
+      "reason": "Preserve the existing Wisconsin bloom and destination-guide exclusion after an ad overlay displaced the visitor experience; phenology-michigan commit 8fb0fbd71cfb8e2bb4e824aebf7c43a14a0d1ce3."
+    },
+    {
+      "host": "chrisizworski.com",
+      "path": "/isle-royale-ferry",
+      "match": "exact",
+      "reason": "Preserve the owning build's existing removal of first-screen Auto ads in isle-royale-outdoors scripts/inject-ga4.mjs at d3ea661efdc18c7e150ea1b374d3964968e3e06d."
     }
   ]
 }
