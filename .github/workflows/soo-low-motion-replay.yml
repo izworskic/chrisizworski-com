@@ -1,0 +1,39 @@
+name: Soo near-lock low motion development
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    branches: ['research/soo-approach-evidence-consolidation-20261125']
+permissions:
+  contents: read
+  actions: read
+jobs:
+  replay:
+    if: github.head_ref == 'research/soo-low-motion-execution-20261125'
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify evidence and regression tests
+        run: node --test tests/soo-predictive-study.test.js tests/soo-independent-validation.test.js tests/soo-direction-aware-development.test.js tests/soo-continuous-approach.test.js tests/soo-near-lock-low-motion.test.js
+      - name: Reuse existing archive artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: great-lakes-noaa-historical-library-pilot
+          run-id: 45390603940
+          github-token: ${{ github.token }}
+          path: ${{ runner.temp }}/soo-original
+      - name: Replay observed low-speed states
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p research-output
+          node scripts/soo-near-lock-low-motion.cjs research-output/soo-low-motion.json "$RUNNER_TEMP/soo-original/2025-06-15.json" "$RUNNER_TEMP/soo-original/2025-08-15.json" "$RUNNER_TEMP/soo-original/2025-10-15.json" | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: soo-near-lock-low-motion-aggregate
+          path: research-output/soo-low-motion.json
+          retention-days: 5
+          if-no-files-found: error
