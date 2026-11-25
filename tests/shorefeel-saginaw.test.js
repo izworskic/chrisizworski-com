@@ -140,7 +140,7 @@ test('Saginaw Bay basemap never requests unkeyed CARTO and survives key/tile fai
  assert.match(js,/carto\.on\('load'/);
  assert.match(js,/map\.removeLayer\(osm\)/);
  assert.match(js,/map\.removeLayer\(carto\)/);
- assert.match(html,/shorefeel-saginaw\.js\?v=20261124-temporal1/);
+ assert.match(html,/shorefeel-saginaw\.js\?v=20261124-window1/);
  assert.match(js,/if\(!map\.hasLayer\(osm\)\)osm\.addTo\(map\)/);
  assert.doesNotMatch(js,/tileLayer\('https:\/\/\{s\}\.basemaps\.cartocdn\.com\/light_all\/[^']+\.png'\s*,/);
 });
