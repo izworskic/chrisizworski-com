@@ -26,7 +26,7 @@ const server=http.createServer((req,res)=>{
     if(mode==='outage')return route.fulfill({status:503,body:'unavailable'});
     const now=Math.max(Date.now(),last+1);last=now;
     const [state,restrictionLevel]=mode==='restricted'?['OPEN_WITH_RESTRICTIONS','LEVEL_1']:mode==='closed'?['CLOSED','LEVEL_3']:mode==='conflict'?['OFFICIAL_STATUS_CONFLICT','UNKNOWN']:['OPEN','NONE'];
-    return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({engine:{generatedAt:new Date(now).toISOString()},officialStatus:{state,restrictionLevel},freshness:{officialStatus:{state:'fresh',ageMs:0,ageMinutes:0}},vehicleEligibility:vehicleEligibility({state,restrictionLevel},{vehicleType:new URL(route.request().url()).searchParams.get('vehicleType')||'suv'}),activeIncidents:[],plannedAdvisories:[],alerts:[],provenance:[]})});
+    return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({engine:{generatedAt:new Date(now).toISOString()},officialStatus:{state,restrictionLevel},freshness:{officialStatus:{state:'fresh',ageMs:0,ageMinutes:0}},vehicleEligibility:vehicleEligibility({state,restrictionLevel},{type:new URL(route.request().url()).searchParams.get('vehicleType')||'suv'}),activeIncidents:[],plannedAdvisories:[],alerts:[],provenance:[]})});
    });
    await context.route('https://**/*',route=>route.abort());
    const page=await context.newPage(),errors=[];
