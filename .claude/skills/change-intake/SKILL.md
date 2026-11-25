@@ -5,7 +5,7 @@ description: "Check open pull requests before starting or opening any change, so
 
 # Change intake: one open change per tool
 
-From 2026-11-20 to 2026-11-24 agents kept five to nine overlapping ShoreFeel PRs open at once, opened two Holiday Travel airport-search PRs minutes apart (#1881, #1883), and Codex hit its review usage limit every day. Every push to a PR also builds a Vercel preview unless the change is Markdown only. Run this skill before any other work on a change.
+Run this skill before any other work on a change. Check the current open PRs and review status. Every push to a PR also builds a Vercel preview unless the change is Markdown only.
 
 ## 1. Look before you start
 
@@ -60,6 +60,10 @@ The first line of every PR body: `Intake: checked N open PRs; overlaps: none`, o
 ## Boundaries
 
 This skill never closes, merges or force-pushes someone else's PR; it asks. AGENTS.md, Experience OS, owning-repository rules and the full gate still apply to the change itself. Do not auto-merge.
+
+## Historical context
+
+In November 2026, overlapping PRs and review usage limits motivated this rule. That history is not evidence about which PRs are open now.
 
 ## Sources
 

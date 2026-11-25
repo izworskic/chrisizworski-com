@@ -33,14 +33,7 @@ From `benchmarks/tool-network-registry.json`: which page already owns nearby que
 
 ## 6. Score and brief
 
-| Criterion | Question |
-| --- | --- |
-| Decision value | Does the answer change what someone does, and does a wrong answer cost them? |
-| Uniqueness | Is it unanswered or clearly better answered after the existing-answer check? |
-| Data feasibility | Are three or more primary sources available, licensed and fresh? |
-| Demand | Is there dated evidence, or is it unknown? |
-| Cost | Static or precomputed first; any function, cron or paid feed is a cost (vercel-cost-guard) |
-| Timing | Can it ship before the season peaks? |
+Use `bestFitScoring` in `benchmarks/tool-network-registry.json` as the single 100-point scoring standard. Read its current weights and build and priority thresholds rather than maintaining a second rubric. Apply the existing-answer, source feasibility, cost and ownership checks above before scoring; they are evidence and eligibility checks, not additional points. Document the evidence behind each registry criterion, flag unknowns rather than inventing scores, and do not recommend a build that fails the registry's build threshold or a hard gate.
 
 Write the top three as one-page briefs: the decision, who asks it and when, the existing-answer findings, the datasets, demand evidence, network fit and the smallest useful first version. Hand the chosen brief to `experience-investment`. Do not start building from this skill.
 

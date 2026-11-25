@@ -34,3 +34,14 @@ All twenty items are built and committed on PR #1976. Nothing is merged. The own
 - opportunity-scout has its own scoring table; the registry already has a 100-point bestFitScoring. Pick one when merging into the OS.
 - change-intake: one pressure agent misread the history line; keep the history wording plain.
 - tool-handoffs: roll the handoffs out one tool per PR, not all at once.
+
+## Integration decisions, 2026-11-25
+
+- Base check: main was `6c894fa18690f7c0f80227a4708bd4e72cb4156d` and the PR was 20 commits ahead, zero behind. No rebase or other PR merge was needed at inspection; preserve all main work and recheck before release.
+- 3a: `benchmarks/tool-network-registry.json` `bestFitScoring` is the only 100-point scoring standard. Removed the competing opportunity-scout scoring table; feasibility, source rights, ownership and cost remain eligibility checks, not extra points.
+- 3b: #1871 is still open. If #1976 lands first, #1871 must add registry entries and catalog routing for return-visit-loops, live-conditions-trust and remembered-state, resolve overlaps, and pass mirror and registry checks. Do not merge #1871 in this task.
+- 3c: change-intake now opens with the current-state instruction. Historical motivation is separate, plainly labeled, and not evidence of today's open PRs.
+- 3d: tool-handoffs explicitly rolls out one tool per PR, never the entire network at once.
+- Refined the OS catalog routing boundaries and synchronized registry skill blob hashes without changing the NOT_VERIFIED behavioral status. Trigger evals remain unrun by owner direction; the original pressure tests were single planned-action samples and were not rerun on these edits.
+- Owner decisions remain open: keep the intake defaults (1 per tool, 5 agent PRs, 3-hour review gate); choose a static basemap host (Vercel static, GitHub Pages, Cloudflare R2) with no new Vercel function; choose read-only Search Console API or BigQuery export and supply credentials separately. No runtime, routes, crons, config, dependency or paid-service change.
+- Release: require the full verify:all and skill-lint checks on the new head before squash merge. No skill dropped during integration.

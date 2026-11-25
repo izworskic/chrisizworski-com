@@ -9,6 +9,8 @@ The owner builds single-purpose tools first and links them later. This skill doe
 
 ## 1. Only registry-backed handoffs
 
+Roll out handoffs one tool per PR, never all tools or relationships at once. Follow `change-intake`: extend the existing PR for that tool if appropriate, verify its receiving links and context, then consider the next tool.
+
 - Add a handoff only for a relationship in the registry, `from` the current tool `to` the next decision. If the relationship is missing, add it to the registry in the same PR with its `type`, `strength` and `reason`.
 - `essential` and `strong` relationships may be prominent, next to the answer. `optional` ones stay secondary. `experimental` ones go through `benchmarks/tool-network-actions.json` and earn prominence through measured clicks.
 - No blanket footers that link every tool to every other tool. Each handoff says why the next tool matters in a short phrase ("Check the launch ramp before you go").

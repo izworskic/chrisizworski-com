@@ -1,7 +1,7 @@
 # Product Engineering OS
 One operating manual for the chrisizworski.com product network.
 
-Status: CANDIDATE v0.1, 2026-11-24. Proposed coordination layer, not a 43rd skill, replacement framework, activated instruction, or runtime. Existing AGENTS.md, owner instructions, skill-eval, Experience OS and release gates remain authoritative. Scope: 42 distinct skills documented in main AGENTS.md as of b6dbe9c105533842341ef0c82638590e85b140ee; reconcile with actual folder inventory before activation.
+Status: CANDIDATE v0.1, 2026-11-24. Proposed coordination layer, not a 43rd skill, replacement framework, activated instruction, or runtime. Existing AGENTS.md, owner instructions, skill-eval, Experience OS and release gates remain authoritative. Scope: 46 distinct skills in the expanded catalog and maturity registry; the original 42-skill baseline is preserved in repository history. This inventory expansion does not activate the candidate framework or promote behavioral maturity.
 
 ## Mission
 
@@ -26,7 +26,7 @@ Order of precedence: explicit permitted owner scope and existing owner/repositor
 
 ## 2. Start every task by routing it, not loading everything
 
-Record one sentence: visitor/owner goal, actual tool/owning repo, task mode and smallest useful outcome. Resolve the current main and open PRs; verify the owner-defined main gate before implementation. A red main is repaired first in its own authorized scope. Unknown CI remains NOT VERIFIED. Do not open a release-ready PR without required checks.
+Record one sentence: visitor/owner goal, actual tool/owning repo, task mode and smallest useful outcome. Run change-intake before starting work or opening a PR; extend an existing authorized change rather than duplicating it. Resolve the current main and open PRs; verify the owner-defined main gate before implementation. A red main is repaired first in its own authorized scope. Unknown CI remains NOT VERIFIED. Do not open a release-ready PR without required checks.
 
 | Mode | Use | Skip |
 | --- | --- | --- |
@@ -38,11 +38,11 @@ Record one sentence: visitor/owner goal, actual tool/owning repo, task mode and 
 | SKILL GOVERNANCE | skill-eval, inventory, lint, paired behavioral evaluation | Activation by declaration or wholesale skill rewrites |
 | RELEASE | Existing exact-head CI and owner release contract; explicit merge approval required | New design scope, red-gate bypass, conflating merge with deployment |
 
-For substantial new visitor tools or reworks, Experience Investment and Experience OS lead; return-visit-design is the existing additional lens. For existing-tool investment, use Foundry improve/assess/prove. For analytical work, follow Python Intelligence OS, even when the correct implementation is JavaScript or precomputed data. Significant changed interfaces require Playwright; add relevant web-quality checks. Plain-voice is for copy, not a factual rewrite. A request for "all skills" means screen the catalog for relevance, not execute all 42. Explicit-only tools remain explicit-only. Candidate intelligence skills may inform research but must not be claimed validated or adopted without their existing behavioral gates.
+For substantial new visitor tools or reworks, Experience Investment and Experience OS lead; return-visit-design is the existing additional lens. For existing-tool investment, use Foundry improve/assess/prove. For analytical work, follow Python Intelligence OS, even when the correct implementation is JavaScript or precomputed data. Significant changed interfaces require Playwright; add relevant web-quality checks. Plain-voice is for copy, not a factual rewrite. A request for "all skills" means screen the catalog for relevance, not execute every skill. Explicit-only tools remain explicit-only. Candidate intelligence skills may inform research but must not be claimed validated or adopted without their existing behavioral gates.
 
 ### Decision routing
 
-- Is the core visitor decision unclear? Experience Investment first, not animation or layout.
+- Is the next new tool undecided? Opportunity-scout first, using the network registry scoring; search-demand supplies demand evidence. For a chosen tool whose visitor decision is unclear, Experience Investment leads, not animation or layout.
 - Is the answer scientifically wrong or missing? Fix the engine or source contract first, select the matching intelligence skill and compare an actual baseline.
 - Is the answer correct but hard to use? Select experience/design methods, reuse verified components, inspect the first phone screen and prove the changed journey.
 - Is there meaningful changing state that would bring someone back? Apply the return contract. "No return contract" is valid. No push notifications of any kind.
@@ -74,7 +74,7 @@ Eight standard responsibilities already mapped to existing authorities (not eigh
 
 ## 5. Skill catalog: all 46 documented capabilities
 
-The linked SKILL.md is the actual method. This index describes routing and expected output, not a substitute for reading it. Candidate means independent behavioral validation is pending; documented or available does not mean proven. Do not infer maturity from a file's presence. Mirror copies remain governed by skill-lint; experience-investment, penpot-design and rea are explicitly exempt from a Copilot folder copy (Copilot can reference the Codex files through its instructions).
+The linked SKILL.md is the actual method. This index describes routing and expected output, not a substitute for reading it. Candidate means independent behavioral validation is pending; documented or available does not mean proven. Do not infer maturity from a file's presence. For a major multidisciplinary review, web-quality-audit coordinates only the necessary specialists; performance owns resource/load budgets, core-web-vitals owns LCP/INP/CLS measurement, accessibility owns accessible interaction, SEO owns index integrity, and best-practices owns browser security/privacy/resilience. Search-demand owns query demand evidence; opportunity-scout owns new-tool selection; Experience Investment owns design of the selected tool. Photo-sourcing owns photo provenance and rights; custom-basemap owns basemap presentation and hosting decisions, while geospatial-intelligence owns spatial correctness. Visual-data-storytelling owns quantitative charts (Observable Plot by default), not mechanism diagrams. Freshness-watch owns ongoing feed monitoring, data-contract-validation owns ingestion validity, and incident-rollback owns production recovery. Share-and-embed owns external sharing and embeds; tool-handoffs owns internal registry-backed next decisions; my-spots-offline owns local saved state. Answer-feedback owns answer-success instrumentation; return-metrics owns repeat-visit measurement. These boundaries select one lead for each job, with narrow supporting methods as needed. Mirror copies remain governed by skill-lint; experience-investment, penpot-design and rea are explicitly exempt from a Copilot folder copy (Copilot can reference the Codex files through its instructions).
 
 ### Experience and research (9)
 
@@ -102,7 +102,7 @@ The linked SKILL.md is the actual method. This index describes routing and expec
 | [hydrological-intelligence](../.agents/skills/hydrological-intelligence/SKILL.md) | Reach, watershed, stage and flow relationships | Gauge provenance and reach validation | Candidate; evaluate first |
 | [engine-property-testing](../.agents/skills/engine-property-testing/SKILL.md) | Engine invariants and boundary cases | Seeded reproducible counterexamples | Candidate; evaluate first |
 | [data-contract-validation](../.agents/skills/data-contract-validation/SKILL.md) | Source schemas, ingestion, missingness and freshness | Versioned contracts and failure fixtures | Candidate; evaluate first |
-| [visual-data-storytelling](../.agents/skills/visual-data-storytelling/SKILL.md) | Scientific charts, history and uncertainty | Legible truthful charts and accessible equivalent | Candidate; evaluate first |
+| [visual-data-storytelling](../.agents/skills/visual-data-storytelling/SKILL.md) | Scientific charts, history and uncertainty | Legible truthful charts (Observable Plot by default) and accessible equivalent | Candidate; evaluate first |
 | [historical-data-intelligence](../.agents/skills/historical-data-intelligence/SKILL.md) | Archives, seasonal baselines, backtests | Versioned joins, coverage and reproducible comparisons | Candidate; evaluate first |
 | [public-data-scout](../.agents/skills/public-data-scout/SKILL.md) | New external data feed | Primary-source ledger, rights and failure handling | When relevant |
 
@@ -122,7 +122,7 @@ The linked SKILL.md is the actual method. This index describes routing and expec
 | [my-spots-offline](../.agents/skills/my-spots-offline/SKILL.md) | Useful saved places or low-signal use | Local storage, clear controls and timestamped cache | Only after valid return contract |
 | [computed-windows](../.agents/skills/computed-windows/SKILL.md) | Astronomical/light windows | Validated local-time calculations | When relevant; calendar only if justified |
 | [return-metrics](../.agents/skills/return-metrics/SKILL.md) | Measure return contract | Comparable GA4 evidence or NOT MEASURED | When relevant; read-only |
-| [answer-feedback](../.agents/skills/answer-feedback/SKILL.md) | Whether visitors got their answer after a tool ships or changes | One-tap GA4 event and a read-back with sample size, or NOT MEASURED | When a new or redesigned tool ships |
+| [answer-feedback](../.agents/skills/answer-feedback/SKILL.md) | Whether visitors got their answer after a tool ships or changes | One-tap GA4 event and a read-back with sample size, or NOT MEASURED | When answer-success instrumentation is justified at launch or redesign; return-metrics owns return measurement |
 
 ### Web and browser quality (8)
 
@@ -163,8 +163,8 @@ Added 2026-11-25 for choosing what to build and helping visitors find and pass o
 | Skill | Select when | Required output | Routing |
 | --- | --- | --- | --- |
 | [search-demand](../.agents/skills/search-demand/SKILL.md) | Choosing pages or tools from Search Console evidence, 404s, sitemap errors | Ranked evidence table with actions, or NOT MEASURED | When search demand, 404s or sitemap health is in question; read-only |
-| [opportunity-scout](../.agents/skills/opportunity-scout/SKILL.md) | Choosing the next tool or vetting a new tool idea | Existing-answer check, then three scored briefs or a rejection | Before experience-investment on any new tool |
-| [share-and-embed](../.agents/skills/share-and-embed/SKILL.md) | Share links with state, Open Graph images, embeddable widgets | Stateful links, static share images, noindex embed with ads exception | When launching or redesigning a tool, or when sharing comes up |
+| [opportunity-scout](../.agents/skills/opportunity-scout/SKILL.md) | Choosing the next tool or vetting a new tool idea | Existing-answer check, then three briefs scored using the registry bestFitScoring or a rejection | Before experience-investment on any new tool |
+| [share-and-embed](../.agents/skills/share-and-embed/SKILL.md) | Share links with state, Open Graph images, embeddable widgets | Stateful links, static share images, noindex embed with ads exception | When external sharing or embedding is useful; not internal handoffs |
 
 ## 6. Practical routing recipes (examples, not mandatory packs)
 
@@ -211,7 +211,7 @@ Do not use this record to claim any absent result. A skill evaluation is not sci
 - Proven pattern: evaluated method plus successful owning-tool implementation and relevant browser/scientific/CI evidence. Measured visitor impact remains separate.
 - Deprecated: duplicate/ineffective method, removal only after review of consumers, mirrors and historical references.
 
-This PR retains all earlier design work and [production design evaluations](skill-evals/production-design-standard.md). [Product Engineering OS evaluation](skill-evals/product-engineering-os.md) defines 25 routing and pressure cases. Before activating either candidate, run the existing skill-eval baseline and paired trials, enumerate all actual skill directories, check mirror/reference parity, reconcile current main and run full CI. If no meaningful behavior changes, keep existing guidance and do not add another instruction layer. If proven, add a short pointer in existing central agent entrypoints and Experience Investment as needed, not 42 copies of this manual. Test separately in each independently owned repository before claiming adoption. Preserve all existing hard gates.
+This PR retains all earlier design work and [production design evaluations](skill-evals/production-design-standard.md). [Product Engineering OS evaluation](skill-evals/product-engineering-os.md) defines 25 routing and pressure cases. Before activating either candidate, run the existing skill-eval baseline and paired trials, enumerate all actual skill directories, check mirror/reference parity, reconcile current main and run full CI. If no meaningful behavior changes, keep existing guidance and do not add another instruction layer. If proven, add a short pointer in existing central agent entrypoints and Experience Investment as needed, not copies of this manual in every skill. Test separately in each independently owned repository before claiming adoption. Preserve all existing hard gates.
 
 Recommended first product pilot: Duluth vessel symbol consistency, then a contrasting non-maritime tool such as Snow Totals versus waterfall discovery. Reference the lab, inspect actual screens and prove the changed visitor journey. Use approved components only after review. Broader adoption and visual-regression baselines follow actual results, not wholesale reskinning.
 
