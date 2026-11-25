@@ -95,14 +95,14 @@ jobs:
           mkdir -p artifacts/shorefeel-beach-qa
           node scripts/shorefeel-archive-coverage.cjs > artifacts/shorefeel-beach-qa/archive-coverage.json
           cat artifacts/shorefeel-beach-qa/archive-coverage.json
-      - name: Recover warm-season near-time observations from preserved model values
+      - name: Inspect warm-season depth profiles and decision-time cooling change
         if: github.head_ref == 'research/shorefeel-actual-october-cohort'
         run: |
           python3 -m venv "$RUNNER_TEMP/shorefeel-archive"
           "$RUNNER_TEMP/shorefeel-archive/bin/pip" install --disable-pip-version-check numpy==2.2.6 netCDF4==1.7.2
           mkdir -p artifacts/shorefeel-beach-qa
-          "$RUNNER_TEMP/shorefeel-archive/bin/python" scripts/shorefeel-near-time-recovery.py --warm-season > artifacts/shorefeel-beach-qa/warm-season-near-time.json
-          cat artifacts/shorefeel-beach-qa/warm-season-near-time.json
+          "$RUNNER_TEMP/shorefeel-archive/bin/python" scripts/shorefeel-warm-season-depth-watch.py > artifacts/shorefeel-beach-qa/warm-season-depth-watch.json
+          cat artifacts/shorefeel-beach-qa/warm-season-depth-watch.json
       - name: Install isolated pinned browser harness
         run: |
           npm install --prefix "$RUNNER_TEMP/shorefeel-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
