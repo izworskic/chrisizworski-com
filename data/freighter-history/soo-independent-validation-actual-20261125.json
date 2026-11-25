@@ -1,0 +1,914 @@
+{
+  "schemaVersion": 1,
+  "kind": "SOO_OUT_OF_TIME_AIS_PROXY_VALIDATION",
+  "plannedDates": [
+    "2025-10-22",
+    "2025-11-05",
+    "2025-11-19",
+    "2025-12-03"
+  ],
+  "missingDates": [],
+  "frozen": {
+    "offsetMinutes": 49.77,
+    "radiusMinutes": 74.47,
+    "sourceRun": 45392249652
+  },
+  "thresholds": {
+    "minMatched": 30,
+    "minPerDay": 5,
+    "minDirection": 10,
+    "minResolvedFraction": 0.7,
+    "maxMaeRatio": 0.8,
+    "minContainment": 0.8,
+    "maxWidthMinutes": 150,
+    "maxWidthRatio": 2,
+    "minNonWorseDays": 3
+  },
+  "modes": {
+    "originalIssue": {
+      "all": {
+        "issued": 34,
+        "matched": 26,
+        "outcomes": {
+          "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 3,
+          "NO_QUALIFYING_CHAMBER_OBSERVATION": 1,
+          "OBSERVED_CHAMBER_REFERENCE_BRACKET": 26,
+          "RIGHT_CENSORED_BY_DAY_END": 4
+        },
+        "resolvedFraction": 0.7647058823529411,
+        "naive": {
+          "matched": 26,
+          "meanAbsoluteErrorMinutes": 56.86,
+          "medianAbsoluteErrorMinutes": 53.23,
+          "meanSignedErrorMinutes": -56.86
+        },
+        "existing": {
+          "matched": 26,
+          "meanAbsoluteErrorMinutes": 40.27,
+          "medianAbsoluteErrorMinutes": 34.02,
+          "meanSignedErrorMinutes": -39.66,
+          "meanIntervalWidthMinutes": 71.47,
+          "fullBracketContained": 12,
+          "bracketOverlaps": 12
+        },
+        "adjusted": {
+          "matched": 26,
+          "meanAbsoluteErrorMinutes": 28.05,
+          "medianAbsoluteErrorMinutes": 28.88,
+          "meanSignedErrorMinutes": 10.11,
+          "meanIntervalWidthMinutes": 148.94,
+          "fullBracketContained": 25,
+          "bracketOverlaps": 25
+        },
+        "containmentBoundsAmongIssued": {
+          "existing": [
+            0.35294117647058826,
+            0.5882352941176471
+          ],
+          "adjusted": [
+            0.7352941176470589,
+            0.9705882352941176
+          ]
+        }
+      },
+      "daily": [
+        {
+          "date": "2025-10-22",
+          "archiveSha256": "ecf6b3a918c3b3a06e96aaf72d30792bca5d829f987f407758c277c7e3e7c543",
+          "sourceUrl": "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-2025-10-22.csv.zst",
+          "sourceRows": 8408506,
+          "fixes": 4599,
+          "vessels": 14,
+          "noIssue": 8,
+          "conflictingTimestamps": 0,
+          "issued": 6,
+          "matched": 4,
+          "outcomes": {
+            "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 1,
+            "OBSERVED_CHAMBER_REFERENCE_BRACKET": 4,
+            "RIGHT_CENSORED_BY_DAY_END": 1
+          },
+          "resolvedFraction": 0.6666666666666666,
+          "naive": {
+            "matched": 4,
+            "meanAbsoluteErrorMinutes": 21.39,
+            "medianAbsoluteErrorMinutes": 20.81,
+            "meanSignedErrorMinutes": -21.39
+          },
+          "existing": {
+            "matched": 4,
+            "meanAbsoluteErrorMinutes": 9.92,
+            "medianAbsoluteErrorMinutes": 9.81,
+            "meanSignedErrorMinutes": -5.98,
+            "meanIntervalWidthMinutes": 86.89,
+            "fullBracketContained": 4,
+            "bracketOverlaps": 4
+          },
+          "adjusted": {
+            "matched": 4,
+            "meanAbsoluteErrorMinutes": 43.79,
+            "medianAbsoluteErrorMinutes": 43.91,
+            "meanSignedErrorMinutes": 43.79,
+            "meanIntervalWidthMinutes": 148.94,
+            "fullBracketContained": 4,
+            "bracketOverlaps": 4
+          },
+          "containmentBoundsAmongIssued": {
+            "existing": [
+              0.6666666666666666,
+              1
+            ],
+            "adjusted": [
+              0.6666666666666666,
+              1
+            ]
+          }
+        },
+        {
+          "date": "2025-11-05",
+          "archiveSha256": "df07b1695beee8afeac02cb1d69ba671350eff79f7df8da4ef3f5b54d24520d9",
+          "sourceUrl": "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-2025-11-05.csv.zst",
+          "sourceRows": 9459819,
+          "fixes": 6179,
+          "vessels": 14,
+          "noIssue": 5,
+          "conflictingTimestamps": 0,
+          "issued": 9,
+          "matched": 9,
+          "outcomes": {
+            "OBSERVED_CHAMBER_REFERENCE_BRACKET": 9
+          },
+          "resolvedFraction": 1,
+          "naive": {
+            "matched": 9,
+            "meanAbsoluteErrorMinutes": 64.85,
+            "medianAbsoluteErrorMinutes": 54.69,
+            "meanSignedErrorMinutes": -64.85
+          },
+          "existing": {
+            "matched": 9,
+            "meanAbsoluteErrorMinutes": 47.34,
+            "medianAbsoluteErrorMinutes": 35.7,
+            "meanSignedErrorMinutes": -47.34,
+            "meanIntervalWidthMinutes": 68.78,
+            "fullBracketContained": 4,
+            "bracketOverlaps": 4
+          },
+          "adjusted": {
+            "matched": 9,
+            "meanAbsoluteErrorMinutes": 28.04,
+            "medianAbsoluteErrorMinutes": 25.41,
+            "meanSignedErrorMinutes": 2.43,
+            "meanIntervalWidthMinutes": 148.94,
+            "fullBracketContained": 8,
+            "bracketOverlaps": 8
+          },
+          "containmentBoundsAmongIssued": {
+            "existing": [
+              0.4444444444444444,
+              0.4444444444444444
+            ],
+            "adjusted": [
+              0.8888888888888888,
+              0.8888888888888888
+            ]
+          }
+        },
+        {
+          "date": "2025-11-19",
+          "archiveSha256": "c92f5429818200d26a43b83f365d612b95afe20bbe9b3922f861515a7601f3a4",
+          "sourceUrl": "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-2025-11-19.csv.zst",
+          "sourceRows": 7597313,
+          "fixes": 3825,
+          "vessels": 12,
+          "noIssue": 5,
+          "conflictingTimestamps": 0,
+          "issued": 7,
+          "matched": 3,
+          "outcomes": {
+            "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 2,
+            "NO_QUALIFYING_CHAMBER_OBSERVATION": 1,
+            "OBSERVED_CHAMBER_REFERENCE_BRACKET": 3,
+            "RIGHT_CENSORED_BY_DAY_END": 1
+          },
+          "resolvedFraction": 0.42857142857142855,
+          "naive": {
+            "matched": 3,
+            "meanAbsoluteErrorMinutes": 79.71,
+            "medianAbsoluteErrorMinutes": 58.52,
+            "meanSignedErrorMinutes": -79.71
+          },
+          "existing": {
+            "matched": 3,
+            "meanAbsoluteErrorMinutes": 61.84,
+            "medianAbsoluteErrorMinutes": 40.01,
+            "meanSignedErrorMinutes": -61.84,
+            "meanIntervalWidthMinutes": 64.97,
+            "fullBracketContained": 1,
+            "bracketOverlaps": 1
+          },
+          "adjusted": {
+            "matched": 3,
+            "meanAbsoluteErrorMinutes": 25.45,
+            "medianAbsoluteErrorMinutes": 10.31,
+            "meanSignedErrorMinutes": -12.07,
+            "meanIntervalWidthMinutes": 148.94,
+            "fullBracketContained": 3,
+            "bracketOverlaps": 3
+          },
+          "containmentBoundsAmongIssued": {
+            "existing": [
+              0.14285714285714285,
+              0.7142857142857143
+            ],
+            "adjusted": [
+              0.42857142857142855,
+              1
+            ]
+          }
+        },
+        {
+          "date": "2025-12-03",
+          "archiveSha256": "000fb0864bd501a77521a832340c8e0ba2cf84df83a6385bca73115c69f90ea7",
+          "sourceUrl": "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-2025-12-03.csv.zst",
+          "sourceRows": 7926071,
+          "fixes": 6388,
+          "vessels": 18,
+          "noIssue": 6,
+          "conflictingTimestamps": 0,
+          "issued": 12,
+          "matched": 10,
+          "outcomes": {
+            "OBSERVED_CHAMBER_REFERENCE_BRACKET": 10,
+            "RIGHT_CENSORED_BY_DAY_END": 2
+          },
+          "resolvedFraction": 0.8333333333333334,
+          "naive": {
+            "matched": 10,
+            "meanAbsoluteErrorMinutes": 57.01,
+            "medianAbsoluteErrorMinutes": 58.32,
+            "meanSignedErrorMinutes": -57.01
+          },
+          "existing": {
+            "matched": 10,
+            "meanAbsoluteErrorMinutes": 39.57,
+            "medianAbsoluteErrorMinutes": 39.66,
+            "meanSignedErrorMinutes": -39.57,
+            "meanIntervalWidthMinutes": 69.67,
+            "fullBracketContained": 3,
+            "bracketOverlaps": 3
+          },
+          "adjusted": {
+            "matched": 10,
+            "meanAbsoluteErrorMinutes": 22.55,
+            "medianAbsoluteErrorMinutes": 18.81,
+            "meanSignedErrorMinutes": 10.2,
+            "meanIntervalWidthMinutes": 148.94,
+            "fullBracketContained": 10,
+            "bracketOverlaps": 10
+          },
+          "containmentBoundsAmongIssued": {
+            "existing": [
+              0.25,
+              0.4166666666666667
+            ],
+            "adjusted": [
+              0.8333333333333334,
+              1
+            ]
+          }
+        }
+      ],
+      "byDirection": {
+        "upbound": {
+          "issued": 17,
+          "matched": 15,
+          "outcomes": {
+            "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 2,
+            "OBSERVED_CHAMBER_REFERENCE_BRACKET": 15
+          },
+          "resolvedFraction": 0.8823529411764706,
+          "naive": {
+            "matched": 15,
+            "meanAbsoluteErrorMinutes": 44.04,
+            "medianAbsoluteErrorMinutes": 41.44,
+            "meanSignedErrorMinutes": -44.04
+          },
+          "existing": {
+            "matched": 15,
+            "meanAbsoluteErrorMinutes": 29.09,
+            "medianAbsoluteErrorMinutes": 24.36,
+            "meanSignedErrorMinutes": -28.04,
+            "meanIntervalWidthMinutes": 81.89,
+            "fullBracketContained": 10,
+            "bracketOverlaps": 10
+          },
+          "adjusted": {
+            "matched": 15,
+            "meanAbsoluteErrorMinutes": 25.61,
+            "medianAbsoluteErrorMinutes": 25.41,
+            "meanSignedErrorMinutes": 21.73,
+            "meanIntervalWidthMinutes": 148.94,
+            "fullBracketContained": 15,
+            "bracketOverlaps": 15
+          },
+          "containmentBoundsAmongIssued": {
+            "existing": [
+              0.5882352941176471,
+              0.7058823529411765
+            ],
+            "adjusted": [
+              0.8823529411764706,
+              1
+            ]
+          }
+        },
+        "downbound": {
+          "issued": 17,
+          "matched": 11,
+          "outcomes": {
+            "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 1,
+            "NO_QUALIFYING_CHAMBER_OBSERVATION": 1,
+            "OBSERVED_CHAMBER_REFERENCE_BRACKET": 11,
+            "RIGHT_CENSORED_BY_DAY_END": 4
+          },
+          "resolvedFraction": 0.6470588235294118,
+          "naive": {
+            "matched": 11,
+            "meanAbsoluteErrorMinutes": 74.35,
+            "medianAbsoluteErrorMinutes": 58.52,
+            "meanSignedErrorMinutes": -74.35
+          },
+          "existing": {
+            "matched": 11,
+            "meanAbsoluteErrorMinutes": 55.5,
+            "medianAbsoluteErrorMinutes": 39.46,
+            "meanSignedErrorMinutes": -55.5,
+            "meanIntervalWidthMinutes": 57.26,
+            "fullBracketContained": 2,
+            "bracketOverlaps": 2
+          },
+          "adjusted": {
+            "matched": 11,
+            "meanAbsoluteErrorMinutes": 31.38,
+            "medianAbsoluteErrorMinutes": 32.65,
+            "meanSignedErrorMinutes": -5.73,
+            "meanIntervalWidthMinutes": 148.94,
+            "fullBracketContained": 10,
+            "bracketOverlaps": 10
+          },
+          "containmentBoundsAmongIssued": {
+            "existing": [
+              0.11764705882352941,
+              0.47058823529411764
+            ],
+            "adjusted": [
+              0.5882352941176471,
+              0.9411764705882353
+            ]
+          }
+        }
+      },
+      "byReportedType": {
+        "cargo": {
+          "issued": 34,
+          "matched": 26,
+          "outcomes": {
+            "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 3,
+            "NO_QUALIFYING_CHAMBER_OBSERVATION": 1,
+            "OBSERVED_CHAMBER_REFERENCE_BRACKET": 26,
+            "RIGHT_CENSORED_BY_DAY_END": 4
+          },
+          "resolvedFraction": 0.7647058823529411,
+          "naive": {
+            "matched": 26,
+            "meanAbsoluteErrorMinutes": 56.86,
+            "medianAbsoluteErrorMinutes": 53.23,
+            "meanSignedErrorMinutes": -56.86
+          },
+          "existing": {
+            "matched": 26,
+            "meanAbsoluteErrorMinutes": 40.27,
+            "medianAbsoluteErrorMinutes": 34.02,
+            "meanSignedErrorMinutes": -39.66,
+            "meanIntervalWidthMinutes": 71.47,
+            "fullBracketContained": 12,
+            "bracketOverlaps": 12
+          },
+          "adjusted": {
+            "matched": 26,
+            "meanAbsoluteErrorMinutes": 28.05,
+            "medianAbsoluteErrorMinutes": 28.88,
+            "meanSignedErrorMinutes": 10.11,
+            "meanIntervalWidthMinutes": 148.94,
+            "fullBracketContained": 25,
+            "bracketOverlaps": 25
+          },
+          "containmentBoundsAmongIssued": {
+            "existing": [
+              0.35294117647058826,
+              0.5882352941176471
+            ],
+            "adjusted": [
+              0.7352941176470589,
+              0.9705882352941176
+            ]
+          }
+        },
+        "tanker": {
+          "issued": 0,
+          "matched": 0,
+          "outcomes": {},
+          "resolvedFraction": null,
+          "naive": {
+            "matched": 0,
+            "meanAbsoluteErrorMinutes": null,
+            "medianAbsoluteErrorMinutes": null,
+            "meanSignedErrorMinutes": null
+          },
+          "existing": {
+            "matched": 0,
+            "meanAbsoluteErrorMinutes": null,
+            "medianAbsoluteErrorMinutes": null,
+            "meanSignedErrorMinutes": null,
+            "meanIntervalWidthMinutes": null,
+            "fullBracketContained": 0,
+            "bracketOverlaps": 0
+          },
+          "adjusted": {
+            "matched": 0,
+            "meanAbsoluteErrorMinutes": null,
+            "medianAbsoluteErrorMinutes": null,
+            "meanSignedErrorMinutes": null,
+            "meanIntervalWidthMinutes": null,
+            "fullBracketContained": 0,
+            "bracketOverlaps": 0
+          },
+          "containmentBoundsAmongIssued": null
+        }
+      },
+      "distinctMatchedVessels": 24,
+      "gates": {
+        "allDates": true,
+        "matched": false,
+        "perDay": false,
+        "directions": true,
+        "resolution": true,
+        "mae": true,
+        "containment": true,
+        "width": false,
+        "nonWorseDays": true
+      },
+      "screenPassed": false
+    },
+    "quarterHourIssue": {
+      "all": {
+        "issued": 33,
+        "matched": 26,
+        "outcomes": {
+          "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 3,
+          "NO_QUALIFYING_CHAMBER_OBSERVATION": 1,
+          "OBSERVED_CHAMBER_REFERENCE_BRACKET": 26,
+          "RIGHT_CENSORED_BY_DAY_END": 3
+        },
+        "resolvedFraction": 0.7878787878787878,
+        "naive": {
+          "matched": 26,
+          "meanAbsoluteErrorMinutes": 44.82,
+          "medianAbsoluteErrorMinutes": 33.72,
+          "meanSignedErrorMinutes": -42.72
+        },
+        "existing": {
+          "matched": 26,
+          "meanAbsoluteErrorMinutes": 32.78,
+          "medianAbsoluteErrorMinutes": 19.61,
+          "meanSignedErrorMinutes": -26.5,
+          "meanIntervalWidthMinutes": 77.33,
+          "fullBracketContained": 17,
+          "bracketOverlaps": 17
+        },
+        "adjusted": {
+          "matched": 26,
+          "meanAbsoluteErrorMinutes": 38.26,
+          "medianAbsoluteErrorMinutes": 36.21,
+          "meanSignedErrorMinutes": 23.27,
+          "meanIntervalWidthMinutes": 148.94,
+          "fullBracketContained": 24,
+          "bracketOverlaps": 25
+        },
+        "containmentBoundsAmongIssued": {
+          "existing": [
+            0.5151515151515151,
+            0.7272727272727273
+          ],
+          "adjusted": [
+            0.7272727272727273,
+            0.9393939393939394
+          ]
+        }
+      },
+      "daily": [
+        {
+          "date": "2025-10-22",
+          "archiveSha256": "ecf6b3a918c3b3a06e96aaf72d30792bca5d829f987f407758c277c7e3e7c543",
+          "sourceUrl": "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-2025-10-22.csv.zst",
+          "sourceRows": 8408506,
+          "fixes": 4599,
+          "vessels": 14,
+          "noIssue": 9,
+          "conflictingTimestamps": 0,
+          "issued": 5,
+          "matched": 4,
+          "outcomes": {
+            "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 1,
+            "OBSERVED_CHAMBER_REFERENCE_BRACKET": 4
+          },
+          "resolvedFraction": 0.8,
+          "naive": {
+            "matched": 4,
+            "meanAbsoluteErrorMinutes": 11.01,
+            "medianAbsoluteErrorMinutes": 10.03,
+            "meanSignedErrorMinutes": 0.76
+          },
+          "existing": {
+            "matched": 4,
+            "meanAbsoluteErrorMinutes": 14.84,
+            "medianAbsoluteErrorMinutes": 10.89,
+            "meanSignedErrorMinutes": 14.84,
+            "meanIntervalWidthMinutes": 101.62,
+            "fullBracketContained": 4,
+            "bracketOverlaps": 4
+          },
+          "adjusted": {
+            "matched": 4,
+            "meanAbsoluteErrorMinutes": 64.61,
+            "medianAbsoluteErrorMinutes": 60.66,
+            "meanSignedErrorMinutes": 64.61,
+            "meanIntervalWidthMinutes": 148.94,
+            "fullBracketContained": 3,
+            "bracketOverlaps": 3
+          },
+          "containmentBoundsAmongIssued": {
+            "existing": [
+              0.8,
+              1
+            ],
+            "adjusted": [
+              0.6,
+              0.8
+            ]
+          }
+        },
+        {
+          "date": "2025-11-05",
+          "archiveSha256": "df07b1695beee8afeac02cb1d69ba671350eff79f7df8da4ef3f5b54d24520d9",
+          "sourceUrl": "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-2025-11-05.csv.zst",
+          "sourceRows": 9459819,
+          "fixes": 6179,
+          "vessels": 14,
+          "noIssue": 5,
+          "conflictingTimestamps": 0,
+          "issued": 9,
+          "matched": 9,
+          "outcomes": {
+            "OBSERVED_CHAMBER_REFERENCE_BRACKET": 9
+          },
+          "resolvedFraction": 1,
+          "naive": {
+            "matched": 9,
+            "meanAbsoluteErrorMinutes": 54,
+            "medianAbsoluteErrorMinutes": 34.11,
+            "meanSignedErrorMinutes": -54
+          },
+          "existing": {
+            "matched": 9,
+            "meanAbsoluteErrorMinutes": 37.31,
+            "medianAbsoluteErrorMinutes": 19.6,
+            "meanSignedErrorMinutes": -37.31,
+            "meanIntervalWidthMinutes": 70.94,
+            "fullBracketContained": 6,
+            "bracketOverlaps": 6
+          },
+          "adjusted": {
+            "matched": 9,
+            "meanAbsoluteErrorMinutes": 37.25,
+            "medianAbsoluteErrorMinutes": 33.21,
+            "meanSignedErrorMinutes": 12.46,
+            "meanIntervalWidthMinutes": 148.94,
+            "fullBracketContained": 8,
+            "bracketOverlaps": 9
+          },
+          "containmentBoundsAmongIssued": {
+            "existing": [
+              0.6666666666666666,
+              0.6666666666666666
+            ],
+            "adjusted": [
+              0.8888888888888888,
+              0.8888888888888888
+            ]
+          }
+        },
+        {
+          "date": "2025-11-19",
+          "archiveSha256": "c92f5429818200d26a43b83f365d612b95afe20bbe9b3922f861515a7601f3a4",
+          "sourceUrl": "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-2025-11-19.csv.zst",
+          "sourceRows": 7597313,
+          "fixes": 3825,
+          "vessels": 12,
+          "noIssue": 5,
+          "conflictingTimestamps": 0,
+          "issued": 7,
+          "matched": 3,
+          "outcomes": {
+            "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 2,
+            "NO_QUALIFYING_CHAMBER_OBSERVATION": 1,
+            "OBSERVED_CHAMBER_REFERENCE_BRACKET": 3,
+            "RIGHT_CENSORED_BY_DAY_END": 1
+          },
+          "resolvedFraction": 0.42857142857142855,
+          "naive": {
+            "matched": 3,
+            "meanAbsoluteErrorMinutes": 59.1,
+            "medianAbsoluteErrorMinutes": 52.59,
+            "meanSignedErrorMinutes": -59.1
+          },
+          "existing": {
+            "matched": 3,
+            "meanAbsoluteErrorMinutes": 42.68,
+            "medianAbsoluteErrorMinutes": 33.9,
+            "meanSignedErrorMinutes": -42.68,
+            "meanIntervalWidthMinutes": 68.23,
+            "fullBracketContained": 1,
+            "bracketOverlaps": 1
+          },
+          "adjusted": {
+            "matched": 3,
+            "meanAbsoluteErrorMinutes": 35.25,
+            "medianAbsoluteErrorMinutes": 42.24,
+            "meanSignedErrorMinutes": 7.09,
+            "meanIntervalWidthMinutes": 148.94,
+            "fullBracketContained": 3,
+            "bracketOverlaps": 3
+          },
+          "containmentBoundsAmongIssued": {
+            "existing": [
+              0.14285714285714285,
+              0.7142857142857143
+            ],
+            "adjusted": [
+              0.42857142857142855,
+              1
+            ]
+          }
+        },
+        {
+          "date": "2025-12-03",
+          "archiveSha256": "000fb0864bd501a77521a832340c8e0ba2cf84df83a6385bca73115c69f90ea7",
+          "sourceUrl": "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-2025-12-03.csv.zst",
+          "sourceRows": 7926071,
+          "fixes": 6388,
+          "vessels": 18,
+          "noIssue": 6,
+          "conflictingTimestamps": 0,
+          "issued": 12,
+          "matched": 10,
+          "outcomes": {
+            "OBSERVED_CHAMBER_REFERENCE_BRACKET": 10,
+            "RIGHT_CENSORED_BY_DAY_END": 2
+          },
+          "resolvedFraction": 0.8333333333333334,
+          "naive": {
+            "matched": 10,
+            "meanAbsoluteErrorMinutes": 45.8,
+            "medianAbsoluteErrorMinutes": 50.3,
+            "meanSignedErrorMinutes": -45.05
+          },
+          "existing": {
+            "matched": 10,
+            "meanAbsoluteErrorMinutes": 32.92,
+            "medianAbsoluteErrorMinutes": 31.02,
+            "meanSignedErrorMinutes": -28.46,
+            "meanIntervalWidthMinutes": 76.09,
+            "fullBracketContained": 6,
+            "bracketOverlaps": 6
+          },
+          "adjusted": {
+            "matched": 10,
+            "meanAbsoluteErrorMinutes": 29.54,
+            "medianAbsoluteErrorMinutes": 25.76,
+            "meanSignedErrorMinutes": 21.31,
+            "meanIntervalWidthMinutes": 148.94,
+            "fullBracketContained": 10,
+            "bracketOverlaps": 10
+          },
+          "containmentBoundsAmongIssued": {
+            "existing": [
+              0.5,
+              0.6666666666666666
+            ],
+            "adjusted": [
+              0.8333333333333334,
+              1
+            ]
+          }
+        }
+      ],
+      "byDirection": {
+        "upbound": {
+          "issued": 17,
+          "matched": 15,
+          "outcomes": {
+            "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 2,
+            "OBSERVED_CHAMBER_REFERENCE_BRACKET": 15
+          },
+          "resolvedFraction": 0.8823529411764706,
+          "naive": {
+            "matched": 15,
+            "meanAbsoluteErrorMinutes": 24.5,
+            "medianAbsoluteErrorMinutes": 24.48,
+            "meanSignedErrorMinutes": -20.86
+          },
+          "existing": {
+            "matched": 15,
+            "meanAbsoluteErrorMinutes": 17.36,
+            "medianAbsoluteErrorMinutes": 16.56,
+            "meanSignedErrorMinutes": -6.47,
+            "meanIntervalWidthMinutes": 94.52,
+            "fullBracketContained": 15,
+            "bracketOverlaps": 15
+          },
+          "adjusted": {
+            "matched": 15,
+            "meanAbsoluteErrorMinutes": 43.3,
+            "medianAbsoluteErrorMinutes": 40.62,
+            "meanSignedErrorMinutes": 43.3,
+            "meanIntervalWidthMinutes": 148.94,
+            "fullBracketContained": 14,
+            "bracketOverlaps": 14
+          },
+          "containmentBoundsAmongIssued": {
+            "existing": [
+              0.8823529411764706,
+              1
+            ],
+            "adjusted": [
+              0.8235294117647058,
+              0.9411764705882353
+            ]
+          }
+        },
+        "downbound": {
+          "issued": 16,
+          "matched": 11,
+          "outcomes": {
+            "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 1,
+            "NO_QUALIFYING_CHAMBER_OBSERVATION": 1,
+            "OBSERVED_CHAMBER_REFERENCE_BRACKET": 11,
+            "RIGHT_CENSORED_BY_DAY_END": 3
+          },
+          "resolvedFraction": 0.6875,
+          "naive": {
+            "matched": 11,
+            "meanAbsoluteErrorMinutes": 72.53,
+            "medianAbsoluteErrorMinutes": 52.59,
+            "meanSignedErrorMinutes": -72.53
+          },
+          "existing": {
+            "matched": 11,
+            "meanAbsoluteErrorMinutes": 53.81,
+            "medianAbsoluteErrorMinutes": 33.9,
+            "meanSignedErrorMinutes": -53.81,
+            "meanIntervalWidthMinutes": 53.89,
+            "fullBracketContained": 2,
+            "bracketOverlaps": 2
+          },
+          "adjusted": {
+            "matched": 11,
+            "meanAbsoluteErrorMinutes": 31.4,
+            "medianAbsoluteErrorMinutes": 31.62,
+            "meanSignedErrorMinutes": -4.04,
+            "meanIntervalWidthMinutes": 148.94,
+            "fullBracketContained": 10,
+            "bracketOverlaps": 11
+          },
+          "containmentBoundsAmongIssued": {
+            "existing": [
+              0.125,
+              0.4375
+            ],
+            "adjusted": [
+              0.625,
+              0.9375
+            ]
+          }
+        }
+      },
+      "byReportedType": {
+        "cargo": {
+          "issued": 33,
+          "matched": 26,
+          "outcomes": {
+            "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 3,
+            "NO_QUALIFYING_CHAMBER_OBSERVATION": 1,
+            "OBSERVED_CHAMBER_REFERENCE_BRACKET": 26,
+            "RIGHT_CENSORED_BY_DAY_END": 3
+          },
+          "resolvedFraction": 0.7878787878787878,
+          "naive": {
+            "matched": 26,
+            "meanAbsoluteErrorMinutes": 44.82,
+            "medianAbsoluteErrorMinutes": 33.72,
+            "meanSignedErrorMinutes": -42.72
+          },
+          "existing": {
+            "matched": 26,
+            "meanAbsoluteErrorMinutes": 32.78,
+            "medianAbsoluteErrorMinutes": 19.61,
+            "meanSignedErrorMinutes": -26.5,
+            "meanIntervalWidthMinutes": 77.33,
+            "fullBracketContained": 17,
+            "bracketOverlaps": 17
+          },
+          "adjusted": {
+            "matched": 26,
+            "meanAbsoluteErrorMinutes": 38.26,
+            "medianAbsoluteErrorMinutes": 36.21,
+            "meanSignedErrorMinutes": 23.27,
+            "meanIntervalWidthMinutes": 148.94,
+            "fullBracketContained": 24,
+            "bracketOverlaps": 25
+          },
+          "containmentBoundsAmongIssued": {
+            "existing": [
+              0.5151515151515151,
+              0.7272727272727273
+            ],
+            "adjusted": [
+              0.7272727272727273,
+              0.9393939393939394
+            ]
+          }
+        },
+        "tanker": {
+          "issued": 0,
+          "matched": 0,
+          "outcomes": {},
+          "resolvedFraction": null,
+          "naive": {
+            "matched": 0,
+            "meanAbsoluteErrorMinutes": null,
+            "medianAbsoluteErrorMinutes": null,
+            "meanSignedErrorMinutes": null
+          },
+          "existing": {
+            "matched": 0,
+            "meanAbsoluteErrorMinutes": null,
+            "medianAbsoluteErrorMinutes": null,
+            "meanSignedErrorMinutes": null,
+            "meanIntervalWidthMinutes": null,
+            "fullBracketContained": 0,
+            "bracketOverlaps": 0
+          },
+          "adjusted": {
+            "matched": 0,
+            "meanAbsoluteErrorMinutes": null,
+            "medianAbsoluteErrorMinutes": null,
+            "meanSignedErrorMinutes": null,
+            "meanIntervalWidthMinutes": null,
+            "fullBracketContained": 0,
+            "bracketOverlaps": 0
+          },
+          "containmentBoundsAmongIssued": null
+        }
+      },
+      "distinctMatchedVessels": 24,
+      "gates": {
+        "allDates": true,
+        "matched": false,
+        "perDay": false,
+        "directions": true,
+        "resolution": true,
+        "mae": false,
+        "containment": true,
+        "width": true,
+        "nonWorseDays": true
+      },
+      "screenPassed": false
+    }
+  },
+  "officialLockEntryGroundTruth": false,
+  "productionCalibrationAuthorized": false,
+  "forecastEnabled": false,
+  "note": "One first eligible issue per reported vessel-day, not independent vessels or official lock-entry truth. Primary uses the original observed-fix issue policy; secondary uses fixed 15-minute UTC ticks and latest fix no older than five minutes. Conditional errors exclude unresolved labels; bounds reflect unknown outcomes rather than false positives. Conflicting timestamps are dropped by the original collector, a reference limitation. No tuning on these dates or production promotion.",
+  "verifiedWorkflowRun": 45610355113,
+  "verifiedWorkflowJob": 139191956981,
+  "sourceCommit": "a3bd98c2086ca8c6aaefbd96741c676208627fe0",
+  "tests": {
+    "total": 11,
+    "pass": 11,
+    "fail": 0
+  },
+  "decision": "REJECT_GLOBAL_OFFSET_FOR_PRODUCTION",
+  "recordMethod": "JSON reproduced from successful GitHub Actions job log; workflow aggregate artifact separately retained."
+}

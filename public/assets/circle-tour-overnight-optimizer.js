@@ -125,7 +125,38 @@ function optimize(trace,nights,raw={}){
   basis:'static OSM-based simplified roadway trace + 15% planning cushion at 45 mph; not a routed ETA or live access check',
   needsLiveDirections:true};
 }
-const api=Object.freeze({optimize,standardize,validate,segment,assumedMph:ASSUMED_MPH,planningCushion:OVERNIGHT_BUFFER});
+// Same editorial cold-season park/trail check used by the published route builder.
+const SEASONAL_STOPS=new Set(['3','6','8','11','12','15','18','20','27','28']);
+const DAY_WINDOWS=Object.freeze([6,8.5,10,12]);
+// A conservative allocation of a visitor's *sample* day, not a visit-duration,
+// daylight, road, admission, or safe-driving prediction. Never modify the route.
+function experiencePlan(day,raw={},catalog={},windowHours=8.5){
+ if(!DAY_WINDOWS.includes(windowHours)||!day||!Array.isArray(day.stops)||
+   !raw||typeof raw!=='object'||!catalog||typeof catalog!=='object'||Array.isArray(catalog)||
+   !Number.isFinite(day.rawDriveHours)||day.rawDriveHours<0||day.rawDriveHours>24||
+   !Number.isFinite(day.borderReserveHours)||day.borderReserveHours<0||day.borderReserveHours>24||
+   typeof day.withinCap!=='boolean'||typeof day.incompleteParkApproach!=='boolean')return null;
+ const p=standardize(raw),dayMinutes=windowHours*60;
+ const driveMinutes=Math.ceil(day.rawDriveHours*60),borderMinutes=Math.ceil(day.borderReserveHours*60);
+ const unallocated=dayMinutes-driveMinutes-borderMinutes;
+ const ranked=[...new Set(day.stops.slice(1))].filter(id=>catalog[id]&&
+   Array.isArray(catalog[id].interests)&&typeof catalog[id].label==='string'&&typeof catalog[id].toolUrl==='string')
+  .map(id=>({id,score:(id==='11'&&p.pictured?12:0)+
+   catalog[id].interests.reduce((n,k)=>n+(p.interests.includes(k)?3:0),0)}))
+  .sort((a,b)=>b.score-a.score);
+ const first=ranked.find(x=>x.score>0);
+ // Never release spare time for an unresolved road approach; keep it withheld.
+ const remainingMinutes=day.incompleteParkApproach?null:Math.floor(Math.max(0,unallocated)/15)*15;
+ const state=day.incompleteParkApproach?'ROAD_CHECK':
+  !day.withinCap?'DRIVE_LIMIT':remainingMinutes<60?'TRANSFER':
+  !first?'NO_MATCH':
+  [11,12,1,2,3,4].includes(p.month)&&SEASONAL_STOPS.has(first.id)?'SEASONAL_CHECK':'REVIEW';
+ return {state,dayMinutes,driveMinutes,borderMinutes,remainingMinutes,
+  primary:state==='REVIEW'?first.id:null,
+  seasonalCandidate:state==='SEASONAL_CHECK'?first.id:null,
+  deferred:ranked.filter(x=>state!=='REVIEW'||x.id!==first.id).map(x=>x.id)};
+}
+const api=Object.freeze({optimize,standardize,validate,segment,experiencePlan,DAY_WINDOWS,assumedMph:ASSUMED_MPH,planningCushion:OVERNIGHT_BUFFER});
 if(typeof module!=='undefined'&&module.exports)module.exports=api;
 if(root)root.CircleTourOvernights=api;
 })(typeof window==='undefined'?null:window);

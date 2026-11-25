@@ -1,0 +1,1263 @@
+{
+  "schema": 1,
+  "auditedRevision": "5a8fc9ba1ddd94718aebd9061d5bc246b82262d4",
+  "auditDate": "2026-11-24",
+  "status": "inventory-verified-behavior-not-verified",
+  "inventory": {
+    "logicalSkills": 46,
+    "mirrorFiles": 135,
+    "codex": 46,
+    "claude": 46,
+    "copilot": 43,
+    "mirrorBlobMismatches": 0,
+    "dedicatedCaseSuites": 36,
+    "withoutDedicatedCasesLocated": 10,
+    "behaviorallyEvaluated": 0,
+    "provenByPairedEvidence": 0
+  },
+  "sharedReferences": {
+    "owner": "experience-investment",
+    "paths": [
+      ".agents/skills/experience-investment/references/DECISION_LENSES.md",
+      ".agents/skills/experience-investment/references/REVIEW_AND_DELIVERY.md",
+      ".agents/skills/experience-investment/references/TECHNOLOGY_FIT_REVIEW.md"
+    ]
+  },
+  "frameworkEvaluations": [
+    {
+      "id": "orchestration-routing",
+      "suite": "docs/skill-evals/product-engineering-os.md",
+      "planned": 25,
+      "baselineExecuted": 0,
+      "candidateExecuted": 0,
+      "status": "NOT_VERIFIED"
+    },
+    {
+      "id": "design-trigger",
+      "suite": "docs/skill-evals/production-design-standard.md",
+      "planned": 20,
+      "baselineExecuted": 0,
+      "candidateExecuted": 0,
+      "status": "NOT_VERIFIED"
+    },
+    {
+      "id": "design-paired",
+      "suite": "docs/skill-evals/production-design-standard.md",
+      "planned": 8,
+      "baselineExecuted": 0,
+      "candidateExecuted": 0,
+      "status": "NOT_VERIFIED"
+    }
+  ],
+  "skills": [
+    {
+      "id": "experience-investment",
+      "family": "Experience and research",
+      "scope": "Substantial visitor tool, UX review or redesign",
+      "expectedOutput": "Visitor job, two real concepts, design/technology choice, evidence",
+      "routing": "Automatic for major visitor work",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "e5e60a3925cf2f62a4e3bb1e3cd4344fa39a26a4",
+      "mirrors": [
+        ".agents/skills/experience-investment/SKILL.md",
+        ".claude/skills/experience-investment/SKILL.md"
+      ],
+      "caseSuite": null,
+      "caseCoverage": "dedicated-cases-not-located",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": [
+        {
+          "type": "product-proof-not-skill-effect",
+          "ref": "https://github.com/izworskic/chrisizworski-com/pull/1918",
+          "note": "Duluth scoped pilot; no causal skill comparison."
+        }
+      ]
+    },
+    {
+      "id": "design-reconnaissance",
+      "family": "Experience and research",
+      "scope": "Compare external design approaches",
+      "expectedOutput": "Dated observations and original alternatives",
+      "routing": "When relevant; external tools opt-in",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "88804a77b89cb985b7ad40e55ed7cd0dd8a2eceb",
+      "mirrors": [
+        ".agents/skills/design-reconnaissance/SKILL.md",
+        ".claude/skills/design-reconnaissance/SKILL.md",
+        ".github/skills/design-reconnaissance/SKILL.md"
+      ],
+      "caseSuite": null,
+      "caseCoverage": "dedicated-cases-not-located",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "editorial-diagrams",
+      "family": "Experience and research",
+      "scope": "Explain real physical mechanisms",
+      "expectedOutput": "Accessible sourced diagram and static equivalent",
+      "routing": "When relevant",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "01a1a5cd8141675cb7147b736ff03688ff943aba",
+      "mirrors": [
+        ".agents/skills/editorial-diagrams/SKILL.md",
+        ".claude/skills/editorial-diagrams/SKILL.md",
+        ".github/skills/editorial-diagrams/SKILL.md"
+      ],
+      "caseSuite": null,
+      "caseCoverage": "dedicated-cases-not-located",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "interactive-2d-scenes",
+      "family": "Experience and research",
+      "scope": "Motion genuinely teaches or changes an answer",
+      "expectedOutput": "Smallest capable rendering stack and fallback",
+      "routing": "When relevant",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "931192196f85bfc0002f7453bf47fbedc1598e9b",
+      "mirrors": [
+        ".agents/skills/interactive-2d-scenes/SKILL.md",
+        ".claude/skills/interactive-2d-scenes/SKILL.md",
+        ".github/skills/interactive-2d-scenes/SKILL.md"
+      ],
+      "caseSuite": null,
+      "caseCoverage": "dedicated-cases-not-located",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "penpot-design",
+      "family": "Experience and research",
+      "scope": "Explicit Penpot request",
+      "expectedOutput": "Verified editable design and review",
+      "routing": "Explicit owner request only",
+      "authorization": "explicit-owner-only",
+      "documentedState": "documented",
+      "auditedSkillBlob": "2a3977fb96aab6c621179ff4a7b6409f4a95d998",
+      "mirrors": [
+        ".agents/skills/penpot-design/SKILL.md",
+        ".claude/skills/penpot-design/SKILL.md"
+      ],
+      "caseSuite": null,
+      "caseCoverage": "dedicated-cases-not-located",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "stitch-concept-review",
+      "family": "Experience and research",
+      "scope": "Explicit Google Stitch request",
+      "expectedOutput": "Concept comparison, including local alternative",
+      "routing": "Explicit owner request only",
+      "authorization": "explicit-owner-only",
+      "documentedState": "documented",
+      "auditedSkillBlob": "63486f9aa7a22601d7f0bbe293896910421dbf2e",
+      "mirrors": [
+        ".agents/skills/stitch-concept-review/SKILL.md",
+        ".claude/skills/stitch-concept-review/SKILL.md",
+        ".github/skills/stitch-concept-review/SKILL.md"
+      ],
+      "caseSuite": null,
+      "caseCoverage": "dedicated-cases-not-located",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "rea",
+      "family": "Experience and research",
+      "scope": "Explicit authorized reverse engineering target",
+      "expectedOutput": "Reproducible observations, not copied code/assets",
+      "routing": "Explicit owner request only",
+      "authorization": "explicit-owner-only",
+      "documentedState": "documented",
+      "auditedSkillBlob": "35a988a4fa7f94f808b1ebebe498acc79f44ce68",
+      "mirrors": [
+        ".agents/skills/rea/SKILL.md",
+        ".claude/skills/rea/SKILL.md"
+      ],
+      "caseSuite": null,
+      "caseCoverage": "dedicated-cases-not-located",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "environmental-intelligence",
+      "family": "Scientific and analytical intelligence",
+      "scope": "Weather, ice, wind or shoreline calculations",
+      "expectedOutput": "Source and units ledger, held-out comparison",
+      "routing": "Candidate; evaluate first",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "candidate",
+      "auditedSkillBlob": "e4dee3fb87c741b9f5e3c54a77277a299f871688",
+      "mirrors": [
+        ".agents/skills/environmental-intelligence/SKILL.md",
+        ".claude/skills/environmental-intelligence/SKILL.md",
+        ".github/skills/environmental-intelligence/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/environmental-intelligence.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "movement-intelligence",
+      "family": "Scientific and analytical intelligence",
+      "scope": "Time-stamped tracks or AIS movement",
+      "expectedOutput": "Validated trajectory, observed/inferred/forecast separation",
+      "routing": "Candidate; evaluate first",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "candidate",
+      "auditedSkillBlob": "b6a8be381892610bb82b1b2e76a27f8894ad2942",
+      "mirrors": [
+        ".agents/skills/movement-intelligence/SKILL.md",
+        ".claude/skills/movement-intelligence/SKILL.md",
+        ".github/skills/movement-intelligence/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/movement-intelligence.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "calibrated-prediction",
+      "family": "Scientific and analytical intelligence",
+      "scope": "Forecasts, dates, ETAs, probabilities",
+      "expectedOutput": "Out-of-time validation, naive baseline and uncertainty",
+      "routing": "Candidate; evaluate first",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "candidate",
+      "auditedSkillBlob": "3e9b4339751364ae564eafad348a06955abde614",
+      "mirrors": [
+        ".agents/skills/calibrated-prediction/SKILL.md",
+        ".claude/skills/calibrated-prediction/SKILL.md",
+        ".github/skills/calibrated-prediction/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/calibrated-prediction.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "geospatial-intelligence",
+      "family": "Scientific and analytical intelligence",
+      "scope": "Geometry, proximity, boundaries, spatial joins",
+      "expectedOutput": "Spatially validated output, access caveats",
+      "routing": "Candidate; evaluate first",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "candidate",
+      "auditedSkillBlob": "0dbd7f2459b09b6859fc51632d22a1642c43832b",
+      "mirrors": [
+        ".agents/skills/geospatial-intelligence/SKILL.md",
+        ".claude/skills/geospatial-intelligence/SKILL.md",
+        ".github/skills/geospatial-intelligence/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/geospatial-intelligence.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "journey-optimization",
+      "family": "Scientific and analytical intelligence",
+      "scope": "Feasible routes and time windows",
+      "expectedOutput": "Constraints, comparison and infeasible fallback",
+      "routing": "Candidate; evaluate first",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "candidate",
+      "auditedSkillBlob": "57f798e07ee38e2710b5c2954e9b4b99ffece20c",
+      "mirrors": [
+        ".agents/skills/journey-optimization/SKILL.md",
+        ".claude/skills/journey-optimization/SKILL.md",
+        ".github/skills/journey-optimization/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/journey-optimization.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "hydrological-intelligence",
+      "family": "Scientific and analytical intelligence",
+      "scope": "Reach, watershed, stage and flow relationships",
+      "expectedOutput": "Gauge provenance and reach validation",
+      "routing": "Candidate; evaluate first",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "candidate",
+      "auditedSkillBlob": "7a455f3a7c7e82ca49cc7ef57614153b18375b97",
+      "mirrors": [
+        ".agents/skills/hydrological-intelligence/SKILL.md",
+        ".claude/skills/hydrological-intelligence/SKILL.md",
+        ".github/skills/hydrological-intelligence/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/hydrological-intelligence.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "engine-property-testing",
+      "family": "Scientific and analytical intelligence",
+      "scope": "Engine invariants and boundary cases",
+      "expectedOutput": "Seeded reproducible counterexamples",
+      "routing": "Candidate; evaluate first",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "candidate",
+      "auditedSkillBlob": "2641b5eb32c066c1dec2dfaaee27f73a40bc6019",
+      "mirrors": [
+        ".agents/skills/engine-property-testing/SKILL.md",
+        ".claude/skills/engine-property-testing/SKILL.md",
+        ".github/skills/engine-property-testing/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/engine-property-testing.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "data-contract-validation",
+      "family": "Scientific and analytical intelligence",
+      "scope": "Source schemas, ingestion, missingness and freshness",
+      "expectedOutput": "Versioned contracts and failure fixtures",
+      "routing": "Candidate; evaluate first",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "candidate",
+      "auditedSkillBlob": "8bd1097a569cf24503fa3507a654d11686306d37",
+      "mirrors": [
+        ".agents/skills/data-contract-validation/SKILL.md",
+        ".claude/skills/data-contract-validation/SKILL.md",
+        ".github/skills/data-contract-validation/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/data-contract-validation.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "visual-data-storytelling",
+      "family": "Scientific and analytical intelligence",
+      "scope": "Scientific charts, history and uncertainty",
+      "expectedOutput": "Legible truthful charts and accessible equivalent",
+      "routing": "Candidate; evaluate first",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "candidate",
+      "auditedSkillBlob": "8c5a81755de21161c32d71062a3a3a4f38349ec6",
+      "mirrors": [
+        ".agents/skills/visual-data-storytelling/SKILL.md",
+        ".claude/skills/visual-data-storytelling/SKILL.md",
+        ".github/skills/visual-data-storytelling/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/visual-data-storytelling.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "historical-data-intelligence",
+      "family": "Scientific and analytical intelligence",
+      "scope": "Archives, seasonal baselines, backtests",
+      "expectedOutput": "Versioned joins, coverage and reproducible comparisons",
+      "routing": "Candidate; evaluate first",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "candidate",
+      "auditedSkillBlob": "c1e3c0a284da50825c874b44665fedb5599e6e2e",
+      "mirrors": [
+        ".agents/skills/historical-data-intelligence/SKILL.md",
+        ".claude/skills/historical-data-intelligence/SKILL.md",
+        ".github/skills/historical-data-intelligence/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/historical-data-intelligence.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "public-data-scout",
+      "family": "Scientific and analytical intelligence",
+      "scope": "New external data feed",
+      "expectedOutput": "Primary-source ledger, rights and failure handling",
+      "routing": "When relevant",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "ff2c8dd252f80b9f4278ddf86c9c68a9064b4983",
+      "mirrors": [
+        ".agents/skills/public-data-scout/SKILL.md",
+        ".claude/skills/public-data-scout/SKILL.md",
+        ".github/skills/public-data-scout/SKILL.md"
+      ],
+      "caseSuite": null,
+      "caseCoverage": "dedicated-cases-not-located",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "return-visit-design",
+      "family": "Visitor retention",
+      "scope": "Substantial new tool/rework or return problem",
+      "expectedOutput": "Return contract, or no meaningful return job",
+      "routing": "Automatic inside major Experience Investment",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "4b97a69f7e2ad4d945ac84d07b3fc75c5dd1539b",
+      "mirrors": [
+        ".agents/skills/return-visit-design/SKILL.md",
+        ".claude/skills/return-visit-design/SKILL.md",
+        ".github/skills/return-visit-design/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/retention-skills.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "condition-alerts",
+      "family": "Visitor retention",
+      "scope": "Supported changing condition or dated event",
+      "expectedOutput": "Existing cached calendar/feed, no subscribers or push",
+      "routing": "Only after valid return contract",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "b539127fc6ed3fe6233f3a459565f9424402b379",
+      "mirrors": [
+        ".agents/skills/condition-alerts/SKILL.md",
+        ".claude/skills/condition-alerts/SKILL.md",
+        ".github/skills/condition-alerts/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/retention-skills.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "my-spots-offline",
+      "family": "Visitor retention",
+      "scope": "Useful saved places or low-signal use",
+      "expectedOutput": "Local storage, clear controls and timestamped cache",
+      "routing": "Only after valid return contract",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "67ce323b618b463dade5378cc2e80dc97dae1fcb",
+      "mirrors": [
+        ".agents/skills/my-spots-offline/SKILL.md",
+        ".claude/skills/my-spots-offline/SKILL.md",
+        ".github/skills/my-spots-offline/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/retention-skills.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "computed-windows",
+      "family": "Visitor retention",
+      "scope": "Astronomical/light windows",
+      "expectedOutput": "Validated local-time calculations",
+      "routing": "When relevant; calendar only if justified",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "9b92182a1edb487b85018e618321c7cd50b78533",
+      "mirrors": [
+        ".agents/skills/computed-windows/SKILL.md",
+        ".claude/skills/computed-windows/SKILL.md",
+        ".github/skills/computed-windows/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/retention-skills.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "return-metrics",
+      "family": "Visitor retention",
+      "scope": "Measure return contract",
+      "expectedOutput": "Comparable GA4 evidence or NOT MEASURED",
+      "routing": "When relevant; read-only",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "bff2f0e8e12471e67a39ce056e65d7053d56c741",
+      "mirrors": [
+        ".agents/skills/return-metrics/SKILL.md",
+        ".claude/skills/return-metrics/SKILL.md",
+        ".github/skills/return-metrics/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/retention-skills.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "web-quality-audit",
+      "family": "Web and browser quality",
+      "scope": "Cross-disciplinary audit or major release",
+      "expectedOutput": "Severity-ranked findings with evidence, lab and field separated",
+      "routing": "When relevant",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "88f10c38c90e335655961c28fa7a2a1814216ecd",
+      "mirrors": [
+        ".agents/skills/web-quality-audit/SKILL.md",
+        ".claude/skills/web-quality-audit/SKILL.md",
+        ".github/skills/web-quality-audit/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/web-quality-audit.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "web-quality-performance",
+      "family": "Web and browser quality",
+      "scope": "Load, images, JS and requests",
+      "expectedOutput": "Before and after bytes, requests and LCP with each change named",
+      "routing": "When relevant",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "ada9cec8de1bc0f118dcaf809f7c0ee79487f117",
+      "mirrors": [
+        ".agents/skills/web-quality-performance/SKILL.md",
+        ".claude/skills/web-quality-performance/SKILL.md",
+        ".github/skills/web-quality-performance/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/web-quality-performance.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "web-quality-core-web-vitals",
+      "family": "Web and browser quality",
+      "scope": "LCP, INP, CLS",
+      "expectedOutput": "Field and lab values per metric, the responsible element or interaction, and the fix",
+      "routing": "When relevant",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "e2d5c5da25c65e33ec2b24899c1d8e8646df37a4",
+      "mirrors": [
+        ".agents/skills/web-quality-core-web-vitals/SKILL.md",
+        ".claude/skills/web-quality-core-web-vitals/SKILL.md",
+        ".github/skills/web-quality-core-web-vitals/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/web-quality-core-web-vitals.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "web-quality-accessibility",
+      "family": "Web and browser quality",
+      "scope": "Changed map, form or interface",
+      "expectedOutput": "Automated results plus a manual WCAG 2.2 checklist; never a compliance claim",
+      "routing": "When relevant",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "77490e98b350a3532a6308a40b7fb33cfe97db0e",
+      "mirrors": [
+        ".agents/skills/web-quality-accessibility/SKILL.md",
+        ".claude/skills/web-quality-accessibility/SKILL.md",
+        ".github/skills/web-quality-accessibility/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/web-quality-accessibility.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "web-quality-seo",
+      "family": "Web and browser quality",
+      "scope": "Metadata, canonical, schema, indexed answers",
+      "expectedOutput": "Page checks with title and description lengths, canonical, Person and byline status, gate results",
+      "routing": "When relevant",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "b88c80998070741474ca7b30b9e9875236ee306d",
+      "mirrors": [
+        ".agents/skills/web-quality-seo/SKILL.md",
+        ".claude/skills/web-quality-seo/SKILL.md",
+        ".github/skills/web-quality-seo/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/web-quality-seo.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "web-quality-best-practices",
+      "family": "Web and browser quality",
+      "scope": "Storage, embeds, third-party scripts, resilience",
+      "expectedOutput": "Third-party ledger, permission flows, storage, headers and console state with fixes",
+      "routing": "When relevant",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "a608fc3c3a282f0b375cb7f9b7398a53ef7d53e3",
+      "mirrors": [
+        ".agents/skills/web-quality-best-practices/SKILL.md",
+        ".claude/skills/web-quality-best-practices/SKILL.md",
+        ".github/skills/web-quality-best-practices/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/web-quality-best-practices.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "playwright-browser-qa",
+      "family": "Web and browser quality",
+      "scope": "Changed interaction, map or major visual redesign",
+      "expectedOutput": "Actual responsive/keyboard/failure evidence and regression tests",
+      "routing": "Automatic for substantial interface work",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "1c897f975c27a8d5f951de425f0a74b73c45cfb7",
+      "mirrors": [
+        ".agents/skills/playwright-browser-qa/SKILL.md",
+        ".claude/skills/playwright-browser-qa/SKILL.md",
+        ".github/skills/playwright-browser-qa/SKILL.md"
+      ],
+      "caseSuite": null,
+      "caseCoverage": "dedicated-cases-not-located",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": [
+        {
+          "type": "product-proof-not-skill-effect",
+          "ref": "https://github.com/izworskic/chrisizworski-com/actions/runs/45437543443",
+          "note": "Duluth five-width map acceptance passed."
+        },
+        {
+          "type": "product-proof-not-skill-effect",
+          "ref": "https://github.com/izworskic/chrisizworski-com/actions/runs/45440868602",
+          "note": "Seven visual state comparisons passed."
+        }
+      ]
+    },
+    {
+      "id": "agent-browser-qa",
+      "family": "Web and browser quality",
+      "scope": "Authorized iterative browser diagnosis",
+      "expectedOutput": "Observed state, snapshots, console and network",
+      "routing": "Opt-in investigation; not regression replacement",
+      "authorization": "bounded-opt-in",
+      "documentedState": "documented",
+      "auditedSkillBlob": "259caff18e474fb0d6b39c1b8528d09321a0cb4f",
+      "mirrors": [
+        ".agents/skills/agent-browser-qa/SKILL.md",
+        ".claude/skills/agent-browser-qa/SKILL.md",
+        ".github/skills/agent-browser-qa/SKILL.md"
+      ],
+      "caseSuite": null,
+      "caseCoverage": "dedicated-cases-not-located",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "skill-eval",
+      "family": "Agent governance and editorial",
+      "scope": "Skill creation, edits, audit or suspected misrouting",
+      "expectedOutput": "Fresh-context trigger/paired evidence",
+      "routing": "Required for skill changes; not a substitute for CI",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "bb07477cc92a5282ea1ff0bb0e9fac9efb7e854f",
+      "mirrors": [
+        ".agents/skills/skill-eval/SKILL.md",
+        ".claude/skills/skill-eval/SKILL.md",
+        ".github/skills/skill-eval/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/agent-tooling-skills.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "plain-voice",
+      "family": "Agent governance and editorial",
+      "scope": "Visible copy or generated-sounding text",
+      "expectedOutput": "Human readable copy, unchanged facts and pinned fields",
+      "routing": "When relevant",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "90e5d89c74462cbaf1107178943ae0c16bdaf928",
+      "mirrors": [
+        ".agents/skills/plain-voice/SKILL.md",
+        ".claude/skills/plain-voice/SKILL.md",
+        ".github/skills/plain-voice/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/agent-tooling-skills.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": [
+        {
+          "type": "fixture-proof-not-skill-effect",
+          "ref": "https://github.com/izworskic/chrisizworski-com/actions/runs/45441769126",
+          "note": "Editorial synthetic fixture tests passed."
+        }
+      ]
+    },
+    {
+      "id": "vercel-cost-guard",
+      "family": "Agent governance and editorial",
+      "scope": "Functions, cron, middleware, rewrites, caching, images or build cost",
+      "expectedOutput": "Actual usage and incremental cost record",
+      "routing": "When relevant",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "a4d7d92a7fc4bbbda6e300035f3d3d8192c4f39b",
+      "mirrors": [
+        ".agents/skills/vercel-cost-guard/SKILL.md",
+        ".claude/skills/vercel-cost-guard/SKILL.md",
+        ".github/skills/vercel-cost-guard/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/agent-tooling-skills.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "change-intake",
+      "family": "Network operations",
+      "scope": "Opening or starting any PR, overlapping PRs, Codex review limit",
+      "expectedOutput": "Intake line in the PR body; extend, supersede or hold instead of a duplicate PR",
+      "routing": "Before any PR in this repository",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "5c7451c5fc114ecde41980667c783afd0a794cd7",
+      "mirrors": [
+        ".agents/skills/change-intake/SKILL.md",
+        ".claude/skills/change-intake/SKILL.md",
+        ".github/skills/change-intake/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/crew-operations-skills.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "freshness-watch",
+      "family": "Network operations",
+      "scope": "Live feeds, crons, scheduled commits and silently stale data",
+      "expectedOutput": "Freshness contract table and a portfolio-sentinel feed entry, or NOT MONITORED",
+      "routing": "When a live or scheduled-data tool ships or changes",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "51b81c360c69d18fe061cadc19783ef093a6a718",
+      "mirrors": [
+        ".agents/skills/freshness-watch/SKILL.md",
+        ".claude/skills/freshness-watch/SKILL.md",
+        ".github/skills/freshness-watch/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/crew-operations-skills.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "incident-rollback",
+      "family": "Network operations",
+      "scope": "Production broken after a deploy, rollback or revert requests",
+      "expectedOutput": "Prepared rollback or revert, live verification and a postmortem entry",
+      "routing": "When production is affected; owner runs rollback and merge",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "d67a90aa2f48070382a791b156205c6a0e859410",
+      "mirrors": [
+        ".agents/skills/incident-rollback/SKILL.md",
+        ".claude/skills/incident-rollback/SKILL.md",
+        ".github/skills/incident-rollback/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/crew-operations-skills.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "photo-sourcing",
+      "family": "Experience and research",
+      "scope": "Place photos for new tools and redesigns, unknown photo source or license, photo QA",
+      "expectedOutput": "Credit records, place confirmation and license verdict per photo",
+      "routing": "When a page needs or reviews real-place photos",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "36e6946d8f3971cdd1e45143803afdc9d01ae642",
+      "mirrors": [
+        ".agents/skills/photo-sourcing/SKILL.md",
+        ".claude/skills/photo-sourcing/SKILL.md",
+        ".github/skills/photo-sourcing/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/photo-sourcing.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "search-demand",
+      "family": "Search and discovery",
+      "scope": "Choosing pages or tools from Search Console evidence, 404s, sitemap errors, demand claims",
+      "expectedOutput": "Ranked evidence table with actions, or NOT MEASURED",
+      "routing": "When search demand, 404s or sitemap health is in question",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "fab521be223da3808f4c42d3c45dfa896dff1ff2",
+      "mirrors": [
+        ".agents/skills/search-demand/SKILL.md",
+        ".claude/skills/search-demand/SKILL.md",
+        ".github/skills/search-demand/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/search-demand.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "opportunity-scout",
+      "family": "Search and discovery",
+      "scope": "Choosing the next tool, new tool ideas, before any new tool",
+      "expectedOutput": "Three briefs scored against the tool network registry bestFitScoring, or a rejection",
+      "routing": "Before experience-investment on any new tool",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "19dcfffef86c3489f926c59a258404c1d1519d8c",
+      "mirrors": [
+        ".agents/skills/opportunity-scout/SKILL.md",
+        ".claude/skills/opportunity-scout/SKILL.md",
+        ".github/skills/opportunity-scout/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/opportunity-scout.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "custom-basemap",
+      "family": "Experience and research",
+      "scope": "Tool maps that look stock or depend on third-party tiles, shared network map style",
+      "expectedOutput": "Regional extract, host decision with range test, shared style and one pilot",
+      "routing": "When building or redesigning a tool map",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "1cbe9f8d694d47a2799fe038f641e10bf9a53959",
+      "mirrors": [
+        ".agents/skills/custom-basemap/SKILL.md",
+        ".claude/skills/custom-basemap/SKILL.md",
+        ".github/skills/custom-basemap/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/custom-basemap.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "share-and-embed",
+      "family": "Search and discovery",
+      "scope": "Share links with state, Open Graph images, embeddable widgets",
+      "expectedOutput": "Stateful links, static share images, noindex embed with ads exception",
+      "routing": "When launching or redesigning a tool, or when sharing or embedding comes up",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "95239c42df1c03596f3927481b4f4326ef8f69d9",
+      "mirrors": [
+        ".agents/skills/share-and-embed/SKILL.md",
+        ".claude/skills/share-and-embed/SKILL.md",
+        ".github/skills/share-and-embed/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/share-and-embed.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "tool-handoffs",
+      "family": "Network operations",
+      "scope": "Cross-tool links, shared place IDs, carrying place and date between tools",
+      "expectedOutput": "Registry-backed handoffs with state parameters and a measurement plan, one tool per PR",
+      "routing": "When a tool should send visitors to another tool",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "8354be82608357fdc53a86cece8ff6a417953013",
+      "mirrors": [
+        ".agents/skills/tool-handoffs/SKILL.md",
+        ".claude/skills/tool-handoffs/SKILL.md",
+        ".github/skills/tool-handoffs/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/tool-handoffs.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "answer-feedback",
+      "family": "Visitor retention",
+      "scope": "Whether visitors got their answer after a tool ships or changes",
+      "expectedOutput": "One-tap GA4 event and a read-back with sample size, or NOT MEASURED",
+      "routing": "When a new or redesigned tool ships",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "a6f39b33232f5173c753f919f2d4591682fe8d06",
+      "mirrors": [
+        ".agents/skills/answer-feedback/SKILL.md",
+        ".claude/skills/answer-feedback/SKILL.md",
+        ".github/skills/answer-feedback/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/answer-feedback.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "ml-justification",
+      "family": "Hugging Face and machine learning",
+      "scope": "Proposed ML models, embeddings, semantic search, forecast challengers, Transformers.js",
+      "expectedOutput": "Offline three-way comparison against no-model baselines and a go or no-go",
+      "routing": "Bounded, opt-in",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "d6507fe5cd3e9c53764bf2f3509dd66bc6c678a0",
+      "mirrors": [
+        ".agents/skills/ml-justification/SKILL.md",
+        ".claude/skills/ml-justification/SKILL.md",
+        ".github/skills/ml-justification/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/ml-justification.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "hf-hub-research",
+      "family": "Hugging Face and machine learning",
+      "scope": "Read-only Hub model, dataset, license and revision research; recurring research scripts",
+      "expectedOutput": "Source ledger and an ACCEPT, EXPERIMENT, REJECT or NOT VERIFIED verdict",
+      "routing": "Bounded, opt-in",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "eb67e24bf4ee621bae48e3e3d104199908a56d96",
+      "mirrors": [
+        ".agents/skills/hf-hub-research/SKILL.md",
+        ".claude/skills/hf-hub-research/SKILL.md",
+        ".github/skills/hf-hub-research/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/hf-hub-research.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    }
+  ],
+  "overlapReview": [
+    {
+      "skills": [
+        "experience-investment",
+        "design-reconnaissance",
+        "web-quality-audit"
+      ],
+      "boundary": "Experience Investment chooses visitor job and concept. Reconnaissance supplies external references; web audit diagnoses measurable defects. Do not require three complete audits.",
+      "disposition": "retain-narrow-routing"
+    },
+    {
+      "skills": [
+        "agent-browser-qa",
+        "playwright-browser-qa"
+      ],
+      "boundary": "Agent browser is opt-in exploratory diagnosis. Playwright is reproducible regression and release acceptance. Exploration is not a substitute for tests.",
+      "disposition": "retain-distinct"
+    },
+    {
+      "skills": [
+        "web-quality-audit",
+        "web-quality-performance",
+        "web-quality-core-web-vitals",
+        "web-quality-accessibility",
+        "web-quality-seo",
+        "web-quality-best-practices"
+      ],
+      "boundary": "Audit routes to relevant specialist. Performance targets resource/load behavior; CWV distinguishes field and lab metrics. Avoid repeated whole-site reviews for a narrow fix.",
+      "disposition": "evaluate-routing-overlap"
+    },
+    {
+      "skills": [
+        "environmental-intelligence",
+        "movement-intelligence",
+        "calibrated-prediction",
+        "ml-justification",
+        "historical-data-intelligence"
+      ],
+      "boundary": "Domain source and physical/track method first; history for archive comparability; calibrated prediction for forward estimates; HF challenger only if authorized and baseline leaves a gap.",
+      "disposition": "evaluate-routing-overlap"
+    },
+    {
+      "skills": [
+        "public-data-scout",
+        "data-contract-validation",
+        "hf-hub-research"
+      ],
+      "boundary": "Discover authoritative feeds, then validate contracts; HF dataset review only for a bounded corpus question. Never substitute model metadata for source truth.",
+      "disposition": "retain-distinct"
+    },
+    {
+      "skills": [
+        "editorial-diagrams",
+        "interactive-2d-scenes",
+        "visual-data-storytelling"
+      ],
+      "boundary": "Explain mechanisms with diagrams; motion only with causal educational or operational value; scientific charts retain data units, time and uncertainty. No mandatory animation.",
+      "disposition": "evaluate-routing-overlap"
+    },
+    {
+      "skills": [
+        "return-visit-design",
+        "condition-alerts",
+        "my-spots-offline",
+        "computed-windows",
+        "return-metrics"
+      ],
+      "boundary": "Return contract first, choose only mechanisms tied to visitor value; measure independently. Computed windows may also serve a one-off task. No push.",
+      "disposition": "retain-narrow-routing"
+    },
+    {
+      "skills": [
+        "ml-justification",
+        "hf-hub-research"
+      ],
+      "boundary": "Decide whether a model is needed, then choose authorized metadata, task-specific benchmark or runtime fit. No default downloads or inference.",
+      "disposition": "evaluate-routing-overlap"
+    },
+    {
+      "skills": [
+        "plain-voice",
+        "web-quality-seo",
+        "visual-data-storytelling"
+      ],
+      "boundary": "Plain voice preserves source facts and pinned SEO. SEO owns metadata and index contract. Storytelling owns truthful visual reading; none may change scientific values for prose.",
+      "disposition": "retain-distinct"
+    },
+    {
+      "skills": [
+        "engine-property-testing",
+        "data-contract-validation"
+      ],
+      "boundary": "Property tests check invariants under generated inputs; contracts check real upstream semantics, coverage, units and failure modes. Use both only where justified.",
+      "disposition": "retain-distinct"
+    },
+    {
+      "skills": [
+        "geospatial-intelligence",
+        "journey-optimization",
+        "hydrological-intelligence"
+      ],
+      "boundary": "Spatial correctness first; routing for feasible sequence and constraints; hydrology for connected reaches and gauge validity. Shared geometry is not proof of safe access.",
+      "disposition": "retain-distinct"
+    },
+    {
+      "skills": [
+        "penpot-design",
+        "stitch-concept-review",
+        "rea"
+      ],
+      "boundary": "Distinct explicit-only capabilities. Similar design vocabulary never grants invocation; connection and target must be verified.",
+      "disposition": "retain-explicit-only"
+    },
+    {
+      "skills": [
+        "freshness-watch",
+        "data-contract-validation",
+        "condition-alerts"
+      ],
+      "boundary": "Data contracts validate sources at ingestion; condition alerts serve visitor calendars and feeds; freshness-watch keeps shipped tools registered with the existing portfolio-sentinel monitor.",
+      "disposition": "retain-distinct"
+    },
+    {
+      "skills": [
+        "incident-rollback",
+        "freshness-watch"
+      ],
+      "boundary": "freshness-watch detects stale or dead data; incident-rollback recovers production after a bad deploy. A dead feed is not fixed by a rollback.",
+      "disposition": "retain-distinct"
+    }
+  ]
+}
