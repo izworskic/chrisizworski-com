@@ -108,7 +108,7 @@ jobs:
         run: SHORE_PW_MODULE="$RUNNER_TEMP/shorefeel-playwright/node_modules/playwright" node scripts/verify-shorefeel-every-beach-browser.cjs
       - name: Predictive validation and uncertainty research fixtures
         if: github.head_ref == 'research/shorefeel-predictive-validation'
-        run: node --test tests/shorefeel-predictive-validation.test.js tests/shorefeel-uncertainty-calibration.test.js tests/shorefeel-archive-coverage.test.js
+        run: node --test tests/shorefeel-predictive-validation.test.js tests/shorefeel-uncertainty-calibration.test.js tests/shorefeel-archive-coverage.test.js tests/shorefeel-native-grid-parity.test.js
       - name: Bounded one-off NOAA archive coverage probe
         if: github.head_ref == 'research/shorefeel-predictive-validation'
         run: |
