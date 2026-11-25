@@ -56,6 +56,9 @@ test('ski source generator ships operator checks on index and every original res
  assert.ok(skiGen.includes('Verify tickets at the resort'));
  assert.ok(skiGen.includes('const today=\'2026-11-11\''));
  assert.ok(skiGen.includes('s7-ski-readiness'));
+ assert.ok(skiGen.includes('Three checks before you buy or drive'),'generated hub retains readiness checklist');
+ assert.ok(skiGen.includes('hill’s official mountain report'));
+ assert.ok(skiGen.includes('MDOT MiDrive'));
  assert.ok(ski.includes('id="s7-ski-title"'));
  assert.ok(ski.includes('hill’s official mountain report'));
  assert.ok(ski.includes('weather with a bad-weather backup') || ski.includes('weekend with a bad-weather backup'));
