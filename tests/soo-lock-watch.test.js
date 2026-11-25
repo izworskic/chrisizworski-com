@@ -194,3 +194,17 @@ test('visit weather quotes only the NWS hourly periods that overlap the visit', 
   assert.match(html, /api\.weather\.gov\/gridpoints\/APX\/65,131\/forecast\/hourly/);
   assert.match(html, /api\.weather\.gov\/points\/46\.4953,-84\.3453/, 'falls back to a fresh grid lookup');
 });
+
+test('near-lock low motion explains absent ETA without becoming a timed entry',()=>{
+ const ship={id:'366123456',mmsi:'366123456',name:'TEST SLOW FREIGHTER',lat:46.5025,lon:-84.365,seen:iso(NOV,-2),speedKnots:.6,distanceNm:.5,state:'near-lock-low-motion'};
+ const empty=data(NOV,{inLock:[],candidates:[],pick:null,nearLockMotion:[ship]});
+ const p=core.plan({data:empty,now:NOV});
+ assert.equal(p.status,'near-lock-motion');assert.match(p.headline,/TEST SLOW FREIGHTER/);
+ assert.equal(p.ships.length,0);assert.equal(p.best,null);assert.equal(p.suggestion,undefined);
+ assert.equal(p.link.href,'#sooVesselMap');assert.match(p.detail.join(' '),/Arrival timing is uncertain/);
+ assert.equal(core.plan({data:empty,now:NOV+4*60000}).status,'no-ships');
+ assert.equal(core.plan({data:empty,now:NOV,failed:true}).status,'unavailable');
+ const mixed=core.plan({data:data(NOV,{nearLockMotion:[ship]}),now:NOV});
+ assert.equal(mixed.status,'in-lock-now');assert.match(mixed.notes.join(' '),/TEST SLOW FREIGHTER/);
+ assert.ok(mixed.ships.every(s=>s.id!==ship.id));
+});

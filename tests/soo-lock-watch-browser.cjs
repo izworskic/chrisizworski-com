@@ -70,8 +70,16 @@ async function open(browser, { width, time, api = 'ok', js = true, wx = 'ok', pi
       return route.fulfill({ status: 404, body: '' });
     }
     if (u.pathname === '/api/soo-ais') {
-      if ((typeof api === 'function' ? api() : api) === 'fail') return route.fulfill({ status: 503, contentType: 'application/json', body: '{"ok":false}' });
-      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(fixture(time)) });
+      const mode = typeof api === 'function' ? api() : api;
+      if (mode === 'fail') return route.fulfill({ status: 503, contentType: 'application/json', body: '{"ok":false}' });
+      const data = fixture(time);
+      if (mode === 'slow' || mode === 'slow-stale' || mode === 'slow-mixed') {
+        const ship = { id:'366009996', mmsi:'366009996', name:'TEST SLOW FREIGHTER', lat:46.5025, lon:-84.365, seen:iso(time,mode==='slow-stale'?-6:-2), speedKnots:0.6, distanceNm:0.5, state:'near-lock-low-motion' };
+        data.nextShip.nearLockMotion = [ship];
+        data.vessels.push({...ship,shipType:70,course:null,heading:null,lengthMeters:200,source:'fixture'});
+        if (mode !== 'slow-mixed') Object.assign(data.nextShip,{inLock:[],candidates:[],pick:null});
+      }
+      return route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify(data) });
     }
     if (u.hostname === 'api.weather.gov') {
       if (wx === 'fail') return route.fulfill({ status: 503, contentType: 'application/json', body: '{}' });
@@ -265,6 +273,35 @@ let base;
       assert.doesNotMatch(await page.locator('#vesselMapStatus').innerText(), /Refresh unavailable/);
       assert.deepEqual(errors, []);
       await context.close();
+    }
+    // Near-lock observations do not turn into forecast rows or survive failed/stale reports.
+    for (const width of [390, 1280]) {
+      let mode='slow';
+      const {context,page,errors}=await open(browser,{width,time:NOV,api:()=>mode});
+      await page.locator('#soo-next-ship-heading').filter({hasText:'TEST SLOW FREIGHTER reported moving slowly'}).waitFor();
+      assert.match(await verdict(page),/TEST SLOW FREIGHTER reported moving slowly/);
+      assert.match(await page.locator('#sooNextBody').innerText(),/Arrival timing is uncertain/);
+      assert.equal(await page.locator('#soo-next-ship .next-ship-window').count(),0);
+      assert.equal(await page.locator('[data-lw-board]').isHidden(),true);
+      assert.equal(await page.locator('.lw-adjust').count(),0);
+      await page.locator('#soo-next-ship').screenshot({path:out+'/near-lock-slow-card-'+width+'.png'});
+      await page.locator('#soo-lock-watch').screenshot({path:out+'/near-lock-slow-planner-'+width+'.png'});
+      await page.locator('#soo-next-ship button').filter({hasText:'Show this vessel on the live map'}).click();
+      await page.locator('#sooVesselMap .leaflet-popup-content').filter({hasText:'TEST SLOW FREIGHTER'}).waitFor();
+      mode='slow-stale'; await page.locator('#vesselMapRefresh').click();
+      await page.locator('#soo-next-ship-heading').filter({hasText:'No ship is clearly heading'}).waitFor();
+      assert.doesNotMatch(await verdict(page),/TEST SLOW FREIGHTER/);
+      mode='slow-mixed'; await page.locator('#vesselMapRefresh').click();
+      await page.locator('#soo-next-ship .next-ship-window').waitFor();
+      assert.match(await page.locator('#sooNextBody').innerText(),/TEST SLOW FREIGHTER/);
+      assert.doesNotMatch(await page.locator('[data-lw-rows]').innerText(),/TEST SLOW FREIGHTER/);
+      mode='fail'; await page.locator('#vesselMapRefresh').click();
+      await page.locator('#soo-next-ship-heading').filter({hasText:'Live ship reports are unavailable'}).waitFor();
+      assert.doesNotMatch(await page.locator('#sooNextBody').innerText(),/TEST SLOW FREIGHTER/);
+      assert.doesNotMatch(await verdict(page),/TEST SLOW FREIGHTER/);
+      mode='slow'; await page.locator('#vesselMapRefresh').click();
+      await page.locator('#soo-next-ship-heading').filter({hasText:'TEST SLOW FREIGHTER'}).waitFor();
+      assert.deepEqual(errors,[]); await context.close();
     }
     // 7. Winter shutdown: the planner says so instead of lining up ships.
     {

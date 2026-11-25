@@ -11,6 +11,7 @@
 (function (root) {
   'use strict';
 
+  var nearMotion = typeof module !== 'undefined' && module.exports ? require('./soo-near-lock-motion') : root.SooNearLockMotion;
   var TZ = 'America/Detroit';
   var SAULT = { lat: 46.4953, lon: -84.3453 };
   var MIN = 60000;
@@ -227,6 +228,7 @@
       out.link = { href: '#soo-schedule-answer', label: 'Other ways to check \u2193' };
       return out;
     }
+    var nearby = nearMotion ? nearMotion.visitorState(opts.data, opts.failed, now) : null;
     var entries = [];
     (n.inLock || []).forEach(function (s) { var e = shipEntry(Object.assign({ state: 'in-lock' }, s), now, visit); if (e) entries.push(e); });
     (n.candidates || []).forEach(function (s) { var e = shipEntry(s, now, visit); if (e) entries.push(e); });
@@ -252,6 +254,14 @@
     var future = entries.filter(function (e) { return !e.inLock && e.start >= visit.end; });
     var lookahead = 'Ships still out on open Lake Superior or Lake Huron are beyond this view, so a later visit can gain ships that are not listed yet.';
 
+    if (!entries.length && nearby) {
+      out.status = 'near-lock-motion';
+      out.headline = nearby.headline;
+      out.detail.push(nearby.detail, 'No arrival window can be lined up from this observation. Check the vessel on the live map before planning your visit.');
+      out.link = { href: '#sooVesselMap', label: 'See nearby vessel reports on the map' };
+      return out;
+    }
+    if (nearby) out.notes.push(nearby.headline + '. ' + nearby.detail);
     if (!entries.length) {
       out.status = 'no-ships';
       out.headline = 'No ship is clearly heading for the locks in the latest reports';

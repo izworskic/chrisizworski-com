@@ -12,7 +12,8 @@
   const cardBody = document.getElementById('sooNextBody');
   const cardNow = document.getElementById('sooNextNow');
   let map, layer, focusLayer, detailPopup, fitted = false, busy = false, mapStarted = false, polling = false, previous, previousFailed = false;
-  let selectedMarker = null;
+  let selectedMarker = null, nearExpiryTimer = null;
+  const nearMotion = window.SooNearLockMotion;
   const visibleMarkers = new Map();
   // Shared local SVG silhouettes, also used by the Seaway map.
   const Icons = window.SeawayVesselIcons;
@@ -177,6 +178,7 @@
     }
     const inLock = n.inLock || [];
     const pick = n.pick;
+    const nearby = nearMotion?.visitorState(data, failed, Date.now());
     if (inLock.length) {
       const s = inLock[0];
       if (pick && cardNow) {
@@ -188,11 +190,18 @@
         cardBody.append(tags([s.sizeLabel, s.lengthFeet ? s.lengthFeet.toLocaleString('en-US') + ' ft' : null, s.chamberName]));
         cardBody.append(text('p', directionText(s.direction) + '. ' + chamberWhere(s.chamber) + ' Reported ' + s.ageMinutes + ' min ago.'));
         cardBody.append(actions(s));
-        cardBody.append(text('p', 'No other freighter is clearly heading for the locks in reports under 30 minutes old.', 'next-ship-also'));
+        if (nearby) appendNearMotion(nearby, false);
+        else cardBody.append(text('p', 'No other freighter is clearly heading for the locks in reports under 30 minutes old.', 'next-ship-also'));
         return;
       }
     }
     if (!pick) {
+      if (nearby) {
+        cardKicker.textContent = 'Vessel observation near the locks';
+        cardHeading.textContent = nearby.headline;
+        appendNearMotion(nearby, true);
+        return;
+      }
       cardKicker.textContent = 'Next ship at the locks';
       cardHeading.textContent = 'No ship is clearly heading for the locks right now';
       cardBody.append(text('p', 'Nothing in reports under 30 minutes old shows a freighter moving toward the locks. That does not mean none is coming: ships wait at docks and anchorages, and AIS coverage has gaps. ' + checkElsewhere()));
@@ -210,6 +219,21 @@
     const others = (n.candidates || []).filter(c => c.id !== pick.id).slice(0, 3);
     if (others.length) cardBody.append(text('p', 'Also heading in: ' + others.map(c => title(c) + ' (' + c.direction + ', about ' + clock(c.window.start) + '–' + clock(c.window.end) + ')').join('; ') + '.', 'next-ship-also'));
     cardBody.append(text('p', 'This planning window uses reported position, speed and river distance. It is not a lock schedule. Ships can slow or stop before reaching the locks. Recheck movement on the map before leaving; the actual arrival can be outside this window. Not for navigation.', 'next-ship-note'));
+    if (nearby) appendNearMotion(nearby, false);
+  }
+  function appendNearMotion(nearby, primary) {
+    const box = document.createElement('div'); box.className = 'next-ship-near-motion';
+    if (!primary) box.append(text('strong', nearby.headline));
+    box.append(text('p', nearby.detail));
+    if (nearby.additional) box.append(text('p', nearby.additional + ' other nearby low-speed vessel report' + (nearby.additional === 1 ? '' : 's') + ' on the map.'));
+    const acts = document.createElement('div'); acts.className = 'next-ship-actions';
+    const button = text('button', nearby.action); button.type = 'button';
+    button.addEventListener('click', () => {
+      const fresh = nearMotion?.freshNearLock(previous, previousFailed, Date.now()).find(v => v.id === nearby.ship.id);
+      if (fresh) focusShip(fresh);
+      else refreshNearMotion();
+    });
+    acts.append(button); box.append(acts); cardBody.append(box);
   }
   function tags(items) {
     const ul = document.createElement('ul'); ul.className = 'next-ship-tags';
@@ -290,6 +314,18 @@
     credits.textContent = 'Source credits: ' + data.attribution.map(a => a.credit).join(' · ');
     renderCard(data, failed);
     share(data, failed);
+    scheduleNearExpiry(data, failed);
+  }
+  function scheduleNearExpiry(data, failed) {
+    clearTimeout(nearExpiryTimer); nearExpiryTimer = null;
+    const expiry = nearMotion?.nextExpiry(data, failed, Date.now());
+    if (Number.isFinite(expiry)) nearExpiryTimer = setTimeout(refreshNearMotion, Math.max(1, expiry - Date.now()));
+  }
+  function refreshNearMotion() {
+    if (!previous || !previous.nextShip?.nearLockMotion?.length) return;
+    renderCard(previous, previousFailed);
+    share(previous, previousFailed);
+    scheduleNearExpiry(previous, previousFailed);
   }
   // Hand each check to the Lock Watch planner (public/assets/soo-lock-watch.js).
   function share(data, failed) {
@@ -341,6 +377,7 @@
   window.SooAis = { focusShip, last: null };
   refresh.addEventListener('click', () => { startMap(); load(); });
   renderLegend();
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshNearMotion(); });
   startPolling();
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(entries => { if (entries.some(e => e.isIntersecting)) { observer.disconnect(); startMap(); } }, { rootMargin: '300px' });
