@@ -477,7 +477,11 @@
     if(!memory||!els.memory||!state.memoryReady)return;
     els.memory.hidden=false;
     els.memoryButton.textContent=state.saved?'Forget saved visit choices':'Remember my visit choices';
-    els.memoryNote.textContent=state.memoryMessage||(state.saved?'Saved on this device only. Choices are relative to the current time; ship reports must be checked again.':'Optional: save your arrival and stay choices on this device, plus a recent check for comparison.');
+    // The live-feed failure is derived from the current request state, not stored
+    // as a preference message. It cannot survive a successful refresh.
+    var text=state.memoryMessage||(state.saved?'Saved on this device only. Choices are relative to the current time; ship reports must be checked again.':'Optional: save your arrival and stay choices on this device, plus a recent check for comparison.');
+    if(state.saved&&state.failed)text='Saved visit choices are available, but live reports are unavailable. Remembered reports are not used as current conditions.';
+    if(els.memoryNote.textContent!==text)els.memoryNote.textContent=text;
   }
   function prefsNow(){return {startOffset:choice('lw-start')||0,stay:choice('lw-stay')||90};}
   function persistMemory(preferences) {
@@ -510,7 +514,7 @@
       });
       state.returnCheck=got.value.lastCheck;
       state.changes=memory.restore(got.value,changing,Date.now());
-      state.memoryMessage='Your saved visit choices are restored. Checking current reports.';
+      state.memoryMessage='Your saved visit choices are restored. Current reports are checked separately.';
     }else if(!got.ok)state.memoryMessage='Device storage is unavailable; your visit planner still works.';
     els.memoryButton.addEventListener('click',function(){
       if(state.saved){
@@ -854,14 +858,15 @@
   function receive(detail) {
     if (!detail) return;
     if (detail.data) state.data = detail.data;
+    var recovered=state.failed&&!detail.failed;
     state.failed = !!detail.failed;
     if (changing) {
       var now=Date.now(), next=state.failed?null:changing.snapshot(state.data,now,core,nearMotion);
       var prior=state.changes;
       state.changes=changing.step(prior,next,state.failed,now);
       if (state.changes!==prior) state.previousBest=state.plan && state.plan.best ? state.plan.best.id : null;
+      if(state.saved&&recovered&&next&&!state.changes.failed)state.memoryMessage='Live reports are available again. Your visit choices remain saved on this device.';
       noteReturn(next);
-      if(state.saved&&state.failed)state.memoryMessage='Saved visit choices are available, but live reports are unavailable. Remembered reports are not used as current conditions.';
       if(state.saved&&state.changes!==prior)persistMemory(false);
     }
     update();
