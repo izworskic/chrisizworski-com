@@ -4,13 +4,13 @@
   "auditDate": "2026-11-24",
   "status": "inventory-verified-behavior-not-verified",
   "inventory": {
-    "logicalSkills": 48,
-    "mirrorFiles": 141,
-    "codex": 48,
-    "claude": 48,
-    "copilot": 45,
+    "logicalSkills": 49,
+    "mirrorFiles": 144,
+    "codex": 49,
+    "claude": 49,
+    "copilot": 46,
     "mirrorBlobMismatches": 0,
-    "dedicatedCaseSuites": 31,
+    "dedicatedCaseSuites": 32,
     "withoutDedicatedCasesLocated": 17,
     "behaviorallyEvaluated": 0,
     "provenByPairedEvidence": 0
@@ -1166,6 +1166,29 @@
         ".github/skills/custom-basemap/SKILL.md"
       ],
       "caseSuite": "docs/skill-evals/custom-basemap.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "share-and-embed",
+      "family": "Search and discovery",
+      "scope": "Share links with state, Open Graph images, embeddable widgets",
+      "expectedOutput": "Stateful links, static share images, noindex embed with ads exception",
+      "routing": "When launching or redesigning a tool, or when sharing or embedding comes up",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "95239c42df1c03596f3927481b4f4326ef8f69d9",
+      "mirrors": [
+        ".agents/skills/share-and-embed/SKILL.md",
+        ".claude/skills/share-and-embed/SKILL.md",
+        ".github/skills/share-and-embed/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/share-and-embed.md",
       "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
