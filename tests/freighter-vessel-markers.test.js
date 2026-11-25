@@ -11,3 +11,21 @@ test('AIS types produce distinct broad silhouettes and size follows reported len
  assert.match(context.shipIcon({speedKnots:0,shipType:null,lengthMeters:null}).className,/is-stopped/);
  assert.match(context.shipIcon({speedKnots:3,shipType:null,lengthMeters:null}).className,/is-moving/);
 });
+
+const fleetPart=source.slice(source.indexOf('  function fleetCounts('),source.indexOf('  function updateHubFleet('));
+vm.runInContext(fleetPart,context);
+test('Fleet counts partition the exact candidate reports and match marker classifications',()=>{
+ const reports=[70,79,80,31,52,60,30,null,37].map((shipType,i)=>({mmsi:i,shipType,lengthMeters:null,speedKnots:null}));
+ const counts=context.fleetCounts(reports);
+ assert.equal(counts.all,9);
+ assert.deepEqual({...counts},{all:9,cargo:2,tanker:1,tug:2,passenger:1,fishing:1,other:2});
+ for(const kind of ['cargo','tanker','tug','passenger','fishing','other']){
+  const result=context.filterFleet(reports,kind);
+  assert.equal(result.length,counts[kind]);
+  assert.ok(result.every(v=>context.shipIcon(v).className.includes('type-'+kind+' ')));
+ }
+ assert.equal(context.filterFleet(reports,'all'),reports);
+ assert.equal(reports.length,9);
+ assert.equal(context.fleetCounts([]).all,0);
+ assert.equal(context.filterFleet(reports,'not-a-type').length,0);
+});

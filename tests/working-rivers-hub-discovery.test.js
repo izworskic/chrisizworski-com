@@ -76,7 +76,7 @@ test('Freighter Central links both tools and its ItemList preserves ordering',()
  const list=graph.find(x=>x['@id']==='https://chrisizworski.com/freighters/#directory').itemListElement;
  assert.equal(new Set(list.map(x=>x.url)).size,list.length);
  assert.deepEqual(list.map(x=>x.position),list.map((_,i)=>i+1));
- assert.equal(graph.find(x=>x['@type']==='CollectionPage').dateModified,'2026-11-23');
+ assert.match(graph.find(x=>x['@type']==='CollectionPage').dateModified,/^\d{4}-\d{2}-\d{2}$/);
  for(const [river,id,city] of rivers){
   const slug=river+'-freighter-watch';
   assert.ok(grid.includes('data-working-river="'+river+'"'));
@@ -86,6 +86,12 @@ test('Freighter Central links both tools and its ItemList preserves ordering',()
  }
 });
 test('Sitemap lastmod for edited hub URLs is updated, but pilot pages remain noindex',()=>{
- for(const hub of ['tools','freighters'])assert.match(sitemap,new RegExp('<loc>https://chrisizworski.com/'+hub+'/</loc>\\s*<lastmod>2026-11-23</lastmod>'));
+ for(const [hub,source] of [['tools',tools],['freighters',freight]]){
+  const graph=schema(source)['@graph'];
+  const date=graph.find(x=>x['@id']==='https://chrisizworski.com/'+hub+'/'||x['@id']==='https://chrisizworski.com/'+hub+'/#page').dateModified;
+  assert.match(date,/^\d{4}-\d{2}-\d{2}$/);
+  const actual=sitemap.match(new RegExp('<loc>https://chrisizworski.com/'+hub+'/</loc>\\s*<lastmod>([^<]+)</lastmod>'));
+  assert.ok(actual,hub);assert.equal(actual[1],date,hub);
+ }
  for(const [river] of rivers)assert.ok(!sitemap.includes('<loc>https://chrisizworski.com/'+river+'-freighter-watch/</loc>'));
 });

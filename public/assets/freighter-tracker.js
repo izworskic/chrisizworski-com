@@ -118,16 +118,36 @@
   var searchAllButton = document.getElementById("freighterSearchAll");
   var clearSearchButton = document.getElementById("freighterClearSearch");
   var vesselList = document.getElementById("freighterVessels");
+  // Optional fleet controls exist on Freighter Central only. The dedicated tracker is unchanged.
+  var hubFleet = document.getElementById("hub-fleet-filter");
+  var hubFleetStatus = document.getElementById("hub-fleet-status");
+  var hubFleetButtons = hubFleet ? Array.prototype.slice.call(hubFleet.querySelectorAll("[data-hub-vessel-type]")) : [];
+  var hubVesselType = "all";
   var sourceCredits = document.getElementById("freighterCredits");
   var activityGrid=document.getElementById("activity-grid"), activityChecked=document.getElementById("activity-checked");
   var inspector=document.getElementById("ship-inspector"), inspectorTitle=document.getElementById("ship-inspector-title");
   var inspectorStatus=document.getElementById("ship-inspector-status"), inspectorFacts=document.getElementById("ship-inspector-facts");
   var inspectorClose=document.getElementById("ship-inspector-close"), selectedMmsi=null, selectedName=null;
   var storyBox=document.getElementById("ship-story"), storyPromise=null;
+  var hubShipDesk=!!(inspector&&inspector.hasAttribute("data-hub-inspector"));
+  var storyRequest=0;
   var corridorKeys=["soo","mackinac","duluth","port-huron","detroit","saginaw"];
   function recent(v,now){ return window.GreatLakesAisEvidence?.positionFresh(v,now)===true; }
   function corridorRadius(key){return key==="saginaw"?60:35;}
   function inCorridor(v,key){var view=views[key];return distanceMiles(view.lat,view.lng,v.lat,v.lon)<=corridorRadius(key);}
+  // Optional Freighter Central consumer. The dedicated tracker has no saved-waterways element.
+  // Reuse the same fresh AIS and corridor-radius rules, without another source request.
+  function publishHubActivity(now) {
+    var desk=document.getElementById("my-waterways");
+    if(!desk)return;
+    var counts=null;
+    if(reports&&!lastFailed){
+      var fresh=reports.vessels.filter(function(v){return recent(v,now);});
+      counts={};
+      corridorKeys.forEach(function(key){counts[key]=fresh.filter(function(v){return inCorridor(v,key);}).length;});
+    }
+    desk.dispatchEvent(new CustomEvent("freighter-corridor-report",{detail:{counts:counts,checkedAt:reports?reports.checkedAt:null,failed:lastFailed}}));
+  }
   function updateActivity(now){
     if(!activityGrid)return;
     var fresh=reports.vessels.filter(function(v){return recent(v,now);});
@@ -146,28 +166,59 @@
   function normalizedShipName(value){return String(value||"").toUpperCase().replace(/[^A-Z0-9]/g,"");}
   function storyFor(catalog,v,now){
     if(!catalog||catalog.schemaVersion!==1||!Array.isArray(catalog.stories))return null;
-    var checked=Date.parse(catalog.checkedOn+"T00:00:00Z"), age=now-checked;
+    var name=normalizedShipName(v.name);
+    if(!name)return null;
+    var matches=catalog.stories.filter(function(x){return x.mmsi===String(v.mmsi) && normalizedShipName(x.aisName)===name;});
+    if(matches.length!==1)return null;
+    var checked=Date.parse((matches[0].reviewedOn||catalog.checkedOn)+"T00:00:00Z"),age=now-checked;
     if(!Number.isFinite(checked)||age<0||age>180*86400000)return null;
-    var matches=catalog.stories.filter(function(x){return x.mmsi===String(v.mmsi) && normalizedShipName(x.aisName)===normalizedShipName(v.name);});
-    return matches.length===1?matches[0]:null;
+    return matches[0];
   }
   function renderStory(v){
     if(!storyBox)return;
     var id=String(v.mmsi), storyKey=id+":"+normalizedShipName(v.name);
-    if(!storyBox.hidden && storyBox.dataset.storyKey===storyKey)return;
-    storyBox.hidden=true;storyBox.replaceChildren();
-    if(!storyPromise)storyPromise=fetch("/assets/freighter-card-stories.json").then(function(r){if(!r.ok)throw Error("stories unavailable");return r.json();}).catch(function(){return null;});
+    if(storyBox.dataset.storyKey===storyKey)return;
+    var request=++storyRequest;
+    storyBox.dataset.storyKey=storyKey;
+    storyBox.hidden=!hubShipDesk;storyBox.replaceChildren();
+    if(hubShipDesk){var loading=node("p","Checking the reviewed ship profiles…");loading.className="hub-story-message";storyBox.append(loading);}
+    if(!storyPromise)storyPromise=fetch("/assets/freighter-card-stories.json").then(function(r){if(!r.ok)throw Error("stories unavailable");return r.json();}).catch(function(){storyPromise=null;return null;});
     storyPromise.then(function(catalog){
-      if(selectedMmsi!==id||selectedName!==normalizedShipName(v.name)||inspector.hidden)return;
-      var story=storyFor(catalog,v,Date.now());if(!story)return;
-      var picture=document.createElement("img");picture.src=story.image;picture.alt=story.imageAlt;picture.loading="lazy";picture.addEventListener("error",function(){picture.hidden=true;});
-      var figure=document.createElement("figure"), caption=document.createElement("figcaption"), credit=node("a",story.photoCredit);
-      credit.href=story.photoSource;credit.target="_blank";credit.rel="noopener";caption.append(credit);
-      if(story.licenseUrl){var license=node("a","License");license.href=story.licenseUrl;license.target="_blank";license.rel="noopener";caption.append(document.createTextNode(" · "),license);}
-      caption.append(document.createTextNode(" · Historical photograph, not live"));figure.append(picture,caption);
-      var content=document.createElement("div"), eyebrow=node("p","SHIP STORY"), heading=node("h4",story.headline), text=node("p",story.history), link=node("a","Read this ship’s full story →"), source=node("a","History source");
+      if(request!==storyRequest||selectedMmsi!==id||selectedName!==normalizedShipName(v.name)||inspector.hidden)return;
+      var story=storyFor(catalog,v,Date.now());
+      if(!story){
+        if(hubShipDesk){
+          var message=node("p",catalog?"A reviewed history is not available for this exact vessel identity yet. The AIS details above are still available.":"The ship-history catalog could not be loaded. You can still read the AIS report above.");
+          message.className="hub-story-message";storyBox.replaceChildren(message);storyBox.hidden=false;
+        }
+        if(!catalog)delete storyBox.dataset.storyKey;
+        return;
+      }
+      var content=document.createElement("div"), eyebrow=node("p","SHIP STORY"), heading=node("h4",story.headline), text=node("p",story.history);
+      var link=node("a",story.storyUrl.startsWith("/")?"Read this ship’s full story →":"Read the operator’s ship profile →"),source=node("a","History source");
       eyebrow.className="activity-kicker";link.href=story.storyUrl;link.className="ship-story-link";source.href=story.historySource;source.target="_blank";source.rel="noopener";
-      var note=node("p","Identity cross-check reviewed "+catalog.checkedOn+" · AIS details can change.");note.className="ship-story-note";content.append(eyebrow,heading,text,link,document.createTextNode(" · "),source,note);storyBox.replaceChildren(figure,content);storyBox.dataset.storyKey=storyKey;storyBox.hidden=false;
+      content.append(eyebrow,heading,text);
+      if(story.specs){
+        var stats=document.createElement("dl");stats.className="ship-profile-specs";
+        [["Built (operator)",String(story.specs.built)],["Overall length",story.specs.lengthFeet.toLocaleString("en-US")+" ft"],["Carrying capacity",story.specs.capacityGrossTons.toLocaleString("en-US")+" gross tons"]].forEach(function(field){var cell=document.createElement("div");cell.append(node("dt",field[0]),node("dd",field[1]));stats.append(cell);});
+        var specLink=node("a","Published ship specifications");specLink.href=story.specs.source;specLink.target="_blank";specLink.rel="noopener";
+        var specNote=node("p","Capacity is a published design/operating specification, not current cargo aboard.");specNote.className="ship-story-note";
+        content.append(stats,specLink,specNote);
+      }
+      if(story.lookFor){var observation=document.createElement("p");observation.append(node("strong","Look for: "),document.createTextNode(story.lookFor));content.append(observation);}
+      var note=node("p","Identity cross-check reviewed "+(story.reviewedOn||catalog.checkedOn)+" · AIS details can change.");note.className="ship-story-note";
+      content.append(link,document.createTextNode(" · "),source,note);
+      storyBox.replaceChildren();storyBox.classList.toggle("has-photo",!!story.image);
+      if(story.image){
+        var picture=document.createElement("img");picture.src=story.image;picture.alt=story.imageAlt;picture.loading="lazy";
+        var figure=document.createElement("figure"),caption=document.createElement("figcaption"),credit=node("a",story.photoCredit);
+        credit.href=story.photoSource;credit.target="_blank";credit.rel="noopener";caption.append(credit);
+        if(story.licenseUrl){var license=node("a","License");license.href=story.licenseUrl;license.target="_blank";license.rel="noopener";caption.append(document.createTextNode(" · "),license);}
+        caption.append(document.createTextNode(" · Historical photograph, not live"));figure.append(picture,caption);
+        picture.addEventListener("error",function(){if(request!==storyRequest)return;figure.hidden=true;storyBox.classList.remove("has-photo");});
+        storyBox.append(figure);
+      }
+      storyBox.append(content);storyBox.hidden=false;
     });
   }
   function showShip(v,now){
@@ -178,14 +229,24 @@
     inspectorFacts.replaceChildren();
     var evidence=window.GreatLakesAisEvidence?.motion(v,now);
     var motionLabel=evidence?.state==="moving"?"Recent reported movement":evidence?.state==="low-reported-speed"?"Recent low reported speed":"Current movement not established";
-    var fields=[["Movement evidence",motionLabel],["Reported speed",v.speedKnots===null?"Not reported":(v.speedKnots*1.15078).toFixed(1)+" mph ("+v.speedKnots.toFixed(1)+" kn)"],
+    var fields=[["Reported type",vesselShape(v).label],["Movement evidence",motionLabel],["Reported speed",v.speedKnots===null?"Not reported":(v.speedKnots*1.15078).toFixed(1)+" mph ("+v.speedKnots.toFixed(1)+" kn)"],
       ["Course",v.course===null?"Not reported":Math.round(v.course)+"°"],
       ["AIS destination",v.destination||"Not reported"],
       ["Reported length",v.lengthMeters===null?"Not reported":Math.round(v.lengthMeters*3.28084)+" ft"]];
     fields.forEach(function(field){var div=document.createElement("div");div.append(node("dt",field[0]),node("dd",field[1]));inspectorFacts.append(div);});
   }
-  function clearShip(){selectedMmsi=null;selectedName=null;if(inspector)inspector.hidden=true;if(storyBox){storyBox.hidden=true;storyBox.replaceChildren();delete storyBox.dataset.storyKey;}}
-  if(inspectorClose)inspectorClose.addEventListener("click",function(){clearShip();vesselSearch.focus();});
+  function clearShip(){storyRequest++;selectedMmsi=null;selectedName=null;if(inspector)inspector.hidden=true;if(storyBox){storyBox.hidden=true;storyBox.replaceChildren();storyBox.classList.remove("has-photo");delete storyBox.dataset.storyKey;}}
+  if(inspectorClose)inspectorClose.addEventListener("click",function(){
+    clearShip();
+    if(hubShipDesk){var heading=document.getElementById("hub-map-title");if(heading)heading.focus();}
+    else vesselSearch.focus();
+  });
+  function meetHubShip(v){
+    if(map)map.closePopup();
+    showShip(v,Date.now());
+    if(inspectorTitle)inspectorTitle.focus({preventScroll:true});
+    if(inspector)inspector.scrollIntoView({block:"nearest",behavior:"auto"});
+  }
   function node(tag, value) {var el=document.createElement(tag);el.textContent=value;return el;}
   // AIS type codes describe broad vessel categories, not an exact hull or identity.
   function vesselShape(v) {
@@ -224,6 +285,33 @@
     if(!terms.length || !name.length)return false;
     return terms.every(function(term){return name.some(function(part){return part.startsWith(term);});});
   }
+  function fleetCounts(vessels) {
+    var counts={all:vessels.length,cargo:0,tanker:0,tug:0,passenger:0,fishing:0,other:0};
+    vessels.forEach(function(v){counts[vesselShape(v).kind]++;});
+    return counts;
+  }
+  function filterFleet(vessels,kind) {
+    return kind==="all"?vessels:vessels.filter(function(v){return vesselShape(v).kind===kind;});
+  }
+  function updateHubFleet(matches,visibleCount,query) {
+    if(!hubFleet||!hubFleetStatus)return;
+    var counts=matches===null?null:fleetCounts(matches);
+    hubFleetButtons.forEach(function(button){
+      var kind=button.getAttribute("data-hub-vessel-type");
+      button.querySelector("strong").textContent=counts===null?"—":String(counts[kind]);
+      button.disabled=counts===null;
+      button.setAttribute("aria-pressed",kind===hubVesselType?"true":"false");
+    });
+    if(counts===null){
+      hubFleetStatus.textContent="AIS reports unavailable. Vessel-type counts are unknown, not zero.";
+      return;
+    }
+    var scope=query?"matching your ship-name search":"in "+views[activeView].label;
+    var text=(lastFailed?"Refresh unavailable; retained reports. ":"")+"Showing "+visibleCount+" of "+counts.all+" recent AIS reports "+scope+".";
+    if(hubVesselType!=="all")text+=" Select All ships to remove the type filter.";
+    if(!counts.all)text+=" No recent reports returned; this does not mean the waterway is empty.";
+    hubFleetStatus.textContent=text;
+  }
   function renderVessels() {
     if (!reports) return;
     var initialCheck=document.getElementById("freighterInitialCheck");
@@ -231,13 +319,17 @@
     var view=views[activeView], now=Date.now();
     var current=reports.vessels.filter(function(v){return recent(v,now) && (activeView === "overview" || inCorridor(v,activeView));});
     updateActivity(now);
+    publishHubActivity(now);
     var query=vesselSearch.value.trim();
-    var vessels=current.filter(function(v){return vesselMatchesSearch(v,query);});
+    var matches=current.filter(function(v){return vesselMatchesSearch(v,query);});
+    var vessels=filterFleet(matches,hubVesselType);
+    updateHubFleet(matches,vessels.length,query);
     if(query){
-      vesselSearchStatus.textContent=vessels.length+" of "+current.length+" recent "+view.label+" AIS reports match “"+query+"”. Search only includes reports received within 30 minutes.";
+      vesselSearchStatus.textContent=matches.length+" of "+current.length+" recent "+view.label+" AIS reports match “"+query+"”. Search only includes reports received within 30 minutes.";
     }else{
       vesselSearchStatus.textContent=current.length+" recent AIS reports available in "+view.label+". Enter a ship name or MMSI to narrow the map.";
     }
+    if(hubVesselType!=="all")vesselSearchStatus.textContent+=" A vessel-type filter is also active.";
     var selected=vessels.find(function(v){return String(v.mmsi)===selectedMmsi;});
     if(selected)showShip(selected,now);else clearShip();
     vesselList.replaceChildren(); if(layer) layer.clearLayers();
@@ -248,16 +340,22 @@
       popup.append(node("strong",name),node("p",detail),node("p","MMSI "+v.mmsi));
       popup.append(node("p",vesselShape(v).label+(v.lengthMeters===null?" · length not reported":" · reported length "+Math.round(v.lengthMeters*3.28084)+" ft")));
       if(v.course!==null) popup.append(node("p","Course "+Math.round(v.course)+"°"));
+      if(hubShipDesk){
+        var meet=node("button","Meet this ship");meet.type="button";meet.className="hub-meet-ship";
+        meet.addEventListener("click",function(){meetHubShip(v);});popup.append(meet);
+      }
       if(map){
         var marker=L.marker([v.lat,v.lon],{icon:shipIcon(v),title:name,alt:name,keyboard:true}).addTo(layer).bindTooltip(node("span",name)).bindPopup(popup);
-        marker.on("click",function(){showShip(v,Date.now());if(inspector)inspector.scrollIntoView({block:"nearest",behavior:"smooth"});});
+        marker.on("click",function(){if(!hubShipDesk){showShip(v,Date.now());if(inspector)inspector.scrollIntoView({block:"nearest",behavior:"smooth"});}});
         var markerElement=marker.getElement();
-        if(markerElement)markerElement.addEventListener("keydown",function(event){if(event.key==="Enter"||event.key===" "){event.preventDefault();showShip(v,Date.now());marker.openPopup();}});
-        var button=node("button",name);button.type="button";button.addEventListener("click",function(){showShip(v,Date.now());map.setView([v.lat,v.lon],13);marker.openPopup();if(inspector)inspector.scrollIntoView({block:"nearest",behavior:"smooth"});else mapFrame.scrollIntoView({block:"center",behavior:"smooth"});});item.append(button);
-      }else {var fallback=node("button",name);fallback.type="button";fallback.addEventListener("click",function(){showShip(v,Date.now());});item.append(fallback);}
+        if(markerElement)markerElement.addEventListener("keydown",function(event){if(event.key==="Enter"||event.key===" "){event.preventDefault();if(!hubShipDesk)showShip(v,Date.now());marker.openPopup();}});
+        var button=node("button",name);button.type="button";button.addEventListener("click",function(){if(hubShipDesk){map.setView([v.lat,v.lon],13);meetHubShip(v);return;}showShip(v,Date.now());map.setView([v.lat,v.lon],13);marker.openPopup();if(inspector)inspector.scrollIntoView({block:"nearest",behavior:"smooth"});else mapFrame.scrollIntoView({block:"center",behavior:"smooth"});});item.append(button);
+      }else {var fallback=node("button",name);fallback.type="button";fallback.addEventListener("click",function(){if(hubShipDesk)meetHubShip(v);else showShip(v,Date.now());});item.append(fallback);}
       item.append(node("span",detail));vesselList.append(item);
     });
-    if(!vessels.length) vesselList.append(node("li",query
+    if(!vessels.length) vesselList.append(node("li",hubVesselType!=="all"
+      ? "No recent AIS reports match this vessel type and search. Select All ships or another corridor. Missing reports do not prove a ship is absent."
+      : query
       ? "No matching recent AIS reports in "+view.label+". Try All Great Lakes, a different name, or the passage source below. A missing report is not evidence the ship is absent."
       : "No recent reports returned for this view. This does not mean there are no ships; check the passage source below."));
     setStatus((lastFailed?"Refresh unavailable; retained ":"")+vessels.length+" recent reports · "+view.label+" · checked "+new Date(reports.checkedAt).toLocaleTimeString("en-US",{hour:"numeric",minute:"2-digit",timeZone:"America/Detroit",timeZoneName:"short"})+(map?"":" · map unavailable"),lastFailed?"slow":vessels.length?"loaded":"");
@@ -269,7 +367,7 @@
       var r=await fetch("/api/freighter-ais",{signal:AbortSignal.timeout(12000)}), data=await r.json();
       if(!r.ok||!data.ok||!Array.isArray(data.vessels))throw new Error("AIS unavailable");
       reports=data;lastFailed=false;renderVessels();
-    }catch(_){lastFailed=true;if(reports)renderVessels();else{if(activityChecked)activityChecked.textContent="AIS unavailable; no corridor counts can be shown.";setStatus("Vessel reports unavailable. Try refresh or the passage links below.","slow");vesselList.replaceChildren(node("li","The feed did not return usable data. This is not a zero-traffic report."));vesselSearchStatus.textContent="Search unavailable: no current AIS reports loaded. Try refresh or the external passage sources."; }}
+    }catch(_){lastFailed=true;if(reports)renderVessels();else{publishHubActivity(Date.now());updateHubFleet(null,0,"");if(activityChecked)activityChecked.textContent="AIS unavailable; no corridor counts can be shown.";setStatus("Vessel reports unavailable. Try refresh or the passage links below.","slow");vesselList.replaceChildren(node("li","The feed did not return usable data. This is not a zero-traffic report."));vesselSearchStatus.textContent="Search unavailable: no current AIS reports loaded. Try refresh or the external passage sources."; }}
     finally{busy=false;refreshButton.disabled=false;}
   }
 
@@ -439,6 +537,30 @@
     if (settings.track !== false) trackView(key);
   }
 
+  if(hubFleet&&hubFleetStatus){
+    hubFleet.hidden=false;
+    hubFleetButtons.forEach(function(button){
+      button.addEventListener("click",function(){
+        var kind=button.getAttribute("data-hub-vessel-type");
+        if(!["all","cargo","tanker","tug","passenger","fishing","other"].includes(kind)||!reports)return;
+        hubVesselType=kind;
+        renderVessels();
+      });
+    });
+  }
+  if(hubShipDesk)document.querySelectorAll("[data-hub-find-ship]").forEach(function(button){
+    button.hidden=false;
+    button.addEventListener("click",function(){
+      var id=button.getAttribute("data-hub-find-ship");
+      if(!/^\d{9}$/.test(id))return;
+      hubVesselType="all";vesselSearch.value=id;
+      var searchPanel=vesselSearch.closest("details");if(searchPanel)searchPanel.open=true;
+      selectView("overview",{updateHash:true,track:true});
+      if(!reports)vesselSearchStatus.textContent="Checking for this vessel’s recent AIS report. A missing report does not establish its location.";
+      document.getElementById("live-map").scrollIntoView({block:"start",behavior:"auto"});
+      vesselSearch.focus({preventScroll:true});
+    });
+  });
   vesselSearch.addEventListener("input", function () {if(reports)renderVessels();});
   clearSearchButton.addEventListener("click",function(){vesselSearch.value="";if(reports)renderVessels();vesselSearch.focus();});
   searchAllButton.addEventListener("click",function(){selectView("overview",{updateHash:true,track:true});});

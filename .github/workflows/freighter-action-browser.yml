@@ -3,11 +3,15 @@ on:
   pull_request:
     paths:
       - 'public/great-lakes-freighter-tracking/**'
+      - 'public/freighters/**'
+      - 'public/assets/freighters-hub.*'
+      - 'tests/freighters-hub-browser.cjs'
       - 'public/assets/freighter-tracker.*'
       - 'public/assets/freighter-card-stories.json'
       - 'tests/freighter-card-stories.test.js'
       - 'tests/freighter-vessel-markers.test.js'
       - 'tests/freighter-action-*'
+      - 'experience-foundry/examples/freighter-central-corridor-*'
       - '.github/workflows/freighter-action-browser.yml'
 permissions:
   contents: read
@@ -17,6 +21,9 @@ jobs:
     timeout-minutes: 10
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
@@ -24,6 +31,22 @@ jobs:
       - run: npm ci
       - run: npm install --no-save --no-package-lock playwright@1.56.1
       - run: node tests/freighter-action-browser.cjs
+      - run: node tests/freighters-hub-browser.cjs
+      - name: Foundry corridor choice before-after proof
+        run: |
+          node experience-foundry/examples/freighter-central-corridor-improvement.mjs
+          node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/freighter-central-corridor-choice/run.json
+          node scripts/experience-foundry.mjs prove --run experience-foundry/drafts/freighter-central-corridor-choice/run.json --out build/experience-foundry/freighter-central-corridor-proof
+          node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/freighter-central-corridor-choice/run.json --proof build/experience-foundry/freighter-central-corridor-proof/proof.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: freighter-central-foundry-proof
+          path: |
+            experience-foundry/drafts/freighter-central-corridor-choice/
+            build/experience-foundry/freighter-central-corridor-proof/
+          if-no-files-found: warn
+          retention-days: 7
       - uses: actions/upload-artifact@v4
         if: always()
         with:

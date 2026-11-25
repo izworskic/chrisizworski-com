@@ -1,0 +1,135 @@
+'use strict';
+const http=require('node:http'),fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
+const {chromium}=require('playwright');
+const root=path.resolve('public'),out='artifacts/freighter-action';
+fs.mkdirSync(out,{recursive:true});
+const server=http.createServer((req,res)=>{let f=path.resolve(root,'.'+decodeURIComponent(req.url.split('?')[0]));if(!f.startsWith(root+path.sep)){res.writeHead(403).end();return}try{if(fs.statSync(f).isDirectory())f=path.join(f,'index.html')}catch{}fs.readFile(f,(e,b)=>{if(e){res.writeHead(404).end();return}res.setHeader('content-type',({'.js':'text/javascript','.css':'text/css','.html':'text/html','.json':'application/json','.jpg':'image/jpeg','.png':'image/png'})[path.extname(f)]||'application/octet-stream');res.end(b)})});
+const fixture=()=>{const now=new Date().toISOString();const ship=(mmsi,name,lat,lon,type,speed,length,seen=now)=>({mmsi,name,lat,lon,shipType:type,speedKnots:speed,lengthMeters:length,seen,course:90,destination:null,source:'QA fixture'});return {ok:true,checkedAt:now,attribution:[{credit:'Fixture only'}],vessels:[ship('366904950','LEE A. TREGURTHA',46.5036,-84.36,70,5,240),ship('367000002','QA TANKER',43.657,-83.874,80,0,100),ship('367000003','QA STALE',46.51,-84.35,70,5,200,new Date(Date.now()-41*60000).toISOString())]}};
+(async()=>{await new Promise(r=>server.listen(0,'127.0.0.1',r));const base='http://127.0.0.1:'+server.address().port;const browser=await chromium.launch({channel:'chrome',headless:true,args:['--no-sandbox']});try{
+for(const width of [360,390,768,1280,1440]){
+ const context=await browser.newContext({viewport:{width,height:900},reducedMotion:'reduce'}),page=await context.newPage(),errors=[];let failed=false;
+ page.on('pageerror',e=>errors.push(e.message));
+ await context.route('**/*',async route=>{const u=new URL(route.request().url());if(u.hostname==='unpkg.com'&&u.pathname.endsWith('/leaflet.js'))return route.fulfill({status:200,contentType:'text/javascript',body:fs.readFileSync('public/vendor/leaflet/leaflet.js')});if(u.hostname==='unpkg.com'&&u.pathname.endsWith('/leaflet.css'))return route.fulfill({status:200,contentType:'text/css',body:fs.readFileSync('public/vendor/leaflet/leaflet.css')});if(u.pathname==='/api/freighter-ais')return route.fulfill({status:failed?503:200,contentType:'application/json',body:JSON.stringify(failed?{}:fixture())});if(u.pathname==='/api/buoys')return route.fulfill({status:503,contentType:'application/json',body:'{}'});if(u.hostname==='127.0.0.1')return route.continue();return route.abort()});
+ await page.goto(base+'/freighters/',{waitUntil:'domcontentloaded'});
+ assert.equal(await page.locator("#my-waterways").isHidden(),true);
+ await page.locator('#freighterMap .tracker-ship-marker').first().waitFor();
+ assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),2);
+ assert.equal(await page.locator('.type-cargo.size-large.is-moving').count(),1);
+ assert.equal(await page.locator('.type-tanker.size-medium.is-stopped').count(),1);
+ assert.equal(await page.locator('.type-cargo .ship-hull').evaluate(e=>getComputedStyle(e).fill),'rgb(20, 108, 134)');
+ assert.match(await page.locator('#mapStatusText').innerText(),/2 recent reports/);
+ const type=kind=>page.locator('[data-hub-vessel-type="'+kind+'"]');
+ assert.equal(await type('all').locator('strong').innerText(),'2');
+ assert.equal(await type('cargo').locator('strong').innerText(),'1');
+ assert.equal(await type('tanker').locator('strong').innerText(),'1');
+ assert.equal(await type('passenger').locator('strong').innerText(),'0');
+ await type('tanker').click();
+ assert.equal(await type('tanker').getAttribute('aria-pressed'),'true');
+ assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),1);
+ assert.equal(await page.locator('#freighterVessels button').count(),1);
+ assert.match(await page.locator('#freighterVessels').textContent(),/QA TANKER/);
+ assert.match(await page.locator('#hub-fleet-status').innerText(),/Showing 1 of 2/);
+ await page.locator('[data-freighter-view=soo]').click();
+ assert.equal(await type('tanker').locator('strong').innerText(),'0');
+ assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),0);
+ assert.match(await page.locator('#freighterVessels').textContent(),/No recent AIS reports match/);
+ await type('cargo').focus();await page.keyboard.press('Enter');
+ assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),1);
+ await page.locator('[data-freighter-view=overview]').click();
+ assert.equal(await type('cargo').locator('strong').innerText(),'1');
+ await type('all').click();
+ assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),2);
+ await page.screenshot({path:out+'/hub-first-'+width+'.png'});
+ await page.locator('[data-freighter-view=soo]').click();
+ assert.equal(await page.locator('#corridorTitle').innerText(),'Soo Locks');
+ assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),1);
+ await page.locator('.hub-vessel-search summary').click();
+ await page.locator('#freighterNameSearch').fill('QA TANKER');
+ assert.match(await page.locator('#freighterSearchStatus').innerText(),/0 of 1/);
+ assert.equal(await type('all').locator('strong').innerText(),'0');
+ await page.locator('#freighterSearchAll').click();
+ assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),1);
+ assert.equal(await type('cargo').locator('strong').innerText(),'0');assert.equal(await type('tanker').locator('strong').innerText(),'1');
+ await type('cargo').click();assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),0);
+ await type('all').click();assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),1);
+ await page.locator('#freighterClearSearch').click();
+ assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),2);
+ await page.locator('[data-freighter-view=saginaw]').click();assert.equal(await page.locator('#corridorTitle').innerText(),'Saginaw Bay');
+ await page.locator('[data-freighter-view=soo]').click();assert.equal(await page.locator('#corridorTitle').innerText(),'Soo Locks');
+ await page.locator('#freighterMap .tracker-ship-marker').first().focus();await page.keyboard.press('Enter');
+ await page.locator('#freighterMap .leaflet-popup').waitFor();assert.equal(await page.locator('#freighterMap .leaflet-popup').count(),1);
+ assert.match(await page.locator('#freighterMap .leaflet-popup').innerText(),/LEE A. TREGURTHA/);
+ assert.equal(await page.locator('#ship-inspector').isHidden(),true);
+ await page.locator('.hub-meet-ship').click();await page.locator('#ship-story').getByText(/wartime tanker/).first().waitFor();
+ // Leaflet removes the fading popup asynchronously; require actual detachment.
+ await page.locator('#freighterMap .leaflet-popup').waitFor({state:'detached',timeout:2000}); assert.equal(await page.locator('#freighterMap .leaflet-popup').count(),0);
+ assert.match(await page.locator('#ship-inspector-title').innerText(),/LEE A. TREGURTHA/);assert.match(await page.locator('#ship-story').innerText(),/29,360 gross tons/);
+ assert.equal(await page.locator('#ship-story img').evaluate(async img=>{await img.decode();return img.naturalWidth>0}),true);
+ if(width===390)await page.locator('#ship-inspector').screenshot({path:out+'/hub-ship-story-390.png'});
+ await page.locator('#ship-inspector-close').click();assert.equal(await page.locator('#ship-inspector').isHidden(),true);
+ if(width===390){
+   await page.locator('[data-hub-find-ship="366904950"]').click();assert.equal(await page.locator('#freighterNameSearch').inputValue(),'366904950');assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),1);
+   await page.locator('[data-hub-find-ship="366904940"]').click();assert.equal(await page.locator('#freighterMap .tracker-ship-marker').count(),0);
+   // Add a known text-only identity in a new response, not a live claim.
+   await page.unroute('**/*');
+   await page.route('**/*',async route=>{const u=new URL(route.request().url());if(u.hostname==='unpkg.com'&&u.pathname.endsWith('/leaflet.js'))return route.fulfill({status:200,contentType:'text/javascript',body:fs.readFileSync('public/vendor/leaflet/leaflet.js')});if(u.hostname==='unpkg.com'&&u.pathname.endsWith('/leaflet.css'))return route.fulfill({status:200,contentType:'text/css',body:fs.readFileSync('public/vendor/leaflet/leaflet.css')});if(u.pathname==='/api/freighter-ais'){const data=fixture();data.vessels.push({...data.vessels[0],mmsi:'366904940',name:'PAUL R TREGURTHA',lengthMeters:309});return route.fulfill({status:failed?503:200,contentType:'application/json',body:JSON.stringify(failed?{}:data)});}if(u.pathname==='/api/buoys')return route.fulfill({status:503,contentType:'application/json',body:'{}'});if(u.hostname==='127.0.0.1')return route.continue();return route.abort()});
+   await page.locator('#mapRefresh').click();await page.locator('#freighterMap .tracker-ship-marker').waitFor();
+   await page.locator('#freighterMap .tracker-ship-marker').focus();await page.keyboard.press('Enter');await page.locator('.hub-meet-ship').click();
+   await page.locator('#ship-story').getByText(/longest ship on the lakes/).waitFor();
+   assert.match(await page.locator('#ship-story').innerText(),/68,000 gross tons/);assert.equal(await page.locator('#ship-story img').count(),0);
+   // Leaflet fades closed popups before removing their nodes. Require detachment before selecting the next ship.
+   await page.locator('#freighterMap .leaflet-popup').waitFor({state:'detached',timeout:2000});
+   assert.equal(await page.locator('#freighterMap .leaflet-popup').count(),0);
+   await page.locator('#ship-inspector-close').click();await page.unroute('**/*');
+   await page.locator('#mapRefresh').click();await page.waitForFunction(()=>document.getElementById('hub-fleet-status').textContent.includes('Showing 0 of 0'));
+   await page.locator('#freighterClearSearch').click();await page.locator('[data-freighter-view=saginaw]').click();
+   await page.locator('#freighterMap .tracker-ship-marker').first().focus();await page.keyboard.press('Enter');
+   await page.locator('#freighterMap .leaflet-popup').waitFor();
+   assert.equal(await page.locator('#freighterMap .leaflet-popup').count(),1);
+   await page.locator('#freighterMap .leaflet-popup .hub-meet-ship').click();await page.locator('#ship-story').getByText(/reviewed history is not available/).waitFor();
+   await page.locator('#freighterMap .leaflet-popup').waitFor({state:'detached',timeout:2000});
+   assert.equal(await page.locator('#ship-story img').count(),0);await page.locator('#ship-inspector-close').click();
+ }
+ await page.locator('#live-map').screenshot({path:out+'/hub-map-'+width+'.png'});
+ await page.locator('#finder-query').fill('Cleveland');await page.locator('#finder-query').press('Enter');assert.equal(await page.locator('#corridor').inputValue(),'cuyahoga');assert.equal(await page.locator('#finder-go').getAttribute('href'),'/cuyahoga-freighter-watch/');
+ await page.locator('#finder-query').fill('unknown location');await page.locator('#finder-search-go').click();assert.match(await page.locator('#finder-search-status').innerText(),/No matching/);assert.equal(await page.locator('#corridor').inputValue(),'cuyahoga');
+ await page.locator('#corridor').selectOption('duluth');await page.locator('#finder-go').click();assert.equal(await page.locator('#corridorTitle').innerText(),'Duluth–Superior');
+ if(width===390){
+   await page.locator('#corridor').selectOption('soo');await page.locator('#save-waterway').click();
+   await page.locator('[data-saved-waterway=soo]').waitFor();
+   assert.match(await page.locator('[data-saved-waterway=soo]').innerText(),/1 recent AIS report within about 35 miles/);
+   await page.locator('#save-waterway').click();assert.equal(await page.locator('#saved-waterways-list li').count(),1);
+   await page.locator('#corridor').selectOption('cuyahoga');await page.locator('#save-waterway').click();
+   assert.equal(await page.locator('[data-saved-waterway=cuyahoga] a').getAttribute('href'),'/cuyahoga-freighter-watch/');
+   assert.match(await page.locator('[data-saved-waterway=cuyahoga]').innerText(),/specialist waterway/);
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.waitForFunction(()=>document.querySelector('[data-saved-waterway=soo] p')?.textContent.includes('recent AIS report within'));
+   assert.equal(await page.locator('#saved-waterways-list li').count(),2);
+   await page.locator('[data-saved-waterway=soo] a').click();assert.equal(await page.locator('#corridorTitle').innerText(),'Soo Locks');
+   await page.locator('#my-waterways').screenshot({path:out+'/hub-saved-390.png'});
+   await page.locator('[data-saved-waterway=cuyahoga] button').click();assert.equal(await page.locator('#saved-waterways-list li').count(),1);
+ }
+ failed=true;await page.locator('#mapRefresh').click();await page.waitForFunction(()=>document.getElementById('mapStatusText').textContent.includes('Refresh unavailable'));
+ assert.match(await page.locator('#hub-fleet-status').innerText(),/Refresh unavailable; retained reports/);
+ if(width===390){
+   assert.match(await page.locator('[data-saved-waterway=soo]').innerText(),/Last known \(not live\)/);
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.waitForFunction(()=>document.querySelector('[data-saved-waterway=soo] p')?.textContent.includes('Fresh report unavailable'));
+   assert.match(await page.locator('[data-saved-waterway=soo]').innerText(),/Last known \(not live\)/);
+   await page.locator('#clear-waterways').click();assert.equal(await page.locator('#my-waterways').isHidden(),true);
+   assert.equal(await page.evaluate(()=>localStorage.getItem('ciz:freighters:spots:v1')),'[]');
+ }
+ assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),true,'overflow '+width);
+ assert.deepEqual(errors,[]);await context.close();
+}
+const context=await browser.newContext({viewport:{width:390,height:900}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+await context.route('**/*',route=>{const u=new URL(route.request().url());if(u.pathname==='/api/freighter-ais')return route.fulfill({status:503,contentType:'application/json',body:'{}'});return u.hostname==='127.0.0.1'?route.continue():route.abort()});
+await page.goto(base+'/freighters/',{waitUntil:'domcontentloaded'});await page.getByText(/Vessel reports unavailable/).waitFor();assert.equal(await page.locator('[data-hub-vessel-type=all] strong').innerText(),'—');assert.equal(await page.locator('[data-hub-vessel-type=all]').isDisabled(),true);assert.match(await page.locator('#hub-fleet-status').innerText(),/unknown, not zero/);assert.ok(await page.locator('#freighterMap').evaluate(e=>e.getBoundingClientRect().height)<=120);assert.deepEqual(errors,[]);await context.close();
+const nojs=await browser.newContext({javaScriptEnabled:false,viewport:{width:390,height:900}}),staticPage=await nojs.newPage();await staticPage.goto(base+'/freighters/',{waitUntil:'domcontentloaded'});assert.equal(await staticPage.locator('#corridors .corridor-card').count(),10);assert.ok(await staticPage.locator('#corridors a[href="/calumet-freighter-watch/"]').isVisible());assert.equal(await staticPage.locator('#my-waterways').isHidden(),true);assert.equal(await staticPage.locator('#save-waterway-row').isHidden(),true);assert.equal(await staticPage.locator('#hub-fleet-filter').isHidden(),true);assert.equal(await staticPage.locator('#ship-inspector').isHidden(),true);assert.equal(await staticPage.locator('[data-library-mmsi]').count(),8);assert.equal(await staticPage.locator('[data-hub-find-ship]').first().isHidden(),true);await nojs.close();
+const blocked=await browser.newContext({viewport:{width:390,height:900}}),blockedPage=await blocked.newPage();
+await blocked.addInitScript(()=>{Storage.prototype.getItem=function(){throw Error('blocked')};Storage.prototype.setItem=function(){throw Error('blocked')};});
+await blocked.route('**/*',route=>{const u=new URL(route.request().url());if(u.pathname==='/api/freighter-ais')return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(fixture())});return u.hostname==='127.0.0.1'?route.continue():route.abort()});
+await blockedPage.goto(base+'/freighters/',{waitUntil:'domcontentloaded'});await blockedPage.locator('#save-waterway').click();assert.match(await blockedPage.locator('#save-waterway-status').innerText(),/could not save/);
+await blockedPage.locator('#corridor').selectOption('welland');assert.equal(await blockedPage.locator('#finder-go').getAttribute('href'),'/welland-canal/');await blocked.close();
+console.log('Freighter hub fixture browser scenarios complete; live AIS and external map tiles not verified.');
+}finally{await browser.close();server.close()}})().catch(e=>{console.error(e);process.exitCode=1;server.close()});

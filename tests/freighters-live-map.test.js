@@ -24,7 +24,7 @@ test("Live five-lake AIS map is prominently ahead of finder and directory", () =
 test("Map embeds existing specialized engine and does not introduce another AIS request", () => {
   const paths = [
     "https://unpkg.com/leaflet@1.9.4/dist/leaflet.js",
-    "/assets/freighter-tracker.js?v=20260917",
+    "/assets/freighter-tracker.js?v=20261124",
     "/assets/freighters-hub.js"
   ];
   for(const p of paths) assert.ok(html.includes(p), "missing "+p);
@@ -80,3 +80,53 @@ test("Search canonical, entity, Person byline and intent boundary stay stable", 
   assert.doesNotMatch(html, /<meta[^>]+noindex/);
   assert.match(html, /class="hub-map-legal"/);
 });
+
+ test("Freighter Central supplies every required shared ship-search control and the actual ship-marker styling", () => {
+  for (const id of ["freighterNameSearch","freighterSearchStatus","freighterSearchAll","freighterClearSearch"]) {
+    assert.equal((html.match(new RegExp('id="' + id + '"', 'g')) || []).length, 1, id);
+    assert.ok(tracker.includes('getElementById("' + id + '")'));
+  }
+  assert.match(css, /\.tracker-ship-marker\s*\{/);
+  assert.match(css, /\.tracker-ship-marker\.is-stopped \.ship-hull/);
+  assert.match(css, /\.hub-map-canvas-wrap\.map-stage-unavailable/);
+  assert.ok(html.indexOf('id="freighterNameSearch"') < html.indexOf('id="freighterMap"'));
+});
+ test("The connected corridor guide includes all ten destinations and keeps specialist URLs",()=>{
+  const section=html.slice(html.indexOf('id="corridors"'),html.indexOf('id="fleet"'));
+  assert.equal((section.match(/class="corridor-card"/g)||[]).length,10);
+  for(const url of ["/calumet-freighter-watch/","/cuyahoga-freighter-watch/","/welland-canal/","/st-lawrence-seaway/"])assert.ok(section.includes('href="'+url+'"'));
+});
+
+test("Saved desk is hidden before JS, consumes existing corridor activity and uses no new fetch",()=>{
+ const saved=read("public/assets/freighters-waterways.js");
+ assert.match(html,/id="my-waterways"[^>]+hidden/);
+ assert.match(html,/id="save-waterway-row"[^>]+hidden/);
+ assert.ok(html.indexOf("/assets/freighters-waterways.js")<html.indexOf("/assets/freighter-tracker.js"));
+ assert.match(tracker,/if\(!desk\)return;/);
+ assert.match(tracker,/freighter-corridor-report/);
+ assert.doesNotMatch(saved,/\bfetch\s*\(/);
+ assert.match(css,/\.hub-map-canvas-wrap\{isolation:isolate;overflow:hidden\}/);
+});
+
+test("Fleet controls are opt-in to Freighter Central and use the same AIS category as markers",()=>{
+ assert.match(html,/id="hub-fleet-filter"[^>]+hidden/);
+ for(const kind of ["all","cargo","tanker","tug","passenger","fishing","other"])assert.equal((html.match(new RegExp('data-hub-vessel-type="'+kind+'"','g'))||[]).length,1);
+ assert.match(tracker,/counts\[vesselShape\(v\)\.kind\]\+\+/);
+ assert.match(tracker,/vesselShape\(v\)\.kind===kind/);
+ assert.match(tracker,/updateHubFleet\(matches,vessels\.length,query\)/);
+ assert.match(tracker,/updateHubFleet\(null,0,""\)/);
+ assert.match(css,/\.hub-fleet-filter\[hidden\]\{display:none\}/);
+});
+
+test("Hub ship learning is optional, source-backed and uses one detail surface",()=>{
+ assert.match(html,/id="ship-inspector" data-hub-inspector[^>]+hidden/);
+ assert.match(html,/id="ship-library"/);
+ assert.match(tracker,/hubShipDesk/);
+ assert.match(tracker,/Meet this ship/);
+ assert.match(tracker,/map\.closePopup\(\)/);
+ assert.match(tracker,/reviewed history is not available/);
+ assert.match(css,/\.hub-ship-inspector\[hidden\]/);
+});
+
+
+test("Freighter Central loads shared AIS movement evidence before the tracker",()=>{const html=read("public/freighters/index.html");assert.ok(html.indexOf("/assets/ais-movement.js")>=0&&html.indexOf("/assets/ais-movement.js")<html.indexOf("/assets/freighter-tracker.js"));});

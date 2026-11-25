@@ -48,7 +48,7 @@
       "description": "A freighter-watching decision guide and curated directory of Great Lakes vessel tracking, ship-watching locations, ports, maritime news and history.",
       "url": "https://chrisizworski.com/freighters/",
       "inLanguage": "en-US",
-      "dateModified": "2026-11-23",
+      "dateModified": "2026-11-24",
       "isPartOf": {
         "@id": "https://chrisizworski.com/#website"
       },
@@ -183,16 +183,21 @@
   </div>
 </div>
 <div class="quick-rail" aria-label="Jump to freighter resources">
- <a href="#live-map">Live map</a><a href="#watch-finder">Where to watch</a><a href="#corridors">Shipping corridors</a><a href="#live-tools">Live tools</a><a href="#fleet">The fleet</a><a href="#stories">History &amp; news</a>
+ <a href="#live-map">Live map</a><a href="#watch-finder">Where to watch</a><a href="#corridors">Shipping corridors</a><a href="#live-tools">Live tools</a><a href="#fleet">The fleet</a><a href="#ship-library">Meet the ships</a><a href="#stories">History &amp; news</a>
 </div>
 <div class="wrap">
 
+<section id="my-waterways" class="my-waterways" aria-labelledby="my-waterways-title" hidden>
+  <div class="my-waterways-head"><div><p class="eyebrow">Your shipping desk</p><h2 id="my-waterways-title">My waterways</h2></div><button id="clear-waterways" type="button">Clear saved waterways</button></div>
+  <p class="my-waterways-note">Recent AIS reports, not a total of ships on the water. Saved only on this device.</p>
+  <ul id="saved-waterways-list"></ul>
+</section>
 <section id="live-map" class="hub-map-section" aria-labelledby="hub-map-title">
   <div class="hub-map-heading">
     <div>
       <p class="eyebrow">Live vessel tracking · five Great Lakes</p>
-      <h2 id="hub-map-title">The Great Lakes, <em>live on the map.</em></h2>
-      <p>Explore AIS-reported ship positions across all five lakes, or zoom to a shipping corridor. Select a vessel to read its name, speed, course (when reported), and the age of its last position.</p>
+      <h2 id="hub-map-title" tabindex="-1">The Great Lakes, <em>live on the map.</em></h2>
+      <p>Explore AIS-reported ship positions across all five lakes, or zoom to a shipping corridor. Select a vessel to read its name, speed, course (when reported), and the age of its last position. Open Meet this ship to explore its history when a reviewed profile is available.</p>
     </div>
     <a class="hub-map-full-link" href="/great-lakes-freighter-tracking/" data-track-tool="ship-tracker" data-placement="freighters-map">Open the full ship tracker ↗</a>
   </div>
@@ -212,10 +217,37 @@
         <button class="view-tab" type="button" role="tab" aria-selected="false" tabindex="-1" data-freighter-view="mackinac">Mackinac</button>
       </div>
     </div>
+    <section id="hub-fleet-filter" class="hub-fleet-filter" aria-label="Filter recent AIS vessel reports by type" hidden>
+      <div class="hub-fleet-head"><h3>Ships in this view</h3><span>Choose a type to filter the map and list.</span></div>
+      <div class="hub-fleet-buttons" role="group" aria-label="Vessel type">
+        <button type="button" data-hub-vessel-type="all" aria-pressed="true" disabled><strong>—</strong><span>All ships</span></button>
+        <button type="button" data-hub-vessel-type="cargo" aria-pressed="false" disabled><strong>—</strong><span>Cargo</span></button>
+        <button type="button" data-hub-vessel-type="tanker" aria-pressed="false" disabled><strong>—</strong><span>Tankers</span></button>
+        <button type="button" data-hub-vessel-type="tug" aria-pressed="false" disabled><strong>—</strong><span>Tugs / towing</span></button>
+        <button type="button" data-hub-vessel-type="passenger" aria-pressed="false" disabled><strong>—</strong><span>Passenger</span></button>
+        <button type="button" data-hub-vessel-type="fishing" aria-pressed="false" disabled><strong>—</strong><span>Fishing</span></button>
+        <button type="button" data-hub-vessel-type="other" aria-pressed="false" disabled><strong>—</strong><span>Other / unknown</span></button>
+      </div>
+      <p id="hub-fleet-status" role="status">Checking recent AIS reports.</p>
+    </section>
+    <details class="hub-vessel-search">
+      <summary>Find a ship by name or MMSI</summary>
+      <div class="hub-vessel-search-body" role="search" aria-label="Search recent vessel reports">
+        <label for="freighterNameSearch">Ship name or MMSI</label>
+        <div class="hub-vessel-search-controls"><input id="freighterNameSearch" type="search" placeholder="Type a ship name" autocomplete="off" spellcheck="false"><button type="button" id="freighterSearchAll">Search all five lakes</button><button type="button" id="freighterClearSearch">Clear</button></div>
+        <p id="freighterSearchStatus" role="status">Search only includes recent AIS reports.</p>
+      </div>
+    </details>
     <div class="hub-map-canvas-wrap">
       <div id="freighterMap" role="region" aria-label="Interactive AIS map of Great Lakes vessel positions"></div>
       <div class="hub-map-tools"><button class="hub-map-refresh" id="mapRefresh" type="button">↻ Refresh vessel reports</button></div>
     </div>
+    <section class="hub-ship-inspector" id="ship-inspector" data-hub-inspector aria-labelledby="ship-inspector-title" hidden>
+      <div class="hub-ship-inspector-top"><div><p class="eyebrow">Meet the ship</p><h3 id="ship-inspector-title" tabindex="-1">Selected vessel</h3></div><button type="button" id="ship-inspector-close">Back to map</button></div>
+      <p id="ship-inspector-status" role="status"></p><dl class="hub-ship-facts" id="ship-inspector-facts"></dl>
+      <div class="hub-ship-story" id="ship-story" hidden></div>
+      <p class="hub-ship-note">AIS details describe the last report, not a confirmed arrival or cargo load. <a href="#ship-library">Explore the ship field guide ↓</a></p>
+    </section>
     <div class="hub-map-bottom">
       <div class="hub-map-route">
         <p class="hub-mini-label" id="corridorLabel">Current map: All Great Lakes</p>
@@ -239,7 +271,7 @@
     </div>
     <details class="hub-map-reports">
       <summary>Recent vessel reports and source credits <span class="hub-report-hint">View the names behind the markers</span></summary>
-      <p>Only AIS reports less than 30 minutes old appear. Blue indicates movement; amber, little or no movement; gray, unavailable speed. A missing report does not prove a lake is empty.</p>
+      <p>Only AIS reports less than 30 minutes old appear. The fleet filter groups reported AIS types, not exact ship classes; cargo includes freighters and other cargo vessels. Other / unknown includes types not separately classified here. Ship silhouettes show reported broad vessel types and approximate size bands, not true map scale or direction. Blue indicates movement; amber, little or no movement; gray, unavailable speed. A missing report does not prove a lake is empty.</p>
       <ul id="freighterVessels"><li>Checking reported positions…</li></ul>
       <p id="freighterCredits">Sources will be listed when AIS reports load.</p>
     </details>
@@ -252,9 +284,10 @@
   <p>Freighter Central is the <strong>directory and shore-watching guide</strong> for the Great Lakes shipping tools on this site. If you're trying to locate a particular vessel, use the AIS tracker. If you're planning to see one in person, choose a corridor below, then verify a fresh vessel report before you leave. For today's reported movements and port news, use the Great Lakes Gazette.</p>
 </section>
 <section id="watch-finder" class="finder" aria-labelledby="finder-title">
- <div class="finder-header"><div><p class="eyebrow">Freighter watch finder</p><h2 id="finder-title">Where should I look for a ship?</h2><p>Choose a waterway and what you want to accomplish. This guide routes you to the right existing tool; it does not estimate unverified arrival times.</p></div><div class="finder-mark" aria-hidden="true">01 / 03</div></div>
+ <div class="finder-header"><div><p class="eyebrow">Freighter watch finder</p><h2 id="finder-title">Where should I look for a ship?</h2><p>Choose a harbor, river or lock, then decide whether to follow the ships or head to the shore. You can also search by place name. Check recent reports before leaving home.</p></div><div class="finder-mark" aria-hidden="true">01 / 03</div></div>
  <div class="finder-form">
   <div class="field"><label for="corridor">01 · Choose your corridor</label>
+  <div id="finder-search" class="finder-search" hidden><label for="finder-query">Search by city, river or lock</label><div class="finder-search-row"><input id="finder-query" type="search" placeholder="Try Cleveland, Lock 3 or Canal Park" autocomplete="off" aria-describedby="finder-search-status"><button id="finder-search-go" type="button">Find</button></div><p id="finder-search-status" role="status"></p></div>
   <select id="corridor">
    <option value="soo">Soo Locks · Sault Ste. Marie</option>
    <option value="duluth">Duluth · Lake Superior</option>
@@ -262,6 +295,10 @@
    <option value="saginaw">Saginaw Bay · Bay City</option>
    <option value="port-huron">Port Huron · St. Clair River</option>
    <option value="mackinac">Straits of Mackinac</option>
+   <option value="calumet">Chicago · Calumet River</option>
+   <option value="cuyahoga">Cleveland · Cuyahoga River</option>
+   <option value="welland">Welland Canal · Niagara</option>
+   <option value="seaway">St. Lawrence Seaway</option>
   </select></div>
   <fieldset class="field"><legend>02 · What do you want to do?</legend>
    <label class="choice"><input type="radio" name="intent" value="track" checked><span>Find ships now</span></label>
@@ -273,6 +310,7 @@
   <div><p class="result-label">Your next step</p><h3 id="finder-heading">Soo Locks: locate the ships</h3><p id="finder-reason">Use the map for positions, then check the Soo Locks passage information for named ships.</p><p class="fine" id="finder-caveat">Check report timestamps; a map marker is not a guaranteed viewing time.</p></div>
   <a id="finder-go" class="button dark" href="/great-lakes-freighter-tracking/#soo" data-track-tool="freighter-finder" data-placement="freighters-finder">Show Soo Locks traffic <span aria-hidden="true">↗</span></a>
  </div>
+ <div id="save-waterway-row" class="save-waterway-row" hidden><button type="button" id="save-waterway">Save this waterway</button><span id="save-waterway-status" role="status"></span></div>
  <noscript><p class="noscript">The finder needs JavaScript. <a href="/great-lakes-freighter-tracking/">Open the live map</a> or <a href="/great-lakes-ship-watching-spots/">browse shore-watching spots</a>.</p></noscript>
 </section>
 <section id="live-tools" class="section" aria-labelledby="live-title">
@@ -302,14 +340,18 @@
  </div>
 </section>
 <section id="corridors" class="section" aria-labelledby="corridors-title">
- <div class="section-head"><div><p class="eyebrow">Six ship-watching waterways</p><h2 id="corridors-title">Follow the shipping corridors</h2></div><p>Some routes see frequent traffic; others require patience. Open the corridor-specific AIS view to check the current reported position.</p></div>
+ <div class="section-head"><div><p class="eyebrow">Ten ship-watching waterways</p><h2 id="corridors-title">Follow the shipping corridors</h2></div><p>Some routes see frequent traffic; others require patience. Open the corridor-specific AIS view to check the current reported position.</p></div>
  <div class="corridor-grid">
-  <article class="corridor-card"><div class="corridor-index">01 <span>Lake Superior / Huron</span></div><h3>Soo Locks</h3><p>Nearly every large vessel traveling between Lake Superior and the lower lakes passes through the St. Marys River system.</p><p class="spot">Watch: Sault Ste. Marie observation deck</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#soo">Live traffic ↗</a><a href="/soo-locks/">Locks schedule →</a></div></article>
-  <article class="corridor-card"><div class="corridor-index">02 <span>Western Lake Superior</span></div><h3>Duluth–Superior</h3><p>Incoming and outgoing vessels use the harbor approaches, with close viewing from Canal Park.</p><p class="spot">Watch: Duluth Ship Canal</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#duluth">Live traffic ↗</a><a href="/duluth-canal-park/">Passage planner →</a></div></article>
-  <article class="corridor-card"><div class="corridor-index">03 <span>Huron / St. Clair</span></div><h3>Port Huron</h3><p>The upper St. Clair River narrows ship traffic near the Blue Water Bridge, creating accessible shore views.</p><p class="spot">Watch: Vantage Point waterfront</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#port-huron">Live traffic ↗</a><a href="/great-lakes-ship-watching-spots/">Viewing guide →</a></div></article>
-  <article class="corridor-card"><div class="corridor-index">04 <span>St. Clair / Erie</span></div><h3>Detroit River</h3><p>A busy international shipping artery with a short-window decision tool for vessels moving near the riverfront.</p><p class="spot">Watch: Belle Isle or the Riverwalk</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#detroit">Live traffic ↗</a><a href="/detroit-river-freighters/">Watch verdict →</a></div></article>
-  <article class="corridor-card"><div class="corridor-index">05 <span>Lake Huron</span></div><h3>Saginaw Bay</h3><p>Watch freighters bound for Bay City and Saginaw. Traffic is episodic, so check the bay and Saginaw River reports first.</p><p class="spot">Watch: Bay City riverfront</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#saginaw">Live traffic ↗</a><a href="/great-lakes-ship-watching-spots/">Viewing guide →</a></div></article>
-  <article class="corridor-card"><div class="corridor-index">06 <span>Michigan / Huron</span></div><h3>Straits of Mackinac</h3><p>The connection between Lake Michigan and Lake Huron brings large commercial vessels within view of both peninsulas.</p><p class="spot">Watch: Mackinaw City or St. Ignace</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#mackinac">Live traffic ↗</a><a href="/great-lakes-ship-watching-spots/">Viewing guide →</a></div></article>
+  <article class="corridor-card"><div class="corridor-index">01 <span>Lake Superior / Huron</span></div><h3>Soo Locks</h3><p>Nearly every large vessel traveling between Lake Superior and the lower lakes passes through the St. Marys River system.</p><p class="spot">Watch: Sault Ste. Marie observation deck</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#soo">Live traffic ↗</a><a href="/soo-locks/">Locks schedule →</a><a class="corridor-maps" href="https://www.google.com/maps/search/?api=1&amp;query=Soo%20Locks%20Visitor%20Center%2C%20Sault%20Ste%20Marie%20Michigan" target="_blank" rel="noopener noreferrer" aria-label="View Soo Locks observation deck in Google Maps">Google Maps: Soo Locks observation deck</a></div></article>
+  <article class="corridor-card"><div class="corridor-index">02 <span>Western Lake Superior</span></div><h3>Duluth–Superior</h3><p>Incoming and outgoing vessels use the harbor approaches, with close viewing from Canal Park.</p><p class="spot">Watch: Duluth Ship Canal</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#duluth">Live traffic ↗</a><a href="/duluth-canal-park/">Passage planner →</a><a class="corridor-maps" href="https://www.google.com/maps/search/?api=1&amp;query=Duluth%20Ship%20Canal%20Canal%20Park%20Minnesota" target="_blank" rel="noopener noreferrer" aria-label="View Duluth Ship Canal in Google Maps">Google Maps: Duluth Ship Canal</a></div></article>
+  <article class="corridor-card"><div class="corridor-index">03 <span>Huron / St. Clair</span></div><h3>Port Huron</h3><p>The upper St. Clair River narrows ship traffic near the Blue Water Bridge, creating accessible shore views.</p><p class="spot">Watch: Vantage Point waterfront</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#port-huron">Live traffic ↗</a><a href="/great-lakes-ship-watching-spots/">Viewing guide →</a><a class="corridor-maps" href="https://www.google.com/maps/search/?api=1&amp;query=Vantage%20Point%20Port%20Huron%20Michigan" target="_blank" rel="noopener noreferrer" aria-label="View Vantage Point in Google Maps">Google Maps: Vantage Point</a></div></article>
+  <article class="corridor-card"><div class="corridor-index">04 <span>St. Clair / Erie</span></div><h3>Detroit River</h3><p>A busy international shipping artery with a short-window decision tool for vessels moving near the riverfront.</p><p class="spot">Watch: Belle Isle or the Riverwalk</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#detroit">Live traffic ↗</a><a href="/detroit-river-freighters/">Watch verdict →</a><a class="corridor-maps" href="https://www.google.com/maps/search/?api=1&amp;query=Belle%20Isle%20Park%20Detroit%20Michigan" target="_blank" rel="noopener noreferrer" aria-label="View Belle Isle in Google Maps">Google Maps: Belle Isle</a><a class="corridor-maps" href="https://www.google.com/maps/search/?api=1&amp;query=Detroit%20Riverwalk%20Michigan" target="_blank" rel="noopener noreferrer" aria-label="View Detroit Riverwalk in Google Maps">Google Maps: Detroit Riverwalk</a></div></article>
+  <article class="corridor-card"><div class="corridor-index">05 <span>Lake Huron</span></div><h3>Saginaw Bay</h3><p>Watch freighters bound for Bay City and Saginaw. Traffic is episodic, so check the bay and Saginaw River reports first.</p><p class="spot">Watch: Bay City riverfront</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#saginaw">Live traffic ↗</a><a href="/great-lakes-ship-watching-spots/">Viewing guide →</a><a class="corridor-maps" href="https://www.google.com/maps/search/?api=1&amp;query=Bay%20City%20Riverwalk%20Michigan" target="_blank" rel="noopener noreferrer" aria-label="View Bay City riverfront in Google Maps">Google Maps: Bay City riverfront</a></div></article>
+  <article class="corridor-card"><div class="corridor-index">06 <span>Michigan / Huron</span></div><h3>Straits of Mackinac</h3><p>The connection between Lake Michigan and Lake Huron brings large commercial vessels within view of both peninsulas.</p><p class="spot">Watch: Mackinaw City or St. Ignace</p><div class="corridor-actions"><a href="/great-lakes-freighter-tracking/#mackinac">Live traffic ↗</a><a href="/great-lakes-ship-watching-spots/">Viewing guide →</a><a class="corridor-maps" href="https://www.google.com/maps/search/?api=1&amp;query=Mackinaw%20City%20waterfront%20Michigan" target="_blank" rel="noopener noreferrer" aria-label="View Mackinaw City in Google Maps">Google Maps: Mackinaw City</a><a class="corridor-maps" href="https://www.google.com/maps/search/?api=1&amp;query=St%20Ignace%20waterfront%20Michigan" target="_blank" rel="noopener noreferrer" aria-label="View St. Ignace in Google Maps">Google Maps: St. Ignace</a></div></article>
+  <article class="corridor-card"><div class="corridor-index">07 <span>Lake Michigan / Chicago</span></div><h3>Calumet River</h3><p>Follow the industrial river past working bridges and terminals. Look for recent vessel reports rather than a promised bridge opening.</p><p class="spot">Watch: 95th Street Bridge area; confirm public access</p><div class="corridor-actions"><a href="/calumet-freighter-watch/">River map and viewing guide →</a><a class="corridor-maps" href="https://www.google.com/maps/search/?api=1&amp;query=95th%20Street%20Bridge%20over%20Calumet%20River%2C%20Chicago%20Illinois" target="_blank" rel="noopener noreferrer" aria-label="View 95th Street Bridge area in Google Maps">Google Maps: 95th Street Bridge area</a></div></article>
+  <article class="corridor-card"><div class="corridor-index">08 <span>Lake Erie / Cleveland</span></div><h3>Cuyahoga River</h3><p>Follow freighters through the bends of Cleveland's working river, from the lakefront toward the Flats.</p><p class="spot">Watch: Scranton Flats Pier or Wendy Park</p><div class="corridor-actions"><a href="/cuyahoga-freighter-watch/">River map and viewing guide →</a><a class="corridor-maps" href="https://www.google.com/maps/search/?api=1&amp;query=Scranton%20Flats%20Pier%20Cleveland%20Ohio" target="_blank" rel="noopener noreferrer" aria-label="View Scranton Flats Pier in Google Maps">Google Maps: Scranton Flats Pier</a><a class="corridor-maps" href="https://www.google.com/maps/search/?api=1&amp;query=Wendy%20Park%20Cleveland%20Ohio" target="_blank" rel="noopener noreferrer" aria-label="View Wendy Park in Google Maps">Google Maps: Wendy Park</a></div></article>
+  <article class="corridor-card"><div class="corridor-index">09 <span>Erie / Ontario</span></div><h3>Welland Canal</h3><p>Eight locks carry ships past the Niagara Escarpment. Check recent reports and the official order of turn before heading to a lock.</p><p class="spot">Watch: Lock 3 museum viewing platform</p><div class="corridor-actions"><a href="/welland-canal/">Canal map and lock guide →</a><a class="corridor-maps" href="https://www.google.com/maps/search/?api=1&amp;query=St%20Catharines%20Museum%20Welland%20Canals%20Centre" target="_blank" rel="noopener noreferrer" aria-label="View Lock 3 museum in Google Maps">Google Maps: Lock 3 museum</a></div></article>
+  <article class="corridor-card"><div class="corridor-index">10 <span>Ontario / Montreal</span></div><h3>St. Lawrence Seaway</h3><p>Follow the seven locks connecting Lake Ontario and Montreal, with public viewing choices in Canada and the United States.</p><p class="spot">Watch: Eisenhower Lock or Iroquois Point; confirm access</p><div class="corridor-actions"><a href="/st-lawrence-seaway/">Seaway map and viewing guide →</a><a class="corridor-maps" href="https://www.google.com/maps/search/?api=1&amp;query=Seaway%20Visitor%20Center%20Massena%20New%20York" target="_blank" rel="noopener noreferrer" aria-label="View Eisenhower Lock visitor center in Google Maps">Google Maps: Eisenhower Lock visitor center</a><a class="corridor-maps" href="https://www.google.com/maps/search/?api=1&amp;query=Iroquois%20Point%20Iroquois%20Ontario%20Canada" target="_blank" rel="noopener noreferrer" aria-label="View Iroquois Point in Google Maps">Google Maps: Iroquois Point</a></div></article>
  </div>
  <p class="corridor-foot"><a href="/great-lakes-ship-watching-spots/">Compare public freighter-viewing spots around the lakes →</a></p>
 </section>
@@ -321,6 +363,53 @@
   <article><span class="fleet-icon" aria-hidden="true">Ⅲ</span><h3>Tug–barge combinations</h3><p>Workboats and barges move fuel, stone and specialized loads through rivers and harbor approaches. They're part of the commercial fleet too.</p></article>
  </div>
  <div class="field-note"><h3>Reading ship reports</h3><p><strong>Upbound</strong> generally means toward Lake Superior; <strong>downbound</strong> generally means toward the lower lakes. A ship's AIS destination may be abbreviated, stale or entered incorrectly. Public AIS reception has gaps, and a reported position is not permission to navigate by it.</p><a href="/great-lakes-freighter-tracking/#how-to-track">How to read the AIS map →</a></div>
+</section>
+<section id="ship-library" class="section ship-library" aria-labelledby="ship-library-title">
+  <div class="section-head"><div><p class="eyebrow">A shipwatcher's field guide</p><h2 id="ship-library-title">Meet the ships of the Great Lakes</h2></div><p>Get to know eight vessels from the Interlake fleet. Compare their published lengths, explore their histories, then look for a recent report on the map.</p></div>
+  <p class="ship-library-note">These are reviewed ship profiles, not a list of ships currently underway. Capacity is published carrying capacity in gross tons, not the amount aboard today. Length bars share a 1,013.5-foot scale. <a href="https://www.interlakesteamship.com/our-fleet/">Operator fleet specifications</a>.</p>
+  <div class="ship-library-list">
+    <article class="ship-library-entry" data-library-mmsi="366904940">
+      <div class="ship-library-name"><h3>Paul R. Tregurtha</h3><p>The longest ship on the lakes</p></div>
+      <div class="ship-library-scale"><span>1,013.5 ft · 1981</span><meter min="0" max="1013.5" value="1013.5" aria-label="Paul R. Tregurtha length: 1,013.5 feet"></meter><small>68,000 gross tons capacity</small></div>
+      <div class="ship-library-actions"><a href="https://www.interlakesteamship.com/our-fleet/m-v-paul-r-tregurtha/">Operator profile and photo ↗</a><button type="button" data-hub-find-ship="366904940" hidden>Find recent report</button></div>
+    </article>
+    <article class="ship-library-entry" data-library-mmsi="366905890">
+      <div class="ship-library-name"><h3>James R. Barker</h3><p>A thousand-footer built for the lakes</p></div>
+      <div class="ship-library-scale"><span>1,004 ft · 1976</span><meter min="0" max="1013.5" value="1004" aria-label="James R. Barker length: 1,004 feet"></meter><small>63,300 gross tons capacity</small></div>
+      <div class="ship-library-actions"><a href="/great-lakes-freighter-winter-layup/vessels/james-r-barker/">Ship history ↗</a><button type="button" data-hub-find-ship="366905890" hidden>Find recent report</button></div>
+    </article>
+    <article class="ship-library-entry" data-library-mmsi="366904880">
+      <div class="ship-library-name"><h3>Mesabi Miner</h3><p>A name from Minnesota's iron country</p></div>
+      <div class="ship-library-scale"><span>1,004 ft · 1977</span><meter min="0" max="1013.5" value="1004" aria-label="Mesabi Miner length: 1,004 feet"></meter><small>63,300 gross tons capacity</small></div>
+      <div class="ship-library-actions"><a href="https://www.interlakesteamship.com/our-fleet/m-v-mesabi-miner/">Operator profile and photo ↗</a><button type="button" data-hub-find-ship="366904880" hidden>Find recent report</button></div>
+    </article>
+    <article class="ship-library-entry" data-library-mmsi="367050550">
+      <div class="ship-library-name"><h3>Stewart J. Cort</h3><p>The first thousand-footer</p></div>
+      <div class="ship-library-scale"><span>1,000 ft · 1972</span><meter min="0" max="1013.5" value="1000" aria-label="Stewart J. Cort length: 1,000 feet"></meter><small>58,000 gross tons capacity</small></div>
+      <div class="ship-library-actions"><a href="/great-lakes-freighter-winter-layup/vessels/stewart-j-cort/">Ship history ↗</a><button type="button" data-hub-find-ship="367050550" hidden>Find recent report</button></div>
+    </article>
+    <article class="ship-library-entry" data-library-mmsi="366904950">
+      <div class="ship-library-name"><h3>Lee A. Tregurtha</h3><p>From wartime tanker to Great Lakes freighter</p></div>
+      <div class="ship-library-scale"><span>826 ft · 1942</span><meter min="0" max="1013.5" value="826" aria-label="Lee A. Tregurtha length: 826 feet"></meter><small>29,360 gross tons capacity</small></div>
+      <div class="ship-library-actions"><a href="/great-lakes-freighter-winter-layup/vessels/lee-a-tregurtha/">Ship history ↗</a><button type="button" data-hub-find-ship="366904950" hidden>Find recent report</button></div>
+    </article>
+    <article class="ship-library-entry" data-library-mmsi="366904910">
+      <div class="ship-library-name"><h3>Kaye E. Barker</h3><p>A classic freighter adapted for new work</p></div>
+      <div class="ship-library-scale"><span>767 ft · 1952</span><meter min="0" max="1013.5" value="767" aria-label="Kaye E. Barker length: 767 feet"></meter><small>25,900 gross tons capacity</small></div>
+      <div class="ship-library-actions"><a href="https://www.interlakesteamship.com/our-fleet/m-v-kaye-e-barker/">Operator profile and photo ↗</a><button type="button" data-hub-find-ship="366904910" hidden>Find recent report</button></div>
+    </article>
+    <article class="ship-library-entry" data-library-mmsi="366904930">
+      <div class="ship-library-name"><h3>Herbert C. Jackson</h3><p>A Michigan-built working ship</p></div>
+      <div class="ship-library-scale"><span>690 ft · 1959</span><meter min="0" max="1013.5" value="690" aria-label="Herbert C. Jackson length: 690 feet"></meter><small>24,800 gross tons capacity</small></div>
+      <div class="ship-library-actions"><a href="https://www.interlakesteamship.com/our-fleet/m-v-herbert-c-jackson/">Operator profile and photo ↗</a><button type="button" data-hub-find-ship="366904930" hidden>Find recent report</button></div>
+    </article>
+    <article class="ship-library-entry" data-library-mmsi="368251670">
+      <div class="ship-library-name"><h3>Mark W. Barker</h3><p>Designed for the bends of a working river</p></div>
+      <div class="ship-library-scale"><span>639 ft · 2022</span><meter min="0" max="1013.5" value="639" aria-label="Mark W. Barker length: 639 feet"></meter><small>26,000 gross tons capacity</small></div>
+      <div class="ship-library-actions"><a href="https://www.interlakesteamship.com/our-fleet/m-v-mark-w-barker/">Operator profile and photo ↗</a><button type="button" data-hub-find-ship="368251670" hidden>Find recent report</button></div>
+    </article>
+  </div>
+  <p class="ship-library-note">Want to compare more vessels and their winter homes? <a href="/great-lakes-freighter-winter-layup/">Explore the winter layup fleet guide</a>.</p>
 </section>
 <section class="image-story" aria-label="Soo Locks ship-watching photographs">
  <img src="/assets/soo-locks/lock-chamber.jpg" loading="lazy" alt="Freighter in the Soo Locks chamber" width="960" height="640">
@@ -349,9 +438,11 @@
 <footer class="site-footer"><div class="footer-inner">
  <div><strong>Freighter Central</strong><p>Great Lakes vessel watching, ports, ship stories and shoreline decisions.</p></div>
  <div class="footer-links"><a href="/great-lakes/">Great Lakes</a><a href="/great-lakes-freighter-tracking/">Live AIS</a><a href="/soo-locks/">Soo Locks</a><a href="/great-lakes-freighter-winter-layup/">Winter layup</a><a href="/tools/">All tools</a></div>
-</div><p class="byline">Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · Bay City, Michigan · Updated October 11, 2026</p></footer>
+</div><p class="byline">Built by <a href="https://chrisizworski.com/chris-izworski/">Chris Izworski</a> · Bay City, Michigan · Updated November 24, 2026</p></footer>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
-<script defer src="/assets/freighter-tracker.js?v=20260917"></script>
+<script defer src="/assets/freighters-waterways.js?v=20261124"></script>
+<script defer src="/assets/ais-movement.js?v=20261124"></script>
+<script defer src="/assets/freighter-tracker.js?v=20261124"></script>
 <script defer src="/assets/freighters-hub.js"></script>
 <script src="/_vercel/insights/script.js" defer></script>
 <script src="/_vercel/speed-insights/script.js" defer></script>
