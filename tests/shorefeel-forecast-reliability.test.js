@@ -113,3 +113,22 @@ test('completed confirmation recovery preserves all 35 near-time pairs without c
   assert.equal(evaluate(d).leads[h].confirmation.gates.exactCoverage,false);
  }
 });
+
+test('provider archives do not supply new exact pairs or duplicate independent evidence',()=>{
+ const fs=require('node:fs'),crypto=require('node:crypto'),path=require('node:path');
+ const read=n=>fs.readFileSync(path.join(__dirname,'../data/shorefeel/'+n+'-actual-20261125.json'));
+ const sha=b=>crypto.createHash('sha256').update(b).digest('hex');
+ const d=JSON.parse(read('provider-reconciliation'));
+ assert.equal(d.sourceDatasetSha256,sha(read('horizon-confirm-cohort')));
+ assert.equal(d.recoverySha256,sha(read('horizon-confirm-near-time')));
+ assert.equal(d.canPromoteModel,false);
+ assert.deepEqual(Object.keys(d.sources).sort(),['cdip269','glos45210','glos45214']);
+ for(const [name,n] of [['cdip269',10964],['glos45210',2585],['glos45214',1652]]){
+  const s=d.sources[name];assert.equal(s.status,'parsed');assert.equal(s.counts.rows,n);
+  assert.equal(s.slots.length,20);assert.equal(s.exactCandidatePairs,0);
+  assert.equal(s.slots.filter(x=>x.exactBaseline&&x.exactTarget).length,0);
+  assert.match(s.source.sha256,/^[a-f0-9]{64}$/);
+ }
+ assert.equal(d.sources.cdip269.station,d.sources.glos45210.station);
+ assert.equal(d.sources.cdip269.counts.conflictingTimestamps,2741);
+});
