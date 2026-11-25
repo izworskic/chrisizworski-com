@@ -35,6 +35,13 @@ function lakeRecent(lake,now){
  const when=Date.parse((lake?.latest?.date||'')+'T00:00:00Z');
  return lake?.status==='recent'&&Number.isFinite(lake?.latest?.tempF)&&Number.isFinite(when)&&today>=when&&today-when<=3*24*HOUR;
 }
+function validDecisionWindow(w,now,activity){
+ if(!w||w.method!=='relative-weather-comfort-two-hour-v1'||w.activity!==activity||w.durationMinutes!==120)return null;
+ const start=Date.parse(w.startsAt||''),end=Date.parse(w.endsAt||''),issue=Date.parse(w.issuedAt||'');
+ if(!Number.isFinite(start)||start%HOUR!==0||end!==start+2*HOUR||end<=now||!Number.isFinite(issue)||now-issue>18*HOUR||issue-now>HOUR)return null;
+ if(![w.airMinF,w.airMaxF,w.windMaxMph,w.rainMaxPct].every(Number.isFinite)||w.airMinF>w.airMaxF||w.windMaxMph<0||w.rainMaxPct<0||w.rainMaxPct>100)return null;
+ return w;
+}
 function usableSnapshot(data,now=Date.now()){
  if(!data||!sourceRecent(data,now))return null;
  const water=data.water&&['satellite','buoy'].includes(data.water.kind)&&waterRecent(data.water,data.water.kind,now)?data.water:null;
@@ -58,7 +65,7 @@ function usableSnapshot(data,now=Date.now()){
   windTurn:weather&&turn?{...turn,...(!turnWater?{water:null,forecastAirWaterContrastF:null,contrastMeaning:null}:{} )}:null,
   hourlyAirComparison:weather?data.hourlyAirComparison:null,
   assessments:weather&&(!data.water||water)?data.assessments:null,
-  weatherWindows:windows};
+  weatherWindows:windows,decisionWindows:Object.hasOwn(data,'decisionWindows')?Object.fromEntries(['swim','family','paddle','relax'].map(a=>[a,validDecisionWindow(data.decisionWindows?.[a],now,a)])):undefined};
 }
 // A single local timer wakes at the earliest relevant source deadline.
 // Inclusive age limits expire one millisecond after the boundary; hourly
@@ -80,6 +87,7 @@ function nextEvidenceExpiry(data,now=Date.now()){
  for(const c of data.regionalSatellite?.cells||[])observed(c.measurement,'satellite');
  if(data.water?.kind==='satellite'&&(data.shorelinePhysics?.status==='research-only'||data.windTurn?.water))add(data.water.observedAt,36*HOUR,true);
  for(const w of Object.values(data.weatherWindows||{}))add(w?.startsAt,HOUR);
+ for(const w of Object.values(data.decisionWindows||{})){add(w?.startsAt,0);add(w?.endsAt,0);add(w?.issuedAt,18*HOUR,true);}
  for(const v of Object.values(data.lakes||{}))if(v?.status==='recent')add(v.latest.date+'T00:00:00Z',4*24*HOUR);
  return deadlines.length?Math.min(...deadlines):null;
 }
@@ -233,6 +241,15 @@ function renderEvidence(focus=true){
  put('shore-forecast-time',currentHour(payload?.weatherNow?.startsAt)?'NWS land-side hourly forecast near Bay City State Park · '+date(payload.weatherNow.startsAt):'The NWS hourly forecast for the current hour is unavailable.');
  renderSelected(focus);
 }
+function renderWindow(a){
+ const w=validDecisionWindow(payload?.decisionWindows?.[a],Date.now(),a);
+ if(w){
+  const prefix=Date.parse(w.startsAt)<=Date.now()?'Weather-only comparison underway until '+date(w.endsAt):'Compare a two-hour daylight period: '+date(w.startsAt)+' to '+date(w.endsAt);
+  put('window',prefix+'. NWS area air '+w.airMinF+'–'+w.airMaxF+'°F; wind up to '+w.windMaxMph+' mph; highest hourly rain chance '+w.rainMaxPct+'%. Relative comfort only, not swimming or paddling safety. Forecast issued '+date(w.issuedAt)+'.');
+  return;
+ }
+ put('window','No suitable forecast weather window can be established.');
+}
 function renderActivity(a){
  activity=a;
  document.querySelectorAll('[data-activity]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.activity===a)));
@@ -245,13 +262,12 @@ function renderActivity(a){
   put('in-water',valid?temp(water.tempF)+' · '+(water.kind==='buoy'?'offshore buoy observation':'offshore satellite analysis')+' · '+date(water.observedAt)+'. '+band(water.tempF).note+' Not a swimming-area measurement.':'No site-specific water reading is available.');
   put('after-water','Wind and wet clothing can increase cooling.');
   put('activity-decision','Check official forecasts and beach hazards separately.');
-  put('window','No suitable forecast weather window can be established.');
+  renderWindow(a);
   return;
  }
  put('activity-heading',v.heading);put('on-sand',v.beach);put('in-water',v.water);put('after-water',v.after);
  put('activity-decision',v.decision);
- const candidate=payload?.weatherWindows?.[a],start=Date.parse(candidate?.startsAt||'');
- const win=Number.isFinite(start)&&start+3600000>Date.now()?candidate:null;put('window',win?'NWS daylight weather-only window: '+date(win.startsAt)+'. This is not a swimming or paddling safety determination.':'No suitable forecast weather window can be established.');
+ renderWindow(a);
 }
 function buildMap(){
  const host=id('bay-map');if(!host||!window.L||map)return;
@@ -320,6 +336,7 @@ function revalidate(){
   updateMarkers();renderLead();renderWindTurn();renderEvidence(false);renderActivity(activity);
   if(!payload){put('last-updated','Readings expired · refresh to check current sources');put('lead-band-note','The previous source check has expired. Refresh readings to check current conditions.');}
  }
+ renderWindow(activity);
  scheduleExpiry();
 }
 async function load(){
