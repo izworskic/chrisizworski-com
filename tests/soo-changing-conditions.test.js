@@ -56,3 +56,10 @@ test('an unchanged newer check retains one bounded event, preferred vessel wins'
  s=advance(null,0,[vessel(0),other]);s=advance(s,1,[vessel(1,25),{...other,seen:iso(0),window:vessel(1,30).window}]);
  assert.match(c.summary(s,T+M,['366123457']).text,/OTHER/);
 });
+
+test('invalid or expired listed report is not described as a withdrawal',()=>{
+ const start=advance(null,0),bad=vessel(1);bad.seen='bad';
+ const result=advance(start,1,[bad]);assert.equal(show(result,1),null);
+ const withdrawn=advance(start,1,[]);assert.equal(show(withdrawn,1).kind,'withdrawn');
+ const invalidAgain=advance(withdrawn,2,[bad]);assert.equal(show(invalidAgain,2),null);
+});

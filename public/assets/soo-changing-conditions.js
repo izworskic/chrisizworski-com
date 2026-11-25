@@ -14,9 +14,10 @@
  function snapshot(data,now,core,near){
    const checked=time(data?.checkedAt),n=data?.nextShip;
    if(data?.ok!==true||n?.ok!==true||!valid(checked,now,MAX_GAP)||!Array.isArray(n.candidates)||!Array.isArray(n.inLock)||!core.navigationSeason(now).open)return null;
-   const ships=Object.create(null),conflicts=new Set();
+   const ships=Object.create(null),conflicts=new Set(),listed=new Set();
    function add(s,kind,limit){
      const key=id(s),seen=time(s?.seen);
+     if(/^\d{9}$/.test(key))listed.add(key);
      if(!/^\d{9}$/.test(key)||!valid(seen,now,limit)||seen>checked)return;
      const item={id:key,name:clean(s.name)||'Vessel '+key,kind,seen};
      if(kind==='timed'){
@@ -37,7 +38,8 @@
    conflicts.forEach(k=>delete ships[k]);
    // A malformed or truncated snapshot is not evidence of missing ships.
    if(conflicts.size||n.inLock.length+n.candidates.length+(Array.isArray(n.nearLockMotion)?n.nearLockMotion.length:0)>MAX_SHIPS)return null;
-   return {checked,ships};
+   if(Array.isArray(n.nearLockMotion))n.nearLockMotion.forEach(s=>{const k=id(s);if(/^\d{9}$/.test(k))listed.add(k);});
+   return {checked,ships,listed};
  }
  function initial(){return {last:null,anchors:Object.create(null),withdrawn:Object.create(null),events:[],failed:false};}
  function event(kind,s,from,to,extra={}){return {kind,id:s?.id||null,name:s?.name||null,from,to,...extra};}
@@ -53,7 +55,7 @@
    Object.values(prev.withdrawn).filter(x=>next.checked-x.at<=MAX_GAP).forEach(x=>{withdrawn[x.id]=x;});
    // Do not mistake an elapsed or aged-out estimate for newly observed motion.
    for(const s of Object.values(old.ships)){
-     if(s.kind==='timed'&&!next.ships[s.id]&&s.end>next.checked&&next.checked-s.seen<=MAX_GAP){
+     if(s.kind==='timed'&&!next.listed.has(s.id)&&s.end>next.checked&&next.checked-s.seen<=MAX_GAP){
        events.push(event('withdrawn',s,old.checked,next.checked));withdrawn[s.id]={id:s.id,at:next.checked};
      }
    }
@@ -90,7 +92,7 @@
    if(!valid(e.to,now,MAX_GAP)||!next||!valid(next.checked,now,MAX_GAP))return false;
    if(e.kind==='recovered')return true;
    const s=next.ships[e.id];
-   if(e.kind==='withdrawn')return !s;
+   if(e.kind==='withdrawn')return !next.listed.has(e.id);
    if(!s||!valid(s.seen,now,s.kind==='slow'?5*MIN:MAX_GAP))return false;
    if(e.kind==='slow'||e.kind==='chamber')return s.kind===e.kind;
    return s.kind==='timed'&&s.end>now;
@@ -105,7 +107,7 @@
    });
    const e=available[0];if(!e)return null;
    const messages={
-     recovered:'Fresh check available after an unsuccessful refresh. Review the current reports below.',
+     recovered:'Fresh check available after an unsuccessful refresh. Review your current visit plan.',
      withdrawn:e.name+': the previous arrival estimate is no longer listed. This does not establish a departure or passage.',
      chamber:e.name+': newly reported in a lock chamber. Check the observation age.',
      slow:e.name+': newly reported at low speed near the locks. Arrival timing is uncertain.',

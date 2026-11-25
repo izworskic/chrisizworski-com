@@ -698,7 +698,7 @@
   function renderChanges(p) {
     if (!els.changes || !changing) return;
     var item = p.status === 'season-closed' || p.status === 'loading' || p.status === 'unavailable' ? null : changing.summary(state.changes,p.now,[p.best && p.best.id,state.previousBest].filter(Boolean));
-    var message=item ? 'Since the '+clock(item.from)+' check: '+item.text : '';
+    var message=item ? (item.kind==='recovered' ? clock(item.to)+' check: ' : 'Since the '+clock(item.from)+' check: ')+item.text : '';
     if (els.changes.textContent!==message) els.changes.textContent=message;
     els.changes.hidden=!item;
   }
