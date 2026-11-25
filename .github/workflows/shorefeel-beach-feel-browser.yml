@@ -97,12 +97,14 @@ jobs:
           cat artifacts/shorefeel-beach-qa/archive-coverage.json
       - name: Offline preserved ShoreFeel empirical evidence
         run: node --test tests/shorefeel-empirical-evidence.test.js tests/shorefeel-forecast-reliability.test.js
-      - name: One-off provider timestamp reconciliation
+      - name: One-off June observation coverage preflight
         if: github.head_ref == 'research/shorefeel-actual-october-cohort'
         run: |
+          python3 -m venv "$RUNNER_TEMP/shorefeel-preflight"
+          "$RUNNER_TEMP/shorefeel-preflight/bin/pip" install --disable-pip-version-check numpy==2.2.6 netCDF4==1.7.2
           mkdir -p artifacts/shorefeel-beach-qa
-          python3 scripts/shorefeel-provider-reconciliation.py > artifacts/shorefeel-beach-qa/provider-reconciliation.json
-          cat artifacts/shorefeel-beach-qa/provider-reconciliation.json
+          "$RUNNER_TEMP/shorefeel-preflight/bin/python" scripts/shorefeel-coverage-preflight.py > artifacts/shorefeel-beach-qa/coverage-preflight.json
+          cat artifacts/shorefeel-beach-qa/coverage-preflight.json
       - name: Install isolated pinned browser harness
         run: |
           npm install --prefix "$RUNNER_TEMP/shorefeel-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
