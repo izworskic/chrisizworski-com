@@ -1418,6 +1418,54 @@ function renderSolarWind(solarWind){
   } else markSpaceWeatherUnavailable('swSpeed');
 }
 
+// Withdraw every Kp-dependent display together, without inventing a zero signal.
+function clearKpForecast(){
+  currentKp = null;
+  kpForecast = [];
+  document.getElementById('gaugeArc').setAttribute('stroke-dasharray','0 628');
+  document.getElementById('gaugeArc').setAttribute('stroke','#a0a8b0');
+  document.getElementById('gaugeNum').textContent = '--';
+  document.getElementById('gaugeStatus').textContent = 'unavailable';
+  document.getElementById('forecastSvg').replaceChildren();
+  document.getElementById('forecastTooltip').style.display = 'none';
+  document.querySelectorAll('.kp-step').forEach(step=>step.classList.remove('current'));
+  const cta = document.getElementById('smartCta');
+  cta.classList.remove('show','alert');
+  cta.replaceChildren();
+  document.getElementById('liveDot').classList.remove('active','alert');
+  markSpaceWeatherUnavailable('swKpPeak');
+}
+function renderObservedKp(data){
+  const current = asFiniteNumber(data?.forecast?.current?.kp);
+  const card = document.getElementById('swKpNow');
+  if (Number.isFinite(current)){
+    card.className = 'sw-card '+(current >= 5 ? 'alert' : '');
+    card.querySelector('.sw-val').textContent = current.toFixed(1);
+    card.querySelector('.sw-status').textContent = KP_STATUS[kpClass(current)];
+  } else markSpaceWeatherUnavailable('swKpNow');
+}
+function renderAuroraUnavailable(data){
+  // A current partial payload can still supply independent source context.
+  latestAuroraData = data;
+  clearKpForecast();
+  renderUnavailableTonightVerdict('A current NOAA Kp forecast is unavailable.');
+  renderSolarWind(data?.solar_wind);
+  renderObservedKp(data);
+  renderDecisionData(data);
+  document.getElementById('refreshInfo').textContent = data
+    ? '· API checked '+new Date(data.fetched_at).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+' · partial sources'
+    : '';
+  document.getElementById('liveStatus').textContent = data
+    ? 'Kp forecast unavailable · independent sources below'
+    : 'NOAA feed unavailable · manual guide active';
+  document.getElementById('tonightHeadline').textContent = data
+    ? 'Kp forecast temporarily unavailable'
+    : 'Live NOAA feed temporarily unavailable';
+  document.getElementById('tonightDetail').innerHTML = 'Open the <a href="https://www.spaceweather.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener" style="color:#7bc8e8">official NOAA 30-minute forecast</a> before driving. '+(data
+    ? 'Available cloud, moon and short-term observations are shown separately. They do not replace the missing Kp forecast.'
+    : 'The regional thresholds and viewing-location guide below remain available.');
+}
+
 // === Main data fetch ===
 let latestRequest = 0;
 async function loadAuroraData(){
@@ -1429,9 +1477,11 @@ async function loadAuroraData(){
     if (request !== latestRequest) return;
     const max24 = asFiniteNumber(data.forecast && data.forecast.peak_24h);
     const max72 = asFiniteNumber(data.forecast && data.forecast.peak_72h);
-    if (!Number.isFinite(max24)) throw new Error('NOAA Kp forecast unavailable');
-
     if (!currentForecast(data)) throw new Error('Aurora response has expired');
+    if (!Number.isFinite(max24) || !Array.isArray(data.forecast?.periods) || !data.forecast.periods.length) {
+      renderAuroraUnavailable(data);
+      return;
+    }
     latestAuroraData = data;
 
     currentKp = max24;
@@ -1442,13 +1492,7 @@ async function loadAuroraData(){
     checkAndNotify(max24);
     renderSolarWind(data.solar_wind);
 
-    const current = data.forecast.current && asFiniteNumber(data.forecast.current.kp);
-    const currentCard = document.getElementById('swKpNow');
-    if (Number.isFinite(current)){
-      currentCard.className = 'sw-card '+(current >= 5 ? 'alert' : '');
-      currentCard.querySelector('.sw-val').textContent = current.toFixed(1);
-      currentCard.querySelector('.sw-status').textContent = KP_STATUS[kpClass(current)];
-    } else markSpaceWeatherUnavailable('swKpNow');
+    renderObservedKp(data);
 
     const peakCard = document.getElementById('swKpPeak');
     if (Number.isFinite(max72)){
@@ -1484,17 +1528,7 @@ async function loadAuroraData(){
     document.getElementById('refreshInfo').textContent = '· API checked '+new Date(data.fetched_at || Date.now()).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+' · source ages checked separately';
   } catch (error) {
     if (request !== latestRequest) return;
-    latestAuroraData = null;
-    renderUnavailableTonightVerdict('A current NOAA forecast is unavailable.');
-    ['swBz','swSpeed','swKpNow','swKpPeak'].forEach(markSpaceWeatherUnavailable);
-    renderDecisionData(null);
-    document.getElementById('refreshInfo').textContent = '';
-    document.getElementById('liveStatus').textContent = 'NOAA feed unavailable · manual guide active';
-    document.getElementById('tonightHeadline').textContent = 'Live NOAA feed temporarily unavailable';
-    document.getElementById('tonightDetail').innerHTML = 'Open the <a href="https://www.spaceweather.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener" style="color:#7bc8e8">official NOAA 30-minute forecast</a>, then check local clouds. The regional thresholds and viewing-location guide below remain available.';
-    document.getElementById('selectedCloud').textContent = 'NWS data unavailable';
-    document.getElementById('nextBestWindow').textContent = 'Recheck after feed returns';
-    document.getElementById('nightStrip').innerHTML = '';
+    renderAuroraUnavailable(null);
   }
 }
 
@@ -1638,7 +1672,9 @@ function renderTonightWindow(periods, region) {
       ? Math.round(choice.cloud)+'% near '+michiganClock(new Date(best.time_tag))
       : 'NWS data unavailable';
   } else {
-    text += ' NOAA has no forecast rows inside tonight\u2019s dark window yet, so treat the headline number as daytime guidance and recheck after sunset.';
+    text += periods && periods.length
+      ? ' NOAA has no forecast rows inside tonight\u2019s dark window yet. Recheck after sunset.'
+      : ' The Kp forecast is unavailable. Darkness and cloud information alone cannot establish an aurora viewing opportunity.';
     const startCloud = skyCoverAt(region,darkStart);
     document.getElementById('selectedCloud').textContent = Number.isFinite(startCloud)
       ? Math.round(startCloud)+'% at dark-window start'
@@ -1722,8 +1758,7 @@ window.addEventListener('DOMContentLoaded',()=>{
   // Auto-refresh every 10 minutes
   setInterval(loadAuroraData, 10*60*1000);
   function expireRegionalForecast() {
-    latestAuroraData = null;
-    renderDecisionData(null);
+    renderAuroraUnavailable(null);
   }
   document.addEventListener('visibilitychange', function(){
     if (!document.hidden && latestAuroraData && !currentForecast(latestAuroraData)) {
