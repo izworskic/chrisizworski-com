@@ -173,7 +173,7 @@ const server=http.createServer((req,res)=>{
   await gridPage.route(/(?:upload\.wikimedia\.org|tile\.openstreetmap\.org)/,r=>r.abort());
   await gridPage.route('**/api/shorefeel?*',route=>{
    const payload=JSON.parse(fixture(new URL('http://localhost/api/shorefeel?lake=michigan&place=traverse-city')));
-   const m={tempF:64.4,observedAt:'2026-10-13T12:00:00.000Z',distanceKm:4.2};
+   const m={tempF:64.4,observedAt:at(-3600000),distanceKm:4.2};
    payload.regionalSatellite={status:'recent',cells:[{key:'west-bay',short:'West Bay',label:'West Grand Traverse Bay, 4 km north of Clinch Park',measurement:m},{key:'east-bay',short:'East Bay',label:'East Grand Traverse Bay',measurement:{...m,tempF:64.9}}]};
    payload.water={kind:'satellite',tempF:64.4,observedAt:m.observedAt,label:'West Grand Traverse Bay, 4 km north of Clinch Park',cellKey:'west-bay',where:'Grand Traverse Bay',caveat:'NOAA satellite surface analysis for a pixel 4.2 km from Clinch Park beach, not a beach thermometer; sunlit shallows can run warmer.'};
    for(const a of activities)payload.assessments[a].water='Cold · 64.4°F at West Grand Traverse Bay, 4 km north of Clinch Park. In the 60s.';
