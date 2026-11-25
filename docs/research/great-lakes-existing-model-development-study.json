@@ -1,0 +1,1009 @@
+{
+  "schemaVersion": 1,
+  "kind": "FIXED_COHORT_ARRIVAL_WINDOW_STUDY",
+  "model": "existing-reference-v1",
+  "modelRevision": "b38f8e81e294e6b56fd9619e6c86b185132ac3c0",
+  "plannedDates": 27,
+  "completedDates": 27,
+  "unavailableDates": 0,
+  "pendingDates": [],
+  "ledger": [
+    {
+      "date": "2024-08-19",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503227287",
+      "etag": "0x8DDB01C9721731C",
+      "sourceReceiptSha256": "1682987a113e1af88543a101503f98b36538c243455b4fd1f51c460b41682716",
+      "inputSha256": "1e5540df0ecb17a75a3ed676484ecde7894360e8ce90a1c413d6ca17f7ee67a8",
+      "rowsScanned": 9112166,
+      "selectedRows": 66540,
+      "rangeBytes": 215326720,
+      "rangeRequests": 145,
+      "candidateEvents": 12,
+      "scoredEvents": 3
+    },
+    {
+      "date": "2024-08-21",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB01C35169099",
+      "sourceReceiptSha256": "8a51704953821806275306264815081178b751e818c3a3cb2ec1fb932a794cac",
+      "inputSha256": "27c3af93ddd0a57dbe3cca1235b94cd4659c4a8a0d887d596f7de4222e37ac24",
+      "rowsScanned": 10028835,
+      "selectedRows": 66487,
+      "rangeBytes": 237846528,
+      "rangeRequests": 161,
+      "candidateEvents": 7,
+      "scoredEvents": 2
+    },
+    {
+      "date": "2024-08-23",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB01C4D8DDAB6",
+      "sourceReceiptSha256": "1ee1c99489fb36ec76441197d51b21212f95a0178aad57a414ffb2510554a938",
+      "inputSha256": "6c982bb27655c966e378ddba3bc450b1c6cc900bc18c915dc1581f4afba4051e",
+      "rowsScanned": 10182566,
+      "selectedRows": 67463,
+      "rangeBytes": 240828416,
+      "rangeRequests": 161,
+      "candidateEvents": 10,
+      "scoredEvents": 4
+    },
+    {
+      "date": "2024-08-25",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB01C546CA7D7",
+      "sourceReceiptSha256": "1833a6279404d8a0659c535af0156346ed53cc7c81bfd6179e88cc026bf049e8",
+      "inputSha256": "c2b6765d0822a8cb6d384b3255c60dfa94d2b014e4e1bc87e63e48ae136b4f0f",
+      "rowsScanned": 10563927,
+      "selectedRows": 76865,
+      "rangeBytes": 250019840,
+      "rangeRequests": 177,
+      "candidateEvents": 14,
+      "scoredEvents": 5
+    },
+    {
+      "date": "2024-08-27",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB01C25D65215",
+      "sourceReceiptSha256": "12debce138851ca516cc9098a957c3c647cf2fc4e6480a938f64d45e87efcbfb",
+      "inputSha256": "07666d3fcd54f9efdac4bad75afb0fd9ecfa436a1ea53ae0edb5826236e9fa02",
+      "rowsScanned": 9550574,
+      "selectedRows": 62198,
+      "rangeBytes": 225083392,
+      "rangeRequests": 161,
+      "candidateEvents": 4,
+      "scoredEvents": 0
+    },
+    {
+      "date": "2024-08-29",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB01C4BDF4EAE",
+      "sourceReceiptSha256": "a24d34836f8ee422e0f110a17b5aff22aa8dfd24760c78fc72c20e882c2f96c0",
+      "inputSha256": "1368f36de8c8b07364206c3a98bb2a4977e7fe5703b318bca8785a8d5baf69a8",
+      "rowsScanned": 10146586,
+      "selectedRows": 68434,
+      "rangeBytes": 240222208,
+      "rangeRequests": 161,
+      "candidateEvents": 11,
+      "scoredEvents": 4
+    },
+    {
+      "date": "2024-08-31",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB01C384504D1",
+      "sourceReceiptSha256": "f9d15e64b2a90ede3f463875f827d4ba4a5df8124feefa39e980ea6c09d2f166",
+      "inputSha256": "3e5996c82c939e0d039ea24df7613dea7a0d1b08a613147189ea60cb1f95be04",
+      "rowsScanned": 9782231,
+      "selectedRows": 74729,
+      "rangeBytes": 231448576,
+      "rangeRequests": 161,
+      "candidateEvents": 11,
+      "scoredEvents": 3
+    },
+    {
+      "date": "2024-09-01",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503227287",
+      "etag": "0x8DDB021091FE6BF",
+      "sourceReceiptSha256": "5bdd389425281a6f120e1b34e529ee5d14dae3764dc404c5af3c5ae9bc232ea6",
+      "inputSha256": "bf5fb5100c4193effc2c7aa29b4312143a8bfd711fb13118b3d40e3e8130a6cf",
+      "rowsScanned": 9566456,
+      "selectedRows": 69419,
+      "rangeBytes": 225525760,
+      "rangeRequests": 161,
+      "candidateEvents": 7,
+      "scoredEvents": 2
+    },
+    {
+      "date": "2024-09-02",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB02110D92AA4",
+      "sourceReceiptSha256": "0276d4a2a989806a7b58e59f72140389c2138790ac8029f3c2bce7161c106022",
+      "inputSha256": "90d86bdfc74ab17a4850a8491f3499b6877c83a05eea5653c6a11b9a41350b9b",
+      "rowsScanned": 10319403,
+      "selectedRows": 77923,
+      "rangeBytes": 243826688,
+      "rangeRequests": 161,
+      "candidateEvents": 10,
+      "scoredEvents": 2
+    },
+    {
+      "date": "2024-09-03",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB0210D546BD5",
+      "sourceReceiptSha256": "c67e071aa986dc35adb7a51a964ef3b69b3fde10cc3184d728079bc13258c663",
+      "inputSha256": "c34b0a0ac669038211d24f465763d4f4817cdeaa086251667d077d151e1bda25",
+      "rowsScanned": 9990769,
+      "selectedRows": 68597,
+      "rangeBytes": 236085248,
+      "rangeRequests": 161,
+      "candidateEvents": 10,
+      "scoredEvents": 1
+    },
+    {
+      "date": "2024-09-04",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503227287",
+      "etag": "0x8DDB02110673996",
+      "sourceReceiptSha256": "982a6223a037a40e68527f3aeecace17479a594185fc5167c7f9a9eb88eb6bcc",
+      "inputSha256": "47d282f38592ffcf1537295a0566e16211aa17985464a7e8618612aa98ea3161",
+      "rowsScanned": 10078124,
+      "selectedRows": 65713,
+      "rangeBytes": 238411776,
+      "rangeRequests": 161,
+      "candidateEvents": 9,
+      "scoredEvents": 5
+    },
+    {
+      "date": "2024-09-05",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB021118D31B5",
+      "sourceReceiptSha256": "3d4432b7155bb5cfcd41d25d79babca31bc2446deab3dc4a9f0f5ef152d33a9c",
+      "inputSha256": "d5c46654a38f24b1d120330611306b940f70d8576f5c44db509b110721f349b4",
+      "rowsScanned": 10134204,
+      "selectedRows": 69197,
+      "rangeBytes": 240074752,
+      "rangeRequests": 161,
+      "candidateEvents": 15,
+      "scoredEvents": 1
+    },
+    {
+      "date": "2024-09-06",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB020FE6D81AC",
+      "sourceReceiptSha256": "f8272aeb33ec0e151778e529e94d94a4a88021b999f956e35332ff8ad59bb98a",
+      "inputSha256": "ff4740c766382d415bcd064e4f5e3560cab0cbfd82306309650159e3ae43143b",
+      "rowsScanned": 9222646,
+      "selectedRows": 64281,
+      "rangeBytes": 217653248,
+      "rangeRequests": 145,
+      "candidateEvents": 12,
+      "scoredEvents": 2
+    },
+    {
+      "date": "2024-09-07",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB020F6CE860B",
+      "sourceReceiptSha256": "1226994cc3197994441691ce8ba5de3e5941e4d0ef24addb621fb58d0b6fc710",
+      "inputSha256": "b7c2445587dc4f5b9f99f30a51d4b199e2d460216a3a9d904cc5b7cd18afd264",
+      "rowsScanned": 9264299,
+      "selectedRows": 66618,
+      "rangeBytes": 218030080,
+      "rangeRequests": 145,
+      "candidateEvents": 11,
+      "scoredEvents": 7
+    },
+    {
+      "date": "2024-09-08",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB02106E67F57",
+      "sourceReceiptSha256": "871b44a88b7922a6794be8a21b9147231cd2f6a94f2cfb800e75b544d0e0bf34",
+      "inputSha256": "5d2b36de1aa0804fc0ce9357ed2867f569f09772374d00f496156831e3401f2e",
+      "rowsScanned": 9343596,
+      "selectedRows": 73721,
+      "rangeBytes": 220536832,
+      "rangeRequests": 145,
+      "candidateEvents": 11,
+      "scoredEvents": 1
+    },
+    {
+      "date": "2024-09-09",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB020E5FE44AD",
+      "sourceReceiptSha256": "9d91df701594eb9ae1d27905cb59da992ef328c2d4be801d28ef3492a292fae9",
+      "inputSha256": "6004fe2f1d4db19755fe7262d97c5508eb1815acbb42332afc11edd29be841fc",
+      "rowsScanned": 8810082,
+      "selectedRows": 61568,
+      "rangeBytes": 208150528,
+      "rangeRequests": 145,
+      "candidateEvents": 8,
+      "scoredEvents": 3
+    },
+    {
+      "date": "2024-09-10",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503227287",
+      "etag": "0x8DDB020AB5367B6",
+      "sourceReceiptSha256": "e632291a71084040c1397d1f3f1c4b05ba70f896a90c93df000002af8e7ba828",
+      "inputSha256": "d5aad68826e65fb9dc5f4721fbcb6afdbb544215107c151e6714bfeda1553fce",
+      "rowsScanned": 8221779,
+      "selectedRows": 53869,
+      "rangeBytes": 193634304,
+      "rangeRequests": 129,
+      "candidateEvents": 7,
+      "scoredEvents": 2
+    },
+    {
+      "date": "2024-09-11",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB020EC7A0440",
+      "sourceReceiptSha256": "026bf71931b931efa813a3681ea09a75519f0ea6a43a685b57831bd9eb38854d",
+      "inputSha256": "8874cd0982979f020ef35a53435f21e888777619dbddc9475fa8eb27712c3ecc",
+      "rowsScanned": 9072115,
+      "selectedRows": 51804,
+      "rangeBytes": 213352448,
+      "rangeRequests": 145,
+      "candidateEvents": 8,
+      "scoredEvents": 0
+    },
+    {
+      "date": "2024-09-12",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB02107394B84",
+      "sourceReceiptSha256": "c1ad58889417460357a098b74aaa30658f7f275d4eb3051216b60966f85460f1",
+      "inputSha256": "9d55dc37e69b065fc1f1f0b48d7d2adbd5790820ca797f597e2c05689dec10c4",
+      "rowsScanned": 9541395,
+      "selectedRows": 58076,
+      "rangeBytes": 226009088,
+      "rangeRequests": 161,
+      "candidateEvents": 12,
+      "scoredEvents": 3
+    },
+    {
+      "date": "2024-09-13",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB020DF5C632E",
+      "sourceReceiptSha256": "70b48c282df0959b262c26519023709e76d4f3dab9ee20a47e85781734416b52",
+      "inputSha256": "1ce8334b95af177c3268948a3638612da5a457e509cc0c3750138818bd804b01",
+      "rowsScanned": 8774855,
+      "selectedRows": 53174,
+      "rangeBytes": 207577088,
+      "rangeRequests": 145,
+      "candidateEvents": 8,
+      "scoredEvents": 2
+    },
+    {
+      "date": "2024-09-14",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB0210A7875E7",
+      "sourceReceiptSha256": "4b102d459650aa7cdd32c3e387612e09c7ffbf5b51d2dc6dad9ea8958be850f9",
+      "inputSha256": "45d9588b8852cb736f68f2367d5a81b97cee949699259a8b8fc06b0ac6d082f8",
+      "rowsScanned": 9804386,
+      "selectedRows": 58087,
+      "rangeBytes": 232636416,
+      "rangeRequests": 161,
+      "candidateEvents": 10,
+      "scoredEvents": 1
+    },
+    {
+      "date": "2024-09-15",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503227287",
+      "etag": "0x8DDB020DAB7E6AB",
+      "sourceReceiptSha256": "529527d34bd92c9f16a584ad1a8281aac5e2181b8bd16e66366892e5e316d0b7",
+      "inputSha256": "bb296521c70bf6f514965fcc8da6ae1c80521e4727a565aaf97a454f57f55fbb",
+      "rowsScanned": 8774129,
+      "selectedRows": 55523,
+      "rangeBytes": 207593472,
+      "rangeRequests": 145,
+      "candidateEvents": 12,
+      "scoredEvents": 2
+    },
+    {
+      "date": "2024-09-16",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB020F7331893",
+      "sourceReceiptSha256": "051b46dc651e89bae173f8861293160957cde0bd70ab1ba09ea1b1046f40ab10",
+      "inputSha256": "d6a1b3c2526008fb174f5a7dc03ef029a4a7431a9dfc9a4fca1c0847442652e2",
+      "rowsScanned": 9100508,
+      "selectedRows": 48867,
+      "rangeBytes": 215588864,
+      "rangeRequests": 145,
+      "candidateEvents": 9,
+      "scoredEvents": 2
+    },
+    {
+      "date": "2024-09-17",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB020FCD6F698",
+      "sourceReceiptSha256": "bac9134d9d088dce1b738270c4a4da57564187c86e4c129ad357237f903e6f86",
+      "inputSha256": "ba998038d1ee72d8290b5ecdd13133422a240749f498fe212cd3194ca815656a",
+      "rowsScanned": 9271658,
+      "selectedRows": 51958,
+      "rangeBytes": 219414528,
+      "rangeRequests": 145,
+      "candidateEvents": 10,
+      "scoredEvents": 2
+    },
+    {
+      "date": "2024-09-18",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB0210776ABE3",
+      "sourceReceiptSha256": "87bcefdf95adc8ad31e99e21059c0af4c3c91fbf85eea8d9fa592f87ecf2b517",
+      "inputSha256": "373cfee3040b1edd41018bf1bbe0a99cfbea89f2e88ad8e1f0c76d9133f78595",
+      "rowsScanned": 9167056,
+      "selectedRows": 52098,
+      "rangeBytes": 216629248,
+      "rangeRequests": 145,
+      "candidateEvents": 10,
+      "scoredEvents": 2
+    },
+    {
+      "date": "2024-09-19",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503535400",
+      "etag": "0x8DDB020D94C3321",
+      "sourceReceiptSha256": "afbda5a931c89c3ec5800a341af94bc4a19d99590afdfb25a399533104a5ba33",
+      "inputSha256": "b5ccb16e4b897e9d9d1f6b6a7ead9cffe4cc4b982f4103c0e416a88ddd1441f3",
+      "rowsScanned": 8744641,
+      "selectedRows": 54656,
+      "rangeBytes": 206561280,
+      "rangeRequests": 145,
+      "candidateEvents": 11,
+      "scoredEvents": 2
+    },
+    {
+      "date": "2024-09-20",
+      "status": "COMPLETE",
+      "runRef": "https://github.com/izworskic/chrisizworski-com/actions/runs/45503227287",
+      "etag": "0x8DDB020D6015611",
+      "sourceReceiptSha256": "555781c0baf94876b46fbeeac627c927ac0695cb0911b5d093d1934a7eaff81a",
+      "inputSha256": "52b4f4fec3aa8e7bc23c212829403d0d34356186ca6e9ecedca7103869d98a8e",
+      "rowsScanned": 8423088,
+      "selectedRows": 49251,
+      "rangeBytes": 199278592,
+      "rangeRequests": 145,
+      "candidateEvents": 7,
+      "scoredEvents": 0
+    }
+  ],
+  "dataset": {
+    "schemaVersion": 1,
+    "kind": "RETROSPECTIVE_WINDOW_DEVELOPMENT_RESIDUALS",
+    "modelRevision": "b38f8e81e294e6b56fd9619e6c86b185132ac3c0",
+    "holdoutStartsOn": "2024-09-21",
+    "days": [
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-08-19",
+        "sourceReceiptSha256": "1682987a113e1af88543a101503f98b36538c243455b4fd1f51c460b41682716",
+        "candidateEvents": 12,
+        "eligibleEstimates": 3,
+        "residuals": [
+          [
+            0.5855833333333333,
+            2.90225
+          ],
+          [
+            22.244216666666667,
+            23.444216666666666
+          ],
+          [
+            22.602766666666668,
+            24.769433333333332
+          ]
+        ],
+        "inputSha256": "1e5540df0ecb17a75a3ed676484ecde7894360e8ce90a1c413d6ca17f7ee67a8"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-08-21",
+        "sourceReceiptSha256": "8a51704953821806275306264815081178b751e818c3a3cb2ec1fb932a794cac",
+        "candidateEvents": 7,
+        "eligibleEstimates": 2,
+        "residuals": [
+          [
+            0.2218,
+            1.4051333333333333
+          ],
+          [
+            7.031583333333334,
+            9.981583333333333
+          ]
+        ],
+        "inputSha256": "27c3af93ddd0a57dbe3cca1235b94cd4659c4a8a0d887d596f7de4222e37ac24"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-08-23",
+        "sourceReceiptSha256": "1ee1c99489fb36ec76441197d51b21212f95a0178aad57a414ffb2510554a938",
+        "candidateEvents": 10,
+        "eligibleEstimates": 4,
+        "residuals": [
+          [
+            -5.247616666666667,
+            -4.064283333333333
+          ],
+          [
+            6.698716666666667,
+            11.365383333333334
+          ],
+          [
+            23.825233333333333,
+            25.008566666666667
+          ],
+          [
+            24.49801666666667,
+            25.664683333333333
+          ]
+        ],
+        "inputSha256": "6c982bb27655c966e378ddba3bc450b1c6cc900bc18c915dc1581f4afba4051e"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-08-25",
+        "sourceReceiptSha256": "1833a6279404d8a0659c535af0156346ed53cc7c81bfd6179e88cc026bf049e8",
+        "candidateEvents": 14,
+        "eligibleEstimates": 5,
+        "residuals": [
+          [
+            1.1712,
+            3.5045333333333333
+          ],
+          [
+            9.4001,
+            10.566766666666666
+          ],
+          [
+            10.770733333333334,
+            14.254066666666667
+          ],
+          [
+            21.862,
+            23.045333333333332
+          ],
+          [
+            22.626966666666668,
+            23.793633333333332
+          ]
+        ],
+        "inputSha256": "c2b6765d0822a8cb6d384b3255c60dfa94d2b014e4e1bc87e63e48ae136b4f0f"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-08-27",
+        "sourceReceiptSha256": "12debce138851ca516cc9098a957c3c647cf2fc4e6480a938f64d45e87efcbfb",
+        "candidateEvents": 4,
+        "eligibleEstimates": 0,
+        "residuals": [],
+        "inputSha256": "07666d3fcd54f9efdac4bad75afb0fd9ecfa436a1ea53ae0edb5826236e9fa02"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-08-29",
+        "sourceReceiptSha256": "a24d34836f8ee422e0f110a17b5aff22aa8dfd24760c78fc72c20e882c2f96c0",
+        "candidateEvents": 11,
+        "eligibleEstimates": 4,
+        "residuals": [
+          [
+            -3.4259833333333334,
+            -2.259316666666667
+          ],
+          [
+            0.95955,
+            2.1428833333333333
+          ],
+          [
+            11.184633333333334,
+            13.367966666666666
+          ],
+          [
+            22.842483333333334,
+            23.85915
+          ]
+        ],
+        "inputSha256": "1368f36de8c8b07364206c3a98bb2a4977e7fe5703b318bca8785a8d5baf69a8"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-08-31",
+        "sourceReceiptSha256": "f9d15e64b2a90ede3f463875f827d4ba4a5df8124feefa39e980ea6c09d2f166",
+        "candidateEvents": 11,
+        "eligibleEstimates": 3,
+        "residuals": [
+          [
+            4.050083333333333,
+            6.400083333333333
+          ],
+          [
+            10.083483333333334,
+            12.416816666666668
+          ],
+          [
+            21.527333333333335,
+            22.677333333333333
+          ]
+        ],
+        "inputSha256": "3e5996c82c939e0d039ea24df7613dea7a0d1b08a613147189ea60cb1f95be04"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-01",
+        "sourceReceiptSha256": "5bdd389425281a6f120e1b34e529ee5d14dae3764dc404c5af3c5ae9bc232ea6",
+        "candidateEvents": 7,
+        "eligibleEstimates": 2,
+        "residuals": [
+          [
+            10.933233333333334,
+            12.083233333333334
+          ],
+          [
+            24.539983333333332,
+            25.689983333333334
+          ]
+        ],
+        "inputSha256": "bf5fb5100c4193effc2c7aa29b4312143a8bfd711fb13118b3d40e3e8130a6cf"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-02",
+        "sourceReceiptSha256": "0276d4a2a989806a7b58e59f72140389c2138790ac8029f3c2bce7161c106022",
+        "candidateEvents": 10,
+        "eligibleEstimates": 2,
+        "residuals": [
+          [
+            0.6587833333333334,
+            1.8421166666666666
+          ],
+          [
+            4.62975,
+            5.813083333333333
+          ]
+        ],
+        "inputSha256": "90d86bdfc74ab17a4850a8491f3499b6877c83a05eea5653c6a11b9a41350b9b"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-03",
+        "sourceReceiptSha256": "c67e071aa986dc35adb7a51a964ef3b69b3fde10cc3184d728079bc13258c663",
+        "candidateEvents": 10,
+        "eligibleEstimates": 1,
+        "residuals": [
+          [
+            22.105316666666667,
+            23.221983333333334
+          ]
+        ],
+        "inputSha256": "c34b0a0ac669038211d24f465763d4f4817cdeaa086251667d077d151e1bda25"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-04",
+        "sourceReceiptSha256": "982a6223a037a40e68527f3aeecace17479a594185fc5167c7f9a9eb88eb6bcc",
+        "candidateEvents": 9,
+        "eligibleEstimates": 5,
+        "residuals": [
+          [
+            6.87715,
+            8.060483333333334
+          ],
+          [
+            12.6658,
+            16.14913333333333
+          ],
+          [
+            19.101666666666667,
+            21.285
+          ],
+          [
+            20.40726666666667,
+            22.40726666666667
+          ],
+          [
+            22.407916666666665,
+            24.74125
+          ]
+        ],
+        "inputSha256": "47d282f38592ffcf1537295a0566e16211aa17985464a7e8618612aa98ea3161"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-05",
+        "sourceReceiptSha256": "3d4432b7155bb5cfcd41d25d79babca31bc2446deab3dc4a9f0f5ef152d33a9c",
+        "candidateEvents": 15,
+        "eligibleEstimates": 1,
+        "residuals": [
+          [
+            26.08,
+            28.413333333333334
+          ]
+        ],
+        "inputSha256": "d5c46654a38f24b1d120330611306b940f70d8576f5c44db509b110721f349b4"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-06",
+        "sourceReceiptSha256": "f8272aeb33ec0e151778e529e94d94a4a88021b999f956e35332ff8ad59bb98a",
+        "candidateEvents": 12,
+        "eligibleEstimates": 2,
+        "residuals": [
+          [
+            12.132983333333334,
+            13.282983333333334
+          ],
+          [
+            24.356616666666667,
+            25.506616666666666
+          ]
+        ],
+        "inputSha256": "ff4740c766382d415bcd064e4f5e3560cab0cbfd82306309650159e3ae43143b"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-07",
+        "sourceReceiptSha256": "1226994cc3197994441691ce8ba5de3e5941e4d0ef24addb621fb58d0b6fc710",
+        "candidateEvents": 11,
+        "eligibleEstimates": 7,
+        "residuals": [
+          [
+            10.052883333333334,
+            13.536216666666666
+          ],
+          [
+            13.1387,
+            15.4887
+          ],
+          [
+            20.3697,
+            21.55303333333333
+          ],
+          [
+            22.397966666666665,
+            23.5813
+          ],
+          [
+            23.132583333333333,
+            24.315916666666666
+          ],
+          [
+            23.69415,
+            24.86081666666667
+          ],
+          [
+            24.874716666666668,
+            27.191383333333334
+          ]
+        ],
+        "inputSha256": "b7c2445587dc4f5b9f99f30a51d4b199e2d460216a3a9d904cc5b7cd18afd264"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-08",
+        "sourceReceiptSha256": "871b44a88b7922a6794be8a21b9147231cd2f6a94f2cfb800e75b544d0e0bf34",
+        "candidateEvents": 11,
+        "eligibleEstimates": 1,
+        "residuals": [
+          [
+            -0.4522,
+            0.6978
+          ]
+        ],
+        "inputSha256": "5d2b36de1aa0804fc0ce9357ed2867f569f09772374d00f496156831e3401f2e"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-09",
+        "sourceReceiptSha256": "9d91df701594eb9ae1d27905cb59da992ef328c2d4be801d28ef3492a292fae9",
+        "candidateEvents": 8,
+        "eligibleEstimates": 3,
+        "residuals": [
+          [
+            5.422916666666667,
+            6.572916666666667
+          ],
+          [
+            20.92085,
+            22.087516666666666
+          ],
+          [
+            23.411566666666666,
+            24.578233333333333
+          ]
+        ],
+        "inputSha256": "6004fe2f1d4db19755fe7262d97c5508eb1815acbb42332afc11edd29be841fc"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-10",
+        "sourceReceiptSha256": "e632291a71084040c1397d1f3f1c4b05ba70f896a90c93df000002af8e7ba828",
+        "candidateEvents": 7,
+        "eligibleEstimates": 2,
+        "residuals": [
+          [
+            8.230466666666667,
+            10.580466666666666
+          ],
+          [
+            21.676383333333334,
+            23.84305
+          ]
+        ],
+        "inputSha256": "d5aad68826e65fb9dc5f4721fbcb6afdbb544215107c151e6714bfeda1553fce"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-11",
+        "sourceReceiptSha256": "026bf71931b931efa813a3681ea09a75519f0ea6a43a685b57831bd9eb38854d",
+        "candidateEvents": 8,
+        "eligibleEstimates": 0,
+        "residuals": [],
+        "inputSha256": "8874cd0982979f020ef35a53435f21e888777619dbddc9475fa8eb27712c3ecc"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-12",
+        "sourceReceiptSha256": "c1ad58889417460357a098b74aaa30658f7f275d4eb3051216b60966f85460f1",
+        "candidateEvents": 12,
+        "eligibleEstimates": 3,
+        "residuals": [
+          [
+            -0.2563666666666667,
+            0.8936333333333333
+          ],
+          [
+            9.7803,
+            10.946966666666667
+          ],
+          [
+            25.903316666666665,
+            28.253316666666667
+          ]
+        ],
+        "inputSha256": "9d55dc37e69b065fc1f1f0b48d7d2adbd5790820ca797f597e2c05689dec10c4"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-13",
+        "sourceReceiptSha256": "70b48c282df0959b262c26519023709e76d4f3dab9ee20a47e85781734416b52",
+        "candidateEvents": 8,
+        "eligibleEstimates": 2,
+        "residuals": [
+          [
+            -0.36343333333333333,
+            0.9865666666666667
+          ],
+          [
+            4.3296833333333336,
+            7.479683333333333
+          ]
+        ],
+        "inputSha256": "1ce8334b95af177c3268948a3638612da5a457e509cc0c3750138818bd804b01"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-14",
+        "sourceReceiptSha256": "4b102d459650aa7cdd32c3e387612e09c7ffbf5b51d2dc6dad9ea8958be850f9",
+        "candidateEvents": 10,
+        "eligibleEstimates": 1,
+        "residuals": [
+          [
+            24.2931,
+            25.776433333333333
+          ]
+        ],
+        "inputSha256": "45d9588b8852cb736f68f2367d5a81b97cee949699259a8b8fc06b0ac6d082f8"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-15",
+        "sourceReceiptSha256": "529527d34bd92c9f16a584ad1a8281aac5e2181b8bd16e66366892e5e316d0b7",
+        "candidateEvents": 12,
+        "eligibleEstimates": 2,
+        "residuals": [
+          [
+            -0.5413333333333333,
+            0.6086666666666667
+          ],
+          [
+            5.89845,
+            7.0651166666666665
+          ]
+        ],
+        "inputSha256": "bb296521c70bf6f514965fcc8da6ae1c80521e4727a565aaf97a454f57f55fbb"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-16",
+        "sourceReceiptSha256": "051b46dc651e89bae173f8861293160957cde0bd70ab1ba09ea1b1046f40ab10",
+        "candidateEvents": 9,
+        "eligibleEstimates": 2,
+        "residuals": [
+          [
+            3.8994,
+            7.0494
+          ],
+          [
+            23.249116666666666,
+            24.415783333333334
+          ]
+        ],
+        "inputSha256": "d6a1b3c2526008fb174f5a7dc03ef029a4a7431a9dfc9a4fca1c0847442652e2"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-17",
+        "sourceReceiptSha256": "bac9134d9d088dce1b738270c4a4da57564187c86e4c129ad357237f903e6f86",
+        "candidateEvents": 10,
+        "eligibleEstimates": 2,
+        "residuals": [
+          [
+            9.5776,
+            11.5776
+          ],
+          [
+            19.056916666666666,
+            20.24025
+          ]
+        ],
+        "inputSha256": "ba998038d1ee72d8290b5ecdd13133422a240749f498fe212cd3194ca815656a"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-18",
+        "sourceReceiptSha256": "87bcefdf95adc8ad31e99e21059c0af4c3c91fbf85eea8d9fa592f87ecf2b517",
+        "candidateEvents": 10,
+        "eligibleEstimates": 2,
+        "residuals": [
+          [
+            -1.00095,
+            0.16571666666666668
+          ],
+          [
+            22.147933333333334,
+            24.4646
+          ]
+        ],
+        "inputSha256": "373cfee3040b1edd41018bf1bbe0a99cfbea89f2e88ad8e1f0c76d9133f78595"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-19",
+        "sourceReceiptSha256": "afbda5a931c89c3ec5800a341af94bc4a19d99590afdfb25a399533104a5ba33",
+        "candidateEvents": 11,
+        "eligibleEstimates": 2,
+        "residuals": [
+          [
+            19.765766666666668,
+            21.282433333333334
+          ],
+          [
+            22.2947,
+            24.4447
+          ]
+        ],
+        "inputSha256": "b5ccb16e4b897e9d9d1f6b6a7ead9cffe4cc4b982f4103c0e416a88ddd1441f3"
+      },
+      {
+        "site": "soo",
+        "model": "existing-reference-v1",
+        "date": "2024-09-20",
+        "sourceReceiptSha256": "555781c0baf94876b46fbeeac627c927ac0695cb0911b5d093d1934a7eaff81a",
+        "candidateEvents": 7,
+        "eligibleEstimates": 0,
+        "residuals": [],
+        "inputSha256": "52b4f4fec3aa8e7bc23c212829403d0d34356186ca6e9ecedca7103869d98a8e"
+      }
+    ]
+  },
+  "status": "RESEARCH_MARGINS_AVAILABLE_UNVALIDATED",
+  "diagnostic": {
+    "schemaVersion": 1,
+    "kind": "RESEARCH_ARRIVAL_WINDOW_ASYMMETRY_NOT_CALIBRATED_PROBABILITY",
+    "site": "soo",
+    "model": "existing-reference-v1",
+    "modelRevision": "b38f8e81e294e6b56fd9619e6c86b185132ac3c0",
+    "holdoutStartsOn": "2024-09-21",
+    "sourceDates": [
+      "2024-08-19",
+      "2024-08-21",
+      "2024-08-23",
+      "2024-08-25",
+      "2024-08-27",
+      "2024-08-29",
+      "2024-08-31",
+      "2024-09-01",
+      "2024-09-02",
+      "2024-09-03",
+      "2024-09-04",
+      "2024-09-05",
+      "2024-09-06",
+      "2024-09-07",
+      "2024-09-08",
+      "2024-09-09",
+      "2024-09-10",
+      "2024-09-11",
+      "2024-09-12",
+      "2024-09-13",
+      "2024-09-14",
+      "2024-09-15",
+      "2024-09-16",
+      "2024-09-17",
+      "2024-09-18",
+      "2024-09-19",
+      "2024-09-20"
+    ],
+    "nonemptyDates": 24,
+    "scoredEvents": 63,
+    "candidateEvents": 266,
+    "eligibleEstimates": 63,
+    "minimumDates": 20,
+    "minimumEvents": 40,
+    "tailRankLevel": 0.95,
+    "diagnosticObservedEnvelope": {
+      "earlyMinutes": 6,
+      "lateMinutes": 29,
+      "entirelyLater": 56,
+      "entirelyEarlier": 2,
+      "bracketsContainingMidpoint": 5
+    },
+    "status": "RESEARCH_MARGINS_AVAILABLE_UNVALIDATED",
+    "proposedMargins": null,
+    "productionCalibrationAuthorized": false,
+    "fieldAccuracyVerified": false,
+    "probabilityCalibrated": false,
+    "note": "Daily block extrema, conservative signed bracket tails. No exchangeability established, no nominal coverage claim. Diagnostic envelope fits observed sample and is not an arrival window. Zero-outcome dates are counted but not treated as zero errors."
+  },
+  "proposedMargins": {
+    "earlyMinutes": 6,
+    "lateMinutes": 29
+  },
+  "productionCalibrationAuthorized": false,
+  "fieldAccuracyVerified": false,
+  "probabilityCalibrated": false
+}

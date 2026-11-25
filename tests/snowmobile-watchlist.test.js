@@ -58,3 +58,14 @@ test('no new fetch or tracking, UI loads before main client and preserves typed 
  assert.ok(js.includes("mode:'towns'"));assert.ok(!/\bfetch\(|\bgtag\(/.test(js));
  assert.match(js,/STALE, not current/);
 });
+
+test('statewide map is the first section after the introduction, with one map and unchanged watchlist and controls',()=>{
+ const html=readFileSync(new URL('../public/snowmobile/index.html',import.meta.url),'utf8');
+ assert.equal((html.match(/id="state-map"/g)||[]).length,1);
+ assert.match(html,/<p class="lede">[\s\S]*?<\/p>\s*<section class="panel" aria-labelledby="map-title">/);
+ const map=html.indexOf('id="state-map"');
+ for(const id of ['sled-watchlist','snow-town-query','compare-form','region-list']){
+  assert.ok(html.indexOf('id="'+id+'"')>map,id+' must follow the map');
+ }
+ assert.ok(html.indexOf('class="map-legend"')<html.indexOf('id="sled-watchlist"'));
+});

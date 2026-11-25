@@ -27,6 +27,20 @@
     };
   }
 
+  // The Authority publishes a 2.3% credit/debit fee. Round each crossing
+  // independently to cents; actual transaction rounding may differ.
+  function paymentComparison(total, vehicleClass, leadAxles, towedAxles) {
+    if (!Number.isInteger(total) || total <= 0) return null;
+    var cents = total * 100;
+    var fee = Math.round(cents * 23 / 1000);
+    return {
+      cardOneCents: cents + fee,
+      cardReturnCents: 2 * (cents + fee),
+      macPassCandidate: vehicleClass === "passenger" && leadAxles === 2 && towedAxles === 0,
+      qualifyingMacPassReturnCents: cents
+    };
+  }
+
   function render() {
     var classInput = byId("guideTollClass");
     var leadInput = byId("guideLeadAxles");
@@ -54,6 +68,14 @@
     }
     if (result.exceptionApplied) formula += " • motorhome/auto exception";
     byId("guideTollFormula").textContent = formula;
+    var payment = paymentComparison(result.total, classInput.value, result.leadAxles, result.towedAxles);
+    if (payment && byId("guideCardOne")) {
+      byId("guideCardOne").textContent = "$" + (payment.cardOneCents / 100).toFixed(2);
+      byId("guideCardReturn").textContent = "$" + (payment.cardReturnCents / 100).toFixed(2);
+      byId("guideMacPassExample").textContent = payment.macPassCandidate
+        ? "If your existing MacPass account, vehicle and return trip qualify: $" + (payment.qualifyingMacPassReturnCents / 100).toFixed(2) + " for both crossings."
+        : "This configuration does not qualify for the two-axle passenger vehicle return discount. Budget the standard two-crossing fare.";
+    }
   }
 
   function init() {

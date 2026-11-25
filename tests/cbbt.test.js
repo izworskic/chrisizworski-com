@@ -188,6 +188,49 @@ test('NOAA observation becomes stale after the configured threshold', () => {
   assert.equal(observation.freshness.state, 'stale');
 });
 
+test('NOAA weather preserves independent current fields and never coerces missing fields to zero', () => {
+  const wind = {data:[{t:'2026-10-01 14:54',s:null,g:' ',d:null,dr:null}]};
+  const temp = {data:[{t:'2026-10-01 14:55',v:72}]};
+  const pressure = {data:[{t:'2026-10-01 13:00',v:1012}]};
+  const result=normalizeNoaaObservation({windPayload:wind,airTempPayload:temp,pressurePayload:pressure},{now:NOW});
+  assert.equal(result.available,true);
+  assert.equal(result.wind.sustainedMph,null);
+  assert.equal(result.wind.gustMph,null);
+  assert.equal(result.wind.directionDegrees,null);
+  assert.equal(result.airTemperatureF,72);
+  assert.equal(result.pressureMb,null);
+  assert.equal(result.observedAt,'2026-10-01T14:55:00.000Z');
+  const calm=normalizeNoaaObservation({windPayload:{data:[{t:'2026-10-01 14:54',s:'0',g:'0',d:0}]}},{now:NOW});
+  assert.equal(calm.wind.sustainedMph,0);
+  assert.equal(calm.wind.gustMph,0);
+  assert.equal(calm.wind.directionDegrees,0);
+  const future=normalizeNoaaObservation({windPayload:{data:[{t:'2026-10-01 15:01',s:'30'}]}},{now:NOW});
+  assert.equal(future.available,false);
+  assert.equal(future.wind.sustainedMph,null);
+});
+
+test('NWS grid issuance and validity remain independent; undated or malformed packets abstain', () => {
+  for(const issue of [null,'invalid','2026-10-01T15:01:00Z','2026-10-01T01:00:00Z']){
+    const p=structuredClone(fixtures.nwsGrid);p.properties.updateTime=issue;
+    const result=normalizeNwsGridForecast(p,{now:NOW,retrievedAt:new Date(NOW).toISOString()});
+    assert.equal(result.available,false);
+    assert.deepEqual(result.periods,[]);
+    assert.notEqual(result.freshness.state,'fresh');
+  }
+  const p=structuredClone(fixtures.nwsGrid);
+  p.properties.windSpeed.values.unshift({validTime:'2026-10-01T14:00:00Z/PT1H',value:90},{validTime:'2026-10-01T14:00:00Z/invalid',value:99});
+  p.properties.windGust.values[0].value=null;
+  p.properties.windDirection.values[0].value=null;
+  p.properties.probabilityOfPrecipitation.values[0].value=null;
+  const result=normalizeNwsGridForecast(p,{now:NOW});
+  assert.equal(result.periods.length,2);
+  assert.equal(result.periods[0].windMph,20);
+  assert.equal(result.periods[0].gustMph,null);
+  assert.equal(result.periods[0].windDirectionDegrees,null);
+  assert.equal(result.periods[0].precipitationProbabilityPct,null);
+  assert.equal(result.operationalRestrictionInference,'PROHIBITED');
+});
+
 test('NWS points metadata identifies the marine grid-data endpoint', () => {
   const points = normalizeNwsPoints(fixtures.nwsPoints);
   assert.equal(points.cwa, 'AKQ');

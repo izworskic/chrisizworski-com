@@ -41,3 +41,10 @@
 .soo-vessel-legend-glyph svg{width:45px;height:25px}
 .soo-vessel-legend p{line-height:1.5;margin:7px 0}
 @media(max-width:640px){.soo-vessel-legend-items{gap:4px 10px}.soo-vessel-legend-item{flex:1 1 44%;white-space:normal}}
+/* Chooser for vessels that overlap at one spot (moored boats at the same dock). */
+.soo-ais-crowd{min-width:0;max-width:240px;font-family:system-ui,-apple-system,'Segoe UI',Roboto,sans-serif}
+.soo-ais-crowd-lead{margin:0 0 8px;font-size:13px;line-height:1.45;color:#263234}
+.soo-ais-crowd ul{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.soo-ais-crowd button{width:100%;min-height:40px;padding:8px 10px;border:1px solid #165d71;border-radius:4px;background:#fff;color:#123c4a;font:600 13px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;text-align:left;cursor:pointer}
+.soo-ais-crowd button:hover{background:#eef5f7}
+.soo-ais-crowd button:focus-visible{outline:3px solid #bd812c;outline-offset:2px}

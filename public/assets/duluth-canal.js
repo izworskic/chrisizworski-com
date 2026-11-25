@@ -29,6 +29,8 @@
   let previous = null;
   let currentData = null;
   let busy = false;
+  const changes=window.DuluthChanges;
+  let changeState=changes?changes.initial():null,changeTimer;
   let activeCameraId = CAMERAS[0].id;
   const markers = new Map();
   const spotMarkers = new Map();
@@ -90,13 +92,23 @@
   function scrollMap() {
     const node = $('duluthVesselMap');
     if (node) node.scrollIntoView({ behavior: 'smooth', block: 'center' });
-    window.setTimeout(() => { if (map) map.invalidateSize(); }, 250);
+    window.setTimeout(() => {
+      if (map) map.invalidateSize({ pan: false, animate: false });
+    }, 250);
   }
 
   function renderPick(data, failed) {
     const card = $('watchPick');
     card.replaceChildren();
     const pick = data.watchPick;
+    if (failed) {
+      card.className = 'watch-card quiet';
+      card.append(el('div', 'LIVE DATA TEMPORARILY UNAVAILABLE', 'watch-kicker'),
+        el('h2', 'Current passage estimate unavailable'),
+        el('p', 'The latest AIS refresh failed. Earlier passage windows are withheld until fresh reports return. This is not a zero-traffic report.', 'stale-warning'),
+        el('p', 'Use the last-known positions as a reference, or check the separate published harbor forecast and camera views before leaving.', 'watch-note'));
+      return;
+    }
     if (!pick) {
       card.className = 'watch-card quiet';
       card.append(
@@ -132,16 +144,19 @@
       el('h2', pick.name), heading, action, el('p', explainCandidate(pick), 'watch-why'), actions,
       el('p', 'For a shore-side view, arrive before the beginning of this window and watch the lift bridge and channel. A ship may slow, change berths or use another entrance, so this is a watching window, not a guaranteed bridge opening.', 'watch-note')
     );
-    if (failed) card.append(el('p', 'Fresh ship reports are unavailable. This was the last successful watch, not a current passage prediction.', 'stale-warning'));
   }
 
   function candidateMeta(c) {
     return [c.sizeLabel, `${c.distanceNm} NM`, `${Number(c.speedKnots).toFixed(1)} kn`, `AIS ${c.ageMinutes} min old`].join(' · ');
   }
 
-  function renderCandidates(data) {
+  function renderCandidates(data, failed) {
     const list = $('anticipatedShips');
     list.replaceChildren();
+    if (failed) {
+      list.append(el('div', 'Passage windows are unavailable until fresh AIS returns. Check the published harbor forecast separately.', 'empty-state'));
+      return;
+    }
     const candidates = Array.isArray(data.candidates) ? data.candidates : [];
     if (!candidates.length) {
       const empty = el('div', '', 'empty-state');
@@ -182,8 +197,10 @@
       } else {
         next.append(el('strong', 'No supported passage yet', 'monitor-title'), el('span', 'The harbor may still be active. Explore recent ships, cameras and shore viewpoints.', 'monitor-detail'));
       }
-      if (failed) next.append(el('span', 'Last successful AIS check shown, not a live update.', 'monitor-stale'));
+      if (failed) next.replaceChildren(el('div', 'NEXT WATCH', 'monitor-kicker'), el('strong', 'Current passage estimate unavailable', 'monitor-title'), el('span', 'The latest refresh failed. Last-known positions are not current passage predictions.', 'monitor-stale'));
     }
+    const focus = $('focusNext');
+    if (focus) focus.disabled = failed || !pick;
     const visual = $('monitorVisual');
     if (visual) {
       visual.replaceChildren(
@@ -204,11 +221,12 @@
     }
   }
 
-  function vesselPopup(v) {
+  function vesselPopup(v, failed = false) {
     const wrap = el('div');
     wrap.append(el('strong', v.name || `Vessel ${v.mmsi}`));
     const motion = v.speedKnots == null ? 'speed unavailable' : `${(v.speedKnots * 1.15078).toFixed(1)} mph (${Number(v.speedKnots).toFixed(1)} kn)`;
-    wrap.append(el('p', `${motion} · report ${age(v)}`));
+    wrap.append(el('p', `${failed ? 'Last-known position · ' : ''}${motion} · report ${age(v)}`));
+    wrap.append(el('p', `AIS type: ${shipTypeLabel(v)}`));
     if (v.destination) wrap.append(el('p', `AIS destination: ${v.destination}`));
     if (v.lengthMeters) wrap.append(el('p', `Length: ${Math.round(v.lengthMeters)} m`));
     wrap.append(button('Open live camera monitor', 'map-jump', () => openCameraMonitor(false)));
@@ -221,6 +239,7 @@
     wrap.append(el('p', `${c.direction === 'departure' ? 'Departure' : 'Arrival'} planning window: ${range(c.window)}`));
     wrap.append(el('p', `${c.distanceNm} NM · ${Number(c.speedKnots).toFixed(1)} kn · AIS ${c.ageMinutes} min old`));
     wrap.append(el('p', `${confidenceLabel(c.confidence)} · ${c.sizeLabel}`));
+    wrap.append(el('p', `AIS type: ${shipTypeLabel(c)}`));
     wrap.append(button('Open live camera monitor', 'map-jump', () => openCameraMonitor(false)));
     return wrap;
   }
@@ -239,17 +258,16 @@
       .watch-spot-marker.is-active span{background:#173f50;transform:scale(1.18)}
       .camera-map-marker span{width:34px;height:28px;border-radius:6px;display:flex;align-items:center;justify-content:center;background:#6a4c86;color:#fff;border:2px solid #fff;box-shadow:0 2px 9px rgba(18,52,64,.4);font:700 10px/1 Arial,sans-serif;transition:transform .15s ease,background .15s ease}
       .camera-map-marker.is-active span{background:#b9572a;transform:scale(1.12)}
-      .ship-map-marker .ship-glyph{display:block;filter:drop-shadow(0 2px 3px rgba(18,52,64,.38));transition:filter .15s ease}
+      .ship-map-marker .ship-glyph{display:block;width:100%;height:100%;filter:drop-shadow(0 2px 3px rgba(18,52,64,.38))}
       .ship-map-marker svg{display:block;width:100%;height:100%;overflow:visible}
-      .ship-map-marker .ship-hull{fill:#146c86;stroke:#fff;stroke-width:2.3;stroke-linejoin:round}
-      .ship-map-marker .ship-house,.ship-map-marker .ship-stack{fill:#f8fbfc;stroke:#fff;stroke-width:1.3}
-      .ship-map-marker .ship-hatch{fill:#d8e8ec;stroke:#fff;stroke-width:1}
-      .ship-map-marker .ship-window{fill:#173f50}
-      .ship-map-marker .ship-waterline{stroke:#fff;stroke-width:1.6;opacity:.9}
-      .ship-map-marker.is-selected .ship-hull{fill:#b9572a}
-      .ship-map-marker.is-selected .ship-glyph{filter:drop-shadow(0 0 6px rgba(185,87,42,.7)) drop-shadow(0 2px 3px rgba(18,52,64,.42))}
+      .ship-map-marker.is-candidate .ship-hull{fill:#146c86}
       .ship-map-marker.is-local .ship-hull{fill:#567d8b}
       .ship-map-marker.is-stopped .ship-hull{fill:#8a6a42}
+      .ship-map-marker.is-motion-unknown .ship-hull{fill:#68797f}
+      .ship-map-marker.is-selected .ship-hull{fill:#b9572a}
+      .ship-map-marker.is-selected .ship-glyph{filter:drop-shadow(0 0 6px rgba(185,87,42,.7)) drop-shadow(0 2px 3px rgba(18,52,64,.42))}
+      .ship-map-marker .ship-fallback{display:flex;align-items:center;justify-content:center;width:100%;height:100%;border:2px solid #fff;border-radius:5px;background:#506873;color:#fff;font-weight:700}
+      .ship-map-marker.is-selected .ship-fallback{background:#b9572a}
     `;
     document.head.append(style);
   }
@@ -262,21 +280,26 @@
     return L.divIcon({ className: `camera-map-marker${active ? ' is-active' : ''}`, html: '<span>CAM</span>', iconSize: [34, 28], iconAnchor: [17, 14], popupAnchor: [0, -15] });
   }
 
-  function shipRotation(vessel) {
-    const heading = Number(vessel?.heading);
-    if (Number.isFinite(heading) && heading >= 0 && heading < 360) return heading;
-    const course = Number(vessel?.course);
-    return Number.isFinite(course) && course >= 0 && course < 360 ? course : 0;
+  function localShipState(vessel) {
+    const speed = vessel?.speedKnots;
+    return typeof speed !== 'number' || !Number.isFinite(speed) || speed < 0
+      ? 'motion-unknown' : speed > 0.5 ? 'local' : 'stopped';
+  }
+
+  function shipTypeLabel(vessel) {
+    const icons = window.SeawayVesselIcons;
+    return icons?.KINDS.find(item => item.kind === icons.classify(vessel))?.label || 'Type display unavailable';
   }
 
   function shipIcon(vessel, state = 'candidate') {
     const selected = state === 'selected';
-    const stopped = state === 'stopped';
-    const local = state === 'local';
-    const width = selected ? 64 : local || stopped ? 38 : 50;
-    const height = selected ? 30 : local || stopped ? 22 : 26;
-    const className = ['ship-map-marker', selected ? 'is-selected' : '', local ? 'is-local' : '', stopped ? 'is-stopped' : ''].filter(Boolean).join(' ');
-    const html = `<span class="ship-glyph" aria-hidden="true"><svg viewBox="0 0 72 32" focusable="false"><path class="ship-hull" d="M3 19 L8 19 L11 24 L58 24 L67 18 L70 14 L62 14 L55 18 Z"/><path class="ship-house" d="M8 19 V10 H20 V19 Z"/><rect class="ship-stack" x="11" y="5" width="4" height="5" rx="1"/><rect class="ship-window" x="10" y="12" width="3" height="2" rx=".5"/><rect class="ship-window" x="15" y="12" width="3" height="2" rx=".5"/><rect class="ship-hatch" x="24" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="34" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="44" y="15" width="8" height="4" rx="1"/><path class="ship-waterline" d="M12 21.5 H59"/></svg></span>`;
+    const shape = window.SeawayVesselIcons?.icon(vessel, { zoom: map?.getZoom() ?? 12, selected });
+    // Category and reported-length band come from the shared AIS factory.
+    // Color continues to describe the local watch state, not vessel type.
+    // Never rotate side profiles by course or infer vessel type from length.
+    const [width, height] = shape?.size || (selected ? [56, 34] : [38, 28]);
+    const className = ['ship-map-marker', 'soo-ais-symbol', 'type-' + (shape?.kind || 'unknown'), 'size-' + (shape?.band || 'unknown'), 'is-' + state].join(' ');
+    const html = shape ? '<span class="ship-glyph" aria-hidden="true">' + shape.html + '</span>' : '<span class="ship-fallback" aria-hidden="true">?</span>';
     return L.divIcon({ className, html, iconSize: [width, height], iconAnchor: [Math.round(width / 2), Math.round(height / 2)], popupAnchor: [0, -Math.round(height / 2)] });
   }
 
@@ -442,7 +465,7 @@
 
   function setupMonitorControls() {
     const next = $('focusNext');
-    if (next) next.addEventListener('click', () => currentData?.watchPick && focusVessel(currentData.watchPick.mmsi));
+    if (next) { next.disabled = true; next.addEventListener('click', () => currentData?.watchPick && focusVessel(currentData.watchPick.mmsi)); }
     const cameras = $('focusCameras');
     if (cameras) cameras.addEventListener('click', focusAllCameras);
     const spots = $('focusSpots');
@@ -454,19 +477,34 @@
   function initMap() {
     if (map || typeof L === 'undefined') return;
     installMonitorStyles();
-    map = L.map('duluthVesselMap', { scrollWheelZoom: false }).setView(CANAL, 12);
+    map = L.map('duluthVesselMap', { scrollWheelZoom: false, fadeAnimation: false }).setView(CANAL, 12);
+    // The narrow-map detail pane is a sibling of Leaflet's moving map pane.
+    // Its contents stay inside the viewport while the user pans or zooms.
+    map.createPane('duluthVesselDetails', map.getContainer()).classList.add('duluth-vessel-details-pane');
     L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors' }).addTo(map);
     vesselLayer = L.layerGroup().addTo(map);
     candidateLayer = L.layerGroup().addTo(map);
     L.circleMarker(CANAL, { radius: 9, color: '#fff', weight: 2, fillColor: '#c35f2d', fillOpacity: 1 }).addTo(map).bindTooltip('Duluth Ship Canal', { direction: 'top' }).bindPopup('<strong>Duluth Ship Canal</strong><br>Canal Park watch zone');
   }
 
-  function renderMap(data) {
+  function vesselPopupOptions() {
+    const narrow = map.getSize().x < 600;
+    return { className: 'duluth-vessel-popup',
+      pane: narrow ? 'duluthVesselDetails' : 'popupPane',
+      autoPan: !narrow, maxWidth: 280, minWidth: 100,
+      maxHeight: Math.max(100, map.getSize().y - 100),
+      autoPanPaddingTopLeft: [45, 14], autoPanPaddingBottomRight: [14, 26] };
+  }
+
+  function renderMap(data, failed) {
     initMap();
     if (!map || !vesselLayer || !candidateLayer) {
       $('duluthVesselMap').textContent = 'Map could not load. Live vessel details remain available above.';
       return;
     }
+    // Close detail panes before replacing their source markers. Do not leave
+    // fading, outdated AIS detail panels on screen during recovery.
+    map.closePopup();
     vesselLayer.clearLayers();
     candidateLayer.clearLayers();
     markers.clear();
@@ -477,10 +515,9 @@
 
     (data.mapVessels || []).forEach(v => {
       if (candidateIds.has(String(v.mmsi))) return;
-      const moving = Number(v.speedKnots) > 0.5;
-      const state = moving ? 'local' : 'stopped';
+      const state = failed ? 'local' : localShipState(v);
       const marker = L.marker([v.lat, v.lon], { icon: shipIcon(v, state), keyboard: true, title: v.name || `Vessel ${v.mmsi}`, zIndexOffset: 520 })
-        .addTo(vesselLayer).bindTooltip(v.name || `Vessel ${v.mmsi}`, { direction: 'top' }).bindPopup(vesselPopup(v));
+        .addTo(vesselLayer).bindTooltip(v.name || `Vessel ${v.mmsi}`, { direction: 'top' }).bindPopup(vesselPopup(v, failed), vesselPopupOptions());
       markers.set(String(v.mmsi), marker);
     });
 
@@ -488,7 +525,7 @@
       if (!Number.isFinite(Number(c.lat)) || !Number.isFinite(Number(c.lon))) return;
       const selected = String(c.mmsi) === selectedId;
       const marker = L.marker([c.lat, c.lon], { icon: shipIcon(c, selected ? 'selected' : 'candidate'), keyboard: true, title: selected ? `Next watch: ${c.name}` : `Anticipated: ${c.name}`, zIndexOffset: selected ? 1200 : 760 })
-        .addTo(candidateLayer).bindTooltip(selected ? `NEXT WATCH · ${c.name}` : c.name, { direction: 'top' }).bindPopup(candidatePopup(c, selected));
+        .addTo(candidateLayer).bindTooltip(selected ? `NEXT WATCH · ${c.name}` : c.name, { direction: 'top' }).bindPopup(candidatePopup(c, selected), vesselPopupOptions());
       markers.set(String(c.mmsi), marker);
     });
 
@@ -501,7 +538,7 @@
     }
 
     const caption = document.querySelector('.map-caption');
-    if (caption) caption.textContent = 'Rust freighter = selected next watch. Blue freighters = other supported passage candidates. Muted blue/brown freighters = recent nearby AIS reports. Purple CAM markers = live cameras. Green 1–3 = in-person viewing spots.';
+    if (caption) caption.textContent = (failed ? 'Last-known positions only, not current movement or passage predictions. ' : '') + 'Ship shapes show reported AIS vessel types; size follows reported length bands, not map scale. Color shows watch status. Select a vessel for its details and report age. A question mark means the type symbol could not load.';
   }
 
   function focusVessel(mmsi) {
@@ -512,7 +549,9 @@
       return;
     }
     const latlng = marker.getLatLng();
-    map.fitBounds([CANAL, [latlng.lat, latlng.lng]], { padding: [55, 55], maxZoom: 11 });
+    map.stop();
+    map.invalidateSize({ pan: false, animate: false });
+    map.fitBounds([CANAL, [latlng.lat, latlng.lng]], { padding: [55, 55], maxZoom: 11, animate: false });
     marker.openPopup();
     scrollMap();
   }
@@ -521,7 +560,7 @@
     const count = Array.isArray(data.mapVessels) ? data.mapVessels.length : 0;
     const candidates = Array.isArray(data.candidates) ? data.candidates.length : 0;
     $('mapStatus').textContent = failed
-      ? `Refresh unavailable. Last successful AIS picture retained · ${candidates} supported passage candidate${candidates === 1 ? '' : 's'} · 2 cameras · 3 viewing spots.`
+      ? `Refresh unavailable. Last successful AIS picture retained · ${count} last-known position${count === 1 ? '' : 's'} · passage estimates withheld · 2 cameras · 3 viewing spots.`
       : `${count} nearby AIS report${count === 1 ? '' : 's'} · ${candidates} supported passage candidate${candidates === 1 ? '' : 's'} · 2 cameras · 3 viewing spots · checked ${time(data.checkedAt)} CT`;
     $('liveDot').className = `live-dot${failed ? ' offline' : ' on'}`;
     const credits = (data.attribution || []).map(a => a.credit).filter(Boolean);
@@ -529,14 +568,40 @@
     $('updated').textContent = failed ? 'Last successful live check retained' : `Live AIS checked ${time(data.checkedAt)} CT`;
   }
 
+  function renderChanges() {
+    if(!changes)return;
+    let note=$('duluthWatchChanges');
+    if(!note){note=el('p','','duluth-watch-changes');note.id='duluthWatchChanges';note.setAttribute('role','status');note.setAttribute('aria-live','polite');note.hidden=true;$('watchPick').append(note);}
+    const item=changes.summary(changeState,Date.now(),currentData?.watchPick);
+    const text=item?(item.kind==='recovered'?dayTime(item.to)+' CT: ':'Since '+dayTime(item.from)+' CT: ')+item.text:'';
+    if(note.textContent!==text)note.textContent=text;
+    note.hidden=!item;
+    clearTimeout(changeTimer);
+    if(item){
+      const dates=[item.to+15*60000+1,changeState.last.checked+15*60000+1];
+      for(const s of Object.values(changeState.last.ships))dates.push(s.seen+15*60000+1,s.end);
+      const future=dates.filter(t=>t>Date.now());
+      if(future.length)changeTimer=setTimeout(renderChanges,Math.max(1,Math.min(...future)-Date.now()));
+    }
+  }
   function render(data, failed) {
+    // A single display snapshot prevents retained candidates leaking into map, card or controls.
+    if (failed) {
+      const now = Date.now();
+      data = { ...data, watchPick: null, candidates: [], mapVessels: (data.mapVessels || []).filter(v => {
+        const seen = Date.parse(v.seen);
+        return Number.isFinite(seen) && seen <= now && now - seen <= 30 * 60 * 1000;
+      }) };
+    }
     currentData = data;
+    if(changes)changeState=changes.step(changeState,data,failed,Date.now());
     renderPick(data, failed);
+    renderChanges();
     renderMonitorSummary(data, failed);
-    renderMap(data);
-    renderCandidates(data);
+    renderMap(data, failed);
+    renderCandidates(data, failed);
     renderSource(data, failed);
-    window.setTimeout(() => { if (map) map.invalidateSize(); }, 80);
+    window.setTimeout(() => { if (map) map.invalidateSize({ pan: false, animate: false }); }, 80);
   }
 
   async function load() {
@@ -552,6 +617,8 @@
     } catch (_) {
       if (previous) render(previous, true);
       else {
+        if(changes)changeState=changes.step(changeState,null,true,Date.now());
+        renderChanges();
         $('watchPick').className = 'watch-card quiet';
         $('watchPick').replaceChildren(
           el('div', 'LIVE DATA TEMPORARILY UNAVAILABLE', 'watch-kicker'),
@@ -570,6 +637,7 @@
     }
   }
 
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)renderChanges();});
   $('refreshVessels').addEventListener('click', load);
   initMap();
   setupWatchSpots();

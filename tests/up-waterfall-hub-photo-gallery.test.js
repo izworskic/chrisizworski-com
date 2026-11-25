@@ -34,8 +34,12 @@ test('photo treatment keeps main map, protected SEO and ads unchanged in their o
   assert.match(hub,/id="falls-map"/);
   assert.match(hub,/id="shortlist"/);
   assert.match(hub,/rel="canonical" href="https:\/\/chrisizworski.com\/upper-peninsula-waterfalls\/"/);
-  assert.ok(hub.includes('"dateModified":"2026-11-17"'));
-  assert.ok(sitemap.includes('<loc>https://chrisizworski.com/upper-peninsula-waterfalls/</loc><lastmod>2026-11-17</lastmod>'));
+  const modified=hub.match(/"dateModified":"(\d{4}-\d{2}-\d{2})"/)?.[1];
+  assert.ok(modified,'hub must declare dateModified');
+  const date=new Date(modified+'T00:00:00Z');
+  assert.ok(Number.isFinite(date.getTime()) && date.toISOString().slice(0,10)===modified,'dateModified must be a valid calendar date');
+  assert.ok(modified>='2026-11-17','dateModified must not predate the photo treatment');
+  assert.ok(sitemap.includes('<loc>https://chrisizworski.com/upper-peninsula-waterfalls/</loc><lastmod>'+modified+'</lastmod>'),'sitemap lastmod must match hub dateModified');
   assert.match(css,/\.upfall-photo-preview-grid/);
   assert.match(css,/@media\(max-width:640px\)/);
   assert.match(hub,/<meta property="og:image"/);

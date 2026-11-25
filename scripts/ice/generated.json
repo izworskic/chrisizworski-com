@@ -1,15 +1,15 @@
 {
   "files": {
-    "freezing-degree-days.html": "5a6e1a63ad29f49cfed212e03d705555459250a1a86e707f1539a4f74a44b511",
-    "ice-cover-history.html": "b95affe94d1dd75f00dcbde506bff1359874cacd073202540ca22da477e1d2b4",
-    "ice-safety.html": "ef94491e7b88ebaa99e45718792da3ded42fdfc93caf418d0a86d51f2f3c87fa",
-    "index.html": "001261bb48d4880d97867f3965d64dc335dbb22bf30d2e672ff4f2f799539f86",
-    "regions/burt-mullett.html": "2e83db37b44e7376da1fd37aae35e2efaf8d8e39cb5b118d228dc9f9d21256ea",
-    "regions/grand-traverse-bay.html": "a51216ac18221019b3e11739b533f9c41c46529eff78538a1ab840b66b50e437",
-    "regions/houghton-lake.html": "7f99f48a29d03e50bb74d18fb85243f016c0e9dd76221a53e355556810de2a78",
-    "regions/lake-st-clair.html": "0ecc942414a145650025f9a7c01213ed9c01a62b484ed6173c8bf541731baf4a",
-    "regions/little-bay-de-noc.html": "5491666def2ecd668dd1485650b67247c60ca79c57782bab8b787bcde2656c84",
-    "regions/saginaw-bay.html": "84a83a6cf33c28c66547827852e37703fad31cb1d3bf96942d3d9fa10c50d830"
+    "freezing-degree-days.html": "d847afb34a7eeef35c12c16d390f4cde102fee2fdd0658a12bae371a6ea544e3",
+    "ice-cover-history.html": "ad431124c97c33dbb32e565b5d76beb1ed64ebfd26f78510a2df9b22fa081e66",
+    "ice-safety.html": "dc641c54af8f7d17520219d01bce1312e7c1cfb44907d05fed8886bd7c2517b2",
+    "index.html": "45030d0145df29d8794f5e14884e9ebbaf7549bd499231eddb23593daa31c5ac",
+    "regions/burt-mullett.html": "f5a89c727f5e71222428340dfb71ee3af164d234470e97bd306e819d028020b1",
+    "regions/grand-traverse-bay.html": "71eb4ac01b13046b839a4701d7f397362a3f80648149631a1e349c14c5ed6413",
+    "regions/houghton-lake.html": "4743d5da3d699e1ce0b7e974c5ffbb40e60730db30a1b18f721f1b842cf3a8df",
+    "regions/lake-st-clair.html": "71548b66c87b263643ea671cb9b3bdf407eda5bcccd7c748f8746ba1425f6219",
+    "regions/little-bay-de-noc.html": "f2c29a83e166f47aa39d83be3c9f2b9defbf3eb9c1f23509fb032b4ab67a3b25",
+    "regions/saginaw-bay.html": "c8127a233290093c3dd742ade6b7fdedfcc08ea319b6e31986acf95a0aca60f3"
   },
   "outputDir": "public/michigan-ice"
 }
