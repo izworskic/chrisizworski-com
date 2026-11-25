@@ -406,7 +406,7 @@
       "routing": "Candidate; evaluate first",
       "authorization": "relevant-authorized-task",
       "documentedState": "candidate",
-      "auditedSkillBlob": "a2bcb4225ea33f15ca8419aa9154b597236935b8",
+      "auditedSkillBlob": "8c5a81755de21161c32d71062a3a3a4f38349ec6",
       "mirrors": [
         ".agents/skills/visual-data-storytelling/SKILL.md",
         ".claude/skills/visual-data-storytelling/SKILL.md",

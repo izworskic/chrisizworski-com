@@ -27,4 +27,4 @@ Read `skills-expansion-plan.md` first. Update this log in the same commit as eac
 
 ## Next action
 
-Rebuild visual-data-storytelling with Observable Plot as the default library, pressure-test it against the version on main, record it here, commit.
+Build custom-basemap (Protomaps PMTiles with MapLibre), run its pressure test, record it here, commit.

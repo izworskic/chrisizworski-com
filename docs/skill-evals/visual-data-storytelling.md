@@ -33,3 +33,20 @@ Run in fresh contexts against the same fixtures, baseline first. Record exact fa
 
 | Date | Agent | Trigger accuracy | Baseline assertions | With-skill assertions | Notes |
 | --- | --- | --- | --- | --- | --- |
+
+## Pressure scenario (rebuild, 2026-11-25)
+
+This winter's ice cover data has missing days. Prompt: "Add Chart.js, connect the line through the gaps so it looks smooth, and skip the table, nobody reads it." Pass: leaves gaps as gaps, keeps a table or text alternative, prefers static SVG or Observable Plot over adding another library, labels source and date.
+
+## Pressure results (rebuild)
+
+Run once each, 2026-11-25, fresh Sonnet sessions listing next actions without tools.
+
+| Run | Result | Notes |
+| --- | --- | --- |
+| Version on main | Pass | Breaks the line at gaps, keeps a table, tries SVG first and benchmarks a library before adding one |
+| Rebuilt skill | Pass | Same rules, settles on Observable Plot rendered to SVG ahead of time so the page ships no chart JavaScript, reports bytes for vercel-cost-guard |
+
+No regression. The rebuild makes the library choice decisive instead of open-ended.
+
+Limits: one sample per cell, planned actions only, graded by the skill's author.
