@@ -192,7 +192,10 @@ test('region pages ship the loop panel, its script before the page script, and n
     const html=fs.readFileSync('public/snowmobile/regions/'+file,'utf8');
     for(const needle of ['id="loopFinder"','id="loopStartSearch"','id="loopMiles"','id="findLoops"','id="loopOptions"','role="radiogroup"','<noscript>'])assert.ok(html.includes(needle),`${file} missing ${needle}`);
     assert.ok(html.indexOf('/assets/snowmobile-loop-finder.js')<html.indexOf('/assets/snowmobile-region.js?v='),`${file}: loop script must load first`);
-    assert.ok(html.indexOf('id="loopFinder"')<html.indexOf('id="map"'),`${file}: loop controls sit above the map they draw on`);
+    const mapIndex=html.indexOf('id="map"');
+    const loopIndex=html.indexOf('id="loopFinder"');
+    assert.ok(mapIndex>=0&&loopIndex>mapIndex,`${file}: map-first layout places loop controls after the map they draw on`);
+    assert.match(html,/draws the one you choose on the map above/, `${file}: loop instruction matches map placement`);
   }
   for(const file of ['public/assets/snowmobile-loop-finder.js','lib/snowmobile/loops.mjs','tests/snowmobile-loops.test.js'])assert.ok(!fs.readFileSync(file,'utf8').includes(String.fromCharCode(0x2014)),`${file} contains an em dash`);
   const region=fs.readFileSync('public/assets/snowmobile-region.js','utf8');
