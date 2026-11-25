@@ -191,6 +191,16 @@
    "href": "https://chrisizworski.com/flight-tracker/"
   },
   {
+   "id": "holiday-travel",
+   "title": "Holiday Travel Planner",
+   "tags": "holiday travel thanksgiving christmas new year flight flights airport deadline cancellation delay connection best days to fly drive road trip fuel winter weather holiday travel planner",
+   "place": "United States · Thanksgiving and Christmas",
+   "kind": "Holiday trip timing",
+   "description": "Compare Thanksgiving and Christmas travel days, test a flight against your arrival deadline using six past holiday seasons of BTS records, and check NWS weather near your departure date. Compare driving windows and estimated fuel costs, too.",
+   "months": "10,11,12,1",
+   "href": "https://chrisizworski.com/holiday-travel/"
+  },
+  {
    "id": "agentbase",
    "title": "AgentBase, Open Agent Instruction Registry",
    "tags": "agentbase developer ai agents instructions prompts skills workflows mcp registry open source",
