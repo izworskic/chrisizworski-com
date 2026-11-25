@@ -2,6 +2,7 @@
 const { secureHeaders, requireOwner } = require("../lib/growth/owner-auth");
 const { authorizeGscRequest } = require("../lib/gsc/github-actions-oidc.js");
 const { stateReady } = require("../lib/tool-state");
+const { agentAuthorized, agentConfigured, buildAgentSummary } = require("../lib/growth/agent-summary");
 
 module.exports = async function growthCommandCenter(req, res) {
   res.setHeader("X-Robots-Tag", "noindex, nofollow, noarchive");
@@ -18,7 +19,8 @@ module.exports = async function growthCommandCenter(req, res) {
           collectorConfigured: stateReady(),
           ga4Configured: /^\d{6,20}$/.test(String(process.env.GROWTH_GA4_PROPERTY_ID || "")),
           adsenseConfigured: Boolean(process.env.GROWTH_ADSENSE_ACCOUNT && process.env.GROWTH_ADSENSE_CLIENT_ID &&
-            process.env.GROWTH_ADSENSE_CLIENT_SECRET && process.env.GROWTH_ADSENSE_REFRESH_TOKEN) });
+            process.env.GROWTH_ADSENSE_CLIENT_SECRET && process.env.GROWTH_ADSENSE_REFRESH_TOKEN),
+          agentAccessConfigured: agentConfigured() });
       }
       const { readGrowthSnapshot } = await import("../lib/growth/auto-ingest.mjs");
       const snapshot = await readGrowthSnapshot();
@@ -27,6 +29,23 @@ module.exports = async function growthCommandCenter(req, res) {
     } catch (error) {
       console.error("growth_private_report_error", error?.code || "storage-read-failure");
       return res.status(503).json({ error: "growth-private-report-unavailable" });
+    }
+  }
+
+  // Read-only summary for coding agents: its own bearer token, never the owner's password.
+  if (method === "GET" && view === "agent") {
+    if (!agentAuthorized(req.headers?.authorization || "")) {
+      res.setHeader("WWW-Authenticate", 'Bearer realm="Growth agent summary"');
+      return res.status(401).json({ error: "agent-token-required" });
+    }
+    try {
+      const { readGrowthSnapshot } = await import("../lib/growth/auto-ingest.mjs");
+      const snapshot = await readGrowthSnapshot();
+      if (!snapshot) return res.status(404).json({ error: "no-private-growth-report-yet" });
+      return res.status(200).json(buildAgentSummary(snapshot, { limit: req.query?.limit }));
+    } catch (error) {
+      console.error("growth_agent_summary_error", error?.code || "storage-read-failure");
+      return res.status(503).json({ error: "growth-agent-summary-unavailable" });
     }
   }
 

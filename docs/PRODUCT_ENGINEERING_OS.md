@@ -35,7 +35,7 @@ Record one sentence: visitor/owner goal, actual tool/owning repo, task mode and 
 | REVIEW | Inspect current source and actual rendered behavior if available; rank improvements; Experience Investment REVIEW if substantial | Production source mutations when review only |
 | PROPOSE | Define decision and compare feasible designs, sources, scope, cost and acceptance | Creating a live route without implementation request |
 | IMPLEMENT | Review or propose first; choose relevant methods, implement in owner repo and verify | Stopping with a plan; irrelevant capabilities |
-| MEASURE | Applicable search, performance, science or return metrics with actual comparable evidence | Invented outcomes or unnecessary production edits |
+| MEASURE | Applicable search, performance, science or return metrics with actual comparable evidence; growth figures stay in the private session | Invented outcomes, unnecessary production edits, figures in the repo |
 | SKILL GOVERNANCE | skill-eval, inventory, lint, paired behavioral evaluation | Activation by declaration or wholesale skill rewrites |
 | RELEASE | Existing exact-head CI and owner release contract; explicit merge approval required | New design scope, red-gate bypass, conflating merge with deployment |
 
@@ -44,6 +44,7 @@ For substantial new visitor tools or reworks, Experience Investment and Experien
 ### Decision routing
 
 - Is the next new tool undecided? Opportunity-scout first, using the network registry scoring; search-demand supplies demand evidence. For a chosen tool whose visitor decision is unclear, Experience Investment leads, not animation or layout.
+- Which existing page or tool deserves the next fix? For an explicitly authorized private measurement task, the private growth summary can supply evidence. Without the token or a fresh snapshot, the evidence is NOT MEASURED; do not guess. Automatic skill routing to this view is deferred until trigger and paired behavioral evaluations pass.
 - Is the answer scientifically wrong or missing? Fix the engine or source contract first, select the matching intelligence skill and compare an actual baseline.
 - Is the answer correct but hard to use? Select experience/design methods, reuse verified components, inspect the first phone screen and prove the changed journey.
 - Is there meaningful changing state that would bring someone back? Apply the return contract. "No return contract" is valid. No push notifications of any kind.
@@ -68,6 +69,7 @@ Apply the existing authoritative name-SERP and search governance to **every** pr
 - **Before:** resolve the canonical intent owner and generated source, inspect protected name surfaces and the actual affected page(s), read AGENTS.md section 2 and NAME_SERP_MOAT.md. For growth work read the growth playbook and session log. Record title, H1, canonical, indexability, defined Person and author/creator/publisher relationships, visible creator credit and relevant identity links. Use actual source/production evidence and state any gaps. Preserve existing approved query-first title exceptions; follow the current growth ledger's ship-and-observe mode, not obsolete experiment freeze lists.
 - **During:** preserve or strengthen genuine Chris Izworski authorship, the canonical Person `https://chrisizworski.com/#person`, the primary branded homepage and the primary identity surface `/chris-izworski/`. Keep subject-first answers, useful crawlable content, verified source attribution and truthful links to relevant Projects/Works. Prefer the exact creator name in the title when the owning policy permits and length fits; do not force the name into intent-first H1s or weaken approved titles. Never use a product homepage as Person sameAs merely because its creator owns it; do not manufacture profiles, doorway pages or link networks. Changes to protected files require the existing explicit owner approval label, not this manual.
 - **Before release:** compare before and after for all materially affected public pages and generated outputs, including shared templates. Record evidence of no regression or an explicitly approved change in the existing PR/release review. Run the existing creator-entity, name-SERP protection, search governance, canonical/freshness and full owning-repo gates; inspect output and production after deployment. Unknown evidence remains NOT VERIFIED. Independent repos must be checked under their own contracts; do not infer coverage from a central green check.
+- **Private figures:** Search Console, GA4 and AdSense figures never go into commits, PRs, issues, docs or skill files; this repository is public. PR records cite page paths and direction (rising, falling, flat, top earner, CTR gap) or NOT MEASURED. See AGENTS.md, Private growth data for agents.
 - **Measure separately:** non-branded demand/CTR and revenue are not branded rank evidence. Use comparable 28-day GSC windows and query segmentation where available. For exact-name and close-name SERP observations, use the existing monthly and material-entity-change protocol, distinct controlled-origin/account counting, and top-10/20/30 classifications in name-SERP governance. Preserve credible earned results. Same-root pages and subdomains support the entity but do not add independent moat slots. Report actual snapshots and gaps, not guarantees; do not infer branded rank from CI, metadata, traffic growth or deployment.
 - **Owner goals:** primary homepage position 1, controlled independent top-ten target 8 (floor 7), favorable earned target 2 where high-quality authority exists, attributable occupancy targets 15/20 and 20/30. Use the governance JSON as authoritative if targets change. Do not trade product usefulness, factual accuracy or approved search ownership for name repetition.
 
@@ -210,7 +212,7 @@ Source and data contract / uncertainty / failure path:
 Protected facts, SEO, creator identity/name-SERP evidence, ads, privacy, cost, scope:
 Before/after scenarios and evidence locations:
 Targeted tests / browser and screenshot review / full CI:
-Release state / measured outcomes or NOT MEASURED:
+Release state / measured outcomes as direction only, or NOT MEASURED:
 Next meaningful investment / reusable lesson:
 ```
 
