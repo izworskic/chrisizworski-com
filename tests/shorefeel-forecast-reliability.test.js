@@ -132,3 +132,22 @@ test('provider archives do not supply new exact pairs or duplicate independent e
  assert.equal(d.sources.cdip269.station,d.sources.glos45210.station);
  assert.equal(d.sources.cdip269.counts.conflictingTimestamps,2741);
 });
+
+test('June preflight failure is preserved and does not authorize forecast acquisition',()=>{
+ const fs=require('node:fs'),crypto=require('node:crypto'),path=require('node:path');
+ const dir=path.join(__dirname,'../data/shorefeel');
+ const raw=fs.readFileSync(path.join(dir,'horizon-confirm-coverage-audit-20261125.json'));
+ const d=require('../data/shorefeel/june-coverage-preflight-actual-20261125.json');
+ assert.equal(d.priorAuditSha256,crypto.createHash('sha256').update(raw).digest('hex'));
+ assert.equal(d.canAcquireFixedPrimaryForecastCohort,false);assert.equal(d.canPromoteModel,false);
+ assert.equal(d.slots.length,200);
+ assert.equal(new Set(d.slots.map(x=>[x.station,x.cycleAt,x.leadHours].join('|'))).size,200);
+ for(const h of [24,48]){
+  const rows=d.slots.filter(x=>x.leadHours===h&&x.stratum==='primary');
+  assert.equal(rows.length,80);assert.equal(rows.filter(x=>x.exactPairPresent).length,62);
+  assert.equal(d.metrics[h].primary.passesFeasibility,false);
+  assert.equal(d.metrics[h].primary.dateBlocks,10);
+  assert.equal(rows.filter(x=>x.station==='45024'&&x.exactPairPresent).length,0);
+  assert.equal(rows.filter(x=>x.station==='45026'&&x.exactPairPresent).length,5);
+ }
+});
