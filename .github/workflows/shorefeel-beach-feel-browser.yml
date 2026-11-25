@@ -95,14 +95,14 @@ jobs:
           mkdir -p artifacts/shorefeel-beach-qa
           node scripts/shorefeel-archive-coverage.cjs > artifacts/shorefeel-beach-qa/archive-coverage.json
           cat artifacts/shorefeel-beach-qa/archive-coverage.json
-      - name: Recover near-time buoy observations for preserved 180-slot dataset
+      - name: Acquire four early October historical diagnostic cycles
         if: github.head_ref == 'research/shorefeel-actual-october-cohort'
         run: |
           python3 -m venv "$RUNNER_TEMP/shorefeel-archive"
           "$RUNNER_TEMP/shorefeel-archive/bin/pip" install --disable-pip-version-check numpy==2.2.6 netCDF4==1.7.2
           mkdir -p artifacts/shorefeel-beach-qa
-          "$RUNNER_TEMP/shorefeel-archive/bin/python" scripts/shorefeel-near-time-recovery.py > artifacts/shorefeel-beach-qa/near-time-recovery.json
-          cat artifacts/shorefeel-beach-qa/near-time-recovery.json
+          "$RUNNER_TEMP/shorefeel-archive/bin/python" scripts/shorefeel-expanded-dataset.py --early-october > artifacts/shorefeel-beach-qa/early-october-actual.json
+          cat artifacts/shorefeel-beach-qa/early-october-actual.json
       - name: Install isolated pinned browser harness
         run: |
           npm install --prefix "$RUNNER_TEMP/shorefeel-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
