@@ -12,7 +12,9 @@ const pages=[
  ['/lake-michigan-water-temperature/grand-haven/','grand'],
  ['/lake-michigan-water-temperature/traverse-city/','traverse']
 ];
-const sample={date:'2026-10-12',tempF:62.1},history=[{date:'2026-10-11',tempF:61.8},sample];
+const clock=Date.now(),at=offset=>new Date(clock+offset).toISOString();
+const sample={date:at(-86400000).slice(0,10),tempF:62.1},history=[{date:at(-2*86400000).slice(0,10),tempF:61.8},sample];
+const sampleLabel=new Date(sample.date+'T12:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});
 const lakes=Object.fromEntries(['superior','michigan','huron','erie','ontario'].map(k=>[k,{status:'recent',latest:sample,history,trend7:null}]));
 const activities=['swim','family','paddle','relax'];
 const assessments=Object.fromEntries(activities.map(a=>[a,{
@@ -22,27 +24,27 @@ const assessments=Object.fromEntries(activities.map(a=>[a,{
 }]));
 function bf(){
  const pt=(h,t,c)=>({leadH:h,tempF:t,low:Math.round(t-2),high:Math.round(t+2),changeF:c,shallowF:0});
- return {status:'available',cycle:'2026-10-13T12:00:00.000Z',source:{name:'NOAA LMHOFS'},
+ return {status:'available',cycle:at(-6*3600000),source:{name:'NOAA LMHOFS'},
   method:'Measured level plus model change.',caveat:'A forecast with a range, not a measurement.',
   validation:{error24hF:1.3,error48hF:1.9,caveats:['Six weeks of testing.']},
-  beaches:[{key:'t',name:'Test beach',levelKind:'satellite',levelTempF:58.7,levelObservedAt:'2026-10-12T12:00:00.000Z',now:pt(0,60,0),
+  beaches:[{key:'grand-haven-state-park',name:'Test beach',levelKind:'satellite',levelTempF:58.7,levelObservedAt:at(-3600000),now:pt(0,60,0),
    points:[pt(0,60,0),pt(6,60,0),pt(24,57,-3),pt(48,58,-2)],cooling:{tier:'watch',deltaF:-3,text:'Cooling watch. Test.'},shallowApplied:false}]};
 }
 function fixture(url){
  const place=url.searchParams.get('place');
- return JSON.stringify({product:'ShoreFeel',lake:'michigan',lakes,local:place?{
+ return JSON.stringify({product:'ShoreFeel',generatedAt:at(0),lake:'michigan',lakes,local:place?{
   name:place,waterBody:place==='grand-haven'?'Lake Michigan off Grand Haven':'Grand Traverse Bay',stationId:place==='grand-haven'?'45029':'45020',
   stationName:'Test offshore buoy',lat:43.2,lon:-86.2,caveat:'Station is offshore, not the beach.',
-  measurement:place==='traverse-city'?null:{tempF:60.8,observedAt:'2026-10-13T11:00:00.000Z'},
-  periods:[{startsAt:'2026-10-13T13:00:00-04:00',tempF:75,windMph:12,summary:'Sunny',daylight:true}],
+  measurement:place==='traverse-city'?null:{tempF:60.8,observedAt:at(-3600000)},
+  periods:[{startsAt:at(-10*60000),tempF:75,windMph:12,summary:'Sunny',daylight:true}],
  }:null,
  // Evidence ladder: the API resolves `water` (buoy > nearest valid satellite pixel > null).
- water:place==='grand-haven'?{kind:'buoy',tempF:60.8,observedAt:'2026-10-13T11:00:00.000Z',label:'Test offshore buoy 45029',where:'Lake Michigan off Grand Haven',caveat:'A buoy reading is the water at the buoy, not the shallow water at the beach.'}:null,
- regionalSatellite:place?{status:'unavailable',cells:[{key:'west-bay',short:'West Bay',label:'West Grand Traverse Bay',measurement:null}]}:null,
- normal:{date:'2026-10-12',tempF:57.1,deltaF:5},
+ water:place==='grand-haven'?{kind:'buoy',tempF:60.8,observedAt:at(-3600000),label:'Test offshore buoy 45029',where:'Lake Michigan off Grand Haven',caveat:'A buoy reading is the water at the buoy, not the shallow water at the beach.'}:null,
+ regionalSatellite:place?{status:place==='grand-haven'?'available':'unavailable',cells:place==='grand-haven'?[{key:'open-shore',measurement:{tempF:58.7,observedAt:at(-3600000)}}]:[{key:'west-bay',short:'West Bay',label:'West Grand Traverse Bay',measurement:null}]}:null,
+ normal:{date:sample.date,tempF:57.1,deltaF:5},
  beachForecast:place==='grand-haven'?bf():place?{status:'unavailable',reason:'test'}:null,
- weatherNow:place?{startsAt:'2026-10-13T13:00:00-04:00',tempF:75,windMph:12,summary:'Sunny',daylight:true}:null,
- assessments:place?assessments:null,weatherWindow:place?{startsAt:'2026-10-13T13:00:00-04:00'}:null});
+ weatherNow:place?{startsAt:at(-10*60000),tempF:75,windMph:12,summary:'Sunny',daylight:true}:null,
+ assessments:place?assessments:null,weatherWindow:place?{startsAt:at(-10*60000),tempF:75,windMph:12}:null});
 }
 const types={'.html':'text/html; charset=utf-8','.css':'text/css; charset=utf-8','.js':'application/javascript; charset=utf-8','.jpg':'image/jpeg','.png':'image/png','.svg':'image/svg+xml'};
 const server=http.createServer((req,res)=>{
@@ -103,7 +105,7 @@ const server=http.createServer((req,res)=>{
      assert.match(await page.locator('#feel-title').textContent(),/family/);
      await page.getByRole('button',{name:'Paddling'}).click();
      assert.match(await page.locator('#feel-title').textContent(),/paddle/);
-     if(key==='traverse'){assert.match(await page.locator('#bf-body').textContent(),/unavailable right now/);assert.match(await page.locator('#bf-body').textContent(),/Nothing has been estimated/);}
+     if(key==='traverse'){assert.match(await page.locator('#bf-body').textContent(),/cannot be verified/);assert.match(await page.locator('#bf-body').textContent(),/Nothing has been estimated/);}
      else{
       assert.equal(await page.locator('#beach-forecast').isVisible(),true);
       assert.match(await page.locator('#bf-body').textContent(),/Test beach/);
@@ -119,7 +121,7 @@ const server=http.createServer((req,res)=>{
       assert.match(await page.locator('#lead-temp-label').textContent(),/grand traverse bay · not verified/i);
       assert.match(await page.locator('#lead-bay-status').textContent(),/Not reporting/);
       assert.match(await page.locator('#lead-grid-status').textContent(),/No valid pixel/);
-      assert.match(await page.locator('#lead-lake-context').textContent(),/62\.1°F on Oct 12 · \+5\.0°F vs the long-term normal/);
+      assert.ok((await page.locator('#lead-lake-context').textContent()).includes('62.1°F on '+sampleLabel+' · +5.0°F vs the long-term normal'));
       const sizes=await page.evaluate(()=>({answer:parseFloat(getComputedStyle(document.querySelector('#lead-temp')).fontSize),h1:parseFloat(getComputedStyle(document.querySelector('h1')).fontSize)}));
       assert.ok(sizes.answer>=28&&sizes.answer>sizes.h1,'the answer (even when it is the no-reading message) is larger than the page title: '+JSON.stringify(sizes));
       if(width===1024||width===1280){
@@ -171,7 +173,7 @@ const server=http.createServer((req,res)=>{
   await gridPage.route(/(?:upload\.wikimedia\.org|tile\.openstreetmap\.org)/,r=>r.abort());
   await gridPage.route('**/api/shorefeel?*',route=>{
    const payload=JSON.parse(fixture(new URL('http://localhost/api/shorefeel?lake=michigan&place=traverse-city')));
-   const m={tempF:64.4,observedAt:'2026-10-13T12:00:00.000Z',distanceKm:4.2};
+   const m={tempF:64.4,observedAt:at(-3600000),distanceKm:4.2};
    payload.regionalSatellite={status:'recent',cells:[{key:'west-bay',short:'West Bay',label:'West Grand Traverse Bay, 4 km north of Clinch Park',measurement:m},{key:'east-bay',short:'East Bay',label:'East Grand Traverse Bay',measurement:{...m,tempF:64.9}}]};
    payload.water={kind:'satellite',tempF:64.4,observedAt:m.observedAt,label:'West Grand Traverse Bay, 4 km north of Clinch Park',cellKey:'west-bay',where:'Grand Traverse Bay',caveat:'NOAA satellite surface analysis for a pixel 4.2 km from Clinch Park beach, not a beach thermometer; sunlit shallows can run warmer.'};
    for(const a of activities)payload.assessments[a].water='Cold · 64.4°F at West Grand Traverse Bay, 4 km north of Clinch Park. In the 60s.';
