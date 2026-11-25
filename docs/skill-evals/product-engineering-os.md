@@ -1,6 +1,6 @@
 # Product Engineering OS: pre-activation evaluation
 
-Status: DRAFT, NOT VERIFIED. The framework is a proposed orchestration reference, not a new skill or active repository instruction. Run existing skill-eval rules before any activation or skill changes. Existing production-design-standard.md remains the visual acceptance evaluation, not a competing rubric.
+Status: EVALUATED (2026-11-25, 64 isolated fresh-context sessions across 32 paired cases; see `product-engineering-os-phase-1-results-20261124.md`). Existing `production-design-standard.md` remains the visual acceptance evaluation, not a competing rubric.
 
 ## Procedure
 

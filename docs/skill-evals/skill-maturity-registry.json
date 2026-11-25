@@ -2,7 +2,7 @@
   "schema": 1,
   "auditedRevision": "0e42ef28fffb7ab8bb9653b4e02a8ca1c7561faa",
   "auditDate": "2026-11-25",
-  "status": "inventory-verified-behavior-not-verified",
+  "status": "inventory-and-framework-evaluated-per-skill-not-verified",
   "inventory": {
     "logicalSkills": 46,
     "mirrorFiles": 135,
@@ -28,25 +28,53 @@
       "id": "orchestration-routing",
       "suite": "docs/skill-evals/product-engineering-os.md",
       "planned": 32,
-      "baselineExecuted": 0,
-      "candidateExecuted": 0,
-      "status": "NOT_VERIFIED"
+      "baselineExecuted": 32,
+      "candidateExecuted": 32,
+      "status": "EVALUATED",
+      "baselinePassed": 29,
+      "candidatePassed": 32,
+      "gains": [
+        "O07",
+        "O21",
+        "O27"
+      ],
+      "regressions": 0,
+      "unauthorizedExplicitTriggers": 0,
+      "evaluatedAt": "2026-11-25",
+      "harness": "isolated-fresh-context-paired-workflow-flash",
+      "evidenceDoc": "docs/skill-evals/product-engineering-os-phase-1-results-20261124.md"
     },
     {
       "id": "design-trigger",
       "suite": "docs/skill-evals/production-design-standard.md",
       "planned": 20,
-      "baselineExecuted": 0,
-      "candidateExecuted": 0,
-      "status": "NOT_VERIFIED"
+      "baselineExecuted": 20,
+      "candidateExecuted": 20,
+      "status": "EVALUATED",
+      "baselinePassed": 20,
+      "candidatePassed": 20,
+      "gains": [],
+      "regressions": 0,
+      "unauthorizedExplicitTriggers": 0,
+      "evaluatedAt": "2026-11-25",
+      "harness": "isolated-fresh-context-paired-workflow-flash",
+      "evidenceDoc": "docs/skill-evals/product-engineering-os-phase-1-results-20261124.md"
     },
     {
       "id": "design-paired",
       "suite": "docs/skill-evals/production-design-standard.md",
       "planned": 8,
-      "baselineExecuted": 0,
-      "candidateExecuted": 0,
-      "status": "NOT_VERIFIED"
+      "baselineExecuted": 8,
+      "candidateExecuted": 8,
+      "status": "EVALUATED",
+      "baselinePassed": 8,
+      "candidatePassed": 8,
+      "gains": [],
+      "regressions": 0,
+      "unauthorizedExplicitTriggers": 0,
+      "evaluatedAt": "2026-11-25",
+      "harness": "isolated-fresh-context-paired-workflow-flash",
+      "evidenceDoc": "docs/skill-evals/product-engineering-os-phase-1-results-20261124.md"
     }
   ],
   "skills": [
@@ -860,7 +888,7 @@
       "routing": "Before any PR in this repository",
       "authorization": "relevant-authorized-task",
       "documentedState": "documented",
-      "auditedSkillBlob": "5c7451c5fc114ecde41980667c783afd0a794cd7",
+      "auditedSkillBlob": "300f7fe26538de738795b413ac1ede28a14c288f",
       "mirrors": [
         ".agents/skills/change-intake/SKILL.md",
         ".claude/skills/change-intake/SKILL.md",
@@ -952,7 +980,7 @@
       "routing": "When search demand, 404s or sitemap health is in question",
       "authorization": "relevant-authorized-task",
       "documentedState": "documented",
-      "auditedSkillBlob": "fab521be223da3808f4c42d3c45dfa896dff1ff2",
+      "auditedSkillBlob": "74380e3f9bfac7be735218933aea7342f0b59d84",
       "mirrors": [
         ".agents/skills/search-demand/SKILL.md",
         ".claude/skills/search-demand/SKILL.md",
@@ -998,7 +1026,7 @@
       "routing": "When building or redesigning a tool map",
       "authorization": "relevant-authorized-task",
       "documentedState": "documented",
-      "auditedSkillBlob": "1cbe9f8d694d47a2799fe038f641e10bf9a53959",
+      "auditedSkillBlob": "e2cce8ce4721ca20f632e77b62e5da1563e71d2c",
       "mirrors": [
         ".agents/skills/custom-basemap/SKILL.md",
         ".claude/skills/custom-basemap/SKILL.md",

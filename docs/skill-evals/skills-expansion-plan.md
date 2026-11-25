@@ -34,9 +34,9 @@ Library size after the plan: 42 on main, plus 10 new, minus 6 from the Hugging F
 
 One scenario per skill that pushes an agent to break the skill's main rule. Each runs twice in a fresh subagent session (model: Sonnet): new skills against no skill, rebuilt or folded skills against the version on main. Sessions list their next actions without running tools. Results go in each skill's eval file and in the progress log. Trigger evals are not part of this plan.
 
-## Open questions for the owner
+## Settled owner decisions (confirmed 2026-11-25)
 
-- change-intake caps: 1 open PR per tool, 5 open agent PRs, 3-hour review gate (proposed defaults).
-- Basemap host: Vercel static (range requests unverified), GitHub Pages or Cloudflare R2.
-- Search Console access for search-demand: read-only API key or the BigQuery export; both need owner credentials.
-- The Codex prompt that folds these skills into the Product Engineering OS is the owner's next step after this PR is complete.
+- `change-intake` caps: confirmed at 1 open PR per tool, 5 open agent PRs repo-wide, and a 3-hour Codex review-silence gate.
+- `custom-basemap` static host: confirmed as GitHub Pages in a dedicated static map-assets repository (free, zero Vercel Edge or deploy bloat, no new vendor; verify HTTP 206 Range and CORS from `chrisizworski.com` on the pilot extract before migrating any map).
+- `search-demand` Search Console read path: confirmed as the existing native read-only GSC service-account pipeline + private stored snapshot (`/api/growth-command-center?view=agent` for explicitly authorized private measurement sessions, or owner CSV/JSON export fallback; no BigQuery export; private figures never committed to the public repo).
+- Integration into the Product Engineering OS completed in PR #1976 (`8a8298b4`) and reconciled to 46/46 dedicated suites and 20 overlap groups on 2026-11-25.

@@ -9,8 +9,8 @@ The owner's search targets (MILLION_IMPRESSIONS_PLAYBOOK.md) are targets, not ac
 
 ## 1. Get the evidence, read-only
 
-- Source: Search Console, search type Web, the property that owns the URL. Use an owner-supplied export, or a read-only API credential (`webmasters.readonly` scope) that the owner set up. Never invent, estimate or back-fill numbers; a missing window is NOT MEASURED, not zero.
-- Do not connect agents to a Search Console tool that can submit or delete sitemaps or load remote instructions at run time.
+- Source (owner-confirmed 2026-11-25): Google Search Console (search type Web, the property that owns the URL) via the **existing native read-only GSC service-account pipeline and private stored daily snapshot** (`GET https://chrisizworski.com/api/growth-command-center?view=agent` with `Authorization: Bearer $GROWTH_AGENT_TOKEN` for an explicitly authorized private measurement session, per `ops/growth-command-center/AUTO_INGESTION.md`), or an owner-supplied CSV/JSON export when the token is absent. Do not set up or require a BigQuery export unless the owner separately requests it. Never invent, estimate or back-fill numbers; a missing window is NOT MEASURED, not zero.
+- Do not connect agents to a Search Console tool that can submit or delete sitemaps or load remote instructions at run time. Never print, log or commit `GROWTH_AGENT_TOKEN`.
 - Compare equal windows (28 days against the previous 28, or the same 28 days last year for seasonal tools). Record the dates and the property.
 - Read `docs/SEARCH_STRATEGY.md`, `docs/GROWTH_SESSION_LOG.md` and the tool network registry (`benchmarks/tool-network-registry.json`) before proposing anything.
 
@@ -38,7 +38,7 @@ Then confirm every sitemap URL returns 200 and matches its canonical (`scripts/a
 
 ## Output
 
-A ranked table: query or URL, page, window dates, impressions, clicks, CTR, average position, pattern, proposed action and the skill that takes it. Anything without evidence is NOT MEASURED. No ranking, traffic or revenue promise.
+In the private working session only, present the ranked table: query or URL, page, window dates, impressions, clicks, CTR, average position, pattern, proposed action and the skill that takes it. In any commit, PR, comment, issue or repository doc, strip all Search Console, GA4 and AdSense figures (exact, rounded, ranges or percent changes) and cite page paths and direction only (`rising`, `falling`, `flat`, `CTR gap`, or `NOT MEASURED`) per `AGENTS.md` (Private growth data for agents). Anything without evidence is NOT MEASURED. No ranking, traffic or revenue promise.
 
 ## Boundaries
 

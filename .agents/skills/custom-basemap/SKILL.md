@@ -13,17 +13,17 @@ About 110 pages load Leaflet 1.9.4 over stock raster tiles, and a handful load M
 2. Record the file size, the bounding box, the max zoom and the build date in the tool network docs. Rebuild a few times a year, not on every deploy.
 3. Never commit a planet-sized file. If the extract is large, it does not belong in the git repository.
 
-## 2. Host it (owner decision)
+## 2. Host it (owner decision: GitHub Pages, 2026-11-25)
 
 PMTiles needs HTTP range requests. Every tile the map shows is one range request.
 
+Owner-confirmed standard host (2026-11-25): **GitHub Pages in a dedicated static map-assets repository** (free up to 1 GB, zero Vercel Edge request billing, zero `chrisizworski-com` deployment bloat, no new cloud vendor). Before migrating any live map, verify HTTP `206 Partial Content`, `Content-Range` and CORS headers from `https://chrisizworski.com` against the hosted pilot extract, and record the result in `vercel-cost-guard` terms in the PR.
+
 | Host | Status | Cost note |
 | --- | --- | --- |
-| Vercel static (`public/`) | Range support NOT VERIFIED; test a preview for `206 Partial Content` and a `Content-Range` header first | Each tile is an edge request; large files bloat every deployment |
-| GitHub Pages | Listed by Protomaps; repositories up to 1 GB | Free; check CORS from chrisizworski.com |
-| Cloudflare R2 | Recommended by Protomaps: no egress fees, per-request fees | New infrastructure; needs owner approval and CORS for GET, HEAD and the Range header |
-
-Pick the host with the owner before building, and record it in `vercel-cost-guard` terms in the PR.
+| GitHub Pages (dedicated static map-assets repo) | **Selected standard (2026-11-25)**; verify `206 Partial Content`, `Content-Range` and CORS from `chrisizworski.com` on pilot | Free; keeps binary `.pmtiles` out of app deploys and avoids Vercel Edge request charges |
+| Cloudflare R2 | Not selected unless separately approved by owner | New vendor/bucket infrastructure and per-request billing |
+| Vercel static (`public/`) | Not selected for `.pmtiles` | Each tile pan is a billed Edge request and large archives bloat every deployment |
 
 ## 3. One style, shared
 
