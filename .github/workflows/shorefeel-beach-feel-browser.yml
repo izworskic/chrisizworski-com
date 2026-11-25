@@ -103,6 +103,11 @@ jobs:
           mkdir -p artifacts/shorefeel-beach-qa
           "$RUNNER_TEMP/shorefeel-reliability/bin/python" scripts/shorefeel-near-time-recovery.py --reliability > artifacts/shorefeel-beach-qa/reliability-near-time.json
           cat artifacts/shorefeel-beach-qa/reliability-near-time.json
+          "$RUNNER_TEMP/shorefeel-reliability/bin/python" scripts/shorefeel-expanded-dataset.py --confirm-reliability > artifacts/shorefeel-beach-qa/horizon-confirm-cohort.json
+          node scripts/shorefeel-forecast-reliability.cjs artifacts/shorefeel-beach-qa/horizon-confirm-cohort.json > artifacts/shorefeel-beach-qa/horizon-confirm-review.json
+          cat artifacts/shorefeel-beach-qa/horizon-confirm-cohort.json
+          cat artifacts/shorefeel-beach-qa/horizon-confirm-review.json
+          node --test tests/shorefeel-forecast-reliability.test.js
       - name: Install isolated pinned browser harness
         run: |
           npm install --prefix "$RUNNER_TEMP/shorefeel-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
