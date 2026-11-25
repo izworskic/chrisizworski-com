@@ -1,0 +1,217 @@
+{
+  "run": 45508324738,
+  "reports": [
+    {
+      "jobId": 138849211478,
+      "day": {
+        "schemaVersion": 1,
+        "kind": "ROLLING_FORECAST_DEVELOPMENT_AUDIT",
+        "date": "2024-09-10",
+        "sourceReceiptSha256": "e632291a71084040c1397d1f3f1c4b05ba70f896a90c93df000002af8e7ba828",
+        "freezeSha256": "5af06e866dac2b2ebb603dc553b3924e974d0733182aac29842b363bde495832",
+        "initialSelection": {
+          "usableSnapshots": 526,
+          "modelAbstentions": 126,
+          "outsideLeadRange": 123,
+          "duplicateVesselDaySuppressed": 268
+        },
+        "episodes": 9,
+        "slots": 72,
+        "states": {
+          "forecast_available": 38,
+          "model_abstained": 13,
+          "observed_in_chamber": 16,
+          "stale_or_missing": 1,
+          "low_reported_speed": 4
+        },
+        "initialOutcomeCounts": {
+          "no_detected_crossing_incomplete": 2,
+          "discontinuous_observation": 2,
+          "matched": 3,
+          "no_detected_crossing_continuous": 2
+        },
+        "forecastAvailableSlots": 38,
+        "withdrawals": 10,
+        "resumptions": 1,
+        "episodesWithWithdrawal": 9,
+        "consecutiveRevisions": 28,
+        "lateRevisions": 7,
+        "earlyRevisions": 0,
+        "meanAbsoluteRevisionMinutes": 6.7755261904761905,
+        "matchedEpisodes": 3,
+        "matchedUpdates": 9,
+        "episodeWeightedMatchedExistingContainment": 0,
+        "episodeWeightedMatchedCorrectedContainment": 0,
+        "episodeWeightedMatchedWarningMinutes": 80.78888888888889,
+        "episodeWeightedMatchedWidthMinutes": 21.19933287037037,
+        "note": "Lifecycle slots include all fixed followup opportunities, even after crossings. Outcome-conditioned scores are separately limited to matched pre-crossing updates, weighted once per vessel-day episode. No confirmed nonarrival, no probability or production authorization.",
+        "productionCalibrationAuthorized": false,
+        "fieldAccuracyVerified": false,
+        "receiptTimesAvailable": false
+      },
+      "coverage": {
+        "allFourBoxesObservedMinutes": 1416,
+        "batchRows": 32768,
+        "coordinateBasis": "NOAA documented WGS84 WKB points; x longitude, y latitude",
+        "date": "2024-09-10",
+        "etag": "0x8DDB020AB5367B6",
+        "fieldAccuracyVerified": false,
+        "geoVersion": "1.0.0",
+        "independentCrossingLabels": 0,
+        "invalidGeometryRows": 0,
+        "kind": "NOAA_ORIGINAL_ARCHIVE_ONE_DAY_COVERAGE",
+        "minutesAbsentInAllBoxesButPresentNationwide": 11,
+        "nationwideMissingMinuteIntervals": [],
+        "nationwideObservedMinutes": 1440,
+        "noBoxObservedMinuteIntervals": [
+          [
+            735,
+            736
+          ],
+          [
+            738,
+            740
+          ],
+          [
+            741,
+            742
+          ],
+          [
+            744,
+            746
+          ],
+          [
+            747,
+            752
+          ]
+        ],
+        "objectBytes": 256543341,
+        "objectRows": 8221779,
+        "productionCalibrationAuthorized": false,
+        "projectedCompressedBytes": 193402552,
+        "pyarrowVersion": "21.0.0",
+        "rangeBudgetBytes": 314572800,
+        "rangeBytesRead": 193634304,
+        "rangeReceiptSha256": "e632291a71084040c1397d1f3f1c4b05ba70f896a90c93df000002af8e7ba828",
+        "rangeRequests": 129,
+        "receiptTimesAvailable": false,
+        "rowGroupRows": [
+          1048576,
+          1048576,
+          1048576,
+          1048576,
+          1048576,
+          1048576,
+          1048576,
+          881747
+        ],
+        "rowGroups": 8,
+        "rowsScanned": 8221779,
+        "scanComplete": true,
+        "selectedColumns": [
+          "geometry",
+          "mmsi",
+          "base_date_time",
+          "vessel_type",
+          "sog",
+          "cog",
+          "heading",
+          "length"
+        ],
+        "selectedGeographicRows": 53869,
+        "sites": {
+          "duluth_approach": {
+            "adjacentPairs": 37012,
+            "box": [
+              46.3,
+              -92.5,
+              48.4,
+              -86.8
+            ],
+            "cargoTankerAdjacentPairs": 15706,
+            "cargoTankerGapsOverFiveMinutes": 699,
+            "cargoTankerRows": 15736,
+            "cargoTankerVessels": 30,
+            "distinctObservedMinutes": 1426,
+            "distinctVessels": 107,
+            "duplicateVesselTimestampRows": 2,
+            "gapsOverFiveMinutes": 4044,
+            "invalidIdentityOrTimeRows": 0,
+            "uniqueVesselTimestampRows": 37119,
+            "unknownTypeRows": 198
+          },
+          "duluth_local": {
+            "adjacentPairs": 11012,
+            "box": [
+              46.73,
+              -92.15,
+              46.85,
+              -91.95
+            ],
+            "cargoTankerAdjacentPairs": 4211,
+            "cargoTankerGapsOverFiveMinutes": 331,
+            "cargoTankerRows": 4226,
+            "cargoTankerVessels": 15,
+            "distinctObservedMinutes": 1421,
+            "distinctVessels": 32,
+            "duplicateVesselTimestampRows": 0,
+            "gapsOverFiveMinutes": 1072,
+            "invalidIdentityOrTimeRows": 0,
+            "uniqueVesselTimestampRows": 11044,
+            "unknownTypeRows": 0
+          },
+          "soo_approach": {
+            "adjacentPairs": 16691,
+            "box": [
+              45.9,
+              -85.2,
+              47,
+              -83.4
+            ],
+            "cargoTankerAdjacentPairs": 5455,
+            "cargoTankerGapsOverFiveMinutes": 57,
+            "cargoTankerRows": 5472,
+            "cargoTankerVessels": 17,
+            "distinctObservedMinutes": 1424,
+            "distinctVessels": 56,
+            "duplicateVesselTimestampRows": 1,
+            "gapsOverFiveMinutes": 574,
+            "invalidIdentityOrTimeRows": 0,
+            "uniqueVesselTimestampRows": 16747,
+            "unknownTypeRows": 0
+          },
+          "soo_local": {
+            "adjacentPairs": 9929,
+            "box": [
+              46.45,
+              -84.5,
+              46.52,
+              -84.25
+            ],
+            "cargoTankerAdjacentPairs": 1167,
+            "cargoTankerGapsOverFiveMinutes": 20,
+            "cargoTankerRows": 1177,
+            "cargoTankerVessels": 10,
+            "distinctObservedMinutes": 1419,
+            "distinctVessels": 30,
+            "duplicateVesselTimestampRows": 1,
+            "gapsOverFiveMinutes": 309,
+            "invalidIdentityOrTimeRows": 0,
+            "uniqueVesselTimestampRows": 9959,
+            "unknownTypeRows": 0
+          }
+        },
+        "source": "https://ocmgeodatastor1.blob.core.windows.net/marinecadastre/ais2024/ais-2024-09-10.parquet",
+        "split": "development",
+        "status": "COVERAGE_ONLY",
+        "timestampBasis": "NOAA documented UTC; naive archive timestamp interpreted as UTC"
+      },
+      "tests": [
+        "# tests 47",
+        "# pass 47",
+        "# fail 0"
+      ],
+      "artifact": "Artifact rolling-forecast-development-2024-09-10.zip successfully finalized. Artifact ID 14974441161"
+    }
+  ]
+}
