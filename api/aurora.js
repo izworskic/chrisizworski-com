@@ -106,16 +106,18 @@ module.exports = async function handler(req, res) {
     results;
   const weatherResults = results.slice(6);
 
+  const now = Date.now();
   const forecast =
     forecastResult.status === "fulfilled"
-      ? parseKpForecast(forecastResult.value)
+      ? parseKpForecast(forecastResult.value, now)
       : { peak_24h: null, peak_24h_at: null, peak_72h: null, peak_72h_at: null, periods: [] };
   const currentKpRaw =
     currentResult.status === "fulfilled" ? parseCurrentKp(currentResult.value) : null;
-  const currentKp = isFresh(currentKpRaw?.observed_at, MAX_OBSERVED_AGE_MS) ? currentKpRaw : null;
+  const currentKp = isFresh(currentKpRaw?.observed_at, MAX_OBSERVED_AGE_MS, now, 0) ? currentKpRaw : null;
   const solarWindRaw = parseSolarWind(
     magneticResult.status === "fulfilled" ? magneticResult.value : [],
     speedResult.status === "fulfilled" ? speedResult.value : [],
+    now, MAX_OBSERVED_AGE_MS,
   );
   const solarWind = isFresh(solarWindRaw?.observed_at, MAX_OBSERVED_AGE_MS) ? solarWindRaw : null;
   const ovationPayload = ovationResult.status === "fulfilled" ? ovationResult.value : {};
@@ -142,7 +144,7 @@ module.exports = async function handler(req, res) {
 
   const sources = {
     kp_forecast: sourceState(
-      forecastResult,
+      forecast.periods.length ? forecastResult : { status: "rejected" },
       "NOAA Space Weather Prediction Center",
       "https://www.spaceweather.gov/products/3-day-forecast",
     ),

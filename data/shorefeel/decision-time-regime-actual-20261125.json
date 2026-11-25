@@ -1,0 +1,368 @@
+{
+  "status": "DECISION_TIME_FEATURE_COMPARISON_ONLY",
+  "cohorts": {
+    "review": {
+      "status": "DECISION_TIME_FEATURE_DIAGNOSTIC_ONLY",
+      "cohortSha256": "764b43ea2a6b14eed9b69af1b35ef5e632b74447b77eb9d18ee3b50dba8d32d9",
+      "leads": {
+        "24": {
+          "expected": 80,
+          "featureAvailable": 80,
+          "scored": 54,
+          "missingOutcomeOrFeature": 26,
+          "weight": 0.25,
+          "bands": [
+            {
+              "band": "under2",
+              "featureAvailable": 59,
+              "scored": 39,
+              "observedBands": {
+                "under2": 34,
+                "2to5": 4,
+                "5plus": 1
+              },
+              "persistence": {
+                "n": 39,
+                "maeF": 1.1353846153846159,
+                "p90F": 2.520000000000004,
+                "maxF": 9
+              },
+              "frozenCandidate": {
+                "n": 39,
+                "maeF": 1.0984782776465785,
+                "p90F": 2.3511967849731485,
+                "maxF": 9.059594821929931
+              }
+            },
+            {
+              "band": "2to5",
+              "featureAvailable": 13,
+              "scored": 8,
+              "observedBands": {
+                "under2": 6,
+                "2to5": 1,
+                "5plus": 1
+              },
+              "persistence": {
+                "n": 8,
+                "maeF": 1.8,
+                "p90F": 5.4,
+                "maxF": 5.4
+              },
+              "frozenCandidate": {
+                "n": 8,
+                "maeF": 1.5612365663051624,
+                "p90F": 4.890103912353516,
+                "maxF": 4.890103912353516
+              }
+            },
+            {
+              "band": "5plus",
+              "featureAvailable": 8,
+              "scored": 7,
+              "observedBands": {
+                "under2": 3,
+                "2to5": 1,
+                "5plus": 3
+              },
+              "persistence": {
+                "n": 7,
+                "maeF": 8.614285714285716,
+                "p90F": 21.060000000000002,
+                "maxF": 21.060000000000002
+              },
+              "frozenCandidate": {
+                "n": 7,
+                "maeF": 7.2085396017347065,
+                "p90F": 17.88994737625122,
+                "maxF": 17.88994737625122
+              }
+            }
+          ],
+          "largeChange": {
+            "TP": 3,
+            "FP": 4,
+            "TN": 45,
+            "FN": 2,
+            "precision": 0.42857142857142855,
+            "recall": 0.6
+          },
+          "exactCoveragePassed": false
+        },
+        "48": {
+          "expected": 80,
+          "featureAvailable": 80,
+          "scored": 51,
+          "missingOutcomeOrFeature": 29,
+          "weight": 1,
+          "bands": [
+            {
+              "band": "under2",
+              "featureAvailable": 40,
+              "scored": 27,
+              "observedBands": {
+                "under2": 19,
+                "2to5": 8,
+                "5plus": 0
+              },
+              "persistence": {
+                "n": 27,
+                "maeF": 1.4733333333333336,
+                "p90F": 3.6,
+                "maxF": 3.6
+              },
+              "frozenCandidate": {
+                "n": 27,
+                "maeF": 1.3386252085367842,
+                "p90F": 3.098365631103517,
+                "maxF": 4.2114097595214846
+              }
+            },
+            {
+              "band": "2to5",
+              "featureAvailable": 25,
+              "scored": 13,
+              "observedBands": {
+                "under2": 4,
+                "2to5": 5,
+                "5plus": 4
+              },
+              "persistence": {
+                "n": 13,
+                "maeF": 3.9323076923076927,
+                "p90F": 8.640000000000002,
+                "maxF": 9.179999999999996
+              },
+              "frozenCandidate": {
+                "n": 13,
+                "maeF": 2.3389039817223183,
+                "p90F": 5.921901397705074,
+                "maxF": 6.491740264892581
+              }
+            },
+            {
+              "band": "5plus",
+              "featureAvailable": 15,
+              "scored": 11,
+              "observedBands": {
+                "under2": 1,
+                "2to5": 1,
+                "5plus": 9
+              },
+              "persistence": {
+                "n": 11,
+                "maeF": 10.865454545454547,
+                "p90F": 17.46,
+                "maxF": 20.879999999999995
+              },
+              "frozenCandidate": {
+                "n": 11,
+                "maeF": 4.11489318154075,
+                "p90F": 7.000839500427244,
+                "maxF": 11.814760780334478
+              }
+            }
+          ],
+          "largeChange": {
+            "TP": 9,
+            "FP": 2,
+            "TN": 36,
+            "FN": 4,
+            "precision": 0.8181818181818182,
+            "recall": 0.6923076923076923
+          },
+          "exactCoveragePassed": false
+        }
+      },
+      "canPromoteModel": false,
+      "limitations": [
+        "Archived model change available by assumed decision according to object metadata only; actual operational receipt time unverified.",
+        "Bands fixed at 2 and 5 F from preceding descriptive diagnostic; these cohorts have been inspected and are not an independent holdout.",
+        "No observed future change used to define forecast bands. Observed change used solely to score classification and errors.",
+        "No adaptive weight, threshold optimization, wind inference or calibrated probability. Missing slots retained."
+      ]
+    },
+    "confirmation": {
+      "status": "DECISION_TIME_FEATURE_DIAGNOSTIC_ONLY",
+      "cohortSha256": "5fb9599ae7442338a541651f5880b714747e5d311edc1956556f247221315563",
+      "leads": {
+        "24": {
+          "expected": 100,
+          "featureAvailable": 100,
+          "scored": 72,
+          "missingOutcomeOrFeature": 28,
+          "weight": 0.25,
+          "bands": [
+            {
+              "band": "under2",
+              "featureAvailable": 69,
+              "scored": 44,
+              "observedBands": {
+                "under2": 34,
+                "2to5": 8,
+                "5plus": 2
+              },
+              "persistence": {
+                "n": 44,
+                "maeF": 1.4195454545454544,
+                "p90F": 3.4199999999999977,
+                "maxF": 6.120000000000004
+              },
+              "frozenCandidate": {
+                "n": 44,
+                "maeF": 1.3275366340983992,
+                "p90F": 3.1275293540954565,
+                "maxF": 5.77216856002808
+              }
+            },
+            {
+              "band": "2to5",
+              "featureAvailable": 19,
+              "scored": 17,
+              "observedBands": {
+                "under2": 10,
+                "2to5": 6,
+                "5plus": 1
+              },
+              "persistence": {
+                "n": 17,
+                "maeF": 2.9752941176470595,
+                "p90F": 3.6,
+                "maxF": 22.32
+              },
+              "frozenCandidate": {
+                "n": 17,
+                "maeF": 2.522735908732695,
+                "p90F": 3.6603436088562065,
+                "maxF": 21.640419216156005
+              }
+            },
+            {
+              "band": "5plus",
+              "featureAvailable": 12,
+              "scored": 11,
+              "observedBands": {
+                "under2": 2,
+                "2to5": 4,
+                "5plus": 5
+              },
+              "persistence": {
+                "n": 11,
+                "maeF": 6.3,
+                "p90F": 12.419999999999998,
+                "maxF": 19.080000000000002
+              },
+              "frozenCandidate": {
+                "n": 11,
+                "maeF": 4.773043587424539,
+                "p90F": 10.837682161331179,
+                "maxF": 17.808436803817752
+              }
+            }
+          ],
+          "largeChange": {
+            "TP": 5,
+            "FP": 6,
+            "TN": 58,
+            "FN": 3,
+            "precision": 0.45454545454545453,
+            "recall": 0.625
+          },
+          "exactCoveragePassed": false
+        },
+        "48": {
+          "expected": 100,
+          "featureAvailable": 100,
+          "scored": 69,
+          "missingOutcomeOrFeature": 31,
+          "weight": 1,
+          "bands": [
+            {
+              "band": "under2",
+              "featureAvailable": 58,
+              "scored": 38,
+              "observedBands": {
+                "under2": 27,
+                "2to5": 9,
+                "5plus": 2
+              },
+              "persistence": {
+                "n": 38,
+                "maeF": 1.7099999999999997,
+                "p90F": 3.2400000000000015,
+                "maxF": 9
+              },
+              "frozenCandidate": {
+                "n": 38,
+                "maeF": 1.4119108772277826,
+                "p90F": 2.951445465087887,
+                "maxF": 8.893782806396484
+              }
+            },
+            {
+              "band": "2to5",
+              "featureAvailable": 29,
+              "scored": 19,
+              "observedBands": {
+                "under2": 8,
+                "2to5": 8,
+                "5plus": 3
+              },
+              "persistence": {
+                "n": 19,
+                "maeF": 2.633684210526315,
+                "p90F": 6.480000000000003,
+                "maxF": 7.560000000000002
+              },
+              "frozenCandidate": {
+                "n": 19,
+                "maeF": 1.6823478999890784,
+                "p90F": 3.38974433898926,
+                "maxF": 3.9303527069091833
+              }
+            },
+            {
+              "band": "5plus",
+              "featureAvailable": 13,
+              "scored": 12,
+              "observedBands": {
+                "under2": 5,
+                "2to5": 1,
+                "5plus": 6
+              },
+              "persistence": {
+                "n": 12,
+                "maeF": 6.3450000000000015,
+                "p90F": 12.960000000000003,
+                "maxF": 26.64
+              },
+              "frozenCandidate": {
+                "n": 12,
+                "maeF": 6.664266471862793,
+                "p90F": 13.233792686462403,
+                "maxF": 19.353983917236327
+              }
+            }
+          ],
+          "largeChange": {
+            "TP": 6,
+            "FP": 6,
+            "TN": 52,
+            "FN": 5,
+            "precision": 0.5,
+            "recall": 0.5454545454545454
+          },
+          "exactCoveragePassed": false
+        }
+      },
+      "canPromoteModel": false,
+      "limitations": [
+        "Archived model change available by assumed decision according to object metadata only; actual operational receipt time unverified.",
+        "Bands fixed at 2 and 5 F from preceding descriptive diagnostic; these cohorts have been inspected and are not an independent holdout.",
+        "No observed future change used to define forecast bands. Observed change used solely to score classification and errors.",
+        "No adaptive weight, threshold optimization, wind inference or calibrated probability. Missing slots retained."
+      ]
+    }
+  },
+  "canPromoteModel": false
+}

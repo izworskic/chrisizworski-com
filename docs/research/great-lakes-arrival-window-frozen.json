@@ -1,0 +1,32 @@
+{
+  "schemaVersion": 1,
+  "kind": "FROZEN_RESEARCH_ARRIVAL_WINDOW",
+  "model": "existing-reference-v1",
+  "modelRevision": "b38f8e81e294e6b56fd9619e6c86b185132ac3c0",
+  "site": "soo",
+  "developmentDigest": "eb6d0948956a78f35047c33c3d2cdaa2b63577e8e29cfcdc7a0f87db6fe71f51",
+  "developmentDates": 27,
+  "scoredEvents": 63,
+  "nonemptyDates": 24,
+  "holdoutDates": [
+    "2024-09-21",
+    "2024-09-25",
+    "2024-09-29"
+  ],
+  "margins": {
+    "earlyMinutes": 6,
+    "lateMinutes": 29
+  },
+  "criteria": {
+    "minimumScoredEvents": 10,
+    "minimumContainment": 0.8,
+    "minimumContainmentGain": 0.15,
+    "maximumMeanExtraWidthMinutes": 15,
+    "maximumMeanWidthMinutes": 45,
+    "missPenalty": 4
+  },
+  "productionCalibrationAuthorized": false,
+  "probabilityCalibrated": false,
+  "fieldAccuracyVerified": false,
+  "freezeSha256": "e2dc2890c6f128a5446c348f446d77692f6b135908e10ce9baa5f30dec899366"
+}

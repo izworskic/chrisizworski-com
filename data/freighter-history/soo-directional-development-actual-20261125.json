@@ -1,0 +1,777 @@
+{
+  "schemaVersion": 1,
+  "kind": "SOO_DIRECTIONAL_DEVELOPMENT_CROSS_FIT",
+  "dates": [
+    "2025-06-15",
+    "2025-08-15",
+    "2025-10-15"
+  ],
+  "policy": {
+    "gridMinutes": 15,
+    "minTrainPerGroup": 3,
+    "shrinkage": 4,
+    "capMinutes": 45,
+    "extraEachSide": 6,
+    "minMatched": 20,
+    "minDirection": 8,
+    "minCorrectedFraction": 0.7,
+    "maxMaeRatio": 0.9,
+    "minContainment": 0.8,
+    "maxWidth": 90
+  },
+  "sourceRun": 45390603940,
+  "all": {
+    "issued": 30,
+    "matched": 28,
+    "unresolved": 2,
+    "correctedEligible": 30,
+    "existing": {
+      "matched": 28,
+      "meanAbsoluteErrorMinutes": 53.9,
+      "medianAbsoluteErrorMinutes": 39.58,
+      "meanSignedErrorMinutes": -40.4,
+      "meanIntervalWidthMinutes": 80.85,
+      "fullBracketContained": 11,
+      "bracketOverlaps": 11
+    },
+    "global": {
+      "matched": 28,
+      "meanAbsoluteErrorMinutes": 37.54,
+      "medianAbsoluteErrorMinutes": 26.69,
+      "meanSignedErrorMinutes": -8.97,
+      "meanIntervalWidthMinutes": 92.85,
+      "fullBracketContained": 17,
+      "bracketOverlaps": 18
+    },
+    "directional": {
+      "matched": 28,
+      "meanAbsoluteErrorMinutes": 36.5,
+      "medianAbsoluteErrorMinutes": 29.55,
+      "meanSignedErrorMinutes": -12.56,
+      "meanIntervalWidthMinutes": 92.85,
+      "fullBracketContained": 18,
+      "bracketOverlaps": 18
+    },
+    "outcomeCounts": {
+      "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 1,
+      "OBSERVED_CHAMBER_REFERENCE_BRACKET": 28,
+      "RIGHT_CENSORED_BY_DAY_END": 1
+    },
+    "meanShiftMinutes": 27.92
+  },
+  "byDirection": {
+    "upbound": {
+      "issued": 14,
+      "matched": 14,
+      "unresolved": 0,
+      "correctedEligible": 14,
+      "existing": {
+        "matched": 14,
+        "meanAbsoluteErrorMinutes": 43.44,
+        "medianAbsoluteErrorMinutes": 26.93,
+        "meanSignedErrorMinutes": -16.45,
+        "meanIntervalWidthMinutes": 104.97,
+        "fullBracketContained": 9,
+        "bracketOverlaps": 9
+      },
+      "global": {
+        "matched": 14,
+        "meanAbsoluteErrorMinutes": 37.61,
+        "medianAbsoluteErrorMinutes": 18.15,
+        "meanSignedErrorMinutes": 15.11,
+        "meanIntervalWidthMinutes": 116.97,
+        "fullBracketContained": 11,
+        "bracketOverlaps": 11
+      },
+      "directional": {
+        "matched": 14,
+        "meanAbsoluteErrorMinutes": 36.26,
+        "medianAbsoluteErrorMinutes": 29.55,
+        "meanSignedErrorMinutes": 0.15,
+        "meanIntervalWidthMinutes": 116.97,
+        "fullBracketContained": 11,
+        "bracketOverlaps": 11
+      },
+      "outcomeCounts": {
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 14
+      },
+      "meanShiftMinutes": 16.59
+    },
+    "downbound": {
+      "issued": 16,
+      "matched": 14,
+      "unresolved": 2,
+      "correctedEligible": 16,
+      "existing": {
+        "matched": 14,
+        "meanAbsoluteErrorMinutes": 64.36,
+        "medianAbsoluteErrorMinutes": 67.13,
+        "meanSignedErrorMinutes": -64.36,
+        "meanIntervalWidthMinutes": 56.73,
+        "fullBracketContained": 2,
+        "bracketOverlaps": 2
+      },
+      "global": {
+        "matched": 14,
+        "meanAbsoluteErrorMinutes": 37.46,
+        "medianAbsoluteErrorMinutes": 35.66,
+        "meanSignedErrorMinutes": -33.05,
+        "meanIntervalWidthMinutes": 68.73,
+        "fullBracketContained": 6,
+        "bracketOverlaps": 7
+      },
+      "directional": {
+        "matched": 14,
+        "meanAbsoluteErrorMinutes": 36.75,
+        "medianAbsoluteErrorMinutes": 29,
+        "meanSignedErrorMinutes": -25.27,
+        "meanIntervalWidthMinutes": 68.73,
+        "fullBracketContained": 7,
+        "bracketOverlaps": 7
+      },
+      "outcomeCounts": {
+        "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 1,
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 14,
+        "RIGHT_CENSORED_BY_DAY_END": 1
+      },
+      "meanShiftMinutes": 37.83
+    }
+  },
+  "byDistance": {
+    "5_to_10_nm": {
+      "issued": 1,
+      "matched": 1,
+      "unresolved": 0,
+      "correctedEligible": 1,
+      "existing": {
+        "matched": 1,
+        "meanAbsoluteErrorMinutes": 127.54,
+        "medianAbsoluteErrorMinutes": 127.54,
+        "meanSignedErrorMinutes": 127.54,
+        "meanIntervalWidthMinutes": 198.68,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "global": {
+        "matched": 1,
+        "meanAbsoluteErrorMinutes": 159.27,
+        "medianAbsoluteErrorMinutes": 159.27,
+        "meanSignedErrorMinutes": 159.27,
+        "meanIntervalWidthMinutes": 210.68,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "directional": {
+        "matched": 1,
+        "meanAbsoluteErrorMinutes": 142.91,
+        "medianAbsoluteErrorMinutes": 142.91,
+        "meanSignedErrorMinutes": 142.91,
+        "meanIntervalWidthMinutes": 210.68,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "outcomeCounts": {
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 1
+      },
+      "meanShiftMinutes": 15.37
+    },
+    "10_to_15_nm": {
+      "issued": 29,
+      "matched": 27,
+      "unresolved": 2,
+      "correctedEligible": 29,
+      "existing": {
+        "matched": 27,
+        "meanAbsoluteErrorMinutes": 51.17,
+        "medianAbsoluteErrorMinutes": 38.42,
+        "meanSignedErrorMinutes": -46.62,
+        "meanIntervalWidthMinutes": 76.48,
+        "fullBracketContained": 11,
+        "bracketOverlaps": 11
+      },
+      "global": {
+        "matched": 27,
+        "meanAbsoluteErrorMinutes": 33.03,
+        "medianAbsoluteErrorMinutes": 19.42,
+        "meanSignedErrorMinutes": -15.2,
+        "meanIntervalWidthMinutes": 88.48,
+        "fullBracketContained": 17,
+        "bracketOverlaps": 18
+      },
+      "directional": {
+        "matched": 27,
+        "meanAbsoluteErrorMinutes": 32.56,
+        "medianAbsoluteErrorMinutes": 27.75,
+        "meanSignedErrorMinutes": -18.32,
+        "meanIntervalWidthMinutes": 88.48,
+        "fullBracketContained": 18,
+        "bracketOverlaps": 18
+      },
+      "outcomeCounts": {
+        "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 1,
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 27,
+        "RIGHT_CENSORED_BY_DAY_END": 1
+      },
+      "meanShiftMinutes": 28.35
+    }
+  },
+  "byLead": {
+    "under_60_min": {
+      "issued": 0,
+      "matched": 0,
+      "unresolved": 0,
+      "correctedEligible": 0,
+      "existing": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "global": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "directional": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "outcomeCounts": {},
+      "meanShiftMinutes": null
+    },
+    "60_to_120_min": {
+      "issued": 15,
+      "matched": 13,
+      "unresolved": 2,
+      "correctedEligible": 15,
+      "existing": {
+        "matched": 13,
+        "meanAbsoluteErrorMinutes": 62.9,
+        "medianAbsoluteErrorMinutes": 65.17,
+        "meanSignedErrorMinutes": -62.9,
+        "meanIntervalWidthMinutes": 54.51,
+        "fullBracketContained": 2,
+        "bracketOverlaps": 2
+      },
+      "global": {
+        "matched": 13,
+        "meanAbsoluteErrorMinutes": 36.18,
+        "medianAbsoluteErrorMinutes": 33.97,
+        "meanSignedErrorMinutes": -31.43,
+        "meanIntervalWidthMinutes": 66.51,
+        "fullBracketContained": 6,
+        "bracketOverlaps": 7
+      },
+      "directional": {
+        "matched": 13,
+        "meanAbsoluteErrorMinutes": 35.16,
+        "medianAbsoluteErrorMinutes": 24.74,
+        "meanSignedErrorMinutes": -22.81,
+        "meanIntervalWidthMinutes": 66.51,
+        "fullBracketContained": 7,
+        "bracketOverlaps": 7
+      },
+      "outcomeCounts": {
+        "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 1,
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 13,
+        "RIGHT_CENSORED_BY_DAY_END": 1
+      },
+      "meanShiftMinutes": 38.62
+    },
+    "120_plus_min": {
+      "issued": 15,
+      "matched": 15,
+      "unresolved": 0,
+      "correctedEligible": 15,
+      "existing": {
+        "matched": 15,
+        "meanAbsoluteErrorMinutes": 46.1,
+        "medianAbsoluteErrorMinutes": 30.7,
+        "meanSignedErrorMinutes": -20.91,
+        "meanIntervalWidthMinutes": 103.67,
+        "fullBracketContained": 9,
+        "bracketOverlaps": 9
+      },
+      "global": {
+        "matched": 15,
+        "meanAbsoluteErrorMinutes": 38.72,
+        "medianAbsoluteErrorMinutes": 18.46,
+        "meanSignedErrorMinutes": 10.49,
+        "meanIntervalWidthMinutes": 115.67,
+        "fullBracketContained": 11,
+        "bracketOverlaps": 11
+      },
+      "directional": {
+        "matched": 15,
+        "meanAbsoluteErrorMinutes": 37.66,
+        "medianAbsoluteErrorMinutes": 31.35,
+        "meanSignedErrorMinutes": -3.69,
+        "meanIntervalWidthMinutes": 115.67,
+        "fullBracketContained": 11,
+        "bracketOverlaps": 11
+      },
+      "outcomeCounts": {
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 15
+      },
+      "meanShiftMinutes": 17.22
+    }
+  },
+  "byMotion": {
+    "supported": {
+      "issued": 28,
+      "matched": 26,
+      "unresolved": 2,
+      "correctedEligible": 28,
+      "existing": {
+        "matched": 26,
+        "meanAbsoluteErrorMinutes": 49.93,
+        "medianAbsoluteErrorMinutes": 38.1,
+        "meanSignedErrorMinutes": -45.21,
+        "meanIntervalWidthMinutes": 76.14,
+        "fullBracketContained": 11,
+        "bracketOverlaps": 11
+      },
+      "global": {
+        "matched": 26,
+        "meanAbsoluteErrorMinutes": 32.22,
+        "medianAbsoluteErrorMinutes": 18.94,
+        "meanSignedErrorMinutes": -13.7,
+        "meanIntervalWidthMinutes": 88.14,
+        "fullBracketContained": 17,
+        "bracketOverlaps": 18
+      },
+      "directional": {
+        "matched": 26,
+        "meanAbsoluteErrorMinutes": 31.61,
+        "medianAbsoluteErrorMinutes": 26.25,
+        "meanSignedErrorMinutes": -16.82,
+        "meanIntervalWidthMinutes": 88.14,
+        "fullBracketContained": 18,
+        "bracketOverlaps": 18
+      },
+      "outcomeCounts": {
+        "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 1,
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 26,
+        "RIGHT_CENSORED_BY_DAY_END": 1
+      },
+      "meanShiftMinutes": 28.44
+    },
+    "slow_progress": {
+      "issued": 0,
+      "matched": 0,
+      "unresolved": 0,
+      "correctedEligible": 0,
+      "existing": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "global": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "directional": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "outcomeCounts": {},
+      "meanShiftMinutes": null
+    },
+    "disagreement": {
+      "issued": 2,
+      "matched": 2,
+      "unresolved": 0,
+      "correctedEligible": 2,
+      "existing": {
+        "matched": 2,
+        "meanAbsoluteErrorMinutes": 105.44,
+        "medianAbsoluteErrorMinutes": 105.44,
+        "meanSignedErrorMinutes": 22.1,
+        "meanIntervalWidthMinutes": 142.1,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "global": {
+        "matched": 2,
+        "meanAbsoluteErrorMinutes": 106.72,
+        "medianAbsoluteErrorMinutes": 106.72,
+        "meanSignedErrorMinutes": 52.56,
+        "meanIntervalWidthMinutes": 154.1,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "directional": {
+        "matched": 2,
+        "meanAbsoluteErrorMinutes": 100.12,
+        "medianAbsoluteErrorMinutes": 100.12,
+        "meanSignedErrorMinutes": 42.79,
+        "meanIntervalWidthMinutes": 154.1,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "outcomeCounts": {
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 2
+      },
+      "meanShiftMinutes": 20.69
+    },
+    "insufficient_history": {
+      "issued": 0,
+      "matched": 0,
+      "unresolved": 0,
+      "correctedEligible": 0,
+      "existing": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "global": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "directional": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "outcomeCounts": {},
+      "meanShiftMinutes": null
+    },
+    "off_route": {
+      "issued": 0,
+      "matched": 0,
+      "unresolved": 0,
+      "correctedEligible": 0,
+      "existing": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "global": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "directional": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "outcomeCounts": {},
+      "meanShiftMinutes": null
+    },
+    "discontinuous": {
+      "issued": 0,
+      "matched": 0,
+      "unresolved": 0,
+      "correctedEligible": 0,
+      "existing": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "global": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "directional": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "outcomeCounts": {},
+      "meanShiftMinutes": null
+    },
+    "missing_speed": {
+      "issued": 0,
+      "matched": 0,
+      "unresolved": 0,
+      "correctedEligible": 0,
+      "existing": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "global": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "directional": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "outcomeCounts": {},
+      "meanShiftMinutes": null
+    },
+    "unsupported": {
+      "issued": 0,
+      "matched": 0,
+      "unresolved": 0,
+      "correctedEligible": 0,
+      "existing": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "global": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "directional": {
+        "matched": 0,
+        "meanAbsoluteErrorMinutes": null,
+        "medianAbsoluteErrorMinutes": null,
+        "meanSignedErrorMinutes": null,
+        "meanIntervalWidthMinutes": null,
+        "fullBracketContained": 0,
+        "bracketOverlaps": 0
+      },
+      "outcomeCounts": {},
+      "meanShiftMinutes": null
+    }
+  },
+  "daily": [
+    {
+      "date": "2025-06-15",
+      "archiveSha256": "582316049ed53b85a3008dea8d531ebf6dcbb3cd5ab1bd1993275ebb3b04965c",
+      "fixes": 7371,
+      "vessels": 22,
+      "noIssue": 13,
+      "issued": 9,
+      "matched": 9,
+      "unresolved": 0,
+      "correctedEligible": 9,
+      "existing": {
+        "matched": 9,
+        "meanAbsoluteErrorMinutes": 46.78,
+        "medianAbsoluteErrorMinutes": 40.74,
+        "meanSignedErrorMinutes": -46.78,
+        "meanIntervalWidthMinutes": 65.43,
+        "fullBracketContained": 3,
+        "bracketOverlaps": 3
+      },
+      "global": {
+        "matched": 9,
+        "meanAbsoluteErrorMinutes": 24.08,
+        "medianAbsoluteErrorMinutes": 17.83,
+        "meanSignedErrorMinutes": -15.81,
+        "meanIntervalWidthMinutes": 77.43,
+        "fullBracketContained": 6,
+        "bracketOverlaps": 7
+      },
+      "directional": {
+        "matched": 9,
+        "meanAbsoluteErrorMinutes": 26.37,
+        "medianAbsoluteErrorMinutes": 20.17,
+        "meanSignedErrorMinutes": -16.01,
+        "meanIntervalWidthMinutes": 77.43,
+        "fullBracketContained": 6,
+        "bracketOverlaps": 6
+      },
+      "outcomeCounts": {
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 9
+      },
+      "meanShiftMinutes": 30.77
+    },
+    {
+      "date": "2025-08-15",
+      "archiveSha256": "653af1f277a299ac557b905b283cde351050f8ae28e250f136cbf609eeaefd52",
+      "fixes": 7013,
+      "vessels": 21,
+      "noIssue": 9,
+      "issued": 12,
+      "matched": 10,
+      "unresolved": 2,
+      "correctedEligible": 12,
+      "existing": {
+        "matched": 10,
+        "meanAbsoluteErrorMinutes": 54.01,
+        "medianAbsoluteErrorMinutes": 38.1,
+        "meanSignedErrorMinutes": -49.38,
+        "meanIntervalWidthMinutes": 76.81,
+        "fullBracketContained": 5,
+        "bracketOverlaps": 5
+      },
+      "global": {
+        "matched": 10,
+        "meanAbsoluteErrorMinutes": 35.86,
+        "medianAbsoluteErrorMinutes": 30.15,
+        "meanSignedErrorMinutes": -17.94,
+        "meanIntervalWidthMinutes": 88.81,
+        "fullBracketContained": 6,
+        "bracketOverlaps": 6
+      },
+      "directional": {
+        "matched": 10,
+        "meanAbsoluteErrorMinutes": 33.73,
+        "medianAbsoluteErrorMinutes": 25.9,
+        "meanSignedErrorMinutes": -24.93,
+        "meanIntervalWidthMinutes": 88.81,
+        "fullBracketContained": 6,
+        "bracketOverlaps": 6
+      },
+      "outcomeCounts": {
+        "FIRST_CHAMBER_OBSERVATION_UNBRACKETED": 1,
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 10,
+        "RIGHT_CENSORED_BY_DAY_END": 1
+      },
+      "meanShiftMinutes": 25.22
+    },
+    {
+      "date": "2025-10-15",
+      "archiveSha256": "ed88dd3d16caf99fb34391ac6105744eae331e61b5c30f96e3a0bcc08a319ae6",
+      "fixes": 4713,
+      "vessels": 13,
+      "noIssue": 4,
+      "issued": 9,
+      "matched": 9,
+      "unresolved": 0,
+      "correctedEligible": 9,
+      "existing": {
+        "matched": 9,
+        "meanAbsoluteErrorMinutes": 60.89,
+        "medianAbsoluteErrorMinutes": 50.2,
+        "meanSignedErrorMinutes": -24.05,
+        "meanIntervalWidthMinutes": 100.75,
+        "fullBracketContained": 3,
+        "bracketOverlaps": 3
+      },
+      "global": {
+        "matched": 9,
+        "meanAbsoluteErrorMinutes": 52.86,
+        "medianAbsoluteErrorMinutes": 47.71,
+        "meanSignedErrorMinutes": 7.83,
+        "meanIntervalWidthMinutes": 112.75,
+        "fullBracketContained": 5,
+        "bracketOverlaps": 5
+      },
+      "directional": {
+        "matched": 9,
+        "meanAbsoluteErrorMinutes": 49.71,
+        "medianAbsoluteErrorMinutes": 34.83,
+        "meanSignedErrorMinutes": 4.63,
+        "meanIntervalWidthMinutes": 112.75,
+        "fullBracketContained": 6,
+        "bracketOverlaps": 6
+      },
+      "outcomeCounts": {
+        "OBSERVED_CHAMBER_REFERENCE_BRACKET": 9
+      },
+      "meanShiftMinutes": 28.67
+    }
+  ],
+  "gates": {
+    "matched": true,
+    "directions": true,
+    "correctedCoverage": true,
+    "mae": true,
+    "directionNonWorse": true,
+    "containment": false,
+    "width": false
+  },
+  "screenPassed": false,
+  "freshHoldout": false,
+  "productionCalibrationAuthorized": false,
+  "officialLockEntryGroundTruth": false,
+  "forecastEnabled": false,
+  "note": "All three dates previously inspected; leave-date-out and exclude same MMSI from training for each prediction. Not chronological independent validation. Conditional matched errors; no fit on later four-date holdout. Progress strata are descriptive, not fitted or inferred queue causes. Unknown outcomes remain unresolved.",
+  "verifiedWorkflowRun": 45610987186,
+  "verifiedWorkflowJob": 139194124485,
+  "sourceCommit": "7922bf90f7a14ebaafd7d890a30e32aac47a968c",
+  "sourceArtifact": 14917313872,
+  "reportArtifact": 15020485320,
+  "reportArtifactZipSha256": "badbfb8ebc79a391f19f2430e542e942b5ed1d18d47488124ae065adcbb0d0b2",
+  "tests": {
+    "total": 11,
+    "pass": 11,
+    "fail": 0
+  },
+  "decision": "DEVELOPMENT_SCREEN_FAILED_NO_MODEL_PROMOTION",
+  "recordMethod": "JSON reproduced from successful GitHub Actions job log."
+}

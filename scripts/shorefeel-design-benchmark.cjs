@@ -39,28 +39,30 @@ const root = path.join(__dirname, '..', 'public');
 const W = { answerSpeed: .22, answerComplete: .12, forecastReach: .16, calm: .14, hierarchy: .08, ergonomics: .10, stability: .10, degraded: .08 };
 const clamp01 = x => Math.max(0, Math.min(1, x));
 
-function pt(h, t, lo, hi, c, s) { return { leadH: h, startsAt: '2026-10-14T12:00:00Z', tempF: t, low: lo, high: hi, changeF: c, shallowF: s }; }
+const clock=Date.now(),at=offset=>new Date(clock+offset).toISOString(),H=3600000;
+const readingAt=at(-H),sampleDate=at(-86400000).slice(0,10),priorDate=at(-2*86400000).slice(0,10);
+function pt(h, t, lo, hi, c, s) { return { leadH: h, startsAt: at(h*H), tempF: t, low: lo, high: hi, changeF: c, shallowF: s }; }
 const forecast = place => ({
-  status: 'available', cycle: '2026-10-14T06:00:00.000Z',
+  status: 'available', cycle: at(-6*H),
   method: 'Measured level plus the lake model’s forecast change; the model’s absolute temperature is not used.',
   caveat: 'A forecast with an honest range, not a measurement and not swim safety.',
   validation: { error24hF: 1.3, error48hF: 1.9, caveats: ['Six weeks, open-water buoys, no summer.'] },
-  beaches: [{ key: 'a', name: place === 'grand-haven' ? 'Grand Haven State Park beach' : 'Clinch Park beach', levelKind: 'satellite', levelTempF: 60.6, levelObservedAt: '2026-10-14T12:00:00Z',
+  beaches: [{ key: place==='grand-haven'?'grand-haven-state-park':'clinch-park', name: place === 'grand-haven' ? 'Grand Haven State Park beach' : 'Clinch Park beach', levelKind: 'satellite', levelTempF: 60.6, levelObservedAt: readingAt,
     points: [pt(0, 61.7, 59, 65, .4, .7), pt(6, 61.4, 58, 64, .2, .6), pt(12, 61.2, 59, 63, .1, .5), pt(24, 60.9, 59, 63, -.1, .4), pt(36, 56.6, 54, 60, -4.3, -.1), pt(48, 59.2, 55, 63, -3.6, 1.8)],
     cooling: { tier: 'watch', deltaF: -1.6, text: 'Cooling watch. The model has the surface cooling about 2°F within a day. In Sept–Oct 2026 tests this signal never missed a drop of 3°F or more, but about two in three watches were smaller.' }, shallowApplied: true }]
 });
-const lk = t => ({ status: 'recent', latest: { date: '2026-10-13', tempF: t }, trend7: -0.4, history: [{ date: '2026-10-12', tempF: t + .2 }, { date: '2026-10-13', tempF: t }] });
+const lk = t => ({ status: 'recent', latest: { date: sampleDate, tempF: t }, trend7: -0.4, history: [{ date: priorDate, tempF: t + .2 }, { date: sampleDate, tempF: t }] });
 function payload(place, mode) {
   const tc = place === 'traverse-city';
-  if (!place) { const o = { product: 'ShoreFeel', lake: 'michigan', source: { mode: 'live' }, lakes: null, local: null, water: null, regionalSatellite: null, normal: mode === 'degraded' ? null : { date: '2026-10-13', tempF: 57.1, deltaF: 5.2 }, weatherNow: null, assessments: null, beachForecast: null }; o.lakes = payload('traverse-city', mode).lakes; return o; }
-  const water = mode === 'degraded' ? null : { kind: 'satellite', tempF: 60.6, observedAt: '2026-10-14T12:00:00.000Z', label: tc ? 'West Grand Traverse Bay, 4 km north of Clinch Park' : 'Lake Michigan off Grand Haven State Park', where: tc ? 'Grand Traverse Bay' : 'Lake Michigan off Grand Haven', caveat: 'NOAA satellite surface analysis for a pixel 4.2 km from the beach, not a beach thermometer; sunlit shallows can run warmer.' };
+  if (!place) { const o = { product: 'ShoreFeel', generatedAt: at(0), lake: 'michigan', source: { mode: 'live' }, lakes: null, local: null, water: null, regionalSatellite: null, normal: mode === 'degraded' ? null : { date: sampleDate, tempF: 57.1, deltaF: 5.2 }, weatherNow: null, assessments: null, beachForecast: null }; o.lakes = payload('traverse-city', mode).lakes; return o; }
+  const water = mode === 'degraded' ? null : { kind: 'satellite', tempF: 60.6, observedAt: readingAt, label: tc ? 'West Grand Traverse Bay, 4 km north of Clinch Park' : 'Lake Michigan off Grand Haven State Park', where: tc ? 'Grand Traverse Bay' : 'Lake Michigan off Grand Haven', caveat: 'NOAA satellite surface analysis for a pixel 4.2 km from the beach, not a beach thermometer; sunlit shallows can run warmer.' };
   return {
-    product: 'ShoreFeel', lake: 'michigan', source: { mode: 'live' },
+    product: 'ShoreFeel', generatedAt: at(0), lake: 'michigan', source: { mode: 'live' },
     lakes: mode === 'degraded' ? Object.fromEntries(['superior','michigan','huron','erie','ontario'].map(n => [n, { status: 'unavailable', latest: null, history: [] }])) : { superior: lk(54.9), michigan: lk(62.3), huron: lk(59.2), erie: lk(65.7), ontario: lk(61.3) },
-    local: { name: place, waterBody: tc ? 'Grand Traverse Bay' : 'Lake Michigan off Grand Haven', stationId: tc ? '45020' : '45029', stationName: 'Test buoy', lat: 44.9, lon: -85.6, caveat: 'A buoy is offshore, not the beach.', measurement: null, measurementStatus: 'offline', periods: [{ startsAt: '2026-10-14T13:00:00-04:00', tempF: 55, windMph: 7, summary: 'Cloudy', daylight: true }] },
-    water, regionalSatellite: { status: water ? 'recent' : 'unavailable', cells: water ? [{ key: 'west-bay', short: 'West Bay', label: water.label, measurement: { tempF: 60.6, observedAt: water.observedAt } }] : [] },
-    normal: { date: '2026-10-13', tempF: 57.1, deltaF: 5.2 }, weatherNow: { startsAt: '2026-10-14T13:00:00-04:00', tempF: 55, windMph: 7, summary: 'Cloudy', daylight: true },
-    assessments: { swim: { title: 'Planning to swim?', beach: 'Cool air.', water: 'Cold water.', after: 'Dry off fast.', decision: 'Comfort guidance is not swim safety.', state: 'contextual', band: 'cold' } },
+    local: { name: place, waterBody: tc ? 'Grand Traverse Bay' : 'Lake Michigan off Grand Haven', stationId: tc ? '45020' : '45029', stationName: 'Test buoy', lat: 44.9, lon: -85.6, caveat: 'A buoy is offshore, not the beach.', measurement: null, measurementStatus: 'offline', periods: [{ startsAt: at(-10*60000), tempF: 55, windMph: 7, summary: 'Cloudy', daylight: true }] },
+    water, regionalSatellite: { status: water ? 'recent' : 'unavailable', cells: water ? [{ key: tc?'west-bay':'open-shore', short: tc?'West Bay':'Open shore', label: water.label, measurement: { tempF: 60.6, observedAt: water.observedAt } }] : [] },
+    normal: { date: sampleDate, tempF: 57.1, deltaF: 5.2 }, weatherNow: { startsAt: at(-10*60000), tempF: 55, windMph: 7, summary: 'Cloudy', daylight: true },
+    assessments: { swim: { heading: 'Planning to swim?', beach: 'Cool air.', water: 'Cold water.', after: 'Dry off fast.', decision: 'Comfort guidance is not swim safety.', state: 'contextual', band: 'cold' } },
     beachForecast: mode === 'degraded' ? { status: 'unavailable', reason: 'NOAA lake model cycle not available' } : forecast(place)
   };
 }
