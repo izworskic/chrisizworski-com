@@ -52,7 +52,36 @@
     if(event.kind==='source-conflict')return 'Official sources now disagree. Confirm the crossing directly with CBBT.';
     return 'Current official status can no longer be confirmed. This is not a report of a closure.';
   }
-  return{statusView:statusView,vehicleView:vehicleView,freshnessText:freshnessText,tollView:tollView,restrictionLabel:restrictionLabel,reasonText:reasonText,statusChange:statusChange,changeText:changeText};
+  // Compare only backend eligibility results for exactly the same vehicle.
+  // An unknown operational state never establishes a new permission.
+  function decisionImpact(previous,snapshot,configuration,now=Date.now()){
+    var official=observedStatus(snapshot,now),result=snapshot&&snapshot.vehicleEligibility;
+    var confirmed=!['unavailable','conflict'].includes(official.key);
+    var decision=confirmed&&result&&['ALLOWED','RESTRICTED','UNKNOWN'].includes(result.decision)?result.decision:'UNKNOWN';
+    var reason=decision==='UNKNOWN'&&!confirmed?'OFFICIAL_STATUS_UNRESOLVED':result&&result.reason||null;
+    var current={configuration:configuration,official:official.key,decision:decision,reason:reason,checked:official.checked,confirmed:confirmed,event:null};
+    if(!previous||previous.configuration!==configuration)return current;
+    if(current.checked!==null&&previous.checked!==null&&current.checked<previous.checked)return previous;
+    if(current.checked!==null&&current.checked===previous.checked&&confirmed&&current.official!==previous.official)return previous;
+    if(current.official===previous.official&&current.decision===previous.decision&&current.reason===previous.reason)return {...current,event:previous.event};
+    // Do not infer the vehicle effect of an operating change across an
+    // evidence gap, or from changed form inputs.
+    var kind=!confirmed?'confirmation-lost':!previous.confirmed?'confirmation-restored':
+      previous.official===current.official?'result-revised':
+      previous.decision!==decision?'eligibility-changed':'eligibility-unchanged';
+    current.event={kind:kind,from:previous.decision,to:decision,reason:reason};
+    return current;
+  }
+  function impactText(event){
+    if(!event)return '';
+    if(event.kind==='confirmation-lost')return 'The live eligibility check cannot be confirmed now. Verify with CBBT; standing vehicle rules still apply.';
+    if(event.kind==='confirmation-restored')return 'A current check for this vehicle is available again. No eligibility conclusion is made about the gap.';
+    if(event.kind==='eligibility-unchanged')return event.to==='UNKNOWN'?'The official report changed, but this configuration still needs confirmation.': 'The official report changed, but the backend eligibility result for this same configuration is unchanged. Review the current restriction.';
+    if(event.to==='RESTRICTED')return 'This configuration is now restricted under the backend check. '+reasonText(event.reason);
+    if(event.to==='ALLOWED')return 'The backend check now reports this configuration allowed under the current official restriction. Verify before travel.';
+    return 'The backend can no longer determine eligibility for this configuration. '+reasonText(event.reason);
+  }
+  return{statusView:statusView,vehicleView:vehicleView,freshnessText:freshnessText,tollView:tollView,restrictionLabel:restrictionLabel,reasonText:reasonText,statusChange:statusChange,changeText:changeText,decisionImpact:decisionImpact,impactText:impactText};
 });
 
 (function(){
