@@ -55,8 +55,9 @@ function weather(now) {
   })) } };
 }
 
-async function open(browser, { width, time, api = 'ok', js = true, wx = 'ok', pin = true }) {
+async function open(browser, { width, time, api = 'ok', js = true, wx = 'ok', pin = true, blockStorage = false }) {
   const context = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: 'reduce', javaScriptEnabled: js });
+  if(blockStorage)await context.addInitScript(()=>{Object.defineProperty(window,'localStorage',{get(){throw new Error('storage blocked')}});});
   const page = await context.newPage();
   const errors = [];
   page.on('pageerror', e => errors.push(e.message));
@@ -352,6 +353,74 @@ let base;
         if(minute<3)assert.equal(await change.isHidden(),true);
         else await change.filter({hasText:'BURNS HARBOR: the estimated arrival midpoint moved 20 min later'}).waitFor();
       }
+      assert.deepEqual(errors,[]);await context.close();
+    }
+    // Returning visitors: opt-in only; restored preferences, fresh comparison, expiry and clear.
+    for(const width of [390,1280]) {
+      let mode=fixture(NOV);
+      const {context,page,errors}=await open(browser,{width,time:NOV,api:()=>mode});
+      const key='ciz:soo-locks:spots:v1',button=page.locator('[data-lw-memory-button]'),note=page.locator('[data-lw-memory-note]');
+      await page.locator('.lw-row-btn').first().waitFor();
+      await choose(page,'How soon','2 hr');await choose(page,'How long','45 min');
+      assert.equal(await page.evaluate(k=>localStorage.getItem(k),key),null);
+      await button.click();await button.filter({hasText:'Forget saved visit choices'}).waitFor();
+      const saved=await page.evaluate(k=>JSON.parse(localStorage.getItem(k)),key);
+      assert.deepEqual(saved.prefs,{startOffset:120,stay:45});assert.ok(saved.baseline);
+      const shifted=fixture(NOV+60000),ship=shifted.nextShip.candidates[0];
+      for(const k of ['start','midpoint','end'])ship.window[k]=new Date(Date.parse(ship.window[k])+24*60000).toISOString();
+      mode=shifted;await page.clock.setFixedTime(new Date(NOV+60000));await page.reload({waitUntil:'domcontentloaded'});
+      await page.locator('[data-lw-changes]').filter({hasText:'BURNS HARBOR: the estimated arrival midpoint moved 25 min later'}).waitFor();
+      assert.equal(await page.locator('input[name="lw-start"]:checked').getAttribute('value'),'120');
+      assert.equal(await page.locator('input[name="lw-stay"]:checked').getAttribute('value'),'45');
+      await note.filter({hasText:'Fresh check received'}).waitFor();
+      await page.locator('#soo-lock-watch').screenshot({path:out+'/returning-visitor-'+width+'.png'});
+      mode=fixture(NOV+20*60000);await page.clock.setFixedTime(new Date(NOV+20*60000));await page.reload({waitUntil:'domcontentloaded'});
+      await note.filter({hasText:'Earlier vessel reports are too old to compare'}).waitFor();
+      assert.equal(await page.locator('[data-lw-changes]').isHidden(),true);
+      mode='fail';await page.reload({waitUntil:'domcontentloaded'});
+      await page.locator('.lw-verdict-head').filter({hasText:'Live ship reports are unavailable'}).waitFor();
+      assert.equal(await page.locator('[data-lw-board]').isHidden(),true);assert.equal(await page.locator('[data-lw-changes]').isHidden(),true);
+      await button.click();assert.equal(await page.evaluate(k=>localStorage.getItem(k),key),null);
+      await page.reload({waitUntil:'domcontentloaded'});
+      await button.filter({hasText:'Remember my visit choices'}).waitFor();
+      assert.equal(await page.locator('input[name="lw-start"]:checked').getAttribute('value'),'0');
+      assert.equal(await page.locator('input[name="lw-stay"]:checked').getAttribute('value'),'90');
+      assert.deepEqual(errors,[]);await context.close();
+    }
+    {
+      const {context,page,errors}=await open(browser,{width:390,time:NOV,blockStorage:true});
+      await page.locator('.lw-row-btn').first().waitFor();
+      await page.locator('[data-lw-memory-button]').click();
+      await page.locator('[data-lw-memory-note]').filter({hasText:'choices have not been saved'}).waitFor();
+      assert.match(await verdict(page),/EDWIN H. GOTT/);assert.deepEqual(errors,[]);await context.close();
+    }
+    // A new opt-in and a completed return check must both recover their memory
+    // note after an outage, without a reload or changes to the saved controls.
+    for(const restored of [false,true]) {
+      let mode=fixture(NOV),tick=0;
+      const {context,page,errors}=await open(browser,{width:restored?1280:390,time:NOV,api:()=>mode});
+      const key='ciz:soo-locks:spots:v1',button=page.locator('[data-lw-memory-button]'),note=page.locator('[data-lw-memory-note]');
+      await page.locator('.lw-row-btn').first().waitFor();
+      await choose(page,'How soon','2 hr');await choose(page,'How long','45 min');
+      await button.click();await button.filter({hasText:'Forget saved visit choices'}).waitFor();
+      if(restored) {
+        mode=fixture(NOV+(++tick)*60000);
+        await page.clock.setFixedTime(new Date(NOV+tick*60000));await page.reload({waitUntil:'domcontentloaded'});
+        await note.filter({hasText:'Fresh check received'}).waitFor();
+      }
+      mode='fail';await page.locator('#vesselMapRefresh').click();
+      await note.filter({hasText:'live reports are unavailable'}).waitFor();
+      await page.locator('.lw-verdict-head').filter({hasText:'Live ship reports are unavailable'}).waitFor();
+      assert.equal(await page.locator('[data-lw-board]').isHidden(),true);
+      mode=fixture(NOV+(++tick)*60000);
+      await page.clock.setFixedTime(new Date(NOV+tick*60000));await page.locator('#vesselMapRefresh').click();
+      await note.filter({hasText:'Live reports are available again'}).waitFor();
+      await page.locator('.lw-row-btn').first().waitFor();
+      assert.doesNotMatch(await note.innerText(),/live reports are unavailable/i);
+      assert.deepEqual(await page.evaluate(k=>JSON.parse(localStorage.getItem(k)).prefs,key),{startOffset:120,stay:45});
+      assert.equal(await page.locator('input[name="lw-start"]:checked').getAttribute('value'),'120');
+      assert.equal(await page.locator('input[name="lw-stay"]:checked').getAttribute('value'),'45');
+      await page.locator('#soo-lock-watch').screenshot({path:out+'/saved-visit-recovered-'+(restored?1280:390)+'.png'});
       assert.deepEqual(errors,[]);await context.close();
     }
     // 7. Winter shutdown: the planner says so instead of lining up ships.

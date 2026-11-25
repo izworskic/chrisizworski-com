@@ -13,6 +13,7 @@
 
   var nearMotion = typeof module !== 'undefined' && module.exports ? require('./soo-near-lock-motion') : root.SooNearLockMotion;
   var changing = typeof module !== 'undefined' && module.exports ? require('./soo-changing-conditions') : root.SooChangingConditions;
+  var memory = typeof module !== 'undefined' && module.exports ? require('./soo-visit-memory') : root.SooVisitMemory;
   var TZ = 'America/Detroit';
   var SAULT = { lat: 46.4953, lon: -84.3453 };
   var MIN = 60000;
@@ -451,9 +452,10 @@
     dossier: section.querySelector('[data-lw-dossier]'),
     status: section.querySelector('[data-lw-status]'),
     weather: section.querySelector('[data-lw-weather]'),
-    changes: section.querySelector('[data-lw-changes]')
+    changes: section.querySelector('[data-lw-changes]'),
+    memory: section.querySelector('[data-lw-memory]'), memoryButton: section.querySelector('[data-lw-memory-button]'), memoryNote: section.querySelector('[data-lw-memory-note]')
   };
-  var state = { data: null, failed: false, selected: null, userSelected: false, plan: null, wx: null, wxFailed: false, wxAt: 0, changes: changing ? changing.initial() : null, previousBest: null };
+  var state = { data: null, failed: false, selected: null, userSelected: false, plan: null, wx: null, wxFailed: false, wxAt: 0, changes: changing ? changing.initial() : null, previousBest: null, saved: null, returnCheck: null, memoryMessage: '', memoryReady: false };
 
   function el(tag, cls, text) {
     var e = document.createElement(tag);
@@ -466,6 +468,91 @@
     return c ? Number(c.value) : null;
   }
 
+  // Local storage is optional; never read a remembered ship as a current report.
+  function storage() { return root.localStorage; }
+  function readMemory() { try { return memory.read(storage(),Date.now()); } catch (_) { return {ok:false,value:null}; } }
+  function writeMemory(v) { try { return memory.write(storage(),v,Date.now()); } catch (_) { return {ok:false,value:null}; } }
+  function forgetMemory() { try { return memory.clear(storage()); } catch (_) { return false; } }
+  function renderMemory() {
+    if(!memory||!els.memory||!state.memoryReady)return;
+    els.memory.hidden=false;
+    els.memoryButton.textContent=state.saved?'Forget saved visit choices':'Remember my visit choices';
+    // The live-feed failure is derived from the current request state, not stored
+    // as a preference message. It cannot survive a successful refresh.
+    var text=state.memoryMessage||(state.saved?'Saved on this device only. Choices are relative to the current time; ship reports must be checked again.':'Optional: save your arrival and stay choices on this device, plus a recent check for comparison.');
+    if(state.saved&&state.failed)text='Saved visit choices are available, but live reports are unavailable. Remembered reports are not used as current conditions.';
+    if(els.memoryNote.textContent!==text)els.memoryNote.textContent=text;
+  }
+  function prefsNow(){return {startOffset:choice('lw-start')||0,stay:choice('lw-stay')||90};}
+  function persistMemory(preferences) {
+    if(!state.saved)return;
+    // A clear in another tab must not be undone by a background refresh.
+    var current=readMemory();
+    if(!current.ok){state.memoryMessage='Device storage is unavailable. Your saved choices may still be on this device.';renderMemory();return;}
+    if(!current.value){state.saved=null;state.returnCheck=null;state.memoryMessage='Saved choices cleared.';renderMemory();return;}
+    var record=current.value;
+    if(preferences)record={...record,prefs:prefsNow(),savedAt:Date.now()};
+    // Do not overwrite a newer check saved by another tab.
+    if(state.changes?.last&&state.changes.last.checked>=(record.lastCheck||0)){
+      record=memory.capture(record,state.changes,Date.now());
+    }
+    if(!record){state.saved=null;renderMemory();return;}
+    if(JSON.stringify(record)===JSON.stringify(current.value)){state.saved=record;return;}
+    var result=writeMemory(record);
+    state.saved=result.ok?result.value:current.value;
+    if(!result.ok){state.returnCheck=null;state.memoryMessage='Could not update saved choices on this device. You can still try to forget them.';}
+    renderMemory();
+  }
+  function setupMemory() {
+    if(!memory||!changing||!els.memory||!els.memoryButton)return;
+    var got=readMemory();
+    state.memoryReady=true;
+    if(got.value){
+      state.saved=got.value;
+      [['lw-start',got.value.prefs.startOffset],['lw-stay',got.value.prefs.stay]].forEach(function(pair){
+        var radio=section.querySelector('input[name="'+pair[0]+'"][value="'+pair[1]+'"]');if(radio)radio.checked=true;
+      });
+      state.returnCheck=got.value.lastCheck;
+      state.changes=memory.restore(got.value,changing,Date.now());
+      state.memoryMessage='Your saved visit choices are restored. Current reports are checked separately.';
+    }else if(!got.ok)state.memoryMessage='Device storage is unavailable; your visit planner still works.';
+    els.memoryButton.addEventListener('click',function(){
+      if(state.saved){
+        if(!forgetMemory()){state.memoryMessage='Could not clear saved choices. Try again or clear site data in your browser.';renderMemory();return;}
+        state.saved=null;state.returnCheck=null;
+        // Drop the restored comparison, but keep the live plan and seed from current evidence.
+        state.changes=changing.step(changing.initial(),state.failed?null:changing.snapshot(state.data,Date.now(),core,nearMotion),state.failed,Date.now());
+        state.memoryMessage='Saved choices and remembered check cleared.';update();return;
+      }
+      var record=memory.create(prefsNow(),Date.now());
+      if(record)record=memory.capture(record,state.changes,Date.now());
+      var result=record?writeMemory(record):{ok:false};
+      state.saved=result.ok?result.value:null;
+      state.memoryMessage=result.ok?'Visit choices saved on this device only.':'Device storage is unavailable; choices have not been saved.';
+      renderMemory();
+    });
+    root.addEventListener('storage',function(e){
+      if(e.key!==memory.KEY&&e.key!==null)return;
+      if(!state.saved)return;
+      var latest=readMemory();
+      if(!latest.ok){state.memoryMessage='Device storage is unavailable. Your saved choices may still be on this device.';renderMemory();return;}
+      if(!latest.value){
+        state.saved=null;state.returnCheck=null;state.memoryMessage='Saved choices cleared in another tab.';
+        state.changes=changing.step(changing.initial(),state.failed?null:changing.snapshot(state.data,Date.now(),core,nearMotion),state.failed,Date.now());
+        update();
+      }else state.saved=latest.value;
+    });
+    renderMemory();
+  }
+  function noteReturn(next) {
+    if(!state.saved||!state.returnCheck||!next||next.checked<=state.returnCheck||state.changes.failed)return;
+    var previous=state.returnCheck;
+    state.returnCheck=null;
+    state.memoryMessage=next.checked-previous>memory.GAP?
+      'First fresh check since '+clockZone(previous)+dayWord(previous,next.checked)+'. Earlier vessel reports are too old to compare.':
+      'Fresh check received. Saved visit choices are restored; see any supported changes above.';
+    renderMemory();
+  }
   function axisRange(p) {
     var start = p.now - 15 * MIN;
     var end = Math.max(p.now + 4 * HOUR, p.visit.end + 30 * MIN);
@@ -683,7 +770,7 @@
     if (!radio || choice('lw-stay')!==fresh.stay) { update(); return; }
     radio.checked=true;
     state.selected=fresh.id; state.userSelected=true;
-    update(); els.verdict.focus({preventScroll:true});
+    update(); persistMemory(true); els.verdict.focus({preventScroll:true});
   }
 
   function select(id, user) {
@@ -714,6 +801,7 @@
     }
     renderVerdict(p);
     renderChanges(p);
+    renderMemory();
     var showBoard = p.ships.length > 0;
     els.board.hidden = !showBoard;
     els.legend.hidden = !showBoard;
@@ -770,12 +858,16 @@
   function receive(detail) {
     if (!detail) return;
     if (detail.data) state.data = detail.data;
+    var recovered=state.failed&&!detail.failed;
     state.failed = !!detail.failed;
     if (changing) {
       var now=Date.now(), next=state.failed?null:changing.snapshot(state.data,now,core,nearMotion);
       var prior=state.changes;
       state.changes=changing.step(prior,next,state.failed,now);
       if (state.changes!==prior) state.previousBest=state.plan && state.plan.best ? state.plan.best.id : null;
+      if(state.saved&&recovered&&next&&!state.changes.failed)state.memoryMessage='Live reports are available again. Your visit choices remain saved on this device.';
+      noteReturn(next);
+      if(state.saved&&state.changes!==prior)persistMemory(false);
     }
     update();
   }
@@ -804,9 +896,10 @@
   section.classList.add('lw-ready');
   loadWeather();
   setInterval(function () { if (!document.hidden && Date.now() - state.wxAt > 30 * MIN) loadWeather(); }, 5 * MIN);
+  setupMemory();
   els.controls.hidden = false;
   section.addEventListener('change', function (e) {
-    if (e.target && (e.target.name === 'lw-start' || e.target.name === 'lw-stay')) update();
+    if (e.target && (e.target.name === 'lw-start' || e.target.name === 'lw-stay')) { update(); persistMemory(true); }
   });
   document.addEventListener('soo-ais:data', function (e) { receive(e.detail); });
   if (root.SooAis && root.SooAis.last) receive(root.SooAis.last);

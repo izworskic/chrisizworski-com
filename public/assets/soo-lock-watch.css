@@ -113,3 +113,9 @@
 
 .lock-watch .lw-change{margin:8px 18px;padding:10px 12px;border-left:3px solid #165d71;background:#edf4f3;color:#12384a;font:500 14px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-wrap:anywhere}
 .lock-watch .lw-change[hidden]{display:none}
+
+.lock-watch .lw-memory{display:flex;flex-wrap:wrap;align-items:center;gap:4px 12px;margin:6px 18px 10px;color:#33403f}
+.lock-watch .lw-memory[hidden]{display:none}
+.lock-watch .lw-memory-button{min-height:44px;border:1px solid #9cb5bd;background:transparent;border-radius:4px;color:#165d71;font:700 13px/1.4 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding:8px 10px;cursor:pointer;text-align:left}
+.lock-watch .lw-memory-button:focus-visible{outline:3px solid #f2a93b;outline-offset:2px}
+.lock-watch .lw-memory-note{flex:1 1 220px;margin:0;font:400 12.5px/1.5 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow-wrap:anywhere}
