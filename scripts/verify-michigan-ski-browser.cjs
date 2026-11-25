@@ -80,7 +80,12 @@ async function run(){
      const origin=track.getBoundingClientRect().left+parseFloat(getComputedStyle(track).scrollPaddingLeft);
      track.scrollTo({left:track.scrollLeft+card.getBoundingClientRect().left-origin,behavior:'instant'});
     },slug);
-    await page.waitForFunction(slug=>document.querySelector('#ski-resort-carousel .is-selected')?.dataset.slug===slug,slug,{timeout:5000});
+    try{
+     await page.waitForFunction(slug=>document.querySelector('#ski-resort-carousel .is-selected')?.dataset.slug===slug,slug,{timeout:5000});
+    }catch(error){
+     const state=await page.locator('#ski-resort-carousel').evaluate(track=>({left:track.scrollLeft,max:track.scrollWidth-track.clientWidth,selected:track.querySelector('.is-selected')?.dataset.slug,positions:Array.from(track.querySelectorAll('.ski-carousel-card')).slice(-3).map(card=>({slug:card.dataset.slug,left:card.getBoundingClientRect().left-track.getBoundingClientRect().left}))}));
+     throw Error(width+' trailing scroll failed for '+slug+' '+JSON.stringify(state),{cause:error});
+    }
     need(await page.locator('#ski-point-map .ski-dot.selected').getAttribute('data-slug')===slug,width+' trailing scroll selects matching pin '+slug);
    }
    need(await page.locator('#ski-carousel-next').isDisabled(),width+' last card disables next');

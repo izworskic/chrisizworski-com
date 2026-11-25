@@ -37,7 +37,7 @@ function plans(){
  }
  return out;
 }
-let resorts=[],outline=null,outlineFailed=false,selected=null,visible=[],scrollFrame=0,ignoreScroll=false;
+let resorts=[],outline=null,outlineFailed=false,selected=null,visible=[],scrollFrame=0;
 let filters={region:'all',openOnly:false,planOnly:false};
 const currentDay=()=>document.getElementById('ski-day')?.value||'saturday';
 const dayLabel=()=>currentDay()==='saturday'?'Saturday':'Sunday';
@@ -69,12 +69,12 @@ function updateSelection(announce=true){
   statusEl.textContent=(i+1)+' of '+visible.length+': '+r.name+'. '+liftStatus(r)+'. '+(Number.isFinite(forecast)?fmt(forecast)+' inches NWS forecast '+dayLabel():'No NWS forecast for '+dayLabel())+'.';
  }
 }
+// Use the actual snap origin for both explicit choices and native scroll events.
+function scrollOrigin(){return track.getBoundingClientRect().left+track.clientLeft+(parseFloat(getComputedStyle(track).scrollPaddingLeft)||0);}
 function scrollCard(){
  const i=selectedIndex();if(i<0)return;
  const card=track.querySelectorAll('.ski-carousel-card')[i];if(!card)return;
- ignoreScroll=true;
- track.scrollTo({left:card.offsetLeft-track.offsetLeft,behavior:'instant'});
- requestAnimationFrame(()=>{ignoreScroll=false;});
+ track.scrollTo({left:track.scrollLeft+card.getBoundingClientRect().left-scrollOrigin(),behavior:'instant'});
 }
 function pick(slug,fromMapKeyboard=false){
  if(!visible.some(r=>r.slug===slug))return;
@@ -169,10 +169,10 @@ function refresh(){
  visible=candidates();renderCarousel();drawMap();
 }
 track.addEventListener('scroll',()=>{
- if(ignoreScroll||scrollFrame||!visible.length)return;
+ if(scrollFrame||!visible.length)return;
  scrollFrame=requestAnimationFrame(()=>{
-  scrollFrame=0;if(ignoreScroll)return;
-  const left=track.getBoundingClientRect().left;
+  scrollFrame=0;if(!visible.length)return;
+  const left=scrollOrigin();
   let nearest=null,distance=Infinity;
   for(const card of track.querySelectorAll('.ski-carousel-card')){
    const d=Math.abs(card.getBoundingClientRect().left-left);
