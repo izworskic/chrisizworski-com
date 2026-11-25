@@ -1,0 +1,36 @@
+name: Welland viewing intelligence browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/welland-canal/**'
+      - 'public/assets/welland-canal.*'
+      - 'public/assets/welland-viewing-intelligence.js'
+      - 'public/assets/ais-movement.js'
+      - 'tests/welland-viewing-*'
+      - '.github/workflows/welland-viewing-browser.yml'
+permissions:
+  contents: read
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: node --test tests/welland-canal.test.js tests/welland-viewing-intelligence.test.js
+      - run: npm install --no-save --no-package-lock playwright@1.56.1
+      - run: node tests/welland-viewing-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: welland-viewing-browser
+          path: artifacts/welland-viewing/
+          if-no-files-found: warn
+          retention-days: 7
