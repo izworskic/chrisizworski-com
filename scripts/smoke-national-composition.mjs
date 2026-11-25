@@ -79,18 +79,18 @@ await check('Lake Ice-Out seasonal physics proxy works',async()=>{
   if(Number(data.prior_years)<8)throw new Error('seasonal physics prior-year coverage too small');
 });
 
-await check('planting canonical page is v3.4 shell on v35 runtime',async()=>{
+await check('planting canonical page is v3.4 shell on v36 runtime',async()=>{
   // Deliberately use the exact public URL with no cache-busting query and no
   // no-cache request header. This catches a stale canonical CDN object that a
   // query-string smoke would silently bypass.
   const {text}=await request('/national-tools/planting/',{cacheBust:false,noCacheHeader:false});
-  for(const marker of ['data-planting-ui="v3.4"','id="packet-crop"','id="horizon-grid"','national-planting-page-v3.js?v=20260903-v35']){
+  for(const marker of ['data-planting-ui="v3.4"','id="packet-crop"','id="horizon-grid"','national-planting-page-v3.js?v=20261101-v36']){
     if(!text.includes(marker))throw new Error('canonical page missing marker '+marker);
   }
 });
 
 await check('planting page JS is live',async()=>{
-  const {text}=await request('/assets/national-planting-page-v3.js');
+  const {text}=await request('/assets/national-planting-page-v3.js?v=20261101-v36');
   for(const marker of ['fallbackNationalTools','N.bind(form,run)','/api/national-geocode?q='])if(!text.includes(marker))throw new Error('missing JS marker '+marker);
 });
 
