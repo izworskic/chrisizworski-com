@@ -32,3 +32,16 @@ test('episode weights are equal despite unequal numbers of updates',()=>{
 test('fresh or partial date cohorts cannot enter development evaluation',()=>{
  assert.throws(()=>evaluate([{date:'2025-10-22'}]),/original spent dates/);
 });
+
+test('actual replay reconciles every band and preserves nonpromotion',()=>{
+ const a=require('../data/freighter-history/soo-continuous-approach-actual-20261125.json');
+ assert.equal(a.verifiedWorkflowRun,45612405911);
+ assert.equal(a.daily.reduce((n,d)=>n+d.fixes,0),19097);
+ assert.equal(a.unbanded.slots+Object.values(a.bands).reduce((n,b)=>n+b.slots,0),a.allSlots);
+ assert.equal(Object.values(a.allStates).reduce((n,v)=>n+v,0),a.allSlots);
+ assert.equal(Object.values(a.bands).reduce((n,b)=>n+b.available,0),a.allStates.forecast_available);
+ assert.equal(a.bands['0_to_1'].states.low_reported_speed,203);
+ assert.equal(a.productionCalibrationAuthorized,false);
+ assert.equal(a.forecastEnabled,false);
+ assert.equal(a.decision,'LOW_SPEED_NEAR_LOCK_AVAILABILITY_GAP_NO_MODEL_PROMOTION');
+});
