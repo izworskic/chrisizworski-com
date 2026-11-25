@@ -23,14 +23,37 @@ const points=[
  {key:'west-bay',name:'Off Nayanquing Point',kind:'satellite',lat:43.799,lon:-83.861,detail:'NOAA analyzed satellite surface pixel off the western bay shoreline. Not a shoreline thermometer.'},
  {key:'buoy',name:'Saginaw Bay buoy 45163',kind:'buoy',lat:43.983,lon:-83.600,detail:'Seasonal NOAA GLERL offshore buoy. Many miles from the Bay City State Park beach.'}
 ];
-let payload=null,selected='inner-bay',map=null,markers={};
+let payload=null,selected='inner-bay',activity='relax',map=null,markers={},request=0;
+const waterRecent=(m,kind,now=Date.now())=>{
+ if(!Number.isFinite(m?.tempF))return false;
+ const age=now-Date.parse(m.observedAt||'');
+ return Number.isFinite(age)&&age>= (kind==='satellite'?-3600000:0)&&age<=(kind==='satellite'?72:6)*3600000;
+};
+function usableSnapshot(data){
+ if(!data||!sourceRecent(data))return null;
+ const water=data.water&&['satellite','buoy'].includes(data.water.kind)&&waterRecent(data.water,data.water.kind)?data.water:null;
+ const weather=currentHour(data.weatherNow?.startsAt)&&Number.isFinite(data.weatherNow?.tempF)?data.weatherNow:null;
+ const feel=weather&&currentHour(data.beachFeel?.startsAt)?data.beachFeel:null;
+ const physics=data.shorelinePhysics;
+ const modelWater=water?.kind==='satellite'&&Number.isFinite(Date.parse(water.observedAt))&&Date.now()-Date.parse(water.observedAt)>=0&&Date.now()-Date.parse(water.observedAt)<=36*3600000;
+ const marine=waterRecent(physics?.independentMarineAir,'buoy')?physics.independentMarineAir:null;
+ const paired=weather?physics?.paired:null;
+ const model=weather&&modelWater?physics:null;
+ return {...data,water,weatherNow:weather,
+  beachFeel:feel&&(!water&&feel.waterF!=null)?{...feel,waterF:null,waterAirContrastF:null,label:'Shoreline effect uncertain',note:'Current area weather is available, but nearby water evidence is not verified. No local air correction is justified.'}:feel,
+  shorelinePhysics:physics?{...(model||{}),paired,gridRelationship:physics.gridRelationship,independentMarineAir:marine}:null,
+  windTurn:weather&&data.windTurn?{...data.windTurn,...(!water?{water:null,forecastAirWaterContrastF:null,contrastMeaning:null}:{} )}:null,
+  hourlyAirComparison:weather?data.hourlyAirComparison:null,
+  assessments:weather&&(!data.water||water)?data.assessments:null,
+  weatherWindows:weather?data.weatherWindows:null};
+}
 const evidence=key=>{
  const p=points.find(x=>x.key===key);
  if(!p||!payload)return null;
- if(key==='buoy'){const m=payload.local?.measurement;return m?{kind:'Measured offshore',tempF:m.tempF,observedAt:m.observedAt,lat:p.lat,lon:p.lon,detail:p.detail}:null;}
+ if(key==='buoy'){const m=payload.local?.measurement;return waterRecent(m,'buoy')?{kind:'Measured offshore',tempF:m.tempF,observedAt:m.observedAt,lat:p.lat,lon:p.lon,detail:p.detail}:null;}
  const cell=payload.regionalSatellite?.cells?.find(c=>c.key===key);
  const m=cell?.measurement;
- return m?{kind:'Satellite surface analysis',tempF:m.tempF,observedAt:m.observedAt,lat:m.sampleLat,lon:m.sampleLon,detail:p.detail,distanceKm:m.distanceKm}:null;
+ return waterRecent(m,'satellite')?{kind:'Satellite surface analysis',tempF:m.tempF,observedAt:m.observedAt,lat:m.sampleLat,lon:m.sampleLon,detail:p.detail,distanceKm:m.distanceKm}:null;
 };
 function band(t){
  if(!Number.isFinite(t))return {key:'none',name:'Unverified',note:'No nearby recent water analysis can be verified.'};
@@ -41,7 +64,7 @@ function band(t){
 }
 function renderLead(){
  const feel=payload?.beachFeel,weather=feel?.status==='forecast-based'&&currentHour(feel.startsAt);
- const water=payload?.water,validWater=Number.isFinite(water?.tempF);
+ const water=payload?.water,validWater=waterRecent(water,water?.kind);
  const hero=id('bay-hero');
  if(hero)hero.dataset.band=!weather?'none':feel.apparentF<50?'cold':feel.apparentF>=85?'warm':'cool';
  put('lead-temp',weather?Math.round(feel.apparentF)+'°F':'Beach feel unavailable');
@@ -49,14 +72,14 @@ function renderLead(){
  put('lead-band-note',weather?feel.note:'A current NWS shoreline-area forecast is not available. We cannot infer beach air from water alone.');
  put('lead-source',weather?feel.apparentMethod+' · National Weather Service park-area forecast · '+date(feel.startsAt):'No current verified forecast at the beach');
  put('lead-wind',weather&&Number.isFinite(feel.windMph)?Math.round(feel.windMph)+' mph'+(feel.windFrom?' from '+feel.windFrom:''):'Unavailable');
- put('lead-water',validWater?temp(water.tempF)+' · analyzed offshore':'Not verified');
+ put('lead-water',validWater?temp(water.tempF)+(water.kind==='buoy'?' · measured offshore':' · analyzed offshore'):'Not verified');
  put('lead-humidity',weather&&Number.isFinite(feel.humidity)?Math.round(feel.humidity)+'%':'Unavailable');
  put('lake-influence-detail',weather?feel.note:'The bay has a say in the weather here. Once the NWS forecast arrives, compare the wind with nearby water temperature before heading to the sand.');
  put('lead-caveat',weather?feel.limitation:'NWS area air, nearby analyzed water and wind direction are different observations. There is no directly measured beach-air temperature here.');
  put('hero-scope',weather?'At the beach · Bay City State Park · '+feel.apparentMethod:'At the beach · Bay City State Park · Forecast unavailable');
  put('last-updated',payload?.generatedAt?'Sources checked '+date(payload.generatedAt):'Unable to verify latest source');
  const physics=payload?.shorelinePhysics;
- const paired=physics?.paired,grid=physics?.gridRelationship;
+ const paired=weather?physics?.paired:null,grid=physics?.gridRelationship;
  put('physics-grid-info',grid?.description||'NWS grid source identities not available.');
  const marine=physics?.independentMarineAir;
  put('physics-marine-reference',marine&&Number.isFinite(marine.tempF)
@@ -69,7 +92,7 @@ function renderLead(){
    ?'NWS shore '+Math.round(paired.beachNwsF)+'°F · west Bay County '+Math.round(paired.inlandF)+'°F. Different gridded forecast cells, not independent thermometer measurements.'
    :grid?.status==='same-grid'?'Both sites use the same NWS forecast cell. We will not present that as an observed shoreline difference.'
    :'Two current NWS hourly forecasts with verified distinct cells are required; no inland difference is inferred.');
- const modeled=weather&&physics?.status==='research-only';
+ const modeled=weather&&validWater&&physics?.status==='research-only';
  put('physics-model-range',modeled
    ?physics.lowF.toFixed(1)+'–'+physics.highF.toFixed(1)+'°F (scenarios)'
    :'Research scenarios unavailable');
@@ -168,22 +191,34 @@ function renderEvidence(){
   put('date-'+p.key,e?date(e.observedAt):p.kind==='buoy'?'Not currently reporting (seasonal)':'No recent valid NOAA pixel');
  });
  const local=payload?.local;
- put('buoy-status',local?.measurement?'Fresh offshore buoy observation · '+date(local.measurement.observedAt):'NOAA buoy 45163: no recent valid report; seasonal station.');
+ put('buoy-status',waterRecent(local?.measurement,'buoy')?'Fresh offshore buoy observation · '+date(local.measurement.observedAt):'NOAA buoy 45163: no recent valid report; seasonal station.');
  put('shore-air',currentHour(payload?.weatherNow?.startsAt)&&Number.isFinite(payload?.weatherNow?.tempF)?Math.round(payload.weatherNow.tempF)+'°F':'Unavailable');
  put('shore-wind',currentHour(payload?.weatherNow?.startsAt)&&Number.isFinite(payload?.weatherNow?.windMph)?payload.weatherNow.windMph+' mph'+(payload.weatherNow.windDirection?' from '+payload.weatherNow.windDirection:''):'Unavailable');
  put('shore-forecast-time',currentHour(payload?.weatherNow?.startsAt)?'NWS land-side hourly forecast near Bay City State Park · '+date(payload.weatherNow.startsAt):'The NWS hourly forecast for the current hour is unavailable.');
  renderSelected();
 }
 function renderActivity(a){
+ activity=a;
  document.querySelectorAll('[data-activity]').forEach(el=>el.setAttribute('aria-pressed',String(el.dataset.activity===a)));
  const v=currentHour(payload?.weatherNow?.startsAt)?payload?.assessments?.[a]:null;
- if(!v){put('activity-heading','Not enough verified evidence');put('on-sand','Local shoreline forecast unavailable.');put('in-water','No site-specific water reading is available.');put('after-water','Wind and wet clothing can increase cooling.');put('activity-decision','Check official forecasts and beach hazards separately.');return;}
+ if(!v){
+  const water=payload?.water,valid=waterRecent(water,water?.kind);
+  const w=currentHour(payload?.weatherNow?.startsAt)?payload.weatherNow:null;
+  put('activity-heading','Partial or unavailable evidence');
+  put('on-sand',Number.isFinite(w?.tempF)?Math.round(w.tempF)+'°F area air forecast; the combined assessment is unavailable.':'Local shoreline forecast unavailable.');
+  put('in-water',valid?temp(water.tempF)+' · '+(water.kind==='buoy'?'offshore buoy observation':'offshore satellite analysis')+' · '+date(water.observedAt)+'. '+band(water.tempF).note+' Not a swimming-area measurement.':'No site-specific water reading is available.');
+  put('after-water','Wind and wet clothing can increase cooling.');
+  put('activity-decision','Check official forecasts and beach hazards separately.');
+  put('window','No suitable forecast weather window can be established.');
+  return;
+ }
  put('activity-heading',v.heading);put('on-sand',v.beach);put('in-water',v.water);put('after-water',v.after);
  put('activity-decision',v.decision);
- const win=payload?.weatherWindows?.[a];put('window',win?'NWS daylight weather-only window: '+date(win.startsAt)+'. This is not a swimming or paddling safety determination.':'No suitable forecast weather window can be established.');
+ const candidate=payload?.weatherWindows?.[a],start=Date.parse(candidate?.startsAt||'');
+ const win=Number.isFinite(start)&&start+3600000>Date.now()?candidate:null;put('window',win?'NWS daylight weather-only window: '+date(win.startsAt)+'. This is not a swimming or paddling safety determination.':'No suitable forecast weather window can be established.');
 }
 function buildMap(){
- const host=id('bay-map');if(!host||!window.L)return;
+ const host=id('bay-map');if(!host||!window.L||map)return;
  map=window.L.map(host,{scrollWheelZoom:false}).setView([43.81,-83.76],9);
  // Start with a reliable, attributed map. Never request CARTO tiles without a public key.
  const osm=window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{
@@ -217,26 +252,38 @@ function buildMap(){
  }).catch(()=>{host.dataset.basemap='openstreetmap';});
  window.L.circleMarker([43.6714,-83.9068],{radius:7,weight:2,color:'#153e4e',fillColor:'#ffffff',fillOpacity:1})
  .addTo(map).bindPopup('<strong>Bay City State Park beach</strong><p>Public shoreline location; not a water-temperature instrument.</p><a href="https://www.michigan.gov/recsearch/parks/baycity" target="_blank" rel="noopener noreferrer">Park information</a>');
+ updateMarkers();
+ const all=[[43.6714,-83.9068],...points.map(p=>[p.lat,p.lon])];
+ map.fitBounds(all,{padding:[28,28],maxZoom:10});
+}
+function updateMarkers(){
+ if(!map)return;
+ Object.values(markers).forEach(marker=>map.removeLayer(marker));
+ markers={};
  points.forEach(p=>{
-  const e=evidence(p.key),loc=e?[e.lat,e.lon]:[p.lat,p.lon],fill=e?'#007b8b':'#677980';
+  const e=evidence(p.key),loc=e&&Number.isFinite(e.lat)&&Number.isFinite(e.lon)?[e.lat,e.lon]:[p.lat,p.lon];
   const marker=window.L.marker(loc,{icon:window.L.divIcon({className:'bay-marker',html:'<span class="marker-inner '+(p.kind==='buoy'?'is-buoy':'is-sat')+(e?'':' no-reading')+'">'+(p.kind==='buoy'?'⚓':'◈')+'</span>',iconSize:[38,38],iconAnchor:[19,19]})}).addTo(map);
   const text='<strong>'+p.name+'</strong><p>'+(e?temp(e.tempF)+' · '+e.kind+' · '+date(e.observedAt):'No current observation')+'</p><small>'+(p.kind==='buoy'?'Offshore buoy':'Satellite reference area')+'; not a beach thermometer.</small>';
   marker.bindPopup(text);markers[p.key]=marker;
   marker.on('click',()=>{selected=p.key;renderSelected();});
  });
- const all=[[43.6714,-83.9068],...points.map(p=>[p.lat,p.lon])];
- map.fitBounds(all,{padding:[28,28],maxZoom:10});
 }
 async function load(){
+ const seq=++request,button=id('refresh-shorefeel');
+ if(button)button.disabled=true;
  try{
   const ctrl=new AbortController();const timer=setTimeout(()=>ctrl.abort(),18000);
   let response;try{response=await fetch('/api/shorefeel?lake=huron&place=saginaw-bay',{headers:{Accept:'application/json'},signal:ctrl.signal});}finally{clearTimeout(timer);}
   if(!response.ok)throw Error('Live source failed');
   const received=await response.json();
-  if(!sourceRecent(received))throw Error('ShoreFeel data is stale; no current forecast can be shown');
-  payload=received;
-  renderLead();renderWindTurn();renderEvidence();renderActivity('relax');
+  if(seq!==request)return;
+  payload=usableSnapshot(received);
+  if(!payload)throw Error('ShoreFeel data is stale; no current forecast can be shown');
+  updateMarkers();renderLead();renderWindTurn();renderEvidence();renderActivity(activity);
  }catch(e){
+  if(seq!==request)return;
+  payload=null;
+  updateMarkers();renderLead();renderEvidence();
   put('lead-temp','Beach feel unavailable');put('lead-band','Beach conditions unverified');
   put('lead-band-note','Current NWS beach-area weather could not be retrieved.');
   put('lead-source','Official forecast temporarily unavailable.');
@@ -248,10 +295,11 @@ async function load(){
   put('lead-caveat','No inland or water-temperature reading is substituted for a beach thermometer.');
   put('last-updated','Latest data not verified');put('selected-source','Source unavailable');
   put('buoy-status','No verified buoy observation');
-  renderWindTurn();renderActivity('relax');
- }finally{buildMap();}
+  renderWindTurn();renderActivity(activity);
+ }finally{if(seq===request){buildMap();if(button)button.disabled=false;}}
 }
 document.querySelectorAll('[data-point]').forEach(el=>el.addEventListener('click',()=>{selected=el.dataset.point;renderSelected();}));
 document.querySelectorAll('[data-activity]').forEach(el=>el.addEventListener('click',()=>renderActivity(el.dataset.activity)));
+id('refresh-shorefeel')?.addEventListener('click',load);
 load();
 })();

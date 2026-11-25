@@ -60,9 +60,18 @@ async function run(){
  try{
   for(const width of [390,1366]){
    const context=await browser.newContext({viewport:{width,height:860},reducedMotion:'reduce'});
-   await context.route('**/api/shorefeel?*',route=>route.fulfill({
-    status:200,contentType:'application/json',body:JSON.stringify(fixture())
-   }));
+   let mode='normal';
+   await context.route('**/api/shorefeel?*',route=>{
+    if(mode==='outage')return route.fulfill({status:503,body:'offline'});
+    const data=fixture();
+    if(mode==='weather-lost'){data.weatherNow=null;data.beachFeel=null;}
+    if(mode==='water-lost'){
+     // A stale water record must not lend validity to retained derived fields.
+     data.water.observedAt=new Date(Date.now()-80*3600000).toISOString();
+     data.regionalSatellite.cells[0].measurement.observedAt=data.water.observedAt;
+    }
+    return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(data)});
+   });
    await context.route('**/api/carto-basemap-config',route=>route.fulfill({status:503,body:'{}'}));
    await context.route('https://**/*',route=>route.abort());
    const page=await context.newPage();
@@ -92,6 +101,42 @@ async function run(){
    assert.deepEqual(errors,[],'No browser runtime errors');
    await page.screenshot({path:path.join(output,'beach-feel-'+width+'.png'),fullPage:true});
    report.push({width,mode:'data',...metrics});
+   async function refresh(next,selector,value){
+    mode=next;
+    const done=page.waitForResponse(r=>r.url().includes('/api/shorefeel?'));
+    await page.locator('#refresh-shorefeel').click();
+    await done;
+    await page.waitForFunction(({selector,value})=>document.querySelector(selector)?.textContent.includes(value),{selector,value},{timeout:15000});
+    await page.waitForFunction(()=>!document.getElementById('refresh-shorefeel').disabled);
+   }
+   await page.locator('button[data-activity="swim"]').click();
+   await refresh('weather-lost','#lead-temp','Beach feel unavailable');
+   assert.match(await page.locator('#lead-water').innerText(),/58.5°F/);
+   assert.match(await page.locator('#in-water').innerText(),/58.5°F/);
+   assert.match(await page.locator('#physics-forecast-contrast').innerText(),/unavailable/i);
+   assert.match(await page.locator('#physics-model-range').innerText(),/unavailable/i);
+   assert.match(await page.locator('#window').innerText(),/No suitable/);
+   assert.equal(await page.locator('button[data-activity="swim"]').getAttribute('aria-pressed'),'true');
+   await page.screenshot({path:path.join(output,'recovery-weather-lost-'+width+'.png'),fullPage:true});
+   await refresh('water-lost','#lead-water','Not verified');
+   assert.match(await page.locator('#lead-temp').innerText(),/°F/);
+   assert.match(await page.locator('#lead-band').innerText(),/uncertain/i);
+   assert.match(await page.locator('#physics-model-range').innerText(),/unavailable/i);
+   assert.match(await page.locator('#in-water').innerText(),/No site-specific/);
+   assert.match(await page.locator('#value-inner-bay').innerText(),/Unavailable/);
+   await page.screenshot({path:path.join(output,'recovery-water-lost-'+width+'.png'),fullPage:true});
+   await refresh('outage','#last-updated','Latest data not verified');
+   assert.match(await page.locator('#lead-temp').innerText(),/unavailable/i);
+   assert.match(await page.locator('#lead-water').innerText(),/Not verified/);
+   assert.match(await page.locator('#window').innerText(),/No suitable/);
+   assert.equal(await page.locator('#bay-map .bay-marker').count(),3);
+   await refresh('normal','#lead-band','Lake-breeze cooling possible');
+   assert.match(await page.locator('#lead-water').innerText(),/58.5°F/);
+   assert.match(await page.locator('#activity-heading').innerText(),/Swimming preparation/);
+   assert.equal(await page.locator('#bay-map .bay-marker').count(),3);
+   assert.deepEqual(errors,[],'No browser runtime errors through recovery');
+   await page.screenshot({path:path.join(output,'recovered-'+width+'.png'),fullPage:true});
+   report.push({width,mode:'recovery',states:['weather-lost','water-lost','outage','restored'],selectedActivity:'swim'});
    await context.close();
   }
   const offline=await browser.newContext({viewport:{width:390,height:860}});
