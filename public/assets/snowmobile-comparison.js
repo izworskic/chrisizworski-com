@@ -51,7 +51,48 @@
   function detailUrl(key,originId,maxHours){
     const base='/snowmobile/regions/'+encodeURIComponent(key)+'.html';
     // Share named cities only. Browser-location coordinates never enter page URLs.
-    return ORIGINS.some(o=>o.id===originId)?base+'?origin='+encodeURIComponent(originId)+'&maxDrive='+encodeURIComponent(maxHours):base;
+    return (ORIGINS.some(o=>o.id===originId)||/^(?:mi|wi|oh|in|il|mn|pa|ny)-\d{7}$/.test(originId||'')||/^mi-trail-[a-z0-9-]+$/.test(originId||''))?base+'?origin='+encodeURIComponent(originId)+'&maxDrive='+encodeURIComponent(maxHours):base;
   }
-  return {ORIGINS,bundleFresh,evaluate,compare,detailUrl};
+  // This receipt is independent of the route decision. Recompute calendar
+  // age at display time so cached data cannot prolong a report's freshness.
+  function clubEvidence(data,key,now=Date.now()){
+    const age=now-Date.parse(data?.checkedAt);
+    if(data?.region!==key||!Array.isArray(data.reports)||!data.reports.length||
+      !Number.isFinite(age)||age<0||age>30*60000)return null;
+    const parts=new Intl.DateTimeFormat('en-US',{timeZone:'America/Detroit',year:'numeric',month:'2-digit',day:'2-digit'}).formatToParts(new Date(now));
+    const part=type=>parts.find(p=>p.type===type).value;
+    const today=part('year')+'-'+part('month')+'-'+part('day');
+    const dayAge=date=>{
+      if(!/^\d{4}-\d{2}-\d{2}$/.test(date||''))return null;
+      const value=Date.parse(date+'T12:00:00Z');
+      if(!Number.isFinite(value)||new Date(value).toISOString().slice(0,10)!==date)return null;
+      const days=(Date.parse(today+'T12:00:00Z')-value)/86400000;
+      return days>=0?days:null;
+    };
+    const inSeason=[12,1,2,3].includes(Number(part('month')));
+    const reports=data.reports.map(r=>{
+      const days=dayAge(r.reportedAt), groomDays=dayAge(r.lastGroomedAt);
+      const conflict=r.dateConflict===true||r.state==='DATE_CONFLICT';
+      const unavailable=r.state==='UNAVAILABLE';
+      const recent=!conflict&&!unavailable&&r.state==='RECENT'&&days!==null&&days<=3;
+      const grooming=recent&&inSeason&&r.groomingFreshness==='RECENT'&&groomDays!==null&&groomDays<=3;
+      const state=unavailable?'UNAVAILABLE':conflict?'DATE_CONFLICT':days===null?'UNDATED':recent?'RECENT':days<=7?'AGING':'STALE';
+      return {name:String(r.name||'Local club'),state,reportedAt:days===null?null:r.reportedAt,
+        lastGroomedAt:groomDays===null?null:r.lastGroomedAt,grooming,
+        condition:recent&&inSeason&&typeof r.condition==='string'&&/^(excellent|very good|good|fair|poor|good to excellent|fair to good)$/i.test(r.condition)?r.condition:null};
+    });
+    return {checkedAt:data.checkedAt,reports,monitored:reports.length,
+      available:reports.filter(r=>r.state!=='UNAVAILABLE').length,
+      recent:reports.filter(r=>r.state==='RECENT').length,
+      groomed:reports.filter(r=>r.grooming).length,
+      conflicts:reports.filter(r=>r.state==='DATE_CONFLICT').length};
+  }
+  function currentOutlook(weather,now=Date.now()){
+    const o=weather?.outlook,issued=Date.parse(o?.issuedAt),start=Date.parse(o?.startAt),end=Date.parse(o?.endAt);
+    if(o?.version!==1||o.scope!=='HUB_POINT_ONLY'||!['AVAILABLE','PARTIAL'].includes(o.status)||!Number.isFinite(issued)||
+      issued>now||now-issued>6*3600000||!Number.isFinite(start)||!Number.isFinite(end)||now>=start+3600000||end-start!==72*3600000||
+      !Array.isArray(o.days)||o.days.length!==3)return null;
+    return o;
+  }
+  return {ORIGINS,bundleFresh,evaluate,compare,detailUrl,clubEvidence,currentOutlook};
 });

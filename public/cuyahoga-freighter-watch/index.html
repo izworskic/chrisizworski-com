@@ -18,13 +18,17 @@
 <script type="application/ld+json">
 {"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/cuyahoga-freighter-watch/#page","url":"https://chrisizworski.com/cuyahoga-freighter-watch/","name":"Cuyahoga Freighter Watch","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}
 </script>
+<link rel="stylesheet" href="/assets/working-rivers-family.css">
 </head>
-<body>
+<body class="river-family river-family--cuyahoga">
 <a class="skip" href="#river-workbench">Skip to the Cuyahoga river map</a>
 <header class="sitebar">
  <a class="brand" href="/freighters/"><span class="brand-mark" aria-hidden="true">GL</span><span>Great Lakes <strong>Freighter Central</strong></span></a>
- <span class="sitebar-note">Cleveland, Ohio · Working River</span>
- <a class="back" href="/great-lakes-freighter-tracking/">Great Lakes ship tracker <span aria-hidden="true">↗</span></a>
+ <nav class="river-family__switch" aria-label="Working river locations">
+  <a href="/calumet-freighter-watch/">Chicago · Calumet</a>
+  <a href="/cuyahoga-freighter-watch/" aria-current="page">Cleveland · Cuyahoga</a>
+ </nav>
+ <a class="back" href="/great-lakes-freighter-tracking/">Ship tracker <span aria-hidden="true">↗</span></a>
 </header>
 <main>
 <svg class="viewpoint-symbol-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" width="0" height="0">
@@ -38,7 +42,7 @@
 
 <section class="lead" aria-labelledby="main-title">
  <div class="lead-copy">
-  <p class="kicker">CLEVELAND / THE CUYAHOGA RIVER</p>
+  <p class="kicker">WORKING RIVERS / CLEVELAND, OHIO</p>
   <h1 id="main-title">Watch the ships <em>make the bend.</em></h1>
   <p>Find a public place to watch the freighters. The map shows recent AIS reports when available, and four riverfront parks where you can plan a visit.</p>
  </div>
@@ -210,7 +214,7 @@
  </div>
 </details>
 </main>
-<footer class="footer"><a href="/">Chris Izworski</a><span>For public shore watching, not marine navigation. AIS reports are observations, never promised ship arrivals.</span><a href="/freighters/">All freighter tools ↗</a></footer>
+<footer class="footer"><a href="/">© 2026 Chris Izworski</a><span>For public shore watching, not navigation or vessel arrival forecasts.</span><a href="/calumet-freighter-watch/">Explore Chicago’s Calumet ↗</a><a href="/freighters/">All freighter tools ↗</a></footer>
 <script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
 <script defer src="/assets/cuyahoga-watch-core.js"></script>
 <script defer src="/assets/seaway-vessel-icons.js"></script>

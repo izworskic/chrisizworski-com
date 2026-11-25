@@ -1,0 +1,355 @@
+{
+  "schemaVersion": 1,
+  "kind": "HISTORICAL_OBSERVATION_COVERAGE_NOT_PASSAGE_CALIBRATION",
+  "plannedDates": [
+    "2025-06-15",
+    "2025-08-15",
+    "2025-10-15"
+  ],
+  "processedDates": [
+    "2025-06-15",
+    "2025-08-15",
+    "2025-10-15"
+  ],
+  "missingDates": [],
+  "state": "PILOT_DATES_PROCESSED",
+  "regions": [
+    {
+      "id": "soo",
+      "observedDates": [
+        "2025-06-15",
+        "2025-08-15",
+        "2025-10-15"
+      ],
+      "distinctVessels": 40,
+      "regionalPointCount": 19097,
+      "days": [
+        {
+          "date": "2025-06-15",
+          "points": 7371,
+          "vessels": 22,
+          "gapsOver3Minutes": 691,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-08-15",
+          "points": 7013,
+          "vessels": 21,
+          "gapsOver3Minutes": 266,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-10-15",
+          "points": 4713,
+          "vessels": 13,
+          "gapsOver3Minutes": 76,
+          "state": "OBSERVED_REPORTS"
+        }
+      ],
+      "passageGroundTruth": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "duluth",
+      "observedDates": [
+        "2025-06-15",
+        "2025-08-15",
+        "2025-10-15"
+      ],
+      "distinctVessels": 40,
+      "regionalPointCount": 25731,
+      "days": [
+        {
+          "date": "2025-06-15",
+          "points": 8209,
+          "vessels": 20,
+          "gapsOver3Minutes": 899,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-08-15",
+          "points": 8782,
+          "vessels": 16,
+          "gapsOver3Minutes": 292,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-10-15",
+          "points": 8740,
+          "vessels": 15,
+          "gapsOver3Minutes": 389,
+          "state": "OBSERVED_REPORTS"
+        }
+      ],
+      "passageGroundTruth": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "welland",
+      "observedDates": [
+        "2025-06-15",
+        "2025-08-15",
+        "2025-10-15"
+      ],
+      "distinctVessels": 32,
+      "regionalPointCount": 8577,
+      "days": [
+        {
+          "date": "2025-06-15",
+          "points": 3904,
+          "vessels": 14,
+          "gapsOver3Minutes": 449,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-08-15",
+          "points": 1979,
+          "vessels": 10,
+          "gapsOver3Minutes": 198,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-10-15",
+          "points": 2694,
+          "vessels": 13,
+          "gapsOver3Minutes": 464,
+          "state": "OBSERVED_REPORTS"
+        }
+      ],
+      "passageGroundTruth": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "cuyahoga",
+      "observedDates": [
+        "2025-06-15",
+        "2025-08-15",
+        "2025-10-15"
+      ],
+      "distinctVessels": 10,
+      "regionalPointCount": 5037,
+      "days": [
+        {
+          "date": "2025-06-15",
+          "points": 1403,
+          "vessels": 3,
+          "gapsOver3Minutes": 164,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-08-15",
+          "points": 1013,
+          "vessels": 4,
+          "gapsOver3Minutes": 228,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-10-15",
+          "points": 2621,
+          "vessels": 6,
+          "gapsOver3Minutes": 585,
+          "state": "OBSERVED_REPORTS"
+        }
+      ],
+      "passageGroundTruth": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "calumet",
+      "observedDates": [
+        "2025-06-15",
+        "2025-08-15"
+      ],
+      "distinctVessels": 3,
+      "regionalPointCount": 876,
+      "days": [
+        {
+          "date": "2025-06-15",
+          "points": 52,
+          "vessels": 2,
+          "gapsOver3Minutes": 1,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-08-15",
+          "points": 824,
+          "vessels": 1,
+          "gapsOver3Minutes": 39,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-10-15",
+          "points": 0,
+          "vessels": 0,
+          "gapsOver3Minutes": 0,
+          "state": "NO_QUALIFYING_REPORTS_NOT_ABSENCE"
+        }
+      ],
+      "passageGroundTruth": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "massena",
+      "observedDates": [
+        "2025-06-15",
+        "2025-08-15",
+        "2025-10-15"
+      ],
+      "distinctVessels": 13,
+      "regionalPointCount": 412,
+      "days": [
+        {
+          "date": "2025-06-15",
+          "points": 117,
+          "vessels": 4,
+          "gapsOver3Minutes": 39,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-08-15",
+          "points": 163,
+          "vessels": 3,
+          "gapsOver3Minutes": 35,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-10-15",
+          "points": 132,
+          "vessels": 7,
+          "gapsOver3Minutes": 39,
+          "state": "OBSERVED_REPORTS"
+        }
+      ],
+      "passageGroundTruth": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "iroquois",
+      "observedDates": [
+        "2025-06-15",
+        "2025-08-15",
+        "2025-10-15"
+      ],
+      "distinctVessels": 12,
+      "regionalPointCount": 595,
+      "days": [
+        {
+          "date": "2025-06-15",
+          "points": 230,
+          "vessels": 6,
+          "gapsOver3Minutes": 67,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-08-15",
+          "points": 296,
+          "vessels": 3,
+          "gapsOver3Minutes": 26,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-10-15",
+          "points": 69,
+          "vessels": 4,
+          "gapsOver3Minutes": 22,
+          "state": "OBSERVED_REPORTS"
+        }
+      ],
+      "passageGroundTruth": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "thousand-islands",
+      "observedDates": [
+        "2025-06-15",
+        "2025-08-15",
+        "2025-10-15"
+      ],
+      "distinctVessels": 27,
+      "regionalPointCount": 3547,
+      "days": [
+        {
+          "date": "2025-06-15",
+          "points": 1145,
+          "vessels": 7,
+          "gapsOver3Minutes": 78,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-08-15",
+          "points": 1309,
+          "vessels": 9,
+          "gapsOver3Minutes": 34,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-10-15",
+          "points": 1093,
+          "vessels": 13,
+          "gapsOver3Minutes": 119,
+          "state": "OBSERVED_REPORTS"
+        }
+      ],
+      "passageGroundTruth": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "beauharnois",
+      "observedDates": [
+        "2025-06-15",
+        "2025-08-15",
+        "2025-10-15"
+      ],
+      "distinctVessels": 19,
+      "regionalPointCount": 237,
+      "days": [
+        {
+          "date": "2025-06-15",
+          "points": 26,
+          "vessels": 6,
+          "gapsOver3Minutes": 18,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-08-15",
+          "points": 77,
+          "vessels": 6,
+          "gapsOver3Minutes": 26,
+          "state": "OBSERVED_REPORTS"
+        },
+        {
+          "date": "2025-10-15",
+          "points": 134,
+          "vessels": 9,
+          "gapsOver3Minutes": 57,
+          "state": "OBSERVED_REPORTS"
+        }
+      ],
+      "passageGroundTruth": "NOT_ESTABLISHED"
+    },
+    {
+      "id": "montreal",
+      "observedDates": [],
+      "distinctVessels": 0,
+      "regionalPointCount": 0,
+      "days": [
+        {
+          "date": "2025-06-15",
+          "points": 0,
+          "vessels": 0,
+          "gapsOver3Minutes": 0,
+          "state": "NO_QUALIFYING_REPORTS_NOT_ABSENCE"
+        },
+        {
+          "date": "2025-08-15",
+          "points": 0,
+          "vessels": 0,
+          "gapsOver3Minutes": 0,
+          "state": "NO_QUALIFYING_REPORTS_NOT_ABSENCE"
+        },
+        {
+          "date": "2025-10-15",
+          "points": 0,
+          "vessels": 0,
+          "gapsOver3Minutes": 0,
+          "state": "NO_QUALIFYING_REPORTS_NOT_ABSENCE"
+        }
+      ],
+      "passageGroundTruth": "NOT_ESTABLISHED"
+    }
+  ],
+  "forecastEnabled": false,
+  "limitations": "Regional counts may overlap. NOAA coverage, vessel type and complete voyages are not guaranteed, particularly in Canadian waters. A zero is no qualifying source report, not no traffic."
+}

@@ -353,3 +353,66 @@ button:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible{
 .loop-option:hover,.loop-option:focus-visible,.loop-presets button:focus-visible,.loop-actions button:focus-visible,.loop-field input:focus-visible{outline:3px solid #e19c28;outline-offset:2px}
 .loop-truth{padding-bottom:12px;color:#5d4a26}
 @media(max-width:640px){.loop-form{grid-template-columns:1fr}.loop-actions{display:grid;grid-template-columns:1fr}.loop-actions button{width:100%;min-height:48px}.loop-options{grid-template-columns:1fr}}
+
+
+/* Demand-verified local answers: below decision desk, legible on phones. */
+.snow-town-guide{margin-top:18px}
+.snow-town-guide>h2{margin-top:5px}
+.snow-town-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:14px;margin-top:15px}
+.snow-town-card{border:1px solid #d3dedb;border-radius:10px;background:#fff;padding:17px 18px}
+.snow-town-card h3{font-size:1.15rem;line-height:1.35;margin:0 0 10px;color:#123246;scroll-margin-top:16px}
+.snow-town-card p{line-height:1.55}
+.snow-town-links{display:flex;align-items:center;flex-wrap:wrap;gap:10px 18px}
+.snow-town-links a{display:inline-flex;min-height:44px;align-items:center;font-weight:700}
+.snow-town-live{border-left:3px solid #527589;background:#eef5f7;padding:10px 12px;margin-top:12px;color:#153b4c;font-size:.94rem}
+.snow-town-links a:focus-visible{outline:3px solid #e19c28;outline-offset:3px}
+@media(max-width:670px){.snow-town-card{padding:15px}.snow-town-grid{grid-template-columns:1fr}.snow-town-links{flex-direction:column;align-items:stretch}.snow-town-links a{min-height:44px}}
+
+
+/* Source-backed snowmobile place and riding-town search, keyboard and phone accessible. */
+.snow-town-find{border-top:4px solid #245b74;margin-top:18px}
+.snow-town-find h2{font-size:clamp(21px,3vw,29px);margin:4px 0 12px}
+.snow-town-find>label{display:block;font:700 15px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;margin:0 0 6px}
+.snow-town-find .small{margin:8px 0 0;max-width:80ch;line-height:1.55}
+.snow-city-search-wrap{display:block;position:relative;min-width:min(100%,260px);width:100%;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.origin-controls label .snow-city-search-wrap{display:block;margin:0;color:var(--ink);font-size:16px}
+.origin-controls label:has(.snow-city-search-wrap){flex:1 1 245px;min-width:0;max-width:390px}
+.snow-city-search-wrap input[type=search],.origin-controls input[type=search]{display:block;width:100%;min-width:0;min-height:48px;padding:11px 14px;border:1.5px solid #718b99;border-radius:8px;background:#fff;color:#132c3a;font:16px/1.35 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.snow-city-search-wrap input[type=search]::placeholder{color:#586b75;opacity:1}
+.snow-city-search-wrap input[type=search]:focus-visible{outline:3px solid #247bad;outline-offset:2px}
+.snow-city-search-results:not(:empty){display:block;position:absolute;z-index:1201;top:calc(100% + 4px);left:0;right:0;max-height:min(44vh,315px);overflow:auto;border:1px solid #71909d;border-radius:9px;background:#fff;box-shadow:0 12px 27px rgba(17,47,60,.2);padding:3px}
+.snow-city-option{display:block;width:100%;text-align:left;border:0;border-bottom:1px solid #e7eeee;background:#fff;color:#123246;font:500 16px/1.4 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;padding:12px 14px;min-height:46px;cursor:pointer}
+.snow-city-option:last-child{border-bottom:0}
+.snow-city-option:hover,.snow-city-option[aria-selected=true]{background:#e3eff4;color:#082b40;font-weight:700}
+.snow-city-option:focus-visible{outline:3px solid #247bad;outline-offset:-3px}
+.snow-city-search-note{padding:13px;color:#26485a;font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.trip-intake .origin-controls input[type=search]{font-size:16px;min-height:48px}
+@media(max-width:640px){.origin-controls label:has(.snow-city-search-wrap){max-width:none}.snow-city-search-results:not(:empty){max-height:min(38vh,260px)}.snow-town-find h2{font-size:24px}}
+
+/* Statewide three-day hub forecast: distinct from observed snow and club reports. */
+.sled-outlook{margin:.8rem 0;padding:.75rem;border-top:2px solid var(--accent);background:var(--accent-soft);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+.sled-outlook-heading{font-size:.95rem;margin:0 0 .65rem}
+.sled-outlook-days{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.45rem}
+.sled-outlook-day{display:flex;flex-direction:column;gap:.12rem;padding:.45rem;min-width:0;border-left:1px solid #9cabb1;overflow-wrap:anywhere}
+.sled-outlook-window{font-size:.75rem;line-height:1.35;color:var(--accent-deep)}
+.sled-outlook-snow{font-size:clamp(1.05rem,3.7vw,1.6rem);line-height:1.3;color:var(--ink)}
+.sled-outlook-temp{font-weight:700;font-size:.9rem;margin-top:.2rem}
+.sled-outlook .small{font-size:.75rem;line-height:1.35;margin:0;color:#384c56}
+.sled-outlook>p.small{margin-top:.65rem}
+@media(max-width:380px){.sled-outlook{padding:.5rem}.sled-outlook-days{gap:.2rem}.sled-outlook-day{padding:.25rem}}
+
+/* Device-local saved places: source changes, not a second trip ranking. */
+.sled-watchlist[hidden],#sled-watch-finder[hidden],#sled-watch-add[hidden],#sled-watch-clear[hidden]{display:none}
+.sled-watchlist{border-top:3px solid var(--accent);margin:16px 0}
+.sled-watchlist h2{margin:0}
+.sled-watch-items{padding:0;margin:.6rem 0;list-style:none}
+.sled-watch-item{border-top:1px solid var(--line);padding:.65rem 0}
+.sled-watch-item-head{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.sled-watch-item-head a{font-weight:700;font-size:1.15rem}
+.sled-watch-item p{margin:.25rem 0}
+.sled-watch-change{font-weight:700;color:var(--accent-deep);font-size:.95rem}
+.sled-watch-stale{font-size:.82rem;color:#69491c}
+.sled-watchlist button,.sled-watch-save,#sled-watch-add{min-height:44px}
+.sled-region-actions{display:flex;flex-direction:column;align-items:stretch;gap:8px}
+.sled-watch-save[aria-pressed=true]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent-deep)}
+.sled-watchlist button:focus-visible,.sled-watch-save:focus-visible,#sled-watch-add:focus-visible{outline:3px solid #247bad;outline-offset:2px}

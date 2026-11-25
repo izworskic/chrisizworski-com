@@ -142,3 +142,43 @@ body{background:#edf3f6;background-image:linear-gradient(180deg,#e6f0f5 0,#f6f9f
 .s7-ski-steps strong{display:block;font-size:.87rem;line-height:1.35;color:#16455f}
 .s7-ski-steps p{font-size:.79rem;line-height:1.45;margin:7px 0 0}
 @media(max-width:760px){.s7-ski-steps{grid-template-columns:1fr}}
+
+/* Official lift evidence: decision before forecast, no decorative status promises. */
+.ski-operations{border-color:#a6c7d3}
+.ski-open-count{font-size:clamp(1.15rem,2vw,1.6rem);line-height:1.35;font-weight:800;letter-spacing:-.015em;margin:.3em 0 .7em;color:#153b54}
+.ski-status-controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px}
+.ski-filter-chip{border:2px solid #155e7b;background:white;color:#16465e;border-radius:40px;min-height:44px;padding:8px 17px;font:700 .95rem/1.3 system-ui,sans-serif;cursor:pointer}
+.ski-filter-chip[aria-pressed=true]{background:#143c57;color:white;border-color:#143c57}
+#ski-operating-list{display:grid;gap:0;border-top:1px solid #d6e2e9}
+.ski-operation-row{border-bottom:1px solid #d6e2e9;padding:11px 2px;min-width:0}
+.ski-operation-heading{display:flex;align-items:center;justify-content:space-between;gap:10px;flex-wrap:wrap}
+.ski-operation-heading strong{font-size:1.04rem}
+.ski-operation-row p{margin:4px 0;color:#42586a}
+.ski-operation-row>a{font-size:.9rem;font-weight:700;display:inline-block}
+.ski-evidence-status{display:inline-flex;align-items:center;border:1px solid #b5cbd2;border-radius:4px;padding:3px 8px;font-size:.82rem;font-weight:750;background:#eff5f7;color:#304d5f}
+.ski-evidence-status.evidence-open{color:#175139;background:#e1f3e8;border-color:#6cac8a}
+.ski-open-empty{font-weight:650;padding:12px 0}
+.ski-opening-evidence .ski-table-scroll{overflow-x:auto;max-width:100%}
+.ski-opening-evidence table{width:100%;min-width:570px;border-collapse:collapse;text-align:left;font-size:.9rem}
+.ski-opening-evidence th,.ski-opening-evidence td{padding:9px 12px;border-bottom:1px solid #d8e3e9;vertical-align:top}
+.ski-opening-evidence thead th{background:#edf4f7;color:#193f55}
+.ski-opening-evidence tbody th{min-width:140px}
+@media(max-width:600px){.ski-operations{padding:16px}.ski-operation-heading{align-items:start}.ski-evidence-status{font-size:.75rem}.ski-open-count{font-size:1.25rem}}
+
+/* Operator evidence summary: keep the confirmed answer above the undated source details. */
+.ski-next-opening{background:#eef6f8;border-left:3px solid #08788b;padding:10px 13px;margin:10px 0 13px;font-size:.9rem;line-height:1.5}
+.ski-next-opening a{font-weight:750;display:inline-block}
+.ski-unconfirmed{border:1px solid #ccdde5;border-radius:8px;margin:10px 0 0;min-width:0}
+.ski-unconfirmed>summary{cursor:pointer;padding:14px 12px;min-height:48px;font-weight:750;color:#18445c}
+.ski-unconfirmed>.ski-operation-row{margin:0 12px}
+.ski-unconfirmed[open]>summary{border-bottom:1px solid #d6e2e9}
+.ski-evidence-status.evidence-closed{color:#5d401e;background:#fff4e8;border-color:#d2b58f}
+.ski-operator-plan{font-weight:680;color:#155976!important}
+
+/* Ski decision controls and low-noise live announcements. */
+html:not(.ski-js) .ski-operations .js-only{display:none}
+.ski-status-controls{gap:8px 10px;margin:10px 0 8px}
+.ski-status-controls .ski-area-label{display:flex;align-items:center;gap:7px;font-size:.86rem;font-weight:700;color:#365164}
+.ski-status-controls select{min-height:44px;max-width:100%;padding:7px 10px;background:#fff;border:1px solid #abbeca;border-radius:7px;font:inherit;color:var(--ink)}
+.ski-filter-result{min-height:1.3em;font-size:.85rem;font-weight:680;color:#365164;margin:4px 0 9px}
+@media(max-width:600px){.ski-status-controls .ski-area-label{width:100%;justify-content:space-between}.ski-status-controls select{flex:1;max-width:calc(100% - 48px)}}

@@ -1,0 +1,5119 @@
+{
+  "schema": 1,
+  "asOf": "2026-11-25",
+  "auditedRevision": "a59ffcef52860e71030b37a07fa0f37e3d34480f",
+  "registryPath": "benchmarks/tool-network-registry.json",
+  "status": "inventory-and-triage-not-quality-certification",
+  "scope": "Registered entries, not every page. Proposed family derived from kind, not a required layout. No inferred owner or quality grade.",
+  "summary": {
+    "registered": 140,
+    "families": {
+      "geographic-exploration": 8,
+      "interpretive": 12,
+      "live-intelligence": 72,
+      "out-of-scope": 1,
+      "planning": 47
+    },
+    "surfaceSignals": {
+      "exact-external-rewrite-owner-review": 6,
+      "external-host-owner-review": 32,
+      "local-file-present-owner-confirmation-required": 91,
+      "no-direct-file-found-owner-review": 11
+    },
+    "adoptionEvidence": {
+      "NOT_ASSESSED": 135,
+      "merged-bounded-pilot": 5
+    },
+    "mappedOpenPRTools": 8,
+    "prioritized": 11
+  },
+  "entries": [
+    {
+      "id": "winter-layup",
+      "canonical": "https://chrisizworski.com/great-lakes-freighter-winter-layup/",
+      "kind": "seasonal-evidence-atlas",
+      "family": "interpretive",
+      "cluster": "great-lakes-shipping",
+      "visitorJob": "where do Great Lakes freighters spend winter and which layups are documented",
+      "seasons": [
+        1,
+        2,
+        3,
+        11,
+        12
+      ],
+      "searchEvidence": "unmeasured",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/great-lakes-freighter-winter-layup/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "michigan-ice-caves",
+      "canonical": "https://chrisizworski.com/michigan-ice-caves/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "winter-water",
+      "visitorJob": "Are Michigan ice caves formed and is the viewing trip worth planning?",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3,
+        4
+      ],
+      "searchEvidence": "preseason",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-ice-caves/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "trout-report",
+      "canonical": "https://michigantroutreport.com/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "rivers-fishing",
+      "visitorJob": "Michigan trout stream conditions today",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "searchEvidence": "known-demand",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review",
+        "localPath": "public/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "trout-map",
+      "canonical": "https://michigantroutreport.com/map.html",
+      "kind": "live-map",
+      "family": "live-intelligence",
+      "cluster": "rivers-fishing",
+      "visitorJob": "Michigan trout stream map and access",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "trout-daily",
+      "canonical": "https://daily.michigantroutreport.com/",
+      "kind": "daily-brief",
+      "family": "live-intelligence",
+      "cluster": "rivers-fishing",
+      "visitorJob": "daily Michigan trout river report",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review",
+        "localPath": "public/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "salmon-run",
+      "canonical": "https://michigantroutreport.com/salmon-run/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "rivers-fishing",
+      "visitorJob": "Michigan salmon and steelhead run conditions",
+      "seasons": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "searchEvidence": "known-demand",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "saginaw-bay",
+      "canonical": "https://saginawbay.chrisizworski.com/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-fishing",
+      "visitorJob": "Saginaw Bay wind and fishable shore conditions",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review",
+        "localPath": "public/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "whitetail",
+      "canonical": "https://whitetail.chrisizworski.com/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "hunting",
+      "visitorJob": "Michigan deer hunting conditions and corn harvest",
+      "seasons": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "preseason",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review",
+        "localPath": "public/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "michigan-ice",
+      "canonical": "https://chrisizworski.com/michigan-ice/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "winter-water",
+      "visitorJob": "Michigan ice conditions and accumulated cold",
+      "seasons": [
+        12,
+        1,
+        2,
+        3
+      ],
+      "searchEvidence": "preseason",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-ice/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": {
+        "wave": 4,
+        "reason": "Seasonal observation versus archive and stale-state review."
+      },
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "phenology",
+      "canonical": "https://phenology.chrisizworski.com/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "natural-year",
+      "visitorJob": "Michigan phenology and seasonal natural signals",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review",
+        "localPath": "public/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "border-waits",
+      "canonical": "https://chrisizworski.com/michigan-border-wait-times/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "transportation",
+      "visitorJob": "Michigan Ontario border wait times",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "growing",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-border-wait-times/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "mackinac-bridge",
+      "canonical": "https://chrisizworski.com/mackinac-bridge-live/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "transportation",
+      "visitorJob": "Mackinac Bridge conditions today",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "measured",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/mackinac-bridge-live/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": {
+        "wave": 5,
+        "reason": "Measured registry search evidence; restriction freshness."
+      },
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "gazette",
+      "canonical": "https://chrisizworski.com/great-lakes-gazette/",
+      "kind": "daily-brief",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-shipping",
+      "visitorJob": "Great Lakes shipping news today",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/great-lakes-gazette/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "ship-tracker",
+      "canonical": "https://chrisizworski.com/great-lakes-freighter-tracking/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-shipping",
+      "visitorJob": "Great Lakes ship tracker live",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "searchEvidence": "measured",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/great-lakes-freighter-tracking/index.html"
+      },
+      "openPRs": [
+        1894
+      ],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": {
+        "wave": 5,
+        "reason": "Measured registry search evidence; coordinate corridor work."
+      },
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Reconcile existing work and owner scope"
+    },
+    {
+      "id": "edmund-fitzgerald",
+      "canonical": "https://chrisizworski.com/edmund-fitzgerald/",
+      "kind": "authority-guide",
+      "family": "interpretive",
+      "cluster": "great-lakes-history",
+      "visitorJob": "Edmund Fitzgerald history and wreck",
+      "seasons": [
+        11
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/edmund-fitzgerald/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "soo-locks",
+      "canonical": "https://chrisizworski.com/soo-locks/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-shipping",
+      "visitorJob": "Soo Locks ships and schedule today",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "measured",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/soo-locks/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "merged-bounded-pilot",
+        "pr": 1929,
+        "merge": "ba5bfcc16c62ed376733cd6c3647e2fb754da45c",
+        "relatedMergedPRs": [
+          1910,
+          1908,
+          1853
+        ],
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Verify current production and comparable visitor outcome"
+    },
+    {
+      "id": "great-lakes-buoys",
+      "canonical": "https://chrisizworski.com/great-lakes-buoys/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-conditions",
+      "visitorJob": "Great Lakes buoy conditions live",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "measured",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/great-lakes-buoys/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": {
+        "wave": 5,
+        "reason": "Measured registry search evidence; station coverage and observation time."
+      },
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "beach-report",
+      "canonical": "https://chrisizworski.com/great-lakes-beaches/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-recreation",
+      "visitorJob": "Michigan beach conditions today",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "growing",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/great-lakes-beaches/index.html"
+      },
+      "openPRs": [
+        1911
+      ],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Reconcile existing work and owner scope"
+    },
+    {
+      "id": "great-lakes-levels",
+      "canonical": "https://greatlakeslevels.org/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-conditions",
+      "visitorJob": "Great Lakes water levels and shoreline intelligence",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review",
+        "localPath": "public/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "boat-launches",
+      "canonical": "https://chrisizworski.com/michigan-boat-launches/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "boating-access",
+      "visitorJob": "Michigan boat launches near a destination",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "new",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-boat-launches/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "shipwrecks",
+      "canonical": "https://chrisizworski.com/great-lakes-shipwrecks/",
+      "kind": "authority-explorer",
+      "family": "geographic-exploration",
+      "cluster": "great-lakes-history",
+      "visitorJob": "Great Lakes shipwreck database and explorer",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "new",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/great-lakes-shipwrecks/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "lighthouses",
+      "canonical": "https://chrisizworski.com/great-lakes-lighthouses/",
+      "kind": "authority-directory",
+      "family": "geographic-exploration",
+      "cluster": "great-lakes-history",
+      "visitorJob": "Great Lakes lighthouse directory",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/great-lakes-lighthouses/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "ausable-field-map",
+      "canonical": "https://ausable.chrisizworski.com/",
+      "kind": "flagship-planner",
+      "family": "planning",
+      "cluster": "rivers-fishing",
+      "visitorJob": "Au Sable River access map and float planner",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "searchEvidence": "measured-query",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review",
+        "localPath": "public/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "ausable-guide",
+      "canonical": "https://chrisizworski.com/au-sable-river/",
+      "kind": "authority-guide",
+      "family": "interpretive",
+      "cluster": "rivers-fishing",
+      "visitorJob": "Au Sable River float times fishing and camping guide",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "searchEvidence": "known-demand",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/au-sable-river/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "manistee-field-map",
+      "canonical": "https://chrisizworski.com/manistee-river-map/",
+      "kind": "flagship-planner",
+      "family": "planning",
+      "cluster": "rivers-fishing",
+      "visitorJob": "Manistee River access map and trip planner",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "searchEvidence": "measured-query",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/manistee-river-map/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "outdoors-now",
+      "canonical": "https://michiganoutdoorsnow.chrisizworski.com/",
+      "kind": "flagship-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "best Michigan outdoor day trip for current conditions",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "measured-query",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review",
+        "localPath": "public/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "detroit-outdoors",
+      "canonical": "https://chrisizworski.com/detroit-outdoors/",
+      "kind": "live-opportunity-desk",
+      "family": "live-intelligence",
+      "cluster": "trip-planning",
+      "visitorJob": "what to do outdoors around Detroit today",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/detroit-outdoors/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "detroit-freighters",
+      "canonical": "https://chrisizworski.com/detroit-river-freighters/",
+      "kind": "focused-live-acquisition",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-shipping",
+      "visitorJob": "are freighters passing Detroit today",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "new",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/detroit-river-freighters/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "detroit-birding",
+      "canonical": "https://chrisizworski.com/detroit-birding-today/",
+      "kind": "focused-live-acquisition",
+      "family": "live-intelligence",
+      "cluster": "nature-birding",
+      "visitorJob": "best birding around Detroit today",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "new",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/detroit-birding-today/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "lake-st-clair-outdoors",
+      "canonical": "https://chrisizworski.com/lake-st-clair-outdoors/",
+      "kind": "focused-live-acquisition",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-conditions",
+      "visitorJob": "Lake St. Clair paddling and outdoor conditions today",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "new",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/lake-st-clair-outdoors/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "detroit-sunset",
+      "canonical": "https://chrisizworski.com/detroit-sunset-tonight/",
+      "kind": "focused-live-acquisition",
+      "family": "live-intelligence",
+      "cluster": "nature-night-sky",
+      "visitorJob": "Detroit sunset conditions tonight",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "new",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/detroit-sunset-tonight/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "outdoor-weekend",
+      "canonical": "https://weekend.chrisizworski.com/",
+      "kind": "authority-hub",
+      "family": "geographic-exploration",
+      "cluster": "trip-planning",
+      "visitorJob": "Michigan outdoor weekend trip planning",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review",
+        "localPath": "public/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "tc-wine",
+      "canonical": "https://tcwine.chrisizworski.com/",
+      "kind": "flagship-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Traverse City winery map and wine tour planner",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "emerging-demand",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review",
+        "localPath": "public/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "pictured-rocks",
+      "canonical": "https://picturedrocks.chrisizworski.com/",
+      "kind": "flagship-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Pictured Rocks boat kayak hike or drive planner",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review",
+        "localPath": "public/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "circle-tour",
+      "canonical": "https://chrisizworski.com/lake-superior-circle-tour/",
+      "kind": "authority-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Lake Superior Circle Tour itinerary and stops",
+      "seasons": [
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/lake-superior-circle-tour/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": {
+        "wave": 2,
+        "reason": "Contrasting planning family: inspect route and unknown travel-time semantics."
+      },
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "apostle-islands",
+      "canonical": "https://chrisizworski.com/apostle-islands/",
+      "kind": "authority-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Choose Apostle Islands sea caves, cruises, island access, kayak tours and camping with official conditions and transport handoffs",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/apostle-islands/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "lake-superior-provincial-park",
+      "canonical": "https://chrisizworski.com/lake-superior-provincial-park/",
+      "kind": "authority-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Lake Superior Provincial Park stops, trails, permits, parking evidence and visit-time decisions",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/lake-superior-provincial-park/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "sleeping-giant-provincial-park",
+      "canonical": "https://chrisizworski.com/sleeping-giant-provincial-park/",
+      "kind": "authority-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Which Sleeping Giant Provincial Park trail matches my visit time and official walking versus bike-and-hike distances?",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "new-source-verified-intent",
+      "searchTreatment": "launch",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/sleeping-giant-provincial-park/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "xc-planning",
+      "canonical": "https://chrisizworski.com/michigan-cross-country-skiing/",
+      "kind": "authority-planner",
+      "family": "planning",
+      "cluster": "winter-recreation",
+      "visitorJob": "Michigan cross country ski trails and planning",
+      "seasons": [
+        12,
+        1,
+        2,
+        3
+      ],
+      "searchEvidence": "preseason",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-cross-country-skiing/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "xc-live",
+      "canonical": "https://xcski.chrisizworski.com/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "winter-recreation",
+      "visitorJob": "Northern Michigan cross country ski live snow conditions",
+      "seasons": [
+        12,
+        1,
+        2,
+        3
+      ],
+      "searchEvidence": "preseason",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review",
+        "localPath": "public/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "snowmobile",
+      "canonical": "https://chrisizworski.com/snowmobile/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "winter-recreation",
+      "visitorJob": "Michigan snowmobile trail conditions and riding windows",
+      "seasons": [
+        12,
+        1,
+        2,
+        3
+      ],
+      "searchEvidence": "preseason",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/snowmobile/index.html"
+      },
+      "openPRs": [
+        1917
+      ],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": {
+        "wave": 4,
+        "reason": "Winter access decision; reconcile regional map PR."
+      },
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Reconcile existing work and owner scope"
+    },
+    {
+      "id": "morel-report",
+      "canonical": "https://morel.chrisizworski.com/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "natural-year",
+      "visitorJob": "Michigan morel soil warming and timing",
+      "seasons": [
+        4,
+        5,
+        6
+      ],
+      "searchEvidence": "preseason",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review",
+        "localPath": "public/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "aurora",
+      "canonical": "https://chrisizworski.com/northern-lights-michigan/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "nature-night-sky",
+      "visitorJob": "Northern lights Michigan tonight",
+      "seasons": [
+        1,
+        2,
+        3,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "measured",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/northern-lights-michigan/index.html"
+      },
+      "openPRs": [
+        1895
+      ],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": {
+        "wave": 5,
+        "reason": "Measured registry search evidence; model versus actual sighting."
+      },
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Reconcile existing work and owner scope"
+    },
+    {
+      "id": "fall-color",
+      "canonical": "https://chrisizworski.com/fall-color/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "fall-travel",
+      "visitorJob": "Michigan fall color map and peak forecast",
+      "seasons": [
+        9,
+        10
+      ],
+      "searchEvidence": "measured",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/fall-color/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "birding",
+      "canonical": "https://michiganbirdingreport.com/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "nature-birding",
+      "visitorJob": "Michigan bird sightings and migration now",
+      "seasons": [
+        3,
+        4,
+        5,
+        8,
+        9,
+        10,
+        11
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review",
+        "localPath": "public/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "birding-daily",
+      "canonical": "https://daily.michiganbirdingreport.com/",
+      "kind": "daily-brief",
+      "family": "live-intelligence",
+      "cluster": "nature-birding",
+      "visitorJob": "daily Michigan birding county report",
+      "seasons": [
+        3,
+        4,
+        5,
+        8,
+        9,
+        10,
+        11
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review",
+        "localPath": "public/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "planting-calendar",
+      "canonical": "https://chrisizworski.com/zone-6a-planting-calendar/",
+      "kind": "authority-planner",
+      "family": "planning",
+      "cluster": "gardening",
+      "visitorJob": "Zone 6a Michigan planting calendar",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "searchEvidence": "known-demand",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/zone-6a-planting-calendar/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "living-garden",
+      "canonical": "https://chrisizworski.com/living-garden/",
+      "kind": "interactive-planner",
+      "family": "planning",
+      "cluster": "gardening",
+      "visitorJob": "Design a raised bed by square, test spring-to-fall succession plantings, and record actual seasonal harvest outcomes",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "exact-external-rewrite-owner-review",
+        "externalRewrite": "https://garden.chrisizworski.com/living-garden"
+      },
+      "openPRs": [
+        1916
+      ],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Reconcile existing work and owner scope"
+    },
+    {
+      "id": "heirloom-matchmaker",
+      "canonical": "https://chrisizworski.com/heirloom-variety-matchmaker/",
+      "kind": "interactive-planner",
+      "family": "planning",
+      "cluster": "gardening",
+      "visitorJob": "choose heirloom vegetable varieties for a garden",
+      "seasons": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/heirloom-variety-matchmaker/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "seed-saving",
+      "canonical": "https://chrisizworski.com/heirloom-seed-saving-guide/",
+      "kind": "authority-guide",
+      "family": "interpretive",
+      "cluster": "gardening",
+      "visitorJob": "heirloom seed saving methods",
+      "seasons": [
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/heirloom-seed-saving-guide/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "frost-dates",
+      "canonical": "https://chrisizworski.com/michigan-frost-dates/",
+      "kind": "authority-guide",
+      "family": "interpretive",
+      "cluster": "gardening",
+      "visitorJob": "Michigan last frost dates by city",
+      "seasons": [
+        3,
+        4,
+        5,
+        9,
+        10
+      ],
+      "searchEvidence": "measured",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-frost-dates/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "seed-starting",
+      "canonical": "https://chrisizworski.com/seed-starting-guide/",
+      "kind": "authority-guide",
+      "family": "interpretive",
+      "cluster": "gardening",
+      "visitorJob": "Zone 6a seed starting setup and timing",
+      "seasons": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/seed-starting-guide/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "perfect-lawn",
+      "canonical": "https://lawn.chrisizworski.com/",
+      "kind": "flagship-planner",
+      "family": "planning",
+      "cluster": "gardening",
+      "visitorJob": "address specific lawn care plan",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review",
+        "localPath": "public/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "tomato-planting",
+      "canonical": "https://chrisizworski.com/when-to-plant-tomatoes-michigan/",
+      "kind": "authority-guide",
+      "family": "interpretive",
+      "cluster": "gardening",
+      "visitorJob": "when to plant tomatoes in Michigan",
+      "seasons": [
+        3,
+        4,
+        5
+      ],
+      "searchEvidence": "measured",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/when-to-plant-tomatoes-michigan/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "soil-temperature",
+      "canonical": "https://chrisizworski.com/michigan-soil-temperature/",
+      "kind": "live-tool",
+      "family": "live-intelligence",
+      "cluster": "gardening",
+      "visitorJob": "Michigan soil temperature today and when it passes 40F and 60F for planting",
+      "seasons": [
+        3,
+        4,
+        5,
+        6
+      ],
+      "searchEvidence": "preseason",
+      "searchTreatment": "preseason",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-soil-temperature/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "agentbase",
+      "canonical": "https://github.com/AgentBase1",
+      "kind": "developer-infrastructure",
+      "family": "out-of-scope",
+      "cluster": "ai-developer",
+      "visitorJob": "open agent instruction registry",
+      "seasons": [],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Exclude from visitor rollout"
+    },
+    {
+      "id": "estivant-pines",
+      "canonical": "https://chrisizworski.com/estivant-pines/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "michigan-outdoors",
+      "visitorJob": "Estivant Pines trail conditions and hike planning",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "launch",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/estivant-pines/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "isle-royale-map",
+      "canonical": "https://chrisizworski.com/isle-royale-map/",
+      "kind": "flagship-map",
+      "family": "geographic-exploration",
+      "cluster": "michigan-outdoors",
+      "visitorJob": "interactive Isle Royale map with trails campgrounds access and source-backed specialty layers",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "new",
+      "searchTreatment": "launch",
+      "surface": {
+        "status": "no-direct-file-found-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "national-aurora",
+      "canonical": "https://chrisizworski.com/national-tools/aurora/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "nature-night-sky",
+      "visitorJob": "northern lights forecast tonight by U.S. location",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "new",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "no-direct-file-found-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "national-rivers",
+      "canonical": "https://chrisizworski.com/national-tools/rivers/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "rivers-fishing",
+      "visitorJob": "U.S. river levels flow and nearby gauges",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "new",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "no-direct-file-found-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "national-frost",
+      "canonical": "https://chrisizworski.com/national-tools/frost/",
+      "kind": "decision-calculator",
+      "family": "planning",
+      "cluster": "gardening",
+      "visitorJob": "first and last frost dates by U.S. location",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        8,
+        9,
+        10,
+        11
+      ],
+      "searchEvidence": "new",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "no-direct-file-found-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "national-planting",
+      "canonical": "https://chrisizworski.com/national-tools/planting/",
+      "kind": "decision-calculator",
+      "family": "planning",
+      "cluster": "gardening",
+      "visitorJob": "vegetable planting calendar by U.S. location",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "new",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "no-direct-file-found-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "national-garden-water",
+      "canonical": "https://chrisizworski.com/national-tools/garden-water/",
+      "kind": "decision-calculator",
+      "family": "planning",
+      "cluster": "gardening",
+      "visitorJob": "garden watering decision by U.S. location",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11
+      ],
+      "searchEvidence": "new-utility",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "no-direct-file-found-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "national-fall-color",
+      "canonical": "https://chrisizworski.com/national-tools/fall-color/",
+      "kind": "seasonal-data-beta",
+      "family": "live-intelligence",
+      "cluster": "fall-travel",
+      "visitorJob": "historical fall foliage timing by U.S. location",
+      "seasons": [
+        8,
+        9,
+        10,
+        11
+      ],
+      "searchEvidence": "new",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "no-direct-file-found-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "national-coastal",
+      "canonical": "https://chrisizworski.com/national-tools/coastal/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "coastal-recreation",
+      "visitorJob": "U.S. beach and coastal conditions today by location",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "documented-source-and-search-opportunity",
+      "searchTreatment": "launch",
+      "surface": {
+        "status": "no-direct-file-found-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "national-snow",
+      "canonical": "https://chrisizworski.com/national-tools/snow/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "winter-snow",
+      "visitorJob": "U.S. snow depth SWE snowpack and snowmelt outlook by location",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "documented-source-live-production-verified",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "no-direct-file-found-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "national-white-christmas",
+      "canonical": "https://chrisizworski.com/national-tools/white-christmas/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "winter-snow",
+      "visitorJob": "White Christmas probability and current-year outlook by U.S. location",
+      "seasons": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "documented-source-and-search-opportunity",
+      "searchTreatment": "launch",
+      "surface": {
+        "status": "exact-external-rewrite-owner-review",
+        "externalRewrite": "https://national-white-christmas.vercel.app/national-tools/white-christmas/"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": {
+        "wave": 4,
+        "reason": "Near-term holiday relevance; verify extracted owner and search evidence."
+      },
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "white-christmas-map",
+      "canonical": "https://chrisizworski.com/white-christmas-probability-map/",
+      "kind": "supporting-content",
+      "family": "interpretive",
+      "cluster": "winter-snow",
+      "visitorJob": "historical White Christmas probability map 1991-2020",
+      "seasons": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "documented-primary-source",
+      "searchTreatment": "launch",
+      "surface": {
+        "status": "exact-external-rewrite-owner-review",
+        "externalRewrite": "https://national-white-christmas.vercel.app/white-christmas-probability-map/"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "white-christmas-michigan",
+      "canonical": "https://chrisizworski.com/white-christmas-michigan/",
+      "kind": "supporting-content",
+      "family": "interpretive",
+      "cluster": "winter-snow",
+      "visitorJob": "Michigan White Christmas odds history and forecast context",
+      "seasons": [
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "documented-primary-source",
+      "searchTreatment": "launch",
+      "surface": {
+        "status": "exact-external-rewrite-owner-review",
+        "externalRewrite": "https://national-white-christmas.vercel.app/white-christmas-michigan/"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "petoskey-wine",
+      "canonical": "https://chrisizworski.com/petoskey-wine/",
+      "kind": "flagship-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Petoskey wine region map and winery day planner",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "new-surface",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/petoskey-wine/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "michigan-snow-totals",
+      "canonical": "https://chrisizworski.com/michigan-snow-totals/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "winter-snow",
+      "visitorJob": "Michigan snowfall totals reported by storm and day",
+      "seasons": [
+        10,
+        11,
+        12,
+        1,
+        2,
+        3,
+        4
+      ],
+      "searchEvidence": "emerging-demand",
+      "searchTreatment": "launch",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-snow-totals/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "merged-bounded-pilot",
+        "pr": 1921,
+        "ci": "https://github.com/izworskic/chrisizworski-com/actions/runs/45449806595",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Verify current production and comparable visitor outcome"
+    },
+    {
+      "id": "bloom-tracker",
+      "canonical": "https://phenology.chrisizworski.com/bloom-tracker",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "natural-year",
+      "visitorJob": "Michigan flower bloom timing and when to go",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "searchEvidence": "new",
+      "searchTreatment": "launch",
+      "surface": {
+        "status": "external-host-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "leafcutter-bees",
+      "canonical": "https://chrisizworski.com/leafcutter-bees/",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "gardening",
+      "visitorJob": "Leafcutter bee garden care, safe nesting house and managed-cocoon release and overwintering decisions",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/leafcutter-bees/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "michigan-garden-pest-watch",
+      "canonical": "https://chrisizworski.com/michigan-garden-pest-watch/",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "gardening",
+      "visitorJob": "What should I inspect for pests in my Michigan home garden now by crop, plant stage and location?",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "new",
+      "searchTreatment": "launch",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-garden-pest-watch/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "mackinac-island",
+      "canonical": "https://chrisizworski.com/mackinac-island/ferry-planner/",
+      "kind": "ferry-decision",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Mackinac Island ferry and day trip planning",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/mackinac-island/ferry-planner/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "duluth-canal-park",
+      "canonical": "https://chrisizworski.com/duluth-canal-park/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-shipping",
+      "visitorJob": "Duluth ship schedule today and Canal Park ship watching",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "new-canonical",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/duluth-canal-park/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "merged-bounded-pilot",
+        "pr": 1918,
+        "ci": "https://github.com/izworskic/chrisizworski-com/actions/runs/45437543443",
+        "production": "owner-confirmed-working",
+        "visitorOutcome": "NOT_MEASURED",
+        "relatedMergedPRs": [
+          1904,
+          1955
+        ],
+        "currentProduction": "NOT_VERIFIED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Verify current production and comparable visitor outcome"
+    },
+    {
+      "id": "niagara-border",
+      "canonical": "https://chrisizworski.com/niagara-border-crossing/",
+      "kind": "trip-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Niagara U.S.–Canada border bridge waits today",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/niagara-border-crossing/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "tahquamenon",
+      "canonical": "https://chrisizworski.com/tahquamenon-falls/",
+      "kind": "trip-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Tahquamenon Falls visitor trip planning",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "exact-external-rewrite-owner-review",
+        "externalRewrite": "https://tahquamenon-falls-live-94is.vercel.app/tahquamenon-falls/?origin_build=seasonal-20260919-v4"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "nyc-crossing",
+      "canonical": "https://chrisizworski.com/nyc-crossing/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "transportation-crossings",
+      "visitorJob": "which NYC crossing should I take right now toll traffic",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/nyc-crossing/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "house-fit",
+      "canonical": "https://chrisizworski.com/can-i-afford-this-house/",
+      "kind": "decision-engine",
+      "family": "planning",
+      "cluster": "consumer-finance",
+      "visitorJob": "mortgage payment versus true monthly cost for this specific house including hidden ownership costs Reality Gap and buyer tripwires",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/can-i-afford-this-house/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "flight-tracker",
+      "canonical": "https://chrisizworski.com/flight-tracker/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "transportation-live",
+      "visitorJob": "flight tracker live plane location by flight number",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/flight-tracker/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "welland-canal",
+      "canonical": "https://chrisizworski.com/welland-canal/",
+      "kind": "focused-live-acquisition",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-shipping",
+      "visitorJob": "Welland Canal ships today and which lock to watch",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "new-canonical",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/welland-canal/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "niagara-falls-today",
+      "canonical": "https://chrisizworski.com/niagara-falls-today/",
+      "kind": "trip-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "what to do at Niagara Falls today within two four or six hours",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "new-canonical",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/niagara-falls-today/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "epic-ikon-pass",
+      "canonical": "https://chrisizworski.com/epic-ikon-pass/",
+      "kind": "decision-engine",
+      "family": "planning",
+      "cluster": "winter-recreation",
+      "visitorJob": "Can my specific 2026/27 Epic or Ikon pass access this ski resort on this date including blackout dates day pools and reservations",
+      "seasons": [
+        10,
+        11,
+        12,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "searchEvidence": "hypothetical",
+      "searchTreatment": "new-canonical-pending-verified-launch",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/epic-ikon-pass/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "isle-royale-ferry",
+      "canonical": "https://chrisizworski.com/isle-royale-ferry/",
+      "kind": "decision-engine",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Grand Portage Isle Royale ferry cost and schedules, Sea Hunter III and Voyageur II prices, Windigo day trips, Rock Harbor overnight, permits and reservations",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "searchEvidence": "primary-source-reviewed",
+      "searchTreatment": "new-canonical-pending-verified-launch",
+      "surface": {
+        "status": "exact-external-rewrite-owner-review",
+        "externalRewrite": "https://isle-royale-outdoors.vercel.app/isle-royale-ferry/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "split-rock-river-loop",
+      "canonical": "https://chrisizworski.com/split-rock-river-loop/",
+      "kind": "decision-engine",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Split Rock River loop missing bridge trail open detour signed Highway 61 underpass",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "primary-source-reviewed",
+      "searchTreatment": "new-canonical-pending-verified-launch",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/split-rock-river-loop/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "split-rock-lighthouse-visit",
+      "canonical": "https://chrisizworski.com/split-rock-lighthouse-visit/",
+      "kind": "decision-engine",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Split Rock Lighthouse ticket prices historic grounds state park permit Fitzgerald memorial",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "primary-source-reviewed",
+      "searchTreatment": "new-canonical-pending-verified-launch",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/split-rock-lighthouse-visit/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "shorefeel",
+      "canonical": "https://chrisizworski.com/great-lakes-water-temperature/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-conditions",
+      "visitorJob": "Great Lakes water temperature today and shoreline comfort context",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unmeasured",
+      "searchTreatment": "new-pilot",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/great-lakes-water-temperature/index.html"
+      },
+      "openPRs": [
+        1911,
+        1823
+      ],
+      "adoptionEvidence": {
+        "status": "merged-bounded-pilot",
+        "pr": 1925,
+        "merge": "1e362a60a0e095c9d8251cc4b79bcc9c26d879bf",
+        "relatedMergedPRs": [
+          1900,
+          1913
+        ],
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": {
+        "wave": 3,
+        "reason": "Reconcile older US and Canada map branches against merged cross-border intelligence before further expansion."
+      },
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Reconcile existing work and owner scope"
+    },
+    {
+      "id": "wisconsin-bloom-tracker",
+      "canonical": "https://phenology.chrisizworski.com/wisconsin-bloom-tracker",
+      "kind": "seasonal-trip-planner",
+      "family": "planning",
+      "cluster": "natural-year",
+      "visitorJob": "Wisconsin cherry blossoms, lilacs, lavender and flower fields bloom timing",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "maple-sap-run",
+      "canonical": "https://chrisizworski.com/michigan-maple-sap-run/",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "natural-year",
+      "visitorJob": "when does maple sap run in Michigan near me and which sugarhouses can I visit",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-maple-sap-run/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "michigan-ski-hills",
+      "canonical": "https://chrisizworski.com/michigan-ski-hills/",
+      "kind": "live-decision",
+      "family": "live-intelligence",
+      "cluster": "winter-recreation",
+      "visitorJob": "Which Michigan ski hill is worth the drive this weekend based on lake-effect snow, forecast, cost and distance",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3,
+        4
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-ski-hills/index.html"
+      },
+      "openPRs": [
+        1909
+      ],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": {
+        "wave": 4,
+        "reason": "Official dated opening evidence; reconcile carousel PR."
+      },
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Reconcile existing work and owner scope"
+    },
+    {
+      "id": "michigan-rockhounding",
+      "canonical": "https://chrisizworski.com/michigan-rockhounding/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-shore",
+      "visitorJob": "Where to hunt Michigan agates, Petoskey stones and fossils after a storm",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "emerging-demand",
+      "searchTreatment": "launch",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-rockhounding/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "lake-smoke",
+      "canonical": "https://phenology.chrisizworski.com/lake-smoke",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-shore",
+      "visitorJob": "Compare cold air, lake temperatures and hourly viewing outlooks at 15 Great Lakes shore locations. See data availability and the conditions that favor steam fog without a guaranteed sighting.",
+      "seasons": [
+        10,
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "salamander-migration",
+      "canonical": "https://phenology.chrisizworski.com/salamander-migration",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "natural-year",
+      "visitorJob": "Watch for warm-rain Big Night conditions with seven-night regional forecasts, spring timing and privacy-safe observation trends. Includes responsible viewing guidance.",
+      "seasons": [
+        2,
+        3,
+        4,
+        5
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "woodcock-sky-dance",
+      "canonical": "https://phenology.chrisizworski.com/woodcock-sky-dance",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "natural-year",
+      "visitorJob": "Find spring evening display windows using regional timing, sunset-based listening times and a seven-night weather outlook. Learn the peent call and aerial display sounds.",
+      "seasons": [
+        3,
+        4,
+        5
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "frog-chorus",
+      "canonical": "https://phenology.chrisizworski.com/frog-chorus",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "natural-year",
+      "visitorJob": "Compare nine regional seven-night calling outlooks, explore the seasonal calendar and match spring peepers, wood frogs and other Michigan species with frog calls and identification guidance.",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "michigan-trillium",
+      "canonical": "https://phenology.chrisizworski.com/michigan-trillium",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "natural-year",
+      "visitorJob": "Follow spring heat buildup, regional timing, flowering reports and seven-day weather context. Explore ten documented public trails and distinguish modeled readiness from confirmed blooms.",
+      "seasons": [
+        4,
+        5,
+        6
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "hummingbird-tracker",
+      "canonical": "https://phenology.chrisizworski.com/hummingbird-tracker",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "natural-year",
+      "visitorJob": "Explore nine regional arrival windows, feeder timing, a migration map, spring weather clues and clearly labeled iNaturalist sightings. Seasonal guidance stays separate from confirmed arrivals.",
+      "seasons": [
+        4,
+        5,
+        6,
+        8,
+        9
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "firefly-tracker",
+      "canonical": "https://phenology.chrisizworski.com/firefly-tracker",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "natural-year",
+      "visitorJob": "Explore regional lightning-bug season timing, a seven-night NWS viewing outlook, historical warmth context and places to watch. Weather suitability does not confirm fireflies are flashing.",
+      "seasons": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "michigan-mayfly-hatches",
+      "canonical": "https://michigantroutreport.com/michigan-mayfly-hatches.html",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "rivers-fishing",
+      "visitorJob": "Compare the Au Sable, Manistee, Pere Marquette, Muskegon and Boardman using USGS water temperatures, seven-day weather and seasonal Hex, Hendrickson, Brown Drake and Sulphur windows.",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "ausable-mayfly-hatches",
+      "canonical": "https://michigantroutreport.com/mayfly-hatches.html",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "rivers-fishing",
+      "visitorJob": "Explore ten Au Sable mayflies with identification images, live river conditions and seasonal hatch windows. Match the fly you see and check temperature and weather context before fishing.",
+      "seasons": [
+        4,
+        5,
+        6,
+        7,
+        8,
+        9
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "great-lakes-mayflies",
+      "canonical": "https://michigantroutreport.com/great-lakes-mayflies.html",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-shore",
+      "visitorJob": "Explore sourced mayfly habitat across all five Great Lakes, available buoy monitoring, historical hatch records and charts. Keep seasonal readiness, shoreline observations and reviewed events distinct.",
+      "seasons": [
+        5,
+        6,
+        7,
+        8
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "frosty-mornings",
+      "canonical": "https://phenology.chrisizworski.com/frosty-mornings",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "natural-year",
+      "visitorJob": "Which upcoming Michigan morning offers weather favorable for photographing frost and hoarfrost?",
+      "seasons": [
+        9,
+        10,
+        11,
+        12,
+        1,
+        2,
+        3,
+        4,
+        5
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "external-host-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "winter-eagle-watching",
+      "canonical": "https://chrisizworski.com/winter-eagle-watching/",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "nature-birding",
+      "visitorJob": "Where and when should I watch winter bald eagle gatherings or seasonal aerial displays in either Michigan peninsula or along Midwest river corridors?",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/winter-eagle-watching/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "shed-antler-search",
+      "canonical": "https://chrisizworski.com/michigan-shed-antlers/",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "hunting",
+      "visitorJob": "Is this week good for shed antler hunting in Michigan based on snow and weather conditions?",
+      "seasons": [
+        1,
+        2,
+        3,
+        4
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-shed-antlers/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "mackinac-ice-bridge",
+      "canonical": "https://chrisizworski.com/mackinac-ice-bridge/",
+      "kind": "seasonal-live",
+      "family": "live-intelligence",
+      "cluster": "winter-water",
+      "visitorJob": "Mackinac Island Christmas tree ice bridge formation and ice cover",
+      "seasons": [
+        12,
+        1,
+        2,
+        3
+      ],
+      "searchEvidence": "unverified-seasonal-demand",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/mackinac-ice-bridge/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "waterfowl-freeze-line",
+      "canonical": "https://chrisizworski.com/waterfowl-freeze-line/",
+      "kind": "seasonal-decision-engine",
+      "family": "live-intelligence",
+      "cluster": "nature-birding",
+      "visitorJob": "Where is forecast freezing pressure increasing for ducks and geese in the Great Lakes and Mississippi Flyway, and what dated waterfowl observations exist nearby?",
+      "seasons": [
+        10,
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/waterfowl-freeze-line/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "great-lakes-ferries",
+      "canonical": "https://chrisizworski.com/great-lakes-ferries/",
+      "kind": "directory",
+      "family": "geographic-exploration",
+      "cluster": "trip-planning",
+      "visitorJob": "Choose among Great Lakes ferry crossings",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/great-lakes-ferries/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "ferry-put-in-bay",
+      "canonical": "https://chrisizworski.com/put-in-bay-ferry/",
+      "kind": "route-decision-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Miller vs Jet Express ferry Put-in-Bay",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/put-in-bay-ferry/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "ferry-lake-express",
+      "canonical": "https://chrisizworski.com/lake-michigan-ferry/lake-express/",
+      "kind": "route-decision-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Muskegon Milwaukee Lake Express ferry",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/lake-michigan-ferry/lake-express/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "ferry-ss-badger",
+      "canonical": "https://chrisizworski.com/lake-michigan-ferry/ss-badger/",
+      "kind": "route-decision-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Ludington Manitowoc SS Badger ferry",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/lake-michigan-ferry/ss-badger/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "ferry-isle-royale",
+      "canonical": "https://chrisizworski.com/isle-royale-ferry-comparison/",
+      "kind": "route-decision-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Compare four Isle Royale mainland ferry gateways and Rock Harbor versus Windigo",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/isle-royale-ferry-comparison/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "ferry-chi-cheemaun",
+      "canonical": "https://chrisizworski.com/chi-cheemaun-ferry/",
+      "kind": "route-decision-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Tobermory Manitoulin Island Chi Cheemaun ferry",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/chi-cheemaun-ferry/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "ferry-pelee",
+      "canonical": "https://chrisizworski.com/pelee-island-ferry/",
+      "kind": "route-decision-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Pelee Island ferry Kingsville Leamington",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/pelee-island-ferry/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "ferry-beaver",
+      "canonical": "https://chrisizworski.com/beaver-island-ferry/",
+      "kind": "route-decision-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Charlevoix Beaver Island ferry",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/beaver-island-ferry/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "ferry-toronto",
+      "canonical": "https://chrisizworski.com/toronto-islands-ferry/",
+      "kind": "route-decision-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Toronto Centre Ward Hanlans Island ferry",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/toronto-islands-ferry/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "ferry-manitou",
+      "canonical": "https://chrisizworski.com/manitou-island-ferry/",
+      "kind": "route-decision-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "North versus South Manitou ferry access and trip planning",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/manitou-island-ferry/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "holiday-travel",
+      "canonical": "https://chrisizworski.com/holiday-travel/",
+      "kind": "calendar-decision-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "best day to travel Thanksgiving Christmas fly drive crowds traffic departure times",
+      "seasons": [
+        10,
+        11,
+        12,
+        1
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/holiday-travel/index.html"
+      },
+      "openPRs": [
+        1881,
+        1887
+      ],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": {
+        "wave": 4,
+        "reason": "Reconcile holiday planner work; forecast validity."
+      },
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Reconcile existing work and owner scope"
+    },
+    {
+      "id": "lake-effect-snow",
+      "canonical": "https://chrisizworski.com/lake-effect-snow/",
+      "kind": "regional-forecast-decision",
+      "family": "live-intelligence",
+      "cluster": "winter-snow",
+      "visitorJob": "lake effect snow forecast snowbelt hour-by-hour where will lake effect snow fall",
+      "seasons": [
+        10,
+        11,
+        12,
+        1,
+        2,
+        3,
+        4
+      ],
+      "searchEvidence": "prelaunch",
+      "searchTreatment": "pending-release",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/lake-effect-snow/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "st-lawrence-seaway",
+      "canonical": "https://chrisizworski.com/st-lawrence-seaway/",
+      "kind": "focused-live-acquisition",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-shipping",
+      "visitorJob": "St. Lawrence Seaway ship tracker and shore viewing",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "new-canonical",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/st-lawrence-seaway/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "eisenhower-lock",
+      "canonical": "https://chrisizworski.com/eisenhower-lock/",
+      "kind": "focused-live-acquisition",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-shipping",
+      "visitorJob": "Eisenhower Lock public viewing and recent ships",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "new-canonical",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/eisenhower-lock/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "michigan-adventure-finder",
+      "canonical": "https://chrisizworski.com/michigan-destinations/",
+      "kind": "editorial-discovery-hub",
+      "family": "geographic-exploration",
+      "cluster": "trip-planning",
+      "visitorJob": "Which Michigan destinations should I explore by season, interest, and region before checking live conditions?",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-destinations/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect current source, visitor task and prior proof"
+    },
+    {
+      "id": "upper-peninsula-waterfalls",
+      "canonical": "https://chrisizworski.com/upper-peninsula-waterfalls/",
+      "kind": "interactive-map",
+      "family": "geographic-exploration",
+      "cluster": "trip-planning",
+      "visitorJob": "Which Upper Peninsula waterfalls can I visit and how should I plan the trail access?",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "new-tool-no-gsc",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/upper-peninsula-waterfalls/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "merged-bounded-pilot",
+        "pr": 1914,
+        "ci": "https://github.com/izworskic/chrisizworski-com/actions/runs/45454403690",
+        "merge": "20448a78278d78dc99c68dadb3049cc4d8a8fe9c",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Verify current production and comparable visitor outcome"
+    },
+    {
+      "id": "michigan-winter-activities",
+      "canonical": "https://chrisizworski.com/michigan-winter-activities/",
+      "kind": "editorial-discovery-hub",
+      "family": "geographic-exploration",
+      "cluster": "winter-snow",
+      "visitorJob": "Which Michigan winter activity should I choose by personal style, region, and effort before checking site-specific conditions?",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "searchEvidence": "new-no-gsc",
+      "searchTreatment": "new-canonical",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-winter-activities/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "frozen-michigan",
+      "canonical": "https://chrisizworski.com/frozen-michigan/",
+      "kind": "seasonal-field-guide",
+      "family": "interpretive",
+      "cluster": "winter-snow",
+      "visitorJob": "Which actual Michigan frozen waterfalls, ice curtains and shoreline ice viewpoints should I visit, and what winter access is documented?",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "searchEvidence": "new-no-GSC",
+      "searchTreatment": "new-canonical",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/frozen-michigan/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "michigan-winter-trails",
+      "canonical": "https://chrisizworski.com/michigan-winter-trails/",
+      "kind": "seasonal-field-guide",
+      "family": "interpretive",
+      "cluster": "winter-snow",
+      "visitorJob": "Which Michigan winter trail systems and loops allow snowshoeing, cross-country skiing, winter fat biking or winter hiking, and what seasonal access rules apply?",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "searchEvidence": "new-no-GSC",
+      "searchTreatment": "new-canonical",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-winter-trails/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "michigan-wine-cider-spirits",
+      "canonical": "https://chrisizworski.com/michigan-wine-cider-spirits/",
+      "kind": "seasonal-field-guide",
+      "family": "interpretive",
+      "cluster": "trip-planning",
+      "visitorJob": "Which Northern Michigan wineries, heritage hard cideries, and craft distilleries across Old Mission, Leelanau, Traverse City, and Petoskey fit my day, season, winter igloo/snowshoe plan, and after-5 PM lounge window?",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "new-no-GSC",
+      "searchTreatment": "new-canonical",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/michigan-wine-cider-spirits/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "pukaskwa-national-park",
+      "canonical": "https://chrisizworski.com/pukaskwa-national-park/",
+      "kind": "destination-decision",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Which Pukaskwa day hike fits my limited time and ability, and what do Parks Canada's dated access reports actually say?",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "new-no-GSC",
+      "searchTreatment": "new-canonical",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/pukaskwa-national-park/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "gooseberry-falls",
+      "canonical": "https://chrisizworski.com/gooseberry-falls/",
+      "kind": "destination-decision",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "Which Gooseberry Falls waterfall outing is appropriate for my available time, mobility needs and season, and what official access evidence must I check?",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "new-no-GSC",
+      "searchTreatment": "new-canonical",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/gooseberry-falls/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "rocket-launch-usa",
+      "canonical": "https://chrisizworski.com/national-tools/rocket-launch-live/",
+      "kind": "flagship-live",
+      "family": "live-intelligence",
+      "cluster": "rocket-launch-viewing",
+      "visitorJob": "Which U.S. coastal rocket mission is scheduled, where does it launch, and what independent timing, official viewing access and sky evidence must be checked before traveling?",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "measured",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "no-direct-file-found-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "rocket-vandenberg-viewing",
+      "canonical": "https://chrisizworski.com/vandenberg-rocket-launch-viewing/",
+      "kind": "decision-engine",
+      "family": "planning",
+      "cluster": "rocket-launch-viewing",
+      "visitorJob": "Vandenberg Space Force Base and public California viewing access restrictions",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/vandenberg-rocket-launch-viewing/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "rocket-florida-viewing",
+      "canonical": "https://chrisizworski.com/national-tools/space-coast-launch/",
+      "kind": "decision-engine",
+      "family": "planning",
+      "cluster": "rocket-launch-viewing",
+      "visitorJob": "Florida launch facility, exact mission and official ticket and NPS viewing availability",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "no-direct-file-found-owner-review"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Confirm owner before audit"
+    },
+    {
+      "id": "rocket-starbase-viewing",
+      "canonical": "https://chrisizworski.com/starbase-rocket-launch-viewing/",
+      "kind": "decision-engine",
+      "family": "planning",
+      "cluster": "rocket-launch-viewing",
+      "visitorJob": "Starbase Texas public viewing, road and beach access against official notices",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/starbase-rocket-launch-viewing/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "rocket-wallops-viewing",
+      "canonical": "https://chrisizworski.com/wallops-rocket-launch-viewing/",
+      "kind": "decision-engine",
+      "family": "planning",
+      "cluster": "rocket-launch-viewing",
+      "visitorJob": "Wallops Virginia documented public viewpoints and event-specific NASA viewing openings",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/wallops-rocket-launch-viewing/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "rocket-kodiak-viewing",
+      "canonical": "https://chrisizworski.com/kodiak-rocket-launch-viewing/",
+      "kind": "decision-engine",
+      "family": "planning",
+      "cluster": "rocket-launch-viewing",
+      "visitorJob": "Kodiak Alaska restricted-range launch context and documented public access boundaries",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/kodiak-rocket-launch-viewing/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "rocket-barking-sands-viewing",
+      "canonical": "https://chrisizworski.com/barking-sands-rocket-launch-viewing/",
+      "kind": "decision-engine",
+      "family": "planning",
+      "cluster": "rocket-launch-viewing",
+      "visitorJob": "Barking Sands Hawaiʻi restricted-range launch and beach-access boundaries",
+      "seasons": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "unknown",
+      "searchTreatment": "active",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/barking-sands-rocket-launch-viewing/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "frozen-lighthouse-watch",
+      "canonical": "https://chrisizworski.com/frozen-lighthouses-michigan/",
+      "kind": "seasonal-live",
+      "family": "live-intelligence",
+      "cluster": "winter-water",
+      "visitorJob": "Will Michigan pier lighthouses form freezing spray ice in the next 72 hours, and when",
+      "seasons": [
+        11,
+        12,
+        1,
+        2,
+        3
+      ],
+      "searchEvidence": "autocomplete-proxy",
+      "searchTreatment": "new-canonical-pending-verified-launch",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/frozen-lighthouses-michigan/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "rideau-canal",
+      "canonical": "https://chrisizworski.com/rideau-canal/",
+      "kind": "source-audited-journey-planner",
+      "family": "planning",
+      "cluster": "trip-planning",
+      "visitorJob": "plan a Rideau Canal historic lock visit, compare boating channel distances and choose officially published paddling itineraries",
+      "seasons": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        10
+      ],
+      "searchEvidence": "primary-source-reviewed",
+      "searchTreatment": "new-canonical-pending-verified-launch",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/rideau-canal/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "calumet-river-watch",
+      "canonical": "https://chrisizworski.com/calumet-freighter-watch/",
+      "kind": "source-backed-live-pilot",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-shipping",
+      "visitorJob": "Chicago Calumet River ship watching, recent AIS reports, public viewing and bridge context",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "not-measured",
+      "searchTreatment": "noindex-pilot",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/calumet-freighter-watch/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    },
+    {
+      "id": "cuyahoga-river-watch",
+      "canonical": "https://chrisizworski.com/cuyahoga-freighter-watch/",
+      "kind": "source-backed-live-pilot",
+      "family": "live-intelligence",
+      "cluster": "great-lakes-shipping",
+      "visitorJob": "Cleveland Cuyahoga River ship watching, recent AIS reports, public viewing and bridge context",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "searchEvidence": "not-measured",
+      "searchTreatment": "noindex-pilot",
+      "surface": {
+        "status": "local-file-present-owner-confirmation-required",
+        "localPath": "public/cuyahoga-freighter-watch/index.html"
+      },
+      "openPRs": [],
+      "adoptionEvidence": {
+        "status": "NOT_ASSESSED",
+        "production": "NOT_VERIFIED",
+        "visitorOutcome": "NOT_MEASURED"
+      },
+      "priority": null,
+      "designMaturity": "NOT_GRADED",
+      "engineQuality": "NOT_GRADED",
+      "visitorUtility": "NOT_GRADED",
+      "technicalQuality": "NOT_GRADED",
+      "nextReview": "Inspect visitor task, engine sources, actual browser behavior and prior proof"
+    }
+  ]
+}

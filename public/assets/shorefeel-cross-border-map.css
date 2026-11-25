@@ -1,0 +1,69 @@
+/* Cross-border explorer only. Leave regional pages and ad policy untouched. */
+#gl-explorer[hidden],#legacy-explorer[hidden],#gl-explorer [hidden]{display:none!important}
+.gl-active .intro{padding:24px 0 10px}
+.gl-active .intro h1{font-size:clamp(30px,4vw,48px);line-height:1.1;margin:6px 0}
+.gl-active .intro .lead{font-size:16px;line-height:1.5;margin:8px 0}
+.gl-active .intro .intro-route,.gl-active .intro .shore-question-links,.gl-active .intro .shore-region-tabs{display:none}
+.gl-explorer{color:#173d48}
+.gl-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(150px,220px) auto;gap:12px;align-items:end}
+.gl-controls label{font-size:13px;font-weight:700;min-width:0}
+.gl-controls input,.gl-controls select{display:block;box-sizing:border-box;width:100%;margin-top:5px;padding:10px;border:1px solid #9bb9be;border-radius:8px;min-height:45px;background:white;color:#173d48;font:16px system-ui,sans-serif}
+.gl-unit,.gl-lakes{display:flex;gap:6px}
+.gl-lakes{flex-wrap:wrap;margin-top:12px}
+.gl-explorer button{font:650 14px system-ui,sans-serif;cursor:pointer;color:#194955;background:#f7faf9;border:1px solid #a9c4c6;border-radius:8px;min-height:42px;padding:8px 12px}
+.gl-explorer button[aria-pressed=true]{background:#175968;color:#fff;border-color:#175968}
+.gl-explorer button:focus-visible,.gl-explorer a:focus-visible,.gl-explorer input:focus-visible,.gl-explorer select:focus-visible,.gl-explorer .leaflet-marker-icon:focus-visible{outline:3px solid #b47523;outline-offset:3px}
+.gl-muted{font-size:13px;line-height:1.5;color:#4d6469;margin:8px 0}
+.gl-workspace{display:grid;grid-template-columns:minmax(0,1.65fr) minmax(0,1fr);gap:22px;align-items:start}
+.gl-map-area,.gl-detail-area{min-width:0}
+#gl-map-shell{border:1px solid #b3c9cc;border-radius:10px;overflow:hidden;background:#e0e9e9}
+#gl-map{height:clamp(360px,55vh,560px);width:100%;background:#e0e9e9;overscroll-behavior:contain}
+#gl-map-shell,#gl-map,#gl-map *{touch-action:none!important;-ms-touch-action:none}
+#gl-map .leaflet-control-zoom a{height:46px;width:46px;line-height:46px;font-size:25px}
+.gl-map-icon{border:0;background:transparent;display:grid;place-items:center}
+.gl-map-icon span{display:grid;place-items:center;box-sizing:border-box;height:32px;min-width:32px;padding:0 5px;border:2px solid white;background:#175968;color:white;font:750 13px system-ui,sans-serif;border-radius:18px;box-shadow:0 1px 5px #193c4c66;white-space:nowrap}
+.gl-map-icon .gl-cluster{min-width:38px;height:38px;background:#22586a;border-radius:50%}
+.gl-map-icon .gl-temperature.has-value{background:#fff;color:#174b5a;border-color:#27697a}
+.gl-map-icon .gl-temperature.no-value{background:#5e7075}
+.gl-map-icon.gl-selected span{outline:3px solid #ba7b23;outline-offset:2px}
+.gl-map-legend{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:#34545d;margin:6px 0}
+.gl-map-legend b{color:#175968}
+.gl-hint{padding:14px 0;border-top:2px solid #175968;line-height:1.6;margin:0}
+.gl-detail{border-top:3px solid #175968;padding:14px 0}
+.gl-detail h2{font:700 27px/1.2 Georgia,serif;margin:0;color:#173d48}
+.gl-detail h3{font:700 18px Georgia,serif;margin:18px 0 8px}
+.gl-detail p:not(.gl-muted){font-size:15px;line-height:1.55}
+.gl-answer{display:flex;flex-direction:column;margin:14px 0;color:#175968}
+.gl-answer span,.gl-metrics span{font-size:13px;font-weight:650}
+.gl-answer strong{font:750 clamp(32px,5vw,50px)/1.15 system-ui,sans-serif}
+.gl-metrics{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:12px 0;border-top:1px solid #cbdcdd;border-bottom:1px solid #cbdcdd}
+.gl-metrics div{display:grid;gap:4px;min-width:0}
+.gl-metrics strong{font-size:16px;overflow-wrap:anywhere}
+.gl-warning{background:#fff4df;color:#584322;padding:10px 12px;margin:0;font-size:14px}
+.gl-hours{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gl-hours div{display:flex;flex-direction:column;border-bottom:1px solid #cbdcdd;padding:7px 0}
+.gl-hours span{font-size:11px;color:#4d6469}
+.gl-hours strong{font-size:16px}
+.gl-links{display:flex;flex-wrap:wrap;gap:8px 12px;margin-top:12px}
+.gl-links a,.gl-safety a{font-weight:700;color:#165968;text-decoration:underline;text-underline-offset:2px}
+.gl-directory{margin-top:20px;border-top:1px solid #b8cecf;padding-top:14px}
+.gl-list-top{display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:space-between}
+.gl-list-top h2{font:700 23px Georgia,serif;margin:0}
+#gl-count{font-size:13px;color:#4d6469}
+.gl-results{padding:0;margin:10px 0;list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.gl-results button{width:100%;min-height:54px;text-align:left;display:flex;flex-direction:column;gap:4px;overflow-wrap:anywhere}
+.gl-results button span{font-size:12px;font-weight:400}
+.gl-safety{font-size:14px;line-height:1.6;border-top:1px solid #b8cecf;margin-top:20px;padding-top:14px}
+@media(max-width:760px){
+ .gl-active .intro{padding-top:14px}
+ .gl-active .intro h1{font-size:31px}
+ .gl-controls{grid-template-columns:minmax(0,1fr) auto;gap:8px}
+ .gl-controls label:first-child{grid-column:1/-1}
+ .gl-lakes{gap:4px;margin-top:8px}
+ .gl-lakes button{padding:7px 8px;min-height:38px;font-size:13px}
+ .gl-workspace{grid-template-columns:minmax(0,1fr);gap:12px}
+ #gl-map{height:340px}
+ .gl-results{grid-template-columns:minmax(0,1fr)}
+ .gl-detail h2{font-size:25px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}}

@@ -27,7 +27,8 @@ ROAD_TRACE = ROOT / "data/circle-tour-road-trace-v1.json"
 NIGHT_OPTIONS = ROOT / "data/circle-tour-overnight-options-v1.json"
 OUT = ROOT / "public/lake-superior-circle-tour/10-day/index.html"
 CANONICAL = "https://chrisizworski.com/lake-superior-circle-tour/10-day/"
-VERSION = "2026-11-14"
+VERSION = "2026-11-14"  # source reconciliation version
+PAGE_MODIFIED = "2026-11-24"
 STORY = {
     1: ("Bayfield", "Start beside the harbor. Duluth's Aerial Lift Bridge is a fitting first look at the working lake; Bayfield is the doorway to island country.",
         "Use the afternoon for Bayfield and a view of the islands. A boat cruise is a separate commitment to weather and departure times.",
@@ -438,6 +439,13 @@ STYLES += """
 .ct-opt-day ul{margin:8px 0 6px;padding-left:18px}
 .ct-opt-day li{font-size:13px}
 .ct-opt-caution{color:#76502d;font-size:12px;font-weight:650}
+.ct-opt-experience{border-top:1px solid #d9e5dd;padding-top:12px;margin:12px 0}
+.ct-opt-experience h5{font-size:1rem;line-height:1.35;margin:0 0 6px;color:var(--ink)}
+.ct-opt-experience p{margin:6px 0}
+.ct-opt-experience summary{cursor:pointer;font-weight:700;padding:9px 0;min-height:44px}
+#ct-opt-day-window{margin:14px 0 6px;min-width:0}
+#ct-opt-day-window label{display:flex;align-items:center;gap:6px;min-height:44px}
+@media print{#ct-opt-day-window,#ct-opt-window-help{display:none}}
 .ct-optimized-source{font-size:12px;color:#526b5e}
 .ct-original-heading{font-size:19px;margin:18px 0 8px}
 @media(max-width:780px){.ct-optimized-days{grid-template-columns:1fr}}
@@ -470,7 +478,7 @@ def render(data: list[dict], ledger: dict, visual: dict, traveler: dict, route_t
     schema = json.dumps({
         "@context": "https://schema.org", "@type": "Article",
         "headline": "Lake Superior Circle Tour: 10-Day Itinerary, Overnight Stops & What to Do",
-        "mainEntityOfPage": CANONICAL, "dateModified": VERSION,
+        "mainEntityOfPage": CANONICAL, "dateModified": PAGE_MODIFIED,
         "image": visual["hero"]["src"],
         "author": {"@type": "Person", "name": "Chris Izworski", "url": "https://chrisizworski.com/#person"},
         "publisher": {"@type": "Organization", "name": "Chris Izworski", "url": "https://chrisizworski.com/"}
@@ -600,7 +608,7 @@ def render(data: list[dict], ledger: dict, visual: dict, traveler: dict, route_t
 <p>These official sources provide context for roads, border requirements and park access. A link is not evidence that today's route or facility is open. Last editorial reconciliation: {VERSION}.</p>
 <ul>{sources}</ul>
 <p><a href="/lake-superior-circle-tour/">Return to the full Circle Tour map, original itineraries and all 31 stops</a></p></section>
-<footer>Compiled by <a href="https://chrisizworski.com/#person">Chris Izworski</a>. Destination photography is credited beside each image. Route decisions and linked tools are editorial; confirm current conditions with the source. Updated November 14, 2026.</footer>
+<footer>Compiled by <a href="https://chrisizworski.com/#person">Chris Izworski</a>. Destination photography is credited beside each image. Route decisions and linked tools are editorial; confirm current conditions with the source. Updated November 24, 2026.</footer>
 </main>
 <script id="ct-intelligence-days" type="application/json">{embedded}</script>
 <script id="ct-traveler-presets" type="application/json">{traveler_embedded}</script>
@@ -610,8 +618,8 @@ def render(data: list[dict], ledger: dict, visual: dict, traveler: dict, route_t
 <script defer src="/assets/circle-tour-trip-feasibility.js?v=20261114-1"></script>
 <script defer src="/assets/circle-tour-traveler-engine.js?v=20261114-1"></script>
 <script defer src="/assets/circle-tour-traveler-ui.js?v=20261114-1"></script>
-<script defer src="/assets/circle-tour-overnight-optimizer.js?v=20261114-1"></script>
-<script defer src="/assets/circle-tour-overnight-ui.js?v=20261114-1"></script>
+<script defer src="/assets/circle-tour-overnight-optimizer.js?v=20261124-experience"></script>
+<script defer src="/assets/circle-tour-overnight-ui.js?v=20261124-experience"></script>
 </body></html>
 """
 

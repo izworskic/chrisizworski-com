@@ -125,7 +125,7 @@
   var inspectorClose=document.getElementById("ship-inspector-close"), selectedMmsi=null, selectedName=null;
   var storyBox=document.getElementById("ship-story"), storyPromise=null;
   var corridorKeys=["soo","mackinac","duluth","port-huron","detroit","saginaw"];
-  function recent(v,now){ var seen=Date.parse(v.seen); return Number.isFinite(seen) && now-seen>=-60000 && now-seen<=1800000; }
+  function recent(v,now){ return window.GreatLakesAisEvidence?.positionFresh(v,now)===true; }
   function corridorRadius(key){return key==="saginaw"?60:35;}
   function inCorridor(v,key){var view=views[key];return distanceMiles(view.lat,view.lng,v.lat,v.lon)<=corridorRadius(key);}
   function updateActivity(now){
@@ -176,7 +176,9 @@
     renderStory(v);
     inspectorStatus.textContent="Last reported "+Math.max(0,Math.round((now-Date.parse(v.seen))/60000))+" min ago · "+v.source+" · MMSI "+v.mmsi;
     inspectorFacts.replaceChildren();
-    var fields=[["Speed",v.speedKnots===null?"Not reported":(v.speedKnots*1.15078).toFixed(1)+" mph ("+v.speedKnots.toFixed(1)+" kn)"],
+    var evidence=window.GreatLakesAisEvidence?.motion(v,now);
+    var motionLabel=evidence?.state==="moving"?"Recent reported movement":evidence?.state==="low-reported-speed"?"Recent low reported speed":"Current movement not established";
+    var fields=[["Movement evidence",motionLabel],["Reported speed",v.speedKnots===null?"Not reported":(v.speedKnots*1.15078).toFixed(1)+" mph ("+v.speedKnots.toFixed(1)+" kn)"],
       ["Course",v.course===null?"Not reported":Math.round(v.course)+"°"],
       ["AIS destination",v.destination||"Not reported"],
       ["Reported length",v.lengthMeters===null?"Not reported":Math.round(v.lengthMeters*3.28084)+" ft"]];
@@ -478,6 +480,7 @@
     if(!reports || document.hidden)return;
     var now=Date.now(), fresh=reports.vessels.filter(function(v){return recent(v,now);});
     if(fresh.length!==reports.vessels.length){reports.vessels=fresh;renderVessels();}
+    else if(selectedMmsi){var selected=fresh.find(function(v){return String(v.mmsi)===selectedMmsi;});if(selected)showShip(selected,now);}
   }
   setInterval(expireReports,15000);
   document.addEventListener("visibilitychange",expireReports);

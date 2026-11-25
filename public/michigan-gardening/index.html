@@ -44,7 +44,7 @@
         "@id": "https://chrisizworski.com/#person"
       },
       "description": "A curated set of Michigan Zone 6a gardening guides covering planting calendars, frost dates, heirloom tomatoes, seed saving, and companion planting.",
-      "dateModified": "2026-11-13",
+      "dateModified": "2026-11-24",
       "hasPart": [
         {
           "@type": "Article",
@@ -469,6 +469,7 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
 <link rel="stylesheet" href="/assets/garden-tools/garden-kit.css">
 <link rel="stylesheet" href="/assets/garden-tools/season-story.css?v=20261113a">
 <link rel="stylesheet" href="/assets/garden-tools/garden-hub.css?v=20261113a">
+<link rel="stylesheet" href="/assets/garden-tools/growing-season.css?v=20261124c">
 <link rel="stylesheet" href="/assets/garden-tools/garden-welcome.css?v=20261113a">
 <link rel="stylesheet" href="/assets/garden-tools/fvf-identity.css?v=20261113a">
 
@@ -608,6 +609,7 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
   </section>
  </div>
  <p class="garden-outside">Our planning tools use 78 Michigan frost stations and MSU Extension guidance where available. Your soil, seed packet and forecast get the final say.</p>
+ <p class="garden-outside"><a href="#growing-season">Follow your crop through the growing season</a> with historical heat and upcoming overnight weather. <a href="#field-journal">Record your actual plantings and harvests</a> in the field journal.</p>
  <p class="garden-outside">Gardening outside Michigan? <a href="/national-tools/planting/">Open the U.S. planting calendar</a>.</p>
 </section>
 <section class="garden-welcome" aria-labelledby="welcomeTitle">
@@ -738,6 +740,126 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
   </ul>
  </section>
 </div>
+</details>
+
+<details class="planner-door" id="growing-season">
+ <summary><span>FREIGHTER VIEW FARMS · GROWING SEASON</span><strong>Follow a crop from planting to harvest</strong><small>Explore five past growing seasons and check the next cold nights near your garden.</small></summary>
+ <div class="gs-body">
+  <h3>Every garden has its own growing season.</h3>
+  <p>Choose a crop, planting date and one of seven Michigan weather reference towns. See how much the same planting date can vary from year to year, then check the upcoming nights. This is a planning notebook, not a prediction of the day you will harvest.</p>
+  <form id="gs-form" class="gs-form" hidden>
+   <div class="gs-fields">
+    <label for="gs-place">Historical reference town<input id="gs-place" list="gs-towns" autocomplete="off" required><datalist id="gs-towns"></datalist></label>
+    <label for="gs-crop">Crop and variety (choose a matching starting stage or type your own)<input id="gs-crop" list="gs-crops" autocomplete="off" maxlength="120" required><datalist id="gs-crops"></datalist></label>
+    <label for="gs-date">Planting or planned planting date<input id="gs-date" type="date" min="2020-01-01" max="2100-12-31" required></label>
+    <label for="gs-packet">Packet days to maturity (optional)<input id="gs-packet" type="number" min="1" max="365" inputmode="numeric"></label>
+   </div>
+   <div class="gs-actions"><button type="submit">Update and save my season</button><button type="button" class="gs-secondary" id="gs-clear">Clear saved plan</button><button type="button" class="gs-secondary" id="gs-journal" disabled>Copy to field journal</button><span class="gs-save-status" id="gs-save-status" role="status">Saved only in this browser when you choose to save.</span></div>
+  </form>
+  <p id="gs-status" role="status">Open the notebook to compare historic growing seasons.</p>
+  <div class="gs-grid">
+   <section aria-labelledby="gs-history-title"><h3 id="gs-history-title">How past seasons unfolded</h3><div id="gs-history" aria-live="polite"></div></section>
+   <section aria-labelledby="gs-weather-title"><h3 id="gs-weather-title">Watch the nights ahead</h3><button type="button" id="gs-weather" disabled>Check overnight weather</button><p id="gs-weather-status" role="status">No current forecast loaded.</p><div id="gs-weather-result"></div><p><a href="/national-tools/frost/cover-plants-tonight/">Should I cover my plants tonight?</a></p></section>
+  </div>
+  <p class="gs-sources">Historical reference: <a href="https://doi.org/10.3334/ORNLDAAC/2129">NASA Daymet 2021–2025</a>, regional 1 km gridded temperatures, not garden measurements. Cultivar models: <a href="https://extension.oregonstate.edu/catalog/em-9305-vegetable-degree-day-models-introduction-farmers-gardeners">Oregon State University Extension</a>, not independently validated in Michigan. Forecasts: <a href="https://www.weather.gov/">National Weather Service</a>. <a href="/michigan-soil-temperature/">Check soil temperature</a> · <a href="/national-tools/garden-water/">Check watering needs</a> · <a href="/michigan-garden-pest-watch/">Inspect for pests</a> · <a href="/living-garden/">Plan and record your raised-bed harvests</a>.</p>
+  <noscript><p>JavaScript is required for the historical comparison and weather lookup. The source links and existing garden tools above remain available.</p></noscript>
+ </div>
+</details>
+
+<details class="planner-door" id="field-journal">
+ <summary><span>FREIGHTER VIEW FARMS · FIELD JOURNAL</span><strong>Keep a record of what actually grows</strong><small id="fj-count">Your private garden notes, planting dates and harvests.</small></summary>
+ <div class="gs-body">
+  <h3>A garden remembers what we write down.</h3>
+  <p>Keep a separate record for each planting, even when you sow the same variety twice. Note the first flowers, fruit, weighed harvests, crop losses, rainfall, irrigation and measured temperatures. Your observations stay on this device unless you export a backup. <a href="#growing-season">Open the growing-season notebook</a> to copy a modeled crop into the journal.</p>
+  <div id="fj-controls" hidden>
+   <p id="fj-status" role="status" aria-live="polite">Your journal is stored in this browser. Export a backup before clearing browser data.</p>
+   <details class="fj-add" open>
+    <summary>Add an actual planting</summary>
+    <form id="fj-plant-form" class="gs-form">
+     <div class="gs-fields">
+      <label for="fj-crop">Crop and variety<input id="fj-crop" maxlength="120" required placeholder="Brandywine tomato"></label>
+      <label for="fj-bed">Bed or planting name<input id="fj-bed" maxlength="80" required placeholder="South raised bed"></label>
+      <label for="fj-town">Regional weather reference<select id="fj-town" required></select></label>
+      <label for="fj-plant-date">Actual planting date<input id="fj-plant-date" type="date" required min="1900-01-01"></label>
+      <label for="fj-packet">Packet days to maturity (optional)<input id="fj-packet" type="number" min="1" max="365"></label>
+     </div>
+     <p id="fj-model" class="fj-small"></p>
+     <button type="submit">Record planting</button>
+    </form>
+   </details>
+   <p id="fj-empty">No plantings recorded yet. Start with one crop you actually planted.</p>
+   <div id="fj-record" hidden>
+    <label for="fj-selected">Your plantings<select id="fj-selected"></select></label>
+    <p id="fj-planting-info" class="fj-small"></p>
+    <div class="gs-grid">
+     <section aria-labelledby="fj-log-heading"><h3 id="fj-log-heading">What did you notice?</h3>
+      <form id="fj-entry-form" class="gs-form">
+       <div class="gs-fields"><label for="fj-kind">Observation<select id="fj-kind"></select></label><label for="fj-entry-date">Date observed<input type="date" id="fj-entry-date" required></label></div>
+       <fieldset id="fj-air-fields" hidden disabled><legend>Completed local calendar day</legend><div class="gs-fields"><label for="fj-min">Measured low (°F)<input id="fj-min" type="number" min="-80" max="140" step="any" required></label><label for="fj-max">Measured high (°F)<input id="fj-max" type="number" min="-80" max="140" step="any" required></label></div><label class="fj-check" for="fj-full-day"><input type="checkbox" id="fj-full-day" required> I measured the full day with a shielded air sensor, not soil temperature or a forecast.</label></fieldset>
+       <fieldset id="fj-night-fields" hidden disabled><legend>Matched night, previous 6 p.m. to 9 a.m.</legend><div class="gs-fields"><label for="fj-garden-low">Garden measured low (°F)<input id="fj-garden-low" type="number" min="-80" max="140" step="any" required></label><label for="fj-ref-low">Reference measured low (°F)<input id="fj-ref-low" type="number" min="-80" max="140" step="any" required></label><label for="fj-ref-id">Reference sensor or station name<input id="fj-ref-id" maxlength="100" required></label><label for="fj-regime">Conditions<select id="fj-regime"><option value="clear-calm">Clear and calm</option><option value="cloudy-windy">Cloudy and windy</option><option value="other">Other</option></select></label></div><label class="fj-check" for="fj-same-night"><input type="checkbox" id="fj-same-night" required> Both measured lows cover the same completed night, ending on the observation date.</label><label class="fj-check" for="fj-same-height"><input type="checkbox" id="fj-same-height" required> Both shielded air sensors use comparable heights and exposure.</label></fieldset>
+       <fieldset id="fj-water-amount-fields" hidden disabled><legend>Measured water depth</legend><label for="fj-water-inches">Daily total (inches)<input id="fj-water-inches" type="number" min="0" max="10" step="any" required></label><p class="fj-small">For rain, use the total for a completed local calendar day. For irrigation, record the combined depth applied to this planting area that day, not rainfall.</p></fieldset>
+       <fieldset id="fj-feel-fields" hidden disabled><legend>Soil at root depth</legend><label for="fj-feel">How did the soil feel?<select id="fj-feel"><option value="wet">Wet</option><option value="moist">Moist</option><option value="getting-dry">Getting dry</option><option value="dry">Dry</option></select></label><p class="fj-small">Check beneath the surface near the roots, not only the top crust. Record a new observation today before using the watering calculation.</p></fieldset>
+       <fieldset id="fj-leaf-fields" hidden disabled><legend>Leaf scouting observation</legend><div class="gs-fields"><label for="fj-leaf-sign">Main sign you noticed<select id="fj-leaf-sign"><option value="none">No visible signs</option><option value="rings">Brown spots with rings</option><option value="small-spots">Numerous small spots</option><option value="water-soaked">Irregular water-soaked or dark lesions</option><option value="white-powder">White powder-like patches</option><option value="angular-yellow">Angular yellow patches</option><option value="other">Other visible damage</option></select></label><label for="fj-leaf-wet">Foliage at inspection<select id="fj-leaf-wet"><option value="unknown">Not checked</option><option value="wet">Wet</option><option value="dry">Dry</option></select></label><label for="fj-leaf-checked">Leaves inspected<input id="fj-leaf-checked" type="number" min="1" max="200" required></label><label for="fj-leaf-affected">Leaves with visible damage<input id="fj-leaf-affected" type="number" min="0" max="200" required></label></div><p class="fj-small">Record what you saw, not a disease diagnosis. Use comparable leaves and sample sizes on later visits. A wet leaf at one inspection does not measure hours of leaf wetness.</p></fieldset>
+       <fieldset id="fj-harvest-fields" hidden disabled><legend>Weighed harvest for this planting</legend><div class="gs-fields"><label for="fj-usable-weight">Usable produce weight<input id="fj-usable-weight" type="number" min="0" step="any" required></label><label for="fj-discard-weight">Weighed discarded produce<input id="fj-discard-weight" type="number" min="0" step="any" required></label><label for="fj-weight-unit">Weight unit<select id="fj-weight-unit"><option value="lb">Pounds</option><option value="oz">Ounces</option><option value="kg">Kilograms</option><option value="g">Grams</option></select></label></div><p class="fj-small">Enter the combined weight for this planting on this date, without baskets or containers. Enter zero for a category only if none was harvested. Do not count the same produce in two planting records. First harvest milestones are dates, not weights.</p></fieldset>
+       <fieldset id="fj-loss-fields" hidden disabled><legend>Plants lost</legend><label for="fj-lost-count">Number of plants lost on this date<input id="fj-lost-count" type="number" min="1" max="10000" required></label><p class="fj-small">Count plants removed or dead, not damaged leaves. Use notes to record the suspected cause; no unmeasured produce weight is inferred.</p></fieldset>
+       <label for="fj-note">Notes (optional)<textarea id="fj-note" rows="3" maxlength="1000" placeholder="What changed since your last visit?"></textarea></label>
+       <button type="submit">Record observation</button>
+      </form>
+     </section>
+     <section aria-labelledby="fj-compare-heading"><h3 id="fj-compare-heading">Your season, compared</h3><div id="fj-comparison" aria-live="polite"></div><h3>Field timeline</h3><div id="fj-entries"></div></section>
+    </div>
+    <details class="fj-add" id="fj-productivity"><summary>See what this garden produced</summary>
+     <h3>From the garden to the kitchen.</h3><p>Weigh each day's harvest and record plant losses in the journal. Compare measured production with the space and time a planting occupied.</p>
+     <div id="fj-yield-summary" aria-live="polite"></div>
+     <form id="fj-yield-form" class="gs-form">
+      <h3>Space this planting used</h3><div class="gs-fields">
+      <label for="fj-yield-group">Crop group for comparison<select id="fj-yield-group" required><option value="">Choose crop group</option><option value="tomatoes">Tomatoes</option><option value="peppers">Peppers</option><option value="cucumbers">Cucumbers</option><option value="squash">Squash</option><option value="beans">Beans</option><option value="brassicas">Brassicas</option><option value="potatoes">Potatoes</option><option value="corn">Corn</option><option value="leafy">Leafy greens</option><option value="roots">Root crops</option><option value="onions">Onions</option><option value="herbs">Herbs</option><option value="melons">Melons</option><option value="other">Other (no crop comparison)</option></select></label>
+      <label for="fj-yield-length">Allocated length (feet, optional)<input id="fj-yield-length" type="number" min=".1" max="100" step="any"></label>
+      <label for="fj-yield-width">Allocated width (feet, optional)<input id="fj-yield-width" type="number" min=".1" max="100" step="any"></label>
+      <label for="fj-yield-plants">Original plant count (optional)<input id="fj-yield-plants" type="number" min="1" max="10000"></label></div>
+      <p class="fj-small">Enter the area allocated to this planting, not the whole bed unless this crop used all of it. Successive plantings can reuse the same space; their areas are never added into a garden footprint.</p>
+      <label class="fj-check" for="fj-yield-complete"><input id="fj-yield-complete" type="checkbox"> This planting is finished. All harvested produce is included in the weights, or I confirm there was no harvest.</label>
+      <label for="fj-yield-close">Last day of this planting (required if finished)<input id="fj-yield-close" type="date"></label>
+      <button type="submit">Save planting details</button>
+     </form>
+     <h3>Compare finished plantings</h3><div id="fj-yield-compare" aria-live="polite"></div>
+     <div class="fj-add"><h3>Your garden harvest by year</h3><label for="fj-yield-year">Harvest year<input id="fj-yield-year" type="number" min="1900" max="2100"></label><div id="fj-yield-season" aria-live="polite"></div></div>
+     <p class="fj-small">These are your recorded weights, not predicted yields. Compare similar crops and growing conditions. Differences do not prove one variety is better; weather, care, spacing and harvest practices can differ. <a href="/living-garden/">Plan bed layout and succession in The Living Garden</a>.</p>
+    </details>
+    <details class="fj-add" id="fj-water"><summary>Water this planting</summary><h3>What does this bed need today?</h3><p id="fj-water-ledger" class="fj-small">Record rainfall, irrigation and a soil check in the journal above.</p>
+     <form id="fj-water-form" class="gs-form"><div class="gs-fields">
+      <label for="fj-water-crop">Watering crop profile<select id="fj-water-crop" required><option value="">Choose crop</option><option value="tomato">Tomatoes</option><option value="pepper">Peppers</option><option value="cucumber">Cucumbers</option><option value="squash">Squash</option><option value="beans">Beans</option><option value="corn">Sweet corn</option><option value="brassicas">Broccoli, cabbage, cauliflower</option><option value="leafy">Leafy greens</option><option value="roots">Root crops</option><option value="onion">Onions</option><option value="herbs">Herbs</option><option value="melons">Melons</option><option value="generic">Mixed vegetables</option></select></label>
+      <label for="fj-water-stage">Current crop stage<select id="fj-water-stage"><option value="seedling">Seedling</option><option value="developing">Developing</option><option value="mature">Mature</option></select></label>
+      <label for="fj-water-bed">Growing area<select id="fj-water-bed"><option value="ground">In ground</option><option value="raised">Raised bed</option><option value="container">Container</option></select></label>
+      <label for="fj-water-soil">Soil type<select id="fj-water-soil"><option value="auto">Mapped local soil (USDA estimate)</option><option value="sand">Sand</option><option value="sandy-loam">Sandy loam</option><option value="loam">Loam</option><option value="silt-loam">Silt loam</option><option value="clay-loam">Clay loam</option><option value="clay">Clay</option><option value="potting-mix">Potting mix</option></select></label>
+      <label for="fj-water-length">Watered length (feet, optional)<input id="fj-water-length" type="number" min=".1" max="100" step="any"></label>
+      <label for="fj-water-width">Watered width (feet, optional)<input id="fj-water-width" type="number" min=".1" max="100" step="any"></label>
+      </div><label class="fj-check" for="fj-water-mulch"><input id="fj-water-mulch" type="checkbox"> Mulched soil</label>
+      <label class="fj-check" for="fj-water-active"><input id="fj-water-active" type="checkbox" required> This crop is actively growing and the soil is unfrozen.</label>
+      <button type="submit">Check today's watering needs</button><p class="fj-small">Uses the selected regional weather reference and today's recorded soil feel. Length × width is the area you actually water, not the whole garden.</p></form>
+     <div id="fj-water-result" role="status" aria-live="polite"></div>
+     <p class="fj-small">Powered by the existing <a href="/national-tools/garden-water/">Garden Water Today</a> engine and its NOAA, NWS and USDA evidence. Regional model estimates are not sensor readings. Never treat an unknown rainfall day as a measured zero. Check drainage and root conditions before applying water.</p>
+    </details>
+    <details class="fj-add" id="fj-disease"><summary>Scout this planting for disease</summary>
+    <h3>Take a closer look at your leaves.</h3><p class="fj-small" id="fj-disease-ledger">Record a leaf scouting observation above to build your own history.</p>
+    <form id="fj-disease-form" class="gs-form"><div class="gs-fields">
+    <label for="fj-disease-crop">Crop to inspect<select id="fj-disease-crop" required><option value="">Choose crop</option><option value="tomatoes">Tomatoes</option><option value="potatoes">Potatoes</option><option value="cucumbers">Cucumbers</option><option value="squash">Squash and pumpkins</option></select></label>
+    <label for="fj-disease-stage">Current stage<select id="fj-disease-stage"><option value="seedling">Seedling</option><option value="growing">Growing</option><option value="flowering">Flowering</option><option value="fruiting">Fruiting</option></select></label></div>
+    <label class="fj-check" for="fj-disease-active"><input id="fj-disease-active" type="checkbox"> This planting has living foliage now.</label>
+    <button type="submit">Build my scouting guide</button><p class="fj-small">Uses your local observations and, for living plants, the existing Pest Watch forecast. No infection probabilities or spray schedules.</p></form>
+    <div id="fj-disease-result" role="status" aria-live="polite"></div>
+    <p class="fj-small"><a href="/michigan-garden-pest-watch/">Compare symptoms and see the full Michigan Garden Pest Watch</a>. Weather is not a disease diagnosis. Local disease reports and spore monitoring are not yet integrated.</p>
+    </details>
+    <details class="fj-add"><summary>Explore my measured microclimate</summary><p>Use at least five recent matched nights from the same planting, reference sensor and weather regime. Enter a reference low to see what would happen if the measured differences recurred. No automatic frost clearance.</p>
+     <form id="fj-pair-form" class="gs-form"><div class="gs-fields"><label for="fj-scenario-ref">Same reference sensor name<input id="fj-scenario-ref" maxlength="100" required></label><label for="fj-scenario-regime">Matching weather regime<select id="fj-scenario-regime"><option value="clear-calm">Clear and calm</option><option value="cloudy-windy">Cloudy and windy</option><option value="other">Other</option></select></label><label for="fj-scenario-low">Reference low to explore (°F)<input id="fj-scenario-low" type="number" min="-80" max="140" step="any" required></label><label for="fj-scenario-date">Morning date<input id="fj-scenario-date" type="date" required></label></div><button type="submit">Compare measured nights</button></form><div id="fj-pair-result" role="status"></div>
+    </details>
+    <details class="fj-add"><summary>Remove this planting</summary><p>This removes the selected planting and all its observations. Export a backup first if you want to keep them.</p><label class="fj-check" for="fj-confirm-delete"><input type="checkbox" id="fj-confirm-delete"> Remove this planting and its observations.</label><button type="button" id="fj-delete" class="gs-secondary">Remove planting</button></details>
+   </div>
+   <div class="fj-backup"><h3>Keep your notebook</h3><p>Download a JSON backup to keep your journal beyond this browser. Restore only into an empty journal.</p><button type="button" id="fj-export" class="gs-secondary" disabled>Export journal backup</button><label for="fj-import">Restore journal backup<input id="fj-import" type="file" accept=".json,application/json"></label></div>
+  </div>
+  <p class="gs-sources">Historical reference: <a href="https://doi.org/10.3334/ORNLDAAC/2129">NASA Daymet</a> and <a href="https://extension.oregonstate.edu/catalog/em-9305-vegetable-degree-day-models-introduction-farmers-gardeners">Oregon State Extension crop models</a>. Self-reported observations are not independently verified; this journal does not publish your notes or automatically calibrate forecasts. <a href="/living-garden/">Open the raised-bed planner</a> for bed layout and succession planning.</p>
+  <noscript><p>JavaScript is required to save and compare your journal locally. The planting and weather tools remain available.</p></noscript>
+ </div>
 </details>
 
 <!-- MAIN CONTENT -->
@@ -1172,5 +1294,14 @@ body.hm-page{--hm-display:"Playfair Display",Georgia,serif;--hm-body:"Instrument
 })();
 </script>
 <script src="/assets/garden-tools/seasonal-heat.js?v=20261101"></script>
+<script defer src="/assets/garden-tools/garden-harvest.js?v=20261124"></script>
+<script defer src="/assets/garden-tools/garden-history.js?v=20261124"></script>
+<script defer src="/assets/garden-tools/growing-season.js?v=20261124b"></script>
+<script defer src="/assets/garden-tools/garden-microclimate.js?v=20261124"></script>
+<script defer src="/assets/garden-tools/garden-field-journal.js?v=20261124d"></script>
+<script defer src="/assets/garden-tools/garden-journal-water.js?v=20261124"></script>
+<script defer src="/assets/garden-tools/garden-disease.js?v=20261124"></script>
+<script defer src="/assets/garden-tools/garden-productivity.js?v=20261124"></script>
+<script defer src="/assets/garden-tools/field-journal-ui.js?v=20261124d"></script>
 </body>
 </html>

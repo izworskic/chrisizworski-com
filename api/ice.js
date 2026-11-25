@@ -1,6 +1,7 @@
 import { michiganIceClock, winterObservationDate, belongsToWinter } from '../lib/michigan-ice/season.mjs';
 import { acisRange, afddFrom } from '../lib/michigan-ice/thermal.mjs';
 import { cavesResponse } from '../lib/michigan-ice/caves.mjs';
+import { buildIceRecord, ICE_LAKES } from '../lib/michigan-ice/climatology.mjs';
 // /api/ice — server-side aggregation for the Michigan Ice Report.
 //
 // Upstreams:
@@ -64,41 +65,6 @@ async function currentCover(now) {
   };
 }
 
-async function climatology(lakeCode, now) {
-  const file = { huron: 'hur', michigan: 'mic', superior: 'sup', erie: 'eri' }[lakeCode];
-  if (!file) return null;
-  const r = await fetch('https://www.glerl.noaa.gov/data/ice/glicd/daily/' + file + '.txt', { headers: UA });
-  if (!r.ok) return null;
-  const lines = (await r.text()).trim().split('\n');
-  const years = lines[0].trim().split(/\s+/);
-  const label = rowLabel(now);
-  for (let i = 1; i < lines.length; i++) {
-    const p = lines[i].trim().split(/\s+/);
-    if (p[0] !== label) continue;
-    const cells = p.slice(1);
-    const vals = [];
-    for (const c of cells) if (c !== 'NA') vals.push(Number(c));
-    if (!vals.length) return null;
-    const sorted = vals.slice().sort((a, b) => a - b);
-    const mean = vals.reduce((a, b) => a + b, 0) / vals.length;
-    const median = sorted.length % 2
-      ? sorted[(sorted.length - 1) / 2]
-      : (sorted[sorted.length / 2 - 1] + sorted[sorted.length / 2]) / 2;
-    const iceYear = String(now.getUTCMonth() + 1 >= 10 ? now.getUTCFullYear() + 1 : now.getUTCFullYear());
-    const idx = years.indexOf(iceYear);
-    const curRaw = idx >= 0 ? cells[idx] : 'NA';
-    return {
-      date: label, yearsOfRecord: vals.length,
-      mean: Math.round(mean * 10) / 10,
-      median: Math.round(median * 10) / 10,
-      min: sorted[0], max: sorted[sorted.length - 1],
-      current: curRaw === 'NA' ? null : Number(curRaw),
-      firstYear: years[0], lastYear: years[years.length - 1]
-    };
-  }
-  return null;
-}
-
 function afddChange(rows, days, current) {
   if (!rows || current === null) return null;
   const previous = afddFrom(rows.slice(0, Math.max(0, rows.length - days)));
@@ -149,13 +115,18 @@ export default async function handler(req) {
     },
     cover: null,
     climatology: {},
+    history: null,
     cold: []
   };
 
   const tasks = [
     currentCover(now).then(v => { out.cover = v; }).catch(() => { out.cover = null; }),
-    climatology('huron', now).then(v => { out.climatology.huron = v; }).catch(() => { out.climatology.huron = null; }),
-    climatology('michigan', now).then(v => { out.climatology.michigan = v; }).catch(() => { out.climatology.michigan = null; })
+    buildIceRecord(now).then(history => {
+      out.history = history;
+      for (const lake of ICE_LAKES) out.climatology[lake.key] = history.lakes[lake.key] ?? null;
+    }).catch(() => {
+      for (const lake of ICE_LAKES) out.climatology[lake.key] = null;
+    })
   ];
   for (const r of REGIONS) {
     tasks.push(coldFor(r, now).then(v => { out.cold.push(v); })

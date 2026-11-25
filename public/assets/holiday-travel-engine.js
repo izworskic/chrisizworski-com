@@ -194,10 +194,10 @@
 
   /* ---------- live layer: National Weather Service responses ---------- */
   // alerts: api.weather.gov/alerts/active?point=lat,lon JSON. Keep hazards overlapping [startISO, endISO).
-  function hazards(alerts, startISO, endISO) {
+  function hazards(alerts, startISO, endISO, includeAllWarnings) {
     var s = Date.parse(startISO), e = Date.parse(endISO);
     return ((alerts && alerts.features) || []).map(function (f) { return f.properties || {}; }).filter(function (p) {
-      if (HAZARDS.indexOf(p.event) < 0) return false;
+      if (HAZARDS.indexOf(p.event) < 0 && !(includeAllWarnings && /Warning$/i.test(p.event))) return false;
       var on = Date.parse(p.onset || p.effective || p.sent), off = Date.parse(p.ends || p.expires);
       return (isNaN(on) || on < e) && (isNaN(off) || off > s);
     }).map(function (p) { return { event: p.event, headline: p.headline || p.event, severe: SEVERE.test(p.event), ends: p.ends || p.expires || null }; });
