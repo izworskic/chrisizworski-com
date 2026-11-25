@@ -55,6 +55,12 @@ async function weatherFor(place){
   const href=point?.properties?.forecastHourly;
   if(typeof href!=='string'||!href.startsWith('https://api.weather.gov/'))throw new Error('missing official hourly forecast');
   const response=await jsonResponse(href);
+  // Match the existing US regional ShoreFeel NWS issuance policy. Retrieval
+  // time and valid forecast hours do not establish when a forecast was issued.
+  const issueMs=Date.parse(response?.properties?.updateTime||'');
+  const age=Date.now()-issueMs;
+  if(!Number.isFinite(age)||age>18*3600000||age< -3600000)
+    throw new Error('NWS hourly forecast issue time is missing or stale');
   const props=point?.properties||{};
   const grid=typeof props.gridId==='string'&&Number.isInteger(props.gridX)&&Number.isInteger(props.gridY)
     ?{office:props.gridId,x:props.gridX,y:props.gridY,resolutionKm:2.5}
@@ -233,7 +239,7 @@ module.exports=async function handler(req,res){
     forecastStatus:periods.length?'available':'unavailable',periods
   }:null;
   const assessments=place?Object.fromEntries(['swim','family','paddle','relax'].map(a=>[a,comfort(a,water,current)])):null;
-  const windows=place?Object.fromEntries(['swim','family','paddle','relax'].map(a=>[a,bestWeatherWindow(periods,a)])):null;
+  const windows=place?Object.fromEntries(['swim','family','paddle','relax'].map(a=>[a,bestWeatherWindow(periods,a,now)])):null;
   return res.status(200).json({
     product:'ShoreFeel',generatedAt:now.toISOString(),
     source:{name:'NOAA GLERL GLSEA 3',url:analysisUrl,mode:analysisMode,method:'Daily satellite-derived whole-lake surface mean; some pixels may use historical nearby passes or smoothing.'},
