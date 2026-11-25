@@ -32,3 +32,7 @@ Source-level and fixture tests plus same-run before/after browser captures at 39
 | Pictured Rocks | Planning | Independent owner review, no mutation |
 
 For each subsequent product use a separate scoped PR and record baseline/after evidence, exact CI, release and production check, and any actual comparable outcome. Do not bulk migrate or claim the 42 skills have proven effectiveness. Phase 8 started, not complete. No measured visitor improvement yet.
+
+## Portfolio adoption continuation (2026-11-25)
+
+The original pilot plan above is a historical record. Snow Totals #1921 and Waterfall #1914 have merged, as have the Soo and Duluth changing-conditions work and ShoreFeel cross-border consolidation. The [refreshed portfolio inventory](PRODUCTION_DESIGN_PORTFOLIO_20261124.md) supersedes the earlier release queue. No current deployment or measured visitor outcome is inferred. Keep independent behavioral trials and candidate activation separate.
