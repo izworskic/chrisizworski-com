@@ -1,0 +1,85 @@
+name: Cuyahoga observed AIS chords across official mapped road lines
+
+# One-time research replay; existing compact NOAA and GIS artifacts, no new provider download.
+on:
+  push:
+    branches: [research/cuyahoga-ais-audit-20261122]
+    paths: [.github/workflows/cuyahoga-real-roadchords.yml]
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  historic-geometric-intersections:
+    runs-on: ubuntu-latest
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run offline geometry and AIS movement tests
+        run: node --test tests/cuyahoga-county-centerline-audit.test.js tests/cuyahoga-ais-roadchord-study.test.js
+      - name: Reuse NOAA and official county/USACE source snapshots
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p official-source historical-source audit-output
+          gh run download 45027320296 --repo izworskic/chrisizworski-com \
+            --name cuyahoga-noaa-normal-transit-2025-research --dir historical-source
+          gh run download 45027884763 --repo izworskic/chrisizworski-com \
+            --name cuyahoga-official-gis-research --dir official-source
+          test -s official-source/cuyahoga-county-road-centerlines.geojson
+          test -s official-source/usace-national-channel-area.geojson
+          test -s historical-source/MARK_W_BARKER-2025-07-07-observations.json
+          test -s historical-source/SAM_LAUD-2025-08-15-observations.json
+          test -s historical-source/MARK_W_BARKER-2025-08-21-observations.json
+      - name: Build cautious observed-fix chord intervals for three historical days
+        shell: bash
+        run: |
+          set -euo pipefail
+          for spec in '2025-07-07 MARK_W_BARKER' '2025-08-15 SAM_LAUD' '2025-08-21 MARK_W_BARKER'; do
+            read -r day ship <<< "$spec"
+            node scripts/cuyahoga-ais-roadchord-study.mjs \
+              --input "historical-source/$ship-$day-observations.json" \
+              --coast-pilot data/cuyahoga/noaa-coast-pilot-bridge-references.json \
+              --county official-source/cuyahoga-county-road-centerlines.geojson \
+              --usace official-source/usace-national-channel-area.geojson \
+              --out "audit-output/$ship-$day-chord-candidates.json" \
+              | tee "audit-output/$ship-$day-summary.json"
+          done
+      - name: Publish evidence-only outcome
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs=require('node:fs');
+          const names=['MARK_W_BARKER-2025-07-07','SAM_LAUD-2025-08-15','MARK_W_BARKER-2025-08-21'];
+          const result={dateChecked:new Date().toISOString(),
+            study:'OFFLINE_GIS_CHORD_INTERSECTIONS_NOT_CONFIRMED_CROSSINGS',
+            bridgeCrossingAccuracyValidated:false,bridgeOpeningStateVerified:false,
+            visitorEtaEnabled:false,visits:[]};
+          const summary=['## Cuyahoga real AIS road-axis research','',
+            '**These straight-chord candidates do not prove the path sailed or a bridge opening.**'];
+          for(const name of names){
+            const data=JSON.parse(fs.readFileSync('audit-output/'+name+'-chord-candidates.json','utf8'));
+            const vessel=data.vessels[0];
+            const spans=vessel.roadLineIntersectionCandidates.map(x=>({
+              bridgeId:x.bridgeReferenceId,roadName:x.roadName,status:x.status,
+              windows:x.episodes.map(y=>({start:y.firstBracketStart,end:y.lastBracketEnd,seconds:y.representative.bracketSeconds}))
+            }));
+            result.visits.push({name,matchedRoadReferences:data.matchedRoadReferences,windows:spans});
+            summary.push('','### '+name,
+              ...spans.map(x=>x.roadName+': '+x.status+
+                ' '+x.windows.map(w=>w.start+' to '+w.end+' ('+w.seconds+'s)').join('; ')));
+          }
+          fs.writeFileSync('audit-output/evidence-summary.json',JSON.stringify(result,null,2)+'\n');
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,summary.join('\n')+'\n');
+          console.log(summary.join('\n'));
+          NODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cuyahoga-official-roadline-and-real-noaa-chords
+          path: audit-output/
+          retention-days: 5
+          if-no-files-found: error

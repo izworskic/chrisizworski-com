@@ -4,7 +4,7 @@ import {readFileSync,existsSync} from 'node:fs';
 const read=p=>readFileSync(p,'utf8'),html=read('public/michigan-winter-trails/index.html'),js=read('public/assets/michigan-winter-trails.js');
 
 test('crawlable statewide winter trail guide with 15 source-backed static trail systems and 50 named loops',()=>{
-  assert.match(html,/<h1>/);
+  assert.match(html,/<h1(?:\s[^>]*)?>/);
   assert.match(html,/rel="canonical" href="https:\/\/chrisizworski\.com\/michigan-winter-trails\/"/);
   assert.equal((html.match(/class="wf-story"/g)||[]).length,15);
   assert.equal((html.match(/data-evidence="https:\/\//g)||[]).length,15);
@@ -100,4 +100,24 @@ test('Michigan Winter Trails uses locally hosted, version-locked Leaflet rather 
   assert.ok(!html.includes('unpkg.com/leaflet'));
   assert.ok(existsSync('public/assets/leaflet-1.9.4.js'));
   assert.ok(existsSync('public/vendor/leaflet/LICENSE'));
+});
+
+
+test('winter access notices stay source-backed but no longer occupy the page before trail discovery',()=>{
+  const map=html.indexOf('id="wf-map"'),explore=html.indexOf('id="explore"');
+  const access=html.indexOf('<details class="trl-access-disclosure"'),science=html.indexOf('id="trl-science-title"');
+  const dossiers=html.indexOf('id="wf-stories"');
+  assert.ok(explore>0&&map>explore,'main trail map is available before the explanatory material');
+  assert.ok(access>map&&access<dossiers,'details live with the map, before dossier cards');
+  assert.ok(science>dossiers,'trail-use lesson comes after primary discovery');
+  assert.doesNotMatch(html,/<section class="wf-shell trl-closure"|class="wf-shell trl-signpost"/);
+  assert.match(html,/<details class="trl-access-disclosure" id="trl-winter-access">\s*<summary>/);
+  assert.doesNotMatch(html,/<details class="trl-access-disclosure"[^>]*\bopen(?:\s|>)/);
+  assert.equal((html.match(/Snow depth is not plowed parking/g)||[]).length,1);
+  assert.match(html,/Hartwick Pines State Park \(Grayling\):/);
+  assert.match(html,/Tahquamenon Falls State Park \(Paradise\):/);
+  assert.match(html,/Anderson Lake State Forest Campground and pathway access roads are not plowed/);
+  assert.match(html,/Open the DNR Tahquamenon Upper Falls Winter Map/);
+  assert.match(html,/Check Hartwick Pines DNR Notices/);
+  assert.match(read('public/assets/michigan-winter-trails.css'),/\.trl \.trl-access-disclosure summary:focus-visible/);
 });

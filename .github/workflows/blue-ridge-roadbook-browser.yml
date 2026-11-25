@@ -1,0 +1,42 @@
+name: Blue Ridge Parkway roadbook browser QA
+on:
+  pull_request:
+    paths:
+      - 'public/blue-ridge-parkway/**'
+      - 'public/assets/blue-ridge-parkway*'
+      - 'scripts/verify-blue-ridge-roadbook-browser.cjs'
+      - '.github/workflows/blue-ridge-roadbook-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  roadbook:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated browser QA dependencies
+        run: |
+          npm install --prefix /tmp/blue-ridge-roadbook-qa --ignore-scripts --no-save --package-lock=false playwright@1.56.1 leaflet@1.9.4
+          if command -v google-chrome >/dev/null 2>&1; then
+            echo "CHROME_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
+          else
+            /tmp/blue-ridge-roadbook-qa/node_modules/.bin/playwright install --with-deps chromium
+            node -e "console.log('CHROME_PATH='+require('/tmp/blue-ridge-roadbook-qa/node_modules/playwright').chromium.executablePath())" >> "$GITHUB_ENV"
+          fi
+      - name: Exercise selected stop controls and responsive layout
+        env:
+          NODE_PATH: /tmp/blue-ridge-roadbook-qa/node_modules
+        run: node scripts/verify-blue-ridge-roadbook-browser.cjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: blue-ridge-roadbook-browser-qa
+          path: artifacts/blue-ridge-roadbook/
+          retention-days: 7
+          if-no-files-found: warn

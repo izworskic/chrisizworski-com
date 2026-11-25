@@ -12,3 +12,5 @@ Read the repository root `AGENTS.md` before any change. Preserve authoritative e
 
 
 **Playwright browser QA:** For Playwright requests and significant interactive, map or responsive UI work, read `.github/skills/playwright-browser-qa/SKILL.md` and `docs/PLAYWRIGHT_BROWSER_QA_WORKFLOW.md`. Use an executable browser for screenshots, state changes and console/network evidence, then targeted regression tests and full CI. No browser runtime or MCP server is installed by the skill alone.
+
+**Agent Browser investigation (opt-in):** For requested AI-led browser exploration, read `.github/skills/agent-browser-qa/SKILL.md` and `docs/AGENT_BROWSER_WORKFLOW.md`. The optional local smoke runner uses an installed Agent Browser CLI; do not assume browser execution is available or add production dependencies/MCP. Playwright remains the regression gate. Preserve existing source, SEO, Auto ads, maps and CI rules.

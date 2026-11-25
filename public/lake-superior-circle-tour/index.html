@@ -177,6 +177,14 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 .map-shell{min-width:0}
 .map-frame{position:relative;height:clamp(380px,52vh,560px);overflow:hidden;border:1px solid #cfd8d0;border-radius:12px 12px 0 0;background:linear-gradient(145deg,#e8f2e8,#d9e8ef)}
 #circleTourMap{width:100%;height:100%}
+.circle-tour-stop-popup{padding-right:24px;color:#103743;font:14px/1.4 system-ui,sans-serif}
+.circle-tour-stop-popup strong{display:block;overflow-wrap:anywhere}
+.circle-tour-stop-popup p{margin:4px 0 6px}
+.circle-tour-stop-popup-actions{display:flex;align-items:center;flex-wrap:wrap;gap:6px 10px}
+.circle-tour-stop-popup-actions a{display:inline-flex;align-items:center;min-height:44px;color:#124553;text-decoration:underline;text-underline-offset:2px}
+.circle-tour-stop-popup-actions button{min-height:44px;padding:4px 8px;border:1px solid #688b91;border-radius:6px;background:#fff;color:#124553;cursor:pointer;font:inherit}
+#circleTourMap .maplibregl-popup:has(.circle-tour-stop-popup){z-index:3}
+#circleTourMap .maplibregl-popup:has(.circle-tour-stop-popup) .maplibregl-popup-close-button{font-size:24px;min-width:44px;min-height:44px}
 .preset-day-map-tools{position:absolute;top:8px;left:8px;right:54px;z-index:1;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px 8px;padding:4px 8px;background:#f8fbfa;border:1px solid #688b91;border-radius:8px;color:#103743;font:600 12px/1.4 system-ui,sans-serif}
 .preset-day-map-tools[hidden]{display:none}
 .preset-day-map-tools button,.route-day-actions button{padding:4px 8px;min-height:44px;border:1px solid #688b91;border-radius:6px;background:#fff;color:#124553;cursor:pointer;font:600 12px/1.4 system-ui,sans-serif}
@@ -465,7 +473,7 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
         </div>
       </div>
       <div class="map-selection" id="mapSelection" aria-live="polite">
-        <div class="map-selection-copy"><strong>Select a numbered stop on the map</strong>See its region, route position, and planning actions here.</div>
+        <div class="map-selection-copy"><strong>Tap or click a numbered stop</strong>Open its map bubble to see the stop guide or add it to your trip.</div>
         <div class="map-selection-actions">
           <a href="#segTabs" id="mapStopLink">Browse every stop</a>
           <a id="mapStopGoogleLink" href="#segTabs" target="_blank" rel="noopener noreferrer" hidden>View area in Google Maps</a>
@@ -1483,7 +1491,7 @@ a{color:var(--green);text-decoration:none}a:hover{text-decoration:underline}
 </main>
 <footer class="footer">Route evidence reviewed November 14, 2026, Compiled by <a href="https://chrisizworski.com">Chris Izworski</a>, <a href="/tools/">Back to Tools</a></footer>
 <script defer src="/assets/visitor-map-links.js"></script>
-<script defer src="/assets/lake-superior-circle-tour.js?v=20261121-day-map"></script>
+<script defer src="/assets/lake-superior-circle-tour.js?v=20261121-stop-popup"></script>
 <script defer src="/assets/journey-atlas-v1.js"></script>
 <script defer src="/assets/circle-tour-place-story-data.js"></script>
 <script defer src="/assets/circle-tour-bridge.js"></script>

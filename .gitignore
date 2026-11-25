@@ -15,3 +15,9 @@ artifacts/experience-foundry/
 artifacts/playwright-qa/
 playwright-report/
 test-results/
+
+# Temporary Agent Browser diagnostic evidence
+artifacts/agent-browser-qa/
+
+# Ignored optional agent CLI (never a production dependency)
+.agent-tools/

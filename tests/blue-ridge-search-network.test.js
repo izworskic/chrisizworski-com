@@ -42,7 +42,7 @@ test('Every Blue Ridge search owner has complete crawl and social metadata',()=>
     assert.match(html,/<meta name="twitter:card" content="summary_large_image">/i,`${slug||'main'} twitter card`);
     assert.match(html,/"@type":"WebPage"/i,`${slug||'main'} WebPage schema`);
     assert.match(html,/"@type":"BreadcrumbList"/i,`${slug||'main'} breadcrumb schema`);
-    assert.match(html,/"dateModified":"2026-09-25"/i,`${slug||'main'} dateModified`);
+    assert.match(html,new RegExp(`"dateModified":"${slug?'2026-11-22':'2026-11-22'}"`,'i'),`${slug||'main'} dateModified`);
   }
 });
 
@@ -53,7 +53,7 @@ test('Main Blue Ridge owner exposes the whole intent network through crawlable l
   }
   assert.match(html,/Blue Ridge Parkway planning network/);
   assert.match(html,/numberOfItems":9/);
-  assert.ok(html.indexOf('id="gatewaySnapshots"')<html.indexOf('id="plannerForm"'),'live gateway intelligence remains ahead of personalization');
+  assert.ok(html.indexOf('id="plannerForm"')<html.indexOf('id="results"')&&html.indexOf('id="results"')<html.indexOf('id="gatewaySnapshots"'),'personalized route result stays immediately after form, with gateway comparison afterward');
 });
 
 test('Supporting intent pages funnel into the live planner and cross-link the network',()=>{

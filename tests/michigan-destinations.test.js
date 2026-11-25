@@ -83,7 +83,9 @@ test('filters, CARTO map and graceful accessibility fallbacks are present', () =
   assert.match(html, /class="hero-gallery"/);
   assert.match(html, /class="mood-bar"/);
   assert.match(html, /id="map-status"/);
-  assert.match(html, /michigan-destinations\.js\?v=20261116-gmaps/);
+  // The cache-busted application asset and local intent module are both present.
+  assert.match(html, /michigan-destinations\.js\?v=20261122-intent-v1/);
+  assert.match(html, /adventure-intent\.js\?v=20261122-intent-v1/);
   assert.match(js, /card\.querySelector\('\[data-map-google-location\]'\)/);
   assert.match(js, /View destination area in Google Maps/);
   assert.doesNotMatch(html, /Connecting to CARTO using the configured public map key/);

@@ -14,8 +14,8 @@ const minutesApart = (a, b) => Math.abs(a - b) / 60000;
 
 function data(now, extra = {}) {
   const gott = { id: '366971370', mmsi: '366971370', name: 'EDWIN H. GOTT', state: 'in-lock', chamber: 'poe', chamberName: 'Poe Lock', direction: 'downbound', seen: iso(now, -1), ageMinutes: 1, lat: 46.5029, lon: -84.352 };
-  const burns = { id: '366972000', mmsi: '366972000', name: 'BURNS HARBOR', state: 'approaching', direction: 'upbound', lockCertain: true, ageMinutes: 2, window: { start: iso(now, 105), midpoint: iso(now, 160), end: iso(now, 235) } };
-  const late = { id: '316001234', mmsi: '316001234', name: 'ALGOMA EQUINOX', state: 'approaching', direction: 'downbound', lockCertain: false, ageMinutes: 2, window: { start: iso(now, 510), midpoint: iso(now, 560), end: iso(now, 610) } };
+  const burns = { id: '366972000', mmsi: '366972000', name: 'BURNS HARBOR', state: 'approaching', direction: 'upbound', lockCertain: true, seen: iso(now,-2), ageMinutes: 2, window: { start: iso(now, 105), midpoint: iso(now, 160), end: iso(now, 235) } };
+  const late = { id: '316001234', mmsi: '316001234', name: 'ALGOMA EQUINOX', state: 'approaching', direction: 'downbound', lockCertain: false, seen: iso(now,-2), ageMinutes: 2, window: { start: iso(now, 510), midpoint: iso(now, 560), end: iso(now, 610) } };
   return { ok: true, checkedAt: iso(now, 0), vessels: [], nextShip: Object.assign({ ok: true, inLock: [gott], candidates: [burns, late], pick: burns }, extra) };
 }
 
@@ -57,7 +57,7 @@ test('the navigation season matches the calendar the page strip uses', () => {
 test('a visit starting now leads with the ship already in a chamber', () => {
   const p = core.plan({ data: data(NOV), now: NOV, startOffset: 0, stay: 90 });
   assert.equal(p.status, 'in-lock-now');
-  assert.match(p.headline, /EDWIN H\. GOTT is in the Poe Lock right now/);
+  assert.match(p.headline, /EDWIN H\. GOTT last reported in the Poe Lock/);
   assert.equal(p.suggestion.id, '366972000', 'offers to plan around the next window');
 });
 
@@ -68,7 +68,7 @@ test('changing the visit changes the answer, and partial overlap offers the cove
   assert.equal(later.ships.find(s => s.id === '366971370').fit, 'gone', 'the in-lock ship is not promised to a later visit');
   const early = core.plan({ data: data(NOV), now: NOV, startOffset: 60, stay: 90 });
   assert.equal(early.status, 'partial');
-  assert.match(early.detail.join(' '), /covers all of it/);
+  assert.match(early.detail.join(' '), /45 min of its modeled arrival window overlaps your visit during posted park hours/);
   assert.equal(early.suggestion.id, '366972000');
   const miss = core.plan({ data: data(NOV), now: NOV, startOffset: 30, stay: 45 });
   assert.equal(miss.status, 'none');
@@ -95,15 +95,21 @@ test('missing, failed and empty feeds are explicit and never read as an empty ri
   const failed = core.plan({ data: null, failed: true, now: NOV });
   assert.equal(failed.status, 'unavailable');
   assert.match(failed.detail[0], /not a report of an empty river/);
-  assert.equal(failed.link.href, core.BOATNERD);
+  assert.equal(failed.link.href, '#soo-schedule-answer', 'the next step stays on this page');
   const broken = core.plan({ data: { ok: true, nextShip: { ok: false } }, now: NOV });
   assert.equal(broken.status, 'unavailable');
   const empty = core.plan({ data: data(NOV, { inLock: [], candidates: [], pick: null }), now: NOV });
   assert.equal(empty.status, 'no-ships');
   assert.match(empty.detail[0], /not proof of an empty river/);
   const retained = core.plan({ data: data(NOV), failed: true, now: NOV, startOffset: 120 });
-  assert.equal(retained.status, 'match');
-  assert.match(retained.notes[0], /latest refresh failed/);
+  assert.equal(retained.status, 'unavailable');
+  assert.match(retained.detail[0], /latest refresh failed/);
+  assert.equal(retained.ships.length, 0);
+  assert.equal(retained.best, null);
+  assert.equal(retained.suggestion, undefined);
+  const recovered = core.plan({ data: data(NOV), failed: false, now: NOV, startOffset: 120 });
+  assert.equal(recovered.status, 'match');
+  assert.match(recovered.notes[0], /not a confirmed lock time/);
 });
 
 test('the hotline is described only as seasonal outside May through October', () => {
@@ -138,4 +144,99 @@ test('the page wires the planner in after the next-ship answer without touching 
   assert.ok(html.indexOf('/assets/soo-ais.js') < html.indexOf('/assets/soo-lock-watch.js'), 'the AIS client loads first');
   assert.match(html, /November through April: 9 a\.m\. to 6 p\.m\./, 'posted hours are readable without JavaScript');
   assert.equal((html.match(/data-in-article-ad-break/g) || []).length, 1, 'the existing ad break marker is unchanged');
+});
+
+test('verdicts never send the visitor off-site; BoatNerd is only a collapsed cross-check', () => {
+  for (const p of [
+    core.plan({ data: null, failed: true, now: NOV }),
+    core.plan({ data: data(NOV, { inLock: [], candidates: [], pick: null }), now: NOV }),
+    core.plan({ data: data(NOV), now: NOV, startOffset: 30, stay: 45 })
+  ]) {
+    assert.ok(!p.link || p.link.href.startsWith('#'), JSON.stringify(p.link));
+    assert.doesNotMatch([p.headline, ...p.detail].join(' '), /boatnerd/i);
+  }
+  const html = fs.readFileSync(path.join(__dirname, '..', 'public/soo-locks/index.html'), 'utf8');
+  const watch = html.slice(html.indexOf('id="soo-lock-watch"'), html.indexOf('id="soo-schedule-answer"'));
+  const links = watch.match(/href="https:\/\/ais\.boatnerd\.com[^"]*"/g) || [];
+  assert.equal(links.length, 1);
+  assert.ok(watch.indexOf('boatnerd.com') > watch.indexOf('<details class="lw-hours">'), 'inside the collapsed sources note');
+  const card = html.slice(html.indexOf('id="soo-next-ship"'), html.indexOf('id="soo-lock-watch"'));
+  assert.doesNotMatch(card, /boatnerd/i);
+  const sources = html.slice(html.indexOf('class="schedule-source-grid"'), html.indexOf('class="schedule-crosscheck"'));
+  assert.match(sources, /^[^]*?<a href="#soo-lock-watch"/, 'the first schedule source is this page');
+  assert.doesNotMatch(sources, /boatnerd/i);
+});
+
+test('the lock simulator gets a same-size stand-in only when the reported size clearly matches', () => {
+  assert.equal(core.simShipFor({ sizeLabel: '1,000-footer', lengthFeet: 997 }), 'tregurtha');
+  assert.equal(core.simShipFor({ lengthFeet: 1004 }), 'tregurtha');
+  assert.equal(core.simShipFor({ sizeLabel: 'ocean-going saltie', lengthFeet: 656 }), 'saltie');
+  assert.equal(core.simShipFor({ sizeLabel: 'laker', lengthFeet: 740 }), 'anderson');
+  assert.equal(core.simShipFor({ lengthFeet: 730 }), null, 'MacArthur-size ships are not forced onto a historic or saltie hull');
+  assert.equal(core.simShipFor({}), null);
+});
+
+test('visit weather quotes only the NWS hourly periods that overlap the visit', () => {
+  const top = Date.parse('2026-11-21T14:00:00Z');
+  const props = { updateTime: '2026-11-21T13:45:00Z', periods: [0, 1, 2, 3, 4].map(i => ({
+    startTime: new Date(top + i * 3600000).toISOString(), endTime: new Date(top + (i + 1) * 3600000).toISOString(),
+    temperature: [30, 31, 33, 35, 36][i], windSpeed: ['5 mph', '10 mph', '10 to 15 mph', '20 mph', '5 mph'][i], windDirection: ['N', 'NW', 'NW', 'W', 'S'][i],
+    shortForecast: ['Cloudy', 'Cloudy', 'Chance Snow Showers', 'Snow Showers', 'Cloudy'][i], probabilityOfPrecipitation: { value: [5, 10, 30, 60, 10][i] }
+  })) };
+  // 9:45 to 11:15 a.m. EST overlaps the 9, 10 and 11 o'clock periods only.
+  const w = core.visitWeather(props, { start: NOV, end: NOV + 90 * 60000 }, NOV);
+  assert.deepEqual([w.lowF, w.highF, w.windMph, w.windDir, w.maxPop, w.hours, w.stale], [30, 33, 15, 'NW', 30, 3, false]);
+  assert.equal(core.weatherLine(w), '30\u201333\u00B0F, cloudy, then chance snow showers, wind NW up to 15 mph, precipitation chance up to 30%');
+  assert.equal(core.visitWeather(props, { start: top + 9 * 3600000, end: top + 10 * 3600000 }, NOV), null, 'outside the forecast range');
+  assert.equal(core.visitWeather(props, { start: NOV, end: NOV + 3600000 }, NOV + 13 * 3600000).stale, true);
+  assert.equal(core.visitWeather(null, { start: NOV, end: NOV + 1 }, NOV), null);
+  const html = fs.readFileSync(path.join(__dirname, '..', 'public/assets/soo-lock-watch.js'), 'utf8');
+  assert.match(html, /api\.weather\.gov\/gridpoints\/APX\/65,131\/forecast\/hourly/);
+  assert.match(html, /api\.weather\.gov\/points\/46\.4953,-84\.3453/, 'falls back to a fresh grid lookup');
+});
+
+test('near-lock low motion explains absent ETA without becoming a timed entry',()=>{
+ const ship={id:'366123456',mmsi:'366123456',name:'TEST SLOW FREIGHTER',lat:46.5025,lon:-84.365,seen:iso(NOV,-2),speedKnots:.6,distanceNm:.5,state:'near-lock-low-motion'};
+ const empty=data(NOV,{inLock:[],candidates:[],pick:null,nearLockMotion:[ship]});
+ const p=core.plan({data:empty,now:NOV});
+ assert.equal(p.status,'near-lock-motion');assert.match(p.headline,/TEST SLOW FREIGHTER/);
+ assert.equal(p.ships.length,0);assert.equal(p.best,null);assert.equal(p.suggestion,undefined);
+ assert.equal(p.link.href,'#sooVesselMap');assert.match(p.detail.join(' '),/Arrival timing is uncertain/);
+ assert.equal(core.plan({data:empty,now:NOV+4*60000}).status,'no-ships');
+ assert.equal(core.plan({data:empty,now:NOV,failed:true}).status,'unavailable');
+ const mixed=core.plan({data:data(NOV,{nearLockMotion:[ship]}),now:NOV});
+ assert.equal(mixed.status,'in-lock-now');assert.match(mixed.notes.join(' '),/TEST SLOW FREIGHTER/);
+ assert.ok(mixed.ships.every(s=>s.id!==ship.id));
+});
+
+test('closed park and expired evidence cannot become visitor recommendations',()=>{
+ const at=Date.parse('2026-11-21T22:30:00Z'),d=data(at,{inLock:[]});
+ const s=d.nextShip.candidates[0];s.window={start:iso(at,40),midpoint:iso(at,60),end:iso(at,80)};
+ d.nextShip.candidates=[s];
+ const p=core.plan({data:d,now:at,startOffset:0,stay:90});
+ assert.equal(p.best,null);assert.equal(p.openMinutes,30);assert.equal(p.suggestion,undefined);
+ assert.equal(core.plan({data:d,now:at,startOffset:60,stay:90}).status,'park-hours');
+ s.window={start:iso(at,-10),midpoint:iso(at,10),end:iso(at,40)};
+ const q=core.plan({data:d,now:at,stay:90});
+ assert.equal(q.status,'match');assert.equal(q.best.accessibleMinutes,30);assert.equal(q.openMinutes,30);
+ assert.equal(q.suggestion,undefined);
+ for(const seen of [iso(at,-16),iso(at,1),undefined,'bad']){
+   s.seen=seen;const x=core.plan({data:d,now:at});assert.equal(x.status,'stale-reports');assert.equal(x.best,null);
+ }
+});
+test('suggestions cannot precede earliest arrival or silently increase the stay',()=>{
+ const p=core.plan({data:data(NOV),now:NOV,startOffset:30,stay:45});
+ assert.equal(p.suggestion.startOffset,120);assert.equal(p.suggestion.stay,45);assert.equal(p.suggestion.minutes,45);
+ const q=core.plan({data:data(NOV),now:NOV,startOffset:p.suggestion.startOffset,stay:p.suggestion.stay});
+ assert.equal(q.status,'partial');assert.equal(q.best.accessibleMinutes,45);
+ const late=core.plan({data:data(NOV),now:NOV,startOffset:240,stay:240});
+ assert.equal(late.suggestion,undefined);
+});
+test('half-open local park hours respect cross-midnight, DST and navigation season',()=>{
+ const start=Date.parse('2026-11-01T00:00:00Z'),end=Date.parse('2026-11-01T16:00:00Z');
+ const segments=core.openSegments(start,end);
+ assert.deepEqual(segments,[{start,end:Date.parse('2026-11-01T01:00:00Z')},{start:Date.parse('2026-11-01T14:00:00Z'),end}]);
+ assert.deepEqual(core.openSegments(Date.parse('2027-01-15T14:00:00Z'),Date.parse('2027-01-15T17:00:00Z')),[]);
+ const d=data(NOV);
+ assert.equal(core.plan({data:d,now:NOV+16*60000,stay:90}).status,'stale-reports');
 });

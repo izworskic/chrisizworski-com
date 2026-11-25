@@ -43,6 +43,8 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // November 23: canonical GLERL ice-cover record and measured winter handoffs.
+  "/great-lakes-freighter-winter-layup/",
   // New lighthouse winter tool and a relevant directory handoff, November 2026.
   "/frozen-lighthouses-michigan/",
   "/great-lakes-lighthouses/",
@@ -475,6 +477,8 @@ const intentionalChanges = new Set([
 // Pin their exact source hashes so the known drift passes without broadly exempting
 // the routes from future parity checks.
 const committedDriftHashEntries = [
+  // Nov 22 2026: SHA256 pin for edited seasonal ranking; retain live-source parity protection.
+  ["/best-michigan-beaches-today/", "b48bbd305f88bee1dfa295b61d841d2f843eed2de55def4436ffca880af56b4c"],
   // Nov 21 2026: SHA256-pinned shared ShoreFeel JS/CSS and 50 beach guides.
   // Nov 21 2026: reviewed 50 ShoreFeel interpretive beach guides, updated exact
   // body hashes after truthful dateModified/sitemap stamping. Preserve all other
@@ -508,61 +512,61 @@ const committedDriftHashEntries = [
   // lastmod on these routes to their real last content commit. Verified line by
   // line that nothing but those date stamps moved. Re-crawl after deploy and
   // these pins can go back to the live snapshot.
-  ["/great-lakes-beaches/bete-grise/", "500a227ee16d8390880173688b4a523806cae15d3a3f75cf6aa2af84c0a9e5fc"],
-  ["/great-lakes-beaches/bird-creek-county-park/", "12009dbcace084d637c2d744e78d62a61743c6030a0b051bee86cab1927c4b8f"],
-  ["/great-lakes-beaches/black-river-harbor/", "8e3198d23f51ca51b65e3c077535e6c9f3787aaf5ea4d73b346db55284923380"],
-  ["/great-lakes-beaches/caseville-county-park/", "7b9c593da25310c26b6375ac320a5f35f9fa7a2bf2715950572744dde62e0bb1"],
-  ["/great-lakes-beaches/cheboygan-state-park/", "35f5cf327a60d17ba3dcc2f3b1d34f5e364bc8d44b07f66cc72fc330357abea2"],
-  ["/great-lakes-beaches/crisp-point/", "bfaae6e2ae69651382f835f291fec7e1927f14b17f18d7d502628cd3039eeb9d"],
-  ["/great-lakes-beaches/glen-arbor-area/", "dae3df1bdde7cc5b8d67f6ea32d7cc6aeedced6b796ac4b361b71efc8065b74d"],
-  ["/great-lakes-beaches/grand-haven-state-park/", "1aadf391ca90f571d1bcce0c51215d5578aadb7cc4036772e53c784365bead96"],
-  ["/great-lakes-beaches/grand-marais-beach/", "8d8d14cbefa2ccdc90128ee3228fea28f0adde9547a1ee3b71fecfad08128803"],
-  ["/great-lakes-beaches/harrisville-state-park/", "17602707838b4eecee155abf7ba258071f8421106a792f173807e9722d1f792a"],
-  ["/great-lakes-beaches/hoeft-state-park/", "738506e6234e736f3befec22d120cb5728d211a939fa04acaa0c601af2f35df5"],
-  ["/great-lakes-beaches/lakeport-state-park/", "a97a06808bad5f7436af6e4f40e9055f7b117fcd8fcc82c8ef4edc8b6acde755"],
-  ["/great-lakes-beaches/luna-pier/", "833d627e83f0955e3f9932cadcd087c4919223ab4f7ffd56b15512f36aec3100"],
-  ["/great-lakes-beaches/marquette-south-beach/", "ef24abd549e589af827a822406205ffb0f78964d4cbc030202ce586564c20427"],
-  ["/great-lakes-beaches/mclain-state-park/", "f94d3392df22754d414f664d6093a0eeaf0d6e7fa93f1ae15bfb79e93d841efc"],
-  ["/great-lakes-beaches/miners-beach/", "6497aeafafd3caadf7982d442d7d3c0350784ff4ee42996bfeebe176344377a2"],
-  ["/great-lakes-beaches/muskegon-state-park/", "3c8b6aeb030ec619e830f25463701685e5dec8e480d71f98517341754e25e415"],
-  ["/great-lakes-beaches/new-buffalo-beach/", "e5bfd39161d8233e20f17c4ce1776fee45de3dc710c5fa756fc1275b4540555a"],
-  ["/great-lakes-beaches/north-bar-lake/", "56504e37272a6795f8576075aff839f55de731ba5142c4f58f868be05c2d2858"],
-  ["/great-lakes-beaches/oscoda-beach-park/", "34777990fb04aa44e1562a16b6b11c953d61205ebad6aa887e68fd26d6b23945"],
-  ["/great-lakes-beaches/oval-beach/", "8284938d450e2d87791cb5c309ae9bf79e3f9470e4ff96153031ccd5a87b36d8"],
-  ["/great-lakes-beaches/pentwater-beach/", "c87130056bb0d4e5ffdeb61bb91ca35c07de62b8ec8af33b05ddc79e71ed1b42"],
-  ["/great-lakes-beaches/pere-marquette-park/", "630e2117be6dcab8e01df6ad79873e6a0e0a508ebbd8e378b8a244c7f41d0063"],
-  ["/great-lakes-beaches/petoskey-state-park/", "65ccc539a16168e38a03a4f7087bdb83a9142923238374995633a2361849ee56"],
-  ["/great-lakes-beaches/pj-hoffmaster-state-park/", "1647b402b81490f49a8532593a2f55ac024816c8ba7793b178ad99c0e52dc9dc"],
-  ["/great-lakes-beaches/port-crescent-state-park/", "1979faf730ab4fc44e75104a6706681bb5a841817b53d99b26ab305957201ce9"],
-  ["/great-lakes-beaches/presque-isle-marquette/", "8aa2e893c2ab043dc5ee81056723924484760a94187c3fdb04469fddb1812e59"],
-  ["/great-lakes-beaches/rogers-city-lakeside-park/", "0756e0f26d0041a5735532b1eb28b4eae59ed600f2bb5bbea06ce7792086ed6e"],
-  ["/great-lakes-beaches/sand-point-pictured-rocks/", "6f3158ec5b88cf8fa30899ee2a57a181748d26209b53c32537b7ef75a65b851e"],
-  ["/great-lakes-beaches/sand-point-saginaw-bay/", "8063b1fde1f063c78158b8d7bf99ea48348931c3568a7d4332d73116b7ea24e9"],
-  ["/great-lakes-beaches/saugatuck-dunes-state-park/", "d9ed5918330e22f2ce60380298ae42e8c0ac627584a5fe44aa8895d68e2b4e21"],
-  ["/great-lakes-beaches/silver-lake-state-park/", "f7d72af839b52d3fb62be7a7197dbffb995c7d913c2f1d9f12b2c1d8ecae2049"],
-  ["/great-lakes-beaches/sleeping-bear-dunes-empire/", "d533214aac99d292709a0e87b097bc5702dbb041fb239cc21a6820a463e40fd5"],
-  ["/great-lakes-beaches/sleeping-bear-platte-river/", "9d4c2f08f1cfc6005fc48a746efc70b2309cdab15a45ca45508e69c91bd334be"],
-  ["/great-lakes-beaches/stearns-park-beach/", "d4bddf76b11ee26a6a87a0e54fdd30afbd148fd8fd694549758868e2494bad13"],
-  ["/great-lakes-beaches/sterling-state-park/", "65c0d47371248756bf98ee9f6b0ea648cc5b490dba731e908cedf631cd82ed02"],
-  ["/great-lakes-beaches/tawas-point-state-park/", "8296f600cf7404d354461d6afaa97615813fc7dc75174fee8152c4d8a01cc935"],
-  ["/great-lakes-beaches/tunnel-park-holland/", "82ef2be44b604b458147cedcf4a87d770639a94b56560ce91a695246d5d1e27a"],
-  ["/great-lakes-beaches/twelvemile-beach/", "590333eecad07c28bacd7500d87944088c22cf677ab17d0d408fe92513b93f6d"],
-  ["/great-lakes-beaches/van-buren-state-park/", "733087e266178898e232986f6900ee8beed5e424ce23d4d14b82e2fd38a6f8c2"],
-  ["/great-lakes-beaches/warren-dunes-state-park/", "103fb35008dacf39d39d57a5717bd83b3ce70e0062555e264db59f63c6ed4623"],
-  ["/great-lakes-beaches/wenonah-park/", "8dafa0b24822a9748c8ffa422acde872af181511c095edb57957cb230eeeec47"],
-  ["/great-lakes-beaches/whitefish-point/", "723c6124657c940a4e70be5a2cfa0f043347fa12b78419e5d1bb95fbb2687c55"],
-  ["/great-lakes-beaches/wilderness-state-park/", "04bef44d723907e75111c6e23ce2f22cf413db48f4aa1f10d8eaaa2221e74c31"],
+  ["/great-lakes-beaches/bete-grise/", "0d640c7b98b6385ab0578a60564154a05b15f86d1a223334535320ba01a21d9a"],
+  ["/great-lakes-beaches/bird-creek-county-park/", "8286aa346b13047791ac7cbbe70cc0accfa2f61befa0828000734fdb8ab0bbb1"],
+  ["/great-lakes-beaches/black-river-harbor/", "071555b2faa2db832bfc43d8fd127fea572c2d9522024322edb2ec2a9588f939"],
+  ["/great-lakes-beaches/caseville-county-park/", "dbd68b0a00bb03592cc9fe82eaa72939335a10a3ffaa679833e160b713da64dc"],
+  ["/great-lakes-beaches/cheboygan-state-park/", "bf882cd86e8760de36db6b37a2abb72e5bfd9d2a496a05509b35e63399891204"],
+  ["/great-lakes-beaches/crisp-point/", "604be7f3d4a1a87a2a413e11017b7efa209cbf45a3a06efad53d67880d1ae81c"],
+  ["/great-lakes-beaches/glen-arbor-area/", "493efb90c41a5a21c7a75c17ad997994788a842f45052d931ddef30acef3b76d"],
+  ["/great-lakes-beaches/grand-haven-state-park/", "cb9af247261a6cc4fed3e8e68a1eeb3ae9b76afad0a13499ee6e8f519db2ec8d"],
+  ["/great-lakes-beaches/grand-marais-beach/", "4ec870cd87674c1ba755ea208a159736199c8e76180b6d5f3dd0aca279bc6356"],
+  ["/great-lakes-beaches/harrisville-state-park/", "514c5503e02a9b4c5815d8c41fdbd05ec6d019c96aad5310821ea1c1318661b4"],
+  ["/great-lakes-beaches/hoeft-state-park/", "d7f6aaa63d1db7c8b0bec9f5147fb66032ac7095c74da8f2f669e25c6e362ad3"],
+  ["/great-lakes-beaches/lakeport-state-park/", "bab6167fe9df1286fb0ad39a0dec33865240df55a3ce5b9bd01cab9b99f3414d"],
+  ["/great-lakes-beaches/luna-pier/", "89ef3debae3dbbcb4692a6c9f1a9cdac8a503aaaf7db28d82ca2d31df5e763de"],
+  ["/great-lakes-beaches/marquette-south-beach/", "ee35fb44162211a1190935f6cc0bca099cd21cb8af5b0d63cfc754df27449f0c"],
+  ["/great-lakes-beaches/mclain-state-park/", "ee86be0fb92b17772f4b06b427826383226b74f174c938bd6a3a6c5626b0c740"],
+  ["/great-lakes-beaches/miners-beach/", "942fee355f3fe10fee4a1dd74266caa6d42a4de9a4a920334bef8cb6d23dfb5e"],
+  ["/great-lakes-beaches/muskegon-state-park/", "b153b8115e5c6f7d84a2cf4132808f9c6392252566a1262a9670bc737e1b2e14"],
+  ["/great-lakes-beaches/new-buffalo-beach/", "be640fb13945a1a8ad97c3de6d62374ee1f3ed1bb05e7419145008393af000e5"],
+  ["/great-lakes-beaches/north-bar-lake/", "6e08d430b47312546b39b88eef8e7b231998ebc74acf5831208aaff0b3de36a8"],
+  ["/great-lakes-beaches/oscoda-beach-park/", "7b8447315325f141431cb261dc29a54ce35fb14e1da9cea8658ad8ff403eb8dc"],
+  ["/great-lakes-beaches/oval-beach/", "7ab46f1f901afbe48a863e45f907fd27cd3c507b0e4f22baee7f206845c73011"],
+  ["/great-lakes-beaches/pentwater-beach/", "9d17cff5b758897695c3ffa5310d6d926d69899461d265e4d250b70fabcdc248"],
+  ["/great-lakes-beaches/pere-marquette-park/", "8d2f3805af267e215cc076b7fef85efffa8dc763b7bbd85d4704681179010cc7"],
+  ["/great-lakes-beaches/petoskey-state-park/", "a76b6b1db6ab71a0c98e3a1ee8e2a5d9daaf240a958d0f82f02d5133e3eb7acf"],
+  ["/great-lakes-beaches/pj-hoffmaster-state-park/", "e3e013033fa72588a309a206674e3c189ec0ab58d51c17a40a2f63f028650470"],
+  ["/great-lakes-beaches/port-crescent-state-park/", "d27753d6d3475fde4a20a3f878dd71deb0f4e8d2de80f6ff0eb49619b0d2b582"],
+  ["/great-lakes-beaches/presque-isle-marquette/", "a6e626c1c6e400282902153f9ca40655d7a9959b5864306849e08b3874490387"],
+  ["/great-lakes-beaches/rogers-city-lakeside-park/", "6e0739660f66e23ece7be4313bafe7ce3b3b3b805da180d7be106f7efe47fb67"],
+  ["/great-lakes-beaches/sand-point-pictured-rocks/", "9cf60f034fcd1db5e6b2431ed1a45d5eadfd713b42e2beff2e343c9245892bd3"],
+  ["/great-lakes-beaches/sand-point-saginaw-bay/", "d1fb7481cbf8bbe731ed5d60f8513daa3cdb04788ad02c91bcf36a0e8f5d11c4"],
+  ["/great-lakes-beaches/saugatuck-dunes-state-park/", "06b4b74c3eeb43368a3423d1ebc6e18e7385b7e3a7e64d387f7d2aced6da64b4"],
+  ["/great-lakes-beaches/silver-lake-state-park/", "c74bca2c22998dce292fcb97495b4317c87cac2c5e3396f53d279a08b5ff4bb8"],
+  ["/great-lakes-beaches/sleeping-bear-dunes-empire/", "7137722edc1f2a64210b7c386351ea12a457d1d084fe1dea6150cfbdf2b94c60"],
+  ["/great-lakes-beaches/sleeping-bear-platte-river/", "b3f91ca3ca1cdbd25063a5b442e91431ae854e16567834b6b842307e7ebb5c22"],
+  ["/great-lakes-beaches/stearns-park-beach/", "0224a0078bd5487a07a8fdbbb961c6cd4de9cdb62f63b958496df1f804021218"],
+  ["/great-lakes-beaches/sterling-state-park/", "58af4dc7b435aef91a1f8a182209083d9aa63743b972ff0f54590c78b9f1a30d"],
+  ["/great-lakes-beaches/tawas-point-state-park/", "40ba404549b9be3a948609fe56c3e8d82e2fe9d5b8c53a40e6717a7c441fbfe1"],
+  ["/great-lakes-beaches/tunnel-park-holland/", "be4438dc67a1bdab453d6d2bb9508678dc9dd9b751512026a8ae28915476817c"],
+  ["/great-lakes-beaches/twelvemile-beach/", "065ff11d8ca663837170c15da496ba18f542efb98efd0f58c79bcf79b73f808f"],
+  ["/great-lakes-beaches/van-buren-state-park/", "ca87acae128427c3b21e826199383ddd7b64bf0273ed39599fc5bb57e2ec65cc"],
+  ["/great-lakes-beaches/warren-dunes-state-park/", "8185c7bf9a4db545a18daa930ab301e44d8a3a2e70fdf9a16dc04c551f6bdbdf"],
+  ["/great-lakes-beaches/wenonah-park/", "fe2d6383afbd88ca0249617bc1214b2caf1bae6d5d8fedf25bcca91c148a2325"],
+  ["/great-lakes-beaches/whitefish-point/", "74db52b313c7f5ed7d0e48da942e2a00bcf26806cad3fcfe5e174fd1f68e9dd4"],
+  ["/great-lakes-beaches/wilderness-state-park/", "5caea63bf19bea813d01fa935317acd020edfcd0c8e41357af67c1dc35c9802e"],
   // Nov. 12 owner-approved homepage dateModified/lastmod correction updates the exact reputation sitemap SHA-256; retain strict parity protection, not an exemption.
   ["/sitemap-reputation.xml", "2a4595494b15680fa4fde24102a89c96803f24e7cb078888a9675c34848ede2a"],
   ["/zone-6a-planting-calendar/", "3b34180a82558e2df887dc238ad31dc8d1995e465b3e5d81972ddec260414565"],
-  ["/great-lakes-beaches/ludington-state-park/", "cf3b2a693152db8c0f1fe10272f4d0a8c9e4b5822fe305a8a66dd90afe88a5ab"],
-  ["/great-lakes-beaches/holland-state-park/", "3af4b2401a525a4f14ad1e24dbab44fddc50a93dcdb425994c7fb76c6ed327cc"],
-  ["/great-lakes-beaches/frankfort-beach/", "d2143c23453d1c91e8ac6cd11b3cf809f225cf6068008a9ed89e4162829e94ea"],
-  ["/great-lakes-beaches/bay-city-state-park/", "9e68b8120ebcc3c8eef9f7a8397c9586089757992e6bc46fdec59882b44463ff"],
-  ["/great-lakes-beaches/south-haven-north/", "e1f2803bdcb91efb96c74990dd202a9bfb28681546962843e2a683f4d3a29ff4"],
-  ["/great-lakes-beaches/caseville-state-park/", "0d6b1ad107ab1d3ee7be4385a250bcec23e5bda8af577f00df8cb69e460847b0"],
-  ["/assets/beach-report.js", "04de99e553dadf8fc18ea32ba3d1d9aab0c6cafe6efd9953f3ea7d4497f754ff"],
-  ["/assets/beach-report.css", "b07831706321bc270a9552e8632897dc724e2e0877fbf5b40fba2e78033f01e3"],
+  ["/great-lakes-beaches/ludington-state-park/", "0bf715840798576ecf6dec3cc4cbeb5a0d895dc619f57b6160f809d31606ec5e"],
+  ["/great-lakes-beaches/holland-state-park/", "7b992f5c0a18855ff2d98adacaed67aef89d031f11101ac010f44ddd9cf57f92"],
+  ["/great-lakes-beaches/frankfort-beach/", "6b00763e9e8f17b58cd18844da851f877cd58571be3781e5dc810a96e1dfa6b8"],
+  ["/great-lakes-beaches/bay-city-state-park/", "4fe2fd9892a638f3600339c22464bd9e41678676caff422e1a64a6f8fe8d8c84"],
+  ["/great-lakes-beaches/south-haven-north/", "890f82ce0978b02436d69b9ab883c4ff76b6f0706a95b30dbf17f3cf6388adb8"],
+  ["/great-lakes-beaches/caseville-state-park/", "907d8d8d2ad224ae0d7f76b47a09af23f253d40caa1d09be4e9b0f5e3383b36f"],
+  ["/assets/beach-report.js", "9987e1708ce37a0bd1d567ad013fa7f92323a0808c45c93a94a75638282c6d88"],
+  ["/assets/beach-report.css", "51fb95fa481a84ca6edffb40d57f1d1be2c5fae5e58c8d04a12284265b976502"],
 ];
 
 // A Map built from an array silently keeps the LAST value for a duplicate key, so a stale pin added
@@ -745,9 +749,9 @@ for (const relativePath of discoveryPages) {
 }
 
 const greatLakesHub = await readFile(path.join(publicRoot, "great-lakes", "index.html"), "utf8");
-// 9 since Aug 4 2026: the Michigan Ice Report card was added to the live grid.
-if ((greatLakesHub.match(/data-featured-tool=/g) || []).length !== 9) {
-  failures.push("Great Lakes hub does not contain exactly nine featured live tools");
+// The established nine cards plus the Chicago and Cleveland river watches.
+if ((greatLakesHub.match(/data-featured-tool=/g) || []).length !== 11) {
+  failures.push("Great Lakes hub must contain exactly eleven featured live tools");
 }
 const historySection = greatLakesHub.match(/<h2 class="sh">History and Heritage<\/h2>([\s\S]*?)<h2 class="sh">/)?.[1] || "";
 if (/\/(?:soo-locks|northern-lights-michigan|great-lakes-buoys)\//.test(historySection)) {

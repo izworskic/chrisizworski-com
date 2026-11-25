@@ -1,4 +1,24 @@
 const { loadFreighterFeed } = require('../lib/freighter-feed');
+const { normalize } = require('../lib/soo-ais');
+
+// Duluth and Soo Locks query Open Waters with a waterway-specific bbox.
+// The existing lake-wide feed remains unchanged for every other caller.
+const CUYAHOGA_BBOX = Object.freeze([41.40, -81.85, 41.60, -81.58]);
+const CUYAHOGA_SCOPE = 'cuyahoga-regional-openwaters';
+
+async function loadCuyahogaFeed() {
+  const headers = {
+    Accept: 'application/geo+json,application/json',
+    'User-Agent': 'CuyahogaRiverWatch/1.0 (+https://chrisizworski.com/cuyahoga-freighter-watch/)'
+  };
+  if (process.env.OPEN_WATERS_API_TOKEN) headers.Authorization = 'Bearer ' + process.env.OPEN_WATERS_API_TOKEN;
+  const url = 'https://ais.openwaters.io/v1/vessels?bbox=' + CUYAHOGA_BBOX.join(',') + '&max_age=30m';
+  const upstream = await fetch(url, { headers, signal: AbortSignal.timeout(9000) });
+  if (!upstream.ok) throw new Error('Regional AIS provider unavailable');
+  const data = normalize(await upstream.json(), Date.now(), CUYAHOGA_BBOX);
+  return { ...data, scope: CUYAHOGA_SCOPE };
+}
+
 // Detroit's public decision surface has a hard 10-minute AIS freshness limit.
 // Admit only reports <=8 minutes old here so the specialist endpoint's own
 // 10-second hard-expiry cache plus the Detroit shell's bounded response cache
@@ -7,8 +27,14 @@ const DETROIT_SIGNAL_MAX_AGE_MS = 8 * 60 * 1000;
 module.exports = async function handler(req, res) {
   res.setHeader('X-Robots-Tag', 'noindex, nofollow');
   if (req.method && req.method !== 'GET') { res.setHeader('Allow','GET'); return res.status(405).json({ok:false,error:'Method not allowed'}); }
+  const region = req.query && req.query.region;
+  if (region !== undefined && region !== 'cuyahoga') {
+    res.setHeader('Cache-Control', 'no-store');
+    return res.status(400).json({ok:false,error:'Unknown AIS region'});
+  }
+  const isCuyahoga = region === 'cuyahoga';
   try {
-    const data = await loadFreighterFeed();
+    const data = isCuyahoga ? await loadCuyahogaFeed() : await loadFreighterFeed();
 
     // Detroit Outdoors asks a narrower question than the lake-wide tracker:
     // "is a freighter actually passing Detroit now?" A nearby ship that is
@@ -19,8 +45,8 @@ module.exports = async function handler(req, res) {
       const now = Date.now();
       data.vessels = data.vessels.filter(vessel => {
         const seen = Date.parse(vessel && vessel.seen || '');
-        const speed = Number(vessel && vessel.speedKnots);
-        return Number.isFinite(seen) && now - seen <= DETROIT_SIGNAL_MAX_AGE_MS && Number.isFinite(speed) && speed > 0.5;
+        const speed = vessel && vessel.speedKnots;
+        return Number.isFinite(seen) && now >= seen && now - seen <= DETROIT_SIGNAL_MAX_AGE_MS && Number.isFinite(speed) && speed > 0.5;
       });
       data.detroitSignal = {
         movingOnly: true,
@@ -29,6 +55,9 @@ module.exports = async function handler(req, res) {
         publicDecisionMaxAgeMinutes: 10
       };
       res.setHeader('Cache-Control','public, s-maxage=10, must-revalidate');
+    } else if (isCuyahoga) {
+      // Match the 45-second bounded specialty AIS cache used by Soo and Duluth.
+      res.setHeader('Cache-Control','public, s-maxage=45, stale-while-revalidate=60');
     } else {
       res.setHeader('Cache-Control','public, s-maxage=30, stale-while-revalidate=30');
     }

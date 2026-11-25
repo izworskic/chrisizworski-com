@@ -11,8 +11,9 @@
   const cardHeading = document.getElementById('soo-next-ship-heading');
   const cardBody = document.getElementById('sooNextBody');
   const cardNow = document.getElementById('sooNextNow');
-  let map, layer, focusLayer, fitted = false, busy = false, mapStarted = false, polling = false, previous;
-  let selectedMarker = null;
+  let map, layer, focusLayer, detailPopup, fitted = false, busy = false, mapStarted = false, polling = false, previous, previousFailed = false;
+  let selectedMarker = null, nearExpiryTimer = null;
+  const nearMotion = window.SooNearLockMotion;
   const visibleMarkers = new Map();
   // Shared local SVG silhouettes, also used by the Seaway map.
   const Icons = window.SeawayVesselIcons;
@@ -54,16 +55,88 @@
       iconAnchor: [w / 2, h / 2], popupAnchor: [0, -h / 2]
     });
   }
+  function labelShipMarker(marker, v) {
+    const el = marker.getElement();
+    if (!el) return;
+    el.setAttribute('aria-label', title(v) + ' · ' + typeLabel(v));
+    marker.sooLabel = title(v) + ' · ' + typeLabel(v);
+  }
   function addShipMarker(v, into, selected = false) {
     const icon = shipIcon(v, selected);
     // If the optional symbol module fails, the map still retains clickable AIS observations.
-    return icon ? L.marker([v.lat, v.lon], {
-      icon, keyboard: true, title: title(v) + ' · ' + typeLabel(v)
-    }).addTo(into) : L.circleMarker([v.lat, v.lon], {
+    if (icon) {
+      const marker = L.marker([v.lat, v.lon], { icon, keyboard: true }).addTo(into);
+      // A single detail popup on click; an aria-label replaces the extra hover card.
+      labelShipMarker(marker, v);
+      return marker;
+    }
+    return L.circleMarker([v.lat, v.lon], {
       radius: radius(v), color: '#fff', weight: 2,
       fillColor: v.speedKnots === null ? '#64748b' : v.speedKnots > 0.5 ? '#146c86' : '#a6651e',
       fillOpacity: 0.95
     }).addTo(into);
+  }
+  // One Leaflet popup object is shared by every vessel, so selection cannot stack cards.
+  function openShipPopup(marker) {
+    if (!map || !marker.sooContent) return;
+    if (!detailPopup) detailPopup = L.popup({ autoClose: true, closeOnClick: true, maxWidth: 240, autoPanPaddingTopLeft: L.point(50, 12), autoPanPaddingBottomRight: L.point(10, 12) });
+    const anchor = marker.options.icon?.options?.popupAnchor || [0, -8];
+    detailPopup.options.offset = L.point(anchor[0], anchor[1]);
+    detailPopup.setLatLng(marker.getLatLng()).setContent(marker.sooContent).openOn(map);
+  }
+  // Moored boats at the same dock draw on top of each other, so a tap there could only ever
+  // reach the top symbol. When symbols overlap the tapped one, offer every vessel at that spot
+  // in the same single popup. A keyboard user has already focused one marker: open it directly.
+  function crowdAt(marker) {
+    const el = marker.getElement && marker.getElement();
+    if (!layer || !el) return [marker];
+    const a = el.getBoundingClientRect();
+    const crowd = [];
+    layer.eachLayer(other => {
+      const o = other.sooContent && other.getElement && other.getElement();
+      if (!o) return;
+      const b = o.getBoundingClientRect();
+      const overlapW = Math.min(a.right, b.right) - Math.max(a.left, b.left);
+      const overlapH = Math.min(a.bottom, b.bottom) - Math.max(a.top, b.top);
+      if (overlapW > 0 && overlapH > 0) crowd.push(other);
+    });
+    return crowd.length ? crowd : [marker];
+  }
+  function openCrowdChooser(marker, crowd) {
+    if (!detailPopup) detailPopup = L.popup({ autoClose: true, closeOnClick: true, maxWidth: 240, autoPanPaddingTopLeft: L.point(50, 12), autoPanPaddingBottomRight: L.point(10, 12) });
+    const box = document.createElement('div');
+    box.className = 'soo-ais-crowd';
+    box.append(text('p', crowd.length + ' vessels are reported at this spot. Choose one:', 'soo-ais-crowd-lead'));
+    const ul = document.createElement('ul');
+    crowd.forEach(m => {
+      const li = document.createElement('li');
+      const b = text('button', m.sooLabel || 'Vessel'); b.type = 'button';
+      b.addEventListener('click', () => openShipPopup(m));
+      li.append(b); ul.append(li);
+    });
+    box.append(ul);
+    const anchor = marker.options.icon?.options?.popupAnchor || [0, -8];
+    detailPopup.options.offset = L.point(anchor[0], anchor[1]);
+    detailPopup.setLatLng(marker.getLatLng()).setContent(box).openOn(map);
+    const first = box.querySelector('button');
+    if (first) first.focus({ preventScroll: true });
+  }
+  function attachShipPopup(marker, content) {
+    marker.sooContent = content;
+    marker.on('click', e => {
+      const viaKeyboard = /^key/.test(e?.originalEvent?.type || '');
+      const crowd = viaKeyboard ? [marker] : crowdAt(marker);
+      if (crowd.length > 1) openCrowdChooser(marker, crowd);
+      else openShipPopup(marker);
+    });
+    // Leaflet 1.9 only opens popups bound with bindPopup on Enter. This shared popup is opened
+    // by hand, so a focused marker (role="button") needs Enter and Space wired explicitly.
+    marker.on('keydown', e => {
+      const k = e?.originalEvent?.key;
+      if (k !== 'Enter' && k !== ' ') return;
+      e.originalEvent.preventDefault();
+      openShipPopup(marker);
+    });
   }
   function renderLegend() {
     const target = document.getElementById('sooVesselLegend');
@@ -81,7 +154,7 @@
   const directionText = d => d === 'upbound' ? 'Upbound from Lake Huron, heading up to Lake Superior' : d === 'downbound' ? 'Downbound from Lake Superior, heading to the lower lakes' : 'Direction not reported';
   // USACE maintains the boat-schedule hotline only while the Visitor Center is open, May 1 to October 31.
   const hotlineSeason = () => { const m = Number(new Date().toLocaleString('en-US', { month: 'numeric', timeZone: TZ })); return m >= 5 && m <= 10; };
-  const checkElsewhere = () => hotlineSeason() ? 'Call the hotline at 906-202-1333 or check the BoatNerd passage list below.' : 'Check the BoatNerd passage list below; the USACE boat hotline runs only May 1 to October 31.';
+  const checkElsewhere = () => hotlineSeason() ? 'Call the hotline at 906-202-1333, or see the other ways to check further down this page.' : 'See the other ways to check further down this page; the USACE boat hotline runs only May 1 to October 31.';
   const chamberWhere = chamber => chamber === 'poe' ? 'The Poe is the second chamber out from the viewing platform.' : 'The MacArthur is the chamber right below the viewing platform.';
 
   // ---- next-ship card ----
@@ -90,10 +163,11 @@
     const n = data && data.nextShip;
     cardBody.replaceChildren();
     if (cardNow) { cardNow.hidden = true; cardNow.replaceChildren(); }
-    if (failed && !n) {
+    if (failed) {
       cardKicker.textContent = 'Next ship at the locks';
       cardHeading.textContent = 'Live ship reports are unavailable right now';
-      cardBody.append(text('p', hotlineSeason() ? 'Call the official boat hotline at 906-202-1333 while the Visitor Center is open, or check the BoatNerd passage list below.' : 'Check the BoatNerd passage list below. The USACE boat hotline is maintained only while the Visitor Center is open, May 1 to October 31.'));
+      cardBody.append(text('p', data ? 'The last refresh failed. Earlier arrival estimates and chamber observations are not current. Check the last-known positions on the map, then refresh before planning your visit.' : 'The feed did not return usable reports. This does not mean the river is empty.')); 
+      cardBody.append(text('p', checkElsewhere()));
       return;
     }
     if (!n || !n.ok) {
@@ -104,6 +178,7 @@
     }
     const inLock = n.inLock || [];
     const pick = n.pick;
+    const nearby = nearMotion?.visitorState(data, failed, Date.now());
     if (inLock.length) {
       const s = inLock[0];
       if (pick && cardNow) {
@@ -115,11 +190,18 @@
         cardBody.append(tags([s.sizeLabel, s.lengthFeet ? s.lengthFeet.toLocaleString('en-US') + ' ft' : null, s.chamberName]));
         cardBody.append(text('p', directionText(s.direction) + '. ' + chamberWhere(s.chamber) + ' Reported ' + s.ageMinutes + ' min ago.'));
         cardBody.append(actions(s));
-        cardBody.append(text('p', 'No other freighter is clearly heading for the locks in reports under 30 minutes old.', 'next-ship-also'));
+        if (nearby) appendNearMotion(nearby, false);
+        else cardBody.append(text('p', 'No other freighter is clearly heading for the locks in reports under 30 minutes old.', 'next-ship-also'));
         return;
       }
     }
     if (!pick) {
+      if (nearby) {
+        cardKicker.textContent = 'Vessel observation near the locks';
+        cardHeading.textContent = nearby.headline;
+        appendNearMotion(nearby, true);
+        return;
+      }
       cardKicker.textContent = 'Next ship at the locks';
       cardHeading.textContent = 'No ship is clearly heading for the locks right now';
       cardBody.append(text('p', 'Nothing in reports under 30 minutes old shows a freighter moving toward the locks. That does not mean none is coming: ships wait at docks and anchorages, and AIS coverage has gaps. ' + checkElsewhere()));
@@ -129,15 +211,29 @@
     cardHeading.textContent = title(pick);
     cardBody.append(tags([pick.sizeLabel, pick.lengthFeet ? pick.lengthFeet.toLocaleString('en-US') + ' ft' : null]));
     const win = document.createElement('div'); win.className = 'next-ship-window';
-    win.append(text('span', 'Estimated at the locks'), text('strong', clock(pick.window.start) + '–' + clockZone(pick.window.end)),
+    win.append(text('span', 'Planning window at the locks'), text('strong', clock(pick.window.start) + '–' + clockZone(pick.window.end)),
       text('small', pick.channelMilesToLocks + ' river miles away at ' + (pick.speedKnots * 1.15078).toFixed(1) + ' mph, reported ' + pick.ageMinutes + ' min ago'));
     cardBody.append(win);
     cardBody.append(text('p', directionText(pick.direction) + '. ' + (pick.lockCertain ? pick.lockNote + ' ' + chamberWhere('poe') : 'Small enough for either chamber; the lockmaster assigns it. ' + chamberWhere('macarthur'))));
     cardBody.append(actions(pick));
     const others = (n.candidates || []).filter(c => c.id !== pick.id).slice(0, 3);
     if (others.length) cardBody.append(text('p', 'Also heading in: ' + others.map(c => title(c) + ' (' + c.direction + ', about ' + clock(c.window.start) + '–' + clock(c.window.end) + ')').join('; ') + '.', 'next-ship-also'));
-    const how = n.selection && n.selection.mode === 'shared-harness-jev' ? 'Picked by JEV.' : 'Picked by timing rules.';
-    cardBody.append(text('p', how + ' An estimate from live AIS position, speed and river distance, not a lock schedule; ships can wait for a chamber or stop at a dock. Not for navigation.', 'next-ship-note'));
+    cardBody.append(text('p', 'This planning window uses reported position, speed and river distance. It is not a lock schedule. Ships can slow or stop before reaching the locks. Recheck movement on the map before leaving; the actual arrival can be outside this window. Not for navigation.', 'next-ship-note'));
+    if (nearby) appendNearMotion(nearby, false);
+  }
+  function appendNearMotion(nearby, primary) {
+    const box = document.createElement('div'); box.className = 'next-ship-near-motion';
+    if (!primary) box.append(text('strong', nearby.headline));
+    box.append(text('p', nearby.detail));
+    if (nearby.additional) box.append(text('p', nearby.additional + ' other nearby low-speed vessel report' + (nearby.additional === 1 ? '' : 's') + ' on the map.'));
+    const acts = document.createElement('div'); acts.className = 'next-ship-actions';
+    const button = text('button', nearby.action); button.type = 'button';
+    button.addEventListener('click', () => {
+      const fresh = nearMotion?.freshNearLock(previous, previousFailed, Date.now()).find(v => v.id === nearby.ship.id);
+      if (fresh) focusShip(fresh);
+      else refreshNearMotion();
+    });
+    acts.append(button); box.append(acts); cardBody.append(box);
   }
   function tags(items) {
     const ul = document.createElement('ul'); ul.className = 'next-ship-tags';
@@ -150,7 +246,8 @@
     show.addEventListener('click', () => focusShip(ship));
     let other;
     if (hotlineSeason()) { other = text('a', 'Boat hotline 906-202-1333'); other.href = 'tel:+19062021333'; }
-    else { other = text('a', 'BoatNerd passage list \u2197'); other.href = 'https://ais.boatnerd.com/passage/port/soo-locks'; other.target = '_blank'; other.rel = 'noopener'; }
+    // Off season, the next step stays in the tool: line this ship up against a visit.
+    else { other = text('a', 'Plan your platform time \u2193'); other.href = '#soo-lock-watch'; }
     box.append(show, other);
     return box;
   }
@@ -166,18 +263,19 @@
     const m = present?.marker || addShipMarker(observed || ship, focusLayer, true);
     selectedMarker = m;
     m.getElement()?.classList.add('is-selected');
-    if (!present) m.bindPopup(text('strong', title(ship)));
+    if (!present) attachShipPopup(m, text('strong', title(ship)));
     const zoom = Number(ship.channelMilesToLocks) > 8 ? 11 : 14;
     map.setView([ship.lat, ship.lon], zoom);
     // Re-centre once smooth scrolling settles.
-    setTimeout(() => { map.invalidateSize(); map.setView([ship.lat, ship.lon], zoom); m.openPopup(); }, 600);
+    setTimeout(() => { map.invalidateSize(); map.setView([ship.lat, ship.lon], zoom, { animate: false }); openShipPopup(m); }, 600);
   }
 
   // ---- map and list ----
   function render(data, failed) {
-    const vessels = data.vessels.filter(v => Number.isFinite(Date.parse(v.seen)) && Date.now() - Date.parse(v.seen) <= 1800000);
-    const inLock = new Map(((data.nextShip && data.nextShip.inLock) || []).map(s => [s.mmsi, s]));
+    const vessels = data.vessels.filter(v => Number.isFinite(Date.parse(v.seen)) && Date.now() >= Date.parse(v.seen) && Date.now() - Date.parse(v.seen) <= 1800000);
+    const inLock = new Map((failed ? [] : ((data.nextShip && data.nextShip.inLock) || [])).map(s => [s.mmsi, s]));
     list.replaceChildren();
+    if (detailPopup && map?.hasLayer(detailPopup)) map.removeLayer(detailPopup);
     if (layer) layer.clearLayers();
     if (focusLayer) focusLayer.clearLayers();
     visibleMarkers.clear();
@@ -196,26 +294,38 @@
       let marker;
       if (map) {
         marker = addShipMarker(v, layer);
-        marker.bindTooltip(text('span', title(v) + ' · ' + typeLabel(v)), { direction: 'top' }).bindPopup(content);
+        attachShipPopup(marker, content);
         visibleMarkers.set(String(v.mmsi), { marker, v });
         points.push([v.lat, v.lon]);
       }
       const item = document.createElement('li');
       if (marker) {
-        const button = text('button', title(v)); button.type = 'button'; button.addEventListener('click', () => { map.setView([v.lat, v.lon], 15); marker.openPopup(); container.scrollIntoView({ block: 'center', behavior: 'smooth' }); }); item.append(button);
+        const button = text('button', title(v)); button.type = 'button'; button.addEventListener('click', () => { map.setView([v.lat, v.lon], 15, { animate: false }); openShipPopup(marker); container.scrollIntoView({ block: 'center', behavior: 'smooth' }); }); item.append(button);
       } else item.append(text('strong', title(v)));
       const extra = [typeLabel(v), inLock.has(v.mmsi) ? 'in the ' + inLock.get(v.mmsi).chamberName + ' now' : null, size || feet(v.lengthMeters)].filter(Boolean).join(' · ');
       item.append(text('span', (extra ? extra + ' · ' : '') + details(v))); list.append(item);
     });
-    if (!vessels.length) list.append(text('li', 'No reports less than 30 minutes old were returned for this area. This does not mean there are no ships.'));
+    if (!vessels.length) list.append(text('li', failed ? 'No last-known positions remain within 30 minutes. Live reports are unavailable; this is not a zero-traffic report.' : 'No reports less than 30 minutes old were returned for this area. This does not mean there are no ships.'));
     if (map && points.length && !fitted) { map.fitBounds(points, { padding: [30, 30], maxZoom: 13 }); fitted = true; }
-    const count = vessels.length + ' recent vessel report' + (vessels.length === 1 ? '' : 's');
+    const count = vessels.length + (failed ? ' last-known vessel report' : ' recent vessel report') + (vessels.length === 1 ? '' : 's');
     status.textContent = failed ? 'Refresh unavailable. ' + count + ' retained from the earlier check; see report ages below.' :
       count + ' near the Soo · checked ' + new Date(data.checkedAt).toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', timeZone: TZ, timeZoneName: 'short' }) + (map || !mapStarted ? '' : ' · map unavailable; vessel list below');
     dot.className = 'vessel-map-status-dot' + (failed ? ' offline' : vessels.length ? ' live' : '');
     credits.textContent = 'Source credits: ' + data.attribution.map(a => a.credit).join(' · ');
     renderCard(data, failed);
     share(data, failed);
+    scheduleNearExpiry(data, failed);
+  }
+  function scheduleNearExpiry(data, failed) {
+    clearTimeout(nearExpiryTimer); nearExpiryTimer = null;
+    const expiry = nearMotion?.nextExpiry(data, failed, Date.now());
+    if (Number.isFinite(expiry)) nearExpiryTimer = setTimeout(refreshNearMotion, Math.max(1, expiry - Date.now()));
+  }
+  function refreshNearMotion() {
+    if (!previous || !previous.nextShip?.nearLockMotion?.length) return;
+    renderCard(previous, previousFailed);
+    share(previous, previousFailed);
+    scheduleNearExpiry(previous, previousFailed);
   }
   // Hand each check to the Lock Watch planner (public/assets/soo-lock-watch.js).
   function share(data, failed) {
@@ -228,11 +338,12 @@
     try {
       const r = await fetch('/api/soo-ais', { signal: AbortSignal.timeout(15000) }); const data = await r.json();
       if (!r.ok || !data.ok || !Array.isArray(data.vessels)) throw new Error('AIS unavailable');
-      previous = data; render(data, false);
+      previous = data; previousFailed = false; render(data, false);
     } catch (_) {
+      previousFailed = true;
       if (previous) render(previous, true);
       else {
-        status.textContent = 'Vessel reports are temporarily unavailable. Try again or use the BoatNerd passage list below.'; dot.className = 'vessel-map-status-dot offline';
+        status.textContent = 'Vessel reports are temporarily unavailable. Try again, or see the other ways to check above the map.'; dot.className = 'vessel-map-status-dot offline';
         list.replaceChildren(text('li', 'The feed did not return usable data. This is not a zero-traffic report.'));
         renderCard(null, true);
         share(null, true);
@@ -254,15 +365,19 @@
       map.on('zoomend', () => {
         for (const { marker, v } of visibleMarkers.values()) {
           const updated = shipIcon(v, marker === selectedMarker);
-          if (updated && marker.setIcon) marker.setIcon(updated);
+          if (updated && marker.setIcon) {
+            marker.setIcon(updated);
+            labelShipMarker(marker, v);
+          }
         }
       });
     } else container.textContent = 'Map could not load. Recent vessel reports remain available in the list below.';
-    if (previous) render(previous, false);
+    if (previous) render(previous, previousFailed);
   }
   window.SooAis = { focusShip, last: null };
   refresh.addEventListener('click', () => { startMap(); load(); });
   renderLegend();
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) refreshNearMotion(); });
   startPolling();
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(entries => { if (entries.some(e => e.isIntersecting)) { observer.disconnect(); startMap(); } }, { rootMargin: '300px' });

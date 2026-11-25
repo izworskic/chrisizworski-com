@@ -7,13 +7,14 @@
  const tell=(id,v)=>{const x=$(id);if(x)x.textContent=v;};
  const link=(id,url,label)=>{const x=$(id);if(x){x.href=url;x.textContent=label;}};
  const notes={
-  Superior:'Lake Superior meets granite headlands, sandy bays and boreal forest. Check the park rules as well as the weather.',
-  Huron:'Lake Huron includes Georgian Bay. The water and wind can feel very different from the air behind dunes or town buildings.',
-  Erie:'Lake Erie opens into long beaches and low, sandy peninsulas. Wind and wave exposure matter as much as the sunny forecast.',
-  Ontario:'On Lake Ontario, sandbars, dunes and city shorelines meet a large, changeable lake.',
+  All:'Explore all 30 Ontario shorelines from Lake Superior to Lake Ontario. Search by beach or town, or choose a lake.',
+  Superior:'On Superior, the trees may shelter you until the forest gives way to a rocky point or sandy bay. Notice when the wind reaches you, and read the park’s latest guidance.',
+  Huron:'Georgian Bay coves, Lake Huron points and long strands face the wind in different directions. Compare the water’s surface with the air you feel behind trees or town buildings.',
+  Erie:'Across Lake Erie’s sandy peninsulas, even a sunny afternoon can bring shifting wind and waves. Check the official park notices before choosing a place at the water.',
+  Ontario:'From Toronto’s streets to Prince Edward County dunes, the Lake Ontario shoreline changes character. See whether the breeze comes across open water or from shelter on land.',
   Michigan:'Lake Michigan lies entirely along the United States. Explore its beaches in the U.S. ShoreFeel guide.'
  };
- let current=null,lake='Superior',controller=null,map=null,mapReady=false,markers=new Map(),tilesLoaded=false,tileErrors=0;
+ let current=null,lake='All',query='',controller=null,map=null,mapReady=false,markers=new Map(),tilesLoaded=false,tileErrors=0;
  function time(s){const t=Date.parse(s||'');return Number.isFinite(t)?new Intl.DateTimeFormat('en-CA',
   {timeZone:'America/Toronto',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',timeZoneName:'short'}).format(new Date(t)):'Time unavailable';}
  function unavailable(reason){
@@ -22,22 +23,26 @@
   tell('report-wind','Wind unavailable');
   tell('report-time','Source timestamp unavailable');
   tell('report-heading','Check the official forecast');
-  tell('report-guide',reason||'ECCC hourly weather could not be verified for this shoreline. Check its current forecast before setting out.');
+  tell('report-guide',reason||'The nearby forecast is not available right now. Explore the shoreline notes, then check current Environment Canada and park guidance before leaving.');
+  tell('report-lake-effect','Lake influence unavailable. Do not infer a beach temperature from missing ECCC and NOAA data.');
   tell('report-scope','No nearest-town air value, lake temperature, wave safety or swimming status has been inferred. Read the official beach and park notices.');
  }
  function show(li){
   if(!li)return;
   const d=li.dataset;current=d.slug;
+   $('field-report').hidden=false;
   for(const x of list)x.querySelector('button[data-select]').setAttribute('aria-pressed',String(x===li));
   tell('report-name',d.name);tell('report-place','Ontario · Lake '+d.lake);
-  tell('report-story',d.story);tell('report-heading','Along the shore');
-  tell('report-guide','Consulting a recent Environment Canada city-area forecast.');
+  tell('report-story',d.story);tell('report-heading','Get to know this shore');
+  tell('report-guide','Checking the nearby Environment Canada forecast. While it loads, explore what makes this particular shore different.');
+  tell('report-lake-effect','Checking a recent NOAA offshore water pixel against the ECCC city-area forecast wind. No on-sand degree correction is assumed.');
   tell('report-temp','Checking weather');tell('report-method','Nearby ECCC forecast, not a beach thermometer');
   tell('report-wind','Checking wind');tell('report-time','Checking official timestamp');
   tell('report-scope','Approximate park or beach vicinity pin, not a parking location. Forecasts and official beach advisories are separate.');
   link('report-park',d.official,'Official park or town');
   link('report-advisory',d.advisory,'Check '+d.source);
   link('report-maps','https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(d.name+', '+d.nearby+', Ontario, Canada'),'View on Google Maps');
+  link('report-detail','/great-lakes-beaches/canada/'+d.slug+'/','Read the complete field note');
   if(controller)controller.abort();
   const signal=new AbortController();controller=signal;
   fetch('/api/shorefeel-ca?beach='+encodeURIComponent(d.slug),{signal:signal.signal,headers:{Accept:'application/json'}})
@@ -52,13 +57,18 @@
        ?Math.round(a.windKmh)+' km/h'+(a.windDirection?' from '+a.windDirection:''):'Wind unavailable');
     tell('report-time',(a.isUpcoming?'Upcoming ECCC hour ':'ECCC hour ')+time(a.validAt));
     tell('report-heading',a.heading||'On the shore');tell('report-guide',a.note||'The wind is worth watching at the waterline.');
+    const influence=a.shorelineRealFeel?.lakeEffect;
+    tell('report-lake-effect',influence?.explanation
+      ?influence.label+'. '+influence.explanation+' The primary temperature remains ECCC forecast comfort, not a beach thermometer.'
+      :'No nearby NOAA offshore water sample verified; actual shoreline warming or cooling remains unknown.');
     tell('report-scope','ECCC forecast for '+a.forecastPlace+' about '+a.forecastDistanceKm+
       ' km from this shoreline. This is not an on-sand air measurement or calibrated coastal correction. Beach water test results and safety flags have not been checked.');
    })
    .catch(e=>{if(e.name!=='AbortError'&&current===d.slug)unavailable('ECCC weather could not be reached. Use the official park and beach health links.');});
   if(mapReady&&markers.has(d.slug)){
     for(const [slug,p]of markers){const e=p.getElement()?.querySelector('.shore-marker');if(e)e.classList.toggle('selected',slug===d.slug);}
-    markers.get(d.slug).openPopup();
+    // Do not open a popup from the beach list: it obscures mobile pinch gestures.
+    // Leaflet's bound popup still opens when a visitor taps its marker.
   }
   try{const u=new URL(location.href);u.searchParams.set('beach',d.slug);history.replaceState(null,'',u);}catch{}
   if(window.va)window.va('event',{name:'ShoreFeel Canada Beach Select',data:{beach:d.slug,lake:d.lake}});
@@ -79,6 +89,7 @@
   link('report-park','/great-lakes-beaches/around-the-lakes/','U.S. shoreline explorer');
   link('report-advisory','/great-lakes-beaches/','Michigan Beach Report');
   link('report-maps','/great-lakes-beaches/around-the-lakes/','Explore Lake Michigan beaches');
+  link('report-detail','/great-lakes-beaches/around-the-lakes/','Explore U.S. Lake Michigan beaches');
   try{const u=new URL(location.href);u.searchParams.delete('beach');history.replaceState(null,'',u);}catch{}
  }
  function selectLake(next,wanted){
@@ -86,15 +97,27 @@
   for(const b of filters)b.setAttribute('aria-pressed',String(b.dataset.lakeFilter===lake));
   const p=$('lake-context');p.textContent=notes[lake];
   if(lake==='Michigan'){const a=document.createElement('a');a.href='/great-lakes-beaches/around-the-lakes/';a.textContent=' View the U.S. Lake Michigan beaches.';p.appendChild(a);}
-  const visible=list.filter(li=>{li.hidden=li.dataset.lake!==lake;return !li.hidden;});
-  tell('result-count',lake==='Michigan'?'U.S. guide available':visible.length+' locations');
+  const visible=list.filter(li=>{
+   const d=li.dataset,byLake=lake==='All'||d.lake===lake;
+   const haystack=[d.name,d.nearby,d.lake,d.story].join(' ').toLowerCase();
+   li.hidden=!(byLake&&(!query||haystack.includes(query)));
+   return !li.hidden;
+  });
+  const empty=$('shore-no-match');
+  if(empty)empty.hidden=visible.length>0||lake==='Michigan';
+  tell('result-count',lake==='Michigan'?'U.S. guide available':visible.length+' of '+list.length+' locations');
   if(mapReady){
-   for(const [slug,m]of markers){const li=bySlug.get(slug);if(li.dataset.lake===lake)m.addTo(map);else map.removeLayer(m);}
+   for(const [slug,m]of markers){const li=bySlug.get(slug);if(!li.hidden)m.addTo(map);else map.removeLayer(m);}
    if(visible.length){const bounds=window.L.latLngBounds(visible.map(li=>[Number(li.dataset.lat),Number(li.dataset.lon)]));map.fitBounds(bounds.pad(.15),{maxZoom:9,animate:false});}
    else map.setView([44.5,-85.5],6,{animate:false});
   }
-  if(lake==='Michigan')handoff();
-  else show(wanted&&visible.includes(wanted)?wanted:visible[0]);
+  if(lake==='Michigan'){$('field-report').hidden=false;handoff();}
+  else if(visible.length)show(wanted&&visible.includes(wanted)?wanted:visible[0]);
+  else{
+   if(controller)controller.abort();
+   current=null;$('field-report').hidden=true;
+   try{const u=new URL(location.href);u.searchParams.delete('beach');history.replaceState(null,'',u);}catch{}
+  }
  }
  function mapFailed(){
   if(map){try{map.remove();}catch{}}
@@ -104,7 +127,22 @@
  function startMap(){
   if(typeof window.L!=='object')return mapFailed();
   try{
-   map=window.L.map('shore-map',{scrollWheelZoom:false,touchZoom:false,dragging:!matchMedia('(pointer:coarse)').matches});
+   // Some Android in-app browsers still hand a two-finger gesture to page
+   // magnification even with Leaflet touchZoom on. Cancel only multi-touch
+   // default actions within this map. Do not disable viewport zoom elsewhere:
+   // visitors must retain accessible page pinch-zoom outside the map.
+   const mapSurface=$('shore-map');
+   mapSurface.style.touchAction='none';
+   const keepPinchOnMap=(event)=>{
+    if(event.touches&&event.touches.length>1&&event.cancelable)event.preventDefault();
+   };
+   mapSurface.addEventListener('touchstart',keepPinchOnMap,{passive:false,capture:true});
+   mapSurface.addEventListener('touchmove',keepPinchOnMap,{passive:false,capture:true});
+   // With dragging disabled, Leaflet sets touch-action: pan-x pan-y, letting
+   // the mobile browser cancel multi-touch before the map can zoom.
+   // Enable drag and zoom together so Leaflet sets touch-action: none.
+   // Visitors scroll the page outside the map; wheel zoom stays disabled.
+   map=window.L.map('shore-map',{scrollWheelZoom:false,zoomControl:true,touchZoom:true,dragging:true});
    map.setView([44.4,-83.9],6);
    const layer=window.L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:12,attribution:'© OpenStreetMap contributors'}).addTo(map);
    layer.on('tileload',()=>{tilesLoaded=true;});layer.on('tileerror',()=>{tileErrors++;if(tileErrors>=3&&!tilesLoaded)mapFailed();});
@@ -114,12 +152,37 @@
     const mark=window.L.marker([Number(d.lat),Number(d.lon)],{icon,title:d.name}).bindPopup('<strong>'+d.name.replaceAll('&','&amp;').replaceAll('<','&lt;')+'</strong><div>Ontario · Lake '+d.lake+'</div>');
     mark.on('click',()=>selectLake(d.lake,li));markers.set(d.slug,mark);
    }
-   mapReady=true;selectLake(lake,bySlug.get(current));
+   // Map initialization must not issue the selected beach forecast a second time.
+   mapReady=true;
+   const visible=list.filter(li=>!li.hidden);
+   for(const [slug,marker] of markers){
+    const entry=bySlug.get(slug);
+    if(entry&&!entry.hidden)marker.addTo(map);
+   }
+   if(visible.length){
+    const bounds=window.L.latLngBounds(visible.map(li=>[Number(li.dataset.lat),Number(li.dataset.lon)]));
+    map.fitBounds(bounds.pad(.15),{maxZoom:9,animate:false});
+   }else map.setView([44.5,-85.5],6,{animate:false});
+   if(current&&markers.has(current)){
+    const selected=markers.get(current);
+    // The field note already describes the selected beach. Keep the initial
+    // map unobstructed rather than centering a popup over touch gestures.
+    const icon=selected.getElement()?.querySelector('.shore-marker');
+    if(icon)icon.classList.add('selected');
+   }
    setTimeout(()=>{if(!tilesLoaded&&mapReady)mapFailed();},8000);
   }catch{mapFailed();}
  }
- filters.forEach(b=>b.addEventListener('click',()=>selectLake(b.dataset.lakeFilter)));
+ const search=$('shore-search');
+ if(search)search.addEventListener('input',()=>{
+  query=search.value.trim().toLowerCase();
+  selectLake('All');
+ });
+ filters.forEach(b=>b.addEventListener('click',()=>{
+  query='';if(search)search.value='';
+  selectLake(b.dataset.lakeFilter);
+ }));
  list.forEach(li=>li.querySelector('button[data-select]').addEventListener('click',()=>selectLake(li.dataset.lake,li)));
  const requested=new URLSearchParams(location.search).get('beach'),target=bySlug.get(requested)||list[0];
- selectLake(target.dataset.lake,target);startMap();
+ selectLake(bySlug.has(requested)?target.dataset.lake:'All',target);startMap();
 })();

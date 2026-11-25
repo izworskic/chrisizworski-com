@@ -79,10 +79,10 @@ test("browser planner exposes Finish and sends it to the API",()=>{
 
 test("Finish is present in static planner markup and the asset is cache-busted",()=>{
   const html=fs.readFileSync(path.join(__dirname,"..","public","blue-ridge-parkway","index.html"),"utf8");
-  assert.match(html,/<label for="finish">Finish<\/label>/);
+  assert.match(html,/<label for="finish">Where do you want to finish\?<\/label>/);
   assert.match(html,/<select id="finish">/);
   assert.match(html,/Back where I started/);
-  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-7/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20261122-flow1/);
 });
 
 
@@ -135,8 +135,8 @@ test("trip results foreground selected-stop detail and collapse normal planner m
   assert.ok(html.indexOf('id="selectedStopDetails"') < html.indexOf('<details class="trip-technical">'));
   assert.ok(html.indexOf('id="roadAlertSection"') < html.indexOf('<details class="trip-technical">'));
   assert.match(source,/function renderSelectedStopDetails/);
-  assert.match(source,/Why it made your trip/);
-  assert.match(source,/What to do here/);
+  assert.match(source,/Why stop here\?/);
+  assert.match(source,/What to notice/);
   assert.match(source,/renderSelectedStopDetails\(payload\)/);
   assert.match(source,/alert\.hidden=!urgent\.length/);
 });
@@ -154,7 +154,7 @@ test("selected-stop summary uses returned interests with checked-box fallback",(
   assert.match(source,/checkedInterests=selectedInterests\(\)/);
   assert.match(source,/Serves \$\{servedIds\.length\} of \$\{chosen\.size\} selected interests/);
   const html=fs.readFileSync(path.join(__dirname,"..","public","blue-ridge-parkway","index.html"),"utf8");
-  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-7/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20261122-flow1/);
 });
 
 
@@ -200,9 +200,9 @@ test("result UI reports served and unserved selections without claiming the user
   assert.match(source,/Serves \$\{servedIds\.length\} of \$\{chosen\.size\} selected interests/);
   assert.match(source,/Not covered:/);
   assert.match(source,/NPS stop information/);
-  assert.match(html,/Stops chosen for this drive/);
+  assert.match(html,/Places worth leaving the car for/);
   assert.doesNotMatch(html,/What you picked—and what to do there/);
-  assert.match(html,/blue-ridge-parkway\.js\?v=20260925-7/);
+  assert.match(html,/blue-ridge-parkway\.js\?v=20261122-flow1/);
 });
 
 

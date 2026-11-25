@@ -9,6 +9,17 @@
   const activityEl = document.getElementById('activity');
   const regionEl = document.getElementById('region');
   const cards = [...document.querySelectorAll('.destination')];
+  const intentInput = document.getElementById('intent-query');
+  const intentBox = document.getElementById('intent-search');
+  const intentClear = document.getElementById('clear-intent');
+  const intentLeading = document.getElementById('intent-leading');
+  const emptyReason = document.getElementById('empty-reason');
+  const intentEngine = window.AdventureIntent || null;
+  // The optional natural-language search is entirely on-device. It cannot send
+  // a user's description to the network or save it in a share URL.
+  const intentCatalog = intentEngine ? cards.map(card => intentEngine.fromCard(card)) : [];
+  const intentById = new Map(intentCatalog.map(place => [place.id, place]));
+  if (intentBox && intentEngine) intentBox.hidden = false;
   // The preferred Torch Lake Commons original occasionally fails at the CDN.
   // On failure use a second photograph by the same author (Hgjudd), also
   // CC BY-SA 3.0, and update attribution and alt text to match the new image.
@@ -71,52 +82,110 @@
   function visibleCards() {
     return cards.filter(card => !card.hidden);
   }
-  function updateMap() {
+  // Group close-by positions at broad zoom levels so touch targets do not
+  // overlap. These are map-selection groups, not additional real destinations.
+  function renderMarkers() {
     if (!map) return;
     markers.forEach(marker => map.removeLayer(marker));
     markers = [];
-    const positions = [];
-    const icon = window.L.divIcon({className: '', html: '<span class="map-marker" aria-hidden="true"></span>', iconSize: [18,18], iconAnchor: [9,9]});
-    visibleCards().forEach(card => {
-      const lat = Number(card.dataset.lat), lng = Number(card.dataset.lng);
-      if (!Number.isFinite(lat) || !Number.isFinite(lng)) return;
-      const name = card.querySelector('h3').textContent.trim();
-      const loc = card.querySelector('.place').textContent.trim();
-      const popup = document.createElement('div');
-      popup.className = 'map-popup';
-      const title = document.createElement('h3');
-      title.textContent = name;
-      const caption = document.createElement('p');
-      caption.textContent = loc;
-      const jump = document.createElement('a');
-      jump.href = '#' + card.id;
-      jump.textContent = 'Read destination & trip links →';
-      jump.addEventListener('click', event => {
+
+    const items = visibleCards().map(card => ({
+      card, lat: Number(card.dataset.lat), lng: Number(card.dataset.lng)
+    })).filter(item => Number.isFinite(item.lat) && Number.isFinite(item.lng));
+    const pixels = items.map(item => map.project([item.lat, item.lng], map.getZoom()));
+    // Anchor groups to a real destination. Never chain neighboring points
+    // into one state-wide cluster at small zoom levels.
+    const groups = [];
+    items.forEach((item, index) => {
+      const pixel = pixels[index];
+      let nearest = null;
+      let distanceSq = 56 * 56;
+      for (const group of groups) {
+        const dx = pixel.x - group.anchor.x;
+        const dy = pixel.y - group.anchor.y;
+        const distance = dx * dx + dy * dy;
+        if (distance < distanceSq) {
+          nearest = group;
+          distanceSq = distance;
+        }
+      }
+      if (nearest) nearest.members.push(item);
+      else groups.push({anchor: pixel, members: [item]});
+    });
+
+    function storyLink(card, label) {
+      const link = document.createElement('a');
+      link.href = '#' + card.id;
+      link.textContent = label;
+      link.addEventListener('click', event => {
         event.preventDefault();
         card.scrollIntoView({behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start'});
         card.querySelector('.primary-link')?.focus({preventScroll:true});
         map.closePopup();
       });
-      const actions = document.createElement('p');
+      return link;
+    }
+
+    for (const {members: group} of groups) {
+      const first = group[0];
+      const popup = document.createElement('div');
+      popup.className = 'map-popup';
+      const heading = document.createElement('h3');
+      const caption = document.createElement('p');
+      const actions = document.createElement('div');
       actions.className = 'map-popup-actions';
-      actions.append(jump);
-      const publishedLocation = card.querySelector('[data-map-google-location]');
-      if (publishedLocation) {
-        const view = document.createElement('a');
-        view.href = publishedLocation.href;
-        view.textContent = 'View destination area in Google Maps';
-        view.target = '_blank';
-        view.rel = 'noopener noreferrer';
-        actions.append(document.createTextNode(' · '), view);
+
+      if (group.length === 1) {
+        const card = first.card;
+        const name = card.querySelector('h3').textContent.trim();
+        heading.textContent = name;
+        caption.textContent = card.querySelector('.place').textContent.trim();
+        actions.append(storyLink(card, 'Read destination and trip links'));
+        const locationLink = card.querySelector('[data-map-google-location]');
+        if (locationLink) {
+          const view = document.createElement('a');
+          view.href = locationLink.href;
+          view.textContent = 'View destination area in Google Maps';
+          view.target = '_blank';
+          view.rel = 'noopener noreferrer';
+          actions.append(document.createTextNode(' · '), view);
+        }
+      } else {
+        heading.textContent = group.length + ' nearby destinations';
+        caption.textContent = 'Grouped for easier selection. Choose a place to read its field guide.';
+        actions.classList.add('map-popup-group');
+        group.forEach(item => {
+          const name = item.card.querySelector('h3').textContent.trim();
+          actions.append(storyLink(item.card, name));
+        });
       }
-      popup.append(title, caption, actions);
-      const marker = window.L.marker([lat,lng], {icon,title:name}).bindPopup(popup).addTo(map);
-      markers.push(marker);
-      positions.push([lat,lng]);
-    });
+      popup.append(heading, caption, actions);
+
+      const multiple = group.length > 1;
+      const icon = window.L.divIcon({
+        className: '',
+        html: multiple
+          ? '<span class="map-cluster" aria-hidden="true">' + group.length + '</span>'
+          : '<span class="map-marker" aria-hidden="true"></span>',
+        iconSize: [40,40], iconAnchor: [20,20]
+      });
+      const title = multiple
+        ? group.length + ' nearby destinations. Open to choose.'
+        : first.card.querySelector('h3').textContent.trim();
+      // Anchor the group to an actual listed destination. It is not a new
+      // inferred place or an invented geographic centroid.
+      markers.push(window.L.marker([first.lat,first.lng],{icon,title}).bindPopup(popup).addTo(map));
+    }
+  }
+
+  function updateMap() {
+    if (!map) return;
+    const positions = visibleCards().map(card => [Number(card.dataset.lat),Number(card.dataset.lng)])
+      .filter(coords => coords.every(Number.isFinite));
     if (positions.length > 1) map.fitBounds(positions, {padding:[22,22], maxZoom:8});
     else if (positions.length === 1) map.setView(positions[0],8);
     else map.setView([44.6,-85.4],6);
+    renderMarkers();
     if (location) {
       if (userPin) map.removeLayer(userPin);
       userPin = window.L.circleMarker([location.lat, location.lng], {radius:7,color:'#155b67',fillColor:'#fefdf5',fillOpacity:1,weight:3}).addTo(map).bindPopup('Your approximate location — not stored by this page');
@@ -190,6 +259,7 @@
     try {
       mapEl.textContent = '';
       map = window.L.map(mapEl, {scrollWheelZoom:false, zoomControl:true}).setView([44.6,-85.4],6);
+      map.on('zoomend', renderMarkers);
       // DOMContentLoaded is early enough for interaction, but lazy photos and
       // Auto ads may settle layout afterward. Keep Leaflet's cached pixel size current.
       if (typeof ResizeObserver !== 'undefined') {
@@ -216,20 +286,63 @@
     moodButtons.forEach(btn => btn.setAttribute('aria-pressed', String(btn.dataset.activity === activityEl.value)));
     const months = targetMonths(whenEl.value);
     const activity = activityEl.value, region = regionEl.value;
-    let count = 0;
-    cards.forEach(card => {
+    const description = intentEngine && intentInput ? intentInput.value.trim().slice(0, 120) : '';
+    const eligible = cards.filter(card => {
       const cardMonths = card.dataset.months.split(',').map(Number);
       const matchesSeason = !months || months.some(m => cardMonths.includes(m));
       const matchesActivity = activity === 'all' || card.dataset.tags.split(',').includes(activity);
       const matchesRegion = region === 'all' || card.dataset.region === region;
-      card.hidden = !(matchesSeason && matchesActivity && matchesRegion);
-      if (!card.hidden) count++;
+      return matchesSeason && matchesActivity && matchesRegion;
     });
+    // Existing visitor-selected controls remain hard filters. Only the
+    // source-supported eligible cards may appear in a text result.
+    const ranked = description
+      ? intentEngine.search(eligible.map(card => intentById.get(card.id)), description, {limit:8})
+      : [];
+    const visibleIds = description
+      ? new Set(ranked.map(hit => hit.id))
+      : new Set(eligible.map(card => card.id));
+    cards.forEach(card => {
+      card.hidden = !visibleIds.has(card.id);
+      card.classList.toggle('intent-best', !!description && ranked[0]?.id === card.id);
+    });
+    const count = visibleIds.size;
     resultTitle.textContent = count + ' Michigan ' + (count === 1 ? 'destination' : 'destinations') + ' to explore';
     const parts = [labelFor(whenEl.value)];
     if(activity !== 'all') parts.push(activityEl.options[activityEl.selectedIndex].textContent.toLowerCase());
     if(region !== 'all') parts.push(regionEl.options[regionEl.selectedIndex].textContent);
-    resultContext.textContent = count ? 'Showing places with typical seasonal fit for ' + parts.join(' · ') + '. Verify actual weather, access and conditions using the linked tools.' : 'No matching places in this curated set. Choose another season, region or activity.';
+    if (description && ranked.length) {
+      const first = ranked[0];
+      const top = intentById.get(first.id);
+      const evidence = first.why.length
+        ? ' Its field notes mention ' + first.why.slice(0, 2).join(' and ') + '.'
+        : ' Its destination name matches the description.';
+      intentLeading.href = '#' + first.id;
+      intentLeading.textContent = 'Start with ' + top.title + '.' + evidence + ' Read the visit details.';
+      intentLeading.hidden = false;
+    } else {
+      intentLeading.hidden = true;
+      intentLeading.removeAttribute('href');
+      intentLeading.textContent = '';
+    }
+    if (description) {
+      const unsupported = intentEngine.unsupportedReasons(description);
+      resultContext.textContent = count
+        ? 'Based on your description and typical seasonal fit for ' + parts.join(' · ') +
+          '. Check the official links for access, current conditions and permitted activities.'
+        : unsupported.length
+          ? 'These field notes do not verify ' + [...new Set(unsupported)].join(' or ') +
+            '. Try a different description or check the official destination resources.'
+          : 'No supported match for that description with your selected filters. Broaden the search or reset the filters.';
+      if (emptyReason) emptyReason.textContent = 'No field-note match. Try other words, another region, or clear the description.';
+    } else {
+      resultContext.textContent = count
+        ? 'Showing places with typical seasonal fit for ' + parts.join(' · ') +
+          '. Verify actual weather, access and conditions using the linked tools.'
+        : 'No matching places in this curated set. Choose another season, region or activity.';
+      if (emptyReason) emptyReason.textContent = 'No destinations match that combination. Try a different region or season.';
+    }
+    if(intentClear) intentClear.hidden = !description;
     empty.hidden = count !== 0;
     updateMap();
     if(updateUrl){
@@ -237,10 +350,13 @@
       if(whenEl.value !== 'any') params.set('when',whenEl.value);
       if(activity !== 'all') params.set('activity',activity);
       if(region !== 'all') params.set('region',region);
+      // Never place free text in query strings, history, analytics, or storage.
       const query = params.toString();
       window.history.replaceState(null,'',window.location.pathname + (query?'?'+query:'') + window.location.hash);
     }
-    if(focus) document.getElementById('result-title').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});
+    if(focus) document.getElementById('result-title').scrollIntoView({
+      behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'
+    });
   }
   function restoreQuery() {
     const p = new URLSearchParams(window.location.search);
@@ -251,11 +367,22 @@
   }
   function reset() {
     whenEl.value='any';activityEl.value='all';regionEl.value='all';
+    if (intentInput) intentInput.value='';
     applyFilters({updateUrl:true});
   }
   moodButtons.forEach(btn => btn.addEventListener('click', () => {activityEl.value = btn.dataset.activity;applyFilters({updateUrl:true});}));
   form.addEventListener('submit',e=>{e.preventDefault();applyFilters({focus:true,updateUrl:true});});
   [whenEl,activityEl,regionEl].forEach(el=>el.addEventListener('change',()=>applyFilters({updateUrl:true})));
+  if (intentEngine && intentInput && intentClear) {
+    intentInput.addEventListener('input', () => {
+      intentClear.hidden = !intentInput.value.trim();
+    });
+    intentClear.addEventListener('click', () => {
+      intentInput.value = '';
+      applyFilters({updateUrl:true});
+      intentInput.focus();
+    });
+  }
   document.getElementById('reset').addEventListener('click',reset);
   document.getElementById('clear-empty').addEventListener('click',reset);
   // A location request is initiated only by an explicit button click, never on load.

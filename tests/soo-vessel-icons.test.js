@@ -16,7 +16,12 @@ test('Soo map uses the shared AIS silhouettes rather than circles for normal shi
   assert.match(js, /L\.marker\(\[v\.lat, v\.lon\]/);
   assert.match(js, /marker = addShipMarker\(v, layer\)/);
   assert.match(js, /visibleMarkers\.set\(String\(v\.mmsi\)/);
-  assert.match(js, /marker\.bindTooltip[\s\S]*\.bindPopup\(content\)/);
+  assert.match(js, /attachShipPopup\(marker, content\)/);
+  assert.match(js, /detailPopup\.setLatLng\(marker\.getLatLng\(\)\)\.setContent\(marker\.sooContent\)\.openOn\(map\)/);
+  assert.doesNotMatch(js, /\.bindPopup\(/);
+  assert.doesNotMatch(js, /\.bindTooltip\(/);
+  assert.match(js, /el\.setAttribute\('aria-label'/);
+  assert.match(js, /labelShipMarker\(marker, v\)/);
   assert.match(js, /map\.on\('zoomend'/);
   assert.match(js, /selectedMarker = m/);
   assert.doesNotMatch(js, /marker = L\.circleMarker\(\[v\.lat, v\.lon\]/);
@@ -51,15 +56,16 @@ test('reported AIS type and length drive distinct, proportionate outlines; unkno
 });
 
 test('Soo page loads icon module before renderer; legend and accessible interactions remain', () => {
-  const icon = page.indexOf('/assets/seaway-vessel-icons.js?v=20261108a');
-  const map = page.indexOf('/assets/soo-ais.js?v=20261122');
+  const icon = page.search(/<script defer src="\/assets\/seaway-vessel-icons\.js\?v=\d{8}[a-z]*"><\/script>/);
+  const map = page.search(/<script defer src="\/assets\/soo-ais\.js\?v=\d{8}[a-z]*"><\/script>/);
   assert.ok(icon > -1 && map > icon);
-  assert.match(page, /\/assets\/soo-vessel-icons\.css\?v=20261122/);
+  assert.match(page, /<link rel="stylesheet" href="\/assets\/soo-vessel-icons\.css\?v=\d{8}[a-z]*">/);
   assert.match(page, /id="sooVesselMap"/);
   assert.match(page, /id="sooVesselLegend"/);
   assert.match(page, /Reported speed and observation age/);
   assert.doesNotMatch(page, /Blue markers indicate reported movement/);
-  assert.match(js, /keyboard: true, title:/);
+  assert.match(js, /keyboard: true/);
+  assert.doesNotMatch(js, /keyboard: true, title:/);
   assert.match(js, /renderLegend\(\)/);
   assert.match(css, /\.soo-ais-symbol\.type-cargo/);
   assert.match(css, /\.soo-ais-symbol\.type-tanker/);

@@ -1,0 +1,52 @@
+name: Agent Browser read-only QA
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - '.github/workflows/agent-browser-qa.yml'
+      - 'scripts/setup-agent-browser.mjs'
+      - 'scripts/agent-browser.mjs'
+      - 'scripts/agent-browser-smoke.mjs'
+      - 'tests/agent-browser*.test.js'
+      - 'docs/AGENT_BROWSER_WORKFLOW.md'
+      - '.agents/skills/agent-browser-qa/**'
+      - '.claude/skills/agent-browser-qa/**'
+      - '.github/skills/agent-browser-qa/**'
+permissions:
+  contents: read
+jobs:
+  browser-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+      - name: Verify installer contract (no browser yet)
+        run: |
+          node --test tests/agent-browser-integration.test.js tests/agent-browser-setup.test.js
+          node scripts/setup-agent-browser.mjs --dry-run
+      - name: Install pinned Agent Browser and Chrome for Testing
+        run: node scripts/setup-agent-browser.mjs
+      - name: Run real browser against owned public site (read only)
+        run: node scripts/agent-browser-smoke.mjs --url https://chrisizworski.com/michigan-snow-totals/
+      - name: Verify genuine mobile and desktop evidence
+        run: |
+          node --input-type=module <<'NODE'
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const root='artifacts/agent-browser-qa';
+          const sessions=fs.readdirSync(root).filter(s=>fs.statSync(path.join(root,s)).isDirectory());
+          if(sessions.length!==1) throw new Error('Expected exactly one browser session');
+          const dir=path.join(root,sessions[0]);
+          const report=JSON.parse(fs.readFileSync(path.join(dir,'report.json'),'utf8'));
+          if(!report.success || report.steps.length<14 || report.closeExitCode!==0) throw new Error('Browser smoke did not complete');
+          for(const name of ['mobile.png','desktop.png','mobile-snapshot.txt','desktop-snapshot.txt']) {
+            if(fs.statSync(path.join(dir,name)).size<200) throw new Error('Missing real browser evidence: '+name);
+          }
+          console.log('Two actual Chrome render captures verified. Interaction QA remains NOT VERIFIED.');
+          NODE
+      # No upload of raw screenshots, storage, page text or network traces.

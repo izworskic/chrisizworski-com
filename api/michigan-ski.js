@@ -40,15 +40,18 @@ async function collect(now=Date.now()){
   await Promise.all([...Array.from({length:6},worker),officialChecks]);
   const resorts=rank(RESORTS.map(r=>assemble(r,conditions.get(r.slug),alerts,reports,'detroit',now,officials.get(r.slug))),'detroit',now);
   return {ok:true,generatedAt:new Date(now).toISOString(),season:'2026-27',
-    policy:'PROVISIONAL; NO OPEN-LIFT OR SAFE-ROAD ASSURANCE',
+    policy:'PROVISIONAL WEATHER/TRAVEL COMPARISON; OPEN_PER_OPERATOR and CLOSED_PER_OPERATOR require a dated official lift report within 36 hours; STALE_REPORT, UNVERIFIED and NOT_CONNECTED do not confirm opening or closure. NO GUARANTEED FUTURE LIFT OR SAFE-ROAD ASSURANCE',
     resorts,health:{nwsAlerts:alertResponse.status==='fulfilled'?'RECEIVED':'UNAVAILABLE',
       localStormReports:lsrResponse.status==='fulfilled'?'RECEIVED':'UNAVAILABLE',
       nwsGridAvailable:resorts.filter(r=>r.weather.weatherCoverage==='NWS_GRID_RECEIVED').length,
       nwsGridTotal:RESORTS.length,officialReportsChecked:officials.size,
-      officialReportsParsed:[...officials.values()].filter(x=>x.status==='PUBLISHED_OFFICIAL_REPORT').length,
+      officialReportsParsed:[...officials.values()].filter(x=>['OPEN_PER_OPERATOR','CLOSED_PER_OPERATOR','STALE_REPORT'].includes(x.status)).length,
+      officialReportsOpen:resorts.filter(r=>r.kind==='downhill'&&r.official.status==='OPEN_PER_OPERATOR').length,
+      officialReportsStale:[...officials.values()].filter(x=>x.status==='STALE_REPORT').length,
+      officialSourceConnected:RESORTS.filter(r=>r.kind==='downhill'&&SOURCES[r.slug]).length,
       errors:errors.slice(0,22)},
     alertsActive:resorts.filter(r=>r.weather.alerts.some(a=>a.isLakeEffect)).length,
-    disclosure:'Recent reports are nearby storm reports with varying accumulation intervals, not 24/48-hour resort snowfall totals. NWS grid snowfall is a forecast, not observed snow. Official lift/trail counts are parsed for select resorts; they are page snapshots, not guaranteed opening status for a future weekend. Unknown resorts remain unverified.'};
+    disclosure:'NWS nearby snowfall is a storm report with a variable interval, not a 24/48-hour resort measurement. NWS gridded snowfall is a forecast, not observed snow. OPEN_PER_OPERATOR requires operator-published lift counts and a dated report no older than 36 hours. CLOSED_PER_OPERATOR uses a similarly dated zero-lift report; STALE_REPORT is older than 36 hours, UNVERIFIED means unparseable/undated/unavailable, and NOT_CONNECTED means no approved operator report source. A page-fetch check time is not the operator\'s report time. Reports do not guarantee future operations, road safety or ticket availability.'};
 }
 function get(){
   const now=Date.now();
@@ -67,7 +70,7 @@ module.exports=async function handler(req,res){
   if(req.method!=='GET'){res.setHeader('Allow','GET');res.setHeader('Cache-Control','no-store');return res.status(405).json({error:'METHOD_NOT_ALLOWED'});}
   if((req.url||'').includes('?')){res.setHeader('Cache-Control','no-store');return res.status(400).json({error:'UNSUPPORTED_PARAMETERS'});}
   const value=await get();
-  const ttl=value.health?.nwsGridAvailable>0?900:120;
+  const ttl=value.ok?900:120;
   res.setHeader('Cache-Control','public, max-age=30');
   res.setHeader('Vercel-CDN-Cache-Control','public, s-maxage='+ttl+', stale-while-revalidate=60');
   res.setHeader('CDN-Cache-Control','public, s-maxage='+ttl+', stale-while-revalidate=60');

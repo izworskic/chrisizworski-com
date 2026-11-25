@@ -100,12 +100,17 @@
   function regional(nowData, slug) {
     return nowData && nowData.observed && nowData.observed.regions ? nowData.observed.regions[slug] : null;
   }
+  // Recheck the original source clock when a cached response reaches the browser.
+  function iceSourceRecent(timestamp, now) {
+    var age = (now === undefined ? Date.now() : now) - Date.parse(timestamp);
+    return Number.isFinite(age) && age >= -2 * 3600000 && age <= 48 * 3600000;
+  }
   function usableRegional(r) {
-    return !!(r && r.supported && r.available && !r.stale && r.rangeLabel);
+    return !!(r && r.supported && r.available && !r.stale && r.rangeLabel && iceSourceRecent(r.validAt));
   }
   function usableLakeWide(nowData) {
     var l = nowData && nowData.observed ? nowData.observed.lakeWide : null;
-    return l && l.current && !l.stale ? l : null;
+    return l && l.current && !l.stale && iceSourceRecent(l.observedAt) ? l : null;
   }
 
   function paintTrack(container, afdd, normal) {
@@ -495,22 +500,211 @@
     set('r-stamp', stamp);
   }
 
-  function renderHistory(server) {
-    var hur = server && server.climatology ? server.climatology.huron : null;
-    var mic = server && server.climatology ? server.climatology.michigan : null;
-    var el = document.getElementById('hist-detail');
-    if (!el) return;
-    if (!hur && !mic) { el.textContent = 'The climatology record is not reachable right now.'; return; }
-    var lines = [];
-    if (hur) lines.push('On this date the ' + hur.yearsOfRecord + ' year record for Lake Huron averages ' + fmt(hur.mean, 1) + '% ice cover, with a median of ' + fmt(hur.median, 1) + '% and a range from ' + fmt(hur.min, 1) + '% to ' + fmt(hur.max, 1) + '%.');
-    if (mic) lines.push('Lake Michigan averages ' + fmt(mic.mean, 1) + '% for the same date, ranging from ' + fmt(mic.min, 1) + '% to ' + fmt(mic.max, 1) + '%.');
-    if (hur && hur.current !== null && hur.current !== undefined) {
-      var d = hur.current - hur.mean;
-      lines.push('This ice year Lake Huron sits at ' + fmt(hur.current, 1) + '%, ' + (d >= 0 ? fmt(d, 1) + ' points above' : fmt(Math.abs(d), 1) + ' points below') + ' the long-term average.');
+  var HISTORY_LAKES = [
+    ['superior','Lake Superior'], ['michigan','Lake Michigan'],
+    ['huron','Lake Huron'], ['erie','Lake Erie'],
+    ['ontario','Lake Ontario'], ['total','Five-lake total']
+  ];
+
+  function historyNumber(value) {
+    return typeof value === 'number' && Number.isFinite(value) ? value.toFixed(1) + '%' : 'Not measured';
+  }
+
+  function historyNode(tag, text, cls) {
+    var n = document.createElement(tag);
+    if (cls) n.className = cls;
+    if (text !== undefined) n.textContent = text;
+    return n;
+  }
+
+  function seasonChart(history, key) {
+    var svg = document.getElementById('hist-chart');
+    var table = document.getElementById('hist-chart-data');
+    if (!svg || !table) return;
+    var rows = (history.series && history.series[key]) || [];
+    svg.replaceChildren();
+    table.replaceChildren();
+    if (!rows.length) {
+      svg.appendChild(svgText(32, 45, 'The NOAA daily comparison is unavailable for this lake.', 16));
+      table.appendChild(historyTableRow(['No recorded daily comparison', '', '', '', '', '']));
+      return;
     }
-    el.textContent = lines.join(' ');
-    var st = document.getElementById('hist-stamp');
-    if (st && hur) st.textContent = 'NOAA GLERL daily ice climatology, ice years ' + hur.firstYear + ' through ' + hur.lastYear + '. Recorded zero and missing observation are kept distinct.';
+    var NS = 'http://www.w3.org/2000/svg';
+    function elt(tag, attrs) {
+      var e = document.createElementNS(NS, tag);
+      Object.keys(attrs || {}).forEach(function (k) { e.setAttribute(k, attrs[k]); });
+      svg.appendChild(e); return e;
+    }
+    function xpos(i) { return 54 + 866 * i / Math.max(1, rows.length - 1); }
+    function ypos(n) { return 260 - 2.15 * n; }
+    function valid(n) { return typeof n === 'number' && Number.isFinite(n); }
+    function line(series, stroke, width) {
+      var path = '', started = false;
+      series.forEach(function (row, i) {
+        var value = row;
+        if (!valid(value)) { started = false; return; }
+        path += (started ? ' L' : ' M') + xpos(i).toFixed(1) + ' ' + ypos(value).toFixed(1);
+        started = true;
+      });
+      elt('path', { d: path.trim(), fill: 'none', stroke: stroke,
+        'stroke-width': width, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' });
+    }
+
+    [0,25,50,75,100].forEach(function (v) {
+      elt('line', { x1: 54, x2: 920, y1: ypos(v), y2: ypos(v),
+        stroke: '#d5e1e8', 'stroke-width': 1 });
+      var label = elt('text', { x: 42, y: ypos(v) + 4, 'text-anchor': 'end',
+        fill: '#345365', 'font-size': 12 });
+      label.textContent = v + '%';
+    });
+    var eligible = rows.map(function (r, i) { return { i: i, min: r.min, max: r.max }; })
+      .filter(function (r) { return valid(r.min) && valid(r.max); });
+    if (eligible.length > 1) {
+      var polygon = eligible.map(function (r) {
+        return xpos(r.i).toFixed(1) + ',' + ypos(r.max).toFixed(1);
+      }).concat(eligible.slice().reverse().map(function (r) {
+        return xpos(r.i).toFixed(1) + ',' + ypos(r.min).toFixed(1);
+      })).join(' ');
+      elt('polygon', { points: polygon, fill: '#c3dbe5', opacity: 0.9 });
+    }
+    line(rows.map(function (r) { return r.mean; }), '#c17d35', 2.5);
+    line(rows.map(function (r) { return r.current; }), '#154d72', 3.5);
+    rows.forEach(function (r, i) {
+      if (valid(r.current)) elt('circle', { cx: xpos(i), cy: ypos(r.current),
+        r: 2.7, fill: '#154d72' });
+    });
+    [0, Math.floor((rows.length - 1) / 3), Math.floor(2 * (rows.length - 1) / 3),
+      rows.length - 1].forEach(function (i) {
+      var label = elt('text', { x: xpos(i), y: 285,
+        'text-anchor': i === 0 ? 'start' : (i === rows.length - 1 ? 'end' : 'middle'),
+        fill: '#345365', 'font-size': 12 });
+      label.textContent = rows[i].date;
+    });
+    var selected = HISTORY_LAKES.filter(function (lake) { return lake[0] === key; })[0];
+    svg.setAttribute('aria-label', (selected ? selected[1] : key) + ', ' + history.seasonLabel +
+      ': measured daily percent against the NOAA GLERL calendar-day mean and historical range');
+    rows.forEach(function (r) {
+      table.appendChild(historyTableRow([
+        r.date, historyNumber(r.current), historyNumber(r.mean),
+        historyNumber(r.min), historyNumber(r.max), String(r.yearsOfRecord)
+      ]));
+    });
+  }
+
+  function svgText(x, y, text, size) {
+    var e = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+    e.setAttribute('x', x); e.setAttribute('y', y);
+    e.setAttribute('font-size', size); e.setAttribute('fill', '#345365');
+    e.textContent = text; return e;
+  }
+
+  function historyTableRow(cells) {
+    var tr = document.createElement('tr');
+    cells.forEach(function (text, i) {
+      tr.appendChild(historyNode(i ? 'td' : 'th', text));
+    });
+    return tr;
+  }
+
+  function historyRangeCell(row) {
+    var cell = historyNode('td');
+    if (!row || row.min === null || row.max === null) {
+      cell.textContent = 'No measured range'; return cell;
+    }
+    var track = historyNode('div', undefined, 'ice-range');
+    var span = historyNode('span', undefined, 'ice-fill');
+    span.style.left = Math.max(0, Math.min(100, row.min)) + '%';
+    span.style.width = Math.max(0, Math.min(100, row.max - row.min)) + '%';
+    track.appendChild(span);
+    var mean = historyNode('span', undefined, 'ice-mean');
+    mean.style.left = Math.max(0, Math.min(100, row.mean)) + '%';
+    mean.title = 'Long-term mean ' + historyNumber(row.mean);
+    track.appendChild(mean);
+    if (row.current !== null) {
+      var marker = historyNode('span', undefined, 'ice-today');
+      marker.style.left = Math.max(0, Math.min(100, row.current)) + '%';
+      marker.title = 'Observed ' + historyNumber(row.current);
+      track.appendChild(marker);
+    }
+    cell.appendChild(track);
+    var legend = historyNode('div', undefined, 'ice-range-legend');
+    legend.appendChild(historyNode('span', 'Min ' + historyNumber(row.min) +
+      ' (' + row.minYear + ')'));
+    legend.appendChild(historyNode('span', 'Mean ' + historyNumber(row.mean)));
+    legend.appendChild(historyNode('span', 'Max ' + historyNumber(row.max) +
+      ' (' + row.maxYear + ')'));
+    cell.appendChild(legend);
+    return cell;
+  }
+
+  function renderHistory(server) {
+    var history = server && server.history;
+    var el = document.getElementById('hist-detail');
+    var board = document.getElementById('hist-board');
+    var season = document.getElementById('hist-offseason');
+    var stamp = document.getElementById('hist-stamp');
+    if (!el || !board) return;
+    board.replaceChildren();
+    if (!history || !history.lakes) {
+      el.textContent = 'NOAA GLERL is not reachable right now. No current ice percentage is inferred.';
+      board.appendChild(historyTableRow(['Historical comparison unavailable', '', '']));
+      if (stamp) stamp.textContent = 'Source: NOAA GLERL daily ice climatology.';
+      return;
+    }
+    var today = new Intl.DateTimeFormat("en-CA", {timeZone:"America/Detroit",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
+    // A prior-day cached record can still be explored as history, but not as today.
+    var currentDay = history.observedDate === today;
+    var off = !!history.offSeason;
+    if (season) {
+      season.hidden = !off;
+      if (off) season.textContent = 'The record has no rows for today during the off season. ' +
+        'The board shows the previous ice year\'s measured peak instead, where available.';
+    }
+    el.textContent = off
+      ? 'Off season: last measured ice-year peaks, not ice cover today.'
+      : 'Daily ice coverage for ' + history.observedDate +
+        (currentDay ? '. Unmeasured values are left blank, never reported as 0%.' : '. Older cached record, not today. Current values are withheld.');
+    HISTORY_LAKES.forEach(function (lake) {
+      var key = lake[0], row = history.lakes[key];
+      var tr = document.createElement('tr');
+      var name = historyNode('th', lake[1]);
+      name.setAttribute('scope', 'row'); tr.appendChild(name);
+      var current = historyNode('td');
+      if (off) {
+        var peak = history.peaks && history.peaks[key];
+        current.appendChild(historyNode('strong', peak ? historyNumber(peak.value) : 'Not measured',
+          'ice-number'));
+        current.appendChild(historyNode('small', peak ? ('Peak in ice year ' + history.iceYear +
+          ' on ' + peak.date) : 'No recorded peak for the previous ice year'));
+      } else {
+        current.appendChild(historyNode('strong', row && currentDay ? historyNumber(row.current) : 'Not measured',
+          'ice-number'));
+        var detail;
+        if (currentDay && row && row.current !== null && row.rank !== null)
+          detail = 'More ice than ' + row.lowerCount + ' of ' + row.yearsOfRecord +
+            ' measured winters (rank ' + row.rank + ' of ' + row.yearsOfRecord + ' ascending)';
+        else detail = 'No current-day NOAA measurement; the record does not imply 0%.';
+        current.appendChild(historyNode('small', detail));
+        if (row && row.lastYearValue !== null)
+          current.appendChild(historyNode('small',
+            'Same date last ice year: ' + historyNumber(row.lastYearValue)));
+        if (row && row.seasonPeak)
+          current.appendChild(historyNode('small',
+            'Season-to-date peak: ' + historyNumber(row.seasonPeak.value) + ' on ' +
+              row.seasonPeak.date));
+      }
+      tr.appendChild(current);
+      tr.appendChild(historyRangeCell(off || !currentDay ? null : row));
+      board.appendChild(tr);
+    });
+    if (stamp) stamp.textContent = 'NOAA GLERL; ' + history.yearsAvailable +
+      ' ice years available across the archive. Comparison counts include only actual measurements on each date. ' +
+      'Current values require an observation dated today.';
+    var selector = document.getElementById('hist-lake-selector');
+    if (selector) {
+      selector.addEventListener('change', function () { seasonChart(history, selector.value); });
+      seasonChart(history, selector.value);
+    } else seasonChart(history, 'total');
   }
 
   function boot() {

@@ -53,7 +53,7 @@
       "author": {
         "@id": "https://chrisizworski.com/#person"
       },
-      "dateModified": "2026-11-09",
+      "dateModified": "2026-11-22",
       "inLanguage": "en-US",
       "publisher": {
         "@id": "https://chrisizworski.com/#person"
@@ -362,6 +362,16 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}
 .static-answer{background:#edf6f0;border-left:4px solid #2c5f2d;border-radius:0 5px 5px 0;padding:15px 17px;margin:16px 0 24px;color:#334239;font-size:14px;line-height:1.65}
 .footer{text-align:center;padding:24px;border-top:1px solid #e8e4dc;font-size:12px;color:#999;margin-top:48px}
 @media(max-width:640px){.site-header{display:block;padding:13px 16px}.header .site-title{font-size:20px}.nav{justify-content:flex-start;margin-top:9px}.nav a{margin:3px 14px 3px 0}.body{padding:18px 14px 40px}h1.page-title{font-size:26px}h2.sh{font-size:18px}.live-strip{gap:5px 8px;padding:8px 12px}.live-strip .refresh-info{margin:0}.breadcrumb{font-size:11px}}
+.hero-panel .sky-note,.hero-panel #comparisonResult{color:#d7e8ed;font:14px/1.55 system-ui,sans-serif;margin:8px 0 12px}
+.hero-panel .sky-note a{color:#c6f5de;text-decoration:underline}
+.sky-compare{border-block:1px solid #54747b;margin:16px 0 8px}
+.sky-compare summary,.decision-context summary{cursor:pointer;padding:12px 0;min-height:44px;font:600 15px/1.4 system-ui,sans-serif;color:#e2f6ef}
+.sky-compare [hidden]{display:none}
+.sky-compare .region-picker{margin:4px 0 10px}
+.hero-panel :is(summary,select,button,a):focus-visible{outline:3px solid #f7c370;outline-offset:2px}
+.hero-panel .verdict-card__reason,.hero-panel .verdict-card__asof{color:#daebf4}
+.hero-panel .decision-context .live-strip{position:static}
+@media(prefers-reduced-motion:reduce){.kp-step.current{animation:none}}
 </style>
 <script defer src="/_vercel/insights/script.js"></script>
 <script>window.si=window.si||function(){(window.siq=window.siq||[]).push(arguments)};</script>
@@ -383,19 +393,57 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}
 <a href="/">Home</a><a href="/about/">About</a><a href="/tools/">Tools</a><a href="/guides/">Guides</a><a href="/great-lakes/">Great Lakes</a><a href="/great-lakes-gazette/">Gazette</a><a href="/blog/">Blog</a>
 </div>
 </header>
-<div class="live-strip" id="liveStrip">
+
+<main class="body" id="main">
+    <div class="priority-decision-group" data-no-ads>
+<div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/tools/">Tools</a> &rsaquo; Northern Lights Michigan</div>
+
+<h1 class="page-title">Northern Lights Michigan Tonight</h1>
+
+
+<p class="sub">Can you see the northern lights in Michigan tonight? Choose your region for the best hour to look north. A forecast cannot guarantee visibility.</p>
+
+<!-- Regional decision first; statewide context and guide remain below. -->
+<section class="hero-panel" id="aurora-decision" aria-labelledby="localHeadline">
+  <div class="decision-heading">
+    <span class="decision-eyebrow">Tonight’s sky</span>
+    <span class="decision-source">NOAA · NWS · USNO</span>
+  </div>
+  <div class="region-picker"><label for="regionSelect">Choose your region</label><select id="regionSelect"><option value="keweenaw">Keweenaw Peninsula</option><option value="marquette">Marquette</option><option value="munising">Munising</option><option value="sault-ste-marie">Sault Ste. Marie</option><option value="mackinaw-city" selected>Mackinaw City / Straits</option><option value="traverse-city">Traverse City</option><option value="bay-city">Bay City / Saginaw Bay</option><option value="detroit">Detroit / southern Michigan</option></select></div>
+  <div class="local-answer" aria-live="polite" aria-atomic="true">
+    <div class="tonight-label" id="localRegion">Tonight near the Straits of Mackinac</div>
+    <h2 id="localHeadline">Checking your regional outlook</h2>
+    <p id="localDetail">Start with a clear view north, away from shore lights. Your forecast checks whether the strongest hours overlap darkness here.</p>
+  </div>
+  <noscript><style>#aurora-decision .region-picker,#aurora-decision .local-answer,#aurora-decision .decision-factors,#regionalUpdate,#aurora-decision .hero-action-row button{display:none}</style><p class="sky-note">For tonight’s outlook, open <a href="https://www.spaceweather.gov/products/aurora-30-minute-forecast">NOAA’s short-term aurora map</a> and <a href="https://www.weather.gov/">your local weather forecast</a>. Look for an opening in the clouds toward the northern horizon.</p></noscript>
+  <p class="sky-note"><span id="regionalUpdate">Waiting for the latest forecast.</span> <a id="regionalSource" href="https://www.spaceweather.gov/products/aurora-30-minute-forecast" hidden>Open NOAA’s aurora map</a></p>
+  <details class="sky-compare" id="compareSky" hidden>
+    <summary>Would the sky look better somewhere else?</summary>
+    <div class="region-picker"><label for="compareRegion">Compare with</label><select id="compareRegion"><option value="">Choose another region</option></select></div>
+    <p id="comparisonResult" aria-live="polite"></p>
+    <a id="comparisonGuide" class="region-deep-guide" data-growth-cta="aurora-comparison-to-guide" hidden>Explore the viewing guide</a>
+  </details>
+  <div class="decision-factors" aria-live="polite">
+    <div class="decision-factor"><span>When to check the sky · ET</span><strong id="tonightBestTime">Checking...</strong></div>
+    <div class="decision-factor"><span>NWS forecast clouds</span><strong id="selectedCloud">Checking...</strong></div>
+    <div class="decision-factor"><span>Moon near the Straits · USNO</span><strong id="selectedMoon">Checking...</strong></div>
+  </div>
+  <a id="regionDeepLink" class="region-deep-guide" href="/northern-lights-michigan/mackinaw-city/">Mackinaw City local forecast &amp; viewing guide</a>
+  <div class="hero-action-row">
+    <button class="hero-btn primary" id="findBtn">Find viewing for my location</button>
+    <a class="hero-btn" href="#viewing-locations">View the dark-sky map ↓</a>
+    <button class="hero-btn" id="refreshBtn">Refresh now</button>
+  </div>
+  <details class="decision-context">
+    <summary>Statewide outlook and tonight's timing details</summary>
+    <div class="live-strip" id="liveStrip">
   <span class="live-dot" id="liveDot" aria-hidden="true">&#9679;</span>
   <span class="live-label">Aurora forecast</span>
   <span class="live-status" id="liveStatus">loading NOAA SWPC data...</span>
   <span class="refresh-info" id="refreshInfo"></span>
   <a class="live-jump" href="#aurora-decision">Check my regional forecast ↓</a>
 </div>
-<main class="body" id="main">
-    <div class="priority-decision-group" data-no-ads>
-<div class="breadcrumb"><a href="/">Home</a> &rsaquo; <a href="/tools/">Tools</a> &rsaquo; Northern Lights Michigan</div>
-
-<h1 class="page-title">Northern Lights Michigan Tonight</h1>
-<section id="tonightsVerdict" class="verdict-card" data-verdict="unavailable" data-no-ads aria-labelledby="tonightsVerdictTitle" aria-live="polite" aria-atomic="true">
+    <section id="tonightsVerdict" class="verdict-card" data-verdict="unavailable" data-no-ads aria-labelledby="tonightsVerdictTitle" aria-live="polite" aria-atomic="true">
   <div class="verdict-card__eyebrow">Michigan statewide · live forecast</div>
   <h2 class="verdict-card__state" id="tonightsVerdictTitle" data-verdict-state>Checking tonight’s NOAA aurora forecast</h2>
   <div class="verdict-card__main">
@@ -406,33 +454,6 @@ html{scroll-behavior:smooth;scroll-padding-top:20px}
   <p class="verdict-card__reason" data-verdict-reason>Checking the latest NOAA aurora, National Weather Service clouds and moonlight. No forecast is a visibility guarantee.</p>
   <p class="verdict-card__asof" data-verdict-asof>As of: no current assessment</p>
 </section>
-
-<p class="sub">Can you see the northern lights in Michigan tonight? Choose your region to check live NOAA activity, local clouds, moonlight and the best viewing hours. A forecast cannot guarantee visibility.</p>
-
-<!-- Regional decision first; statewide context and guide remain below. -->
-<section class="hero-panel" id="aurora-decision" aria-labelledby="localHeadline">
-  <div class="decision-heading">
-    <span class="decision-eyebrow">Your aurora night</span>
-    <span class="decision-source">NOAA · NWS · USNO</span>
-  </div>
-  <div class="region-picker"><label for="regionSelect">Choose your region</label><select id="regionSelect"><option value="keweenaw">Keweenaw Peninsula</option><option value="marquette">Marquette</option><option value="munising">Munising</option><option value="sault-ste-marie">Sault Ste. Marie</option><option value="mackinaw-city" selected>Mackinaw City / Straits</option><option value="traverse-city">Traverse City</option><option value="bay-city">Bay City / Saginaw Bay</option><option value="detroit">Detroit / southern Michigan</option></select><a id="regionDeepLink" class="region-deep-guide" href="/northern-lights-michigan/mackinaw-city/">Mackinaw City local forecast &amp; viewing guide</a></div>
-  <div class="local-answer" aria-live="polite" aria-atomic="true">
-    <div class="tonight-label" id="localRegion">Tonight near the Straits of Mackinac</div>
-    <h2 id="localHeadline">Checking your regional outlook</h2>
-    <p id="localDetail">Your nighttime Kp signal and cloud forecast will appear here. A forecast is not a visibility guarantee.</p>
-  </div>
-  <div class="decision-factors" aria-live="polite">
-    <div class="decision-factor"><span>Tonight's planning time · ET</span><strong id="tonightBestTime">Checking...</strong></div>
-    <div class="decision-factor"><span>NWS forecast clouds</span><strong id="selectedCloud">Checking...</strong></div>
-    <div class="decision-factor"><span>USNO moon tonight</span><strong id="selectedMoon">Checking...</strong></div>
-  </div>
-  <div class="hero-action-row">
-    <button class="hero-btn primary" id="findBtn">Find viewing for my location</button>
-    <a class="hero-btn" href="#viewing-locations">View the dark-sky map ↓</a>
-    <button class="hero-btn" id="refreshBtn">Refresh now</button>
-  </div>
-  <details class="decision-context">
-    <summary>Statewide outlook and tonight's timing details</summary>
     <div class="hero-grid">
     <div class="gauge-wrap">
       <svg viewBox="0 0 240 240" id="kpGauge">
@@ -845,8 +866,7 @@ function trackAuroraEvent(name, data){
 }
 function selectedRegion(data){
   const regions = data && data.ovation && data.ovation.regions || [];
-  return regions.find(function(region){return region.id===selectedRegionId;}) ||
-    regions.find(function(region){return region.id==='mackinaw-city';}) || null;
+  return regions.find(region => region.id === selectedRegionId) || null;
 }
 function skyCoverAt(region, value){
   const timestamp = value instanceof Date ? value.getTime() : new Date(value).getTime();
@@ -873,8 +893,8 @@ function setSelectedRegion(id, source, measure){
   }
   try { localStorage.setItem(REGION_PREF_KEY, id); } catch (error) {}
   if (measure !== false) trackAuroraEvent('Aurora Region Selected', {region:id, source:source||'selector'});
-  if (latestAuroraData) renderDecisionData(latestAuroraData);
-  else renderLocalPlanningAnswer(null, null);
+  if (source !== 'saved' || latestAuroraData) renderDecisionData(latestAuroraData);
+  else document.getElementById('localRegion').textContent = 'Tonight near '+select.options[select.selectedIndex].text;
 }
 
 // === Kp threshold by latitude (rough geomagnetic) ===
@@ -1132,6 +1152,14 @@ function formatMichiganTime(value){
 }
 
 function renderRegionalOutlook(ovation){
+  const available = new Set((ovation?.regions || []).map(region => region.id));
+  for (const card of document.querySelectorAll('[data-region-id]')) {
+    if (available.has(card.dataset.regionId)) continue;
+    card.dataset.level = 'unavailable';
+    card.querySelector('[data-region-label]').textContent = 'Regional signal unavailable';
+    card.querySelector('[data-region-detail]').textContent = 'Use the planning threshold above and check the official forecast.';
+    card.querySelector('[data-region-weather]')?.remove();
+  }
   const forecastTime = ovation && ovation.forecast_time;
   document.getElementById('regionOutlookTime').textContent = forecastTime
     ? 'NOAA OVATION: '+formatMichiganTime(forecastTime)+' ET. Regional cloud forecasts are from the NWS.'
@@ -1314,12 +1342,55 @@ function renderUnavailableTonightVerdict(reason){
   window.VerdictCard.render(element,lastTonightVerdict);
 }
 
+function currentForecast(data, now = Date.now()) {
+  const age = now - Date.parse(data && data.fetched_at);
+  return Number.isFinite(age) && age >= -60000 && age <= 20 * 60000;
+}
+
 function renderDecisionData(data){
+  if (!currentForecast(data)) data = null;
   const region = selectedRegion(data);
+  document.getElementById('regionalUpdate').textContent = data
+    ? 'Forecast checked '+formatMichiganTime(data.fetched_at)+' ET. Refreshes every 10 minutes.'
+    : 'Current forecast unavailable. Check NOAA’s short-term outlook before you leave.';
+  document.getElementById('regionalSource').hidden = !!region;
   renderRegionalOutlook(data && data.ovation);
   renderMoon(data && data.moon);
-  renderTonightWindow(data && data.forecast && data.forecast.periods, region);
-  renderNextNights(data && data.forecast && data.forecast.periods, region);
+  const choice = renderTonightWindow(data && data.forecast && data.forecast.periods, region);
+  renderComparison(data, region, choice);
+  renderNextNights(region && data.forecast?.periods, region);
+}
+
+function renderComparison(data, home, choice) {
+  const select = document.getElementById('compareRegion');
+  const result = document.getElementById('comparisonResult');
+  for (const option of select.options) option.disabled = option.value === selectedRegionId;
+  if (select.value === selectedRegionId) select.value = '';
+  const guide = REGION_GUIDE_LINKS[select.value];
+  const link = document.getElementById('comparisonGuide');
+  link.hidden = !guide;
+  if (guide) { link.href = guide.href; link.textContent = guide.label; }
+  else link.removeAttribute('href');
+  if (!select.value) { result.textContent = ''; return; }
+  const other = data?.ovation?.regions?.find(region => region.id === select.value);
+  if (!choice || !home || !other || !Number.isFinite(other.planning_kp)) {
+    result.textContent = 'A same-hour comparison is unavailable for these regions.';
+    return;
+  }
+  const at = new Date(choice.row.time_tag);
+  const kp = choice.row.kp;
+  const where = other.label;
+  const when = michiganClock(at)+' ET';
+  if (sunAltitudeDeg(at, other.latitude, other.longitude) > -18) {
+    result.textContent = 'At '+when+' the sky near '+where+' has yet to reach full darkness or is already brightening.';
+    return;
+  }
+  const clouds = skyCoverAt(other, at);
+  const localClouds = Number.isFinite(choice.cloud) ? Math.round(choice.cloud)+'% cloud cover' : 'unknown cloud cover';
+  const otherClouds = Number.isFinite(clouds) ? Math.round(clouds)+'% cloud cover' : 'unknown cloud cover';
+  result.textContent = 'At '+when+', '+home.label+' has '+localClouds+' forecast and '+where+' has '+otherClouds+
+    '. The same Kp '+kp.toFixed(1)+' forecast '+(kp >= other.planning_kp ? 'reaches' : 'falls below')+
+    ' the local planning threshold of Kp '+other.planning_kp+'.';
 }
 
 function renderSolarWind(solarWind){
@@ -1347,16 +1418,74 @@ function renderSolarWind(solarWind){
   } else markSpaceWeatherUnavailable('swSpeed');
 }
 
+// Withdraw every Kp-dependent display together, without inventing a zero signal.
+function clearKpForecast(){
+  currentKp = null;
+  kpForecast = [];
+  document.getElementById('gaugeArc').setAttribute('stroke-dasharray','0 628');
+  document.getElementById('gaugeArc').setAttribute('stroke','#a0a8b0');
+  document.getElementById('gaugeNum').textContent = '--';
+  document.getElementById('gaugeStatus').textContent = 'unavailable';
+  document.getElementById('forecastSvg').replaceChildren();
+  document.getElementById('forecastTooltip').style.display = 'none';
+  document.querySelectorAll('.kp-step').forEach(step=>step.classList.remove('current'));
+  const cta = document.getElementById('smartCta');
+  cta.classList.remove('show','alert');
+  cta.replaceChildren();
+  document.getElementById('liveDot').classList.remove('active','alert');
+  markSpaceWeatherUnavailable('swKpPeak');
+}
+function renderObservedKp(data){
+  const current = asFiniteNumber(data?.forecast?.current?.kp);
+  const card = document.getElementById('swKpNow');
+  if (Number.isFinite(current)){
+    card.className = 'sw-card '+(current >= 5 ? 'alert' : '');
+    card.querySelector('.sw-val').textContent = current.toFixed(1);
+    card.querySelector('.sw-status').textContent = KP_STATUS[kpClass(current)];
+  } else markSpaceWeatherUnavailable('swKpNow');
+}
+function renderAuroraUnavailable(data){
+  // A current partial payload can still supply independent source context.
+  // A missing peak must not leave contradictory forecast rows available to another renderer.
+  if (data && (data.forecast?.periods?.length || data.forecast?.peak_24h != null || data.forecast?.peak_72h != null)) {
+    data = {...data, forecast:{...data.forecast, peak_24h:null, peak_72h:null, periods:[]}};
+  }
+  latestAuroraData = data;
+  clearKpForecast();
+  renderUnavailableTonightVerdict('A current NOAA Kp forecast is unavailable.');
+  renderSolarWind(data?.solar_wind);
+  renderObservedKp(data);
+  renderDecisionData(data);
+  document.getElementById('refreshInfo').textContent = data
+    ? '· API checked '+new Date(data.fetched_at).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+' · partial sources'
+    : '';
+  document.getElementById('liveStatus').textContent = data
+    ? 'Kp forecast unavailable · independent sources below'
+    : 'NOAA feed unavailable · manual guide active';
+  document.getElementById('tonightHeadline').textContent = data
+    ? 'Kp forecast temporarily unavailable'
+    : 'Live NOAA feed temporarily unavailable';
+  document.getElementById('tonightDetail').innerHTML = 'Open the <a href="https://www.spaceweather.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener" style="color:#7bc8e8">official NOAA 30-minute forecast</a> before driving. '+(data
+    ? 'Available cloud, moon, solar-wind and short-term model information are shown separately. They do not replace the missing Kp forecast.'
+    : 'The regional thresholds and viewing-location guide below remain available.');
+}
+
 // === Main data fetch ===
+let latestRequest = 0;
 async function loadAuroraData(){
+  const request = ++latestRequest;
   try {
-    const response = await fetch('/api/aurora',{headers:{accept:'application/json'}});
+    const response = await fetch('/api/aurora',{headers:{accept:'application/json'}, signal:AbortSignal.timeout(20000)});
     if (!response.ok) throw new Error('Aurora endpoint returned '+response.status);
     const data = await response.json();
+    if (request !== latestRequest) return;
     const max24 = asFiniteNumber(data.forecast && data.forecast.peak_24h);
     const max72 = asFiniteNumber(data.forecast && data.forecast.peak_72h);
-    if (!Number.isFinite(max24)) throw new Error('NOAA Kp forecast unavailable');
-
+    if (!currentForecast(data)) throw new Error('Aurora response has expired');
+    if (!Number.isFinite(max24) || !Array.isArray(data.forecast?.periods) || !data.forecast.periods.length) {
+      renderAuroraUnavailable(data);
+      return;
+    }
     latestAuroraData = data;
 
     currentKp = max24;
@@ -1367,13 +1496,7 @@ async function loadAuroraData(){
     checkAndNotify(max24);
     renderSolarWind(data.solar_wind);
 
-    const current = data.forecast.current && asFiniteNumber(data.forecast.current.kp);
-    const currentCard = document.getElementById('swKpNow');
-    if (Number.isFinite(current)){
-      currentCard.className = 'sw-card '+(current >= 5 ? 'alert' : '');
-      currentCard.querySelector('.sw-val').textContent = current.toFixed(1);
-      currentCard.querySelector('.sw-status').textContent = KP_STATUS[kpClass(current)];
-    } else markSpaceWeatherUnavailable('swKpNow');
+    renderObservedKp(data);
 
     const peakCard = document.getElementById('swKpPeak');
     if (Number.isFinite(max72)){
@@ -1408,18 +1531,8 @@ async function loadAuroraData(){
     renderTonightVerdict(data);
     document.getElementById('refreshInfo').textContent = '· API checked '+new Date(data.fetched_at || Date.now()).toLocaleTimeString('en-US',{hour:'numeric',minute:'2-digit'})+' · source ages checked separately';
   } catch (error) {
-    latestAuroraData = null;
-    renderUnavailableTonightVerdict('The live NOAA fetch failed; no previous verdict is being reused.');
-    ['swBz','swSpeed','swKpNow','swKpPeak'].forEach(markSpaceWeatherUnavailable);
-    renderRegionalOutlook(null);
-    document.getElementById('liveStatus').textContent = 'NOAA feed unavailable · manual guide active';
-    document.getElementById('tonightHeadline').textContent = 'Live NOAA feed temporarily unavailable';
-    document.getElementById('tonightDetail').innerHTML = 'Open the <a href="https://www.spaceweather.gov/products/aurora-30-minute-forecast" target="_blank" rel="noopener" style="color:#7bc8e8">official NOAA 30-minute forecast</a>, then check local clouds. The regional thresholds and viewing-location guide below remain available.';
-    renderTonightWindow(null);
-    renderMoon(null);
-    document.getElementById('selectedCloud').textContent = 'NWS data unavailable';
-    document.getElementById('nextBestWindow').textContent = 'Recheck after feed returns';
-    document.getElementById('nightStrip').innerHTML = '';
+    if (request !== latestRequest) return;
+    renderAuroraUnavailable(null);
   }
 }
 
@@ -1505,14 +1618,25 @@ function renderLocalPlanningAnswer(region, choice) {
   headline.textContent = kp >= threshold ? 'Aurora signal worth monitoring tonight'
     : kp >= threshold-1 ? 'Borderline aurora signal tonight'
     : 'Low aurora signal tonight';
-  detail.textContent = 'The selected nighttime forecast is Kp '+kp.toFixed(1)+'; this guide\u2019s regional threshold is Kp '+threshold+'. '+
-    'Check short-term NOAA conditions and local clouds. This is planning guidance, not a visibility guarantee.';
+  const when = michiganClock(new Date(choice.row.time_tag))+' ET';
+  const action = kp >= threshold
+    ? 'Around '+when+', check for a break in the clouds and look low over a dark northern horizon.'
+    : kp >= threshold-1 ? 'If you are already near a dark shoreline, take a look around '+when+'. Check again before making a drive.'
+    : 'Keep tonight close to home. Even around '+when+', the strongest dark hours fall short of the usual signal here.';
+  detail.textContent = action+' NOAA forecasts Kp '+kp.toFixed(1)+' against a regional planning threshold of Kp '+threshold+'.';
+
 }
 
 function renderTonightWindow(periods, region) {
   const el = document.getElementById('tonightWindow');
   const now = new Date();
-  const reference = region || DARK_REF;
+  if (!region) {
+    renderLocalPlanningAnswer(null, null);
+    el.textContent = 'Check local twilight and the NOAA forecast before heading out.';
+    document.getElementById('selectedCloud').textContent = 'NWS data unavailable';
+    return null;
+  }
+  const reference = region;
   const lat = reference.latitude||reference.lat;
   const lng = reference.longitude||reference.lng;
   const name = reference.label||reference.name;
@@ -1540,8 +1664,8 @@ function renderTonightWindow(periods, region) {
   }).map(function (row) {
     return Object.assign({}, row, {time_tag:new Date(Math.max(new Date(row.time_tag).getTime(),darkStart.getTime())).toISOString()});
   });
-  if (inDark.length) {
-    const choice = bestPlanningPeriod(inDark,region);
+  const choice = region && bestPlanningPeriod(inDark,region);
+  if (choice) {
     const best = choice.row;
     renderLocalPlanningAnswer(region, choice);
     const cloudText = Number.isFinite(choice.cloud) ? ' with about <strong>'+Math.round(choice.cloud)+'% forecast sky cover</strong>' : ' (the regional cloud feed is unavailable)';
@@ -1552,13 +1676,16 @@ function renderTonightWindow(periods, region) {
       ? Math.round(choice.cloud)+'% near '+michiganClock(new Date(best.time_tag))
       : 'NWS data unavailable';
   } else {
-    text += ' NOAA has no forecast rows inside tonight\u2019s dark window yet, so treat the headline number as daytime guidance and recheck after sunset.';
+    text += periods && periods.length
+      ? ' NOAA has no forecast rows inside tonight\u2019s dark window yet. Recheck after sunset.'
+      : ' The Kp forecast is unavailable. Darkness and cloud information alone cannot establish an aurora viewing opportunity.';
     const startCloud = skyCoverAt(region,darkStart);
     document.getElementById('selectedCloud').textContent = Number.isFinite(startCloud)
       ? Math.round(startCloud)+'% at dark-window start'
       : 'NWS data unavailable';
   }
   el.innerHTML = text;
+  return choice;
 }
 
 // Group the 3-day Kp grid into nights (8 PM to 6 AM Michigan time) so the answer to
@@ -1584,7 +1711,7 @@ function renderNextNights(periods, region) {
     const choice = bestPlanningPeriod(night.rows,region);
     return {kp:choice.row.kp,at:new Date(choice.row.time_tag),cloud:choice.cloud,label:night.label};
   });
-  if (!rows.length) { el.innerHTML = ''; return; }
+  if (!rows.length) { el.innerHTML = ''; document.getElementById('nextBestWindow').textContent = 'No nighttime forecast available'; return; }
   const bestKp = Math.max.apply(null, rows.map(function (r) { return r.kp; }));
   const comparable = rows.filter(function(row){return row.kp>=bestKp-0.5;});
   const withClouds = comparable.filter(function(row){return Number.isFinite(row.cloud);});
@@ -1612,6 +1739,13 @@ function renderNextNights(periods, region) {
 window.addEventListener('DOMContentLoaded',()=>{
   initMap();
   setupNotifications();
+  const compareSelect = document.getElementById('compareRegion');
+  for (const option of document.getElementById('regionSelect').options) compareSelect.add(new Option(option.text, option.value));
+  document.getElementById('compareSky').hidden = false;
+  compareSelect.addEventListener('change', function(){
+    renderDecisionData(latestAuroraData);
+    if (compareSelect.value) trackAuroraEvent('Aurora Regions Compared', {region:selectedRegionId, comparison:compareSelect.value});
+  });
   setSelectedRegion(selectedRegionId,'saved',false);
   document.getElementById('regionSelect').addEventListener('change',function(event){setSelectedRegion(event.target.value,'selector',true);});
   document.getElementById('findBtn').addEventListener('click', findMyViewing);
@@ -1627,8 +1761,18 @@ window.addEventListener('DOMContentLoaded',()=>{
   loadAuroraData();
   // Auto-refresh every 10 minutes
   setInterval(loadAuroraData, 10*60*1000);
+  function expireRegionalForecast() {
+    renderAuroraUnavailable(null);
+  }
+  document.addEventListener('visibilitychange', function(){
+    if (!document.hidden && latestAuroraData && !currentForecast(latestAuroraData)) {
+      expireRegionalForecast();
+      loadAuroraData();
+    }
+  });
   // Expire a visible verdict even if background tab timers delay the next fetch.
   setInterval(function(){
+    if (latestAuroraData && !currentForecast(latestAuroraData)) expireRegionalForecast();
     if (lastTonightVerdict && window.VerdictCard)
       window.VerdictCard.render(document.getElementById('tonightsVerdict'),lastTonightVerdict);
   },60*1000);

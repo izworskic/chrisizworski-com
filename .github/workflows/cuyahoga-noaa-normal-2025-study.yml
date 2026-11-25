@@ -1,0 +1,106 @@
+name: Cuyahoga NOAA ordinary vessel passage sample
+
+# Single-use research only. Runs only after adding this workflow on the research branch.
+on:
+  push:
+    branches: [research/cuyahoga-ais-audit-20261122]
+    paths: [.github/workflows/cuyahoga-noaa-normal-2025-study.yml]
+
+permissions:
+  contents: read
+
+jobs:
+  candidate-passages:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - name: Verify existing NOAA normalization
+        run: node --test tests/cuyahoga-ais-audit.test.js tests/cuyahoga-noaa-points.test.js tests/cuyahoga-observation-clusters.test.js tests/cuyahoga-bridge-proximity.test.js tests/cuyahoga-coast-pilot-brackets.test.js tests/cuyahoga-bridge-backtest.test.js
+      - name: Analyze independently photographed ordinary ship visits
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v zstd
+          mkdir -p research-output
+          for spec in '2025-07-07 368251670 MARK_W_BARKER' '2025-08-15 366938760 SAM_LAUD' '2025-08-21 368251670 MARK_W_BARKER'; do
+            read -r day mmsi ship <<< "$spec"
+            echo "::group::$ship $day"
+            archive="$RUNNER_TEMP/ais-$day.csv.zst"
+            curl --fail --location --silent --show-error --retry 2 --connect-timeout 15 --max-time 700 \
+              "https://noaaocm.blob.core.windows.net/ais/csv2/csv2025/ais-$day.csv.zst" \
+              -o "$archive"
+            test -s "$archive"
+            sha256sum "$archive" | tee "research-output/$ship-$day-source.sha256"
+            out="research-output/$ship-$day-observations.json"
+            node scripts/cuyahoga-noaa-points.mjs \
+              --input "$archive" --mmsi "$mmsi" \
+              --from "$day"T00:00:00Z \
+              --to "$(date -u -d "$day + 1 day" '+%Y-%m-%dT00:00:00Z')" \
+              --out "$out" | tee "research-output/$ship-$day-summary.json"
+            node scripts/cuyahoga-observation-clusters.mjs \
+              --input "$out" \
+              --output "research-output/$ship-$day-clusters.json" \
+              > "research-output/$ship-$day-clusters-summary.json"
+            node scripts/cuyahoga-bridge-proximity.mjs \
+              --input "$out" \
+              --references data/cuyahoga/bridge-observation-references.json \
+              --out "research-output/$ship-$day-reference-proximity.json" \
+              > "research-output/$ship-$day-reference-summary.json"
+            node scripts/cuyahoga-coast-pilot-brackets.mjs \
+              --input "$out" \
+              --coast-pilot data/cuyahoga/noaa-coast-pilot-bridge-references.json \
+              --odot data/cuyahoga/odot-bridge-inventory-points.json \
+              --out "research-output/$ship-$day-coast-pilot-brackets.json" \
+              > "research-output/$ship-$day-coast-pilot-brackets-summary.ndjson"
+            rm -f "$archive"
+            echo "::endgroup::"
+          done
+      - name: Backtest independent dates without crossing-time ground truth
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/cuyahoga-bridge-backtest.mjs \
+            --input "2025-07-07:research-output/MARK_W_BARKER-2025-07-07-coast-pilot-brackets.json" \
+            --input "2025-08-15:research-output/SAM_LAUD-2025-08-15-coast-pilot-brackets.json" \
+            --input "2025-08-21:research-output/MARK_W_BARKER-2025-08-21-coast-pilot-brackets.json" \
+            --out "research-output/cuyahoga-independent-date-backtest.json" \
+            | tee "research-output/cuyahoga-independent-date-backtest-summary.json"
+      - name: Publish evidence inventory, not bridge times
+        shell: bash
+        run: |
+          set -euo pipefail
+          node <<'NODE'
+          const fs = require('node:fs');
+          const cases = [
+            {date:'2025-07-07',ship:'MARK_W_BARKER',independent:'https://www.boatnerd.com/vessels/lakers/interlake-steamship/mark-w-barker/'},
+            {date:'2025-08-15',ship:'SAM_LAUD',independent:'https://www.boatnerd.com/vessels/lakers/grand-river-navigation/sam-laud/'},
+            {date:'2025-08-21',ship:'MARK_W_BARKER',independent:'https://www.boatnerd.com/vessels/lakers/interlake-steamship/mark-w-barker/'}
+          ];
+          const result = {generatedAt:new Date().toISOString(),purpose:'OFFLINE_NOAA_NORMAL_TRANSIT_RESEARCH',bridgeEtasValidated:false,cases:[]};
+          const summary = ['## Cuyahoga ordinary vessel AIS candidate study','', 'No bridge openings or ETA predictions are derived.'];
+          for (const item of cases) {
+            const d = JSON.parse(fs.readFileSync('research-output/'+item.ship+'-'+item.date+'-observations.json', 'utf8'));
+            const e = JSON.parse(fs.readFileSync('research-output/'+item.ship+'-'+item.date+'-reference-proximity.json', 'utf8'));
+            const pilot = JSON.parse(fs.readFileSync('research-output/'+item.ship+'-'+item.date+'-coast-pilot-brackets.json', 'utf8'));
+            const pilotVessel = pilot.vessels[0] || {bridgeReferenceEvents:[]};
+            result.cases.push({date:item.date,vessel:item.ship,sourceEvidence:item.independent,stats:d.stats,tracks:d.audit.tracks,referenceEvidence:e.analyses,coastPilotEvidence:{status:'CHART_REFERENCE_ONLY_NOT_BRIDGE_CROSSING',bridgeEtasEnabled:pilot.futureArrivalPredictionEnabled,bridgeReferenceEvents:pilotVessel.bridgeReferenceEvents,sourceObservedReferenceIntervals:pilotVessel.sourceObservedReferenceIntervals}});
+            summary.push('', '### '+item.ship+' ('+item.date+')',
+              'Identity-matching NOAA records: '+d.stats.matchedIdentity,
+              'Accepted study-area positions: '+d.stats.matchedTimeAndBox,
+              'Outside study area: '+d.stats.outsideResearchBox,
+              'Track gap assessment: '+JSON.stringify(d.audit.tracks),
+              'NOAA Coast Pilot: '+JSON.stringify({brackets:pilotVessel.bridgeReferenceEvents.filter(x=>x.bracket).map(x=>({id:x.id,mile:x.riverMile,at:x.bracket.nearestObservedAt,gap:x.bracket.bracketDurationMinutes,odot:x.crossAgency.status})),insufficient:pilotVessel.bridgeReferenceEvents.filter(x=>!x.bracket).map(x=>({id:x.id,status:x.status})),futureEtaEnabled:false}),
+              'Bridge-area references only: '+JSON.stringify(e.analyses.map(x=>({mmsi:x.mmsi,checks:x.referenceChecks.map(y=>({id:y.referenceId,status:y.status,closestDistanceMeters:y.closestObservedDistanceMeters,episodes:y.episodes.map(z=>({at:z.nearestObservedAt,nearMeters:z.nearestObservedDistanceMeters}))})),observedOrder:x.observedOrder}))),
+              'Independent visit evidence: '+item.independent);
+          }
+          fs.writeFileSync('research-output/normal-transit-inventory.json',JSON.stringify(result,null,2)+'\n');
+          fs.appendFileSync(process.env.GITHUB_STEP_SUMMARY,summary.join('\n')+'\n');
+          console.log(summary.join('\n'));
+          NODE
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cuyahoga-noaa-normal-transit-2025-research
+          path: research-output/
+          retention-days: 5
+          if-no-files-found: error

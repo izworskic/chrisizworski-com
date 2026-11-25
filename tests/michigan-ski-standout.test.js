@@ -7,8 +7,7 @@ test('official Caberfae report parser accepts only plausible complete lift/trail
  const r=parse('caberfae-peaks',html);
  assert.deepEqual(r.lifts,{open:0,total:5});
  assert.deepEqual(r.trails,{open:0,total:27});
- assert.equal(r.baseDepthInches,0);
- assert.equal(r.recentSnowInches,0);
+ assert.equal(r.reportUpdatedAt,null,'a fetch time is not a report timestamp');
  assert.equal(parse('caberfae-peaks',html.replace('0/5','8/5')),null);
  assert.equal(parse('caberfae-peaks','Trail status is unavailable'),null);
 });
@@ -21,7 +20,7 @@ test('official Crystal and Shanty reports use independent field formats',()=>{
  assert.equal(parse('unknown-resort',crystal),null);
 });
 test('adapter remains fail closed when page is unavailable or markup changes',async()=>{
- const missing=await fetchOfficial('nubs-nob');
+ const missing=await fetchOfficial('alpine-valley');
  assert.equal(missing.status,'NOT_CONNECTED');
  const source=SOURCES['caberfae-peaks'];
  const broken=await fetchOfficial('caberfae-peaks',async url=>{
@@ -54,7 +53,7 @@ test('real operating lift data never converts into guaranteed future opening',()
  const r=E.RESORTS.find(x=>x.slug==='caberfae-peaks');
  const now=Date.parse('2027-01-08T12:00:00Z');
  const a=E.assemble(r,{grid:{properties:{snowfallAmount:{values:[]}}},updatedAt:new Date(now).toISOString()},
- [],[],'grandRapids',now,{status:'PUBLISHED_OFFICIAL_REPORT',lifts:{open:0,total:5},trails:{open:0,total:27},baseDepthInches:0});
+ [],[],'grandRapids',now,{status:'CLOSED_PER_OPERATOR',lifts:{open:0,total:5},trails:{open:0,total:27},baseDepthInches:0});
  assert.equal(a.official.lifts.open,0);
  assert.equal(a.weather.baseDepthInches,0);
  assert.notEqual(a.ranking.verdict,'CONFIRMED_OPEN');

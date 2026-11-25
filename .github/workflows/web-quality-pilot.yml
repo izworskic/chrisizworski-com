@@ -1,0 +1,63 @@
+name: Targeted Web Quality pilot
+on:
+  pull_request:
+    paths:
+      - 'public/michigan-destinations/index.html'
+      - 'public/michigan-snow-totals/index.html'
+      - 'public/assets/michigan-ski.js'
+      - 'public/assets/michigan-ski.css'
+      - 'scripts/generate-michigan-ski-pages.mjs'
+      - 'scripts/verify-michigan-ski-browser.cjs'
+      - '.agents/skills/web-quality-*/SKILL.md'
+      - '.claude/skills/web-quality-*/SKILL.md'
+      - '.github/skills/web-quality-*/SKILL.md'
+      - 'docs/WEB_QUALITY_PILOT.md'
+      - 'scripts/web-quality-static-server.cjs'
+      - 'scripts/verify-web-quality-browser.cjs'
+      - 'lighthouserc.web-quality.cjs'
+      - '.github/workflows/web-quality-pilot.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  qa:
+    runs-on: ubuntu-latest
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated audit dependencies
+        run: |
+          npm install --prefix /tmp/web-quality-pilot --ignore-scripts --no-save --package-lock=false playwright@1.56.1 @axe-core/playwright@4.10.2 @lhci/cli@0.16.0
+          if command -v google-chrome >/dev/null 2>&1; then
+            echo "CHROME_PATH=$(command -v google-chrome)" >> "$GITHUB_ENV"
+          else
+            /tmp/web-quality-pilot/node_modules/.bin/playwright install --with-deps chromium
+            node -e "console.log('CHROME_PATH='+require('/tmp/web-quality-pilot/node_modules/playwright').chromium.executablePath())" >> "$GITHUB_ENV"
+          fi
+      - name: Playwright axe and Lighthouse CI on local static pages
+        env:
+          NODE_PATH: /tmp/web-quality-pilot/node_modules
+        run: |
+          node scripts/generate-michigan-ski-pages.mjs
+          node scripts/web-quality-static-server.cjs &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            if curl --fail --silent --output /dev/null http://127.0.0.1:4179/michigan-destinations/; then break; fi
+            sleep 1
+          done
+          node scripts/verify-web-quality-browser.cjs
+          /tmp/web-quality-pilot/node_modules/.bin/lhci autorun --config=lighthouserc.web-quality.cjs
+      - name: Upload redacted findings
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-quality-pilot
+          path: artifacts/web-quality/
+          retention-days: 7
+          if-no-files-found: warn

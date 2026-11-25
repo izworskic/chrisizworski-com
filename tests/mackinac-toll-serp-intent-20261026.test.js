@@ -35,7 +35,10 @@ test('Official rate proof and callable calculator remain in server-rendered page
   assert.match(html, /id="guideLeadAxles"/);
   assert.match(html, /id="guideTowedAxles"/);
   assert.match(html, /id="guideTollTotal"/);
-  assert.match(html, /src="\/assets\/mackinac-toll-calculator.js"/);
+  assert.match(html, /id="guideCardOne"/);
+  assert.match(html, /id="guideCardReturn"/);
+  assert.match(html, /id="guideMacPassExample"/);
+  assert.match(html, /src="\/assets\/mackinac-toll-calculator\.js\?v=20261124"/);
   assert.match(html, /https:\/\/www\.mackinacbridge\.org\/fares-traffic\/fare-schedule\//);
   assert.match(html, /MacPass passenger vehicles not towing a trailer can qualify for a \$0 return crossing/);
 });
@@ -44,11 +47,11 @@ test('Canonical, creator identity, structured data and sitemap stay aligned', ()
   assert.match(html, /<link rel="canonical" href="https:\/\/chrisizworski\.com\/mackinac-bridge-tolls\/">/);
   assert.match(html, /https:\/\/chrisizworski\.com\/#person/);
   assert.match(html, /<a href="https:\/\/chrisizworski\.com\/chris-izworski\/">Chris Izworski<\/a>/);
-  assert.match(html, /"dateModified":"2026-10-26"/);
+  assert.match(html, /"dateModified":"2026-11-24"/);
   assert.match(html, /"@type":"FAQPage"/);
   assert.match(html, /"name":"Mackinac Bridge Toll: \$4 Car \| Calculator \| Chris Izworski"/);
   const sitemap = read('public/sitemap.xml');
-  assert.match(sitemap, /<loc>https:\/\/chrisizworski\.com\/mackinac-bridge-tolls\/<\/loc>\s*<lastmod>2026-10-26<\/lastmod>/);
+  assert.match(sitemap, /<loc>https:\/\/chrisizworski\.com\/mackinac-bridge-tolls\/<\/loc>\s*<lastmod>2026-11-24<\/lastmod>/);
 });
 
 test('Toll-specific production smoke is scoped and confirms clean plus cache-busted traffic', () => {

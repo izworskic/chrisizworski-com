@@ -46,6 +46,16 @@
       "sourceUrl": "https://www.weather-us.com/en/michigan-usa/sault-ste-marie-weather-november",
       "checkedDate": "2026-11-21",
       "limitation": "Sunrise and sunset are computed in the browser with the NOAA sunrise equation for Sault Ste. Marie; this third-party table is only the test reference (within three minutes). Darkness flags ignore twilight and cloud."
+    },
+    {
+      "id": "nws-visit-weather",
+      "kind": "forecast",
+      "subject": "weather-context",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://api.weather.gov/gridpoints/APX/65,131/forecast/hourly",
+      "checkedDate": "2026-11-22",
+      "maxAgeMinutes": 720,
+      "limitation": "NWS Gaylord hourly forecast for the Soo Locks grid cell, quoted for the hours overlapping the visit with its update time; marked stale after 12 hours. A point forecast, not an observation; lake-effect conditions can differ within the cell."
     }
   ],
   "decisionState": {
@@ -151,5 +161,5 @@
       "note": "No comparable post-release GSC, Vercel Analytics or AdSense window exists yet."
     }
   },
-  "note": "Released 2026-11-21. Visitor outcome remains NOT_MEASURED until a comparable post-release window is read."
+  "note": "Released 2026-11-21. 2026-11-22 increment (in-tool next steps, BoatNerd as a collapsed cross-check, NWS visit weather) is documented in the brief addendum and verified by its own PR."
 }

@@ -27,3 +27,21 @@ ChatGPT already has separate GitHub, Figma and Vercel capabilities in some conne
 ## Required review
 
 Preserve owning repo and extraction boundaries, science/source rights, original visual identity, canonical Person data, Auto ads and no-generated-evidence rule. Use the smallest capable frontend; do not default to React, PixiJS, WebGL or an external AI service. Run mobile/desktop browser acceptance and `npm run verify:all` for subsequent production builds. Report checks that did not run as NOT VERIFIED. Open a PR; do not auto-merge.
+
+
+## Hugging Face capability library (added 2026-11-22)
+
+Two opt-in skills complement, not replace, the five existing specialist skills above. On 2026-11-25 they replaced the original eight (`hf-cli`, `huggingface-best`, `huggingface-datasets`, `huggingface-tool-builder`, `transformers-js`, `hf-semantic-discovery`, `hf-visual-evidence`, `hf-forecast-benchmark`); photo QA moved to `photo-sourcing`.
+
+| Skill | When to use | What it actually does |
+| --- | --- | --- |
+| `ml-justification` | Proposed model, embeddings, semantic search, forecast challenger or browser inference | Offline three-way comparison against no-model baselines, then a go or no-go |
+| `hf-hub-research` | Hub model, dataset, license or revision research | Read-only source ledger and an ACCEPT, EXPERIMENT, REJECT or NOT VERIFIED verdict |
+
+All mirrors are identical across three agent harnesses. Upstream source: [huggingface/skills](https://github.com/huggingface/skills). Study [the capability adoption report](HUGGING_FACE_CAPABILITY_ADOPTION_20261122.md) and the relevant SKILL.md before choosing a model. No Hugging Face runtime or paid service is installed. A draft GitHub PR is required; no production deployment or result improvement should be claimed from adding these skills.
+
+**Example requests:**
+- “Use ml-justification to test whether local semantic search beats our keyword filters on Adventure Finder.”
+- “Use hf-hub-research to check the license and pinned revision of this model before we consider it.”
+- “Use photo-sourcing to review confirmed photo assets, not invent destinations.”
+- “Use ml-justification for an out-of-time forecast challenger against observed river-stage data.”

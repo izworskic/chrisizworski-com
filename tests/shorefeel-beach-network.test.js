@@ -82,7 +82,7 @@ test('all 50 generated pages retain original SEO and safety while exposing Shore
  const css=fs.readFileSync(path.join(root,'public/assets/beach-report.css'),'utf8');
  const api=fs.readFileSync(path.join(root,'api/beaches.js'),'utf8');
  assert.match(generator,/shorefeel-field-note/);
- assert.match(generator,/shorefeel-jump/);
+ assert.match(generator,/shorefeel-primary/);
  assert.match(script,/renderShoreFeel\(beach\)/);
  assert.match(api,/shore_feel: beachConditions/);
  assert.match(css,/\.shorefeel-field-note/);
@@ -90,7 +90,7 @@ test('all 50 generated pages retain original SEO and safety while exposing Shore
    const file=path.join(root,'public/great-lakes-beaches',item.slug,'index.html');
    const html=fs.readFileSync(file,'utf8');
    assert.equal((html.match(/id="at-the-beach"/g)||[]).length,1,item.slug+' must have one beach guide');
-   assert.equal((html.match(/class="shorefeel-jump"/g)||[]).length,1,item.slug+' must link to guide');
+   assert.equal((html.match(/class="section shorefeel-field-note shorefeel-primary"/g)||[]).length,1,item.slug+' must expose one primary model panel');
    assert.match(html,new RegExp('rel="canonical" href="https://chrisizworski\\.com/great-lakes-beaches/'+item.slug+'/'));
    assert.match(html,/Check NWS forecast and alerts/);
    assert.match(html,/Michigan BeachGuard/);

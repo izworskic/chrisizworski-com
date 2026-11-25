@@ -69,6 +69,30 @@ const fixture={region:'eastern-up',checkedAt:'2026-11-13T21:00:00Z',reports,tota
    await page.waitForFunction(()=>document.querySelector('#localClubStatus')?.textContent?.includes('could not be checked'),{timeout:15000});
    assert.equal(await page.locator('#localClubReports .club-wire-card').count(),0,'no stale cards on fail');
    assert.ok((await page.locator('#localClubStatus').innerText()).includes('MISORVA groomer directory'));
+   // New visitor search: type a name, distinguish nearby Census places,
+   // navigate to an existing verified DNR town answer without a city dropdown.
+   const origin=page.locator('#originPreset');
+   assert.equal(await origin.getAttribute('type'),'search');
+   await origin.fill('Frederic');
+   await page.locator('#originPresetResults [role="option"]').first().waitFor({timeout:15000});
+   const labels=await page.locator('#originPresetResults [role="option"]').allTextContents();
+   assert.ok(labels.some(x=>x.startsWith('Frederic, MI')),name+' missing source-backed unincorporated Frederic');
+   await page.locator('#originPresetResults [role="option"]').filter({hasText:'Frederic, MI'}).first().click();
+   assert.equal(await origin.inputValue(),'Frederic, MI');
+   await origin.fill('Bay City');
+   await page.locator('#originPresetResults [role="option"]').first().waitFor({timeout:15000});
+   const sharedNames=await page.locator('#originPresetResults [role="option"]').allTextContents();
+   assert.ok(sharedNames.some(x=>x==='Bay City, MI')&&sharedNames.some(x=>x==='Bay City, WI'),
+     name+' must preserve same-name geographic ambiguity');
+   await page.goto('http://127.0.0.1:'+server.address().port+'/snowmobile/',{waitUntil:'domcontentloaded',timeout:30000});
+   const town=page.locator('#snow-town-query');
+   await town.fill('Frederic');
+   await page.locator('#snow-town-query-results [role="option"]').filter({hasText:'Frederic, MI'}).first().waitFor({timeout:15000});
+   await page.locator('#snow-town-query-results [role="option"]').filter({hasText:'Frederic, MI'}).first().click();
+   await page.waitForURL(/\/snowmobile\/regions\/grayling-gaylord\.html#trail-conditions-near-frederic$/,{timeout:15000});
+   assert.ok(await page.locator('#trail-conditions-near-frederic').count(),name+' missing the actual regional town answer');
+   const layout=await page.evaluate(()=>({scroll:document.documentElement.scrollWidth,width:innerWidth}));
+   assert.ok(layout.scroll<=layout.width+3,name+' regional town view causes horizontal overflow');
    assert.ok(errors.length===0,name+' JS errors: '+errors.join(' | '));
    console.log('PASS '+name+' local-source report dates, offseason/stale suppression, source outage, route independence, responsive layout');
    await ctx.close();

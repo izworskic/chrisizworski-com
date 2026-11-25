@@ -1,0 +1,181 @@
+{
+  "schemaVersion": "1.2",
+  "recordStatus": "draft",
+  "project": {
+    "slug": "michigan-winter-trails",
+    "ownerRepo": "izworskic/chrisizworski-com",
+    "canonical": "https://chrisizworski.com/michigan-winter-trails/",
+    "pageFile": "public/michigan-winter-trails/index.html",
+    "visitorDecision": "Choose a documented winter trail by activity, location and effort, then inspect weather and source-specific rules without mistaking modeled snow for winter access.",
+    "primaryAction": "Select one of two compared trails and check regional NOAA/NWS weather before opening its official park or pathway guidance."
+  },
+  "claims": [
+    {
+      "id": "nps-munising-route",
+      "kind": "official-reference",
+      "subject": "route-guidance",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.nps.gov/piro/planyourvisit/snowshoeing.htm",
+      "checkedDate": "2026-11-22",
+      "limitation": "NPS named snowshoe route documentation is not live confirmation of today’s trail, road or lot status."
+    },
+    {
+      "id": "dnr-michigan-winter-trails",
+      "kind": "official-reference",
+      "subject": "route-guidance",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.michigan.gov/recsearch",
+      "checkedDate": "2026-11-22",
+      "limitation": "Official pathway route information identifies permitted uses but does not provide current grooming or plowed winter lots for all 15 featured systems."
+    },
+    {
+      "id": "nws-hourly-regional",
+      "kind": "forecast",
+      "subject": "weather-context",
+      "state": "SUPPORTED",
+      "sourceUrl": "https://www.weather.gov/documentation/services-web-api",
+      "checkedDate": "2026-11-22",
+      "maxAgeMinutes": 720,
+      "limitation": "NWS daytime forecast is for a regional map reference point and must never certify trail surface, route opening or visitor safety."
+    },
+    {
+      "id": "noaa-modeled-grid",
+      "kind": "unverified",
+      "subject": "weather-context",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://www.nohrsc.noaa.gov/nsa/",
+      "checkedDate": "2026-11-22",
+      "limitation": "NOAA NOHRSC modeled 1-km snow analysis is not observed snow at the named trail, and it does not verify groomed tracks or a plowed parking approach."
+    },
+    {
+      "id": "park-access-not-verified",
+      "kind": "unverified",
+      "subject": "park-access",
+      "state": "UNVERIFIED",
+      "sourceUrl": "https://www.nps.gov/piro/planyourvisit/conditions.htm",
+      "checkedDate": "2026-11-22",
+      "limitation": "No fresh official notice certifies all featured trails, roads and lots open now. Visitors must check the operator before travel."
+    },
+    {
+      "id": "regional-map-points",
+      "kind": "editorial",
+      "subject": "other",
+      "state": "EDITORIAL",
+      "sourceUrl": "https://www.openstreetmap.org/",
+      "checkedDate": "2026-11-22",
+      "limitation": "Map markers are reference areas, not surveyed trail geometry or verified winter entrances."
+    }
+  ],
+  "decisionState": {
+    "selectedIdField": "route.id sourced from each existing .wf-story id",
+    "sourceOfTruth": "The existing 15 static source dossiers feed shortlist/pairFor; the matched route ID is passed into the existing NOAA/NWS weather inspector, never a second unsourced trail catalog.",
+    "linkedSurfaces": [
+      "answer",
+      "activity-region-effort-controls",
+      "compared-trail-cards",
+      "weather-inspector",
+      "map-or-unavailable",
+      "official-manager-handoffs"
+    ],
+    "unavailableBehavior": "If JavaScript, map tiles or NOAA/NWS evidence is unavailable, preserve the original named source-linked dossiers and show explicit unknown weather rather than a ready-to-go claim."
+  },
+  "scenarios": [
+    {
+      "kind": "initial",
+      "input": "390px phone, default snowshoe, all regions and efforts",
+      "expectedVisibleAnswer": "Show the first named trail comparison option within the initial phone screen, followed by direct field notes and area-weather actions.",
+      "sourceAndSafety": "Matched options are editorial route comparisons and cannot certify current grooming, lot plowing or opening."
+    },
+    {
+      "kind": "alternative",
+      "input": "Choose a different region or winter activity and inspect a new matched option",
+      "expectedVisibleAnswer": "The named compared trail and its weather action change together to the matching source dossier ID.",
+      "sourceAndSafety": "Only source-listed regions and modes are offered, and map markers remain regional areas."
+    },
+    {
+      "kind": "reverse",
+      "input": "Choose Pictured Rocks, check NOAA/NWS weather, return to comparison, switch option and then restore original filters",
+      "expectedVisibleAnswer": "The shared weather inspector matches the selected trail and the return button restores focus to that same compared route, falling back to activity controls if no longer visible.",
+      "sourceAndSafety": "Original manager links remain available and no calculated safety verdict is introduced."
+    },
+    {
+      "kind": "no-js",
+      "input": "Disable JavaScript on 390px phone",
+      "expectedVisibleAnswer": "Preserve the two static starting options, all 15 full trail dossiers, and links to official maps and snow sources.",
+      "sourceAndSafety": "The static HTML does not claim a live weather reading; its evidence note remains available."
+    },
+    {
+      "kind": "no-tiles",
+      "input": "Block CARTO and OpenStreetMap tiles or disable Leaflet",
+      "expectedVisibleAnswer": "Keep a readable list of documented trails, source links and region filters independent of the map background.",
+      "sourceAndSafety": "Do not infer routable geometry or winter parking from reference points."
+    },
+    {
+      "kind": "stale-data",
+      "input": "Provide old or missing NOAA snow, NWS forecast or active-alert response",
+      "expectedVisibleAnswer": "Show Unknown for each stale element while retaining the selected place, source links and visitor cautions.",
+      "sourceAndSafety": "Stale weather is never a trail condition, opening or safety signal."
+    }
+  ],
+  "failures": {
+    "no-js": "Keep both crawlable static compared choices, all 15 trail descriptions and their official source links when browser scripts are off.",
+    "no-tiles": "Show map-unavailable message and source-linked trail list, with no fabricated path lines or lot directions.",
+    "no-image": "Retain the named route option, evidence text and official source when the credited image host is blocked.",
+    "stale-data": "Show Unknown with original NOAA and NWS source handoffs and the manager link; no green/open inference."
+  },
+  "qa": {
+    "viewports": [
+      360,
+      390,
+      768,
+      1280,
+      1440
+    ],
+    "browserStatus": "PASSED",
+    "browserRun": "https://github.com/izworskic/chrisizworski-com/actions/runs/45027677211",
+    "screenshotEvidence": [
+      "https://github.com/izworskic/chrisizworski-com/actions/runs/45027677211/artifacts/14755973708"
+    ],
+    "scopeNote": "Deterministic Chromium before/after screenshots and route-specific weather/return flows passed at 360/390/768/1280/1440px on 2026-11-22. The first option moved 317.6px earlier at 360px and 235.6px earlier at 390px, into the first viewport. Axe-core reported zero WCAG violations within the decision desk at 390 and 1280. A fresh public rendering of the pre-change production page independently confirmed map tiles and the first photo; this test does not establish dynamic Auto ads placement, live NOAA/NWS feed availability, source-opening status or measured visitor outcomes."
+  },
+  "photos": [
+    {
+      "depictedSubject": "Actual snow-covered Munising Snowshoe Trail in Pictured Rocks National Lakeshore",
+      "author": "National Park Service",
+      "license": "NPS public domain",
+      "sourceUrl": "https://www.nps.gov/piro/planyourvisit/images/Munising-Snowshoe-Trail-Jan-2021-13.JPG?maxwidth=650&autorotate=false",
+      "creditUrl": "https://www.nps.gov/piro/planyourvisit/snowshoeing.htm",
+      "subjectMatch": "exact"
+    },
+    {
+      "depictedSubject": "NPS cross-country skiing in Sleeping Bear Dunes National Lakeshore",
+      "author": "National Park Service",
+      "license": "NPS public domain",
+      "sourceUrl": "https://www.nps.gov/slbe/planyourvisit/images/skiing_1_1.jpg?maxwidth=650&autorotate=false",
+      "creditUrl": "https://www.nps.gov/slbe/planyourvisit/cross-country-skiing.htm",
+      "subjectMatch": "exact"
+    }
+  ],
+  "release": {
+    "implemented": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-22",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/pull/1847"
+    },
+    "verified": {
+      "status": "CONFIRMED",
+      "checkedDate": "2026-11-22",
+      "evidenceUrl": "https://github.com/izworskic/chrisizworski-com/actions/runs/45027677239"
+    },
+    "deployed": {
+      "status": "NOT_VERIFIED"
+    },
+    "live": {
+      "status": "NOT_VERIFIED"
+    },
+    "measured": {
+      "status": "NOT_MEASURED"
+    }
+  },
+  "verificationLimit": "Review-branch implementation plus same-head Foundry proof, Chromium and complete repository/public HTML audit verified 2026-11-22. The candidate has NOT been merged, deployed or smoke-tested at the public canonical. Dynamic AdSense decisions, live NOAA/NWS availability, real winter trail access and search/visitor outcomes are not verified by mock-data tests."
+}

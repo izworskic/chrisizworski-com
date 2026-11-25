@@ -16,7 +16,7 @@
 <meta name="twitter:title" content="Saginaw Bay Water Temperature Today">
 <meta name="twitter:description" content="NOAA Saginaw Bay water evidence, shoreline forecast and cold-water context.">
 <link rel="stylesheet" href="/assets/shorefeel.css?v=ca6e46fedd">
-<link rel="stylesheet" href="/assets/shorefeel-saginaw.css?v=20261121b">
+<link rel="stylesheet" href="/assets/shorefeel-saginaw.css?v=20261123a">
 <link rel="stylesheet" href="/assets/leaflet-1.9.4.css">
 <link rel="icon" href="/favicon.ico">
 <meta name="google-adsense-account" content="ca-pub-8222782620788075">
@@ -50,8 +50,6 @@
 <div class="wrap">
 <p class="bay-kicker">Lake Huron · Saginaw Bay · At the beach</p>
 <h1>What will Saginaw Bay feel like at the beach?</h1>
-<p class="bay-hero-prompt">Walk out toward the sand at Bay City State Park and you meet a different part of the weather. The open bay can bring a cooling breeze, or soften a chilly morning. Look at the air, wind and water together before you choose your beach day.</p>
-<nav class="bay-quick-actions" aria-label="Explore the beach-feel forecast"><a href="#experience-h">Plan time at the beach</a><a href="#bay-evidence">Check nearby water</a><a href="#map-h">See evidence locations</a></nav>
 <div class="temperature-answer" id="content">
  <p id="hero-scope" class="temperature-answer-label">At the beach · Bay City State Park · Forecast conditions</p>
  <div class="answer-row">
@@ -86,13 +84,27 @@
   <p><a href="https://www.weather.gov/apx/lake_breeze" rel="noopener noreferrer">NWS on lake breezes</a> · <a href="https://coastwatch.glerl.noaa.gov/satellite-data-products/great-lakes-surface-environmental-analysis-glsea/" rel="noopener noreferrer">NOAA water analysis</a> · <a href="https://www.ndbc.noaa.gov/station_page.php?station=45163" rel="noopener noreferrer">Buoy 45163</a></p>
  </details>
 </div>
-<div class="hero-bottom"><span id="last-updated" role="status">Checking official sources</span><a href="#experience-h">See what to expect at the beach ↓</a></div>
+<div class="bay-after-answer">
+<p class="bay-hero-prompt">Walk out toward the sand at Bay City State Park and you meet a different part of the weather. The open bay can bring a cooling breeze, or soften a chilly morning. Look at the air, wind and water together before you choose your beach day.</p>
+<nav class="bay-quick-actions" aria-label="Explore the beach-feel forecast"><a href="#experience-h">Plan time at the beach</a><a href="#bay-evidence">Check nearby water</a><a href="#map-h">See evidence locations</a></nav>
+</div>
+<div class="hero-bottom"><span id="last-updated" role="status">Checking official sources</span> <button type="button" id="refresh-shorefeel">Refresh readings</button><a href="#experience-h">See what to expect at the beach ↓</a></div>
 </div>
 </section>
 <main class="wrap main">
+<section class="section bay-wind-window" id="bay-wind-window" aria-labelledby="wind-turn-heading">
+ <div class="bay-wind-head">
+  <div><p class="bay-wind-eyebrow">The next 24 hours · NWS forecast</p><h2 id="wind-turn-heading">Will the wind turn toward the beach?</h2></div>
+  <a href="https://www.weather.gov/apx/lake_breeze" rel="noopener noreferrer" target="_blank">How a lake breeze works</a>
+ </div>
+ <strong id="wind-turn-answer" role="status" aria-live="polite">Checking the hour-by-hour wind</strong>
+ <p id="wind-turn-explain">A change in forecast wind direction can help you plan when the shoreline may feel different. It does not measure the air on the sand.</p>
+ <ol class="bay-wind-hours" id="wind-turn-hours" aria-label="Upcoming NWS hourly wind forecast"></ol>
+ <p class="bay-wind-source" id="wind-turn-source">National Weather Service land-area hourly forecast. A lake-breeze front can form or pass between forecast times; official beach hazards are separate.</p>
+</section>
 <section class="section" id="bay-evidence" aria-labelledby="evidence-h">
  <h2 id="evidence-h">What is the bay water like today?</h2>
- <p class="evidence-intro">Look east from the sand and you are looking across a shallow, changeable bay. Sun and wind can affect one stretch of water differently from another. Here are two NOAA satellite water locations and an offshore buoy, each with its own timestamp. None measures the water at your feet.</p>
+ <p class="evidence-intro">Look east from the sand and you are looking across a shallow, changeable bay. Sun and wind can affect one stretch of water differently from another. Here are two NOAA satellite water locations and an offshore buoy, each with its own timestamp. None measures the water at your feet. For forecast air comfort and current official beach checks, open <a href="/great-lakes-beaches/bay-city-state-park/#at-the-beach">Bay City State Park ShoreFeel</a>. The air reading and satellite water analysis remain distinct.</p>
  <div class="bay-metrics">
   <article class="bay-card"><span class="tagline">Inner-bay satellite reference</span><h3>Near Bay City State Park</h3>
    <strong class="value" id="value-inner-bay">Not verified</strong><div class="date" id="date-inner-bay">Source not yet verified</div><p>Satellite-derived open-water surface analysis east of the park. Not the temperature inside the swimming area.</p>
@@ -173,6 +185,6 @@
 </main>
 <footer class="foot"><div class="wrap"><p>ShoreFeel reports thermal conditions and data limitations, not safe swimming, ice safety or water quality. Source timestamps and geographic scope matter.</p><p><a href="/great-lakes-water-temperature/">All Great Lakes water temperatures</a> · <a href="/great-lakes-beaches/">Beach safety and advisories</a></p><p><a href="/chris-izworski/">Built by Chris Izworski</a></p></div></footer>
 <script defer src="/assets/leaflet-1.9.4.js"></script>
-<script defer src="/assets/shorefeel-saginaw.js?v=20261121d"></script>
+<script defer src="/assets/shorefeel-saginaw.js?v=20261124-window1"></script>
 </body>
 </html>

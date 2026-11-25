@@ -27,7 +27,7 @@ Michigan already owned 50 canonical beach detail URLs; these retain existing SEO
 
 - Michigan: `/great-lakes-beaches/grand-haven-state-park/` with `#at-the-beach` and existing MI individual pages. Statewide directory `/great-lakes-beaches/`.
 - Other U.S.: `/great-lakes-beaches/around-the-lakes/park-point-beach-house/` and 15 peers. Regionwide explorer remains `/great-lakes-beaches/around-the-lakes/`.
-- Ontario: `/great-lakes-beaches/canada/agawa-bay/` and 17 peers. Canada explorer remains `/great-lakes-beaches/canada/`.
+- Ontario: `/great-lakes-beaches/canada/agawa-bay/` and 29 peers. Canada explorer remains `/great-lakes-beaches/canada/`.
 
 The 34 new HTML pages are derived from **source-controlled vetted catalogs** via `scripts/generate-shorefeel-details.mjs`, invoked from existing `npm run build:site`. They retain Person ID, self-canonical, breadcrumbs and 2026-11-21 sourced content timestamps. All 34 URLs appear in `public/sitemap-shorefeel-beaches.xml`, registered by `public/sitemap-index.xml`. Regional pages carry crawlable links to all 34 generated beach pages.
 

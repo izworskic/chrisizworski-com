@@ -1,0 +1,49 @@
+name: Michigan Winter Trail Weather Browser QA
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - api/winter-hike-lab.js
+      - lib/winter-trail-field-weather.cjs
+      - public/michigan-winter-trails/**
+      - public/assets/michigan-winter-trail-weather.js
+      - public/assets/michigan-winter-trails.js
+      - public/assets/michigan-winter-trails.css
+      - scripts/check-michigan-winter-trail-weather-browser.cjs
+      - .github/workflows/winter-trail-weather-browser.yml
+
+permissions:
+  contents: read
+
+jobs:
+  browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Prepare pinned isolated Playwright
+        run: |
+          mkdir -p /tmp/winter-trail-playwright
+          npm install --prefix /tmp/winter-trail-playwright --no-save --ignore-scripts playwright@1.58.2
+          echo "NODE_PATH=/tmp/winter-trail-playwright/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium-browser || command -v chromium)" >> "$GITHUB_ENV"
+      - name: Serve checked-in static site
+        run: |
+          python3 -m http.server 4173 --directory public > /tmp/winter-trail-weather-site.log 2>&1 &
+          sleep 2
+      - name: Verify map, one weather panel, stale data, dates and mobile layout
+        run: node scripts/check-michigan-winter-trail-weather-browser.cjs
+      - name: Retain screenshots and report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: michigan-winter-trail-weather-browser-qa
+          path: artifacts/michigan-winter-trails-weather/
+          retention-days: 7
+          if-no-files-found: warn

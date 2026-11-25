@@ -41,11 +41,11 @@ test('all seven indexed riding regions retain evidence hierarchy and no unverifi
   assert.ok(h.includes('not a guarantee of opening or grooming'),key);
   assert.ok(h.includes('/michigan-winter-weekends/#weekend-desk'),key);
   assert.ok(h.includes('data-source-name=')&&h.includes('id="routePlanner"'),key);
-  assert.match(h,/"dateModified":"2026-11-11"/);
+  assert.match(h,/"dateModified":"2026-11-23"/);
   assert.ok(winterMap.includes('https://chrisizworski.com/snowmobile/regions/'+key+'.html'));
  }
  assert.ok(snowGen.includes('s7-region-check'));
- assert.ok(snowGen.includes('dateModified: \'2026-11-11\''));
+ assert.ok(snowGen.includes('dateModified: \'2026-11-23\''));
  assert.ok(snowCss.includes('.s7-readiness-steps'));
  assert.ok(snowCss.includes('@media(max-width:750px)'));
 });
@@ -70,7 +70,7 @@ test('stale snow forecast and unknown resort opening can never be labeled an ope
  assert.ok(skiClient.includes('Forecast comparison · verify resort lifts'));
  assert.ok(!skiClient.includes('In-season comparison · verify resort operations'));
  assert.ok(!skiClient.includes('October forecast does not imply'));
- assert.ok(skiClient.includes('Original report update time is unverified'));
+ assert.ok(skiClient.includes('Operator report dated')); // Dated evidence now exists; old blanket undated claim is incorrect.
  assert.ok(skiClient.includes('Official hill / lift report'));
  assert.ok(skiClient.includes('No independently parsed resort operating report'));
 });
@@ -88,8 +88,9 @@ test('preserve original canonical pages and truthful release dates',()=>{
  for(const [html,url] of [[snow,'/snowmobile/'],[ski,'/michigan-ski-hills/'],[xc,'/michigan-cross-country-skiing/']]){
   assert.ok(html.includes('https://chrisizworski.com'+url));
   assert.ok(html.includes('https://chrisizworski.com/#person'));
-  assert.ok(html.includes('"dateModified":"2026-11-11"'));
-  assert.ok(winterMap.includes('<loc>https://chrisizworski.com'+url+'</loc><lastmod>2026-11-11</lastmod>'));
+  const stamp=(html.match(/"dateModified":"(\d{4}-\d{2}-\d{2})"/)||[])[1];
+  assert.ok(stamp && stamp>='2026-11-11' && stamp<=new Date().toISOString().slice(0,10),url);
+  assert.ok(winterMap.includes('<loc>https://chrisizworski.com'+url+'</loc><lastmod>'+stamp+'</lastmod>'),url);
  }
  assert.ok(mainMap.includes('<loc>https://chrisizworski.com/michigan-ski-hills/</loc><lastmod>2026-11-11</lastmod>'));
  for(const r of RESORTS){

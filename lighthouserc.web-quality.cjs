@@ -1,0 +1,26 @@
+module.exports={
+ ci:{
+  collect:{
+   url:['http://127.0.0.1:4179/michigan-destinations/','http://127.0.0.1:4179/michigan-snow-totals/','http://127.0.0.1:4179/michigan-ski-hills/'],
+   numberOfRuns:1,
+   settings:{
+    chromeFlags:'--no-sandbox --disable-dev-shm-usage',
+    onlyCategories:['performance','accessibility','best-practices','seo'],
+    maxWaitForLoad:15000
+   }
+  },
+  assert:{assertions:{
+   'document-title':['error',{minScore:1}],
+   'meta-description':['error',{minScore:1}],
+   'html-has-lang':['error',{minScore:1}],
+   'is-crawlable':['error',{minScore:1}],
+   'cumulative-layout-shift':['error',{maxNumericValue:0.1}],
+   'target-size':['error',{minScore:1}],
+   'categories:performance':['warn',{minScore:0.5}],
+   'categories:accessibility':['warn',{minScore:0.8}],
+   'categories:best-practices':['warn',{minScore:0.7}],
+   'categories:seo':['warn',{minScore:0.9}]
+  }},
+  upload:{target:'filesystem',outputDir:'artifacts/web-quality/lighthouse'}
+ }
+};

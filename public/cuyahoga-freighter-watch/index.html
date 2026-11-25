@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cuyahoga Freighter Watch | Cleveland Ship Map</title>
+<meta name="description" content="Find Cleveland riverfront places to watch freighters. View recent Cuyahoga AIS positions, public parks, and how ships navigate the bends.">
+<meta name="robots" content="noindex,follow">
+<meta name="theme-color" content="#f3f2ea">
+<link rel="canonical" href="https://chrisizworski.com/cuyahoga-freighter-watch/">
+<link rel="icon" href="/favicon.ico">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="">
+<link rel="stylesheet" href="/assets/cuyahoga-watch.css">
+<link rel="stylesheet" href="/assets/river-watch-vessel-ui.css">
+<link rel="stylesheet" href="/assets/soo-vessel-icons.css?v=20261122">
+<link rel="stylesheet" href="/assets/cuyahoga-bridge-to-shore.css">
+<link rel="stylesheet" href="/assets/cuyahoga-bend-demo.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@graph":[{"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},{"@type":"WebSite","@id":"https://chrisizworski.com/#website","url":"https://chrisizworski.com/","publisher":{"@id":"https://chrisizworski.com/#person"}},{"@type":"WebPage","@id":"https://chrisizworski.com/cuyahoga-freighter-watch/#page","url":"https://chrisizworski.com/cuyahoga-freighter-watch/","name":"Cuyahoga Freighter Watch","author":{"@id":"https://chrisizworski.com/#person"},"isPartOf":{"@id":"https://chrisizworski.com/#website"}}]}
+</script>
+<link rel="stylesheet" href="/assets/working-rivers-family.css">
+</head>
+<body class="river-family river-family--cuyahoga">
+<a class="skip" href="#river-workbench">Skip to the Cuyahoga river map</a>
+<header class="sitebar">
+ <a class="brand" href="/freighters/"><span class="brand-mark" aria-hidden="true">GL</span><span>Great Lakes <strong>Freighter Central</strong></span></a>
+ <nav class="river-family__switch" aria-label="Working river locations">
+  <a href="/calumet-freighter-watch/">Chicago · Calumet</a>
+  <a href="/cuyahoga-freighter-watch/" aria-current="page">Cleveland · Cuyahoga</a>
+ </nav>
+ <a class="back" href="/great-lakes-freighter-tracking/">Ship tracker <span aria-hidden="true">↗</span></a>
+</header>
+<main>
+<svg class="viewpoint-symbol-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" width="0" height="0">
+ <defs>
+  <symbol id="cuy-park-bend" viewBox="0 0 24 24"><path d="M4 4h6c4 0 4 4 0 4H9c-5 0-5 8 0 8h6c5 0 5 4 0 4H4" /></symbol>
+  <symbol id="cuy-park-wharf" viewBox="0 0 24 24"><path d="M3 7h18M6 7v13M18 7v13M4 20h16M9 7v7h6V7" /></symbol>
+  <symbol id="cuy-park-heritage" viewBox="0 0 24 24"><path d="M3 20h18M5 20V8l7-5 7 5v12M9 20v-8h6v8M9 9h6" /></symbol>
+  <symbol id="cuy-park-harbor" viewBox="0 0 24 24"><path d="M2 17c2 0 2 2 4 2s2-2 4-2 2 2 4 2 2-2 4-2 2 2 4 2M12 3v10m-4-4 4 4 4-4" /></symbol>
+ </defs>
+</svg>
+
+<section class="lead" aria-labelledby="main-title">
+ <div class="lead-copy">
+  <p class="kicker">WORKING RIVERS / CLEVELAND, OHIO</p>
+  <h1 id="main-title">Watch the ships <em>make the bend.</em></h1>
+  <p>Find a public place to watch the freighters. The map shows recent AIS reports when available, and four riverfront parks where you can plan a visit.</p>
+ </div>
+ <div class="lead-status" aria-label="Recently received AIS signal">
+  <span class="signal-label"><span class="dot" aria-hidden="true"></span> RIVER REPORT</span>
+  <strong id="live-readout" role="status" aria-live="polite">Checking recent AIS positions…</strong>
+  <small id="source-age">Only reports received within 30 minutes qualify</small>
+ </div>
+</section>
+<section class="workbench" id="river-workbench" aria-labelledby="map-heading">
+ <div class="map-header">
+  <div class="map-intro"><p class="kicker">CURRENT VESSEL REPORTS</p><h2 id="map-heading">Ships on the Cuyahoga</h2></div>
+   <p class="map-wayfinding">Select a freighter for its last report. Green markers identify public viewing parks.</p>
+ </div>
+ <noscript><p class="js-fallback">Interactive vessel markers require JavaScript. You can still use the <a href="/great-lakes-freighter-tracking/">current Great Lakes ship tracker</a>, or choose a park below: <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/scranton-flats-pier">Scranton Flats Pier</a>, <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/rivergate-park">Rivergate Park</a>, <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/heritage-park">Heritage Park</a>, <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/wendy-park">Wendy Park</a>. Park managers provide current access information.</p></noscript>
+ <div class="map-layout">
+  <div class="map-column">
+   <div class="map-frame">
+    <div id="cuyahoga-map" role="region" aria-label="Interactive map of Cleveland Cuyahoga River, public viewing parks, select NOAA bridge references and observed vessel positions" tabindex="0"><p class="map-loading">Map is loading. Public park links and report status remain usable below.</p></div>
+   </div>
+   <div class="map-underbar">
+    <div class="map-key" aria-label="Map legend">
+     <span><i class="key-spot"></i>Illustrated viewing-place markers</span><span><i class="key-ship"></i>Recent AIS ships</span><span data-bridge-legend hidden><i class="key-bridge"></i>Bridge landmarks</span><span data-bridge-legend hidden><i class="key-work"></i>Dated removal notice</span>
+    </div>
+    <details class="map-caveat">
+     <summary>What do these pins mean?</summary>
+     <p>Park pins show approximate park areas, not surveyed entrances or guaranteed sightlines. Bridge pins use rounded NOAA Coast Pilot reference coordinates, not physical crossing axes. Work notices are dated announcements, not real-time bridge status. This map is for shore watching, never navigation.</p>
+    </details>
+   </div>
+   <div class="map-secondary">
+    <div class="map-view-actions" role="group" aria-label="Map locations"><button id="show-ships-on-map" type="button" disabled>Show ships</button><button id="show-parks-on-map" type="button">Viewing parks</button></div>
+    <details class="river-type-strip"><summary>Ship types and counts</summary>
+     <div id="cuyahoga-type-counts" class="river-type-counts" role="group" aria-label="Filter recent Cuyahoga AIS vessels by reported type"><span class="river-type-note">Vessel type counts appear with fresh AIS reports.</span></div>
+    </details>
+   </div>
+  </div>
+  <aside class="action-rail" aria-label="Choose a public shore watch and inspect reported ships">
+   <section id="live-controls" class="panel reports-panel">
+    <div class="panel-header"><div><p class="side-eyebrow">STEP 01 / RECENT AIS</p><h3>Recent ship reports</h3></div><button id="refresh-ais" type="button" class="small-button">Refresh</button></div>
+    <p id="vessel-status" aria-live="polite">Checking regional Cleveland AIS reports…</p>
+    <ul id="live-vessels" class="vessel-list" aria-label="Fresh river vessel positions"><li>A missing report does not mean the river is empty.</li></ul>
+    <details class="report-method">
+     <summary>Source, accuracy and limitations</summary>
+     <p class="source-note">From <a href="https://openwaters.io/api/ais/">Open Waters AIS</a>, using a Cleveland-specific area request like the <a href="/soo-locks/">Soo Locks</a> and <a href="/duluth-canal-park/">Duluth</a> tools. Reports can be delayed, sparse or unavailable. Hull shapes illustrate reported AIS type and length band, not true scale. As on our Soo Locks map, vessel silhouettes remain upright. The symbols indicate reported AIS vessel category and approximate length band, not compass direction. Reported course and heading are available in the vessel details. No bridge arrival times are calculated.</p>
+     <p id="ais-source-credits" class="source-note" aria-label="AIS source attributions">Individual upstream source credits appear when the AIS report includes them. <a href="https://openwaters.io/ais/">Provider and licensing information ↗</a></p>
+    </details>
+   </section>
+   <section class="panel places" aria-labelledby="places-heading">
+    <div class="panel-header">
+     <div><p class="side-eyebrow">STEP 02 / CHOOSE A VIEW</p><h3 id="places-heading">Where to stand</h3></div>
+     <span>4 public places</span>
+    </div>
+    <div id="place-buttons" class="place-buttons">
+     <div class="place-entry" data-viewpoint="scranton">
+      <button type="button" data-park="scranton" class="place-button" aria-current="false">
+       <span class="place-glyph place-glyph--bend" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#cuy-park-bend"></use></svg></span>
+       <span class="place-info"><strong>Scranton Flats Pier</strong><span class="place-role">Bend-side observation deck</span><span class="place-watch-copy">From the observation deck below Hope Memorial Bridge, watch long freighters ease around the tight river bends.</span></span>
+       <span class="place-arrow" aria-hidden="true">›</span>
+      </button>
+      <div class="place-entry-links"><a class="place-google-link" href="https://www.google.com/maps?q=41.48796000,-81.69382000" target="_blank" rel="noopener noreferrer" aria-label="Open Scranton Flats Pier in Google Maps">Google Maps ↗</a><span>Park location · confirm access</span></div>
+     </div>
+     <div class="place-entry" data-viewpoint="rivergate">
+      <button type="button" data-park="rivergate" class="place-button" aria-current="false">
+       <span class="place-glyph place-glyph--wharf" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#cuy-park-wharf"></use></svg></span>
+       <span class="place-info"><strong>Rivergate Park</strong><span class="place-role">Riverside walk and wharf</span><span class="place-watch-copy">Follow the public riverside walk near Merwin's Wharf. Freighters and smaller boats share this busy stretch.</span></span>
+       <span class="place-arrow" aria-hidden="true">›</span>
+      </button>
+      <div class="place-entry-links"><a class="place-google-link" href="https://www.google.com/maps?q=41.48915000,-81.70197000" target="_blank" rel="noopener noreferrer" aria-label="Open Rivergate Park in Google Maps">Google Maps ↗</a><span>Park location · confirm access</span></div>
+     </div>
+     <div class="place-entry" data-viewpoint="heritage">
+      <button type="button" data-park="heritage" class="place-button" aria-current="false">
+       <span class="place-glyph place-glyph--heritage" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#cuy-park-heritage"></use></svg></span>
+       <span class="place-info"><strong>Heritage Park</strong><span class="place-role">Historic riverfront</span><span class="place-watch-copy">Walk the historic Flats waterfront, where public riverfront paths and day-use slips sit beside the working channel.</span></span>
+       <span class="place-arrow" aria-hidden="true">›</span>
+      </button>
+      <div class="place-entry-links"><a class="place-google-link" href="https://www.google.com/maps?q=41.49445000,-81.70210000" target="_blank" rel="noopener noreferrer" aria-label="Open Heritage Park in Google Maps">Google Maps ↗</a><span>Park location · confirm access</span></div>
+     </div>
+     <div class="place-entry" data-viewpoint="wendy">
+      <button type="button" data-park="wendy" class="place-button" aria-current="false">
+       <span class="place-glyph place-glyph--harbor" aria-hidden="true"><svg viewBox="0 0 24 24"><use href="#cuy-park-harbor"></use></svg></span>
+       <span class="place-info"><strong>Wendy Park</strong><span class="place-role">Lake Erie harbor mouth</span><span class="place-watch-copy">On Whiskey Island, look toward the broad meeting of the Cuyahoga and Lake Erie, where freighters move through the harbor.</span></span>
+       <span class="place-arrow" aria-hidden="true">›</span>
+      </button>
+      <div class="place-entry-links"><a class="place-google-link" href="https://www.google.com/maps?q=41.49700000,-81.71645000" target="_blank" rel="noopener noreferrer" aria-label="Open Wendy Park in Google Maps">Google Maps ↗</a><span>Park location · confirm access</span></div>
+     </div>
+    </div>
+    <details class="bridge-picker">
+     <summary>Explore Cleveland's bridge landmarks</summary>
+     <label for="bridge-select">Choose a NOAA chart reference</label>
+     <select id="bridge-select" aria-label="Select a historic or current bridge landmark"><option value="">Select a bridge</option></select>
+     <label class="bridge-toggle" for="show-all-bridges"><input type="checkbox" id="show-all-bridges"> Show all 19 charted crossings</label>
+     <p class="source-note" id="bridge-layer-status" aria-live="polite">Open this section to show five key NOAA bridge landmarks, or expand to all 19.</p>
+     <p class="source-note">Includes fixed spans, long-open structures and dated work notices. No live opening times.</p>
+    </details>
+   </section>
+   <section id="river-focus" class="focus-panel" aria-live="polite" aria-label="Selected viewing place or river landmark">
+    <p class="eyebrow">START HERE / PUBLIC SHORE</p>
+    <h3>Scranton Flats Pier</h3>
+    <p>Below Hope Memorial Bridge, watch freighters work through the tight river bends from a public observation deck. Pick any viewing place for the full field guide and nearby AIS observations.</p>
+    <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/scranton-flats-pier">Scranton Flats park information ↗</a>
+   </section>
+
+  </aside>
+
+  <section class="bend-lab" id="bend-lab" aria-labelledby="bend-title">
+   <div class="bend-intro">
+    <div><p class="kicker">HOW THE RIVER WORKS / INTERACTIVE EXPLAINER</p>
+    <h2 id="bend-title">A straight ship in a crooked river.</h2>
+    <p>Watch how the bow, middle and stern occupy different parts of a turn. This is why a freighter rounding Cleveland's bends is worth seeing from shore.</p></div>
+    <span class="bend-kind">Illustration, not vessel tracking</span>
+   </div>
+   <div class="bend-workspace">
+    <div class="bend-chart">
+     <svg id="bend-diagram" viewBox="0 0 760 365" role="img" aria-labelledby="bend-svg-title bend-svg-desc">
+      <title id="bend-svg-title">A top-down explanation of a long ship traveling around a winding river bend</title>
+      <desc id="bend-svg-desc">A simplified winding river, with an illustrated cargo freighter showing where its bow and stern are during the turn. This is not a chart, measured channel, or actual ship track.</desc>
+      <rect x="0" y="0" width="760" height="365" fill="#edf0e6"/>
+      <path d="M 0 322 C 130 310 112 179 224 206 S 325 325 425 270 S 458 144 565 130 S 663 69 760 47" fill="none" stroke="#8e9d88" stroke-width="139" stroke-linecap="round"/>
+      <path d="M 0 322 C 130 310 112 179 224 206 S 325 325 425 270 S 458 144 565 130 S 663 69 760 47" fill="none" stroke="#bad8d9" stroke-width="128" stroke-linecap="round"/>
+      <path id="bend-guide" d="M 0 322 C 130 310 112 179 224 206 S 325 325 425 270 S 458 144 565 130 S 663 69 760 47" fill="none" stroke="#477d89" stroke-width="2.5" stroke-dasharray="8 10" opacity=".55"/>
+      <text x="25" y="55" class="bend-map-label">A RIVER CHANNEL</text>
+      <text x="25" y="76" class="bend-map-caption">Simplified • not to scale</text>
+      <g id="bend-ship" transform="translate(95 295) rotate(-37)">
+       <path d="M -58 -13 L 41 -13 Q 54 -12 61 0 Q 54 12 41 13 L -58 13 Q -65 0 -58 -13 Z" fill="#183f4b" stroke="#f9f6ec" stroke-width="2.8" stroke-linejoin="round"/>
+       <path d="M -44 -7 H -21 V 7 H -44 Z" fill="#f7dfaf" opacity=".93"/>
+       <path d="M -15 -7 H 12 V 7 H -15 Z M 19 -7 H 40 V 7 H 19 Z" fill="#91b7c0"/>
+       <circle cx="52" cy="0" r="4" fill="#f4bd65"/>
+       <circle cx="-53" cy="0" r="4" fill="#f8f5e9"/>
+       <path d="M 67 0 L 76 0 M 71 -4 L 76 0 L 71 4" fill="none" stroke="#f2af58" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </g>
+      <g class="bend-compass" transform="translate(715 303)" aria-hidden="true"><circle r="27" fill="#fffdf6" stroke="#7e9d9e"/><text text-anchor="middle" y="-5" font-size="12" font-weight="800" fill="#345660">PLAN</text><text text-anchor="middle" y="11" font-size="10" fill="#345660">VIEW</text></g>
+     </svg>
+     <div class="bend-chart-key"><span><i class="bend-key-bow"></i>Bow / direction of travel</span><span><i class="bend-key-river"></i>Illustrative river channel</span></div>
+    </div>
+    <div class="bend-notes">
+      <p class="side-eyebrow">WATCH THE TURN / 3 MOMENTS</p>
+      <div class="bend-steps" role="group" aria-label="Choose a moment in the river bend">
+       <button type="button" data-bend-step="0" aria-pressed="true" disabled><span>01</span>Approach</button>
+       <button type="button" data-bend-step="1" aria-pressed="false" disabled><span>02</span>In the bend</button>
+       <button type="button" data-bend-step="2" aria-pressed="false" disabled><span>03</span>Clear the turn</button>
+      </div>
+      <h3 id="bend-stage-name">The bow begins to change direction.</h3>
+      <p id="bend-stage-explanation" aria-live="polite">The forward end starts following the curve while the stern is still coming from the straight approach. The whole ship does not turn at once.</p>
+      <label for="bend-position">Move through the illustrated bend</label>
+      <input type="range" id="bend-position" min="0" max="100" value="12" step="1" aria-label="Illustrated progress through the turn" disabled>
+      <div class="bend-actions"><button id="bend-play" type="button" disabled>Play the turn</button><button id="bend-reset" type="button" disabled>Start again</button></div>
+      <p id="bend-motion-note" class="bend-qualifier">The moving ship is a teaching model, not NOAA AIS replay. Shapes, channel width, steering actions, and timing are not measured.</p>
+      <p class="bend-source">Why these bends matter: <a href="https://www.portofcleveland.com/tourism-recreation/tools/safety-guidelines/">Port of Cleveland safety guidance</a> and <a href="https://case.edu/ech/articles/c/cuyahoga-river">Encyclopedia of Cleveland History</a>. Stay on public shore paths.</p>
+    </div>
+   </div>
+  </section>
+  <section class="story" aria-labelledby="read-river">
+   <div class="story-identity"><p class="kicker">FIELD NOTES / THE LOWER RIVER</p><h2 id="read-river">Why this is a remarkable place to watch a ship.</h2><span class="story-rule" aria-hidden="true"></span>
+    <figure class="story-photo">
+     <img loading="lazy" decoding="async" width="480" height="320" src="/assets/cuyahoga-sam-laud-roy-luck.jpg" alt="The freighter Sam Laud passing downtown Cleveland and Tower City on a bend of the Cuyahoga River in December 2016.">
+     <figcaption>Sam Laud rounding a Cuyahoga bend, photographed in 2016. <a href="https://commons.wikimedia.org/wiki/File:The_Cuyahoga_River_and_Cleveland_OH.jpg">Roy Luck</a> · <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>. Historical photograph, not a live view.</figcaption>
+    </figure></div>
+   <div class="story-content"><p>The Cuyahoga winds sharply through Cleveland's Flats. A freighter may appear between buildings, ease around a bend, and slip out of sight while the rest of its hull is still following the turn. From a public riverfront path, the geography makes the passage as interesting as the ship itself.</p>
+   <p>Start at <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/scranton-flats-pier">Scranton Flats Pier</a> for the bends near Hope Memorial Bridge. <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation/rivergate-park">Rivergate Park</a> offers a longer waterfront pause, while Wendy Park opens the view toward Lake Erie. Check park access before setting out, stay on public paths, and leave working docks to the crews.</p></div>
+  </section>
+ </div>
+</section>
+<details class="sources">
+ <summary id="source-heading"><span>HOW TO READ THIS TOOL</span><strong>The evidence behind the river map</strong><span class="sources-symbol" aria-hidden="true">+</span></summary>
+ <div class="source-grid">
+  <div><h3>Recent AIS observations</h3><p>The map queries the same <a href="https://openwaters.io/api/ais/">Open Waters AIS service</a> used by the Soo Locks and Duluth tools, within a dedicated Cleveland area. It is not a historical replay. Each point has a reported time; absent or expired reports do not prove an empty river. <a href="https://openwaters.io/ais/">AIS provider information ↗</a></p></div>
+  <div><h3>Bridge landmarks</h3><p><a href="https://www.nauticalcharts.noaa.gov/publications/coast-pilot/files/cp6/CPB6_WEB.pdf">NOAA Coast Pilot 6 ↗</a> provides published bridge references, not current operations or exact span crossings.</p></div>
+  <div><h3>Public viewing places</h3><p>Visit descriptions come from <a href="https://www.clevelandmetroparks.com/parks/visit/parks/lakefront-reservation">Cleveland Metroparks ↗</a>. Confirm parking, closures and designated public access with the park manager.</p></div>
+ </div>
+</details>
+</main>
+<footer class="footer"><a href="/">© 2026 Chris Izworski</a><span>For public shore watching, not navigation or vessel arrival forecasts.</span><a href="/calumet-freighter-watch/">Explore Chicago’s Calumet ↗</a><a href="/freighters/">All freighter tools ↗</a></footer>
+<script defer src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+<script defer src="/assets/cuyahoga-watch-core.js"></script>
+<script defer src="/assets/seaway-vessel-icons.js"></script>
+<script defer src="/assets/river-watch-vessel-ui.js"></script>
+<script defer src="/assets/cuyahoga-watch-app.js"></script>
+<script defer src="/assets/cuyahoga-bridge-to-shore-core.js"></script>
+<script defer src="/assets/cuyahoga-bridge-to-shore.js"></script>
+<script defer src="/assets/cuyahoga-bend-demo.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+[
+  {
+    "query": "sandstone cliffs and kayak along Lake Superior",
+    "expected": [
+      "pictured-rocks"
+    ]
+  },
+  {
+    "query": "remote island backpacking wilderness",
+    "expected": [
+      "isle-royale"
+    ]
+  },
+  {
+    "query": "quiet drive in fall along a tunnel of colorful trees",
+    "expected": [
+      "tunnel-of-trees"
+    ]
+  },
+  {
+    "query": "canoe a winding forest river",
+    "expected": [
+      "au-sable",
+      "manistee"
+    ]
+  },
+  {
+    "query": "frozen ice curtains near Munising in winter",
+    "expected": [
+      "munising-winter"
+    ]
+  },
+  {
+    "query": "shipwrecks and the Thunder Bay marine sanctuary",
+    "expected": [
+      "alpena"
+    ]
+  },
+  {
+    "query": "photograph waterfalls and old growth forests",
+    "expected": [
+      "tahquamenon",
+      "porcupines"
+    ]
+  },
+  {
+    "query": "Keweenaw copper country and northern lights",
+    "expected": [
+      "keweenaw"
+    ]
+  },
+  {
+    "query": "ferry to a car-free island for biking",
+    "expected": [
+      "mackinac-island"
+    ]
+  },
+  {
+    "query": "birdwatching along Saginaw Bay shoreline",
+    "expected": [
+      "saginaw-bay",
+      "tawas-point"
+    ]
+  },
+  {
+    "query": "climb dunes overlooking Lake Michigan",
+    "expected": [
+      "sleeping-bear",
+      "ludington"
+    ]
+  },
+  {
+    "query": "Detroit waterfront riverwalk and Belle Isle",
+    "expected": [
+      "detroit-river"
+    ]
+  }
+]

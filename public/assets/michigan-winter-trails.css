@@ -9,16 +9,6 @@
 .trl .trl-hero-montage .wf-photo img{object-fit:cover;object-position:center}
 .trl .trl-hero-montage .wf-photo figcaption{font-size:.51rem;padding:21px 8px 6px}
 
-.trl-signpost{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;padding-top:10px;padding-bottom:20px;border-top:1px solid var(--wf-line)}
-.trl-signpost>div{border-left:3px solid #7fb099;padding-left:12px;display:flex;flex-direction:column;gap:2px}
-.trl-signpost strong{color:#21523e;text-transform:uppercase;font-size:.68rem;letter-spacing:.08em}
-.trl-signpost span{color:#556c62;font-size:.77rem}
-
-.trl-closure{padding:17px 19px;border:1px solid #e4caa8;border-left:5px solid #af6538;background:#fcf8f1;border-radius:6px;display:flex;gap:26px;align-items:center;justify-content:space-between;margin-bottom:24px}
-.trl-closure h2{font-size:1.42rem;line-height:1.25;color:#5f3f28}
-.trl-closure p:not(.wf-eyebrow){font-size:.8rem;line-height:1.65;color:#725846;margin-top:7px}
-.trl-closure>a{flex-shrink:0;font-size:.76rem;font-weight:700}
-
 .trl-science{padding:22px 0 27px;border-top:1px solid #d4e2d9}
 .trl-science-head{display:flex;justify-content:space-between;align-items:end;gap:22px}
 .trl-science-head>p{max-width:460px;color:#586f64;font-size:.79rem}
@@ -47,7 +37,20 @@
 .trl .wf-controls label{flex:1 1 180px}
 .trl .wf-chip{font-size:.75rem}
 .trl .wf-map{height:415px}
-.trl .trl-map-caution{margin-top:12px;border-left:3px solid #a87553;background:#f3eee6;padding:10px 12px;font-size:.73rem;color:#654c3b;display:flex;flex-direction:column;gap:4px}
+/* Access notices belong at the map decision, not above the trail choices. */
+.trl .trl-access-disclosure{margin-top:10px;border-top:1px solid #d6e0d9;font-size:.76rem;line-height:1.5;color:#385445}
+.trl .trl-access-disclosure summary{display:flex;align-items:center;flex-wrap:wrap;column-gap:8px;row-gap:2px;cursor:pointer;min-height:42px;padding:9px 2px;color:#2b5841;list-style-position:inside}
+.trl .trl-access-disclosure summary::marker{color:#527c65}
+.trl .trl-access-disclosure summary::after{content:"+";font-weight:800;font-size:1.15rem;margin-left:auto;line-height:1}
+.trl .trl-access-disclosure[open] summary::after{content:"−"}
+.trl .trl-access-disclosure summary strong{font-size:.78rem}
+.trl .trl-access-disclosure summary span{font-size:.72rem;text-decoration:underline;text-underline-offset:2px}
+.trl .trl-access-disclosure summary:focus-visible{outline:3px solid #a26a22;outline-offset:2px}
+.trl .trl-access-disclosure .trl-access-body{border-left:3px solid #aa805a;margin:1px 0 11px;padding:4px 10px 4px 13px;background:#faf8f1}
+.trl .trl-access-disclosure .trl-access-body h3{font-size:.88rem;line-height:1.3;color:#4c4935;margin:10px 0 7px}
+.trl .trl-access-disclosure .trl-access-body p{font-size:.76rem;color:#455d50;line-height:1.55;margin:6px 0}
+.trl .trl-access-disclosure .trl-access-body a{color:#255b43;text-decoration:underline;font-weight:700}
+
 
 .trl .wf-story{min-height:295px}
 .trl .wf-story>.wf-photo{min-height:295px}
@@ -96,11 +99,6 @@
   .trl .wf-hero h1{font-size:clamp(2.45rem,9.5vw,3.35rem)}
   .trl .trl-hero-montage{width:100%;height:175px}
   .trl .trl-hero-montage .wf-scene{display:none}
-  .trl-signpost{display:flex;flex-direction:column;gap:7px}
-  .trl-signpost>div{display:grid;grid-template-columns:138px 1fr;align-items:baseline;padding:0 8px}
-  .trl-closure{display:block;padding:14px;margin-bottom:16px}
-  .trl-closure h2{font-size:1.23rem}
-  .trl-closure>a{display:inline-block;margin-top:10px}
   .trl-science{padding:16px 0}
   .trl-science-layout{grid-template-columns:1fr}
   .trl-use-selector{display:grid;grid-template-columns:1fr}
@@ -123,10 +121,130 @@
 @media(max-width:370px){
   .trl .wf-controls{grid-template-columns:1fr}
   .trl .wf-controls label:nth-child(3),.trl .wf-controls button{grid-column:1/-1}
-  .trl-signpost>div{display:flex;flex-direction:column;gap:0}
 }
 
 /* Visitor map handoff. No location is represented as guaranteed plowed winter parking. */
 .trl .wf-links .trl-google-map-link{font-size:.71rem;color:#36614d;font-weight:700}
 .trl .wf-map-popup .trl-popup-map-link{display:block;font-size:.7rem;margin-top:3px;color:#2f5e49;text-decoration:underline}
 @media(max-width:610px){.trl .wf-links .trl-google-map-link{font-size:.74rem;line-height:1.55}}
+
+
+/* Winter Trail Decision Desk: grounded comparison, not an opening-status dashboard. */
+.trl .trl-desk{background:linear-gradient(128deg,#1d3b31 0%,#2a5544 58%,#173c36 100%);color:#f5f6ee;padding:clamp(19px,3vw,35px) 0}
+.trl .trl-desk-layout{display:grid;grid-template-columns:minmax(0,.79fr) minmax(0,1.21fr);align-items:start;gap:clamp(18px,3.5vw,50px)}
+.trl .trl-desk-intro{padding:12px 0;max-width:520px}
+.trl .trl-desk-eyebrow{font-size:.72rem;font-weight:800;letter-spacing:.14em;text-transform:uppercase;color:#d7bc94;margin-bottom:13px}
+.trl .trl-desk-intro h1{font:500 clamp(2.7rem,4.8vw,4.7rem)/1.02 var(--wf-display);letter-spacing:-.027em;color:#fff9ec;margin:0 0 19px}
+.trl .trl-desk-intro>p:not(.trl-desk-eyebrow){font-size:clamp(.96rem,1.5vw,1.08rem);line-height:1.65;color:#e5ede5;max-width:42ch}
+.trl .trl-desk-console{min-width:0;background:#f7f8f2;color:#1d392f;border-radius:13px;padding:clamp(16px,2.5vw,26px);box-shadow:0 20px 50px #0c30284d}
+.trl .trl-desk-topline{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:14px}
+.trl .trl-desk-topline h2{font:500 clamp(1.5rem,2.4vw,1.95rem)/1.1 var(--wf-display);margin:0;color:#194332}
+.trl .trl-desk-topline>span{font-size:.68rem;text-transform:uppercase;letter-spacing:.075em;color:#5c7364;font-weight:750}
+.trl .trl-desk-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+.trl .trl-desk-controls label{display:grid;gap:6px;min-width:0;color:#315447;font-size:.74rem;font-weight:750}
+.trl .trl-desk-controls select{width:100%;min-width:0;min-height:45px;padding:8px 27px 8px 9px;background:#fff;border:1px solid #b5c8bd;border-radius:6px;color:#15382b;font:600 .81rem/1.3 system-ui,sans-serif}
+.trl .trl-desk-verify{display:flex;align-items:flex-start;gap:10px;margin-top:12px;font-size:.78rem;line-height:1.4;font-weight:700;cursor:pointer;color:#284537}
+.trl .trl-desk-verify input{width:18px;height:18px;accent-color:#27644a;flex-shrink:0;margin-top:2px}
+.trl .trl-desk-verify small{display:block;color:#65766b;font-size:.71rem;font-weight:500;margin-top:2px}
+.trl .trl-desk-result-label{margin:15px 0 10px;font-size:.77rem;color:#486558}
+.trl .trl-desk-results{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:11px;align-items:stretch}
+.trl .trl-desk-option{min-width:0;display:flex;flex-direction:column;gap:8px;padding:15px 14px;background:#fff;border-radius:7px;border-top:4px solid #729885;box-shadow:0 3px 12px #1a4c3b13}
+.trl .trl-desk-option-index{font-size:.65rem;letter-spacing:.12em;font-weight:800;color:#8a6341}
+.trl .trl-desk-option h3{font:550 1.28rem/1.17 var(--wf-display);color:#214b38;margin:0}
+.trl .trl-desk-option p{font-size:.76rem;line-height:1.48;color:#475c50;margin:0}
+.trl .trl-desk-option .trl-desk-option-meta{font-weight:700;color:#415b4b}
+.trl .trl-desk-option .trl-desk-option-use{font-size:.78rem;color:#294e3e}
+.trl .trl-desk-option .trl-desk-option-access{padding-top:7px;border-top:1px solid #dfebe1}
+.trl .trl-desk-option details{font-size:.75rem;color:#435d4f}
+.trl .trl-desk-option summary{cursor:pointer;color:#2c604a;font-weight:750}
+.trl .trl-desk-option details p{margin-top:7px}
+.trl .trl-desk-option-actions{margin-top:auto;display:flex;align-items:center;flex-wrap:wrap;gap:7px 10px;padding-top:5px}
+.trl .trl-desk-option-actions button{font-size:.79rem;background:#1e5a41;color:white;padding:9px 12px;border:0;border-radius:5px;cursor:pointer;font-weight:750;min-height:41px;text-align:left}
+.trl .trl-desk-option-actions a{color:#285b45;text-decoration:underline;font-size:.76rem;font-weight:750}
+.trl .trl-desk-option-actions .trl-desk-weather-action{background:#eef4ef;color:#1d573e;border:1px solid #85ac95;padding:8px 10px;min-height:41px}
+.trl .trl-desk-option-actions .trl-desk-weather-action:hover{background:#dbece1}
+.trl .trl-desk-option-actions .trl-desk-weather-action:focus-visible{outline:3px solid #b8792d;outline-offset:3px}
+.trl .trl-desk-none{grid-column:1/-1;padding:22px;background:#fff;color:#465d51;border-radius:6px}
+.trl .trl-desk-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:13px}
+.trl .trl-desk-actions button{border:1px solid #a7bfb0;background:transparent;color:#22543e;border-radius:5px;min-height:42px;padding:8px 12px;font-size:.79rem;font-weight:750;cursor:pointer}
+.trl .trl-desk-actions #trl-desk-map{background:#224d3d;color:#fff;border-color:#224d3d}
+.trl .trl-desk-actions button:disabled{opacity:.46;cursor:not-allowed}
+.trl .trl-desk-checks{margin-top:17px;padding-top:13px;border-top:1px solid #cedbd0}
+.trl .trl-desk-checks p{font-size:.76rem;color:#426052;line-height:1.45;margin:0 0 8px}
+.trl .trl-desk-checks>div{display:flex;flex-wrap:wrap;gap:7px 14px}
+.trl .trl-desk-checks a{font-size:.78rem;font-weight:800;text-decoration:underline;color:#205f45}
+.trl .trl-desk button:focus-visible,.trl .trl-desk select:focus-visible,.trl .trl-desk a:focus-visible,.trl .trl-desk input:focus-visible,.trl .trl-desk summary:focus-visible{outline:3px solid #cc8c35;outline-offset:3px}
+.trl .wf-intro h2{font:500 clamp(2.65rem,4.5vw,4.35rem)/1.07 var(--wf-display);max-width:610px;color:var(--wf-ink)}
+@media(max-width:980px){
+  .trl .trl-desk-layout{grid-template-columns:1fr;gap:14px}
+  .trl .trl-desk-intro{max-width:100%;padding:0}
+  .trl .trl-desk-intro h1{font-size:clamp(2.5rem,6vw,3.65rem);margin-bottom:10px}
+}
+@media(max-width:610px){
+  /* First phone screen: lead with the selected visitor decision, not a second lecture. */
+  .trl .trl-desk{padding:11px 0 17px}
+  .trl .trl-desk-layout{gap:9px}
+  .trl .trl-desk-eyebrow{font-size:.63rem;letter-spacing:.1em;margin-bottom:7px}
+  .trl .trl-desk-intro h1{font-size:clamp(2.05rem,8.2vw,2.55rem);line-height:1.02;margin-bottom:7px}
+  .trl .trl-desk-intro>p:not(.trl-desk-eyebrow){font-size:.82rem;line-height:1.4;max-width:46ch;margin:0}
+  .trl .trl-desk-console{padding:13px;border-radius:9px}
+  .trl .trl-desk-topline{margin-bottom:9px}
+  .trl .trl-desk-topline h2{font-size:1.48rem}
+  .trl .trl-desk-controls{grid-template-columns:1fr 1fr;gap:7px}
+  .trl .trl-desk-controls label:first-child{grid-column:1/-1}
+  .trl .trl-desk-verify{margin-top:8px}
+  .trl .trl-desk-result-label{margin:9px 0 8px;font-size:.73rem}
+  .trl .trl-desk-results{grid-template-columns:1fr}
+  .trl .trl-desk-option{gap:6px;padding:12px}
+  .trl .trl-desk-option h3{font-size:1.28rem}
+  .trl .trl-desk-actions button{flex:1 1 auto}
+  .trl .wf-intro h2{font-size:clamp(2.35rem,9vw,3.1rem)}
+}
+@media(max-width:360px){.trl .trl-desk-controls{grid-template-columns:1fr}.trl .trl-desk-controls label:first-child{grid-column:auto}}
+@media(prefers-reduced-motion:reduce){.trl .trl-desk *{scroll-behavior:auto}}
+
+
+/* One-slot weather evidence lens. Closed by default so trail discovery stays first. */
+.trl .trl-weather-lens{min-width:0;margin:10px 0 0;border-top:1px solid #cadcd0;color:#264636}
+.trl .trl-weather-lens>summary{display:flex;gap:4px 10px;align-items:center;flex-wrap:wrap;cursor:pointer;min-height:44px;padding:9px 2px;list-style-position:inside;color:#1d563b}
+.trl .trl-weather-lens>summary strong{font-size:.84rem}
+.trl .trl-weather-lens>summary span{font-size:.72rem;color:#4b6959}
+.trl .trl-weather-lens>summary::after{content:"+";font-size:1.15rem;font-weight:800;margin-left:auto;line-height:1}
+.trl .trl-weather-lens[open]>summary::after{content:"−"}
+.trl .trl-weather-lens>summary:focus-visible,.trl .trl-weather-lens button:focus-visible,.trl .trl-weather-lens a:focus-visible,.trl .trl-weather-lens select:focus-visible,.trl .trl-weather-lens input:focus-visible,.trl .trl-weather-entry:focus-visible,.trl .trl-popup-weather-link:focus-visible{outline:3px solid #a36e31;outline-offset:3px}
+.trl .trl-weather-inspector{min-width:0;padding:10px 0 14px;border-top:1px solid #dfebdf}
+.trl .trl-weather-inspector>p{font-size:.76rem;line-height:1.52;color:#425c4d;margin:0 0 11px}
+.trl .trl-weather-controls{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.95fr);gap:8px;align-items:end}
+.trl .trl-weather-controls label{min-width:0;display:grid;gap:5px;font-size:.72rem;font-weight:800;color:#2c5942}
+.trl .trl-weather-controls select,.trl .trl-weather-controls input{box-sizing:border-box;min-width:0;width:100%;min-height:43px;padding:7px 9px;border:1px solid #adc5b4;background:#fff;color:#183d2b;font-size:.82rem;border-radius:5px}
+.trl .trl-weather-controls button{grid-column:1/-1;background:#245941;color:white;font-size:.8rem;font-weight:800;border:0;border-radius:5px;padding:11px 13px;min-height:44px;cursor:pointer}
+.trl .trl-weather-controls button[disabled]{opacity:.65;cursor:progress}
+.trl .trl-weather-controls button[hidden]{display:none!important}
+.trl .trl-weather-report{margin-top:12px;min-height:48px;font-size:.78rem;color:#344f3e}
+.trl .trl-weather-report>p{line-height:1.5;margin:0 0 8px}
+.trl .trl-weather-reading h3{font:500 1.34rem/1.25 var(--wf-display);color:#245039;margin:0}
+.trl .trl-weather-issued{margin:2px 0 9px;color:#5d7065;font-size:.72rem;line-height:1.45}
+.trl .trl-weather-metrics{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.trl .trl-weather-metric{min-width:0;background:#f4f7f1;padding:12px 10px;border-radius:7px}
+.trl .trl-weather-metric-title{font-size:.67rem;line-height:1.4;font-weight:750;color:#42644f}
+.trl .trl-weather-value{display:block;color:#214b39;font:600 clamp(1.4rem,2.9vw,1.9rem)/1.15 var(--wf-display);font-variant-numeric:tabular-nums;margin-top:5px;overflow-wrap:anywhere}
+.trl .trl-weather-metric p{font-size:.71rem;line-height:1.5;color:#506a5b;margin:8px 0 0}
+.trl .trl-weather-alerts{padding:11px 0;border-bottom:1px solid #d9e5dc;line-height:1.5}
+.trl .trl-weather-alerts strong{font-size:.76rem;color:#34523f}
+.trl .trl-weather-alerts p{font-size:.73rem;margin:5px 0 7px}
+.trl .trl-weather-alerts ul{padding-left:18px;font-size:.75rem;margin:6px 0}
+.trl .trl-weather-alerts a,.trl .trl-weather-links a,.trl .trl-weather-source-standby a{font-size:.75rem;color:#236046;text-decoration:underline;text-underline-offset:2px;font-weight:750}
+.trl .trl-weather-links{display:flex;flex-wrap:wrap;gap:6px 13px;padding:10px 0 0}
+.trl .trl-weather-boundary{font-size:.74rem;line-height:1.52;color:#5b523f;margin:10px 0 0}
+.trl .wf-links .trl-weather-entry{display:inline-flex;align-items:center;min-height:33px;border:1px solid #8ba997;background:#f3f8f1;color:#245740;padding:5px 9px;border-radius:5px;font-size:.72rem;font-weight:800;cursor:pointer;text-align:left}
+.trl .wf-map-popup .trl-popup-weather-link{display:block;width:100%;margin-top:6px;padding:7px 8px;background:#23553d;color:#fff;border:0;border-radius:4px;font-weight:750;font-size:.76rem;cursor:pointer;text-align:left}
+@media(max-width:460px){
+  .trl .trl-weather-controls{grid-template-columns:1fr}
+  .trl .trl-weather-metrics{grid-template-columns:1fr 1fr}
+  .trl .trl-weather-metric{padding:10px 8px}
+  .trl .trl-weather-value{font-size:1.46rem}
+}
+
+/* Weather check is available from the matched trail card, never only after map scroll. */
+.trl .trl-weather-return{margin-top:12px;min-height:42px;padding:8px 12px;border:1px solid #87a591;border-radius:5px;background:#eef5ef;color:#1f553b;font-weight:750;font-size:.78rem;cursor:pointer}
+.trl .trl-weather-return:focus-visible{outline:3px solid #a36e31;outline-offset:3px}

@@ -521,14 +521,8 @@
       : "Forecast wind unavailable");
     set("water", feel.waterNote || "No current NOAA offshore water evidence is available.");
     set("limit", feel.limitation || "No measured beach-air temperature is available.");
-    var heroLink = document.querySelector(".shorefeel-jump");
-    if (heroLink) {
-      heroLink.textContent = value === null
-        ? "ShoreFeel · no recent forecast · Read the field note"
-        : "ShoreFeel here · " + Math.round(value) + "°F modeled · Read the field note";
-      heroLink.dataset.status = current ? "forecast" : "unavailable";
-    }
-    host.dataset.status = current ? "forecast" : "unavailable";
+    scope.dataset.status = current && value !== null ? "forecast" : "unavailable";
+    host.dataset.status = current && value !== null ? "forecast" : "unavailable";
   }
 
   function renderIndividual() {

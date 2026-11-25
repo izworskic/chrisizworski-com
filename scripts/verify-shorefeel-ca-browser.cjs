@@ -40,19 +40,40 @@ async function main(){
   page.on('pageerror',err=>errors.push(String(err)));
   await page.goto(origin+'/great-lakes-beaches/canada/',{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>document.querySelector('#report-temp')?.textContent==='2°C',{timeout:14000});
-  assert.equal(await page.locator('.shore-stop').count(),18);
+  assert.equal(await page.locator('.shore-stop').count(),30);
+  assert.equal(await page.locator('.shore-stop:visible').count(),30,'all lakes visible on arrival');
+  assert.equal(await page.locator('[data-lake-filter="All"]').getAttribute('aria-pressed'),'true');
+  assert.equal(await page.locator('.shore-region-tabs [aria-current="page"]').getAttribute('href'),'/great-lakes-beaches/canada/');
+  await page.locator('#shore-search').fill('Sandbanks');
+  await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Sandbanks'));
+  assert.equal(await page.locator('.shore-stop:visible').count(),1);
+  await page.locator('#shore-search').fill('no-such-shore-999');
+  assert.equal(await page.locator('.shore-stop:visible').count(),0);
+  assert.equal(await page.locator('#shore-no-match').isVisible(),true);
+  assert.equal(await page.locator('#field-report').isVisible(),false,'stale beach answer is hidden');
+  await page.locator('#shore-search').fill('');
+  await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Agawa Bay'));
+  assert.equal(await page.locator('.shore-stop:visible').count(),30);
   assert.match(await page.locator('#report-name').innerText(),/Agawa Bay/);
+  await page.waitForFunction(()=>document.querySelector('#report-scope')?.textContent?.includes('20 km'),{timeout:14000});
   assert.match(await page.locator('#report-scope').innerText(),/20 km/);
   assert.match(await page.locator('#report-advisory').getAttribute('href'),/ontarioparks.ca\/beachresults/);
+  await page.locator('[data-select="batchawana-bay"]').click();
+  await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Batchawana Bay'));
   await page.getByRole('button',{name:'Erie',exact:true}).click();
   await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Port Burwell')&&document.querySelector('#report-temp')?.textContent==='2°C');
   await page.locator('[data-select="bay-beach-crystal"]').click();
   await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Crystal Beach'));
   assert.match(await page.locator('#report-advisory').getAttribute('href'),/niagararegion.ca/);
+  await page.getByRole('button',{name:'Huron',exact:true}).click();
+  await page.locator('[data-select="killbear-georgian-bay"]').click();
+  await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Killbear'));
   await page.getByRole('button',{name:'Ontario',exact:true}).click();
   await page.locator('[data-select="toronto-woodbine"]').click();
   await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Woodbine'));
   assert.match(await page.locator('#report-advisory').getAttribute('href'),/toronto.ca/);
+  await page.locator('[data-select="toronto-bluffers-beach"]').click();
+  await page.waitForFunction(()=>document.querySelector('#report-name')?.textContent?.includes('Bluffer'));
   await page.getByRole('button',{name:'Michigan',exact:true}).click();
   assert.equal(await page.locator('#report-temp').innerText(),'Explore the U.S.');
   assert.match(await page.locator('#report-park').getAttribute('href'),/around-the-lakes/);
@@ -72,6 +93,171 @@ async function main(){
   output.push({width,...metrics});
   await ctx.close();
  }
+ // Unlike the blocked-tile fallback scenarios above, this exercises a working
+ // map with deterministic tile responses, including the actual Leaflet controls.
+ // No network calls to OpenStreetMap are made by this fixture.
+ const zoomCtx=await browser.newContext({
+  viewport:{width:390,height:850},isMobile:true,hasTouch:true,reducedMotion:'reduce'
+ });
+ const tile=Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mP8/x8AAwMCAO+/pQAAAABJRU5ErkJggg==','base64');
+ await zoomCtx.route('https://**/*',route=>route.abort());
+ await zoomCtx.route('https://tile.openstreetmap.org/**',route=>route.fulfill({
+  status:200,contentType:'image/png',body:tile
+ }));
+ // Expose the exact local Leaflet instance to this isolated test only.
+ await zoomCtx.route('**/assets/shorefeel-ca.js*',route=>{
+  const script=fs.readFileSync(path.join(ROOT,'assets/shorefeel-ca.js'),'utf8');
+  const needle='map=window.L.map(';
+  assert.ok(script.includes(needle),'Map initialization source unchanged');
+  return route.fulfill({status:200,contentType:'application/javascript',
+   body:script.replace(needle,'map=window.__shoreTestMap=window.L.map(')});
+ });
+ await zoomCtx.route('**/api/shorefeel-ca?*',route=>{
+  const slug=new URL(route.request().url()).searchParams.get('beach');
+  return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(fixture(slug))});
+ });
+ const zoomPage=await zoomCtx.newPage();
+ await zoomPage.goto(origin+'/great-lakes-beaches/canada/',{waitUntil:'domcontentloaded'});
+ await zoomPage.waitForFunction(()=>document.querySelector('#report-temp')?.textContent==='2°C');
+ await zoomPage.waitForFunction(()=>document.querySelector('#shore-map .leaflet-tile-loaded')!==null,{timeout:14000});
+ assert.equal(await zoomPage.locator('#map-fallback').isVisible(),false,'working tile layer must remain available');
+ assert.equal(await zoomPage.locator('#shore-map .leaflet-popup').count(),0,
+  'Map must not auto-open a popup that blocks phone gestures');
+ const mapSurface=zoomPage.locator('#shore-map');
+ assert.equal(await mapSurface.evaluate(el=>el.classList.contains('leaflet-touch-zoom')),true,
+  'mobile map must register Leaflet two-finger touch zoom');
+ const zoomIn=zoomPage.locator('#shore-map .leaflet-control-zoom-in');
+ const zoomOut=zoomPage.locator('#shore-map .leaflet-control-zoom-out');
+ assert.ok(await zoomIn.isVisible(),'visible zoom-in control');
+ assert.ok(await zoomOut.isVisible(),'visible zoom-out control');
+ const touchSettings=await mapSurface.evaluate(el=>({
+  touchAction:getComputedStyle(el).touchAction,
+  pinch:el.classList.contains('leaflet-touch-zoom'),
+  drag:el.classList.contains('leaflet-touch-drag'),
+  shell:getComputedStyle(el.closest('.map-shell')).touchAction,
+  tile:getComputedStyle(el.querySelector('.leaflet-tile')||el).touchAction
+ }));
+ assert.equal(touchSettings.pinch,true,'Leaflet pinch handler active');
+ assert.equal(touchSettings.drag,true,'Leaflet drag handler active');
+ assert.equal(touchSettings.touchAction,'none','Prevent native touch cancellation');
+ assert.equal(touchSettings.shell,'none','Map shell must not allow browser page pinch');
+ assert.equal(touchSettings.tile,'none','Tile touch target must not allow browser page pinch');
+ assert.ok(await zoomIn.evaluate(el=>el.getBoundingClientRect().width>=44),
+  'Mobile map zoom controls must be at least 44px wide');
+ assert.ok(await zoomOut.evaluate(el=>el.getBoundingClientRect().height>=44),
+  'Mobile map zoom controls must be at least 44px tall');
+ assert.match(await zoomPage.locator('script[src*="shorefeel-ca.js"]').getAttribute('src'),/mobile-pinch-4/,
+  'Versioned JS URL prevents reuse of the old cached gesture code');
+ const readTileZoom=()=>zoomPage.evaluate(()=>{
+  const imgs=[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')];
+  return Math.max(-1,...imgs.map(img=>{
+   const m=new URL(img.src).pathname.match(/^\/(\d+)\//);
+   return m?Number(m[1]):-1;
+  }));
+ });
+ const before=await readTileZoom();
+ assert.ok(before>=0,'real map tile was loaded before zoom test');
+ await zoomIn.click();
+ await zoomPage.waitForFunction(before=>{
+  const imgs=[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')];
+  return imgs.some(img=>{
+   const m=new URL(img.src).pathname.match(/^\/(\d+)\//);
+   return m&&Number(m[1])>before;
+  });
+ },before,{timeout:10000});
+ await zoomOut.click();
+ await zoomPage.waitForFunction(before=>{
+  const imgs=[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')];
+  return imgs.some(img=>{
+   const m=new URL(img.src).pathname.match(/^\/(\d+)\//);
+   return m&&Number(m[1])===before;
+  });
+ },before,{timeout:10000});
+ // Start from a fresh map so higher-zoom tiles left by the +/- control
+ // animation cannot be mistaken for the pinch gesture's initial zoom.
+ await zoomPage.reload({waitUntil:'domcontentloaded'});
+ await zoomPage.waitForFunction(()=>document.querySelector('#shore-map img.leaflet-tile-loaded')!==null,{timeout:14000});
+ await zoomPage.waitForTimeout(400);
+ // Record touch and pointer events so a failed gesture can be diagnosed.
+ await zoomPage.evaluate(()=>{
+  window.__shorePinchTrace=[];
+  const el=document.getElementById('shore-map');
+  for(const name of ['touchstart','touchmove','touchend','pointerdown','pointermove','pointercancel']){
+   el.addEventListener(name,e=>{
+    const trace=window.__shorePinchTrace;
+    if(trace.length<65)trace.push({type:name,touches:e.touches?.length??null,
+      pointer:e.pointerType||null,cancelable:e.cancelable});
+   },{passive:true});
+  }
+ });
+ // Prove pinch-zoom using two real touchscreen contacts, not map controls.
+ await mapSurface.scrollIntoViewIfNeeded();
+ const rect=await mapSurface.boundingBox();
+ assert.ok(rect&&rect.width>150&&rect.height>150,'Visible map gesture surface');
+ const cx=rect.x+rect.width/2,cy=rect.y+rect.height/2;
+ const zoomBeforePinch=await readTileZoom();
+ await zoomPage.evaluate(()=>{
+  window.__shoreZoomLog=[];
+  const m=window.__shoreTestMap;
+  m.on('zoomstart zoom zoomend',e=>window.__shoreZoomLog.push({
+   type:e.type,zoom:m.getZoom()}));
+ });
+ const mapBeforePinch=await zoomPage.evaluate(()=>({
+  zoom:window.__shoreTestMap.getZoom(),
+  handler:window.__shoreTestMap.touchZoom.enabled(),
+  animating:!!window.__shoreTestMap._animatingZoom
+ }));
+ const cdp=await zoomCtx.newCDPSession(zoomPage);
+ const finger=(id,x,y)=>({id,x,y,force:1});
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[
+  finger(1,cx-24,cy)
+ ]});
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchStart',touchPoints:[
+  finger(1,cx-24,cy),finger(2,cx+24,cy)
+ ]});
+ for(let step=1;step<=12;step++){
+  const spread=24+step*7;
+  await cdp.send('Input.dispatchTouchEvent',{type:'touchMove',touchPoints:[
+   finger(1,cx-spread,cy),finger(2,cx+spread,cy)
+  ]});
+  await zoomPage.waitForTimeout(24);
+ }
+ await cdp.send('Input.dispatchTouchEvent',{type:'touchEnd',touchPoints:[]});
+ const pinchEvidence=await zoomPage.evaluate(()=>({
+  touchAction:getComputedStyle(document.getElementById('shore-map')).touchAction,
+  tileLevels:[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')]
+   .map(img=>Number(new URL(img.src).pathname.split('/')[1])),
+  trace:window.__shorePinchTrace,
+  viewportScale:window.visualViewport?.scale,
+  viewportWidth:window.visualViewport?.width,
+  mapZoom:window.__shoreTestMap.getZoom(),
+  hitTarget:(()=>{const box=document.getElementById('shore-map').getBoundingClientRect();
+   const e=document.elementFromPoint(box.left+box.width/2,box.top+box.height/2);
+   return e?.className||e?.tagName;})(),
+  gesture:{
+   started:!!window.__shoreTestMap.touchZoom._zooming,
+   moved:!!window.__shoreTestMap.touchZoom._moved,
+   startDist:window.__shoreTestMap.touchZoom._startDist,
+   startZoom:window.__shoreTestMap.touchZoom._startZoom,
+   targetZoom:window.__shoreTestMap.touchZoom._zoom
+  },
+  zoomLog:window.__shoreZoomLog
+ }));
+ console.log('ShoreFeel real pinch evidence: '+JSON.stringify({
+  zoomBeforePinch,mapBeforePinch,...pinchEvidence
+ }));
+ await zoomPage.waitForFunction(before=>{
+  const imgs=[...document.querySelectorAll('#shore-map img.leaflet-tile-loaded')];
+  return imgs.some(img=>{
+   const z=Number(new URL(img.src).pathname.split('/')[1]);
+   return Number.isFinite(z)&&z>before;
+  });
+ },zoomBeforePinch,{timeout:10000});
+ assert.equal(await zoomPage.locator('#map-fallback').isVisible(),false);
+ assert.ok(Math.abs(await zoomPage.evaluate(()=>visualViewport.scale)-1)<0.02,
+  'Pinch must zoom the map rather than changing the whole page scale');
+ await zoomPage.screenshot({path:path.join(OUT,'canada-mobile-working-map-zoom-390.png')});
+ await zoomCtx.close();
  const ctx=await browser.newContext({viewport:{width:390,height:850}});
  await ctx.route('**/api/shorefeel-ca?*',route=>route.fulfill({status:200,contentType:'application/json',
   body:JSON.stringify(fixture(new URL(route.request().url()).searchParams.get('beach'),true))}));
@@ -83,12 +269,12 @@ async function main(){
  await ctx.close();
  const noJs=await browser.newContext({viewport:{width:390,height:850},javaScriptEnabled:false});
  const plain=await noJs.newPage();await plain.goto(origin+'/great-lakes-beaches/canada/',{waitUntil:'domcontentloaded'});
- assert.equal(await plain.locator('.shore-stop').count(),18);
+ assert.equal(await plain.locator('.shore-stop').count(),30);
  assert.equal(await plain.locator('noscript').isVisible(),true);
- assert.equal(await plain.locator('.shore-stop .shore-stop-links > a[href^="https://"]').count(),18);
-  assert.equal(await plain.locator('.shore-stop .shore-stop-links > a[href^="/great-lakes-beaches/canada/"]').count(),18);
+ assert.equal(await plain.locator('.shore-stop .shore-stop-links > a[href^="https://"]').count(),30);
+  assert.equal(await plain.locator('.shore-stop .shore-stop-links > a[href^="/great-lakes-beaches/canada/"]').count(),30);
  await noJs.close();
- console.log(JSON.stringify({passed:true,screenSizes:output,staleData:'No fabricated temperature',noJs:'18 park links available'},null,2));
+ console.log(JSON.stringify({passed:true,screenSizes:output,staleData:'No fabricated temperature',noJs:'30 park links available'},null,2));
  }finally{if(browser)await browser.close();await new Promise(done=>server.close(done));}
 }
 main().catch(e=>{console.error(e);process.exitCode=1;});
