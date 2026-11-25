@@ -11,7 +11,7 @@ function diagnose(d){
    for(const f of ["baselineC","actualC","modelBaseC","modelValidC","modelChangeErrorF","persistenceErrorF"])if(!Number.isFinite(p[f]))throw Error("Invalid pair");
    const change=(p.actualC-p.baselineC)*1.8,delta=(p.modelValidC-p.modelBaseC)*1.8;
    if(Math.abs(delta-change-p.modelChangeErrorF)>1e-7||Math.abs(-change-p.persistenceErrorF)>1e-7)throw Error("Pair arithmetic");
-   return {...p,change,delta,candidateError:w*delta-change,persistenceError:-change,originalError:delta-change};
+   return {...p,change,delta,candidateError:w*delta-change,persistenceError:change===0?0:-change,originalError:delta-change};
   });
   const score=ps=>{
    const metrics=field=>{const e=ps.map(p=>p[field]),a=e.map(Math.abs).sort((a,b)=>a-b);return {maeF:mean(a),p90F:a.length?a[Math.ceil(.9*a.length)-1]:null,maxF:a.length?a[a.length-1]:null};};
