@@ -129,4 +129,4 @@ test("Hub ship learning is optional, source-backed and uses one detail surface",
 });
 
 
-test("Freighter Central loads shared AIS movement evidence before the tracker",()=>{const html=fs.readFileSync("public/freighters/index.html","utf8");assert.ok(html.indexOf("/assets/ais-movement.js")>=0&&html.indexOf("/assets/ais-movement.js")<html.indexOf("/assets/freighter-tracker.js"));});
+test("Freighter Central loads shared AIS movement evidence before the tracker",()=>{const html=read("public/freighters/index.html");assert.ok(html.indexOf("/assets/ais-movement.js")>=0&&html.indexOf("/assets/ais-movement.js")<html.indexOf("/assets/freighter-tracker.js"));});
