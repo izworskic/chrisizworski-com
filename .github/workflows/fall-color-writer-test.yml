@@ -193,7 +193,7 @@ jobs:
               "${WRITER_URL}&kind=mi&check=1")"
             unset oidc_token
             if [[ "$status" == "200" ]]; then
-              jq -e --arg date "$today" '.ok == true and .authenticated == true and .date == $date' "$RUNNER_TEMP/fall-check.json"
+              jq -e --arg date "$today" '.ok == true and .authenticated == true and .date == $date and (.eligible.mi | type == "boolean") and (.eligible.national | type == "boolean")' "$RUNNER_TEMP/fall-check.json"
               echo "Identity and production SHA verified."
               break
             fi
@@ -213,6 +213,10 @@ jobs:
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
 
           for kind in mi national; do
+            if [[ "$(jq -r --arg kind "$kind" '.eligible[$kind]' "$RUNNER_TEMP/fall-check.json")" == "false" ]]; then
+              echo "Edition $kind $today is outside the publishing season; no attempt reserved."
+              continue
+            fi
             if [[ -f "data/fall-color/${kind}/${today}.json" ]]; then
               echo "Edition $kind $today already exists; no paid model call."
               continue
@@ -263,6 +267,9 @@ jobs:
 
           # Read-back from GitHub's public JSON origin, no Redis commands.
           for kind in mi national; do
+            if [[ "$(jq -r --arg kind "$kind" '.eligible[$kind]' "$RUNNER_TEMP/fall-check.json")" == "false" ]]; then
+              continue
+            fi
             if [[ ! -f "data/fall-color/$kind/$today.json" ]]; then
               echo "::error::Missing $kind daily edition: see reserved sentinel"
               exit 1
