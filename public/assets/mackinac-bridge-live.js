@@ -1066,20 +1066,42 @@
     renderAll();
   }
 
+  // Match the endpoint's 60-second fresh + 240-second stale cache window.
+  // fetched_at is the endpoint retrieval time, NOT the authority's report issue time.
+  function snapshotFresh(data, now) {
+    var fetched = Date.parse(data?.fetched_at || "");
+    return Number.isFinite(fetched) && fetched <= now + 60_000 && now - fetched <= 300_000;
+  }
+
+  function invalidateStatus(message) {
+    window.dispatchEvent(new CustomEvent('mackinac:official-data', { detail: null }));
+    renderUnavailable(message);
+  }
+
   async function loadData(options) {
+    if (state.data?.official?.available && !snapshotFresh(state.data, Date.now())) {
+      invalidateStatus("The previous check has expired. Open the official Bridge Authority report before traveling.");
+    }
     if (state.loading) return;
     state.loading = true;
     var manual = Boolean(options?.manual);
     var refreshButton = byId("refreshButton");
     refreshButton.disabled = true;
+    var controller = new AbortController();
+    var timeout = window.setTimeout(function () { controller.abort(); }, 15_000);
 
     try {
       var response = await fetch(API_URL + "?minute=" + Math.floor(Date.now() / 60_000), {
         cache: "no-store",
+        signal: controller.signal,
         headers: { accept: "application/json" },
       });
       if (!response.ok) throw new Error("Live endpoint returned " + response.status);
       var data = await response.json();
+      if (!snapshotFresh(data, Date.now())) {
+        invalidateStatus("The response was too old or its check time could not be verified. Check the official Bridge Authority report.");
+        return;
+      }
       state.data = data;
       window.dispatchEvent(new CustomEvent('mackinac:official-data', { detail: data }));
       if (
@@ -1093,12 +1115,9 @@
       renderAll();
       if (manual) track("manual-refresh", { status: data.official?.level || "unknown" });
     } catch (_error) {
-      window.dispatchEvent(new CustomEvent('mackinac:official-data', { detail: null }));
-      if (!state.data) renderUnavailable();
-      else {
-        setText("ribbonTime", "• refresh failed; showing last result");
-      }
+      invalidateStatus("The latest check failed. The previous crossing verdict is no longer current. Open the official Bridge Authority report before traveling.");
     } finally {
+      window.clearTimeout(timeout);
       state.loading = false;
       refreshButton.disabled = false;
     }
@@ -1315,6 +1334,9 @@
     refreshRadar();
     loadData();
     window.setInterval(loadData, 60_000);
+    document.addEventListener("visibilitychange", function () {
+      if (document.visibilityState === "visible" && !snapshotFresh(state.data, Date.now())) loadData();
+    });
     window.setInterval(refreshCamera, 60_000);
     window.setInterval(refreshRadar, 300_000);
   }

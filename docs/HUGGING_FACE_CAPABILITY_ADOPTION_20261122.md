@@ -1,5 +1,7 @@
 # Hugging Face skills adoption — 2026-11-22
 
+**Update 2026-11-25:** the eight skills below were folded into `ml-justification` and `hf-hub-research`; photo QA moved to `photo-sourcing`. This report is kept as the original adoption record.
+
 **Scope:** agent-side capability adoption and offline Adventure Finder evaluation only. **No production UI changes**, routes, Auto ads / AdSense changes, environment variables, scheduled jobs, Redis, dependencies, model downloads or inference services. The Michigan Adventure Finder at [`/michigan-destinations/`](https://chrisizworski.com/michigan-destinations/) remains HTML-first, map-first by context, and indexable.
 
 ## What was adopted

@@ -1,0 +1,86 @@
+{
+  "schemaVersion": 1,
+  "kind": "FIXED_ARRIVAL_WINDOW_DEVELOPMENT_COHORT",
+  "model": "existing-reference-v1",
+  "modelRevision": "b38f8e81e294e6b56fd9619e6c86b185132ac3c0",
+  "site": "soo",
+  "holdoutStartsOn": "2024-09-21",
+  "reservedHoldoutDates": [
+    "2024-09-21",
+    "2024-09-25",
+    "2024-09-29"
+  ],
+  "sourceInventory": "https://github.com/NOAA-OCM/ocm-marinecadastre-ais-vessel-traffic/blob/main/data/daily-2024-parquet-filenames.md",
+  "dates": [
+    "2024-08-19",
+    "2024-08-21",
+    "2024-08-23",
+    "2024-08-25",
+    "2024-08-27",
+    "2024-08-29",
+    "2024-08-31",
+    "2024-09-01",
+    "2024-09-02",
+    "2024-09-03",
+    "2024-09-04",
+    "2024-09-05",
+    "2024-09-06",
+    "2024-09-07",
+    "2024-09-08",
+    "2024-09-09",
+    "2024-09-10",
+    "2024-09-11",
+    "2024-09-12",
+    "2024-09-13",
+    "2024-09-14",
+    "2024-09-15",
+    "2024-09-16",
+    "2024-09-17",
+    "2024-09-18",
+    "2024-09-19",
+    "2024-09-20"
+  ],
+  "batches": [
+    [
+      "2024-08-19",
+      "2024-09-01",
+      "2024-09-04",
+      "2024-09-10",
+      "2024-09-15",
+      "2024-09-20"
+    ],
+    [
+      "2024-08-21",
+      "2024-08-23",
+      "2024-08-25",
+      "2024-08-27",
+      "2024-08-29",
+      "2024-08-31",
+      "2024-09-02"
+    ],
+    [
+      "2024-09-03",
+      "2024-09-05",
+      "2024-09-06",
+      "2024-09-07",
+      "2024-09-08",
+      "2024-09-09",
+      "2024-09-11"
+    ],
+    [
+      "2024-09-12",
+      "2024-09-13",
+      "2024-09-14",
+      "2024-09-16",
+      "2024-09-17",
+      "2024-09-18",
+      "2024-09-19"
+    ]
+  ],
+  "minimumNonemptyDates": 20,
+  "minimumEvents": 40,
+  "maximumBytesPerDate": 314572800,
+  "maximumRequestsPerDate": 180,
+  "selection": "All September 1-20 UTC and alternate days August 19-31 UTC. Fixed before expanded residual extraction; no replacement dates. Prior three development days retained; no holdout outcome inspection. Stage batches for cost control; no early fitting.",
+  "issueRule": "last observation at or before bracket start minus 30 minutes, within 2 minutes; one issue per retained event"
+}

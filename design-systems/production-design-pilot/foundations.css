@@ -1,0 +1,64 @@
+/*
+ * Candidate semantic foundations, scoped to the existing local design lab.
+ * Not a production stylesheet. No global defaults or page-layout mandate.
+ * Type/space steps from Snow Totals Visual V1. River palette from the
+ * working-rivers family. See FOUNDATION_CONTRACT.md for provenance and scope.
+ */
+.lab {
+  --pd-space-xs: 4px;
+  --pd-space-sm: 8px;
+  --pd-space-md: 12px;
+  --pd-space-lg: 16px;
+  --pd-space-xl: 24px;
+  --pd-space-2xl: 32px;
+  --pd-space-3xl: 48px;
+  --pd-type-caption: 14px;
+  --pd-type-body: 16px;
+  --pd-type-subheading: 18px;
+  --pd-type-heading: 22px;
+  --pd-type-reading: 40px;
+  --pd-body-line: 1.55;
+  --pd-font-operational: system-ui, sans-serif;
+  --pd-font-editorial: Georgia, serif;
+  --pd-radius-control: 8px;
+  --pd-target-min: 44px;
+  --pd-focus-width: 3px;
+  --pd-focus-offset: 3px;
+  --pd-paper: #f3f0e8;
+  --pd-surface: #fffefa;
+  --pd-ink: #172f35;
+  --pd-muted: #4c6369;
+  --pd-line: #d8dfd9;
+  --pd-accent: #155d6f;
+  --pd-accent-soft: #e5f0ef;
+  --pd-focus: #815321;
+  --pd-recent: #155d6f;
+  --pd-stale: #815321;
+  --pd-unavailable: #4c6369;
+  --pd-elevation: 0 7px 24px rgba(17,45,52,.085);
+}
+/* Family roles: exact existing source values, never global theme resets. */
+.lab .specimen--calumet {
+  --pd-accent: #815321;
+  --pd-accent-soft: #f7eee0;
+}
+.lab .reference-snow {
+  --pd-paper: #f4f8fb;
+  --pd-surface: #ffffff;
+  --pd-ink: #132a3d;
+  --pd-muted: #4a5d6d;
+  --pd-line: #c4e1f2;
+  --pd-accent: #17476f;
+  --pd-accent-soft: #eaf2f8;
+  --pd-focus: #17476f;
+}
+.lab .reference-journey {
+  --pd-paper: #faf9f6;
+  --pd-surface: #ffffff;
+  --pd-ink: #2c2c2c;
+  --pd-muted: #666666;
+  --pd-line: #e0dbd2;
+  --pd-accent: #2c5f2d;
+  --pd-accent-soft: #e8f2e8;
+  --pd-focus: #0e6081;
+}

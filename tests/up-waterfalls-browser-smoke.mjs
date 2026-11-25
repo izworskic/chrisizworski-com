@@ -26,6 +26,47 @@ try{
     assert.ok(await page.locator('#geographic-research').count()===1);
     for(const id of ['mosquito-falls','elliot-falls','manido-falls','bridalveil-falls'])assert.equal(await page.locator('[data-id="'+id+'"]').count(),1);
   });
+  await run('town adventure compares time budgets and saves through existing itinerary',async()=>{
+    await page.locator('#waterfall-adventure summary').click();
+    await page.locator('#adventure-build').waitFor();
+    await page.waitForFunction(()=>document.querySelector('#adventure-build')?.disabled===false);
+    const date=page.locator('#visit-date');
+    const original=await date.inputValue();
+    try{
+      await date.fill('2027-07-12');
+      await page.locator('#adventure-town').fill('Munising');
+      await page.locator('#adventure-build').click();
+      assert.ok(await page.locator('[data-adventure-plan]').count()>0,'summer Munising should have documented candidates');
+      assert.match(await page.locator('#adventure-status').innerText(),/120 minutes/);
+      const ids=(await page.locator('[data-adventure-plan]').first().getAttribute('data-adventure-plan')).split(',');
+      assert.ok(ids.length<=3&&!ids.includes('munising-falls'));
+      const road=page.locator('[data-adventure-plan]').first();
+      assert.match(await road.locator('.upfall-adventure-light').innerText(),/buffered daylight/i);
+      const manual=road.locator('.adventure-road-minutes');
+      await manual.fill('720');
+      assert.equal(await road.getByRole('button',{name:'Add these stops to my day'}).isDisabled(),true);
+      await manual.fill('30');
+      assert.equal(await road.getByRole('button',{name:'Add these stops to my day'}).isDisabled(),false);
+      assert.match(await road.locator('.upfall-adventure-road [role=status]').innerText(),/Fits your entered times/);
+      await page.locator('[data-adventure-plan]').first().getByRole('button',{name:'Add these stops to my day'}).click();
+      for(const id of ids)assert.equal(await page.locator('[data-id="'+id+'"] .save').getAttribute('aria-pressed'),'true');
+      await page.locator('#clear-list').click();
+      await page.locator('#adventure-departure').fill('22:00');
+      await page.locator('#adventure-build').click();
+      assert.equal(await page.locator('[data-adventure-plan]').count(),0);
+      assert.match(await page.locator('#adventure-status').innerText(),/buffered daylight/);
+      await page.locator('#adventure-departure').fill('09:00');
+      await date.fill('2027-01-12');
+      await page.locator('#adventure-build').click();
+      assert.match(await page.locator('#adventure-status').innerText(),/held outside June through September/);
+      assert.equal(await page.locator('[data-adventure-plan]').count(),0);
+      await page.screenshot({path:screenshots+'/adventure-mobile.png',fullPage:false});
+    }finally{
+      await page.locator('#clear-list').click();
+      await date.fill(original);
+      await page.locator('#waterfall-adventure summary').click();
+    }
+  });
   await run('arrival desk connects real parking, closure, seasonal road and no-route decisions',async()=>{
     const choose=page.locator('#arrival-choice');
     assert.equal(await choose.inputValue(),'wagner-falls');
@@ -61,6 +102,28 @@ try{
     assert.equal(await drive.count(),0);
     await choose.selectOption('wagner-falls');
     await page.locator('#visit-date').fill('2027-07-15');
+  });
+  await run('connected arrival, saved stop and river context survive A-B-A selection',async()=>{
+    const choose=page.locator('#arrival-choice');
+    await choose.selectOption('wagner-falls');
+    const save=page.locator('#arrival-save');
+    const original=page.locator('[data-id="wagner-falls"] button.save');
+    if(await original.getAttribute('aria-pressed')==='true')await save.click();
+    await save.click();
+    assert.equal(await original.getAttribute('aria-pressed'),'true');
+    assert.equal(await save.getAttribute('aria-pressed'),'true');
+    await page.locator('#arrival-water').click();
+    assert.equal(await page.locator('#river-conditions').evaluate(e=>e.open),true);
+    assert.match(await page.locator('#river-visit-context').innerText(),/Wagner Falls/);
+    await choose.selectOption('munising-falls');
+    assert.equal(await save.isDisabled(),true);
+    assert.match(await page.locator('#river-visit-context').innerText(),/Munising Falls/);
+    await choose.selectOption('wagner-falls');
+    assert.equal(await save.getAttribute('aria-pressed'),'true');
+    await save.click();
+    assert.equal(await original.getAttribute('aria-pressed'),'false');
+    await page.locator('#river-conditions-heading').click();
+    await page.screenshot({path:screenshots+'/connected-visit-390.png',fullPage:false});
   });
   await run('arrival panel keeps 360px and tablet layout inside the viewport',async()=>{
     for(const width of [360,768]){
@@ -219,8 +282,12 @@ try{
     assert.match(await google.getAttribute('href'),/^https:\/\/www\.google\.com\/maps\/search\/\?api=1&query=/);
     assert.equal(await page.locator('[data-nearby-id="munising-falls"]').count(),0,'closed waterfall cannot be suggested');
     await page.locator('[data-nearby-id="miners-falls"] .nearby-map-action').click();
+    assert.equal(await page.locator('.leaflet-popup-content').count(),1,'only one popup may exist after selection');
     assert.match(await page.locator('.leaflet-popup-content').innerText(),/Miners Falls/);
     assert.equal(await page.locator('.leaflet-popup-content .waterfall-google-link').count(),1,'map popup needs an external location view');
+    await page.evaluate(()=>{window.UPWaterfallFocus('wagner-falls');window.UPWaterfallFocus('miners-falls');});
+    assert.equal(await page.locator('.leaflet-popup-content').count(),1,'rapid successive selections cannot leave overlapping popups');
+    assert.match(await page.locator('.leaflet-popup-content').innerText(),/Miners Falls/);
     await page.locator('[data-nearby-id="miners-falls"] .nearby-save-action').click();
     assert.match(await page.locator('#selected-list').innerText(),/Miners Falls/);
     await page.locator('#clear-list').click();
