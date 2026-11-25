@@ -70,6 +70,18 @@ async function run(){
    need(await page.locator('#ski-resort-carousel .is-selected').getAttribute('data-slug')===first,width+' A-B-A selection is reversible');
    await page.locator('#ski-point-map .ski-dot[data-slug="mt-bohemia"]').click();
    need(await page.locator('#ski-resort-carousel .is-selected').getAttribute('data-slug')==='mt-bohemia',width+' selecting map pin opens the correct card');
+   // Horizontal scrolling must reach every trailing card, not just the arrows.
+   const cardSlugs=await page.locator('#ski-resort-carousel .ski-carousel-card').evaluateAll(cards=>cards.map(card=>card.dataset.slug));
+   for(const slug of cardSlugs.slice(-3)){
+    await page.locator('#ski-resort-carousel').evaluate((track,slug)=>{
+     const card=Array.from(track.querySelectorAll('.ski-carousel-card')).find(card=>card.dataset.slug===slug);
+     const origin=track.getBoundingClientRect().left+parseFloat(getComputedStyle(track).scrollPaddingLeft);
+     track.scrollTo({left:track.scrollLeft+card.getBoundingClientRect().left-origin,behavior:'instant'});
+    },slug);
+    await page.waitForFunction(slug=>document.querySelector('#ski-resort-carousel .is-selected')?.dataset.slug===slug,slug,{timeout:5000});
+    need(await page.locator('#ski-point-map .ski-dot.selected').getAttribute('data-slug')===slug,width+' trailing scroll selects matching pin '+slug);
+   }
+   need(await page.locator('#ski-carousel-next').isDisabled(),width+' last card disables next');
    await page.locator('#ski-day').selectOption('sunday');
    need((await page.locator('#ski-resort-carousel .is-selected').innerText()).includes('Sunday'),width+' carousel switches the NWS day');
    await page.locator('#ski-day').selectOption('saturday');

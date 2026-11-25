@@ -193,8 +193,10 @@ html:not(.ski-js) .ski-operations .js-only{display:none}
 .ski-carousel-arrows button{background:#fff;color:#17455d;border:1px solid #94b2c1;border-radius:7px;padding:7px 12px;min-height:44px;font:700 .84rem system-ui;cursor:pointer}
 .ski-carousel-arrows button:disabled{opacity:.45;cursor:not-allowed}
 .ski-carousel-arrows button:focus-visible,.ski-card-select:focus-visible,.ski-resort-carousel:focus-visible{outline:3px solid #cf7919;outline-offset:3px}
-.ski-resort-carousel{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:4px;padding:4px 4px 15px;overscroll-behavior-x:contain;min-width:0;touch-action:pan-x pan-y}
-.ski-carousel-card{flex:0 0 clamp(255px,32%,365px);scroll-snap-align:start;min-width:0;background:#fff;border:1.5px solid #c9dce5;border-radius:11px;padding:13px;display:flex;flex-direction:column;gap:7px}
+.ski-resort-carousel{--ski-card-basis:clamp(255px,32%,365px);display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-padding-inline:4px;padding:4px 4px 15px;overscroll-behavior-x:contain;min-width:0;touch-action:pan-x pan-y}
+.ski-carousel-card{flex:0 0 var(--ski-card-basis);scroll-snap-align:start;min-width:0;background:#fff;border:1.5px solid #c9dce5;border-radius:11px;padding:13px;display:flex;flex-direction:column;gap:7px}
+/* Allow every trailing card to reach the normal scroll-snap origin. */
+.ski-resort-carousel:has(> .ski-carousel-card:nth-child(2))::after{content:"";flex:0 0 max(0px,calc(100% - var(--ski-card-basis) - 12px));pointer-events:none}
 .ski-carousel-card.is-selected{border-color:#0e657f;box-shadow:0 0 0 2px rgba(14,101,127,.14)}
 .ski-carousel-card .ski-card-select{font:800 1.02rem/1.3 system-ui;border:0;background:transparent;color:#16455d;text-align:left;text-decoration:underline;text-decoration-color:transparent;cursor:pointer;padding:4px 0}
 .ski-carousel-card .ski-card-select:hover{text-decoration-color:currentColor}
@@ -216,5 +218,5 @@ html:not(.ski-js) .ski-operations .js-only{display:none}
 .ski-method summary,.ski-advanced-comparison>summary,.ski-directory>summary,.photo-reference-panel>summary{font-weight:760;color:#16465f;cursor:pointer;min-height:44px;padding:7px 0}
 .ski-advanced-comparison>summary,.ski-directory>summary,.photo-reference-panel>summary{font-size:1.04rem}
 html:not(.ski-js) .ski-map-explorer{display:none}
-@media(max-width:650px){.ski-map-explorer .michigan-point-svg{max-height:320px}.ski-carousel-heading{align-items:flex-start;flex-wrap:wrap}.ski-carousel-arrows{width:100%;justify-content:space-between}.ski-carousel-card{flex-basis:min(85vw,325px)}}
+@media(max-width:650px){.ski-map-explorer .michigan-point-svg{max-height:320px}.ski-carousel-heading{align-items:flex-start;flex-wrap:wrap}.ski-carousel-arrows{width:100%;justify-content:space-between}.ski-resort-carousel{--ski-card-basis:min(85vw,325px)}}
 @media(prefers-reduced-motion:reduce){.ski-resort-carousel{scroll-behavior:auto}}
