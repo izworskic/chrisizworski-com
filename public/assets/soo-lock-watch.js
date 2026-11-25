@@ -484,7 +484,8 @@
     if(!state.saved)return;
     // A clear in another tab must not be undone by a background refresh.
     var current=readMemory();
-    if(!current.ok||!current.value){state.saved=null;state.returnCheck=null;state.memoryMessage=current.ok?'Saved choices cleared.':'Device storage is unavailable.';renderMemory();return;}
+    if(!current.ok){state.memoryMessage='Device storage is unavailable. Your saved choices may still be on this device.';renderMemory();return;}
+    if(!current.value){state.saved=null;state.returnCheck=null;state.memoryMessage='Saved choices cleared.';renderMemory();return;}
     var record=current.value;
     if(preferences)record={...record,prefs:prefsNow(),savedAt:Date.now()};
     // Do not overwrite a newer check saved by another tab.
@@ -494,8 +495,8 @@
     if(!record){state.saved=null;renderMemory();return;}
     if(JSON.stringify(record)===JSON.stringify(current.value)){state.saved=record;return;}
     var result=writeMemory(record);
-    state.saved=result.ok?result.value:null;
-    if(!result.ok){state.returnCheck=null;state.memoryMessage='Could not update saved choices on this device.';}
+    state.saved=result.ok?result.value:current.value;
+    if(!result.ok){state.returnCheck=null;state.memoryMessage='Could not update saved choices on this device. You can still try to forget them.';}
     renderMemory();
   }
   function setupMemory() {
@@ -530,6 +531,7 @@
       if(e.key!==memory.KEY&&e.key!==null)return;
       if(!state.saved)return;
       var latest=readMemory();
+      if(!latest.ok){state.memoryMessage='Device storage is unavailable. Your saved choices may still be on this device.';renderMemory();return;}
       if(!latest.value){
         state.saved=null;state.returnCheck=null;state.memoryMessage='Saved choices cleared in another tab.';
         state.changes=changing.step(changing.initial(),state.failed?null:changing.snapshot(state.data,Date.now(),core,nearMotion),state.failed,Date.now());
@@ -859,6 +861,7 @@
       state.changes=changing.step(prior,next,state.failed,now);
       if (state.changes!==prior) state.previousBest=state.plan && state.plan.best ? state.plan.best.id : null;
       noteReturn(next);
+      if(state.saved&&state.failed)state.memoryMessage='Saved visit choices are available, but live reports are unavailable. Remembered reports are not used as current conditions.';
       if(state.saved&&state.changes!==prior)persistMemory(false);
     }
     update();
