@@ -34,9 +34,11 @@ const add=(name,points,ok,detail='')=>checks.push({name,points,earned:ok?points:
 add('Statewide region roster is real and grounded',5,
   REGION_KEYS.every((k)=>regionsConfig.includes(`key: '${k}'`))&&regionsConfig.includes('OUT_OF_SCOPE_NOTE')&&regionsConfig.includes('legacyCorridor: true')
 );
-add('Statewide index is lightweight and decision-first',6,
+add('Statewide index is lightweight and map-first (owner-approved)',6,
   ['id="state-map"','id="region-list"','map-legend'].every(x=>indexPage.includes(x))
-  &&indexPage.indexOf('id="region-list"')<indexPage.indexOf('id="state-map"')
+  &&/<p class="lede">[\s\S]*?<\/p>\s*<section class="panel" aria-labelledby="map-title">/.test(indexPage)
+  &&(indexPage.match(/id="state-map"/g)||[]).length===1
+  &&['sled-watchlist','snow-town-query','compare-form','region-list'].every(id=>indexPage.indexOf('id="'+id+'"')>indexPage.indexOf('id="state-map"'))
   &&(indexJs.includes("fetch('/api/snowmobile')")||indexJs.includes("fetch('/api/snowmobile',"))&&buildRegion.includes('function regionSummary')&&!api.includes('regions:regionResults')
 );
 add('Two-mode API: statewide summary vs single-region detail',6,

@@ -135,3 +135,63 @@ test('build-generated page embeds immutable source data and the actual overnight
  assert.ok(html.indexOf('id="ct-optimized"')<html.indexOf('id="ten-days"'));
  assert.doesNotMatch(html,/adsbygoogle|pagead2\.googlesyndication/);
 });
+
+const experienceCatalog=JSON.parse(fs.readFileSync('data/circle-tour-traveler-stops.json','utf8')).stops;
+test('daily experience budget uses explicit time, conservative rounding, source order and unknown veto',()=>{
+ const settings={days:10,maxDrive:5,month:8,interests:['hiking','waterfalls'],pictured:true};
+ const result=optimizer.optimize(trace,stays,settings);
+ const pictured=result.days.find(d=>d.hasPicturedRocks);
+ const p=optimizer.experiencePlan(pictured,settings,experienceCatalog,8.5);
+ assert.equal(p.primary,'11');assert.equal(p.state,'REVIEW');
+ assert.equal(p.remainingMinutes,Math.floor((510-Math.ceil(pictured.rawDriveHours*60)-Math.ceil(pictured.borderReserveHours*60))/15)*15);
+ const unresolved=result.days.find(d=>d.incompleteParkApproach);
+ for(const hours of optimizer.DAY_WINDOWS){
+  const u=optimizer.experiencePlan(unresolved,settings,experienceCatalog,hours);
+  assert.equal(u.state,'ROAD_CHECK');assert.equal(u.remainingMinutes,null);assert.equal(u.primary,null);
+ }
+ const base={stops:['10','11'],rawDriveHours:5.5,borderReserveHours:0.75,withinCap:false,incompleteParkApproach:false};
+ assert.equal(optimizer.experiencePlan(base,settings,experienceCatalog,12).state,'DRIVE_LIMIT');
+ const short={...base,rawDriveHours:5,borderReserveHours:0.5,withinCap:true};
+ assert.equal(optimizer.experiencePlan(short,settings,experienceCatalog,6).state,'TRANSFER');
+ const winter=optimizer.experiencePlan(pictured,{...settings,month:1},experienceCatalog,12);
+ assert.equal(winter.state,'SEASONAL_CHECK');assert.equal(winter.primary,null);assert.equal(winter.seasonalCandidate,'11');
+ assert.equal(optimizer.experiencePlan(pictured,{...settings,interests:[],pictured:false},experienceCatalog,12).state,'NO_MATCH');
+ for(const invalid of [null,{}, {...pictured,rawDriveHours:NaN},{...pictured,borderReserveHours:-1},{...pictured,rawDriveHours:Infinity}]){
+  assert.equal(optimizer.experiencePlan(invalid,settings,experienceCatalog,8.5),null);
+ }
+ assert.equal(optimizer.experiencePlan(pictured,settings,experienceCatalog,99),null);
+ assert.equal(optimizer.experiencePlan(pictured,settings,null,8.5),null);
+ assert.equal(optimizer.experiencePlan(pictured,null,experienceCatalog,8.5),null);
+});
+test('daily experience properties across 72 source-route configurations and 3072 budgets',()=>{
+ let cases=0;
+ for(const days of [7,10,15])for(const maxDrive of [4,5,6,8])for(const month of [1,8])for(const prefs of [
+  {interests:['hiking','waterfalls'],pictured:true},{interests:['shipwatch'],pictured:false},{interests:[],pictured:false}]){
+  const settings={days,maxDrive,month,...prefs};
+  const route=optimizer.optimize(trace,stays,settings);
+  for(const day of route.days){
+   let prior=-1;
+   for(const hours of optimizer.DAY_WINDOWS){
+    const p=optimizer.experiencePlan(day,settings,experienceCatalog,hours);cases++;
+    assert.ok(p);assert.equal(p.dayMinutes,hours*60);
+    assert.ok(p.driveMinutes>=day.rawDriveHours*60&&p.borderMinutes>=day.borderReserveHours*60);
+    const ids=day.stops.slice(1);
+    assert.ok(p.deferred.every(id=>ids.includes(id)&&experienceCatalog[id]));
+    if(day.incompleteParkApproach){
+     assert.equal(p.remainingMinutes,null);assert.equal(p.state,'ROAD_CHECK');assert.equal(p.primary,null);
+    }else{
+     assert.ok(p.remainingMinutes>=prior&&p.remainingMinutes%15===0);
+     assert.ok(p.remainingMinutes>=0&&p.remainingMinutes<=Math.max(0,p.dayMinutes-p.driveMinutes-p.borderMinutes));
+     prior=p.remainingMinutes;
+    }
+    if(!day.withinCap)assert.equal(p.primary,null);
+    if(p.primary){
+     assert.equal(p.state,'REVIEW');assert.ok(p.remainingMinutes>=60);
+     assert.ok(ids.includes(p.primary)&&!p.deferred.includes(p.primary));
+     assert.ok((p.primary==='11'&&settings.pictured)||experienceCatalog[p.primary].interests.some(x=>settings.interests.includes(x)));
+    }
+   }
+  }
+ }
+ assert.equal(cases,3072);
+});

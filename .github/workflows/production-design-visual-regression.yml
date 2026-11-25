@@ -1,0 +1,77 @@
+name: Production design visual regression
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'design-systems/production-design-pilot/**'
+      - 'public/assets/seaway-vessel-icons.js'
+      - 'public/assets/soo-vessel-icons.css'
+      - '.github/workflows/production-design-visual-regression.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-design-visual-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      TZ: UTC
+      LANG: C.UTF-8
+      LC_ALL: C.UTF-8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Install isolated QA runtime
+        run: |
+          python3 -m venv "$RUNNER_TEMP/design-visual-venv"
+          "$RUNNER_TEMP/design-visual-venv/bin/pip" install --disable-pip-version-check playwright==1.57.0 Pillow==11.3.0
+          browser="$(command -v google-chrome || command -v chromium-browser || command -v chromium)"
+          test -n "$browser"
+          echo "CHROMIUM_PATH=$browser" >> "$GITHUB_ENV"
+          "$browser" --version
+      - name: Prove comparator catches regressions
+        run: '"$RUNNER_TEMP/design-visual-venv/bin/python" design-systems/production-design-pilot/compare_visual.py --self-test'
+      - name: Compare all seven reviewed states on the same runner
+        shell: bash
+        run: |
+          set -euo pipefail
+          lab=design-systems/production-design-pilot
+          py="$RUNNER_TEMP/design-visual-venv/bin/python"
+          out="$GITHUB_WORKSPACE/artifacts/production-design-regression"
+          mkdir -p "$out/reference" "$out/candidate" "$out/diffs"
+          baseline="$("$py" -c 'import json; print(json.load(open("design-systems/production-design-pilot/visual-reference.json"))["reviewedSource"])')"
+          [[ "$baseline" =~ ^[0-9a-f]{40}$ ]]
+          # Fail closed if the reviewed source is no longer in this history.
+          git merge-base --is-ancestor "$baseline" HEAD
+          work="$(mktemp -d /tmp/pdv.XXXXXX)"
+          trap 'rm -rf -- "$work"' EXIT
+          mkdir -p "$work/source" "$work/ref" "$work/cand"
+          git archive "$baseline" "$lab" public/assets/seaway-vessel-icons.js public/assets/soo-vessel-icons.css | tar -x -C "$work/source"
+          {
+            echo "Reference: $baseline"
+            echo "Candidate: $(git rev-parse HEAD)"
+            "$CHROMIUM_PATH" --version
+            "$py" --version
+          } > "$out/environment.txt"
+          TMPDIR="$work/ref" "$py" "$work/source/$lab/verify.py"
+          cp "$work/ref"/production-design-pilot-*/lab-*.png "$out/reference/"
+          TMPDIR="$work/cand" "$py" "$GITHUB_WORKSPACE/$lab/verify.py"
+          cp "$work/cand"/production-design-pilot-*/lab-*.png "$out/candidate/"
+          "$py" "$lab/compare_visual.py" --manifest "$lab/visual-reference.json" --reference "$out/reference" --candidate "$out/candidate" --output "$out/diffs"
+      - name: Retain reference, candidate and changed-pixel evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-design-visual-regression
+          path: artifacts/production-design-regression/
+          retention-days: 7
+          if-no-files-found: warn

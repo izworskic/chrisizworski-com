@@ -45,8 +45,8 @@ module.exports = async function handler(req, res) {
       const now = Date.now();
       data.vessels = data.vessels.filter(vessel => {
         const seen = Date.parse(vessel && vessel.seen || '');
-        const speed = Number(vessel && vessel.speedKnots);
-        return Number.isFinite(seen) && now - seen <= DETROIT_SIGNAL_MAX_AGE_MS && Number.isFinite(speed) && speed > 0.5;
+        const speed = vessel && vessel.speedKnots;
+        return Number.isFinite(seen) && now >= seen && now - seen <= DETROIT_SIGNAL_MAX_AGE_MS && Number.isFinite(speed) && speed > 0.5;
       });
       data.detroitSignal = {
         movingOnly: true,

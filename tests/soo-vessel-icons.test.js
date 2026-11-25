@@ -56,10 +56,10 @@ test('reported AIS type and length drive distinct, proportionate outlines; unkno
 });
 
 test('Soo page loads icon module before renderer; legend and accessible interactions remain', () => {
-  const icon = page.indexOf('/assets/seaway-vessel-icons.js?v=20261108a');
-  const map = page.indexOf('/assets/soo-ais.js?v=20261122f');
+  const icon = page.search(/<script defer src="\/assets\/seaway-vessel-icons\.js\?v=\d{8}[a-z]*"><\/script>/);
+  const map = page.search(/<script defer src="\/assets\/soo-ais\.js\?v=\d{8}[a-z]*"><\/script>/);
   assert.ok(icon > -1 && map > icon);
-  assert.match(page, /\/assets\/soo-vessel-icons\.css\?v=20261122/);
+  assert.match(page, /<link rel="stylesheet" href="\/assets\/soo-vessel-icons\.css\?v=\d{8}[a-z]*">/);
   assert.match(page, /id="sooVesselMap"/);
   assert.match(page, /id="sooVesselLegend"/);
   assert.match(page, /Reported speed and observation age/);

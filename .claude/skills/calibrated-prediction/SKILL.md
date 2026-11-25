@@ -12,7 +12,7 @@ Proposed first pilot: Soo Locks arrival windows. This is an engineering workflow
 - Define observed target, forecast issue time, horizon, permissible predictors and decision cost. Locate independent outcome history with revision policy and sufficient coverage. Never use future information or model-generated labels as ground truth.
 - Compare current method with persistence, seasonal naive or climatology as appropriate, then a small classical challenger using StatsForecast; consider MAPIE intervals only where its assumptions and calibration design fit. River is optional for offline replay of incremental methods, not a mandate for continuous training.
 - Split by time and, where needed, site/vessel/event; keep tuning and calibration separate from final holdout. Replay the data actually available at issue time, include missingness and seasonal regime shifts.
-- Report horizon-specific MAE/bias or proper probability score, sample count, nominal versus empirical interval coverage and width, false reassurance risk. For small samples, decline probability claims; an interval is not a guarantee. Use hf-forecast-benchmark only when an ML challenger is justified.
+- Report horizon-specific MAE/bias or proper probability score, sample count, nominal versus empirical interval coverage and width, false reassurance risk. For small samples, decline probability claims; an interval is not a guarantee. Use ml-justification only when an ML challenger is justified.
 - Ship only a measured improvement over current and naive baselines with a documented fallback and uncertainty UI. No live online learning, new model API or paid inference by default.
 
 ## Integration and release boundary

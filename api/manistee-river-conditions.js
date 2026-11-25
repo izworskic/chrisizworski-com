@@ -3,6 +3,7 @@ const USGS_IV='https://waterservices.usgs.gov/nwis/iv/';
 const USGS_STAT='https://waterservices.usgs.gov/nwis/stat/';
 
 function finite(value){
+  if(value===null||value===undefined||typeof value==="boolean"||String(value).trim()==="")return null;
   const n=Number(value);
   return Number.isFinite(n)?n:null;
 }
@@ -13,19 +14,21 @@ function parameterCode(series={}){
 function siteCode(series={}){
   return series.sourceInfo?.siteCode?.[0]?.value||null;
 }
-function latest(series={}){
+function latest(series={},now=Date.now()){
   const values=series.values?.[0]?.value||[];
+  let best=null;
   for(let i=values.length-1;i>=0;i--){
     const point=values[i];
     const value=finite(point?.value);
-    if(value!==null&&value!==-999999)return {value,dateTime:point.dateTime||null,qualifiers:point.qualifiers||[]};
+    const t=Date.parse(point?.dateTime||"");
+    if(value!==null&&value!==-999999&&Number.isFinite(t)&&t<=now&&now-t<=180*60000&&(!best||t>Date.parse(best.dateTime)))best={value,dateTime:point.dateTime,qualifiers:point.qualifiers||[]};
   }
-  return null;
+  return best;
 }
 function emptyGauge(id){
   return {id,name:id,latitude:null,longitude:null,measured_at:null,discharge_cfs:null,water_temp_c:null,water_temp_f:null,gage_height_ft:null,turbidity_fnu:null,dissolved_oxygen_mgl:null};
 }
-function normalize(payload){
+function normalize(payload,now=Date.now()){
   const bySite={};
   for(const series of payload?.value?.timeSeries||[]){
     const id=siteCode(series),code=parameterCode(series);
@@ -34,9 +37,9 @@ function normalize(payload){
       const geo=series.sourceInfo?.geoLocation?.geogLocation||{};
       bySite[id]={...emptyGauge(id),name:series.sourceInfo?.siteName||id,latitude:finite(geo.latitude),longitude:finite(geo.longitude)};
     }
-    const point=latest(series);
+    const point=latest(series,now);
     if(!point||point.value===null)continue;
-    if(!bySite[id].measured_at||String(point.dateTime)>String(bySite[id].measured_at))bySite[id].measured_at=point.dateTime;
+    if(!bySite[id].measured_at||Date.parse(point.dateTime)<Date.parse(bySite[id].measured_at))bySite[id].measured_at=point.dateTime;
     if(code==='00060')bySite[id].discharge_cfs=point.value;
     if(code==='00010'){
       bySite[id].water_temp_c=point.value;
@@ -122,11 +125,11 @@ module.exports=async function handler(req,res){
     if(!response.ok)throw new Error(`USGS returned ${response.status}`);
     const payload=await response.json();
     const statsBySite=new Map(statsList.map(s=>[s.gaugeId,s]));
-    const gauges=normalize(payload).map(g=>{
+    const now=Date.now();
+    const gauges=normalize(payload,now).map(g=>{
       const stats=statsBySite.get(g.id)||{};
       return {...g,seasonal_stats:stats,temperature_context:tempContext(g.water_temp_f),flow_context:flowContext(g.discharge_cfs,stats)};
     });
-    const now=Date.now();
     for(const gauge of gauges){
       const t=Date.parse(gauge.measured_at||'');
       gauge.age_minutes=Number.isFinite(t)?Math.round((now-t)/60000):null;

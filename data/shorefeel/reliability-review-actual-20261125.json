@@ -1,0 +1,628 @@
+{
+  "status": "RELIABILITY_CANDIDATES_REVIEW_ONLY",
+  "cohortSha256": "764b43ea2a6b14eed9b69af1b35ef5e632b74447b77eb9d18ee3b50dba8d32d9",
+  "weights": {
+    "persistence": 0,
+    "conservative": 0.25,
+    "equalBlend": 0.5,
+    "original": 1
+  },
+  "leads": {
+    "24": {
+      "expected": 80,
+      "matched": 54,
+      "matchedFraction": 0.675,
+      "methods": {
+        "persistence": {
+          "weight": 0,
+          "n": 54,
+          "maeF": 2.2033333333333345,
+          "biasF": 0.9033333333333329,
+          "maxAbsErrorF": 21.060000000000002,
+          "heuristicCoverage": 0.7962962962962963,
+          "blocks": [
+            {
+              "day": "2026-07-03",
+              "n": 5,
+              "maeF": 0.7560000000000031,
+              "biasF": -0.5400000000000025,
+              "maxAbsErrorF": 1.6200000000000039,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-07-09",
+              "n": 5,
+              "maeF": 0.5759999999999991,
+              "biasF": -0.43199999999999966,
+              "maxAbsErrorF": 1.2599999999999987,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-07-21",
+              "n": 8,
+              "maeF": 3.8474999999999993,
+              "biasF": 3.172499999999999,
+              "maxAbsErrorF": 19.439999999999998,
+              "heuristicCoverage": 0.5
+            },
+            {
+              "day": "2026-07-27",
+              "n": 8,
+              "maeF": 4.86,
+              "biasF": 4.59,
+              "maxAbsErrorF": 21.060000000000002,
+              "heuristicCoverage": 0.625
+            },
+            {
+              "day": "2026-08-03",
+              "n": 7,
+              "maeF": 3.394285714285715,
+              "biasF": -3.394285714285715,
+              "maxAbsErrorF": 14.040000000000001,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-08-09",
+              "n": 7,
+              "maeF": 0.9771428571428563,
+              "biasF": 0.8228571428571418,
+              "maxAbsErrorF": 2.8799999999999963,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-08-21",
+              "n": 7,
+              "maeF": 0.8228571428571427,
+              "biasF": 0.8228571428571427,
+              "maxAbsErrorF": 1.8,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-27",
+              "n": 7,
+              "maeF": 0.9000000000000009,
+              "biasF": 0.5400000000000013,
+              "maxAbsErrorF": 3.420000000000004,
+              "heuristicCoverage": 0.8571428571428571
+            }
+          ]
+        },
+        "conservative": {
+          "weight": 0.25,
+          "n": 54,
+          "maeF": 1.9590800476074222,
+          "biasF": 0.8108811728159583,
+          "maxAbsErrorF": 17.88994737625122,
+          "heuristicCoverage": 0.7592592592592593,
+          "blocks": [
+            {
+              "day": "2026-07-03",
+              "n": 5,
+              "maeF": 1.133129487991336,
+              "biasF": -0.010843591690066035,
+              "maxAbsErrorF": 2.8057147407531753,
+              "heuristicCoverage": 0.8
+            },
+            {
+              "day": "2026-07-09",
+              "n": 5,
+              "maeF": 0.5899273681640612,
+              "biasF": -0.2369078750610349,
+              "maxAbsErrorF": 1.2296279525756824,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-07-21",
+              "n": 8,
+              "maeF": 2.9169591021537773,
+              "biasF": 2.911290714740752,
+              "maxAbsErrorF": 16.258460226058958,
+              "heuristicCoverage": 0.625
+            },
+            {
+              "day": "2026-07-27",
+              "n": 8,
+              "maeF": 4.504045221805573,
+              "biasF": 3.949875690937042,
+              "maxAbsErrorF": 17.88994737625122,
+              "heuristicCoverage": 0.625
+            },
+            {
+              "day": "2026-08-03",
+              "n": 7,
+              "maeF": 2.9856431089128774,
+              "biasF": -2.9856431089128774,
+              "maxAbsErrorF": 12.495508518218996,
+              "heuristicCoverage": 0.42857142857142855
+            },
+            {
+              "day": "2026-08-09",
+              "n": 7,
+              "maeF": 0.8746118463788706,
+              "biasF": 0.6344088772365014,
+              "maxAbsErrorF": 2.7819015312194786,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-08-21",
+              "n": 7,
+              "maeF": 0.8170240647452232,
+              "biasF": 0.45604534966605037,
+              "maxAbsErrorF": 1.4361628532409667,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-27",
+              "n": 7,
+              "maeF": 0.7237215082986027,
+              "biasF": 0.4861902277810247,
+              "maxAbsErrorF": 2.2097847175598186,
+              "heuristicCoverage": 0.8571428571428571
+            }
+          ]
+        },
+        "equalBlend": {
+          "weight": 0.5,
+          "n": 54,
+          "maeF": 1.9805529212951667,
+          "biasF": 0.718429012298583,
+          "maxAbsErrorF": 14.719894752502444,
+          "heuristicCoverage": 0.7407407407407407,
+          "blocks": [
+            {
+              "day": "2026-07-03",
+              "n": 5,
+              "maeF": 1.5393884010314953,
+              "biasF": 0.5183128166198705,
+              "maxAbsErrorF": 5.071429481506349,
+              "heuristicCoverage": 0.8
+            },
+            {
+              "day": "2026-07-09",
+              "n": 5,
+              "maeF": 0.8198547363281238,
+              "biasF": -0.04181575012207004,
+              "maxAbsErrorF": 1.1992559051513658,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-07-21",
+              "n": 8,
+              "maeF": 2.7514182043075555,
+              "biasF": 2.6500814294815056,
+              "maxAbsErrorF": 13.076920452117918,
+              "heuristicCoverage": 0.5
+            },
+            {
+              "day": "2026-07-27",
+              "n": 8,
+              "maeF": 4.148090443611147,
+              "biasF": 3.309751381874085,
+              "maxAbsErrorF": 14.719894752502444,
+              "heuristicCoverage": 0.625
+            },
+            {
+              "day": "2026-08-03",
+              "n": 7,
+              "maeF": 2.997641062055316,
+              "biasF": -2.5770005035400394,
+              "maxAbsErrorF": 10.951017036437989,
+              "heuristicCoverage": 0.42857142857142855
+            },
+            {
+              "day": "2026-08-09",
+              "n": 7,
+              "maeF": 0.8316860798427029,
+              "biasF": 0.4459606116158611,
+              "maxAbsErrorF": 2.6838030624389613,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-08-21",
+              "n": 7,
+              "maeF": 1.2285973957606733,
+              "biasF": 0.08923355647495797,
+              "maxAbsErrorF": 2.6196470260620117,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-08-27",
+              "n": 7,
+              "maeF": 0.650300159454347,
+              "biasF": 0.4323804555620479,
+              "maxAbsErrorF": 1.9023657989501992,
+              "heuristicCoverage": 1
+            }
+          ]
+        },
+        "original": {
+          "weight": 1,
+          "n": 54,
+          "maeF": 2.2031295903523764,
+          "biasF": 0.5335246912638345,
+          "maxAbsErrorF": 9.602858963012697,
+          "heuristicCoverage": 0.6481481481481481,
+          "blocks": [
+            {
+              "day": "2026-07-03",
+              "n": 5,
+              "maeF": 2.466776802062989,
+              "biasF": 1.5766256332397437,
+              "maxAbsErrorF": 9.602858963012697,
+              "heuristicCoverage": 0.8
+            },
+            {
+              "day": "2026-07-09",
+              "n": 5,
+              "maeF": 1.2797094726562488,
+              "biasF": 0.3483684997558597,
+              "maxAbsErrorF": 2.7241884613037124,
+              "heuristicCoverage": 0.8
+            },
+            {
+              "day": "2026-07-21",
+              "n": 8,
+              "maeF": 2.6902574443817135,
+              "biasF": 2.1276628589630118,
+              "maxAbsErrorF": 8.405775260925292,
+              "heuristicCoverage": 0.75
+            },
+            {
+              "day": "2026-07-27",
+              "n": 8,
+              "maeF": 3.436180887222291,
+              "biasF": 2.029502763748169,
+              "maxAbsErrorF": 9.238379287719727,
+              "heuristicCoverage": 0.375
+            },
+            {
+              "day": "2026-08-03",
+              "n": 7,
+              "maeF": 3.265023814610072,
+              "biasF": -1.7597152927943647,
+              "maxAbsErrorF": 7.862034072875978,
+              "heuristicCoverage": 0.2857142857142857
+            },
+            {
+              "day": "2026-08-09",
+              "n": 7,
+              "maeF": 0.9433721596854066,
+              "biasF": 0.06906408037458038,
+              "maxAbsErrorF": 2.487606124877926,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-08-21",
+              "n": 7,
+              "maeF": 2.2000519343784886,
+              "biasF": -0.6443900299072265,
+              "maxAbsErrorF": 6.139294052124023,
+              "heuristicCoverage": 0.5714285714285714
+            },
+            {
+              "day": "2026-08-27",
+              "n": 7,
+              "maeF": 0.9094177845546179,
+              "biasF": 0.32476091112409444,
+              "maxAbsErrorF": 2.1847315979003943,
+              "heuristicCoverage": 0.8571428571428571
+            }
+          ]
+        }
+      },
+      "missing": 26
+    },
+    "48": {
+      "expected": 80,
+      "matched": 51,
+      "matchedFraction": 0.6375,
+      "methods": {
+        "persistence": {
+          "weight": 0,
+          "n": 51,
+          "maeF": 4.125882352941176,
+          "biasF": 0.5752941176470587,
+          "maxAbsErrorF": 20.879999999999995,
+          "heuristicCoverage": 0.5490196078431373,
+          "blocks": [
+            {
+              "day": "2026-07-03",
+              "n": 5,
+              "maeF": 4.0680000000000005,
+              "biasF": -4.0680000000000005,
+              "maxAbsErrorF": 9.179999999999996,
+              "heuristicCoverage": 0.2
+            },
+            {
+              "day": "2026-07-09",
+              "n": 5,
+              "maeF": 2.5919999999999996,
+              "biasF": -0.43199999999999966,
+              "maxAbsErrorF": 3.6,
+              "heuristicCoverage": 0.8
+            },
+            {
+              "day": "2026-07-21",
+              "n": 8,
+              "maeF": 10.2375,
+              "biasF": 9.3825,
+              "maxAbsErrorF": 20.879999999999995,
+              "heuristicCoverage": 0.25
+            },
+            {
+              "day": "2026-07-27",
+              "n": 7,
+              "maeF": 3.111428571428572,
+              "biasF": 3.111428571428572,
+              "maxAbsErrorF": 8.640000000000002,
+              "heuristicCoverage": 0.5714285714285714
+            },
+            {
+              "day": "2026-08-03",
+              "n": 7,
+              "maeF": 6.814285714285715,
+              "biasF": -6.814285714285715,
+              "maxAbsErrorF": 14.040000000000001,
+              "heuristicCoverage": 0.14285714285714285
+            },
+            {
+              "day": "2026-08-09",
+              "n": 7,
+              "maeF": 1.4657142857142862,
+              "biasF": -1.0542857142857147,
+              "maxAbsErrorF": 3.6,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-08-21",
+              "n": 5,
+              "maeF": 1.0799999999999998,
+              "biasF": 1.0799999999999998,
+              "maxAbsErrorF": 1.4400000000000013,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-27",
+              "n": 7,
+              "maeF": 1.4399999999999997,
+              "biasF": 0.6685714285714282,
+              "maxAbsErrorF": 5.4,
+              "heuristicCoverage": 0.8571428571428571
+            }
+          ]
+        },
+        "conservative": {
+          "weight": 0.25,
+          "n": 51,
+          "maeF": 3.289604380551508,
+          "biasF": 0.564770391688627,
+          "maxAbsErrorF": 16.38734710693359,
+          "heuristicCoverage": 0.6666666666666666,
+          "blocks": [
+            {
+              "day": "2026-07-03",
+              "n": 5,
+              "maeF": 3.6429309825897223,
+              "biasF": -3.6429309825897223,
+              "maxAbsErrorF": 8.365475349426266,
+              "heuristicCoverage": 0.4
+            },
+            {
+              "day": "2026-07-09",
+              "n": 5,
+              "maeF": 1.9136720008850094,
+              "biasF": -0.5100587196350095,
+              "maxAbsErrorF": 2.7790740966796874,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-07-21",
+              "n": 8,
+              "maeF": 8.149876213073728,
+              "biasF": 7.946178681850431,
+              "maxAbsErrorF": 16.38734710693359,
+              "heuristicCoverage": 0.375
+            },
+            {
+              "day": "2026-07-27",
+              "n": 7,
+              "maeF": 2.638255756923131,
+              "biasF": 2.638255756923131,
+              "maxAbsErrorF": 8.102935066223147,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-08-03",
+              "n": 7,
+              "maeF": 4.76654064314706,
+              "biasF": -4.76654064314706,
+              "maxAbsErrorF": 11.083095016479493,
+              "heuristicCoverage": 0.42857142857142855
+            },
+            {
+              "day": "2026-08-09",
+              "n": 7,
+              "maeF": 1.5175066076006214,
+              "biasF": -1.0580653299604148,
+              "maxAbsErrorF": 3.752852439880371,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-08-21",
+              "n": 5,
+              "maeF": 0.7550332031250006,
+              "biasF": 0.7209781265258789,
+              "maxAbsErrorF": 1.4274567031860363,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-27",
+              "n": 7,
+              "maeF": 1.222358816691807,
+              "biasF": 0.6711957018715989,
+              "maxAbsErrorF": 4.621440124511719,
+              "heuristicCoverage": 0.8571428571428571
+            }
+          ]
+        },
+        "equalBlend": {
+          "weight": 0.5,
+          "n": 51,
+          "maeF": 2.708859379712272,
+          "biasF": 0.5542466657301957,
+          "maxAbsErrorF": 11.894694213867183,
+          "heuristicCoverage": 0.7058823529411765,
+          "blocks": [
+            {
+              "day": "2026-07-03",
+              "n": 5,
+              "maeF": 3.2178619651794436,
+              "biasF": -3.2178619651794436,
+              "maxAbsErrorF": 7.550950698852535,
+              "heuristicCoverage": 0.6
+            },
+            {
+              "day": "2026-07-09",
+              "n": 5,
+              "maeF": 1.3713767166137694,
+              "biasF": -0.5881174392700192,
+              "maxAbsErrorF": 2.6611835861206066,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-07-21",
+              "n": 8,
+              "maeF": 6.509857363700865,
+              "biasF": 6.509857363700865,
+              "maxAbsErrorF": 11.894694213867183,
+              "heuristicCoverage": 0.375
+            },
+            {
+              "day": "2026-07-27",
+              "n": 7,
+              "maeF": 2.211428865705217,
+              "biasF": 2.16508294241769,
+              "maxAbsErrorF": 7.565870132446292,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-08-03",
+              "n": 7,
+              "maeF": 3.5066185406276174,
+              "biasF": -2.7187955720084056,
+              "maxAbsErrorF": 8.126190032958984,
+              "heuristicCoverage": 0.42857142857142855
+            },
+            {
+              "day": "2026-08-09",
+              "n": 7,
+              "maeF": 1.5692989294869568,
+              "biasF": -1.061844945635115,
+              "maxAbsErrorF": 3.905704879760742,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-08-21",
+              "n": 5,
+              "maeF": 0.9340664062500006,
+              "biasF": 0.36195625305175777,
+              "maxAbsErrorF": 1.430275382995607,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-27",
+              "n": 7,
+              "maeF": 1.0635742378234865,
+              "biasF": 0.6738199751717698,
+              "maxAbsErrorF": 3.8428802490234375,
+              "heuristicCoverage": 0.8571428571428571
+            }
+          ]
+        },
+        "original": {
+          "weight": 1,
+          "n": 51,
+          "maeF": 2.192401125290815,
+          "biasF": 0.5331992138133327,
+          "maxAbsErrorF": 11.814760780334478,
+          "heuristicCoverage": 0.7647058823529411,
+          "blocks": [
+            {
+              "day": "2026-07-03",
+              "n": 5,
+              "maeF": 2.385005561828613,
+              "biasF": -2.3677239303588875,
+              "maxAbsErrorF": 5.921901397705074,
+              "heuristicCoverage": 0.6
+            },
+            {
+              "day": "2026-07-09",
+              "n": 5,
+              "maeF": 1.7535320892333992,
+              "biasF": -0.7442348785400389,
+              "maxAbsErrorF": 2.9823671722412124,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-07-21",
+              "n": 8,
+              "maeF": 3.637214727401732,
+              "biasF": 3.637214727401732,
+              "maxAbsErrorF": 7.000839500427244,
+              "heuristicCoverage": 0.5
+            },
+            {
+              "day": "2026-07-27",
+              "n": 7,
+              "maeF": 2.0983806283133384,
+              "biasF": 1.2187373134068085,
+              "maxAbsErrorF": 6.491740264892581,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-08-03",
+              "n": 7,
+              "maeF": 3.070846105303083,
+              "biasF": 1.3766945702689033,
+              "maxAbsErrorF": 11.814760780334478,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-08-09",
+              "n": 7,
+              "maeF": 1.8125168609619149,
+              "biasF": -1.0694041769845148,
+              "maxAbsErrorF": 4.2114097595214846,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-08-21",
+              "n": 5,
+              "maeF": 1.3076597900390634,
+              "biasF": -0.35608749389648436,
+              "maxAbsErrorF": 4.120550765991212,
+              "heuristicCoverage": 0.8
+            },
+            {
+              "day": "2026-08-27",
+              "n": 7,
+              "maeF": 0.9445067432948526,
+              "biasF": 0.6790685217721116,
+              "maxAbsErrorF": 2.412326431274414,
+              "heuristicCoverage": 1
+            }
+          ]
+        }
+      },
+      "missing": 29
+    }
+  },
+  "canPromoteModel": false,
+  "limitations": [
+    "Eight fixed previously unscored 2026 warm-season dates, separated by six or seven days. Not a prospective holdout; receipt times and historical deployment not authenticated.",
+    "Equal paired rows for all methods. Fixed weights not trained or optimized. No automatic winner, no production change, no calibrated coverage claim.",
+    "The anchored change uses 04Z baseline and 06Z assumed decision. No cooling-watch scores because baseline and decision times differ.",
+    "No conclusion about cool-season or beach-level skill."
+  ],
+  "sourceSha256": "1bf3fe3ddcf4b0ed2c6c6f7eb284f90e89f9a6a15fe8b0a2abc3fb1ee44fc681"
+}
