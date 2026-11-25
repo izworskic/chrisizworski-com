@@ -28,15 +28,16 @@ def select(times,target,prior_only):
 
 def main():
     args=sys.argv[1:]
-    if args not in ([],["--early-october"],["--warm-season"]):raise SystemExit("Usage: shorefeel-near-time-recovery.py [--early-october|--warm-season]")
+    if args not in ([],["--early-october"],["--warm-season"],["--reliability"]):raise SystemExit("Usage: shorefeel-near-time-recovery.py [--early-october|--warm-season|--reliability]")
     early=args==["--early-october"]
     warm=args==["--warm-season"]
-    source=pathlib.Path("data/shorefeel/warm-season-actual-20261124.json") if warm else pathlib.Path("data/shorefeel/early-october-actual-20261124.json") if early else SOURCE
+    reliability=args==["--reliability"]
+    source=pathlib.Path("data/shorefeel/reliability-cohort-actual-20261125.json") if reliability else pathlib.Path("data/shorefeel/warm-season-actual-20261124.json") if warm else pathlib.Path("data/shorefeel/early-october-actual-20261124.json") if early else SOURCE
     original=json.loads(source.read_text())
-    assert original["status"]==("WARM_SEASON_ARCHIVE_COVERAGE_DIAGNOSTIC_NOT_HOLDOUT" if warm else "EARLY_OCTOBER_HISTORICAL_DIAGNOSTIC_NOT_HOLDOUT" if early else "MULTI_STATION_DECISION_TIME_DIAGNOSTIC_ONLY")
-    assert len(original["cohort"])==(80 if early or warm else 180)
+    assert original["status"]==("FROZEN_WARM_SEASON_RELIABILITY_REVIEW_ONLY" if reliability else "WARM_SEASON_ARCHIVE_COVERAGE_DIAGNOSTIC_NOT_HOLDOUT" if warm else "EARLY_OCTOBER_HISTORICAL_DIAGNOSTIC_NOT_HOLDOUT" if early else "MULTI_STATION_DECISION_TIME_DIAGNOSTIC_ONLY")
+    assert len(original["cohort"])==(160 if reliability else 80 if early or warm else 180)
     with tempfile.TemporaryDirectory() as tmp:
-        obs,meta=e.observations(pathlib.Path(tmp),(7,8,9) if warm else (10,) if early else (10,11))
+        obs,meta=e.observations(pathlib.Path(tmp),(7,8) if reliability else (7,8,9) if warm else (10,) if early else (10,11))
     rows=[p for c in original["cycles"] for p in c["pairs"]]
     recovered=[];unresolved=[];revision_checks=[]
     for p in rows:
@@ -80,5 +81,8 @@ def main():
     if warm:
         out["status"]="WARM_SEASON_NEAR_TIME_NOT_HOLDOUT"
         out["limitations"].append("July and August predate the original backtest and September overlaps it. This is retrospective sensitivity, not independent holdout.")
+    if reliability:
+        out["status"]="RELIABILITY_NEAR_TIME_REVIEW_ONLY"
+        out["limitations"].append("Separate timing sensitivity for fixed eight-date candidate comparison; no pooling into exact scores.")
     print(json.dumps(out,indent=2,allow_nan=False))
 if __name__=="__main__":main()
