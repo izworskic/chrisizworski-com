@@ -2,6 +2,8 @@ import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import vm from "node:vm";
+import { createRequire } from "node:module";
+const require=createRequire(import.meta.url);
 const html=readFileSync("public/freighters/index.html","utf8");
 const script=readFileSync("public/assets/freighters-hub.js","utf8");
 function run(source=script, mapReady=true) {
