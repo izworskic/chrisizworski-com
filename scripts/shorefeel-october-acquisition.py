@@ -8,6 +8,7 @@ import pathlib
 import tempfile
 import urllib.request
 import statistics
+import sys
 import netCDF4
 import numpy as np
 
@@ -45,7 +46,7 @@ def var(ds,*names):
         if n.lower() in lookup:return ds.variables[lookup[n.lower()]]
     raise ValueError("missing variable: "+str(names))
 
-def load_grid(path,lead):
+def load_grid(path,lead,cycle):
     with netCDF4.Dataset(path) as ds:
         t=var(ds,"temp")
         time=var(ds,"time")
@@ -56,7 +57,7 @@ def load_grid(path,lead):
         if str(t.units).lower().replace(" ","_") not in ("celsius","degree_celsius","degrees_celsius","degree_c","degrees_c","degc","c","degree_celcius"): raise ValueError("unexpected temperature units "+str(t.units))
         valid=netCDF4.num2date(time[0],time.units,getattr(time,"calendar","standard"),only_use_cftime_datetimes=False,only_use_python_datetimes=True)
         valid=valid.replace(tzinfo=UTC)
-        if valid!=CYCLE+dt.timedelta(hours=lead): raise ValueError("wrong valid time "+str(valid))
+        if valid!=cycle+dt.timedelta(hours=lead): raise ValueError("wrong valid time "+str(valid))
         dep=np.asarray(depths[:],dtype=float)
         if dep.shape!=(25,) or abs(dep[0])>0.001: raise ValueError("unverified surface depth "+str(dep[:3]))
         la=np.ma.filled(np.ma.asarray(lat[:],dtype=float),np.nan).squeeze()
@@ -93,29 +94,33 @@ def parse_obs(path):
     for when in conflicts:out.pop(when,None)
     return out
 
-def main():
-    result={"status":"CYCLE_RELATIVE_DIAGNOSTIC_ONLY","cohort":COHORT,"cohortSha256":digest(json.dumps(COHORT,sort_keys=True,separators=(",",":")).encode()),"models":{},"observations":{},"pairs":[],"canPromoteModel":False,"limitations":["One fixed 00Z cycle; no statistical inference or nearshore skill.","Station locations from repository catalog; historical deployment coordinates and sensor depth not independently authenticated.","Archive Last-Modified does not establish original forecast or observation publication availability. Cycle-relative diagnostic is not a prospective holdout."]}
-    catalog={s["id"]:s for s in json.loads(pathlib.Path("data/buoy-stations.json").read_text())}
+def load_observations(tmp):
+    obs={};meta={}
+    for station in STATIONS:
+        path=tmp/(station+".txt")
+        try:
+            meta[station]=fetch("https://www.ndbc.noaa.gov/data/l_stdmet/"+station+".txt",path,1024*1024)
+            obs[station]=parse_obs(path)
+            meta[station]["validWaterRows"]=len(obs[station])
+        except Exception as e:meta.setdefault(station,{}).update(error=str(e)[:300])
+    return obs,meta
+
+def evaluate_cycle(cycle,obs,obs_meta,catalog):
+    cohort=[{"station":s,"cycleAt":cycle.isoformat(),"leadHours":h} for s in STATIONS for h in (24,48)]
+    result={"status":"CYCLE_RELATIVE_DIAGNOSTIC_ONLY","cohort":cohort,"cohortSha256":digest(json.dumps(cohort,sort_keys=True,separators=(",",":")).encode()),"models":{},"observations":{},"pairs":[],"canPromoteModel":False,"limitations":["One fixed 00Z cycle; no statistical inference or nearshore skill.","Station locations from repository catalog; historical deployment coordinates and sensor depth not independently authenticated.","Archive Last-Modified does not establish original forecast or observation publication availability. Cycle-relative diagnostic is not a prospective holdout."]}
     with tempfile.TemporaryDirectory() as tmp:
-        tmp=pathlib.Path(tmp);grids={};obs={}
+        tmp=pathlib.Path(tmp);grids={}
         for h in LEADS:
-            name=f"lmhofs.t00z.20261020.regulargrid.f{h:03}.nc";path=tmp/name
+            name=f"lmhofs.t00z.{cycle:%Y%m%d}.regulargrid.f{h:03}.nc";path=tmp/name
             try:
-                meta=fetch(BASE+name,path,MAX_FILE)
+                meta=fetch(f"https://noaa-nos-ofs-pds.s3.amazonaws.com/lmhofs/netcdf/{cycle:%Y/%m/%d}/"+name,path,MAX_FILE)
                 result["models"][h]=meta
-                grids[h]=load_grid(path,h)
+                grids[h]=load_grid(path,h,cycle)
                 result["models"][h].update(grids[h][3])
             except Exception as e:result["models"].setdefault(h,{}).update(error=str(e)[:300])
             finally:path.unlink(missing_ok=True)
-        for s in STATIONS:
-            path=tmp/(s+".txt")
-            try:
-                result["observations"][s]=fetch("https://www.ndbc.noaa.gov/data/l_stdmet/"+s+".txt",path,1024*1024)
-                obs[s]=parse_obs(path)
-                result["observations"][s]["validWaterRows"]=len(obs[s])
-                result["observations"][s]["samplesC"]={str(h):obs[s].get(CYCLE+dt.timedelta(hours=h)) for h in LEADS}
-            except Exception as e:result["observations"].setdefault(s,{}).update(error=str(e)[:300])
-        for entry in COHORT:
+        result["observations"]={s:{**obs_meta.get(s,{}),"samplesC":{str(h):obs.get(s,{}).get(cycle+dt.timedelta(hours=h)) for h in LEADS}} for s in STATIONS}
+        for entry in cohort:
             s,h=entry["station"],entry["leadHours"];p={**entry}
             result["pairs"].append(p)
             if 0 not in grids or h not in grids:p["reason"]="missing model";continue
@@ -124,7 +129,7 @@ def main():
             site=catalog[s];j,i,d=nearest(la,lo,site["lat"],site["lng"])
             p.update(j=j,i=i,distanceKm=round(d,4),cellLat=float(la[j,i]),cellLon=float(lo[j,i]),stationLat=site["lat"],stationLon=site["lng"])
             if d>2.5 or not math.isfinite(z[j,i]) or not math.isfinite(zh[j,i]):p["reason"]="unverified wet grid cell";continue
-            baseline=obs.get(s,{}).get(CYCLE);actual=obs.get(s,{}).get(CYCLE+dt.timedelta(hours=h))
+            baseline=obs.get(s,{}).get(cycle);actual=obs.get(s,{}).get(cycle+dt.timedelta(hours=h))
             p.update(modelBaseC=float(z[j,i]),modelValidC=float(zh[j,i]),baselineC=baseline,actualC=actual)
             if baseline is None or actual is None:p["reason"]="missing exact-hour independent observation";continue
             f=lambda c:c*1.8+32
@@ -134,6 +139,34 @@ def main():
         for h in (24,48):
             rows=[p for p in result["pairs"] if p["leadHours"]==h and "modelChangeErrorF" in p]
             result["metrics"][h]={"n":len(rows),"expected":4,"persistenceMAE_F":statistics.mean(abs(p["persistenceErrorF"]) for p in rows) if rows else None,"modelChangeMAE_F":statistics.mean(abs(p["modelChangeErrorF"]) for p in rows) if rows else None,"biasF":statistics.mean(p["modelChangeErrorF"] for p in rows) if rows else None}
-    print(json.dumps(result,indent=2,allow_nan=False))
+    return result
+
+# Fixed 72-hour spacing, omitting the previously inspected October 20 pilot.
+# Freeze before inspecting any new model values. Keep all four stations,
+# including seasonal missingness, in the denominator.
+EXPANDED_DAYS=(14,17,23,26,29)
+def main():
+    args=sys.argv[1:]
+    if args not in ([],["--expanded"]): raise SystemExit("Usage: shorefeel-october-acquisition.py [--expanded]")
+    catalog={s["id"]:s for s in json.loads(pathlib.Path("data/buoy-stations.json").read_text())}
+    cycles=[dt.datetime(2026,10,d,tzinfo=UTC) for d in EXPANDED_DAYS] if args else [CYCLE]
+    with tempfile.TemporaryDirectory() as folder:
+        obs,obs_meta=load_observations(pathlib.Path(folder))
+        results=[evaluate_cycle(c,obs,obs_meta,catalog) for c in cycles]
+    if not args:
+        print(json.dumps(results[0],indent=2,allow_nan=False));return
+    cohort=[entry for result in results for entry in result["cohort"]]
+    pairs=[entry for result in results for entry in result["pairs"]]
+    metrics={}
+    for h in (24,48):
+        expected=[p for p in pairs if p["leadHours"]==h]
+        rows=[p for p in expected if "modelChangeErrorF" in p]
+        # Evaluate the actual unrounded historical heuristic, not a
+        # calibrated probability. Existing display rounds its endpoints.
+        half=2 if h==24 else 3
+        mean=lambda values:statistics.mean(values) if values else None
+        metrics[h]={"expected":len(expected),"n":len(rows),"persistenceMAE_F":mean([abs(p["persistenceErrorF"]) for p in rows]),"modelChangeMAE_F":mean([abs(p["modelChangeErrorF"]) for p in rows]),"biasF":mean([p["modelChangeErrorF"] for p in rows]),"heuristicUnroundedHalfWidthF":half,"heuristicUnroundedCoverage":mean([int(abs(p["modelChangeErrorF"])<=half) for p in rows]),"stationCounts":{s:sum(p["station"]==s for p in rows) for s in STATIONS}}
+    out={"status":"EXPANDED_CYCLE_RELATIVE_DIAGNOSTIC_ONLY","cohort":cohort,"cohortSha256":digest(json.dumps(cohort,sort_keys=True,separators=(",",":")).encode()),"cycleResults":results,"metrics":metrics,"canPromoteModel":False,"limitations":["October 20 exploratory result excluded; no model or range tuning.","Expected 20 station-cycle slots per horizon. Missing seasonal observations retained in denominator.","Cycle-relative results, not operational issue-time holdout; original observation availability and historical station positions unverified.","Five cycles within one late-season month are insufficient for calibration; no beach-level skill claim."]}
+    print(json.dumps(out,indent=2,allow_nan=False))
 
 if __name__=="__main__": main()
