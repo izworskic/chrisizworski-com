@@ -65,15 +65,17 @@ def gap(sorted_times,target,past_only=False):
 # They overlap the original September 1 - October 13 backtest period.
 EARLY_DATES=("2026-10-02","2026-10-05","2026-10-08","2026-10-11")
 WARM_DATES=("2026-07-15","2026-08-15","2026-09-15","2026-09-28")
+RELIABILITY_DATES=("2026-07-03","2026-07-09","2026-07-21","2026-07-27","2026-08-03","2026-08-09","2026-08-21","2026-08-27")
 def main():
     args=sys.argv[1:]
-    if args not in ([],["--early-october"],["--warm-season"]):raise SystemExit("Usage: shorefeel-expanded-dataset.py [--early-october|--warm-season]")
+    if args not in ([],["--early-october"],["--warm-season"],["--reliability"]):raise SystemExit("Usage: shorefeel-expanded-dataset.py [--early-october|--warm-season]")
     early=args==["--early-october"]
     warm=args==["--warm-season"]
-    cycles=[dt.datetime.fromisoformat(day).replace(tzinfo=a.UTC) for day in (EARLY_DATES if early else WARM_DATES)] if early or warm else CYCLES
+    reliability=args==["--reliability"]
+    cycles=[dt.datetime.fromisoformat(day).replace(tzinfo=a.UTC) for day in (RELIABILITY_DATES if reliability else EARLY_DATES if early else WARM_DATES)] if early or warm or reliability else CYCLES
     catalog={s["id"]:s for s in json.loads(pathlib.Path("data/buoy-stations.json").read_text())}
     with tempfile.TemporaryDirectory() as folder:
-        obs,meta=observations(pathlib.Path(folder),(7,8,9) if warm else (10,) if early else (10,11))
+        obs,meta=observations(pathlib.Path(folder),(7,8) if reliability else (7,8,9) if warm else (10,) if early else (10,11))
         results=[a.evaluate_cycle(c,obs,meta,catalog,True,STATIONS) for c in cycles]
     rows=[p for c in results for p in c["pairs"]]
     cohort=[p for c in results for p in c["cohort"]]
@@ -90,7 +92,7 @@ def main():
         groups[label]={}
         for lead in (24,48):
             subset=[p for p in rows if p["station"] in stations and p["leadHours"]==lead]
-            groups[label][lead]={"all":measure(subset),("monthly-quality-controlled-only" if warm else "october-quality-controlled-only"):measure([p for p in subset if p["baselineSourceKind"]==p["outcomeSourceKind"]=="monthly-quality-controlled"]),"includes-november-provisional":measure([p for p in subset if "provisional-realtime" in (p["baselineSourceKind"],p["outcomeSourceKind"])])}
+            groups[label][lead]={"all":measure(subset),("monthly-quality-controlled-only" if warm or reliability else "october-quality-controlled-only"):measure([p for p in subset if p["baselineSourceKind"]==p["outcomeSourceKind"]=="monthly-quality-controlled"]),"includes-november-provisional":measure([p for p in subset if "provisional-realtime" in (p["baselineSourceKind"],p["outcomeSourceKind"])])}
     for result in results:
         # Retain only one copy of observation file metadata in this dataset.
         result.pop("observations")
@@ -103,5 +105,8 @@ def main():
     if warm:
         out["status"]="WARM_SEASON_ARCHIVE_COVERAGE_DIAGNOSTIC_NOT_HOLDOUT"
         out["limitations"]=["Fixed July 15, August 15, September 15 and 28 cycles. Model retention unknown until actual downloads; missing slots retained.","July and August predate original backtest; September overlaps it. Not an independent prospective holdout.","Three monthly compressed NDBC archives per station; source-byte and decompressed hashes retained. Both compressed and decompressed sizes bounded.","Same 06Z decision sensitivity and exact hourly measurement matching, near-time gaps counted but not scored. No production calibration."]
+    if reliability:
+        out["status"]="FROZEN_WARM_SEASON_RELIABILITY_REVIEW_ONLY"
+        out["limitations"]=["Eight previously unscored dates fixed before acquisition, July/August only. Retrospective, not prospective.","160 expected exact slots. No date replacement or missing-data imputation. Same 06Z assumption and 04Z measured baseline.","Original source hashes and grid geometry retained. No production promotion."]
     print(json.dumps(out,indent=2,allow_nan=False))
 if __name__=="__main__":main()
