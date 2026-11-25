@@ -68,7 +68,7 @@ test('changing the visit changes the answer, and partial overlap offers the cove
   assert.equal(later.ships.find(s => s.id === '366971370').fit, 'gone', 'the in-lock ship is not promised to a later visit');
   const early = core.plan({ data: data(NOV), now: NOV, startOffset: 60, stay: 90 });
   assert.equal(early.status, 'partial');
-  assert.match(early.detail.join(' '), /covers all of it/);
+  assert.match(early.detail.join(' '), /covers the modeled window, not every possible arrival/);
   assert.equal(early.suggestion.id, '366972000');
   const miss = core.plan({ data: data(NOV), now: NOV, startOffset: 30, stay: 45 });
   assert.equal(miss.status, 'none');
@@ -193,4 +193,18 @@ test('visit weather quotes only the NWS hourly periods that overlap the visit', 
   const html = fs.readFileSync(path.join(__dirname, '..', 'public/assets/soo-lock-watch.js'), 'utf8');
   assert.match(html, /api\.weather\.gov\/gridpoints\/APX\/65,131\/forecast\/hourly/);
   assert.match(html, /api\.weather\.gov\/points\/46\.4953,-84\.3453/, 'falls back to a fresh grid lookup');
+});
+
+test('near-lock low motion explains absent ETA without becoming a timed entry',()=>{
+ const ship={id:'366123456',mmsi:'366123456',name:'TEST SLOW FREIGHTER',lat:46.5025,lon:-84.365,seen:iso(NOV,-2),speedKnots:.6,distanceNm:.5,state:'near-lock-low-motion'};
+ const empty=data(NOV,{inLock:[],candidates:[],pick:null,nearLockMotion:[ship]});
+ const p=core.plan({data:empty,now:NOV});
+ assert.equal(p.status,'near-lock-motion');assert.match(p.headline,/TEST SLOW FREIGHTER/);
+ assert.equal(p.ships.length,0);assert.equal(p.best,null);assert.equal(p.suggestion,undefined);
+ assert.equal(p.link.href,'#sooVesselMap');assert.match(p.detail.join(' '),/Arrival timing is uncertain/);
+ assert.equal(core.plan({data:empty,now:NOV+4*60000}).status,'no-ships');
+ assert.equal(core.plan({data:empty,now:NOV,failed:true}).status,'unavailable');
+ const mixed=core.plan({data:data(NOV,{nearLockMotion:[ship]}),now:NOV});
+ assert.equal(mixed.status,'in-lock-now');assert.match(mixed.notes.join(' '),/TEST SLOW FREIGHTER/);
+ assert.ok(mixed.ships.every(s=>s.id!==ship.id));
 });
