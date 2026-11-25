@@ -25,11 +25,11 @@ def observations(tmp,months=(10,11)):
     out={};meta={}
     for station in STATIONS:
         out[station]={};meta[station]={}
-        for month,kind,folder in [(7,"monthly-quality-controlled","stdmet/Jul"),(8,"monthly-quality-controlled","stdmet/Aug"),(9,"monthly-quality-controlled","stdmet/Sep"),(10,"monthly-quality-controlled","l_stdmet"),(11,"provisional-realtime","realtime2")]:
+        for month,kind,folder in [(6,"monthly-quality-controlled","stdmet/Jun"),(7,"monthly-quality-controlled","stdmet/Jul"),(8,"monthly-quality-controlled","stdmet/Aug"),(9,"monthly-quality-controlled","stdmet/Sep"),(10,"monthly-quality-controlled","l_stdmet"),(11,"provisional-realtime","realtime2")]:
             if month not in months:continue
             key=str(month);path=tmp/(station+"-"+key+".txt")
             try:
-                compressed=month in (7,8,9)
+                compressed=month in (6,7,8,9)
                 filename=station+str(month)+"2026.txt.gz" if compressed else station+".txt"
                 m=a.fetch("https://www.ndbc.noaa.gov/data/"+folder+"/"+filename,path,CAP)
                 if compressed:
