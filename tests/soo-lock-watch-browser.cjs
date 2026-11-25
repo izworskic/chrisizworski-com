@@ -142,7 +142,7 @@ let base;
       }
       // 1. Default "Now, 1½ hr": the ship already in a chamber is the answer.
       assert.match(await verdict(page), /EDWIN H\. GOTT last reported in the Poe Lock/);
-      assert.match(await dossier(page), /EDWIN H\. GOTT[\s\S]*Poe Lock, now/);
+      assert.match(await dossier(page), /EDWIN H\. GOTT[\s\S]*Poe Lock \(last report\)/);
       assert.equal(await page.locator('.lw-row-btn').count(), 3);
       assert.match(await page.locator('.lw-notes').innerText(), /hotline is not maintained now/);
       // The next-ship card no longer offers the seasonal hotline in November.

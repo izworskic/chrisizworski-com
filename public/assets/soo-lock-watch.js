@@ -133,7 +133,7 @@
       : 'Direction not reported';
   }
   function chamberText(s) {
-    if (s.state === 'in-lock') return (s.chamberName || 'A lock chamber') + ', now';
+    if (s.state === 'in-lock') return (s.chamberName || 'A lock chamber') + ' (last report)';
     if (s.lockCertain) return 'Poe Lock (too large for the MacArthur)';
     return 'Poe or MacArthur; the lockmaster assigns it';
   }
@@ -591,7 +591,7 @@
       fact(dl, 'Planning window at the locks', clock(s.start) + '–' + clockZone(s.end) + dayWord(s.start, p.now));
       var raw = s.raw;
       if (Number.isFinite(raw.channelMilesToLocks) && Number.isFinite(raw.speedKnots)) {
-        fact(dl, 'Where it is', raw.channelMilesToLocks + ' river miles out at ' + (raw.speedKnots * 1.15078).toFixed(1) + ' mph, reported ' + raw.ageMinutes + ' min ago');
+        fact(dl, 'Where it is', raw.channelMilesToLocks + ' river miles out at ' + (raw.speedKnots * 1.15078).toFixed(1) + ' mph, reported ' + s.ageMinutes + ' min ago');
       }
       fact(dl, 'Your visit', fitText(s) + ' (' + clock(p.visit.start) + '–' + clock(p.visit.end) + '); ' + duration(s.accessibleMinutes) + ' of the modeled window during posted hours');
       var light = [];
@@ -775,6 +775,8 @@
       deadlines.push(Date.parse(s.seen)+REPORT_AGE_MS+1);
       var end=Date.parse(s.window?.end);if(end>now)deadlines.push(end);
     });
+    var h=parkHours(now);
+    [h.open,h.close].forEach(function(t){if(t>now)deadlines.push(t);});
     if(deadlines.length) ageTimer=setTimeout(function(){update();},Math.max(1,Math.min.apply(null,deadlines)-now));
   }
   document.addEventListener('visibilitychange',function(){if(!document.hidden)update();});
