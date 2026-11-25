@@ -4,13 +4,13 @@
   "auditDate": "2026-11-24",
   "status": "inventory-verified-behavior-not-verified",
   "inventory": {
-    "logicalSkills": 46,
-    "mirrorFiles": 135,
-    "codex": 46,
-    "claude": 46,
-    "copilot": 43,
+    "logicalSkills": 47,
+    "mirrorFiles": 138,
+    "codex": 47,
+    "claude": 47,
+    "copilot": 44,
     "mirrorBlobMismatches": 0,
-    "dedicatedCaseSuites": 23,
+    "dedicatedCaseSuites": 24,
     "withoutDedicatedCasesLocated": 23,
     "behaviorallyEvaluated": 0,
     "provenByPairedEvidence": 0
@@ -1120,6 +1120,29 @@
         ".github/skills/search-demand/SKILL.md"
       ],
       "caseSuite": "docs/skill-evals/search-demand.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "opportunity-scout",
+      "family": "Search and discovery",
+      "scope": "Choosing the next tool, new tool ideas, before any new tool",
+      "expectedOutput": "Three scored briefs after an existing-answer check, or a rejection",
+      "routing": "Before experience-investment on any new tool",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "0037102a5817b0354b8d346ccd1a5a031702e981",
+      "mirrors": [
+        ".agents/skills/opportunity-scout/SKILL.md",
+        ".claude/skills/opportunity-scout/SKILL.md",
+        ".github/skills/opportunity-scout/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/opportunity-scout.md",
       "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
