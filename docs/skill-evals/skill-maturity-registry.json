@@ -10,8 +10,8 @@
     "claude": 47,
     "copilot": 44,
     "mirrorBlobMismatches": 0,
-    "dedicatedCaseSuites": 27,
-    "withoutDedicatedCasesLocated": 20,
+    "dedicatedCaseSuites": 28,
+    "withoutDedicatedCasesLocated": 19,
     "behaviorallyEvaluated": 0,
     "provenByPairedEvidence": 0
   },
@@ -816,18 +816,18 @@
       "id": "web-quality-accessibility",
       "family": "Web and browser quality",
       "scope": "Changed map, form or interface",
-      "expectedOutput": "Automated plus manual accessibility review",
+      "expectedOutput": "Automated results plus a manual WCAG 2.2 checklist; never a compliance claim",
       "routing": "When relevant",
       "authorization": "relevant-authorized-task",
       "documentedState": "documented",
-      "auditedSkillBlob": "85285155bf60a8d600c7d3acd0f35fe1d0d6150a",
+      "auditedSkillBlob": "77490e98b350a3532a6308a40b7fb33cfe97db0e",
       "mirrors": [
         ".agents/skills/web-quality-accessibility/SKILL.md",
         ".claude/skills/web-quality-accessibility/SKILL.md",
         ".github/skills/web-quality-accessibility/SKILL.md"
       ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
+      "caseSuite": "docs/skill-evals/web-quality-accessibility.md",
+      "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
         "runs": [],
