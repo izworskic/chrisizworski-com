@@ -593,14 +593,14 @@
         return Number.isFinite(seen) && seen <= now && now - seen <= 30 * 60 * 1000;
       }) };
     }
-    currentData = data;
     if(changes)changeState=changes.step(changeState,data,failed,Date.now());
+    currentData = data;
     renderPick(data, failed);
-    renderChanges();
     renderMonitorSummary(data, failed);
     renderMap(data, failed);
     renderCandidates(data, failed);
     renderSource(data, failed);
+    renderChanges();
     window.setTimeout(() => { if (map) map.invalidateSize({ pan: false, animate: false }); }, 80);
   }
 
