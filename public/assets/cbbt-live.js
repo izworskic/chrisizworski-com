@@ -1,7 +1,7 @@
 (function(){
   'use strict';
   var API='/api/cbbt';
-  var state={snapshot:null,vehicleUi:'suv',vehicleParams:{vehicleType:'suv'}};
+  var state={snapshot:null,vehicleUi:'suv',vehicleParams:{vehicleType:'suv'},statusHistory:null,impact:null};
   var $=function(id){return document.getElementById(id);};
   var vehicleLabels={suv:'Car / SUV',pickup:'Pickup',motorcycle:'Motorcycle',rv:'RV / camper',towing_trailer:'Trailer combination',commercial:'Commercial vehicle',bus:'Bus',other:'Other / special vehicle'};
   var detailOptions={suv:[['suv','SUV'],['car','Passenger car'],['minivan','Minivan'],['van','Van']],pickup:[['pickup','Pickup']],motorcycle:[['motorcycle','Motorcycle']],rv:[['rv','RV / camper'],['large_pickup_camper','Large pickup camper']],towing_trailer:[['car','Car / SUV towing'],['pickup','Pickup towing']],commercial:[['box_truck','Box / moving truck'],['tractor_trailer','Tractor-trailer'],['tanker','Tanker'],['van','High-profile / conversion van']],bus:[['bus','Bus']],other:[['other','Other / special vehicle'],['hazmat','Hazmat'],['oversize','Oversize vehicle']]};
@@ -21,14 +21,37 @@
   function renderAdvisories(snapshot){var list=(snapshot&&snapshot.plannedAdvisories)||[];var wrap=$('advisoryList');if(!list.length){wrap.innerHTML='<p class="loading-line">No planned CBBT travel advisory is currently listed in the feed.</p>';return;}wrap.innerHTML='<div class="event-list">'+list.map(function(x){return '<article class="event-item"><strong>'+escapeHtml((x.category||'travel advisory').replace(/_/g,' '))+'</strong><p>'+escapeHtml(x.rawSourceText||'CBBT travel advisory.')+'</p></article>';}).join('')+'</div>';}
   function renderAlerts(snapshot){var list=(snapshot&&snapshot.alerts)||[];var section=$('alertsSection');if(!list.length){section.hidden=true;return;}section.hidden=false;$('alertsList').innerHTML='<div class="event-list">'+list.slice(0,5).map(function(x){return '<article class="event-item"><strong>'+escapeHtml(x.event||x.headline||'Weather alert')+'</strong><p>'+escapeHtml(x.headline||x.areaDesc||'National Weather Service alert for the CBBT area.')+'</p></article>';}).join('')+'</div>';}
   function renderSources(snapshot){var p=(snapshot&&snapshot.provenance)||[];var seen={};var rows=[];p.forEach(function(x){var name=x&&x.source_name,url=x&&x.source_url;if(!name||seen[name+'|'+url])return;seen[name+'|'+url]=1;rows.push('<div class="source-row"><span><strong>'+escapeHtml(name)+'</strong> · '+escapeHtml(x.source_timestamp?formatTime(x.source_timestamp):'retrieved live')+'</span>'+(url?'<a href="'+escapeHtml(url)+'" target="_blank" rel="noopener">Source ↗</a>':'')+'</div>');});$('sourceDetails').innerHTML=rows.join('')||'<p>Live source metadata is not available for this refresh.</p>';var radar=snapshot&&snapshot.radar;if(radar&&radar.viewerUrl)$('radarLink').href=radar.viewerUrl;}
-  function renderAll(snapshot){state.snapshot=snapshot;renderStatus(snapshot);renderVehicle(snapshot);renderIncidents(snapshot);renderWeather(snapshot);renderForecast(snapshot);renderAdvisories(snapshot);renderAlerts(snapshot);renderSources(snapshot);}
-  function renderApiFailure(){renderStatus({officialStatus:{state:'UNKNOWN',restrictionLevel:'UNKNOWN'},freshness:{officialStatus:{state:'unavailable'}}});var box=$('vehicleResult');box.dataset.tone='unknown';text('vehicleResultTitle','Vehicle check unavailable');text('vehicleResultCopy','The CBBT decision engine could not be reached. Verify current conditions with CBBT.');text('incidentSummary','Live incident check unavailable');renderWeather(null);renderForecast(null);}
+  function renderStatusChange(snapshot){
+    var previous=state.statusHistory;
+    state.statusHistory=CBBTView.statusChange(previous,snapshot,Date.now());
+    var event=state.statusHistory.event,host=$('statusChange');
+    if(!host)return;
+    if(!event){host.hidden=true;return;}
+    if(previous&&previous.event===event)return;
+    text('statusChangeText',CBBTView.changeText(event));
+    text('statusChangeTime','Detected during this visit · '+formatTime(event.detectedAt)+' · exact change time unknown');
+    host.hidden=false;
+  }
+  function renderDecisionImpact(snapshot,configuration){
+    var previous=state.impact;
+    state.impact=CBBTView.decisionImpact(previous,snapshot,configuration,Date.now());
+    var host=$('vehicleImpact');
+    if(!host)return;
+    if(!state.impact.event){host.hidden=true;host.textContent='';return;}
+    if(previous&&previous.event===state.impact.event)return;
+    host.textContent=CBBTView.impactText(state.impact.event);host.hidden=false;
+  }
+  function renderAll(snapshot,configuration){
+    var checked=Date.parse(snapshot&&snapshot.engine&&snapshot.engine.generatedAt||'');
+    if(state.statusHistory&&Number.isFinite(checked)&&checked<state.statusHistory.lastChecked)return;
+    state.snapshot=snapshot;renderStatusChange(snapshot);renderStatus(snapshot);renderVehicle(snapshot);renderDecisionImpact(snapshot,configuration);renderIncidents(snapshot);renderWeather(snapshot);renderForecast(snapshot);renderAdvisories(snapshot);renderAlerts(snapshot);renderSources(snapshot);}
+  function renderApiFailure(configuration){renderStatusChange(null);renderDecisionImpact(null,configuration);renderStatus({officialStatus:{state:'UNKNOWN',restrictionLevel:'UNKNOWN'},freshness:{officialStatus:{state:'unavailable'}}});var box=$('vehicleResult');box.dataset.tone='unknown';text('vehicleResultTitle','Vehicle check unavailable');text('vehicleResultCopy','The CBBT decision engine could not be reached. Verify current conditions with CBBT.');text('incidentSummary','Live incident check unavailable');renderWeather(null);renderForecast(null);}
   function populateDetailSelect(){var el=$('vehicleTypeDetail');el.innerHTML=(detailOptions[state.vehicleUi]||detailOptions.other).map(function(row){return '<option value="'+row[0]+'">'+row[1]+'</option>';}).join('');if(state.vehicleUi==='commercial')el.value=$('commercialType').value;}
   function showConditional(){document.querySelectorAll('.conditional').forEach(function(el){el.hidden=el.dataset.showFor!==state.vehicleUi;});$('propaneValveWrap').hidden=state.vehicleUi!=='rv'||$('propaneCarried').value!=='true';}
   function buildVehicleParams(){var ui=state.vehicleUi;var type=$('vehicleTypeDetail').value||({towing_trailer:'car',commercial:'box_truck'})[ui]||ui;var p={vehicleType:type};if(ui==='towing_trailer'){p.towing=true;p.trailerSubtype=$('trailerSubtype').value;}if($('exteriorCargo').checked)p.exteriorCargo=true;if($('heightFt').value)p.heightFt=$('heightFt').value;if(ui==='rv'&&$('propaneCarried').value){p.propaneCarried=$('propaneCarried').value;if($('propaneCarried').value==='true'&&$('propaneValveClosed').value)p.propaneValveClosed=$('propaneValveClosed').value;}if(ui==='commercial'){p.vehicleType=$('commercialType').value;if($('payloadLb').value)p.payloadLb=$('payloadLb').value;if($('highProfile').checked)p.highProfile=true;if($('sixWheel').checked)p.sixWheel=true;}return p;}
   var refreshSequence=0;
   async function refreshVehicle(){state.vehicleParams=buildVehicleParams();return refreshCurrent();}
-  async function refreshCurrent(){var seq=++refreshSequence;try{var snap=await getSnapshot(state.vehicleParams);if(seq===refreshSequence)renderAll(snap);}catch(e){if(seq===refreshSequence)renderApiFailure();}}
+  async function refreshCurrent(){var seq=++refreshSequence,params=state.vehicleParams,configuration=JSON.stringify(Object.keys(params).sort().map(k=>[k,params[k]]));if(state.impact&&state.impact.configuration!==configuration){state.impact=null;var note=$('vehicleImpact');if(note){note.hidden=true;note.textContent='';}}try{var snap=await getSnapshot(params);if(seq===refreshSequence)renderAll(snap,configuration);}catch(e){if(seq===refreshSequence)renderApiFailure(configuration);}}
   function syncVehicleUi(){state.vehicleUi=$('vehicleQuickSelect').value;populateDetailSelect();showConditional();refreshVehicle();}
   function syncTollFields(){var v=$('tollVehicle').value;document.querySelectorAll('.toll-conditional').forEach(function(el){el.hidden=!String(el.dataset.tollFor||'').split(/\s+/).includes(v);});$('returnWithinWrap').hidden=!$('returnTrip').checked;}
   function tollParams(isReturn){var v=$('tollVehicle').value;var p={estimateToll:1,tollVehicleType:v==='trailer'?'car':v==='commercial'?'tractor_trailer':v,isReturnTrip:isReturn?'true':'false'};if($('travelAt').value)p.travelAt=new Date($('travelAt').value).toISOString();if($('ezPass').checked)p.ezPass=true;if(isReturn&&$('returnWithin24Hours').checked)p.returnWithin24Hours=true;if(v==='trailer')p.trailerAxles=$('trailerAxles').value;if(['rv','commercial','bus'].includes(v)&&$('axles').value)p.axles=$('axles').value;if(v==='rv'&&$('tires').value)p.tires=$('tires').value;if(['rv','commercial'].includes(v)&&$('tollHeightFt').value)p.heightFt=$('tollHeightFt').value;if(v==='commercial'&&$('grossWeightLb').value)p.grossWeightLb=$('grossWeightLb').value;return p;}
