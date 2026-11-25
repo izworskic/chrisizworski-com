@@ -86,6 +86,15 @@ jobs:
           python-version: '3.11'
       - name: Offline NOAA archive and paired logger scientific tests
         run: python3 -m unittest discover -s tests -p 'test_shorefeel_*.py' -v
+      - name: Predictive validation and uncertainty research fixtures
+        if: github.head_ref == 'research/shorefeel-predictive-validation'
+        run: node --test tests/shorefeel-predictive-validation.test.js tests/shorefeel-uncertainty-calibration.test.js tests/shorefeel-archive-coverage.test.js tests/shorefeel-native-grid-parity.test.js
+      - name: Bounded one-off NOAA archive coverage probe
+        if: github.head_ref == 'research/shorefeel-predictive-validation'
+        run: |
+          mkdir -p artifacts/shorefeel-beach-qa
+          node scripts/shorefeel-archive-coverage.cjs > artifacts/shorefeel-beach-qa/archive-coverage.json
+          cat artifacts/shorefeel-beach-qa/archive-coverage.json
       - name: Install isolated pinned browser harness
         run: |
           npm install --prefix "$RUNNER_TEMP/shorefeel-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
