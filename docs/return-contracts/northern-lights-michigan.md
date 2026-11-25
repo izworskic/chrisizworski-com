@@ -26,3 +26,14 @@ Written 2026-11-24 with the `return-visit-design` skill. Pilot tool for the rete
 ## Next skills to run
 
 `return-metrics` (baseline), then `computed-windows` for the dark-window line, then `my-spots-offline` for the saved region, then `condition-alerts` if a regional RSS feed is still wanted. Compared against Mackinac Bridge Live (dated windows, wind triggers) and Fall Color (regional peak, slower cadence).
+
+## Shipped 2026-11-24
+
+| Piece | What the visitor sees | Where |
+| --- | --- | --- |
+| Since your last check | One line under the regional answer comparing this visit with their previous one for the same region ("Signal was worth monitoring (Kp 5.7), now low (Kp 3.0)"). Shown only when the last visit was 30 minutes to 21 days ago; stored only on the device under `ciz:aurora:lastseen:v1`. | `public/assets/aurora-return.js` |
+| Share this region's outlook | Native share sheet on phones, copy-link fallback elsewhere. The link carries `?region=` so the recipient sees the same region; tagged `utm_source=share`. | same |
+| Add the best time to my calendar | A one-event `.ics` built in the browser, offered only when the signal is worth monitoring or borderline and the best time is within 36 hours. No alarm, no server. | same |
+| Region in the URL | `?region=` opens that region; changing the picker updates the address bar. Unknown values fall back to Mackinaw City. | inline script |
+
+Measurement: Vercel Web Analytics custom events `Aurora Share`, `Aurora Calendar` and `Aurora Return Line`; GA4 by `utm_source` once the GA4 credential exists. No notifications of any kind.
