@@ -195,6 +195,39 @@ async function run(){
    report.push({width,mode:'temporal-expiry',states:['water','hour','packet','manual-recovery'],requests});
    await ctx.close();
   }
+  for(const width of [390,1366]){
+   const ctx=await browser.newContext({viewport:{width,height:860},reducedMotion:'reduce'});
+   let mode='valid';
+   await ctx.route('**/api/shorefeel?*',route=>{
+    const d=fixture(),now=Date.now(),H=3600000,at=t=>new Date(t).toISOString();
+    const start=Math.ceil(now/H)*H;
+    const {decisionWindow}=require('../lib/shorefeel/decision-window.js');
+    const rows=[start,start+H].map(t=>({startsAt:at(t),endsAt:at(t+H),tempF:72,windMph:5,rainChance:0,daylight:true}));
+    if(mode==='gap')rows[1].startsAt=at(start+2*H);
+    d.weatherNow=null;d.beachFeel=null;d.water=null;
+    d.decisionWindows=Object.fromEntries(['swim','relax','family','paddle'].map(a=>[a,decisionWindow(rows,a,new Date(now),at(now-H))]));
+    return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(d)});
+   });
+   await ctx.route('**/api/carto-basemap-config',route=>route.fulfill({status:503,body:'{}'}));
+   await ctx.route('https://**/*',route=>route.abort());
+   const pg=await ctx.newPage(),errors=[];
+   pg.on('pageerror',e=>errors.push(String(e)));
+   await pg.goto(origin+'/lake-huron-water-temperature/saginaw-bay/',{waitUntil:'domcontentloaded'});
+   await pg.waitForFunction(()=>document.querySelector('#window')?.textContent.includes('two-hour daylight period'),null,{timeout:15000});
+   assert.match(await pg.locator('#lead-temp').innerText(),/unavailable/i);
+   assert.match(await pg.locator('#window').innerText(),/highest hourly rain chance 0%/);
+   assert.match(await pg.locator('#window').innerText(),/not swimming or paddling safety/);
+   await pg.locator('button[data-activity="paddle"]').click();
+   assert.match(await pg.locator('#window').innerText(),/two-hour daylight period/);
+   await pg.screenshot({path:path.join(output,'decision-window-'+width+'.png'),fullPage:true});
+   mode='gap';
+   const response=pg.waitForResponse(r=>r.url().includes('/api/shorefeel?'));
+   await pg.locator('#refresh-shorefeel').click();await response;
+   await pg.waitForFunction(()=>document.querySelector('#window')?.textContent.includes('No suitable'),null,{timeout:15000});
+   assert.deepEqual(errors,[]);
+   report.push({width,mode:'decision-window',states:['independent future forecast','gap rejected']});
+   await ctx.close();
+  }
   const offline=await browser.newContext({viewport:{width:390,height:860}});
   await offline.route('**/api/shorefeel?*',route=>route.fulfill({status:503,body:'offline'}));
   await offline.route('**/api/carto-basemap-config',route=>route.fulfill({status:503,body:'{}'}));
