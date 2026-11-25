@@ -182,3 +182,30 @@ test('failure-mode evidence reproduces and cannot qualify or train a candidate',
  assert.ok(a.leads[48].observedChangeMagnitude[0].deltaMaeF>0);
  assert.ok(a.leads[48].observedChangeMagnitude[2].deltaMaeF<0);
 });
+
+test('decision-time model regimes reproduce without using realized temperature to assign bands',()=>{
+ const {analyze}=require('../scripts/shorefeel-decision-time-regime.cjs');
+ const expected=require('../data/shorefeel/decision-time-regime-actual-20261125.json');
+ const sources={review:require('../data/shorefeel/reliability-cohort-actual-20261125.json'),confirmation:require('../data/shorefeel/horizon-confirm-cohort-actual-20261125.json')};
+ for(const [name,source] of Object.entries(sources)){
+  const r=analyze(source);assert.deepEqual(r,expected.cohorts[name]);assert.equal(r.canPromoteModel,false);
+  for(const h of [24,48]){
+   const l=r.leads[h];assert.equal(l.featureAvailable,l.expected);
+   assert.equal(l.bands.reduce((s,b)=>s+b.scored,0),l.scored);
+   assert.equal(l.bands.reduce((s,b)=>s+b.featureAvailable,0),l.featureAvailable);
+   assert.equal(l.exactCoveragePassed,false);
+  }
+  const changed=structuredClone(source);
+  for(const c of changed.cycles)for(const p of c.pairs)if(!p.reason){
+   p.actualC=p.baselineC;p.persistenceErrorF=0;p.modelChangeErrorF=(p.modelValidC-p.modelBaseC)*1.8;
+  }
+  const altered=analyze(changed);
+  for(const h of [24,48])assert.deepEqual(altered.leads[h].bands.map(b=>[b.band,b.featureAvailable,b.scored]),r.leads[h].bands.map(b=>[b.band,b.featureAvailable,b.scored]));
+  const late=structuredClone(source);late.cycles[0].models[4].lastModified='2027-01-01T00:00:00Z';
+  const blocked=analyze(late);
+  for(const h of [24,48])assert.equal(blocked.leads[h].featureAvailable,r.leads[h].featureAvailable-10);
+ }
+ assert.equal(expected.cohorts.review.leads[48].largeChange.TP,9);
+ assert.equal(expected.cohorts.confirmation.leads[48].largeChange.FP,6);
+ assert.equal(expected.canPromoteModel,false);
+});
