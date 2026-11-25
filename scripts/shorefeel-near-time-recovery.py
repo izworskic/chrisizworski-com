@@ -9,6 +9,7 @@ import pathlib
 import tempfile
 import bisect
 import math
+import sys
 
 spec=importlib.util.spec_from_file_location("expanded",pathlib.Path(__file__).with_name("shorefeel-expanded-dataset.py"))
 e=importlib.util.module_from_spec(spec)
@@ -26,11 +27,15 @@ def select(times,target,prior_only):
     return best if abs((best-target).total_seconds())<=LIMIT_MIN*60 else None
 
 def main():
-    original=json.loads(SOURCE.read_text())
-    assert original["status"]=="MULTI_STATION_DECISION_TIME_DIAGNOSTIC_ONLY"
-    assert len(original["cohort"])==180
+    args=sys.argv[1:]
+    if args not in ([],["--early-october"]):raise SystemExit("Usage: shorefeel-near-time-recovery.py [--early-october]")
+    early=bool(args)
+    source=pathlib.Path("data/shorefeel/early-october-actual-20261124.json") if early else SOURCE
+    original=json.loads(source.read_text())
+    assert original["status"]==("EARLY_OCTOBER_HISTORICAL_DIAGNOSTIC_NOT_HOLDOUT" if early else "MULTI_STATION_DECISION_TIME_DIAGNOSTIC_ONLY")
+    assert len(original["cohort"])==(80 if early else 180)
     with tempfile.TemporaryDirectory() as tmp:
-        obs,meta=e.observations(pathlib.Path(tmp))
+        obs,meta=e.observations(pathlib.Path(tmp),(10,) if early else (10,11))
     rows=[p for c in original["cycles"] for p in c["pairs"]]
     recovered=[];unresolved=[];revision_checks=[]
     for p in rows:
@@ -64,7 +69,12 @@ def main():
         x=[p for p in exact if p["leadHours"]==h]
         y=[p for p in recovered if p["leadHours"]==h]
         z=[p for p in unresolved if p["leadHours"]==h]
-        metrics[h]={"expected":90,"originalExact":len(x),"newNearTime":len(y),"remainingMissing":len(z),"originalExactMetrics":e.measure(x),"nearTimeOnlyMetrics":e.measure(y),"recoverableCoverageFraction":(len(x)+len(y))/90}
-    out={"status":"NEAR_TIME_RECOVERY_SENSITIVITY_ONLY","originalCohortSha256":original["cohortSha256"],"sourceDatasetSha256":e.a.digest(SOURCE.read_bytes()),"maximumOffsetMinutes":LIMIT_MIN,"metrics":metrics,"recovered":recovered,"unresolved":unresolved,"exactObservationRevisionChecks":revision_checks,"observationFiles":meta,"canPromoteModel":False,"limitations":["Prior baseline only; target nearest observation within +/-15 min, ties earlier. No interpolated or manufactured observation.","Model values remain at their original valid times, so nonzero offsets are timing sensitivity, not exact-time validation.","Re-fetched source bytes may differ; revisions of exact pairs are reported, never overwrite original evidence.","Historical buoy availability and sensor deployment still unverified; no pooled calibration metrics or production changes."]}
+        expected=sum(p["leadHours"]==h for p in rows)
+        assert expected==len(x)+len(y)+len(z)
+        metrics[h]={"expected":expected,"originalExact":len(x),"newNearTime":len(y),"remainingMissing":len(z),"originalExactMetrics":e.measure(x),"nearTimeOnlyMetrics":e.measure(y),"recoverableCoverageFraction":(len(x)+len(y))/expected}
+    out={"status":"NEAR_TIME_RECOVERY_SENSITIVITY_ONLY","originalCohortSha256":original["cohortSha256"],"sourceDatasetSha256":e.a.digest(source.read_bytes()),"maximumOffsetMinutes":LIMIT_MIN,"metrics":metrics,"recovered":recovered,"unresolved":unresolved,"exactObservationRevisionChecks":revision_checks,"observationFiles":meta,"canPromoteModel":False,"limitations":["Prior baseline only; target nearest observation within +/-15 min, ties earlier. No interpolated or manufactured observation.","Model values remain at their original valid times, so nonzero offsets are timing sensitivity, not exact-time validation.","Re-fetched source bytes may differ; revisions of exact pairs are reported, never overwrite original evidence.","Historical buoy availability and sensor deployment still unverified; no pooled calibration metrics or production changes."]}
+    if early:
+        out["status"]="EARLY_OCTOBER_NEAR_TIME_NOT_HOLDOUT"
+        out["limitations"].append("Overlaps original backtest period; not independent holdout.")
     print(json.dumps(out,indent=2,allow_nan=False))
 if __name__=="__main__":main()
