@@ -95,14 +95,14 @@ jobs:
           mkdir -p artifacts/shorefeel-beach-qa
           node scripts/shorefeel-archive-coverage.cjs > artifacts/shorefeel-beach-qa/archive-coverage.json
           cat artifacts/shorefeel-beach-qa/archive-coverage.json
-      - name: Check archived model availability at assumed 06Z decision time
+      - name: Acquire expanded ten-station October-November NOAA dataset
         if: github.head_ref == 'research/shorefeel-actual-october-cohort'
         run: |
           python3 -m venv "$RUNNER_TEMP/shorefeel-archive"
           "$RUNNER_TEMP/shorefeel-archive/bin/pip" install --disable-pip-version-check numpy==2.2.6 netCDF4==1.7.2
           mkdir -p artifacts/shorefeel-beach-qa
-          "$RUNNER_TEMP/shorefeel-archive/bin/python" scripts/shorefeel-october-acquisition.py --timing > artifacts/shorefeel-beach-qa/october-timing-sensitivity.json
-          cat artifacts/shorefeel-beach-qa/october-timing-sensitivity.json
+          "$RUNNER_TEMP/shorefeel-archive/bin/python" scripts/shorefeel-expanded-dataset.py > artifacts/shorefeel-beach-qa/expanded-multi-station-actual.json
+          cat artifacts/shorefeel-beach-qa/expanded-multi-station-actual.json
       - name: Install isolated pinned browser harness
         run: |
           npm install --prefix "$RUNNER_TEMP/shorefeel-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
