@@ -4,13 +4,13 @@
   "auditDate": "2026-11-24",
   "status": "inventory-verified-behavior-not-verified",
   "inventory": {
-    "logicalSkills": 45,
-    "mirrorFiles": 132,
-    "codex": 45,
-    "claude": 45,
-    "copilot": 42,
+    "logicalSkills": 46,
+    "mirrorFiles": 135,
+    "codex": 46,
+    "claude": 46,
+    "copilot": 43,
     "mirrorBlobMismatches": 0,
-    "dedicatedCaseSuites": 22,
+    "dedicatedCaseSuites": 23,
     "withoutDedicatedCasesLocated": 23,
     "behaviorallyEvaluated": 0,
     "provenByPairedEvidence": 0
@@ -1097,6 +1097,29 @@
         ".github/skills/photo-sourcing/SKILL.md"
       ],
       "caseSuite": "docs/skill-evals/photo-sourcing.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
+    },
+    {
+      "id": "search-demand",
+      "family": "Search and discovery",
+      "scope": "Choosing pages or tools from Search Console evidence, 404s, sitemap errors, demand claims",
+      "expectedOutput": "Ranked evidence table with actions, or NOT MEASURED",
+      "routing": "When search demand, 404s or sitemap health is in question",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "fab521be223da3808f4c42d3c45dfa896dff1ff2",
+      "mirrors": [
+        ".agents/skills/search-demand/SKILL.md",
+        ".claude/skills/search-demand/SKILL.md",
+        ".github/skills/search-demand/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/search-demand.md",
       "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
