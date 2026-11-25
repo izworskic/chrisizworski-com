@@ -125,9 +125,11 @@ async function main(){
     assert.equal(await page.locator('#focusNext').isDisabled(),true);
     assert.equal(await page.locator('.ship-map-marker.is-selected, .ship-map-marker.is-candidate').count(),0);
     assert.equal(await page.locator('.ship-map-marker').count(),4);
+    assert.equal(await page.locator('.leaflet-popup-content').count(),0,'old vessel detail removed when evidence changes');
     const retained=page.locator('.ship-map-marker.type-cargo');
     await retained.focus(); await retained.press('Enter');
     await page.locator('.leaflet-popup-content').getByText(/Last-known position/).waitFor();
+    assert.equal(await page.locator('.leaflet-popup-content').count(),1,'only one retained vessel detail');
     assert.doesNotMatch(await page.locator('.leaflet-popup-content').innerText(),/planning window/i);
     await screenshot(page,'duluth-390-retained-failure');
     mode='empty';await page.locator('#refreshVessels').click();
