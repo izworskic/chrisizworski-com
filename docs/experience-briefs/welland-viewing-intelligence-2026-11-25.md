@@ -5,3 +5,7 @@ Baseline fe22874c042597a32813ead4c8baaeb0e24837da; Duluth #1904 merged and Verce
 ## Browser acceptance preparation
 
 Added a path-scoped browser job for five viewport widths, keyboard selection, one/multiple/shared/other-type observations, expiry, outage/recovery, persistent selection, no-JS public map links and horizontal overflow. The harness blocks external network traffic, so it cannot establish live tile or AIS availability. Exact-head results, screenshot review and formal Foundry proof remain NOT VERIFIED. No production behavior or source cadence changes in this verification commit.
+
+## Foundry replay
+
+Added a committed-baseline replay of the actual shore-watch rendering functions and shared AIS helper. Three improvement cases and two preservation cases use identical fixed input in both versions. Proof execution, browser screenshot review and live source verification remain NOT VERIFIED until the corresponding evidence is available. No new production code or infrastructure in this commit.

@@ -8,6 +8,7 @@ on:
       - 'public/assets/welland-viewing-intelligence.js'
       - 'public/assets/ais-movement.js'
       - 'tests/welland-viewing-*'
+      - 'experience-foundry/examples/welland-public-viewing-*'
       - '.github/workflows/welland-viewing-browser.yml'
 permissions:
   contents: read
@@ -18,6 +19,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          fetch-depth: 0
           persist-credentials: false
       - uses: actions/setup-node@v4
         with:
@@ -27,6 +29,21 @@ jobs:
       - run: node --test tests/welland-canal.test.js tests/welland-viewing-intelligence.test.js
       - run: npm install --no-save --no-package-lock playwright@1.56.1
       - run: node tests/welland-viewing-browser.cjs
+      - name: Foundry before-after comparison proof
+        run: |
+          node experience-foundry/examples/welland-public-viewing-improvement.mjs
+          node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/welland-public-viewing-comparison/run.json
+          node scripts/experience-foundry.mjs prove --run experience-foundry/drafts/welland-public-viewing-comparison/run.json --out build/experience-foundry/welland-public-viewing-proof
+          node scripts/experience-foundry.mjs assess --run experience-foundry/drafts/welland-public-viewing-comparison/run.json --proof build/experience-foundry/welland-public-viewing-proof/proof.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: welland-viewing-foundry-proof
+          path: |
+            experience-foundry/drafts/welland-public-viewing-comparison/
+            build/experience-foundry/welland-public-viewing-proof/
+          if-no-files-found: warn
+          retention-days: 7
       - uses: actions/upload-artifact@v4
         if: always()
         with:
