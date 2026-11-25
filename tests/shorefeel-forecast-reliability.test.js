@@ -38,3 +38,30 @@ test('preserved eight-date review reproduces from exact source bytes',()=>{
  const actual={...evaluate(JSON.parse(raw)),sourceSha256:crypto.createHash('sha256').update(raw).digest('hex')};
  assert.deepEqual(actual,archived);
 });
+
+test('preserved ten-date confirmation reproduces exactly and remains blocked by exact coverage',()=>{
+ const fs=require('node:fs'),crypto=require('node:crypto'),path=require('node:path');
+ const raw=fs.readFileSync(path.join(__dirname,'../data/shorefeel/horizon-confirm-cohort-actual-20261125.json'));
+ const archived=require('../data/shorefeel/horizon-confirm-review-actual-20261125.json');
+ const actual={...evaluate(JSON.parse(raw)),sourceSha256:crypto.createHash('sha256').update(raw).digest('hex')};
+ assert.deepEqual(actual,archived);
+ for(const [h,matched] of [[24,72],[48,69]]){
+  const lead=actual.leads[h];assert.equal(lead.expected,100);assert.equal(lead.matched,matched);
+  assert.equal(lead.confirmation.gates.exactCoverage,false);
+  for(const gate of ['allTenBlocks','maeBeatsPersistence','maeNoWorseThanOriginal','p90NoWorseThanBoth'])assert.equal(lead.confirmation.gates[gate],true);
+  assert.equal(lead.confirmation.passesResearchGates,false);
+ }
+ assert.equal(actual.canPromoteModel,false);
+});
+test('recovered near-time rows do not turn into exact matches or authorization',()=>{
+ const d=require('../data/shorefeel/reliability-near-time-actual-20261125.json');
+ const review=require('../data/shorefeel/reliability-review-actual-20261125.json');
+ assert.equal(d.sourceDatasetSha256,review.sourceSha256);
+ assert.equal(d.originalCohortSha256,review.cohortSha256);
+ assert.equal(d.maximumOffsetMinutes,15);assert.equal(d.canPromoteModel,false);
+ for(const [h,n] of [[24,54],[48,51]]){
+  const m=d.metrics[h];assert.equal(m.originalExact,n);assert.equal(m.newNearTime,16);
+  assert.equal(m.originalExact+m.newNearTime+m.remainingMissing,m.expected);
+  assert.equal(m.originalExact,review.leads[h].matched);
+ }
+});
