@@ -151,3 +151,34 @@ test('June preflight failure is preserved and does not authorize forecast acquis
   assert.equal(rows.filter(x=>x.station==='45026'&&x.exactPairPresent).length,5);
  }
 });
+
+test('separate-year acquisition retains failed observation gate and no model evaluation',()=>{
+ const d=require('../data/shorefeel/separate-year-validation-actual-20261125.json');
+ assert.equal(d.slots.length,200);
+ assert.equal(new Set(d.slots.map(p=>[p.station,p.cycleAt,p.leadHours].join('|'))).size,200);
+ assert.equal(d.observationGate,false);assert.equal(d.modelAcquisitionAllowed,false);
+ assert.equal(d.modelProbes.length,0);assert.equal(d.cycles.length,0);assert.equal(d.scores,null);
+ assert.equal(d.canPromoteModel,false);
+ for(const [h,n] of [[24,55],[48,56]]){
+  const rows=d.slots.filter(p=>p.leadHours===h&&p.stratum==='primary');
+  assert.equal(rows.length,80);assert.equal(rows.filter(p=>p.exactPairPresent).length,n);
+  assert.equal(d.metrics[h].primary.passes,false);
+ }
+});
+test('failure-mode evidence reproduces and cannot qualify or train a candidate',()=>{
+ const fs=require('node:fs'),crypto=require('node:crypto'),path=require('node:path');
+ const raw=fs.readFileSync(path.join(__dirname,'../data/shorefeel/horizon-confirm-cohort-actual-20261125.json'));
+ const {diagnose}=require('../scripts/shorefeel-failure-mode-diagnostic.cjs');
+ const a={...diagnose(JSON.parse(raw)),sourceSha256:crypto.createHash('sha256').update(raw).digest('hex')};
+ assert.deepEqual(a,require('../data/shorefeel/failure-mode-diagnostic-actual-20261125.json'));
+ assert.equal(a.canPromoteModel,false);
+ for(const [h,n] of [[24,72],[48,69]]){
+  const l=a.leads[h];
+  assert.equal(l.matched,n);assert.equal(l.exactCoveragePassed,false);
+  assert.equal(l.stations.reduce((s,x)=>s+x.expected,0),100);
+  assert.equal(l.observedChangeMagnitude.reduce((s,x)=>s+x.n,0),n);
+  assert.equal(l.leaveOneStationOut.length,10);assert.equal(l.leaveOneDateOut.length,10);
+ }
+ assert.ok(a.leads[48].observedChangeMagnitude[0].deltaMaeF>0);
+ assert.ok(a.leads[48].observedChangeMagnitude[2].deltaMaeF<0);
+});
