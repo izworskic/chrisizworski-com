@@ -34,3 +34,21 @@ test('partial and empty cohorts fail closed, reject duplicate dates, retain aggr
  assert.equal(summarize([]).modes.originalIssue.screenPassed,false);
  assert.throws(()=>summarize([day([issue]),day([issue])]),/duplicate/);
 });
+
+test('committed actual report retains every date and rejected screen',()=>{
+ const actual=require('../data/freighter-history/soo-independent-validation-actual-20261125.json');
+ assert.deepEqual(actual.plannedDates,DATES);assert.deepEqual(actual.missingDates,[]);
+ assert.deepEqual(actual.frozen,FROZEN);assert.equal(actual.verifiedWorkflowRun,45610355113);
+ assert.equal(actual.decision,'REJECT_GLOBAL_OFFSET_FOR_PRODUCTION');
+ for(const m of Object.values(actual.modes)){
+  assert.deepEqual(m.daily.map(d=>d.date).sort(),[...DATES].sort());
+  assert.equal(m.daily.reduce((n,d)=>n+d.issued,0),m.all.issued);
+  assert.equal(m.daily.reduce((n,d)=>n+d.matched,0),m.all.matched);
+  assert.equal(Object.values(m.all.outcomes).reduce((a,b)=>a+b,0),m.all.issued);
+  assert.equal(m.screenPassed,false);
+  assert.equal(m.gates.matched,false);
+ }
+ assert.equal(actual.modes.originalIssue.gates.width,false);
+ assert.equal(actual.modes.quarterHourIssue.gates.mae,false);
+ assert.equal(actual.forecastEnabled,false);assert.equal(actual.productionCalibrationAuthorized,false);
+});
