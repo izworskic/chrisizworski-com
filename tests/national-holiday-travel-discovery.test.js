@@ -28,7 +28,7 @@ test('Holiday Travel has one searchable card beside Flight Tracker, in Everyday 
   const tracker = section.indexOf('data-tool-id="flight-tracker"');
   const holiday = section.indexOf('data-tool-id="holiday-travel"');
   const agentbase = section.indexOf('data-tool-id="agentbase"');
-  assert.ok(holiday >= 0 && holiday < tracker && tracker < agentbase);
+  assert.ok(tracker >= 0 && tracker < holiday && holiday < agentbase);
 });
 
 test('visible cards, finder count, structured list and source year stay in sync', () => {
@@ -36,11 +36,23 @@ test('visible cards, finder count, structured list and source year stay in sync'
   assert.equal(cards, list.numberOfItems);
   assert.equal(list.itemListElement.length, cards);
   assert.equal((list.itemListElement.filter(item => item.url === url)).length, 1);
-  assert.equal(list.itemListElement.find(item => item.url === url).name, 'Holiday Travel Planner: Best Days to Fly or Drive');
+  assert.equal(list.itemListElement.find(item => item.url === url).name, 'Holiday Travel Planner');
   assert.match(mirror, new RegExp('id="finder-count" aria-live="polite">' + cards + ' tools shown'));
-  assert.equal(graph.find(node => node['@id'] === 'https://chrisizworski.com/national-tools/#page')?.dateModified, '2026-11-24');
+  assert.equal(graph.find(node => node['@id'] === 'https://chrisizworski.com/national-tools/#page')?.dateModified, '2026-11-25');
   const sitemap = fs.readFileSync('public/sitemap.xml', 'utf8');
-  assert.ok(sitemap.includes('<loc>https://chrisizworski.com/national-tools/</loc>\n    <lastmod>2026-11-24</lastmod>'), 'sitemap lastmod must match the catalog change');
+  assert.ok(sitemap.includes('<loc>https://chrisizworski.com/national-tools/</loc>\n    <lastmod>2026-11-25</lastmod>'), 'sitemap lastmod must match the catalog change');
 
   assert.ok(!mirror.includes('Holiday travel flights are live tracked by BTS'), 'must not invent live BTS data');
+});
+
+test('the national card, search corpus and seasonal peak configuration agree',()=>{
+ const catalog=JSON.parse(fs.readFileSync('data/hub-search/corpus.json','utf8')).national;
+ const peaks=JSON.parse(fs.readFileSync('data/directory-peaks.json','utf8')).national;
+ const entries=catalog.filter(item=>item.id==='holiday-travel');
+ assert.equal(entries.length,1); assert.equal(entries[0].href,url);
+ assert.equal(entries[0].title,'Holiday Travel Planner');
+ assert.deepEqual(peaks['holiday-travel'].windows,['11-15/12-02','12-10/01-02']);
+ const visible=[...mirror.matchAll(/<article class="directory-card"[\s\S]*?<\/article>/g)].map(m=>new URL(m[0].match(/class="primary-action" href="([^"]+)"/)[1],'https://chrisizworski.com/').href);
+ assert.deepEqual(list.itemListElement.map(item=>item.url),visible);
+ assert.equal(new Set(visible).size,visible.length);
 });

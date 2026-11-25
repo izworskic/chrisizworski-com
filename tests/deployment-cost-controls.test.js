@@ -9,7 +9,9 @@ import { readPinnedSource } from '../lib/pinned-build-source.mjs';
 
 test('only internal Markdown changes can skip a deployment', () => {
   assert.equal(documentationOnly(['docs/GROWTH_SESSION_LOG.md', 'README.md']), true);
-  for (const files of [[], ['public/guide.md'], ['docs/widget.html'], ['docs/note.md', 'api/flight-assignment.js'], ['package-lock.json'], ['vercel.json'], ['tests/deployment-build-contract.test.js']])
+  assert.equal(documentationOnly(['.agents/skills/web-quality-seo/SKILL.md', '.claude/skills/web-quality-seo/SKILL.md', '.github/skills/web-quality-seo/SKILL.md', 'CLAUDE.md', 'AGENTS.md']), true);
+  assert.equal(documentationOnly(['.agents/skills/experience-investment/references/DECISION_LENSES.md']), true);
+  for (const files of [[], ['public/guide.md'], ['docs/widget.html'], ['docs/note.md', 'api/flight-assignment.js'], ['package-lock.json'], ['vercel.json'], ['tests/deployment-build-contract.test.js'], ['.agents/skills/x/run.mjs'], ['.claude/settings.json'], ['.github/workflows/ci.yml'], ['.github/skills/x/SKILL.md', 'tests/skill-lint.test.js']])
     assert.equal(documentationOnly(files), false);
 });
 

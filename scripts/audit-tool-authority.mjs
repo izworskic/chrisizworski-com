@@ -5,6 +5,7 @@ import { stripTypeScriptTypes } from 'node:module';
 import { fileURLToPath } from 'node:url';
 import { hasVisibleCreatorAttribution, inspectVisibleHtml } from '../lib/creator-attribution.mjs';
 import { auditStructuredAuthority } from '../lib/tool-authority-identity.mjs';
+import { checkToolIndexability } from '../lib/tool-indexability-policy.mjs';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const origin = 'https://chrisizworski.com';
@@ -128,7 +129,10 @@ function auditDocument(html, expectedUrl, tool, headers = new Headers()) {
   const actualCanonical = canonical(html);
   const normalizedUrl = value => { try { return new URL(value).href; } catch { return ''; } };
   check(normalizedUrl(actualCanonical) === normalizedUrl(expectedUrl), `Canonical mismatch: ${actualCanonical || '(missing)'}`);
-  check(!/noindex|nofollow/i.test(robotHeader) && !/noindex|nofollow/i.test(meta(html, 'robots')), 'Indexability is blocked by a robots directive.');
+  const indexability = checkToolIndexability({
+    tool, robotsMeta: meta(html, 'robots'), robotsHeader: robotHeader
+  });
+  check(indexability.ok, indexability.message);
   check(Boolean(title), 'Initial HTML has no title.');
   check(Boolean(description), 'Initial HTML has no meta description.');
   check(Boolean(h1) && Boolean(bodyText) && bodyText !== h1, 'Initial HTML has no readable heading and additional visible body content.');

@@ -1,6 +1,6 @@
 ---
 name: design-reconnaissance
-description: "On-demand public website design research, evidence comparison and optional Dembrandt analysis."
+description: "On-demand public website design research, evidence comparison and optional Dembrandt analysis. Use when asked to compare a tool against public design examples or study how other sites present a similar visitor decision before a redesign."
 ---
 
 # design-reconnaissance

@@ -24,6 +24,7 @@
   tell('report-time','Source timestamp unavailable');
   tell('report-heading','Check the official forecast');
   tell('report-guide',reason||'The nearby forecast is not available right now. Explore the shoreline notes, then check current Environment Canada and park guidance before leaving.');
+  tell('report-lake-effect','Lake influence unavailable. Do not infer a beach temperature from missing ECCC and NOAA data.');
   tell('report-scope','No nearest-town air value, lake temperature, wave safety or swimming status has been inferred. Read the official beach and park notices.');
  }
  function show(li){
@@ -34,6 +35,7 @@
   tell('report-name',d.name);tell('report-place','Ontario · Lake '+d.lake);
   tell('report-story',d.story);tell('report-heading','Get to know this shore');
   tell('report-guide','Checking the nearby Environment Canada forecast. While it loads, explore what makes this particular shore different.');
+  tell('report-lake-effect','Checking a recent NOAA offshore water pixel against the ECCC city-area forecast wind. No on-sand degree correction is assumed.');
   tell('report-temp','Checking weather');tell('report-method','Nearby ECCC forecast, not a beach thermometer');
   tell('report-wind','Checking wind');tell('report-time','Checking official timestamp');
   tell('report-scope','Approximate park or beach vicinity pin, not a parking location. Forecasts and official beach advisories are separate.');
@@ -55,6 +57,10 @@
        ?Math.round(a.windKmh)+' km/h'+(a.windDirection?' from '+a.windDirection:''):'Wind unavailable');
     tell('report-time',(a.isUpcoming?'Upcoming ECCC hour ':'ECCC hour ')+time(a.validAt));
     tell('report-heading',a.heading||'On the shore');tell('report-guide',a.note||'The wind is worth watching at the waterline.');
+    const influence=a.shorelineRealFeel?.lakeEffect;
+    tell('report-lake-effect',influence?.explanation
+      ?influence.label+'. '+influence.explanation+' The primary temperature remains ECCC forecast comfort, not a beach thermometer.'
+      :'No nearby NOAA offshore water sample verified; actual shoreline warming or cooling remains unknown.');
     tell('report-scope','ECCC forecast for '+a.forecastPlace+' about '+a.forecastDistanceKm+
       ' km from this shoreline. This is not an on-sand air measurement or calibrated coastal correction. Beach water test results and safety flags have not been checked.');
    })

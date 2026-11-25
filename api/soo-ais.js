@@ -1,5 +1,6 @@
 const { normalize } = require('../lib/soo-ais');
 const next = require('../lib/soo-locks-next');
+const nearMotion = require('../public/assets/soo-near-lock-motion');
 const { chooseNextShip } = require('../lib/soo-locks-jev');
 
 // One upstream call covers the whole St. Marys River, Whitefish Bay to DeTour.
@@ -36,6 +37,7 @@ async function nextShip(raw, now, checkedAt) {
       ok: true,
       inLock: next.inLockList(river.vessels, now),
       candidates,
+      nearLockMotion: nearMotion.observeList(river.vessels, now, next),
       pick: selection.pick || null,
       selection: { mode: selection.mode, confidence: selection.confidence, model: selection.mode === 'shared-harness-jev' ? selection.model : undefined, reason: selection.reason || undefined },
       caveats: [

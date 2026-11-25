@@ -21,6 +21,8 @@
   const choose = el('arrival-choose-hint');
   const example = el('arrival-example');
   let selectedId = null;
+  const next=el("arrival-next"), save=el("arrival-save"), water=el("arrival-water"), nextContext=el("arrival-next-context"), saveStatus=el("arrival-save-status"), riverContext=el("river-visit-context");
+  let observedSave=null;
   const safeLink = url => {
     try {
       const target = new URL(url, window.location.origin);
@@ -72,6 +74,40 @@
     return 'https://www.google.com/maps/dir/?api=1&destination=' + encodeURIComponent(lat + ',' + lng) + '&travelmode=driving';
   };
   const text = (node, value) => { node.textContent = value; };
+  function syncNext(card) {
+    if (!next || !save || !water || !nextContext || !saveStatus || !riverContext) return;
+    observedSave?.disconnect();
+    const d=card?.dataset;
+    if(!d){next.hidden=true;riverContext.textContent='Choose a waterfall for its arrival details. River readings are regional context, not measurements at the falls.';return;}
+    next.hidden=false;
+    const original=card.querySelector('button.save');
+    function refresh(){
+      const saved=original?.getAttribute('aria-pressed')==='true';
+      const eligible=category(card)!=='closed'&&category(card)!=='unverified'&&category(card)!=='specialist'&&window.UPWaterfallVisitLens?.review?.(d.id)?.excluded!==true;
+      save.disabled=!original||(!saved&&!eligible);
+      save.setAttribute('aria-pressed',String(saved));
+      save.textContent=saved?'Remove saved stop':'Save this stop';
+      nextContext.textContent=saved?'This waterfall is in your saved day.':eligible?'Keep this waterfall with your other stops, then review the day before you drive.':'Use the guide for more information. This approach is not eligible for a new saved visit from here.';
+    }
+    refresh();
+    if(original&&typeof MutationObserver!=='undefined'){observedSave=new MutationObserver(refresh);observedSave.observe(original,{attributes:true,attributeFilter:['aria-pressed']});}
+    riverContext.textContent='Exploring '+d.name+'? Compare the regional river and weather observations below. No gauge-to-waterfall flow relationship has been established for this selection.';
+    saveStatus.textContent='';
+  }
+  save?.addEventListener('click',()=>{
+    const card=byId.get(selectedId), original=card?.querySelector('button.save');
+    if(!original||save.disabled)return;
+    const before=original.getAttribute('aria-pressed')==='true';
+    original.click();
+    const after=original.getAttribute('aria-pressed')==='true';
+    syncNext(card);
+    saveStatus.textContent=after===before?'The saved list has not changed. Check your six-stop limit.':after?'Added to your waterfall day.':'Removed from your waterfall day.';
+  });
+  water?.addEventListener('click',()=>{
+    const river=el('river-conditions'), summary=el('river-conditions-heading');
+    if(!river||!summary)return;
+    river.open=true;summary.focus({preventScroll:true});river.scrollIntoView({block:'start',behavior:'auto'});
+  });
   function render(card) {
     if (!card) return;
     const d = card.dataset;
@@ -130,6 +166,7 @@
       }
     }
     text(reviewed, (d.statusLabel || 'Access review') + '. This is published source guidance, not live trail, weather, or road status.');
+    syncNext(card);
   }
   function select(id, options = {}) {
     const card = byId.get(id);
@@ -163,7 +200,7 @@
   });
   chooser.addEventListener('change', () => {
     const id = chooser.value;
-    if (!id) { area.hidden = true; choose.hidden = false; selectedId = null; return; }
+    if (!id) { area.hidden = true; choose.hidden = false; selectedId = null; syncNext(null); return; }
     select(id, {userChosen: true});
     // Keep the answer visible; a filter may currently hide this map pin.
     if (typeof window.UPWaterfallFocus === 'function') {

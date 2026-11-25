@@ -3,7 +3,7 @@ const test=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
-const {data,bySlug,validLocation,officialNwsUrl,windMph,selectPeriod,interpret}=require('../lib/shorefeel/us-coast.js');
+const {data,epaBeaches,bySlug,validLocation,officialNwsUrl,windMph,selectPeriod,interpret}=require('../lib/shorefeel/us-coast.js');
 const handler=require('../api/shorefeel-us.js');
 const root=path.resolve(__dirname,'..');
 const page=fs.readFileSync(path.join(root,'public/great-lakes-beaches/around-the-lakes/index.html'),'utf8');
@@ -22,7 +22,8 @@ test('US catalog covers 16 verified destinations in seven non-Michigan states an
  assert.equal(data.beaches.length,16);
  assert.deepEqual([...new Set(data.beaches.map(b=>b.state))].sort(),['IL','IN','MN','NY','OH','PA','WI']);
  assert.deepEqual([...new Set(data.beaches.map(b=>b.lake))].sort(),['Erie','Michigan','Ontario','Superior']);
- assert.equal(bySlug.size,16);
+ assert.equal(epaBeaches.length,981);
+ assert.equal(bySlug.size,997);
  assert.match(data.coverage.Michigan,/Lake Huron/);
  for(const b of data.beaches){
    assert.ok(validLocation(b),b.slug+' must be a valid source-vetted US Great Lakes beach');
@@ -65,8 +66,9 @@ test('four NWS shoreline references remain in vetted land locations, within the 
    };
    const got=await handler.lookup(beach,now);
    assert.equal(got.status,'forecast-based',slug);
-   assert.ok(called[0].endsWith('/points/'+expected.lat.toFixed(4)+','+expected.lon.toFixed(4)),slug+' uses its vetted point');
-   assert.equal(called.length,2,slug+' retrieves the source-authenticated hourly forecast');
+   assert.ok(called.find(url=>url.includes('api.weather.gov/points/'))?.endsWith('/points/'+expected.lat.toFixed(4)+','+expected.lon.toFixed(4)),slug+' uses its vetted point');
+   assert.equal(called.filter(url=>url.includes('api.weather.gov/')).length,2,slug+' retrieves two source-authenticated NWS calls');
+   assert.equal(called.filter(url=>url.includes('apps.glerl.noaa.gov/')).length,1,slug+' checks NOAA water context in parallel');
   }
  }finally{global.fetch=saved;}
 });
@@ -131,8 +133,9 @@ test('API only permits the catalog slug, never returns a false beach safety stat
    };
    const got=await handler.lookup(data.beaches[0],now);
    assert.equal(got.status,'forecast-based');
-   assert.equal(calls.length,2);
-   assert.ok(calls.every(url=>url.startsWith('https://api.weather.gov/')));
+   assert.equal(calls.filter(url=>url.startsWith('https://api.weather.gov/')).length,2);
+   assert.equal(calls.filter(url=>url.startsWith('https://apps.glerl.noaa.gov/')).length,1);
+   assert.equal(got.shorelineRealFeel.calibratedOnSand,false);
  }finally{global.fetch=saved;}
 });
 
@@ -150,7 +153,7 @@ test('curated list is crawlable and consistent across five lake choices',()=>{
  assert.match(page,/No beach is labeled safe, open or recently tested here/);
  for(const link of ['mnbeaches.org/','apps.dnr.wi.gov/beachhealth/','idph.illinois.gov/envhealth/ilbeaches/','portal.idem.in.gov/beachalert/','odh.ohio.gov/know-our-programs/','eriecountypa.gov/departments/health/','beachadvisory.health.ny.gov/'])assert.ok(page.includes(link),'static source fallback for '+link);
  assert.match(page,/rel="canonical" href="https:\/\/chrisizworski\.com\/great-lakes-beaches\/around-the-lakes\//);
- assert.match(page,/"dateModified":"2026-11-22"/);
+ assert.match(page,/"dateModified":"2026-11-24"/);
  assert.match(fs.readFileSync(path.join(root,'public/sitemap-beaches.xml'),'utf8'),/around-the-lakes\/</);
  assert.match(fs.readFileSync(path.join(root,'public/great-lakes-beaches/index.html'),'utf8'),/Explore Great Lakes ShoreFeel/);
 });

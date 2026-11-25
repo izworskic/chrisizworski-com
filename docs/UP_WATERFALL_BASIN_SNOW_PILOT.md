@@ -1,0 +1,19 @@
+# Offline waterfall basin snow pilot (2026-11-24)
+
+No live basin numerical values yet. The compiler produces a candidate research artifact from reviewed original-value GeoTIFF conversions and NLDI polygons. It cannot authenticate manually supplied source provenance, and does not publish any values automatically.
+
+Sources:
+- USGS NLDI: https://api.water.usgs.gov/docs/nldi/basin/ . For each allowlisted gauge fetch the full upstream split catchment using https://api.water.usgs.gov/nldi/linked-data/nwissite/{id}/basin?f=json&simplified=false&splitCatchment=true . Preserve the original response, confirm identity and review mapped area. The 10% drainage area tolerance is a pilot check, not identity proof.
+- National Operational Hydrologic Remote Sensing Center. (2004). Snow Data Assimilation System (SNODAS) Data Products at NSIDC, Version 1 (G02158). Boulder, Colorado USA: NSIDC. https://doi.org/10.7265/N5TB14TC . Actual dated subset and access date must be retained. Archive: https://noaadata.apps.nsidc.org/NOAA/G02158/ . Guide: https://nsidc.org/data/documentation/snow-data-assimilation-system-snodas-data-products-nsidc-version-1-user-guide . Conversion: https://nsidc.org/data/user-resources/help-center/how-do-i-convert-snodas-binary-files-geotiff-or-netcdf . Preserve unscaled integers, original member names, source URLs, headers, nodata and file hashes. Compare header/grid metadata and source timestamps before setting review flags.
+- SWE 1034 is a modeled 06 UTC state, raw integer = mm water. Melt 1044 is modeled snowpack-base runoff, raw times .01 mm. Liquid and solid 1025SIL00/01 are model forcing, raw times .1 mm water equivalent. Flux periods are 06 UTC to 06 UTC: confirm actual interval in the headers, not just archive package date. Model inputs are not measured rainfall; snowpack-base melt is not streamflow. No quantitative water budget or forecast. https://nsidc.org/data/user-resources/help-center/can-i-sum-snodas-values-given-area . Exclude dates before coastal zero repair, nodata, negative values and saturation.
+- NOAA Stage IV radar/gauge precipitation: https://water.noaa.gov/about/precipitation-data-access . Different 12 UTC day boundaries; import deferred until actual source timestamp/units are checked. Do not mix with SNODAS.
+
+Use approved offline Python 3.11+ with rasterio, numpy, shapely, pyproj. No production dependencies or new infrastructure. Native pixels intersect basin in equal-area EPSG:5070; weight by valid overlap; require 95% coverage. Native edge reprojection approximates curved edges; independently validate at real grid resolutions. Missing is not zero; output per product and basin, not aggregated water budget.
+
+Run:
+    python scripts/build-up-waterfall-basin-snow.py --manifest /path/manifest.json --output /path/candidate.json
+    python tests/up-waterfall-basin-snow.test.py
+
+Manifest keys: day (YYYY-MM-DD), accessed (YYYY-MM-DD), reviewedOriginalValues (true only after manual inspection), basins (map station id to source, file, sha256), products (map swe/melt/liquid/solid to source, originalMember, file, sha256, day, encoding="raw-snodas-integer", periodReviewed=true for flux after header review). Missing entries remain absent. Candidate JSON is not a public asset. Do not commit source rasters.
+
+Actual NLDI/NOAA download blocked in this environment; real basin geometry, archive conversion, source lag and coverage remain unverified. Synthetic tests written, not run in this connector environment. Before public release: obtain dated original files, verify headers and area independently, execute offline tests, assess spatial coverage and source age, validate real raster points independently, perform browser/CI verification and human review. Only then publish dated artifact with stale states. Stage IV comparison remains pending. No forecast claim. Rollback by reverting commit.

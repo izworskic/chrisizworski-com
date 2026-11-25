@@ -61,7 +61,7 @@ test("All map tabs correspond to live tracker views and preserve keyboard state"
 test("Mobile responsive, request timestamps, data outage and readable fallback remain", () => {
   assert.match(css, /#freighterMap\{height:360px/);
   assert.match(css, /\.hub-map-tabs\{display:flex;overflow-x:auto/);
-  assert.match(tracker, /1800000/);
+  assert.match(tracker, /GreatLakesAisEvidence\?\.positionFresh\(v,now\)/);
   assert.match(tracker, /Vessel reports unavailable/);
   assert.match(tracker, /No recent reports returned/);
   assert.match(html, /<noscript>/);
@@ -74,7 +74,7 @@ test("Mobile responsive, request timestamps, data outage and readable fallback r
 test("Search canonical, entity, Person byline and intent boundary stay stable", () => {
   assert.match(html, /<title>Great Lakes Freighter Central: Ports \| Chris Izworski<\/title>/);
   assert.match(html, /rel="canonical" href="https:\/\/chrisizworski\.com\/freighters\/"/);
-  assert.match(html, /"@type":"CollectionPage"/);
+  assert.match(html, /"@type"\s*:\s*"CollectionPage"/);
   assert.match(html, /https:\/\/chrisizworski\.com\/#person/);
   assert.match(html, /Built by <a href="https:\/\/chrisizworski\.com\/chris-izworski\/"/);
   assert.doesNotMatch(html, /<meta[^>]+noindex/);

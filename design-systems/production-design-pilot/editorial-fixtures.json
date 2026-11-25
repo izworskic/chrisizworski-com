@@ -1,0 +1,323 @@
+{
+  "schema": 1,
+  "status": "candidate examples only; all readings and places used in the examples are fictional",
+  "sourceAnchors": [
+    {
+      "path": "public/assets/duluth-canal.js",
+      "spans": [
+        "Last successful AIS check shown, not a live update.",
+        "speed unavailable",
+        "AIS type:"
+      ]
+    },
+    {
+      "path": "public/michigan-snow-totals/index.html",
+      "spans": [
+        "Seven-day reported snowfall, not a local forecast. No nearby report does not mean no snow fell.",
+        "Modeled snow depth checked against stations"
+      ]
+    },
+    {
+      "path": "public/lake-superior-circle-tour/index.html",
+      "spans": [
+        "47 mph with a 20% planning margin",
+        "not a routed ETA",
+        "they are not current travel times"
+      ]
+    }
+  ],
+  "examples": [
+    {
+      "id": "ais-stale",
+      "family": "live intelligence",
+      "kind": "observation",
+      "availability": "stale",
+      "source": {
+        "name": "AIS",
+        "time": "14:20 UTC",
+        "fixture": true
+      },
+      "facts": [
+        "14:20 UTC",
+        "AIS",
+        "not a live update",
+        "current position unavailable"
+      ],
+      "before": "Last successful AIS report received at 14:20 UTC. This is not a live update; current position unavailable.",
+      "answer": "Last ship report: 14:20 UTC.",
+      "evidence": "AIS, last successful report. This is not a live update; current position unavailable.",
+      "action": "Check the harbor camera for current activity.",
+      "critical": [
+        "current position unavailable",
+        "not a live update"
+      ],
+      "forbidden": [
+        "live position confirmed",
+        "arriving now"
+      ]
+    },
+    {
+      "id": "snow-zero",
+      "family": "environmental",
+      "kind": "observation",
+      "availability": "available",
+      "source": {
+        "name": "Example NWS report",
+        "time": "past 24 hours",
+        "fixture": true
+      },
+      "facts": [
+        "0 inches",
+        "past 24 hours",
+        "Example NWS report",
+        "snowfall",
+        "not snow depth"
+      ],
+      "before": "Example NWS report: 0 inches of snowfall in the past 24 hours, not snow depth.",
+      "answer": "0 inches of reported snowfall.",
+      "evidence": "Example NWS report, past 24 hours. This is snowfall, not snow depth.",
+      "action": "Check current snow depth before choosing a winter trail.",
+      "critical": [
+        "not snow depth"
+      ],
+      "forbidden": [
+        "no snow on the ground"
+      ]
+    },
+    {
+      "id": "snow-missing",
+      "family": "environmental",
+      "kind": "observation",
+      "availability": "unavailable",
+      "source": {
+        "name": "NWS",
+        "fixture": true
+      },
+      "facts": [
+        "NWS",
+        "no nearby report",
+        "snowfall is unknown"
+      ],
+      "before": "NWS: no nearby report. Local snowfall is unknown.",
+      "answer": "Local snowfall is unknown.",
+      "evidence": "NWS: no nearby report.",
+      "action": "Check nearby station reports.",
+      "critical": [
+        "no nearby report",
+        "snowfall is unknown"
+      ],
+      "forbidden": [
+        "0 inches",
+        "no snow fell"
+      ]
+    },
+    {
+      "id": "snow-estimate",
+      "family": "environmental",
+      "kind": "estimate",
+      "availability": "available",
+      "source": {
+        "name": "Example NWS spotter report",
+        "time": "past 24 hours",
+        "fixture": true
+      },
+      "facts": [
+        "6.4 inches",
+        "past 24 hours",
+        "Example NWS spotter report",
+        "estimated snowfall",
+        "not a measurement"
+      ],
+      "before": "Example NWS spotter report: 6.4 inches of estimated snowfall in the past 24 hours, not a measurement.",
+      "answer": "6.4 inches of estimated snowfall.",
+      "evidence": "Example NWS spotter report, past 24 hours. This is not a measurement.",
+      "action": "Compare with nearby measured reports.",
+      "critical": [
+        "estimated snowfall",
+        "not a measurement"
+      ],
+      "forbidden": [
+        "measured snowfall",
+        "confirmed measurement"
+      ]
+    },
+    {
+      "id": "weather-forecast",
+      "family": "planning",
+      "kind": "forecast",
+      "availability": "available",
+      "source": {
+        "name": "Example NWS forecast",
+        "time": "issued 12:00 UTC",
+        "fixture": true
+      },
+      "facts": [
+        "2 to 4 inches",
+        "issued 12:00 UTC",
+        "Example NWS forecast",
+        "tomorrow",
+        "not observed"
+      ],
+      "before": "Example NWS forecast issued 12:00 UTC: 2 to 4 inches tomorrow, not observed snowfall.",
+      "answer": "Forecast: 2 to 4 inches of snow tomorrow.",
+      "evidence": "Example NWS forecast, issued 12:00 UTC. This is not observed snowfall.",
+      "action": "Check the updated forecast before driving.",
+      "critical": [
+        "forecast",
+        "not observed"
+      ],
+      "forbidden": [
+        "measured total",
+        "snow already fell"
+      ]
+    },
+    {
+      "id": "aurora-model",
+      "family": "environmental",
+      "kind": "model",
+      "availability": "available",
+      "source": {
+        "name": "Example NOAA OVATION output",
+        "time": "15:00 UTC",
+        "fixture": true
+      },
+      "facts": [
+        "20/100",
+        "15:00 UTC",
+        "Example NOAA OVATION output",
+        "modeled intensity",
+        "not a sighting probability"
+      ],
+      "before": "Example NOAA OVATION output at 15:00 UTC: 20/100 modeled intensity, not a sighting probability.",
+      "answer": "20/100 modeled intensity at the selected location.",
+      "evidence": "Example NOAA OVATION output, 15:00 UTC. This is not a sighting probability.",
+      "action": "Check darkness and cloud cover before heading out.",
+      "critical": [
+        "modeled intensity",
+        "not a sighting probability"
+      ],
+      "forbidden": [
+        "20% chance",
+        "guaranteed sighting"
+      ]
+    },
+    {
+      "id": "ship-window",
+      "family": "live intelligence",
+      "kind": "inference",
+      "availability": "partial",
+      "source": {
+        "name": "Example AIS report",
+        "time": "14:20 UTC",
+        "fixture": true
+      },
+      "facts": [
+        "15:00 to 16:00 UTC",
+        "14:20 UTC",
+        "Example AIS report",
+        "estimated arrival window",
+        "not confirmed",
+        "destination unavailable"
+      ],
+      "before": "Estimated arrival window 15:00 to 16:00 UTC, not confirmed. Example AIS report at 14:20 UTC; destination unavailable.",
+      "answer": "Estimated arrival window: 15:00 to 16:00 UTC.",
+      "evidence": "Example AIS report, 14:20 UTC. Destination unavailable; arrival not confirmed.",
+      "action": "Check again before leaving for the canal.",
+      "critical": [
+        "estimated arrival window",
+        "not confirmed",
+        "destination unavailable"
+      ],
+      "forbidden": [
+        "confirmed arrival",
+        "will arrive at"
+      ]
+    },
+    {
+      "id": "lock-simulation",
+      "family": "interpretation",
+      "kind": "simulation",
+      "availability": "available",
+      "source": {
+        "name": "Example lock model",
+        "time": "simulation step",
+        "fixture": true
+      },
+      "facts": [
+        "21 feet",
+        "Example lock model",
+        "simulation",
+        "not current lock status"
+      ],
+      "before": "Example lock model simulation: 21 feet of lift, not current lock status.",
+      "answer": "Simulation: 21 feet of lift.",
+      "evidence": "Example lock model. This is not current lock status.",
+      "action": "Watch how the water level changes in the chamber.",
+      "critical": [
+        "simulation",
+        "not current lock status"
+      ],
+      "forbidden": [
+        "live lock position",
+        "currently lifting"
+      ]
+    },
+    {
+      "id": "journey-estimate",
+      "family": "planning",
+      "kind": "editorial",
+      "availability": "partial",
+      "source": {
+        "name": "Example itinerary",
+        "time": "planning allowance",
+        "fixture": true
+      },
+      "facts": [
+        "45 minutes",
+        "75 minutes",
+        "2 hours",
+        "Example itinerary",
+        "driving time not calculated"
+      ],
+      "before": "Example itinerary: allow 45 minutes at the first stop and 75 minutes at the second, 2 hours at stops; driving time not calculated.",
+      "answer": "Allow 2 hours at the stops.",
+      "evidence": "Example itinerary: 45 minutes at the first stop and 75 minutes at the second. Driving time not calculated.",
+      "action": "Add driving time and confirm access before choosing the plan.",
+      "critical": [
+        "driving time not calculated"
+      ],
+      "forbidden": [
+        "total trip time: 2 hours",
+        "confirmed route duration"
+      ]
+    },
+    {
+      "id": "access-unknown",
+      "family": "discovery",
+      "kind": "editorial",
+      "availability": "unavailable",
+      "source": {
+        "name": "Example land manager",
+        "fixture": true
+      },
+      "facts": [
+        "Example land manager",
+        "access unverified",
+        "no current confirmation"
+      ],
+      "before": "Access unverified. Example land manager: no current confirmation.",
+      "answer": "Access unverified.",
+      "evidence": "Example land manager: no current confirmation.",
+      "action": "Confirm the road, parking and entrance with the land manager before leaving.",
+      "critical": [
+        "access unverified",
+        "no current confirmation"
+      ],
+      "forbidden": [
+        "open today",
+        "safe to visit",
+        "access confirmed"
+      ]
+    }
+  ]
+}
