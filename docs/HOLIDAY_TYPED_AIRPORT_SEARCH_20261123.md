@@ -1,0 +1,7 @@
+# Holiday Travel airport selection: reconciliation (2026-11-25)
+
+The original November 23 airport-only proposal (#1881) is superseded in production source by the current shared `public/assets/holiday-travel-choices.js` implementation. Keep the existing ten enhanced controls and original native select data model; do not ship another airport module or overwrite the current departure dashboard, calendar comparison, NWS board, source-backed risk engine, GA4, ads or creator identity.
+
+Retained unique acceptance: New York's JFK and LGA are distinct source entries; entering ambiguous city text must leave the current route unchanged until an explicit selection. Added source-catalog unit coverage and real-browser scenarios at existing 360px and 1440px widths. The current Python audit already validates the airport source and top-30 roster; the existing Rust/JS parity gate already checks choice rankings. The older duplicate Python/Rust catalog audit and unvalidated typo matcher are not adopted. Static dropdown counting is not a reliable measurement of enhanced runtime controls; defer that independent research task rather than add another routine CI job.
+
+No public source or runtime behavior change. No new route, service, dependency, scheduled build or inference. Exact-head full CI, browser evidence and independent review required before merging. No measured traffic, retention or risk-estimation improvement claimed. Original work remains in the branch history.

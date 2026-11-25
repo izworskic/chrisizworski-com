@@ -46,3 +46,10 @@ test('respects maximum suggestions; never autoselects unsupported values', () =>
   assert.ok(code.includes("entry.addEventListener('keydown'"));
   assert.ok(code.includes("entry.addEventListener('blur'"));
 });
+
+test('ambiguous New York retains distinct source codes and exact code search is deterministic', () => {
+  const city = rankChoices(opts, 'New York');
+  assert.deepEqual(city.map(o => o.value).sort(), ['JFK', 'LGA']);
+  for (const code of ['JFK','LGA']) assert.equal(rankChoices(opts, code)[0].value, code);
+  assert.ok(code.includes('visible.length === 1 || active >= 0'));
+});

@@ -125,6 +125,19 @@ async function main() {
       assert.equal(await page.getByText('No match. Try a city, airport code or another date.').isVisible(), true);
       await homeSearch.press('Escape');
       assert.equal(await page.locator('#home').inputValue(), 'DTW', 'unrecognized entry must not change the route');
+      await homeSearch.fill('New York');
+      await page.getByRole('option', { name: /New York.*JFK/ }).waitFor();
+      await page.getByRole('option', { name: /New York.*LGA/ }).waitFor();
+      await homeSearch.press('Enter');
+      assert.equal(await page.locator('#home').inputValue(), 'DTW', 'ambiguous city must not change the route without selection');
+      await page.getByRole('option', { name: /New York.*LGA/ }).click();
+      await page.waitForFunction(() => document.getElementById('home').value === 'LGA');
+      assert.match(await homeSearch.inputValue(), /New York.*LGA/);
+      await homeSearch.fill('DTW');
+      await homeSearch.press('ArrowDown');
+      await homeSearch.press('Enter');
+      await page.waitForFunction(() => document.getElementById('home').value === 'DTW');
+      await assertNoPageOverflow(page,width);
 
       await page.getByText('National Weather Service data is unavailable for the 30 airports right now').waitFor({ timeout: 15000 });
       await assertNoPageOverflow(page, width);
