@@ -95,6 +95,12 @@ jobs:
           mkdir -p artifacts/shorefeel-beach-qa
           node scripts/shorefeel-archive-coverage.cjs > artifacts/shorefeel-beach-qa/archive-coverage.json
           cat artifacts/shorefeel-beach-qa/archive-coverage.json
+      - name: Acquire bounded public Seagull archive observations
+        if: github.head_ref == 'research/shorefeel-actual-october-cohort'
+        run: |
+          mkdir -p artifacts/shorefeel-beach-qa
+          python3 scripts/shorefeel-seagull-depth-acquisition.py > artifacts/shorefeel-beach-qa/seagull-depth.json
+          cat artifacts/shorefeel-beach-qa/seagull-depth.json
       - name: Install isolated pinned browser harness
         run: |
           npm install --prefix "$RUNNER_TEMP/shorefeel-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
