@@ -87,7 +87,7 @@ test('unknown, stale and empty local AIS sources do not imply there are no ships
  assert.equal(UI.summarize(formerlyFresh,now+31*60*1000).available,false);
 });
 
-test('Calumet keeps shared arrows; Cuyahoga uses exact Soo icon factory while preserving counted source context',()=>{
+test('Calumet and Cuyahoga use the same Soo SVG factory with counted source context',()=>{
  for(const [html,app,id] of [[cHTML,cApp,'calumet-type-counts'],[yHTML,yApp,'cuyahoga-type-counts']]){
   const iconsAt=html.indexOf('/assets/seaway-vessel-icons.js');
   const uiAt=html.indexOf('/assets/river-watch-vessel-ui.js');
@@ -95,13 +95,10 @@ test('Calumet keeps shared arrows; Cuyahoga uses exact Soo icon factory while pr
   assert.ok(iconsAt>0&&uiAt>iconsAt&&appAt>uiAt);
   assert.match(html,/\/assets\/river-watch-vessel-ui\.css/);
   assert.match(html,new RegExp('id="'+id+'"'));
-  if(id.startsWith('calumet'))assert.match(app,/shipUI\.marker\(/);
-  else {
-   assert.match(app,/Icons\.icon\(v,/);
-   assert.match(app,/soo-ais-symbol/);
-   assert.match(html,/\/assets\/soo-vessel-icons\.css/);
-   assert.doesNotMatch(app,/river-ship-course/);
-  }
+  assert.match(app,/Icons\.icon\(v,/);
+  assert.match(app,/soo-ais-symbol/);
+  assert.match(html,/\/assets\/soo-vessel-icons\.css/);
+  assert.doesNotMatch(app,/river-ship-course/);
   assert.match(app,/shipUI\?\.renderTypeFilters\(/);
   assert.match(app,/shipUI\.match\(/);
   assert.match(app,/river-vessel-list-glyph/);

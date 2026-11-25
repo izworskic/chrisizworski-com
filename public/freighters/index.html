@@ -26,25 +26,138 @@
 {
   "@context": "https://schema.org",
   "@graph": [
-    {"@type":"Person","@id":"https://chrisizworski.com/#person","name":"Chris Izworski","url":"https://chrisizworski.com/"},
-    {"@type":"WebSite","@id":"https://chrisizworski.com/#website","name":"Chris Izworski","url":"https://chrisizworski.com/","publisher":{"@id":"https://chrisizworski.com/#person"}},
-    {"@type":"CollectionPage","@id":"https://chrisizworski.com/freighters/#page","name":"Great Lakes Freighter Central: Ships and Ports","description":"A freighter-watching decision guide and curated directory of Great Lakes vessel tracking, ship-watching locations, ports, maritime news and history.","url":"https://chrisizworski.com/freighters/","inLanguage":"en-US","dateModified":"2026-10-28","isPartOf":{"@id":"https://chrisizworski.com/#website"},"author":{"@id":"https://chrisizworski.com/#person"},"publisher":{"@id":"https://chrisizworski.com/#person"},"mainEntity":{"@id":"https://chrisizworski.com/freighters/#directory"}},
-    {"@type":"ItemList","@id":"https://chrisizworski.com/freighters/#directory","name":"Great Lakes freighter resources","itemListElement":[
-      {"@type":"ListItem","position":1,"name":"Great Lakes Ship Tracker","url":"https://chrisizworski.com/great-lakes-freighter-tracking/"},
-      {"@type":"ListItem","position":2,"name":"Soo Locks Ships Today","url":"https://chrisizworski.com/soo-locks/"},
-      {"@type":"ListItem","position":3,"name":"Duluth Canal Park Ship Watch","url":"https://chrisizworski.com/duluth-canal-park/"},
-      {"@type":"ListItem","position":4,"name":"Detroit River Freighters","url":"https://chrisizworski.com/detroit-river-freighters/"},
-      {"@type":"ListItem","position":5,"name":"Great Lakes Ship-Watching Spots","url":"https://chrisizworski.com/great-lakes-ship-watching-spots/"},
-      {"@type":"ListItem","position":6,"name":"Great Lakes Gazette","url":"https://chrisizworski.com/great-lakes-gazette/"},
-      {"@type":"ListItem","position":7,"name":"Great Lakes Maritime History","url":"https://chrisizworski.com/great-lakes-maritime-history/"},
-      {"@type":"ListItem","position":8,"name":"Great Lakes Shipwreck Explorer","url":"https://chrisizworski.com/great-lakes-shipwrecks/"},
-      {"@type":"ListItem","position":9,"name":"Great Lakes Freighter Winter Layup Atlas","url":"https://chrisizworski.com/great-lakes-freighter-winter-layup/"}
-    ]},
-    {"@type":"BreadcrumbList","itemListElement":[
-      {"@type":"ListItem","position":1,"name":"Home","item":"https://chrisizworski.com/"},
-      {"@type":"ListItem","position":2,"name":"Great Lakes","item":"https://chrisizworski.com/great-lakes/"},
-      {"@type":"ListItem","position":3,"name":"Freighters","item":"https://chrisizworski.com/freighters/"}
-    ]}
+    {
+      "@type": "Person",
+      "@id": "https://chrisizworski.com/#person",
+      "name": "Chris Izworski",
+      "url": "https://chrisizworski.com/"
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://chrisizworski.com/#website",
+      "name": "Chris Izworski",
+      "url": "https://chrisizworski.com/",
+      "publisher": {
+        "@id": "https://chrisizworski.com/#person"
+      }
+    },
+    {
+      "@type": "CollectionPage",
+      "@id": "https://chrisizworski.com/freighters/#page",
+      "name": "Great Lakes Freighter Central: Ships and Ports",
+      "description": "A freighter-watching decision guide and curated directory of Great Lakes vessel tracking, ship-watching locations, ports, maritime news and history.",
+      "url": "https://chrisizworski.com/freighters/",
+      "inLanguage": "en-US",
+      "dateModified": "2026-11-23",
+      "isPartOf": {
+        "@id": "https://chrisizworski.com/#website"
+      },
+      "author": {
+        "@id": "https://chrisizworski.com/#person"
+      },
+      "publisher": {
+        "@id": "https://chrisizworski.com/#person"
+      },
+      "mainEntity": {
+        "@id": "https://chrisizworski.com/freighters/#directory"
+      }
+    },
+    {
+      "@type": "ItemList",
+      "@id": "https://chrisizworski.com/freighters/#directory",
+      "name": "Great Lakes freighter resources",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Great Lakes Ship Tracker",
+          "url": "https://chrisizworski.com/great-lakes-freighter-tracking/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Soo Locks Ships Today",
+          "url": "https://chrisizworski.com/soo-locks/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Duluth Canal Park Ship Watch",
+          "url": "https://chrisizworski.com/duluth-canal-park/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 4,
+          "name": "Detroit River Freighters",
+          "url": "https://chrisizworski.com/detroit-river-freighters/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 5,
+          "name": "Calumet River Freighter & Bridge Watch",
+          "url": "https://chrisizworski.com/calumet-freighter-watch/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 6,
+          "name": "Cuyahoga River Freighter & Bridge Watch",
+          "url": "https://chrisizworski.com/cuyahoga-freighter-watch/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 7,
+          "name": "Great Lakes Ship-Watching Spots",
+          "url": "https://chrisizworski.com/great-lakes-ship-watching-spots/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 8,
+          "name": "Great Lakes Gazette",
+          "url": "https://chrisizworski.com/great-lakes-gazette/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 9,
+          "name": "Great Lakes Maritime History",
+          "url": "https://chrisizworski.com/great-lakes-maritime-history/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 10,
+          "name": "Great Lakes Shipwreck Explorer",
+          "url": "https://chrisizworski.com/great-lakes-shipwrecks/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 11,
+          "name": "Great Lakes Freighter Winter Layup Atlas",
+          "url": "https://chrisizworski.com/great-lakes-freighter-winter-layup/"
+        }
+      ]
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        {
+          "@type": "ListItem",
+          "position": 1,
+          "name": "Home",
+          "item": "https://chrisizworski.com/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 2,
+          "name": "Great Lakes",
+          "item": "https://chrisizworski.com/great-lakes/"
+        },
+        {
+          "@type": "ListItem",
+          "position": 3,
+          "name": "Freighters",
+          "item": "https://chrisizworski.com/freighters/"
+        }
+      ]
+    }
   ]
 }
 </script>
@@ -173,6 +286,18 @@
   <article class="feature" data-seaway-discovery="freighters"><p class="card-kicker">Montreal to Lake Ontario · Canada &amp; United States</p><h3><a href="/st-lawrence-seaway/">St. Lawrence Seaway Ship Watch</a></h3><p>Follow recent ship reports, explore seven locks and understand the climb inland. Plan a documented public visit at Eisenhower Lock or Iroquois Point.</p><a class="text-link" href="/st-lawrence-seaway/">Explore the Seaway →</a> · <a class="text-link" href="/eisenhower-lock/">Eisenhower Lock visiting guide →</a></article>
 <article class="feature"><p class="card-kicker">Lake Ontario to Lake Erie · Canada</p><h3><a href="/welland-canal/">Welland Canal Ships &amp; Locks</a></h3><p>Explore eight locks, fresh AIS vessel reports, official Seaway transit schedules and where to watch a freighter.</p><a class="text-link" href="/welland-canal/">Watch Welland ships →</a></article>
   <article class="feature"><p class="card-kicker">Detroit River</p><h3><a href="/detroit-river-freighters/">Are freighters passing Detroit?</a></h3><p>A focused fresh-moving-vessel signal for riverfront visitors, with explicit unknown and no-watch states.</p><a class="text-link" href="/detroit-river-freighters/">Check Detroit now →</a></article>
+  <article class="feature" data-working-river="calumet">
+   <p class="card-kicker">Lake Michigan · Chicago, Illinois</p>
+   <h3><a href="/calumet-freighter-watch/">Calumet River Freighter &amp; Bridge Watch</a></h3>
+   <p>Look for recent AIS reports along Chicago's working industrial river, explore the 95th Street Bridge and learn where public ship watching may be possible. Positions do not predict a bridge lift or ship arrival.</p>
+   <a class="text-link" href="/calumet-freighter-watch/" data-track-tool="calumet-river-watch" data-placement="freighters-live-tools">Explore the Calumet →</a>
+  </article>
+  <article class="feature" data-working-river="cuyahoga">
+   <p class="card-kicker">Lake Erie · Cleveland, Ohio</p>
+   <h3><a href="/cuyahoga-freighter-watch/">Cuyahoga River Freighter &amp; Bridge Watch</a></h3>
+   <p>Find recent AIS observations on the winding Cuyahoga, compare documented public waterfront viewing areas and see how large ships negotiate the bends and bridges.</p>
+   <a class="text-link" href="/cuyahoga-freighter-watch/" data-track-tool="cuyahoga-river-watch" data-placement="freighters-live-tools">Explore the Cuyahoga →</a>
+  </article>
   <article class="feature"><p class="card-kicker">January to March · Winter Fleet</p><h3><a href="/great-lakes-freighter-winter-layup/">Freighter Winter Layup Atlas &amp; Port Guide</a></h3><p>See where the 1,000-footers tie up when the Soo Locks close Jan 15 to Mar 25, with true-scale dock drawings, ship biographies, and an 8-port shore viewing guide.</p><a class="text-link" href="/great-lakes-freighter-winter-layup/">Explore winter layup ports →</a> · <a class="text-link" href="/great-lakes-winter-freighter-guide/">12-Harbor Winter Field Guide →</a></article>
  </div>
 </section>

@@ -1,6 +1,6 @@
 ---
 name: interactive-2d-scenes
-description: "On-demand SVG, Canvas and PixiJS technology selection for meaningful animated 2D explanatory tools."
+description: "On-demand SVG, Canvas and PixiJS technology selection for meaningful animated 2D explanatory tools. Use when choosing SVG, Canvas or PixiJS for an animated or dense 2D scene, such as ships, locks or maps in motion."
 ---
 
 # interactive-2d-scenes

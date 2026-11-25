@@ -106,7 +106,9 @@ test('user cannot supply an arbitrary URL and endpoint is never indexable',async
   global.fetch=async url=>{calls.push(url);return {ok:true,json:async()=>collection};};
   const got=await handler.lookup(b,now);
   assert.equal(got.status,'forecast-based');
-  assert.equal(calls.length,1);
+  assert.equal(calls.length,2);
+  assert.equal(calls.filter(url=>url.startsWith('https://apps.glerl.noaa.gov/')).length,1);
+  assert.equal(got.shorelineRealFeel.calibratedOnSand,false);
   assert.match(calls[0],/^https:\/\/api\.weather\.gc\.ca\/collections\//);
   assert.equal(calls[0].includes('evil.example'),false);
  }finally{global.fetch=original;}
@@ -125,7 +127,7 @@ test('static Canada page preserves park links and explicit public-health paths w
  assert.match(page,/noscript/);
  assert.match(page,/data-lake-filter="Michigan"/);
  assert.match(fs.readFileSync(path.join(root,'public/sitemap-beaches.xml'),'utf8'),/great-lakes-beaches\/canada\//);
- assert.match(fs.readFileSync(path.join(root,'public/great-lakes-beaches/around-the-lakes/index.html'),'utf8'),/30 Canadian beaches/);
+ assert.match(fs.readFileSync(path.join(root,'public/great-lakes-beaches/around-the-lakes/index.html'),'utf8'),/Ontario <span>30 beaches<\/span>/);
 });
 test('Canada browser code uses text-only source data, cancels outdated requests, and retains map fallback',()=>{
  const js=fs.readFileSync(path.join(root,'public/assets/shorefeel-ca.js'),'utf8');

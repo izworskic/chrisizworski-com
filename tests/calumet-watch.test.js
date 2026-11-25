@@ -34,10 +34,19 @@ test('fresh AIS is bounded, checked and individually fresh, with original attrib
  assert.equal(result.state,'REPORTS_AVAILABLE');assert.equal(result.vessels.length,1);
  assert.equal(result.vessels[0].name,'TEST FREIGHTER');
  assert.equal(result.vessels[0].source,'site AIS');
+ assert.equal(result.vessels[0].heading,null);
  assert.equal(result.attributions[0].credit,'Recorded upstream credit');
  assert.equal(core.vesselVisual(result.vessels[0]).kind,'cargo');
  assert.equal(core.vesselVisual(result.vessels[0]).course,123);
  assert.equal(core.nearPlace(guide.viewpoints[0],result,now).state,'NEARBY_REPORTED_POSITION');
+});
+test('true AIS heading is optional, source-reported and bounded',()=>{
+ const valid=core.classifyLive({ok:true,checkedAt:'2026-11-22T18:59:30Z',
+  vessels:[{...vessel('2026-11-22T18:58:00Z'),heading:265}]},now);
+ assert.equal(valid.vessels[0].heading,265);
+ const invalid=core.classifyLive({ok:true,checkedAt:'2026-11-22T18:59:30Z',
+  vessels:[{...vessel('2026-11-22T18:58:00Z'),heading:511}]},now);
+ assert.equal(invalid.vessels[0].heading,null);
 });
 test('no fresh observations, stale checks and unavailable data are not assertions of an empty river',()=>{
  const unavailable=core.classifyLive(null,now);

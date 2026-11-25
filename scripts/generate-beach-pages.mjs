@@ -1,6 +1,7 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
+import shorelineNetwork from "../lib/shorefeel/network-links.js";
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 function escapeHtml(value) {
@@ -72,6 +73,7 @@ function detailPage(beach) {
   // Keep page and sitemap dates aligned; stamp-freshness owns later revisions.
   const detailModified = "2026-11-22";
   const nearby = nearbyBeaches(beach);
+  const waterEvidence = shorelineNetwork.waterEvidenceLink(beach);
   const cameraStylesheet = beach.camera ? '  <link rel="stylesheet" href="/assets/field-camera.css">\n' : "";
   const cameraSection = beach.camera ? `    <section class="section" aria-labelledby="camera-heading">
       <div class="section-head"><div><p class="section-kicker">Current shoreline context</p><h2 id="camera-heading">See the water now</h2><p class="section-intro">A live view of the water, updated through the day.</p></div></div>
@@ -192,6 +194,7 @@ ${cameraStylesheet}  <script type="application/ld+json">${json(schema)}</script>
         <p>${html(fieldNotes[beach.slug])}</p>
       </div>
       <p class="shorefeel-water" data-shorefeel-water>Nearby NOAA lake temperature is being checked. It will not be mistaken for swimming-area water.</p>
+      <p class="shorefeel-evidence-link"><a href="${html(waterEvidence.href)}">${html(waterEvidence.label)}</a> <span>${html(waterEvidence.note)}</span></p>
       <details class="shorefeel-explain">
         <summary>Where does this beach outlook come from?</summary>
         <p data-shorefeel-limit>The air temperature is a location forecast, not a thermometer on the sand. NOAA buoys report open-water conditions at their own coordinates. ShoreFeel does not invent a numerical beach-versus-inland cooling correction without field measurements.</p>
@@ -298,9 +301,9 @@ await writeFile(hubPath, hub);
 console.log(`Wrote crawlable index of ${catalog.beaches.length} beaches into the hub page.`);
 
 const urls = [
-  { loc: "https://chrisizworski.com/great-lakes-beaches/", priority: "0.9", changefreq: "daily", lastmod: "2026-11-22" },
-  { loc: "https://chrisizworski.com/great-lakes-beaches/around-the-lakes/", priority: "0.7", changefreq: "monthly", lastmod: "2026-11-22" },
-  { loc: "https://chrisizworski.com/great-lakes-beaches/canada/", priority: "0.7", changefreq: "monthly", lastmod: "2026-11-22" },
+  { loc: "https://chrisizworski.com/great-lakes-beaches/", priority: "0.9", changefreq: "daily", lastmod: "2026-11-24" },
+  { loc: "https://chrisizworski.com/great-lakes-beaches/around-the-lakes/", priority: "0.7", changefreq: "monthly", lastmod: "2026-11-24" },
+  { loc: "https://chrisizworski.com/great-lakes-beaches/canada/", priority: "0.7", changefreq: "monthly", lastmod: "2026-11-24" },
   { loc: "https://chrisizworski.com/best-michigan-beaches-today/", priority: "0.9", changefreq: "daily", lastmod: "2026-11-22" },
   ...catalog.beaches.map((beach) => ({
     loc: `https://chrisizworski.com/great-lakes-beaches/${beach.slug}/`,

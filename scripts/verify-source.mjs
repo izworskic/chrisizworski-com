@@ -43,6 +43,8 @@ const intentionalRetirements = new Set([
 ]);
 
 const intentionalChanges = new Set([
+  // November 23: canonical GLERL ice-cover record and measured winter handoffs.
+  "/great-lakes-freighter-winter-layup/",
   // New lighthouse winter tool and a relevant directory handoff, November 2026.
   "/frozen-lighthouses-michigan/",
   "/great-lakes-lighthouses/",
@@ -747,9 +749,9 @@ for (const relativePath of discoveryPages) {
 }
 
 const greatLakesHub = await readFile(path.join(publicRoot, "great-lakes", "index.html"), "utf8");
-// 9 since Aug 4 2026: the Michigan Ice Report card was added to the live grid.
-if ((greatLakesHub.match(/data-featured-tool=/g) || []).length !== 9) {
-  failures.push("Great Lakes hub does not contain exactly nine featured live tools");
+// The established nine cards plus the Chicago and Cleveland river watches.
+if ((greatLakesHub.match(/data-featured-tool=/g) || []).length !== 11) {
+  failures.push("Great Lakes hub must contain exactly eleven featured live tools");
 }
 const historySection = greatLakesHub.match(/<h2 class="sh">History and Heritage<\/h2>([\s\S]*?)<h2 class="sh">/)?.[1] || "";
 if (/\/(?:soo-locks|northern-lights-michigan|great-lakes-buoys)\//.test(historySection)) {

@@ -118,7 +118,7 @@ test('all seven public regions load the changed source-aware client, keeping can
  assert.match(api,/routeClubEvidence\(route,built\.scoredGeometry\)/);
  for(const key of regions){
   const html=readFileSync(new URL('../public/snowmobile/regions/'+key+'.html',import.meta.url),'utf8');
-  for(const marker of ['snowmobile-region.js?v=20261115-loop-finder-1','snowmobile.css?v=20261115-loop-finder-1','id="routePlanner"','id="parkingPlanner"','google-adsense-account'])assert.ok(html.includes(marker),key+': '+marker);
+  for(const marker of ['snowmobile-region.js?v=20261115-loop-finder-1','snowmobile.css?v=20261123-name-1','id="routePlanner"','id="parkingPlanner"','google-adsense-account'])assert.ok(html.includes(marker),key+': '+marker);
   assert.match(html,/rel="canonical"/);
  }
 });
