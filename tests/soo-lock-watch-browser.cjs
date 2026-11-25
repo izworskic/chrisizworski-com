@@ -336,6 +336,24 @@ let base;
       await change.filter({hasText:'Fresh check available after an unsuccessful refresh'}).waitFor();
       assert.deepEqual(errors,[]);await context.close();
     }
+    // Regression: a sequence of older source fixes must not manufacture a change.
+    {
+      let mode=fixture(NOV);
+      const {context,page,errors}=await open(browser,{width:390,time:NOV,api:()=>mode});
+      await page.locator('.lw-row-btn').first().waitFor();
+      const change=page.locator('[data-lw-changes]');
+      for(const [minute,seen,shift] of [[1,-4,40],[2,-3,45],[3,1,20]]) {
+        mode=fixture(NOV+minute*60000);
+        const ship=mode.nextShip.candidates[0];ship.seen=iso(NOV,seen);
+        for(const k of ['start','midpoint','end'])ship.window[k]=new Date(Date.parse(fixture(NOV).nextShip.candidates[0].window[k])+shift*60000).toISOString();
+        await page.clock.setFixedTime(new Date(NOV+minute*60000));
+        await page.locator('#vesselMapRefresh').click();
+        await page.waitForFunction(()=>!document.getElementById('vesselMapRefresh').disabled);
+        if(minute<3)assert.equal(await change.isHidden(),true);
+        else await change.filter({hasText:'BURNS HARBOR: the estimated arrival midpoint moved 20 min later'}).waitFor();
+      }
+      assert.deepEqual(errors,[]);await context.close();
+    }
     // 7. Winter shutdown: the planner says so instead of lining up ships.
     {
       const { context, page } = await open(browser, { width: 390, time: Date.parse('2026-02-10T15:00:00Z') });

@@ -63,3 +63,36 @@ test('invalid or expired listed report is not described as a withdrawal',()=>{
  const withdrawn=advance(start,1,[]);assert.equal(show(withdrawn,1).kind,'withdrawn');
  const invalidAgain=advance(withdrawn,2,[bad]);assert.equal(show(invalidAgain,2),null);
 });
+
+test('rejected older fixes cannot lower the accepted observation watermark',()=>{
+ let s=advance(null,0);
+ const accepted=s.accepted[id].seen;
+ s=advance(s,1,[{...vessel(1,40),seen:iso(-2)}]);
+ assert.equal(s.accepted[id].seen,accepted);assert.equal(s.last.ships[id],undefined);assert.equal(show(s,1),null);
+ s=advance(s,2,[{...vessel(2,45),seen:iso(-1.5)}]);
+ assert.equal(s.accepted[id].seen,accepted);assert.equal(show(s,2),null);
+ // An equal timestamp with a different state cannot replace the accepted fix.
+ s=advance(s,3,[],{inLock:[{id,mmsi:id,name:'TEST SHIP',seen:iso(-1)}]});
+ assert.equal(s.accepted[id].kind,'timed');assert.equal(show(s,3),null);
+ s=advance(s,4,[vessel(4,20)]);
+ assert.match(show(s,4).text,/20 min later/);assert.equal(s.accepted[id].seen,Date.parse(iso(3)));
+});
+test('missing or invalid snapshots do not let an older fix masquerade as resumption',()=>{
+ let s=advance(null,0);s=advance(s,1,[]);assert.equal(show(s,1).kind,'withdrawn');
+ s=advance(s,2,[{...vessel(2,25),seen:iso(-2)}]);assert.equal(show(s,2),null);
+ s=advance(s,3,[{...vessel(3,30),seen:iso(-1.5)}]);assert.equal(show(s,3),null);
+ s=advance(s,4,[vessel(4,25)]);assert.equal(show(s,4).kind,'resumed');
+});
+test('outage recovery retains high-water marks without comparing across the outage',()=>{
+ let s=advance(null,0);
+ s=c.step(s,null,true,T+M);
+ s=advance(s,2,[{...vessel(2,45),seen:iso(-2)}]);assert.equal(show(s,2).kind,'recovered');
+ s=advance(s,3,[{...vessel(3,45),seen:iso(-1.5)}]);assert.equal(s.accepted[id].seen,Date.parse(iso(-1)));
+ assert.notEqual(show(s,3)?.kind,'shifted');
+ s=advance(s,4,[vessel(4,30)]);assert.notEqual(show(s,4)?.kind,'shifted');
+ s=advance(s,5,[vessel(5,50)]);assert.match(show(s,5).text,/20 min later/);
+});
+test('out-of-order reports cannot continue supporting an old change note',()=>{
+ let s=advance(null,0);s=advance(s,1,[vessel(1,25)]);assert.equal(show(s,1).kind,'shifted');
+ s=advance(s,2,[{...vessel(2,25),seen:iso(-1)}]);assert.equal(show(s,2),null);
+});

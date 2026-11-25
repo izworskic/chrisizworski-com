@@ -6,7 +6,7 @@
  else root.SooChangingConditions=api;
 })(typeof window!=='undefined'?window:globalThis,function(){
  'use strict';
- const MIN=60000,MAX_GAP=15*MIN,THRESHOLD=15*MIN,MAX_SHIPS=128;
+ const MIN=60000,MAX_GAP=15*MIN,THRESHOLD=15*MIN,MAX_SHIPS=128,MAX_TRACKED=512;
  const time=s=>{if(typeof s!=='string'||!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(s))return NaN;const t=Date.parse(s);return Number.isFinite(t)&&new Date(t).toISOString().slice(0,19)===s.slice(0,19)?t:NaN;};
  const id=s=>String(s?.mmsi||s?.id||'');
  const clean=s=>typeof s==='string'&&s.trim()?s.trim().slice(0,100):'';
@@ -41,18 +41,46 @@
    if(Array.isArray(n.nearLockMotion))n.nearLockMotion.forEach(s=>{const k=id(s);if(/^\d{9}$/.test(k))listed.add(k);});
    return {checked,ships,listed};
  }
- function initial(){return {last:null,anchors:Object.create(null),withdrawn:Object.create(null),events:[],failed:false};}
+ function initial(){return {last:null,accepted:Object.create(null),anchors:Object.create(null),withdrawn:Object.create(null),events:[],failed:false};}
  function event(kind,s,from,to,extra={}){return {kind,id:s?.id||null,name:s?.name||null,from,to,...extra};}
+ // Keep a per-vessel high-water mark separate from the newest API response.
+ // A rejected fix must not become the next comparison baseline or support a
+ // visible change note. Keep the mark across missing/invalid reports and outages
+ // until its observation itself ages out. Never carry an absent vessel as live.
+ function acceptSnapshot(next,previous){
+   const accepted=Object.create(null),ships=Object.create(null);
+   for(const s of Object.values(previous||{})){
+     if(valid(s.seen,next.checked,MAX_GAP))accepted[s.id]=s;
+   }
+   for(const s of Object.values(next.ships)){
+     const prior=accepted[s.id];
+     if(prior&&s.seen<=prior.seen){
+       if(s.seen===prior.seen&&s.kind===prior.kind&&s.start===prior.start&&s.mid===prior.mid&&s.end===prior.end)ships[s.id]=s;
+       continue;
+     }
+     accepted[s.id]={...s,at:next.checked};
+     ships[s.id]=s;
+   }
+   if(Object.keys(accepted).length>MAX_TRACKED)return null;
+   return {next:{...next,ships},accepted};
+ }
  function step(prev,next,failed,now,threshold=THRESHOLD){
    prev=prev||initial();
    if(failed||!next)return {...prev,failed:true,events:[]};
    if(prev.last&&next.checked<=prev.last.checked)return prev;
+   const reconciled=acceptSnapshot(next,prev.accepted);
+   if(!reconciled)return {...prev,failed:true,events:[]};
+   next=reconciled.next;
+   const accepted=reconciled.accepted;
    if(prev.failed){
-     return {last:next,anchors:seed(next),withdrawn:Object.create(null),events:[event('recovered',null,prev.last?.checked??next.checked,next.checked)],failed:false};
+     return {last:next,accepted,anchors:seed(next),withdrawn:Object.create(null),events:[event('recovered',null,prev.last?.checked??next.checked,next.checked)],failed:false};
    }
-   if(!prev.last||next.checked-prev.last.checked>MAX_GAP)return {last:next,anchors:seed(next),withdrawn:Object.create(null),events:[],failed:false};
+   if(!prev.last||next.checked-prev.last.checked>MAX_GAP)return {last:next,accepted,anchors:seed(next),withdrawn:Object.create(null),events:[],failed:false};
    const anchors=Object.create(null),withdrawn=Object.create(null),events=[],old=prev.last;
    Object.values(prev.withdrawn).filter(x=>next.checked-x.at<=MAX_GAP).forEach(x=>{withdrawn[x.id]=x;});
+   for(const a of Object.values(prev.anchors)){
+     if(accepted[a.id]&&next.checked-a.at<=MAX_GAP)anchors[a.id]=a;
+   }
    // Do not mistake an elapsed or aged-out estimate for newly observed motion.
    for(const s of Object.values(old.ships)){
      if(s.kind==='timed'&&!next.listed.has(s.id)&&s.end>next.checked&&next.checked-s.seen<=MAX_GAP){
@@ -60,11 +88,20 @@
      }
    }
    for(const s of Object.values(next.ships)){
-     const prior=old.ships[s.id],anchor=prev.anchors[s.id];
-     if(prior&&s.seen<prior.seen){anchors[s.id]=anchor||{...prior,at:old.checked};continue;}
+     const mark=prev.accepted[s.id],anchor=anchors[s.id];
+     // Equal observation timestamps are repeats, even when a cached API response
+     // assigns a different state/window. Only a genuinely newer fix can change it.
+     if(mark&&s.seen<=mark.seen)continue;
+     const prior=old.ships[s.id]||(old.listed.has(s.id)&&anchor?mark:undefined);
+     // If a recovery reset the comparison anchor, seed a new baseline without
+     // claiming a change across the outage.
+     if(mark&&!prior&&!anchor&&old.listed.has(s.id)&&!withdrawn[s.id]){
+       anchors[s.id]={...s,at:next.checked};
+       continue;
+     }
      if(s.kind==='timed'){
-       if(prior?.kind==='timed'){
-         const base=anchor&&anchor.kind==='timed'&&next.checked-anchor.at<=MAX_GAP?anchor:{...prior,at:old.checked};
+       if(prior?.kind==='timed'&&!withdrawn[s.id]){
+         const base=anchor&&anchor.kind==='timed'&&next.checked-anchor.at<=MAX_GAP?anchor:{...prior,at:mark?.at??old.checked};
          const delta=s.mid-base.mid,edges=Math.max(Math.abs(s.start-base.start),Math.abs(s.end-base.end));
          if(s.seen>prior.seen&&(Math.abs(delta)>=threshold||edges>=threshold)){
            events.push(event(Math.abs(delta)>=threshold?'shifted':'window-changed',s,base.at,next.checked,{minutes:Math.round(delta/MIN)}));
@@ -85,7 +122,7 @@
    // A missing or changed report is not proof of departure. Retain a recent
    // material event only while its associated evidence still supports the label.
    const currentEvents=events.length?events:prev.events.filter(e=>next.checked-e.to<=MAX_GAP&&supports(e,next,now));
-   return {last:next,anchors,withdrawn,events:currentEvents,failed:false};
+   return {last:next,accepted,anchors,withdrawn,events:currentEvents,failed:false};
  }
  function seed(next){const a=Object.create(null);Object.values(next.ships).forEach(s=>{a[s.id]={...s,at:next.checked};});return a;}
  function supports(e,next,now){
