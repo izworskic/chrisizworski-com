@@ -28,8 +28,8 @@ const server=http.createServer((req,res)=>{
   fs.createReadStream(file).pipe(res);
  }catch{res.writeHead(404);res.end('not found');}
 });
-function fixture(){
- const time=new Date(Date.now()-10*60000).toISOString();
+function fixture(now=Date.now()){
+ const time=new Date(now-10*60000).toISOString();
  const weather={startsAt:time,tempF:82,windMph:12,windDirection:'NE',humidity:45,
   summary:'Partly Sunny',daylight:true};
  const water={kind:'satellite',tempF:58.5,observedAt:time,caveat:'NOAA offshore pixel is not a beach thermometer'};
@@ -141,10 +141,10 @@ async function run(){
   }
   for(const width of [390,1366]){
    const ctx=await browser.newContext({viewport:{width,height:860},reducedMotion:'reduce'});
-   let mode='temporal',requests=0;
+   let mode='temporal',requests=0,advanced=0;
    await ctx.route('**/api/shorefeel?*',route=>{
     requests++;
-    const d=fixture();
+    const d=fixture(Date.now()+advanced);
     if(mode==='temporal'){
      const n=Date.now(),at=offset=>new Date(n+offset).toISOString();
      d.generatedAt=at(-25*60000);
@@ -166,18 +166,18 @@ async function run(){
    await pg.locator('button[data-activity="swim"]').click();
    await pg.locator('[data-point="west-bay"]').first().click();
    assert.equal(requests,1);
-   await pg.clock.fastForward(65000);
+   advanced+=65000;await pg.clock.fastForward(65000);
    await pg.waitForFunction(()=>document.querySelector('#lead-water')?.textContent==='Not verified',null,{timeout:15000});
    assert.match(await pg.locator('#lead-temp').innerText(),/°F/);
    assert.match(await pg.locator('#value-west-bay').innerText(),/61.0°F/);
    assert.equal(await pg.locator('button[data-activity="swim"]').getAttribute('aria-pressed'),'true');
    assert.match(await pg.locator('#selected-heading').innerText(),/Nayanquing/);
    assert.equal(requests,1,'expiration must not fetch');
-   await pg.clock.fastForward(65000);
+   advanced+=65000;await pg.clock.fastForward(65000);
    await pg.waitForFunction(()=>document.querySelector('#lead-temp')?.textContent==='Beach feel unavailable',null,{timeout:15000});
    assert.match(await pg.locator('#value-west-bay').innerText(),/61.0°F/);
    assert.equal(requests,1);
-   await pg.clock.fastForward(180000);
+   advanced+=180000;await pg.clock.fastForward(180000);
    await pg.waitForFunction(()=>document.querySelector('#last-updated')?.textContent.includes('Readings expired'),null,{timeout:15000});
    assert.match(await pg.locator('#value-west-bay').innerText(),/Unavailable/);
    assert.equal(await pg.locator('#bay-map .bay-marker').count(),3);
