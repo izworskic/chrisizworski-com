@@ -95,19 +95,8 @@ jobs:
           mkdir -p artifacts/shorefeel-beach-qa
           node scripts/shorefeel-archive-coverage.cjs > artifacts/shorefeel-beach-qa/archive-coverage.json
           cat artifacts/shorefeel-beach-qa/archive-coverage.json
-      - name: Recover fixed reliability cohort near-time observations
-        if: github.head_ref == 'research/shorefeel-actual-october-cohort'
-        run: |
-          python3 -m venv "$RUNNER_TEMP/shorefeel-reliability"
-          "$RUNNER_TEMP/shorefeel-reliability/bin/pip" install --disable-pip-version-check numpy==2.2.6 netCDF4==1.7.2
-          mkdir -p artifacts/shorefeel-beach-qa
-          "$RUNNER_TEMP/shorefeel-reliability/bin/python" scripts/shorefeel-near-time-recovery.py --reliability > artifacts/shorefeel-beach-qa/reliability-near-time.json
-          cat artifacts/shorefeel-beach-qa/reliability-near-time.json
-          "$RUNNER_TEMP/shorefeel-reliability/bin/python" scripts/shorefeel-expanded-dataset.py --confirm-reliability > artifacts/shorefeel-beach-qa/horizon-confirm-cohort.json
-          node scripts/shorefeel-forecast-reliability.cjs artifacts/shorefeel-beach-qa/horizon-confirm-cohort.json > artifacts/shorefeel-beach-qa/horizon-confirm-review.json
-          cat artifacts/shorefeel-beach-qa/horizon-confirm-cohort.json
-          cat artifacts/shorefeel-beach-qa/horizon-confirm-review.json
-          node --test tests/shorefeel-forecast-reliability.test.js
+      - name: Offline preserved ShoreFeel empirical evidence
+        run: node --test tests/shorefeel-empirical-evidence.test.js tests/shorefeel-forecast-reliability.test.js
       - name: Install isolated pinned browser harness
         run: |
           npm install --prefix "$RUNNER_TEMP/shorefeel-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
