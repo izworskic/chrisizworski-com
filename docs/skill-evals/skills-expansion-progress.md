@@ -27,4 +27,4 @@ Read `skills-expansion-plan.md` first. Update this log in the same commit as eac
 
 ## Next action
 
-Rebuild web-quality-best-practices, pressure-test it against the version on main, record it here, commit.
+Rebuild visual-data-storytelling with Observable Plot as the default library, pressure-test it against the version on main, record it here, commit.

@@ -10,8 +10,8 @@
     "claude": 47,
     "copilot": 44,
     "mirrorBlobMismatches": 0,
-    "dedicatedCaseSuites": 29,
-    "withoutDedicatedCasesLocated": 18,
+    "dedicatedCaseSuites": 30,
+    "withoutDedicatedCasesLocated": 17,
     "behaviorallyEvaluated": 0,
     "provenByPairedEvidence": 0
   },
@@ -862,18 +862,18 @@
       "id": "web-quality-best-practices",
       "family": "Web and browser quality",
       "scope": "Storage, embeds, third-party scripts, resilience",
-      "expectedOutput": "Failure, privacy and dependency review",
+      "expectedOutput": "Third-party ledger, permission flows, storage, headers and console state with fixes",
       "routing": "When relevant",
       "authorization": "relevant-authorized-task",
       "documentedState": "documented",
-      "auditedSkillBlob": "187a648aaf7e6633355f5b5593f4a26624c01a6c",
+      "auditedSkillBlob": "a608fc3c3a282f0b375cb7f9b7398a53ef7d53e3",
       "mirrors": [
         ".agents/skills/web-quality-best-practices/SKILL.md",
         ".claude/skills/web-quality-best-practices/SKILL.md",
         ".github/skills/web-quality-best-practices/SKILL.md"
       ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
+      "caseSuite": "docs/skill-evals/web-quality-best-practices.md",
+      "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
         "runs": [],
