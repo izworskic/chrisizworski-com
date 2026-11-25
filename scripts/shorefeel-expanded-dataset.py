@@ -7,6 +7,7 @@ import pathlib
 import statistics
 import tempfile
 import bisect
+import sys
 from collections import Counter
 
 spec=importlib.util.spec_from_file_location("acquisition",pathlib.Path(__file__).with_name("shorefeel-october-acquisition.py"))
@@ -19,11 +20,12 @@ STATIONS=ORIGINAL+ADDITIONAL
 DATES=("2026-10-15","2026-10-18","2026-10-21","2026-10-24","2026-10-27","2026-10-30","2026-11-02","2026-11-05","2026-11-08")
 CYCLES=[dt.datetime.fromisoformat(day).replace(tzinfo=a.UTC) for day in DATES]
 CAP=2*1024*1024
-def observations(tmp):
+def observations(tmp,months=(10,11)):
     out={};meta={}
     for station in STATIONS:
         out[station]={};meta[station]={}
         for month,kind,folder in [(10,"monthly-quality-controlled","l_stdmet"),(11,"provisional-realtime","realtime2")]:
+            if month not in months:continue
             key=str(month);path=tmp/(station+"-"+key+".txt")
             try:
                 m=a.fetch("https://www.ndbc.noaa.gov/data/"+folder+"/"+station+".txt",path,CAP)
@@ -49,11 +51,18 @@ def gap(sorted_times,target,past_only=False):
     if not candidates:return None
     return min(abs((t-target).total_seconds())/60 for t in candidates)
 
+# Earlier diagnostic dates fixed before examining their numeric model errors.
+# They overlap the original September 1 - October 13 backtest period.
+EARLY_DATES=("2026-10-02","2026-10-05","2026-10-08","2026-10-11")
 def main():
+    args=sys.argv[1:]
+    if args not in ([],["--early-october"]):raise SystemExit("Usage: shorefeel-expanded-dataset.py [--early-october]")
+    early=bool(args)
+    cycles=[dt.datetime.fromisoformat(day).replace(tzinfo=a.UTC) for day in EARLY_DATES] if early else CYCLES
     catalog={s["id"]:s for s in json.loads(pathlib.Path("data/buoy-stations.json").read_text())}
     with tempfile.TemporaryDirectory() as folder:
-        obs,meta=observations(pathlib.Path(folder))
-        results=[a.evaluate_cycle(c,obs,meta,catalog,True,STATIONS) for c in CYCLES]
+        obs,meta=observations(pathlib.Path(folder),(10,) if early else (10,11))
+        results=[a.evaluate_cycle(c,obs,meta,catalog,True,STATIONS) for c in cycles]
     rows=[p for c in results for p in c["pairs"]]
     cohort=[p for c in results for p in c["cohort"]]
     for p in rows:
@@ -76,5 +85,8 @@ def main():
     out={"status":"MULTI_STATION_DECISION_TIME_DIAGNOSTIC_ONLY","cohort":cohort,"cohortSha256":a.digest(json.dumps(cohort,sort_keys=True,separators=(",",":")).encode()),"observationFiles":meta,"cycles":results,"metrics":groups,"stationMetrics":{s:{h:measure([p for p in rows if p["station"]==s and p["leadHours"]==h]) for h in (24,48)} for s in STATIONS},
     "nearTimeCoverageAudit":{h:{"missingExactObservationPairs":sum(p.get("reason")=="missing exact-hour independent observation" and p["leadHours"]==h for p in rows),"potentialWithin15min":sum(p.get("reason")=="missing exact-hour independent observation" and p["leadHours"]==h and p["baselineGapMinutes"] is not None and p["baselineGapMinutes"]<=15 and p["outcomeGapMinutes"] is not None and p["outcomeGapMinutes"]<=15 for p in rows)} for h in (24,48)},
     "canPromoteModel":False,"limitations":["06Z assumed decision, exact 04Z baseline and original 00Z f004/f030/f054; AWS Last-Modified gate, not original buoy receipt timestamps.","November uses provisional realtime archive; October quality-controlled, mixed cases reported separately. Nominal station positions/depths require historical verification.","Separate original and geographic-extension metrics; dates differ from exploratory cohort, but overlap in meteorological regimes; not independent calibration blocks.","Near-time gap audit measures potential coverage only; no approximate pairs scored. No replacements for missing sources."]}
+    if early:
+        out["status"]="EARLY_OCTOBER_HISTORICAL_DIAGNOSTIC_NOT_HOLDOUT"
+        out["limitations"]=["Four fixed early October dates overlap the original backtest period; do not count as independent validation or calibration.","Same ten stations, 06Z decision sensitivity, f004/f030/f054, exact-hour pairs only. Archived receipt times and historical deployment positions not authenticated.","No model fitting, no adjusted thresholds, no imputed observations. Missing slots retained; near-time availability counted separately."]
     print(json.dumps(out,indent=2,allow_nan=False))
 if __name__=="__main__":main()
