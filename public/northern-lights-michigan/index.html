@@ -906,6 +906,14 @@ function setSelectedRegion(id, source, measure){
   if (!Array.from(select.options).some(function(option){return option.value===id;})) id='mackinaw-city';
   selectedRegionId = id;
   select.value = id;
+  // All user selections, including geolocation, keep the shared region in sync.
+  try {
+    const url = new URL(window.location.href);
+    if (source !== 'saved' || url.searchParams.has('region')) {
+      url.searchParams.set('region', id);
+      window.history.replaceState(window.history.state, '', url.pathname + url.search + url.hash);
+    }
+  } catch (error) {}
   const guideLink = document.getElementById('regionDeepLink');
   const guide = REGION_GUIDE_LINKS[id];
   if (guideLink) {

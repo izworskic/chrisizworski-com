@@ -74,3 +74,32 @@ test('page wires the controls as progressive enhancement and never asks for noti
   assert.doesNotMatch(source, /Notification|PushManager|serviceWorker/);
   assert.doesNotMatch(source, /fetch\(/, 'no new network requests');
 });
+
+test('manual and geolocation selection update the same region URL and preserve other parameters', () => {
+  const start = html.indexOf('function setSelectedRegion(');
+  const end = html.indexOf('// === Kp threshold', start);
+  assert.ok(start >= 0 && end > start);
+  const code = html.slice(start, end);
+  const select = { options: [{ value: 'marquette' }, { value: 'bay-city' }, { value: 'mackinaw-city' }], value: 'marquette' };
+  const window = { location: { href: 'https://chrisizworski.com/northern-lights-michigan/?region=marquette&utm_source=share#viewing-locations' },
+    history: { state: { retained: true }, replaceState(state, title, url) {
+      assert.equal(state.retained, true);
+      window.location.href = new URL(url, window.location.href).href;
+    } } };
+  const saved = {};
+  const context = vm.createContext({ window, URL, document: { getElementById: id => id === 'regionSelect' ? select : null },
+    selectedRegionId: 'marquette', REGION_GUIDE_LINKS: {}, REGION_PREF_KEY: 'region',
+    localStorage: { setItem(key, value) { saved[key] = value; } },
+    trackAuroraEvent() {}, latestAuroraData: {}, renderDecisionData() {} });
+  vm.runInContext(code, context);
+  context.setSelectedRegion('bay-city', 'geolocation', false);
+  assert.equal(select.value, 'bay-city');
+  assert.equal(saved.region, 'bay-city');
+  assert.equal(new URL(window.location.href).searchParams.get('region'), 'bay-city');
+  assert.equal(new URL(window.location.href).searchParams.get('utm_source'), 'share');
+  assert.equal(new URL(window.location.href).hash, '#viewing-locations');
+  context.setSelectedRegion('marquette', 'selector', true);
+  assert.equal(new URL(window.location.href).searchParams.get('region'), 'marquette');
+  context.setSelectedRegion('invalid', 'saved', false);
+  assert.equal(new URL(window.location.href).searchParams.get('region'), 'mackinaw-city');
+});

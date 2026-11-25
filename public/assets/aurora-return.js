@@ -128,7 +128,6 @@
   var shareBtn = document.getElementById('shareRegionBtn');
   var calBtn = document.getElementById('calendarBestBtn');
   var statusEl = document.getElementById('returnStatus');
-  var select = document.getElementById('regionSelect');
   if (!lineEl || !shareBtn || !calBtn) return;
 
   // The previous visit is read once, before this visit overwrites it.
@@ -170,17 +169,6 @@
 
   window.addEventListener('aurora:decision', function (event) { onDecision(event.detail); });
   if (window.__auroraDecision) onDecision(window.__auroraDecision);
-
-  // Keep the address bar on the visitor's chosen region so a copied link opens it.
-  if (select && window.history && typeof window.history.replaceState === 'function') {
-    select.addEventListener('change', function () {
-      try {
-        var url = new URL(window.location.href);
-        url.searchParams.set('region', select.value);
-        window.history.replaceState(window.history.state, '', url.pathname + url.search + url.hash);
-      } catch (error) {}
-    });
-  }
 
   shareBtn.addEventListener('click', function () {
     if (!latest) return;
