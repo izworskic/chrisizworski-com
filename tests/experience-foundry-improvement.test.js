@@ -158,7 +158,14 @@ test('path traversal, symlinks and untracked baselines cannot enter replay scope
     for(const p of ['../private','/etc/passwd','a/../../b','a\\b','-HEAD','a//b'])assert.throws(()=>sourcePath(p));
     assert.throws(()=>startImprovement({root:f.dir,slug:'bad',owner:'fixture-tool',question:'Which destination should I select?',files:['tests/replay.cjs']},registry),/regular tracked/);
     await fs.rename(path.join(f.dir,'model.cjs'),path.join(f.dir,'real.cjs'));
-    await fs.symlink(path.join(f.dir,'real.cjs'),path.join(f.dir,'model.cjs'));
+    try{
+      await fs.symlink(path.join(f.dir,'real.cjs'),path.join(f.dir,'model.cjs'));
+    }catch(e){
+      if(e.code!=='EPERM'||process.platform!=='win32')throw e;
+      await fs.rename(path.join(f.dir,'real.cjs'),path.join(f.dir,'model.cjs'));
+      await fs.rename(path.join(f.dir,'tests'),path.join(f.dir,'real-tests'));
+      await fs.symlink(path.join(f.dir,'real-tests'),path.join(f.dir,'tests'),'junction');
+    }
     await assert.rejects(proveImprovement({root:f.dir,...f,registry}),/symlinks/);
   }finally{await f.cleanup();}
 });

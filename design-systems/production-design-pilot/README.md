@@ -61,4 +61,4 @@ Use [visual-reference.json](visual-reference.json) and [VISUAL_REGRESSION.md](VI
 
 ## Phase 7: skill maturity
 
-[Skill maturity review](../../docs/skill-evals/SKILL_MATURITY_REVIEW.md) and [machine-readable registry](../../docs/skill-evals/skill-maturity-registry.json) reconcile 42 logical skills, 123 applicable mirror files and dedicated case coverage, with structural regression tests. Independent paired trials remain NOT VERIFIED. No skill body or activation pointer changed. Product proof and skill effectiveness remain separate.
+[Skill maturity review](../../docs/skill-evals/SKILL_MATURITY_REVIEW.md) and [machine-readable registry](../../docs/skill-evals/skill-maturity-registry.json) reconcile 46 logical skills, 135 applicable mirror files, 46/46 dedicated case coverage and 20 overlap boundary groups, with structural regression tests. Independent paired trials remain NOT VERIFIED. No skill body or activation pointer changed. Product proof and skill effectiveness remain separate.

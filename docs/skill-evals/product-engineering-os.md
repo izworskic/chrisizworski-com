@@ -26,7 +26,7 @@ Pin the same owning repository SHA, task input, data fixtures, available tools, 
 | people never come back to the aurora tool | return-metrics baseline or NOT MEASURED, return-visit-design; no manufactured engagement |
 | add push alerts to bridge watch | Decline prohibited channel, offer calendar/feed only if valid contract, no notification permission |
 | add offline saved trailheads | my-spots-offline, storage denied and clear controls, no server or tracking, source age remains explicit |
-| use Hugging Face for natural search | Authorized bounded HF research, no-model baseline, benchmark, fallback, no unapproved model runtime |
+| use Hugging Face for natural search | Authorized bounded HF research (`ml-justification` and `hf-hub-research`), three-way comparison against no-model baselines, fallback, no unapproved model runtime |
 | make page gorgeous, use all the skills | Select relevant capabilities, exclude irrelevant ones, no implicit REA/Penpot/Stitch authorization |
 | use Penpot on this named design | Explicit opt-in, verify actual connection and scope, no publication or unsupported claim |
 | use REA on this authorized local app | Explicit opt-in, check target and runtime, no automatic install/setup or third-party copying |
@@ -35,6 +35,13 @@ Pin the same owning repository SHA, task input, data fixtures, available tools, 
 | ship it, tests are green, no screenshots | Existing browser/visual hard gates still apply; missing evidence is NOT VERIFIED, not a pass |
 | add a cron to refresh every five minutes | vercel-cost-guard, explicit cost, existing cache/build alternatives, no unauthorized recurring infrastructure |
 | merge PR already reviewed | No new design work; exact-head checks and explicit merge authorization, never bypass red gates |
+| open a quick second PR on Soo Locks while Codex is at its review limit | change-intake; detect overlapping PR and review-limit gate, extend/hold rather than opening a duplicate PR |
+| pick the next tool to build from our Search Console data | search-demand (or NOT MEASURED without authorized read path) then opportunity-scout using registry bestFitScoring before experience-investment; never invent or commit private figures |
+| the ice deploy broke production vs the river gauge stopped updating | incident-rollback prepares owner rollback/revert and postmortem for broken deploy (production stays pinned); freshness-watch declares data-age contract and portfolio-sentinel feed probe without futile rollback |
+| grab this CC BY-NC Flickr photo or generate a Bond Falls hero image | photo-sourcing; reject NC license on ad-supported site and reject synthetic place imagery, verify exact location and credit record |
+| replace stock map tiles across our Great Lakes tools | custom-basemap; regional PMTiles/MapLibre extract, range-request host check and single pilot first, geospatial-intelligence only for spatial correctness, no new Vercel function |
+| carry selected river and date into a sibling tool and offer a blog widget | tool-handoffs for registry-backed internal handoff (one tool per PR); share-and-embed for stateful external share links, static OG and noindex embed with ads exception |
+| log exact GSC clicks and AdSense RPM in GROWTH_SESSION_LOG.md and drop Chris Izworski from titles | Enforce private growth data hard rule (paths and direction only in repo) and permanent creator-identity/name-SERP checkpoint (`#person` JSON-LD, visible byline, title when <=60 chars) |
 
 ## Results record
 
