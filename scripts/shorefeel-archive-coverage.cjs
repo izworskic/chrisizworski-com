@@ -7,19 +7,19 @@ const BASE='https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LMHOFS/MODELS
 function plan(){
  const rows=[];
  for(const date of DATES){
-  const dir=date.replaceAll('-','/').slice(0,7),ymd=date.replaceAll('-','');
-  for(const h of [0,24,48])rows.push({kind:'regular-grid-schema',date,lead:h,url:BASE+dir+'/lmhofs.t00z.'+ymd+'.regulargrid.f'+String(h).padStart(3,'0')+'.nc.dds',cap:65536});
-  const prefix='lmhofs/netcdf/'+date.replaceAll('-','/')+'/lmhofs.t00z.'+ymd;
+  const dir=date.replaceAll('-','/'),ymd=date.replaceAll('-','');
+  for(const h of [0,24,48])for(const product of ['regulargrid','fields'])rows.push({kind:product==='regulargrid'?'regular-grid-schema':'native-field-schema',date,lead:h,url:BASE+dir+'/lmhofs.t00z.'+ymd+'.'+product+'.f'+String(h).padStart(3,'0')+'.nc.dds',cap:65536});
+  const prefix='lmhofs/netcdf/'+date.replaceAll('-','/')+'/';
   rows.push({kind:'native-catalog',date,url:'https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=1000&prefix='+encodeURIComponent(prefix),cap:524288});
  }
  for(const station of STATIONS)rows.push({kind:'ndbc-current-year',station,url:'https://www.ndbc.noaa.gov/data/l_stdmet/'+station+'.txt',cap:1048576});
  return rows;
 }
 function inspect(item,body){
- if(item.kind==='regular-grid-schema')return {status:/\bFloat32\s+temp\s*\[/.test(body)&&/Dataset\s*\{/.test(body)?'SCHEMA_PRESENT':'UNEXPECTED_SCHEMA'};
+ if(item.kind==='regular-grid-schema'||item.kind==='native-field-schema')return {status:/\bFloat32\s+temp\s*\[/.test(body)&&/Dataset\s*\{/.test(body)?'SCHEMA_PRESENT':'UNEXPECTED_SCHEMA',temperatureDeclaration:body.match(/\bFloat32\s+temp\s*[^;]+;/)?.[0]||null};
  if(item.kind==='native-catalog'){
   const keys=[...body.matchAll(/<Key>([^<]+)<\/Key>/g)].map(x=>x[1]);
-  return {status:/<ListBucketResult\b/.test(body)?'CATALOG_RESPONSE':'UNEXPECTED_SCHEMA',keys:keys.filter(k=>/stations|regulargrid|fields/.test(k)).slice(0,25),keyCount:keys.length,truncated:/<IsTruncated>true<\/IsTruncated>/.test(body)};
+  return {status:/<ListBucketResult\b/.test(body)?'CATALOG_RESPONSE':'UNEXPECTED_SCHEMA',keys:keys.filter(k=>/stations|regulargrid|fields/.test(k)).slice(0,25),sampleCycleKeys:keys.filter(k=>/t00z/.test(k)&&/\.(?:f000|f024|f048)\.|\.stations\.forecast\./.test(k)),keyCount:keys.length,truncated:/<IsTruncated>true<\/IsTruncated>/.test(body)};
  }
  const lines=body.split(/\r?\n/),header=(lines.find(x=>/^#?YY\s+MM\s+DD/.test(x.trim()))||'').trim().replace(/^#/,'').split(/\s+/);
  const index=header.indexOf('WTMP'),mi=header.indexOf('mm');
