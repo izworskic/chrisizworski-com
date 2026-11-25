@@ -4,10 +4,22 @@ const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const { spawn } = require('node:child_process');
+const http = require('node:http');
 
 async function waitForServer() {
   for (let i = 0; i < 60; i++) {
-    try { if ((await fetch('http://127.0.0.1:8765/holiday-travel/')).ok) return; } catch {}
+    // Drain the HTTP response before resolving. Avoid Node's undici Parser.finish
+    // assertion when a fetch response body is abandoned during readiness probing.
+    const ready = await new Promise(resolve => {
+      const req = http.get('http://127.0.0.1:8765/holiday-travel/', res => {
+        res.on('end', () => resolve(res.statusCode === 200));
+        res.on('error', () => resolve(false));
+        res.resume();
+      });
+      req.on('error', () => resolve(false));
+      req.setTimeout(1000, () => req.destroy());
+    });
+    if (ready) return;
     await new Promise((resolve) => setTimeout(resolve, 250));
   }
   throw new Error('Local holiday-travel server did not start');
@@ -58,12 +70,46 @@ async function main() {
       await page.route('**/api/holiday-airport-weather', (route) => route.fulfill({
         status: 200, contentType: 'application/json', body: JSON.stringify(fixture(down))
       }));
-      await page.goto('http://127.0.0.1:8765/holiday-travel/', { waitUntil: 'domcontentloaded' });
+      await page.goto('http://127.0.0.1:8765/holiday-travel/?h=th&m=fly&d=there&from=ORD&to=LGA&via=nonstop&lay=60&dep=-1.17&due=-1.23&y=2026', { waitUntil: 'domcontentloaded' });
 
       // The existing select data model is now a visible, typed, keyboard-operated input.
       await page.locator('#home-search').waitFor({ timeout: 15000 });
       assert.equal(await page.locator('#home').isVisible(), false, 'native select stays nonvisual once enhanced');
       assert.equal(await page.locator('input[role="combobox"]').count(), 10);
+      // Exercise the real calendar and itinerary A -> B -> A through native controls.
+      await page.waitForFunction(() => Number.isFinite(Number(document.getElementById('third-stat').getAttribute('data-p'))));
+      const originalRisk = Number(await page.locator('#third-stat').getAttribute('data-p'));
+      assert.match(await page.locator('#dashboard-route').innerText(),/ORD.*LGA/);
+      await page.route('**/api/holiday-airport-weather?view=faa',route=>route.fulfill({status:200,contentType:'application/json',body:JSON.stringify({status:'available',checkedAt:new Date().toISOString(),events:[{airport:'ORD',label:'Ground stop',reason:'Fixture snow',averageMinutes:null,minimumMinutes:null,maximumMinutes:null}]})}));
+      await page.locator('#dashboard-refresh').click();
+      await page.getByText('FAA notices: ORD',{exact:true}).waitFor();
+      assert.equal(Number(await page.locator('#third-stat').getAttribute('data-p')),originalRisk);
+      await assertNoPageOverflow(page,width);
+      await page.locator('#departure-dashboard').screenshot({path:'artifacts/holiday-airport-weather/departure-dashboard-'+width+'.png'});
+      const originalDay = await page.locator('#dep-day').inputValue();
+      const originalDue = await page.locator('#due-day').inputValue();
+      const originalDueHour = await page.locator('#due-time').inputValue();
+      await page.locator('[data-calendar-offset="-4"]').click();
+      await page.waitForFunction(() => document.getElementById('dep-day').value === '-4' && Number.isFinite(Number(document.getElementById('third-stat').getAttribute('data-p'))));
+      assert.equal(await page.locator('#due-day').inputValue(), originalDue);
+      await page.locator('[data-calendar-offset="'+originalDay+'"]').click();
+      await page.waitForFunction(r => Number(document.getElementById('third-stat').getAttribute('data-p')) === r, originalRisk);
+      await page.locator('[data-apply-fix="0"]').focus();
+      await page.keyboard.press('Enter');
+      await page.waitForFunction(r => {
+        const p=Number(document.getElementById('third-stat').getAttribute('data-p'));
+        return Number.isFinite(p)&&p<r;
+      },originalRisk);
+      assert.equal(await page.locator('#plan-compare').isVisible(),true);
+      assert.equal(await page.locator('#due-day').inputValue(),originalDue);
+      assert.equal(await page.locator('#due-time').inputValue(),originalDueHour);
+      assert.match(await page.locator('#compare-content').innerText(),/Lower modeled risk/);
+      await assertNoPageOverflow(page,width);
+      await page.screenshot({path:'artifacts/holiday-airport-weather/compare-plans-'+width+'.png',fullPage:true});
+      await page.locator('#restore-plan').click();
+      await page.waitForFunction(r => Number(document.getElementById('third-stat').getAttribute('data-p')) === r,originalRisk);
+      assert.equal(await page.locator('#plan-compare').isVisible(),false);
+      assert.equal(await page.locator('#dep-day').inputValue(),originalDay);
       const homeSearch = page.locator('#home-search');
       await homeSearch.fill('ATL');
       await homeSearch.press('ArrowDown');

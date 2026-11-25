@@ -3,7 +3,7 @@ const test=require('node:test');
 const assert=require('node:assert/strict');
 const fs=require('node:fs');
 const path=require('node:path');
-const {data,bySlug,validLocation,officialNwsUrl,windMph,selectPeriod,interpret}=require('../lib/shorefeel/us-coast.js');
+const {data,epaBeaches,bySlug,validLocation,officialNwsUrl,windMph,selectPeriod,interpret}=require('../lib/shorefeel/us-coast.js');
 const handler=require('../api/shorefeel-us.js');
 const root=path.resolve(__dirname,'..');
 const page=fs.readFileSync(path.join(root,'public/great-lakes-beaches/around-the-lakes/index.html'),'utf8');
@@ -22,7 +22,8 @@ test('US catalog covers 16 verified destinations in seven non-Michigan states an
  assert.equal(data.beaches.length,16);
  assert.deepEqual([...new Set(data.beaches.map(b=>b.state))].sort(),['IL','IN','MN','NY','OH','PA','WI']);
  assert.deepEqual([...new Set(data.beaches.map(b=>b.lake))].sort(),['Erie','Michigan','Ontario','Superior']);
- assert.equal(bySlug.size,16);
+ assert.equal(epaBeaches.length,981);
+ assert.equal(bySlug.size,997);
  assert.match(data.coverage.Michigan,/Lake Huron/);
  for(const b of data.beaches){
    assert.ok(validLocation(b),b.slug+' must be a valid source-vetted US Great Lakes beach');

@@ -61,7 +61,7 @@ test("All map tabs correspond to live tracker views and preserve keyboard state"
 test("Mobile responsive, request timestamps, data outage and readable fallback remain", () => {
   assert.match(css, /#freighterMap\{height:360px/);
   assert.match(css, /\.hub-map-tabs\{display:flex;overflow-x:auto/);
-  assert.match(tracker, /1800000/);
+  assert.match(tracker, /GreatLakesAisEvidence\?\.positionFresh\(v,now\)/);
   assert.match(tracker, /Vessel reports unavailable/);
   assert.match(tracker, /No recent reports returned/);
   assert.match(html, /<noscript>/);
@@ -127,3 +127,6 @@ test("Hub ship learning is optional, source-backed and uses one detail surface",
  assert.match(tracker,/reviewed history is not available/);
  assert.match(css,/\.hub-ship-inspector\[hidden\]/);
 });
+
+
+test("Freighter Central loads shared AIS movement evidence before the tracker",()=>{const html=fs.readFileSync("public/freighters/index.html","utf8");assert.ok(html.indexOf("/assets/ais-movement.js")>=0&&html.indexOf("/assets/ais-movement.js")<html.indexOf("/assets/freighter-tracker.js"));});

@@ -1,0 +1,49 @@
+name: Snow Totals evidence-state browser QA
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'public/assets/michigan-snow-totals.js'
+      - 'public/assets/michigan-snow-totals.css'
+      - 'public/assets/snow-totals-core.js'
+      - 'public/michigan-snow-totals/index.html'
+      - 'scripts/verify-snow-evidence-browser.cjs'
+      - '.github/workflows/snow-evidence-browser.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install isolated QA dependencies
+        run: |
+          npm install --prefix /tmp/snow-evidence-qa --ignore-scripts --no-save --package-lock=false playwright@1.58.2 leaflet@1.9.4
+          echo "NODE_PATH=/tmp/snow-evidence-qa/node_modules" >> "$GITHUB_ENV"
+          echo "CHROME_PATH=$(command -v google-chrome || command -v chromium)" >> "$GITHUB_ENV"
+      - name: Compare old and corrected regional evidence states
+        run: |
+          node scripts/web-quality-static-server.cjs &
+          server_pid=$!
+          trap 'kill "$server_pid" 2>/dev/null || true' EXIT
+          for i in 1 2 3 4 5 6 7 8 9 10; do
+            if curl --fail --silent --output /dev/null http://127.0.0.1:4179/michigan-snow-totals/; then break; fi
+            sleep 1
+          done
+          node scripts/verify-snow-evidence-browser.cjs
+      - name: Retain evidence-state captures
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: snow-evidence-browser
+          path: artifacts/snow-evidence/
+          retention-days: 7
+          if-no-files-found: warn

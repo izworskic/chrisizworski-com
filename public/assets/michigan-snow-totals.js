@@ -73,7 +73,7 @@
       body.innerHTML = '<tr><td colspan="5">The latest reports are unavailable. Use the linked NWS archive for source reports.</td></tr>';
     }
     if (state.map) { state.map.remove(); state.map = null; state.layer = null; }
-    if (state.data && !state.dataStale) renderSelectedReport(visibleRows());
+    if (state.data && state.data.ok && !state.dataStale) renderSelectedReport(visibleRows());
   }
   function initMap() {
     if (state.map || state.mapUnavailable) return;
@@ -127,18 +127,20 @@
     }
     var week = C.rowsFor(d.reports || [], '168h', dataNow());
     if (state.region) week = week.filter(function (r) { return r.region === state.region; });
+    var empty = 'No NWS snowfall reports found for ' + esc(regionLabel()) + ' in ' + esc(windowLabel()) + '. Actual snowfall is unknown.';
     if (week.length) {
-      el.innerHTML = 'No snow reported in ' + esc(regionLabel()) + ' in ' + esc(windowLabel()) + '. The last 7 days had <strong>' + week.length + '</strong> reporting place' + (week.length === 1 ? '' : 's') + ', led by ' +
+      el.innerHTML = empty + ' The last 7 days had <strong>' + week.length + '</strong> reporting place' + (week.length === 1 ? '' : 's') + ', led by ' +
         esc(C.inches(week[0].inches)) + ' at ' + esc(where(week[0])) + ' (' + esc(stamp(week[0])) + '). Choose 7 days to see them.';
       return;
     }
-    if (d.lastSnow && d.lastSnow.latest) {
+    // The archived last report is statewide. Never substitute it for a local result.
+    if (!state.region && d.lastSnow && d.lastSnow.latest) {
       var l = d.lastSnow.latest;
-      el.innerHTML = '<strong>No snow has been reported anywhere in Michigan in the last 7 days.</strong> The most recent NWS snow report was <strong>' +
-        esc(C.inches(l.inches)) + ' at ' + esc(where(l)) + '</strong> on ' + esc(C.when(l.reportedAt)) + ' ET. The map fills in as soon as the next snow is reported; the season section below shows when the first snow usually comes.';
+      el.innerHTML = empty + ' Most recent archived report: <strong>' +
+        esc(C.inches(l.inches)) + ' at ' + esc(where(l)) + '</strong> on ' + esc(C.when(l.reportedAt)) + ' ET. This is a historical observation, not current conditions.';
       return;
     }
-    el.textContent = 'No snow has been reported anywhere in Michigan in the last 7 days.';
+    el.innerHTML = empty;
   }
 
   // Uses only existing NWS Local Storm Report rows in the selected window.
@@ -213,7 +215,7 @@
     var chips = ['<button type="button" data-region="" aria-pressed="' + String(!state.region) + '">All Michigan</button>'];
     counts.forEach(function (c) {
       chips.push('<button type="button" data-region="' + c.id + '" aria-pressed="' + String(state.region === c.id) + '"' + (c.places ? '' : ' class="empty"') + '>' +
-        esc(c.label) + ' <span>' + (c.largest ? esc(C.inches(c.largest.inches)) : '0') + '</span></button>');
+        esc(c.label) + ' <span>' + (c.largest ? esc(C.inches(c.largest.inches)) : 'No reports') + '</span></button>');
     });
     $('regionChips').innerHTML = chips.join('');
     var region = C.regionById(state.region), trails = $('regionTrails');
@@ -227,7 +229,7 @@
   function renderTable(rows) {
     var body = $('snowTable').querySelector('tbody');
     $('snowTable').querySelector('caption').textContent = 'Largest report from each place in ' + regionLabel() + ', ' + windowLabel();
-    if (!rows.length) { body.innerHTML = '<tr><td colspan="5">No snow reports in ' + esc(regionLabel()) + ' in ' + esc(windowLabel()) + '.</td></tr>'; $('showAll').hidden = true; return; }
+    if (!rows.length) { body.innerHTML = '<tr><td colspan="5">No snow reports in ' + esc(regionLabel()) + ' in ' + esc(windowLabel()) + '. Actual snowfall is unknown.</td></tr>'; $('showAll').hidden = true; return; }
     body.innerHTML = rows.slice(0, state.tableLimit).map(function (r, i) {
       return '<tr><td>' + (i + 1) + '</td><td class="in">' + esc(C.inches(r.inches)) + '<span class="tag">' + (r.measured ? 'measured' : 'estimated') + '</span></td>' +
         '<td>' + esc(where(r)) + (r.remark ? '<span class="rm">' + esc(r.remark) + '</span>' : '') + '</td>' +
@@ -286,7 +288,12 @@
   function renderTown(keepMap) {
     var box = $('townResult'), share = $('shareBtn');
     state.shareRow = null;
-    if (!state.data || (!state.town && !state.geo)) { box.hidden = true; share.hidden = true; return; }
+    if (!state.town && !state.geo) { box.hidden = true; share.hidden = true; return; }
+    if (!state.data || !state.data.ok || state.dataStale) {
+      box.hidden = false; share.hidden = true;
+      box.textContent = 'Current snow reports are not available for this search. Use the original NWS archive.';
+      return;
+    }
     var rows = allRows(), html = '', result;
     if (state.geo) {
       var near = C.nearest(state.geo.lat, state.geo.lon, rows, 3, 40);
@@ -353,13 +360,16 @@
   }
 
   function render(fit) {
-    var d = state.data; if (!d || state.dataStale) return;
+    var d = state.data;
+    if (!d || !d.ok || state.dataStale) { renderTown(fit); return; }
     var rows = visibleRows(), quiet = !(d.reports || []).length, mapRows = rows;
-    if (quiet && d.lastSnow) mapRows = d.lastSnow.sameDay || [];
+    var historical = quiet && !state.region && d.lastSnow && Array.isArray(d.lastSnow.sameDay) && d.lastSnow.sameDay.length;
+    if (historical) mapRows = d.lastSnow.sameDay;
     renderSummary(rows); renderStormPulse(rows); renderAlerts(); renderChips(); renderTable(rows); renderMap(mapRows, fit); renderSelectedReport(rows); renderTown(fit);
-    if (!state.mapUnavailable) $('mapNote').textContent = quiet && d.lastSnow
-      ? 'Showing the last day snow was reported, ' + C.when(d.lastSnow.reportedAt).replace(/,[^,]*$/, '') + ', because nothing has been reported in the last 7 days.'
-      : 'Each dot is one official report, larger and darker for more snow. Tap a dot for the time, source and remark.';
+    if (!state.mapUnavailable) $('mapNote').textContent = historical
+      ? 'Historical map: last archived report day, ' + C.when(d.lastSnow.reportedAt).replace(/,[^,]*$/, '') + '. Not current snowfall.'
+      : rows.length ? 'Each dot is one official report, larger and darker for more snow. Tap a dot for the time, source and remark.'
+      : 'No reports in the selected region and time window. Actual snowfall is unknown.';
     $('snowStamp').textContent = 'Checked ' + C.when(d.generatedAt) + ' ET. Sources: NWS Local Storm Reports via the Iowa Environmental Mesonet archive, and active NWS alerts from api.weather.gov.' + (d.degraded ? ' Some sources did not respond; figures may be incomplete.' : '');
     document.querySelectorAll('.windows button').forEach(function (x) { x.setAttribute('aria-pressed', String(x.getAttribute('data-window') === state.window)); });
     syncUrl();
@@ -463,7 +473,7 @@
     .then(function (r) { return r.json(); })
     .then(function (d) {
       state.data = d;
-      if (!d.ok) { $('snowSummary').textContent = 'The NWS snow report archive did not respond just now. Try again in a few minutes.'; mapFallback(); return; }
+      if (!d.ok) { $('snowSummary').textContent = 'The NWS snow report archive did not respond just now. Try again in a few minutes.'; mapFallback(); renderTown(); return; }
       if (olderThan(d.generatedAt, 2)) {
         state.dataStale = true;
         state.selectedReportKey = '';
@@ -472,6 +482,7 @@
         $('snowStamp').textContent = 'Observation feed outdated; the previous check cannot be treated as current snowfall.';
         document.querySelectorAll('.windows button').forEach(function (b) { b.disabled = true; });
         mapFallback('The NWS observation feed is outdated, so the current map is hidden. Use the original NWS archive or the historical season reference below.');
+        renderTown();
         return;
       }
       // Open on the shortest window that has snow, so a quiet day still shows the latest storm.
@@ -482,7 +493,7 @@
       if (state.places) fillTownList();
       (state.town ? loadPlaces() : Promise.resolve()).then(function () { render(Boolean(state.region)); });
     })
-    .catch(function () { $('snowSummary').textContent = 'Snow reports did not load just now. Try again in a few minutes.'; mapFallback(); });
+    .catch(function () { $('snowSummary').textContent = 'Snow reports did not load just now. Try again in a few minutes.'; mapFallback(); renderTown(); });
   fetch('/api/michigan-snow-totals?view=season', { headers: { Accept: 'application/json' } })
     .then(function (r) { return r.json(); })
     .then(function (s) { state.season = s; renderSeason(); if (state.data) renderTown(); })

@@ -13,12 +13,14 @@ async function retrieve(url){
   if(!Array.isArray(data?.features)||data.features.length>12)throw new Error('Unexpected ECCC source shape');
   return data;
 }
-async function lookup(beach,now=new Date()){
+async function lookup(beach,now=new Date(),options={}){
   const url=bboxUrl(beach);
   if(!url)return empty(beach,'This location has no approved ECCC source reference.');
   try{
-    const [forecast,water]=await Promise.all([retrieve(url),nearbyWater(beach,now)]);
-    return interpret(beach,forecast,now,water);
+    const [forecast,water]=await Promise.all([(options.read||retrieve)(url),options.includeWater===false?Promise.resolve(null):nearbyWater(beach,now)]);
+    const answer=interpret(beach,forecast,now,water);
+    if(options.unified&&options.includeWater!==false&&answer.status==='forecast-based')answer.hours=require('../lib/shorefeel/canada.js').forecastHours(beach,forecast,now);
+    return answer;
   }
   catch{return empty(beach,'Environment Canada hourly forecasts could not be retrieved.');}
 }
