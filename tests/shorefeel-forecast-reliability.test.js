@@ -65,3 +65,28 @@ test('recovered near-time rows do not turn into exact matches or authorization',
   assert.equal(m.originalExact,review.leads[h].matched);
  }
 });
+
+test('confirmation missingness audit accounts for every slot without promoting near-time candidates',()=>{
+ const fs=require('node:fs'),crypto=require('node:crypto'),path=require('node:path');
+ const raw=fs.readFileSync(path.join(__dirname,'../data/shorefeel/horizon-confirm-cohort-actual-20261125.json'));
+ const src=JSON.parse(raw),a=require('../data/shorefeel/horizon-confirm-coverage-audit-20261125.json');
+ assert.equal(a.sourceDatasetSha256,crypto.createHash('sha256').update(raw).digest('hex'));
+ assert.equal(a.sourceCohortSha256,src.cohortSha256);assert.equal(a.canPromoteModel,false);
+ assert.equal(a.maximumNearTimeMinutes,15);
+ const rows=src.cycles.flatMap(c=>c.pairs);
+ const count=ps=>{
+  const exact=ps.filter(p=>!p.reason).length;
+  const potentialNearTime=ps.filter(p=>p.reason==='missing exact-hour independent observation'&&Number.isFinite(p.baselineGapMinutes)&&Number.isFinite(p.outcomeGapMinutes)&&p.baselineGapMinutes<=15&&p.outcomeGapMinutes<=15).length;
+  return {expected:ps.length,exact,potentialNearTime,otherMissing:ps.length-exact-potentialNearTime};
+ };
+ for(const h of [24,48]){
+  const lead=rows.filter(p=>p.leadHours===h);
+  assert.deepEqual(a.leads[h],count(lead));
+  for(const station of STATIONS)assert.deepEqual(a.stations[station][h],count(lead.filter(p=>p.station===station)));
+  for(const day of CONFIRM_DATES)assert.deepEqual(a.dates[day][h],count(lead.filter(p=>p.cycleAt.startsWith(day))));
+  assert.equal(a.stations['45210'][h].exact,0);assert.equal(a.stations['45210'][h].potentialNearTime,10);
+ }
+ assert.equal(a.stationProvenance['45210'].receiptTimesAuthenticated,false);
+ assert.equal(a.stationProvenance['45210'].temperatureSensorDepthM,null);
+ assert.equal(a.stationProvenance['45214'].receiptTimesAuthenticated,false);
+});
