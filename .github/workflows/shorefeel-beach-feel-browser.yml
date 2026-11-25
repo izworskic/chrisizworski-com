@@ -10,6 +10,10 @@ on:
       - 'tests/shorefeel-physics.test.js'
       - 'tests/shorefeel-noaa-grid.test.js'
       - 'tests/shorefeel-field-validation.test.js'
+      - 'tests/shorefeel-forecast-reliability.test.js'
+      - 'tests/shorefeel-empirical-evidence.test.js'
+      - 'scripts/shorefeel-failure-mode-diagnostic.cjs'
+      - 'data/shorefeel/**'
       - 'scripts/shorefeel-validate-field.cjs'
       - 'scripts/shorefeel-noaa-hindcast.py'
       - 'scripts/shorefeel-field-pair.py'
@@ -97,14 +101,6 @@ jobs:
           cat artifacts/shorefeel-beach-qa/archive-coverage.json
       - name: Offline preserved ShoreFeel empirical evidence
         run: node --test tests/shorefeel-empirical-evidence.test.js tests/shorefeel-forecast-reliability.test.js
-      - name: One-off separate-year qualification research
-        if: github.head_ref == 'research/shorefeel-actual-october-cohort'
-        run: |
-          python3 -m venv "$RUNNER_TEMP/shorefeel-year"
-          "$RUNNER_TEMP/shorefeel-year/bin/pip" install --disable-pip-version-check numpy==2.2.6 netCDF4==1.7.2
-          mkdir -p artifacts/shorefeel-beach-qa
-          "$RUNNER_TEMP/shorefeel-year/bin/python" scripts/shorefeel-separate-year-validation.py > artifacts/shorefeel-beach-qa/separate-year-validation.json
-          cat artifacts/shorefeel-beach-qa/separate-year-validation.json
       - name: Install isolated pinned browser harness
         run: |
           npm install --prefix "$RUNNER_TEMP/shorefeel-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
