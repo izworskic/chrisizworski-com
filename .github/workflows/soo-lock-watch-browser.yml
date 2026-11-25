@@ -9,6 +9,9 @@ on:
       - 'tests/soo-lock-watch*'
       - 'tests/great-lakes-rolling-forecast-audit.test.js'
       - 'tests/soo-predictive-study.test.js'
+      - 'tests/soo-independent-validation.test.js'
+      - 'scripts/soo-independent-validation.cjs'
+      - 'lib/soo-predictive-study.cjs'
       - 'tests/corridor-intelligence.test.js'
       - 'tests/great-lakes-historical-library.test.js'
       - 'data/freighter-history/**'
@@ -28,7 +31,7 @@ jobs:
       - run: npm ci
       - run: npm install --no-save --no-package-lock --ignore-scripts playwright@1.56.1 @axe-core/playwright@4.10.2
       - name: Verify consolidated offline intelligence
-        run: node --test tests/great-lakes-historical-library.test.js tests/corridor-intelligence.test.js tests/soo-predictive-study.test.js tests/great-lakes-rolling-forecast-audit.test.js
+        run: node --test tests/great-lakes-historical-library.test.js tests/corridor-intelligence.test.js tests/soo-predictive-study.test.js tests/great-lakes-rolling-forecast-audit.test.js tests/soo-independent-validation.test.js
       - run: node tests/soo-lock-watch-browser.cjs
       - uses: actions/upload-artifact@v4
         if: always()
