@@ -61,7 +61,8 @@ for(const width of [360,390,768,1280,1440]){
  assert.match(await page.locator('#freighterMap .leaflet-popup').innerText(),/LEE A. TREGURTHA/);
  assert.equal(await page.locator('#ship-inspector').isHidden(),true);
  await page.locator('.hub-meet-ship').click();await page.locator('#ship-story').getByText(/wartime tanker/).first().waitFor();
- assert.equal(await page.locator('#freighterMap .leaflet-popup').count(),0);
+ // Leaflet removes the fading popup asynchronously; require actual detachment.
+ await page.locator('#freighterMap .leaflet-popup').waitFor({state:'detached',timeout:2000}); assert.equal(await page.locator('#freighterMap .leaflet-popup').count(),0);
  assert.match(await page.locator('#ship-inspector-title').innerText(),/LEE A. TREGURTHA/);assert.match(await page.locator('#ship-story').innerText(),/29,360 gross tons/);
  assert.equal(await page.locator('#ship-story img').evaluate(async img=>{await img.decode();return img.naturalWidth>0}),true);
  if(width===390)await page.locator('#ship-inspector').screenshot({path:out+'/hub-ship-story-390.png'});
