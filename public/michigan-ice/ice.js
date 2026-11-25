@@ -100,12 +100,17 @@
   function regional(nowData, slug) {
     return nowData && nowData.observed && nowData.observed.regions ? nowData.observed.regions[slug] : null;
   }
+  // Recheck the original source clock when a cached response reaches the browser.
+  function iceSourceRecent(timestamp, now) {
+    var age = (now === undefined ? Date.now() : now) - Date.parse(timestamp);
+    return Number.isFinite(age) && age >= -2 * 3600000 && age <= 48 * 3600000;
+  }
   function usableRegional(r) {
-    return !!(r && r.supported && r.available && !r.stale && r.rangeLabel);
+    return !!(r && r.supported && r.available && !r.stale && r.rangeLabel && iceSourceRecent(r.validAt));
   }
   function usableLakeWide(nowData) {
     var l = nowData && nowData.observed ? nowData.observed.lakeWide : null;
-    return l && l.current && !l.stale ? l : null;
+    return l && l.current && !l.stale && iceSourceRecent(l.observedAt) ? l : null;
   }
 
   function paintTrack(container, afdd, normal) {
@@ -646,6 +651,9 @@
       if (stamp) stamp.textContent = 'Source: NOAA GLERL daily ice climatology.';
       return;
     }
+    var today = new Intl.DateTimeFormat("en-CA", {timeZone:"America/Detroit",year:"numeric",month:"2-digit",day:"2-digit"}).format(new Date());
+    // A prior-day cached record can still be explored as history, but not as today.
+    var currentDay = history.observedDate === today;
     var off = !!history.offSeason;
     if (season) {
       season.hidden = !off;
@@ -655,7 +663,7 @@
     el.textContent = off
       ? 'Off season: last measured ice-year peaks, not ice cover today.'
       : 'Daily ice coverage for ' + history.observedDate +
-        '. Unmeasured values are left blank, never reported as 0%.';
+        (currentDay ? '. Unmeasured values are left blank, never reported as 0%.' : '. Older cached record, not today. Current values are withheld.');
     HISTORY_LAKES.forEach(function (lake) {
       var key = lake[0], row = history.lakes[key];
       var tr = document.createElement('tr');
@@ -669,10 +677,10 @@
         current.appendChild(historyNode('small', peak ? ('Peak in ice year ' + history.iceYear +
           ' on ' + peak.date) : 'No recorded peak for the previous ice year'));
       } else {
-        current.appendChild(historyNode('strong', row ? historyNumber(row.current) : 'Not measured',
+        current.appendChild(historyNode('strong', row && currentDay ? historyNumber(row.current) : 'Not measured',
           'ice-number'));
         var detail;
-        if (row && row.current !== null && row.rank !== null)
+        if (currentDay && row && row.current !== null && row.rank !== null)
           detail = 'More ice than ' + row.lowerCount + ' of ' + row.yearsOfRecord +
             ' measured winters (rank ' + row.rank + ' of ' + row.yearsOfRecord + ' ascending)';
         else detail = 'No current-day NOAA measurement; the record does not imply 0%.';
@@ -686,7 +694,7 @@
               row.seasonPeak.date));
       }
       tr.appendChild(current);
-      tr.appendChild(historyRangeCell(off ? null : row));
+      tr.appendChild(historyRangeCell(off || !currentDay ? null : row));
       board.appendChild(tr);
     });
     if (stamp) stamp.textContent = 'NOAA GLERL; ' + history.yearsAvailable +

@@ -1,0 +1,786 @@
+{
+  "status": "HORIZON_RELIABILITY_CONFIRMATION_REVIEW_ONLY",
+  "cohortSha256": "5fb9599ae7442338a541651f5880b714747e5d311edc1956556f247221315563",
+  "weights": {
+    "persistence": 0,
+    "conservative": 0.25,
+    "equalBlend": 0.5,
+    "original": 1
+  },
+  "leads": {
+    "24": {
+      "expected": 100,
+      "matched": 72,
+      "matchedFraction": 0.72,
+      "methods": {
+        "persistence": {
+          "weight": 0,
+          "n": 72,
+          "maeF": 2.532499999999999,
+          "biasF": -0.062499999999999396,
+          "maxAbsErrorF": 22.32,
+          "heuristicCoverage": 0.6388888888888888,
+          "blocks": [
+            {
+              "day": "2026-07-06",
+              "n": 7,
+              "maeF": 2.0571428571428574,
+              "biasF": 0.925714285714286,
+              "maxAbsErrorF": 3.6,
+              "heuristicCoverage": 0.42857142857142855
+            },
+            {
+              "day": "2026-07-12",
+              "n": 7,
+              "maeF": 2.031428571428572,
+              "biasF": -0.23142857142857012,
+              "maxAbsErrorF": 6.659999999999999,
+              "heuristicCoverage": 0.5714285714285714
+            },
+            {
+              "day": "2026-07-18",
+              "n": 8,
+              "maeF": 3.5325000000000006,
+              "biasF": 3.5325000000000006,
+              "maxAbsErrorF": 12.419999999999998,
+              "heuristicCoverage": 0.5
+            },
+            {
+              "day": "2026-07-24",
+              "n": 8,
+              "maeF": 2.9699999999999998,
+              "biasF": 0.22500000000000042,
+              "maxAbsErrorF": 6.120000000000004,
+              "heuristicCoverage": 0.375
+            },
+            {
+              "day": "2026-07-30",
+              "n": 7,
+              "maeF": 5.399999999999999,
+              "biasF": -5.297142857142856,
+              "maxAbsErrorF": 22.32,
+              "heuristicCoverage": 0.2857142857142857
+            },
+            {
+              "day": "2026-08-06",
+              "n": 7,
+              "maeF": 2.417142857142857,
+              "biasF": -2.417142857142857,
+              "maxAbsErrorF": 6.840000000000002,
+              "heuristicCoverage": 0.5714285714285714
+            },
+            {
+              "day": "2026-08-12",
+              "n": 8,
+              "maeF": 0.3599999999999995,
+              "biasF": -0.22499999999999917,
+              "maxAbsErrorF": 0.9,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-18",
+              "n": 7,
+              "maeF": 0.7971428571428575,
+              "biasF": 0.7971428571428575,
+              "maxAbsErrorF": 1.2600000000000051,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-24",
+              "n": 7,
+              "maeF": 2.082857142857143,
+              "biasF": -0.7457142857142861,
+              "maxAbsErrorF": 9.360000000000001,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-08-30",
+              "n": 6,
+              "maeF": 3.9899999999999998,
+              "biasF": 2.6700000000000004,
+              "maxAbsErrorF": 19.080000000000002,
+              "heuristicCoverage": 0.8333333333333334
+            }
+          ]
+        },
+        "conservative": {
+          "weight": 0.25,
+          "n": 72,
+          "maeF": 2.136133358478546,
+          "biasF": -0.27498722076415966,
+          "maxAbsErrorF": 21.640419216156005,
+          "heuristicCoverage": 0.6944444444444444,
+          "blocks": [
+            {
+              "day": "2026-07-06",
+              "n": 7,
+              "maeF": 1.5474343218122202,
+              "biasF": 0.27637643541608575,
+              "maxAbsErrorF": 2.9146797180175783,
+              "heuristicCoverage": 0.5714285714285714
+            },
+            {
+              "day": "2026-07-12",
+              "n": 7,
+              "maeF": 1.5336161695207868,
+              "biasF": -0.42105185917445465,
+              "maxAbsErrorF": 4.940874824523925,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-07-18",
+              "n": 8,
+              "maeF": 2.286411781311036,
+              "biasF": 2.286411781311036,
+              "maxAbsErrorF": 8.664490242004392,
+              "heuristicCoverage": 0.625
+            },
+            {
+              "day": "2026-07-24",
+              "n": 8,
+              "maeF": 2.6447761058807377,
+              "biasF": 0.007144546508789595,
+              "maxAbsErrorF": 5.77216856002808,
+              "heuristicCoverage": 0.5
+            },
+            {
+              "day": "2026-07-30",
+              "n": 7,
+              "maeF": 5.042962237766809,
+              "biasF": -4.927396757943289,
+              "maxAbsErrorF": 21.640419216156005,
+              "heuristicCoverage": 0.2857142857142857
+            },
+            {
+              "day": "2026-08-06",
+              "n": 7,
+              "maeF": 1.9382631601606093,
+              "biasF": -1.9382631601606093,
+              "maxAbsErrorF": 5.551687374114992,
+              "heuristicCoverage": 0.5714285714285714
+            },
+            {
+              "day": "2026-08-12",
+              "n": 8,
+              "maeF": 0.3442695951461787,
+              "biasF": -0.11278002262115397,
+              "maxAbsErrorF": 0.71246646881103,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-18",
+              "n": 7,
+              "maeF": 0.5516838618687221,
+              "biasF": 0.5469424765450618,
+              "maxAbsErrorF": 0.8828714561462376,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-24",
+              "n": 7,
+              "maeF": 2.2608576188768654,
+              "biasF": -1.1213603251320978,
+              "maxAbsErrorF": 10.837682161331179,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-08-30",
+              "n": 6,
+              "maeF": 3.5790367269515992,
+              "biasF": 2.641330332756043,
+              "maxAbsErrorF": 17.808436803817752,
+              "heuristicCoverage": 0.8333333333333334
+            }
+          ]
+        },
+        "equalBlend": {
+          "weight": 0.5,
+          "n": 72,
+          "maeF": 2.028574633598327,
+          "biasF": -0.4874744415283199,
+          "maxAbsErrorF": 20.960838432312013,
+          "heuristicCoverage": 0.7083333333333334,
+          "blocks": [
+            {
+              "day": "2026-07-06",
+              "n": 7,
+              "maeF": 1.860582929338727,
+              "biasF": -0.37296141488211465,
+              "maxAbsErrorF": 3.0128295135498027,
+              "heuristicCoverage": 0.42857142857142855
+            },
+            {
+              "day": "2026-07-12",
+              "n": 7,
+              "maeF": 1.8280143519810272,
+              "biasF": -0.6106751469203392,
+              "maxAbsErrorF": 4.260687217712408,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-07-18",
+              "n": 8,
+              "maeF": 1.166161222457885,
+              "biasF": 1.040323562622071,
+              "maxAbsErrorF": 4.908980484008787,
+              "heuristicCoverage": 0.875
+            },
+            {
+              "day": "2026-07-24",
+              "n": 8,
+              "maeF": 2.8145522117614745,
+              "biasF": -0.2107109069824214,
+              "maxAbsErrorF": 5.481276855468752,
+              "heuristicCoverage": 0.375
+            },
+            {
+              "day": "2026-07-30",
+              "n": 7,
+              "maeF": 4.6859244755336205,
+              "biasF": -4.557650658743721,
+              "maxAbsErrorF": 20.960838432312013,
+              "heuristicCoverage": 0.42857142857142855
+            },
+            {
+              "day": "2026-08-06",
+              "n": 7,
+              "maeF": 1.4733114787510462,
+              "biasF": -1.4593834631783618,
+              "maxAbsErrorF": 4.263374748229982,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-08-12",
+              "n": 8,
+              "maeF": 0.5732751846313469,
+              "biasF": -0.0005600452423087342,
+              "maxAbsErrorF": 2.010048294067383,
+              "heuristicCoverage": 0.875
+            },
+            {
+              "day": "2026-08-18",
+              "n": 7,
+              "maeF": 0.4700834982735767,
+              "biasF": 0.296742095947266,
+              "maxAbsErrorF": 1.045742912292478,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-24",
+              "n": 7,
+              "maeF": 2.49028666632516,
+              "biasF": -1.4970063645499097,
+              "maxAbsErrorF": 12.315364322662354,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-08-30",
+              "n": 6,
+              "maeF": 3.3280068111419676,
+              "biasF": 2.6126606655120854,
+              "maxAbsErrorF": 16.5368736076355,
+              "heuristicCoverage": 0.8333333333333334
+            }
+          ]
+        },
+        "original": {
+          "weight": 1,
+          "n": 72,
+          "maeF": 2.306900815963745,
+          "biasF": -0.9124488830566401,
+          "maxAbsErrorF": 19.601676864624025,
+          "heuristicCoverage": 0.6666666666666666,
+          "blocks": [
+            {
+              "day": "2026-07-06",
+              "n": 7,
+              "maeF": 2.4868801443917405,
+              "biasF": -1.6716371154785155,
+              "maxAbsErrorF": 8.905659027099608,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-07-12",
+              "n": 7,
+              "maeF": 2.612171761648996,
+              "biasF": -0.989921722412108,
+              "maxAbsErrorF": 5.545474090576173,
+              "heuristicCoverage": 0.42857142857142855
+            },
+            {
+              "day": "2026-07-18",
+              "n": 8,
+              "maeF": 1.7650068283081053,
+              "biasF": -1.4518528747558586,
+              "maxAbsErrorF": 3.2322587585449205,
+              "heuristicCoverage": 0.5
+            },
+            {
+              "day": "2026-07-24",
+              "n": 8,
+              "maeF": 3.15410442352295,
+              "biasF": -0.6464218139648434,
+              "maxAbsErrorF": 6.185893936157231,
+              "heuristicCoverage": 0.375
+            },
+            {
+              "day": "2026-07-30",
+              "n": 7,
+              "maeF": 3.971848951067242,
+              "biasF": -3.8181584603445864,
+              "maxAbsErrorF": 19.601676864624025,
+              "heuristicCoverage": 0.5714285714285714
+            },
+            {
+              "day": "2026-08-06",
+              "n": 7,
+              "maeF": 1.0130066462925504,
+              "biasF": -0.5016240692138669,
+              "maxAbsErrorF": 2.4398313903808604,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-08-12",
+              "n": 8,
+              "maeF": 1.1465503692626946,
+              "biasF": 0.22387990951538167,
+              "maxAbsErrorF": 4.920096588134766,
+              "heuristicCoverage": 0.875
+            },
+            {
+              "day": "2026-08-18",
+              "n": 7,
+              "maeF": 0.9769152832031242,
+              "biasF": -0.20365866524832552,
+              "maxAbsErrorF": 1.6863793945312486,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-24",
+              "n": 7,
+              "maeF": 3.0899606486729208,
+              "biasF": -2.2482984433855338,
+              "maxAbsErrorF": 15.27072864532471,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-08-30",
+              "n": 6,
+              "maeF": 3.086013622283936,
+              "biasF": 2.5553213310241705,
+              "maxAbsErrorF": 13.993747215270997,
+              "heuristicCoverage": 0.6666666666666666
+            }
+          ]
+        }
+      },
+      "missing": 28,
+      "confirmation": {
+        "selected": "conservative",
+        "weight": 0.25,
+        "p90F": 4.940874824523925,
+        "persistenceP90F": 5.7600000000000025,
+        "originalP90F": 5.202553710937503,
+        "gates": {
+          "exactCoverage": false,
+          "allTenBlocks": true,
+          "maeBeatsPersistence": true,
+          "maeNoWorseThanOriginal": true,
+          "p90NoWorseThanBoth": true
+        },
+        "passesResearchGates": false
+      }
+    },
+    "48": {
+      "expected": 100,
+      "matched": 69,
+      "matchedFraction": 0.69,
+      "methods": {
+        "persistence": {
+          "weight": 0,
+          "n": 69,
+          "maeF": 2.7704347826086955,
+          "biasF": -0.9808695652173912,
+          "maxAbsErrorF": 26.64,
+          "heuristicCoverage": 0.7246376811594203,
+          "blocks": [
+            {
+              "day": "2026-07-06",
+              "n": 5,
+              "maeF": 1.152000000000001,
+              "biasF": 0.5760000000000005,
+              "maxAbsErrorF": 1.8,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-07-12",
+              "n": 7,
+              "maeF": 3.6514285714285712,
+              "biasF": -2.828571428571428,
+              "maxAbsErrorF": 6.840000000000002,
+              "heuristicCoverage": 0.5714285714285714
+            },
+            {
+              "day": "2026-07-18",
+              "n": 8,
+              "maeF": 4.140000000000001,
+              "biasF": 4.140000000000001,
+              "maxAbsErrorF": 8.1,
+              "heuristicCoverage": 0.5
+            },
+            {
+              "day": "2026-07-24",
+              "n": 7,
+              "maeF": 1.8771428571428577,
+              "biasF": -1.8257142857142863,
+              "maxAbsErrorF": 6.120000000000004,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-07-30",
+              "n": 7,
+              "maeF": 2.8542857142857128,
+              "biasF": -2.5971428571428556,
+              "maxAbsErrorF": 9,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-08-06",
+              "n": 7,
+              "maeF": 3.394285714285713,
+              "biasF": -3.394285714285713,
+              "maxAbsErrorF": 6.480000000000003,
+              "heuristicCoverage": 0.2857142857142857
+            },
+            {
+              "day": "2026-08-12",
+              "n": 8,
+              "maeF": 0.9674999999999992,
+              "biasF": -0.7425000000000009,
+              "maxAbsErrorF": 1.9799999999999962,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-18",
+              "n": 7,
+              "maeF": 0.5142857142857142,
+              "biasF": 0.41142857142857175,
+              "maxAbsErrorF": 1.0800000000000025,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-24",
+              "n": 7,
+              "maeF": 5.3742857142857146,
+              "biasF": -4.654285714285714,
+              "maxAbsErrorF": 26.64,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-08-30",
+              "n": 6,
+              "maeF": 3.48,
+              "biasF": 1.08,
+              "maxAbsErrorF": 12.960000000000003,
+              "heuristicCoverage": 0.6666666666666666
+            }
+          ]
+        },
+        "conservative": {
+          "weight": 0.25,
+          "n": 69,
+          "maeF": 2.419690724248471,
+          "biasF": -1.0605620906663975,
+          "maxAbsErrorF": 24.818495979309084,
+          "heuristicCoverage": 0.7681159420289855,
+          "blocks": [
+            {
+              "day": "2026-07-06",
+              "n": 5,
+              "maeF": 0.6853100166320806,
+              "biasF": -0.35990280532836866,
+              "maxAbsErrorF": 1.5799999809265124,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-07-12",
+              "n": 7,
+              "maeF": 2.963862713405064,
+              "biasF": -2.2227654320853083,
+              "maxAbsErrorF": 4.660417213439943,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-07-18",
+              "n": 8,
+              "maeF": 3.108024909496308,
+              "biasF": 3.108024909496308,
+              "maxAbsErrorF": 6.4425510406494135,
+              "heuristicCoverage": 0.625
+            },
+            {
+              "day": "2026-07-24",
+              "n": 7,
+              "maeF": 2.1312963662828723,
+              "biasF": -2.1312963662828723,
+              "maxAbsErrorF": 5.572588176727298,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-07-30",
+              "n": 7,
+              "maeF": 2.5072532354082364,
+              "biasF": -2.4007783045087527,
+              "maxAbsErrorF": 8.973445701599122,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-08-06",
+              "n": 7,
+              "maeF": 2.7298233195713584,
+              "biasF": -2.701421650477817,
+              "maxAbsErrorF": 5.279474143981936,
+              "heuristicCoverage": 0.42857142857142855
+            },
+            {
+              "day": "2026-08-12",
+              "n": 8,
+              "maeF": 1.2349367523193358,
+              "biasF": -0.9950909185409554,
+              "maxAbsErrorF": 2.7944535827636705,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-18",
+              "n": 7,
+              "maeF": 0.581546099526542,
+              "biasF": 0.23299527576991524,
+              "maxAbsErrorF": 1.077174453735354,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-24",
+              "n": 7,
+              "maeF": 4.990262844903129,
+              "biasF": -4.377991762161256,
+              "maxAbsErrorF": 24.818495979309084,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-08-30",
+              "n": 6,
+              "maeF": 2.910017423629761,
+              "biasF": 1.154344253540039,
+              "maxAbsErrorF": 11.595286474227908,
+              "heuristicCoverage": 0.6666666666666666
+            }
+          ]
+        },
+        "equalBlend": {
+          "weight": 0.5,
+          "n": 69,
+          "maeF": 2.2536948792830755,
+          "biasF": -1.1402546161154044,
+          "maxAbsErrorF": 22.996991958618164,
+          "heuristicCoverage": 0.8115942028985508,
+          "blocks": [
+            {
+              "day": "2026-07-06",
+              "n": 5,
+              "maeF": 1.475221824645996,
+              "biasF": -1.2958056106567377,
+              "maxAbsErrorF": 4.599999961853026,
+              "heuristicCoverage": 0.8
+            },
+            {
+              "day": "2026-07-12",
+              "n": 7,
+              "maeF": 2.2762968553815566,
+              "biasF": -1.6169594355991899,
+              "maxAbsErrorF": 4.152983779907224,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-07-18",
+              "n": 8,
+              "maeF": 2.0760498189926153,
+              "biasF": 2.0760498189926153,
+              "maxAbsErrorF": 4.785102081298827,
+              "heuristicCoverage": 0.75
+            },
+            {
+              "day": "2026-07-24",
+              "n": 7,
+              "maeF": 2.4368784468514586,
+              "biasF": -2.4368784468514586,
+              "maxAbsErrorF": 6.616896343231201,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-07-30",
+              "n": 7,
+              "maeF": 2.363737580435615,
+              "biasF": -2.20441375187465,
+              "maxAbsErrorF": 8.946891403198242,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-08-06",
+              "n": 7,
+              "maeF": 2.271075210571289,
+              "biasF": -2.008557586669921,
+              "maxAbsErrorF": 4.583993911743164,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-08-12",
+              "n": 8,
+              "maeF": 1.5923735046386716,
+              "biasF": -1.24768183708191,
+              "maxAbsErrorF": 4.328907165527342,
+              "heuristicCoverage": 0.875
+            },
+            {
+              "day": "2026-08-18",
+              "n": 7,
+              "maeF": 0.7516636276245121,
+              "biasF": 0.054561980111258714,
+              "maxAbsErrorF": 1.5030707931518543,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-24",
+              "n": 7,
+              "maeF": 4.863382832663402,
+              "biasF": -4.101697810036795,
+              "maxAbsErrorF": 22.996991958618164,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-08-30",
+              "n": 6,
+              "maeF": 2.3400348472595214,
+              "biasF": 1.228688507080078,
+              "maxAbsErrorF": 10.230572948455812,
+              "heuristicCoverage": 0.8333333333333334
+            }
+          ]
+        },
+        "original": {
+          "weight": 1,
+          "n": 69,
+          "maeF": 2.3998321898087207,
+          "biasF": -1.2996396670134172,
+          "maxAbsErrorF": 19.353983917236327,
+          "heuristicCoverage": 0.8115942028985508,
+          "blocks": [
+            {
+              "day": "2026-07-06",
+              "n": 5,
+              "maeF": 3.9122282867431637,
+              "biasF": -3.167611221313476,
+              "maxAbsErrorF": 10.639999923706053,
+              "heuristicCoverage": 0.6
+            },
+            {
+              "day": "2026-07-12",
+              "n": 7,
+              "maeF": 2.3199477931431347,
+              "biasF": -0.40534744262695216,
+              "maxAbsErrorF": 3.985967559814451,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-07-18",
+              "n": 8,
+              "maeF": 1.280892305374146,
+              "biasF": 0.012099637985229894,
+              "maxAbsErrorF": 2.6423767089843757,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-07-24",
+              "n": 7,
+              "maeF": 3.0663401412963887,
+              "biasF": -3.048042607988631,
+              "maxAbsErrorF": 13.233792686462403,
+              "heuristicCoverage": 0.7142857142857143
+            },
+            {
+              "day": "2026-07-30",
+              "n": 7,
+              "maeF": 2.4081249455043237,
+              "biasF": -1.8116846466064438,
+              "maxAbsErrorF": 8.893782806396484,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-08-06",
+              "n": 7,
+              "maeF": 1.669111044747489,
+              "biasF": -0.6228294590541283,
+              "maxAbsErrorF": 3.7679878234863287,
+              "heuristicCoverage": 0.8571428571428571
+            },
+            {
+              "day": "2026-08-12",
+              "n": 8,
+              "maeF": 2.307247009277343,
+              "biasF": -1.7528636741638193,
+              "maxAbsErrorF": 7.397814331054686,
+              "heuristicCoverage": 0.875
+            },
+            {
+              "day": "2026-08-18",
+              "n": 7,
+              "maeF": 1.2320361655099055,
+              "biasF": -0.3023046112060543,
+              "maxAbsErrorF": 2.6461415863037097,
+              "heuristicCoverage": 1
+            },
+            {
+              "day": "2026-08-24",
+              "n": 7,
+              "maeF": 4.760182195390975,
+              "biasF": -3.5491099057878763,
+              "maxAbsErrorF": 19.353983917236327,
+              "heuristicCoverage": 0.5714285714285714
+            },
+            {
+              "day": "2026-08-30",
+              "n": 6,
+              "maeF": 1.5219948577880855,
+              "biasF": 1.3773770141601565,
+              "maxAbsErrorF": 7.501145896911623,
+              "heuristicCoverage": 0.8333333333333334
+            }
+          ]
+        }
+      },
+      "missing": 31,
+      "confirmation": {
+        "selected": "original",
+        "weight": 1,
+        "p90F": 6.33879409790039,
+        "persistenceP90F": 6.840000000000002,
+        "originalP90F": 6.33879409790039,
+        "gates": {
+          "exactCoverage": false,
+          "allTenBlocks": true,
+          "maeBeatsPersistence": true,
+          "maeNoWorseThanOriginal": true,
+          "p90NoWorseThanBoth": true
+        },
+        "passesResearchGates": false
+      }
+    }
+  },
+  "canPromoteModel": false,
+  "limitations": [
+    "Ten predeclared, previously unscored date blocks. Same year and potentially correlated weather regimes; retrospective, not prospective. 24h weight .25 and 48h weight 1 frozen after review. All gates are research screens only.",
+    "Equal paired rows for all methods. Fixed weights not trained or optimized. No automatic winner, no production change, no calibrated coverage claim.",
+    "The anchored change uses 04Z baseline and 06Z assumed decision. No cooling-watch scores because baseline and decision times differ.",
+    "No conclusion about cool-season or beach-level skill."
+  ],
+  "sourceSha256": "63ca4323f6f14363f22c74d06f190b97de1a2f2fe6a7bcd141c221625a0b9a32"
+}

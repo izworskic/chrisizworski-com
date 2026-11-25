@@ -11,6 +11,9 @@
 (function (root) {
   'use strict';
 
+  var nearMotion = typeof module !== 'undefined' && module.exports ? require('./soo-near-lock-motion') : root.SooNearLockMotion;
+  var changing = typeof module !== 'undefined' && module.exports ? require('./soo-changing-conditions') : root.SooChangingConditions;
+  var memory = typeof module !== 'undefined' && module.exports ? require('./soo-visit-memory') : root.SooVisitMemory;
   var TZ = 'America/Detroit';
   var SAULT = { lat: 46.4953, lon: -84.3453 };
   var MIN = 60000;
@@ -132,7 +135,7 @@
       : 'Direction not reported';
   }
   function chamberText(s) {
-    if (s.state === 'in-lock') return (s.chamberName || 'A lock chamber') + ', now';
+    if (s.state === 'in-lock') return (s.chamberName || 'A lock chamber') + ' (last report)';
     if (s.lockCertain) return 'Poe Lock (too large for the MacArthur)';
     return 'Poe or MacArthur; the lockmaster assigns it';
   }
@@ -150,31 +153,89 @@
     return mid && ov / len >= 0.6 ? 'mostly' : 'partly';
   }
 
+  // Posted access is a planning constraint, not confirmation that the gates are open.
+  // Use local calendar days, including DST transitions; intervals are half-open.
+  var START_CHOICES = [0, 30, 60, 90, 120, 180, 240];
+  var STAY_CHOICES = [45, 90, 180, 240];
+  var REPORT_AGE_MS = 15 * MIN; // same conservative eligibility used by the Soo AIS engine
+  function nextLocalDay(ms) {
+    var p = zonedParts(ms);
+    return zonedInstant(p.y, p.mo, p.d + 1, 0, 0);
+  }
+  function openSegments(start, end) {
+    var result = [];
+    if (!Number.isFinite(start) || !Number.isFinite(end) || end <= start || end - start > 7 * 24 * HOUR) return result;
+    for (var day = localMidnight(start); day < end; day = nextLocalDay(day)) {
+      var hours = parkHours(day + 12 * HOUR);
+      if (!navigationSeason(hours.open).open) continue;
+      var a = Math.max(start, hours.open), b = Math.min(end, hours.close);
+      if (b > a) result.push({ start: a, end: b });
+    }
+    return result;
+  }
+  function minutesIn(parts) {
+    return parts.reduce(function (n, p) { return n + (p.end - p.start) / MIN; }, 0);
+  }
+  function coverage(win, visit) {
+    return openSegments(Math.max(win.start, visit.start), Math.min(win.end, visit.end));
+  }
+  function accessibleFit(win, visit) {
+    var parts = coverage(win, visit), amount = minutesIn(parts);
+    if (!amount) return 'outside';
+    var includesMid = parts.some(function (p) { return win.mid >= p.start && win.mid < p.end; });
+    return includesMid && amount / Math.max(1, (win.end - win.start) / MIN) >= 0.6 ? 'mostly' : 'partly';
+  }
+  function freshReport(s, now) {
+    if (!s || typeof s.seen !== 'string' || !/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{3})?Z$/.test(s.seen)) return false;
+    var seen = Date.parse(s.seen), age = now - seen;
+    return Number.isFinite(seen) && new Date(seen).toISOString().slice(0,19) === s.seen.slice(0,19) && age >= 0 && age <= REPORT_AGE_MS;
+  }
   function shipEntry(s, now, visit) {
+    if (!freshReport(s, now)) return null;
+    var seen = Date.parse(s.seen), ageMinutes = Math.floor((now - seen) / MIN);
     if (s.state === 'in-lock') {
-      var seen = Date.parse(s.seen);
+      var h = parkHours(now), accessible = navigationSeason(now).open && now >= h.open && now < h.close;
       return {
         id: String(s.id || s.mmsi), name: title(s), raw: s, inLock: true, direction: s.direction || null,
-        sizeLabel: s.sizeLabel || null, lengthFeet: s.lengthFeet || null, ageMinutes: s.ageMinutes,
-        start: Number.isFinite(seen) ? seen : now, end: now, mid: now,
-        fit: visit.start - now <= 15 * MIN ? 'now' : 'gone',
-        afterClose: false, dark: isDark(now)
+        sizeLabel: s.sizeLabel || null, lengthFeet: s.lengthFeet || null, ageMinutes: ageMinutes,
+        start: seen, end: now, mid: now,
+        fit: accessible && visit.start <= now && visit.end > now ? 'now' : 'gone',
+        afterClose: !accessible, dark: isDark(now)
       };
     }
     var w = s.window || {};
     var start = Date.parse(w.start), end = Date.parse(w.end), mid = Date.parse(w.midpoint);
-    if (![start, end, mid].every(Number.isFinite)) return null;
-    var hours = parkHours(mid);
+    if (![start, end, mid].every(Number.isFinite) || start > mid || mid > end || end <= start || end <= now || end - start > 7 * 24 * HOUR) return null;
+    var hours = parkHours(mid), win = {start:start,end:end,mid:mid};
+    var open = minutesIn(openSegments(start,end));
     var e = {
       id: String(s.id || s.mmsi), name: title(s), raw: s, inLock: false, direction: s.direction || null,
-      sizeLabel: s.sizeLabel || null, lengthFeet: s.lengthFeet || null, ageMinutes: s.ageMinutes,
-      start: start, end: end, mid: mid, fit: fitFor({ start: start, end: end, mid: mid }, visit),
-      afterClose: start >= hours.close || end <= hours.open,
-      runsPastClose: start < hours.close && end > hours.close,
+      sizeLabel: s.sizeLabel || null, lengthFeet: s.lengthFeet || null, ageMinutes: ageMinutes,
+      start: start, end: end, mid: mid, fit: accessibleFit(win, visit),
+      accessibleMinutes: minutesIn(coverage(win,visit)),
+      afterClose: open === 0, runsPastClose: open > 0 && open < (end-start)/MIN,
       dark: isDark(start) && isDark(end) && isDark(mid),
       parkLabel: hours.label
     };
     return e;
+  }
+  // An alternative must respect the earliest arrival and the chosen stay.
+  // Enumerate only controls the visitor can actually select; never extend the stay.
+  function betterVisit(entries, visit, now, currentMinutes) {
+    var stay = (visit.end-visit.start)/MIN, earliest = (visit.start-now)/MIN, best = null;
+    if (STAY_CHOICES.indexOf(stay) < 0) return null;
+    START_CHOICES.forEach(function (offset) {
+      if (offset < earliest) return;
+      var v = {start:now+offset*MIN,end:now+(offset+stay)*MIN};
+      if (minutesIn(openSegments(v.start,v.end)) !== stay) return;
+      entries.forEach(function (e) {
+        if (e.inLock) return;
+        var n = minutesIn(coverage(e,v));
+        if (n <= currentMinutes || (best && n <= best.minutes)) return;
+        best={id:e.id,name:e.name,start:v.start,end:v.end,startOffset:offset,stay:stay,minutes:n};
+      });
+    });
+    return best;
   }
 
   var FIT_RANK = { now: 0, mostly: 1, partly: 2, outside: 3, gone: 4 };
@@ -195,11 +256,12 @@
       season: season, ships: [], best: null, status: '', headline: '', detail: [], notes: []
     };
 
-    var outsideBefore = overlapMinutes(visit.start, visit.end, visit.start - 24 * HOUR, hours.open);
-    var outsideAfter = overlapMinutes(visit.start, visit.end, hours.close, visit.end + 24 * HOUR);
-    if (outsideBefore > 0 || outsideAfter > 0) {
+    var openMinutes = minutesIn(openSegments(visit.start,visit.end));
+    var outsideMinutes = (visit.end-visit.start)/MIN - openMinutes;
+    out.openMinutes = openMinutes;
+    if (outsideMinutes > 0) {
       out.notes.push('Soo Locks Park posted hours today are ' + hours.label + ' (' + hours.months + '), so ' +
-        duration(outsideBefore + outsideAfter) + ' of this visit falls outside them. Confirm with USACE before planning around it.');
+        duration(outsideMinutes) + ' of this visit falls outside them. Confirm with USACE before planning around it.');
     }
     if (sun.sunset !== null && visit.end > sun.sunset && visit.start < sun.sunset + 12 * HOUR) {
       out.notes.push('Sunset is ' + clock(sun.sunset) + '. Ships after that pass in the dark.');
@@ -220,14 +282,16 @@
       return out;
     }
     var n = opts.data && opts.data.nextShip;
-    if (!opts.data || (opts.failed && !n) || !n || !n.ok) {
+    if (opts.failed || !opts.data || opts.data.ok !== true || !n || !n.ok) {
       out.status = 'unavailable';
       out.headline = 'Live ship reports are unavailable, so no visit can be lined up';
-      out.detail.push('This is not a report of an empty river.' + (vc ? ' Call the boat hotline at 906-202-1333, or see the other ways to check below.' : ' See the other ways to check below.'));
+      out.detail.push((opts.failed && opts.data ? 'The latest refresh failed. Earlier windows are withheld until fresh reports return. The last-known positions may still be visible on the map. ' : '') + 'This is not a report of an empty river.' + (vc ? ' Call the boat hotline at 906-202-1333, or see the other ways to check below.' : ' See the other ways to check below.'));
       out.link = { href: '#soo-schedule-answer', label: 'Other ways to check \u2193' };
       return out;
     }
+    var nearby = nearMotion ? nearMotion.visitorState(opts.data, opts.failed, now) : null;
     var entries = [];
+    var reportedCount = (n.inLock || []).length + (n.candidates || []).length;
     (n.inLock || []).forEach(function (s) { var e = shipEntry(Object.assign({ state: 'in-lock' }, s), now, visit); if (e) entries.push(e); });
     (n.candidates || []).forEach(function (s) { var e = shipEntry(s, now, visit); if (e) entries.push(e); });
     // One row per ship even if a report somehow lands in both lists.
@@ -235,65 +299,87 @@
     entries = entries.filter(function (e) { if (seenIds[e.id]) return false; seenIds[e.id] = true; return true; });
     entries.sort(function (a, b) { return a.start - b.start; });
     out.ships = entries;
-    if (opts.failed) out.notes.unshift('The latest refresh failed; these are the windows from the earlier check.');
+    out.notes.unshift('Planning windows describe a modeled arrival, not a confirmed lock time. A ship may slow or stop; check its movement before leaving.');
 
     var pickId = n.pick ? String(n.pick.id || n.pick.mmsi) : null;
     var ranked = entries.filter(function (e) { return e.fit === 'now' || e.fit === 'mostly' || e.fit === 'partly'; })
       .sort(function (a, b) {
         var r = FIT_RANK[a.fit] - FIT_RANK[b.fit];
         if (r) return r;
-        if (a.afterClose !== b.afterClose) return a.afterClose ? 1 : -1;
+        if ((a.accessibleMinutes || 0) !== (b.accessibleMinutes || 0)) return (b.accessibleMinutes || 0) - (a.accessibleMinutes || 0);
         if (a.id === pickId) return -1;
         if (b.id === pickId) return 1;
         return a.start - b.start;
       });
     var best = ranked[0] || null;
     out.best = best;
-    var future = entries.filter(function (e) { return !e.inLock && e.start >= visit.end; });
+    var future = entries.filter(function (e) { return !e.inLock && !e.afterClose && e.start >= visit.end; });
     var lookahead = 'Ships still out on open Lake Superior or Lake Huron are beyond this view, so a later visit can gain ships that are not listed yet.';
 
+    if (!openMinutes) {
+      out.status = 'park-hours';
+      out.headline = 'Your visit falls outside posted park hours';
+      out.detail.push('The viewing park is scheduled for '+hours.label+'. Choose a time during posted hours and confirm access with USACE before traveling.');
+      if (nearby) out.notes.push(nearby.headline + '. ' + nearby.detail);
+      out.suggestion = betterVisit(entries,visit,now,0) || undefined;
+      return out;
+    }
+    if (!entries.length && nearby) {
+      out.status = 'near-lock-motion';
+      out.headline = nearby.headline;
+      out.detail.push(nearby.detail, 'No arrival window can be lined up from this observation. Check the vessel on the live map before planning your visit.');
+      out.link = { href: '#sooVesselMap', label: 'See nearby vessel reports on the map' };
+      return out;
+    }
+    if (nearby) out.notes.push(nearby.headline + '. ' + nearby.detail);
+    if (!entries.length && reportedCount) {
+      out.status = 'stale-reports';
+      out.headline = 'No current arrival estimate for your visit';
+      out.detail.push('Earlier ship reports are too old, invalid or their modeled windows have ended. Refresh before planning around a ship. This is not proof of an empty river.');
+      out.link = {href:'#sooVesselMap',label:'Check vessel reports on the map'};
+      return out;
+    }
     if (!entries.length) {
       out.status = 'no-ships';
       out.headline = 'No ship is clearly heading for the locks in the latest reports';
-      out.detail.push('Nothing in AIS reports under 30 minutes old shows a freighter moving toward the locks. That is not proof of an empty river: ships wait at docks and anchorages, and coverage has gaps.');
+      out.detail.push('No current eligible AIS arrival estimate shows a freighter moving toward the locks. That is not proof of an empty river: ships wait at docks and anchorages, and coverage has gaps.');
       out.detail.push(lookahead);
       out.link = { href: '#soo-schedule-answer', label: 'Other ways to check \u2193' };
       return out;
     }
     if (!best) {
       out.status = 'none';
-      out.headline = 'No reported ship is due during that visit';
+      out.headline = 'No modeled arrival overlaps your available platform time';
       var nextOne = future[0];
       if (nextOne) {
         out.detail.push('The next estimated window is ' + title(nextOne) + ', ' + clock(nextOne.start) + '–' + clockZone(nextOne.end) + dayWord(nextOne.start, now) + '.');
-        out.suggestion = { start: nextOne.start, end: nextOne.end, id: nextOne.id };
+        // The window is informational; only feasible control choices become actions.
       }
+      out.suggestion = betterVisit(entries,visit,now,0) || undefined;
       out.detail.push(lookahead);
       return out;
     }
     if (best.fit === 'now') {
       out.status = 'in-lock-now';
-      out.headline = title(best) + ' is in the ' + (best.raw.chamberName || 'lock') + ' right now';
-      out.detail.push('Seen in the chamber ' + best.ageMinutes + ' min ago. A ship in a chamber is on its way out, so go straight to the platform if you are close.');
+      out.headline = title(best) + ' last reported in the ' + (best.raw.chamberName || 'lock');
+      out.detail.push('Reported in the chamber ' + best.ageMinutes + ' min ago. If you are already at the platform, look toward the chamber; the vessel may have moved since that report.');
       var after = ranked.filter(function (e) { return e !== best && e.fit !== 'gone'; })[0];
       if (after) out.detail.push('Also inside your visit: ' + title(after) + ', estimated ' + clock(after.start) + '–' + clockZone(after.end) + '.');
       else if (future[0]) {
         out.detail.push('After it, the next estimated window is ' + title(future[0]) + ', ' + clock(future[0].start) + '–' + clockZone(future[0].end) + dayWord(future[0].start, now) + '.');
-        out.suggestion = { start: future[0].start, end: future[0].end, id: future[0].id };
+        out.suggestion = betterVisit(entries,visit,now,0) || undefined;
       }
       return out;
     }
     out.status = best.fit === 'mostly' ? 'match' : 'partial';
     out.headline = (best.fit === 'mostly' ? 'Best bet: ' : 'Possible: ') + title(best) + ', about ' + clock(best.start) + '–' + clockZone(best.end);
-    out.detail.push(best.fit === 'mostly'
-      ? 'Its estimated window falls mostly inside your visit (' + clock(visit.start) + '–' + clock(visit.end) + ').'
-      : 'Its estimated window only partly overlaps your visit (' + clock(visit.start) + '–' + clock(visit.end) + '). Being on the platform ' + clock(best.start) + '–' + clock(best.end) + ' covers all of it.');
+    out.detail.push(duration(best.accessibleMinutes) + ' of its modeled arrival window overlaps your visit during posted park hours. This is timing overlap, not a sighting probability. Actual arrival may fall outside the window.');
     if (best.afterClose) out.detail.push('That window is outside the park’s posted hours (' + best.parkLabel + ').');
     else if (best.runsPastClose) out.detail.push('That window runs past the park’s posted closing time (' + best.parkLabel + ').');
     if (best.dark) out.detail.push('It falls after dark.');
     var others = ranked.filter(function (e) { return e !== best && e.fit !== 'gone'; }).length;
     if (others) out.detail.push(others + ' more ' + (others === 1 ? 'ship overlaps' : 'ships overlap') + ' this visit in the lineup below.');
-    if (best.fit === 'partly') out.suggestion = { start: best.start, end: best.end, id: best.id };
+    if (best.fit === 'partly') out.suggestion = betterVisit(entries,visit,now,best.accessibleMinutes) || undefined;
     return out;
   }
 
@@ -346,7 +432,7 @@
   var core = {
     TZ: TZ, SAULT: SAULT, BOATNERD: BOATNERD, USACE: USACE,
     zonedParts: zonedParts, zonedInstant: zonedInstant, parkHours: parkHours, visitorCenterOpen: visitorCenterOpen,
-    navigationSeason: navigationSeason, sunTimes: sunTimes, isDark: isDark, fitFor: fitFor, plan: plan, simShipFor: simShipFor, visitWeather: visitWeather, weatherLine: weatherLine, NWS_HOURLY: NWS_HOURLY,
+    navigationSeason: navigationSeason, sunTimes: sunTimes, isDark: isDark, fitFor: fitFor, openSegments: openSegments, accessibleFit: accessibleFit, freshReport: freshReport, plan: plan, simShipFor: simShipFor, visitWeather: visitWeather, weatherLine: weatherLine, NWS_HOURLY: NWS_HOURLY,
     clock: clock, clockZone: clockZone, duration: duration, directionLong: directionLong, chamberText: chamberText
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = core;
@@ -365,9 +451,11 @@
     legend: section.querySelector('[data-lw-legend]'),
     dossier: section.querySelector('[data-lw-dossier]'),
     status: section.querySelector('[data-lw-status]'),
-    weather: section.querySelector('[data-lw-weather]')
+    weather: section.querySelector('[data-lw-weather]'),
+    changes: section.querySelector('[data-lw-changes]'),
+    memory: section.querySelector('[data-lw-memory]'), memoryButton: section.querySelector('[data-lw-memory-button]'), memoryNote: section.querySelector('[data-lw-memory-note]')
   };
-  var state = { data: null, failed: false, selected: null, userSelected: false, plan: null, wx: null, wxFailed: false, wxAt: 0 };
+  var state = { data: null, failed: false, selected: null, userSelected: false, plan: null, wx: null, wxFailed: false, wxAt: 0, changes: changing ? changing.initial() : null, previousBest: null, saved: null, returnCheck: null, memoryMessage: '', memoryReady: false };
 
   function el(tag, cls, text) {
     var e = document.createElement(tag);
@@ -380,6 +468,91 @@
     return c ? Number(c.value) : null;
   }
 
+  // Local storage is optional; never read a remembered ship as a current report.
+  function storage() { return root.localStorage; }
+  function readMemory() { try { return memory.read(storage(),Date.now()); } catch (_) { return {ok:false,value:null}; } }
+  function writeMemory(v) { try { return memory.write(storage(),v,Date.now()); } catch (_) { return {ok:false,value:null}; } }
+  function forgetMemory() { try { return memory.clear(storage()); } catch (_) { return false; } }
+  function renderMemory() {
+    if(!memory||!els.memory||!state.memoryReady)return;
+    els.memory.hidden=false;
+    els.memoryButton.textContent=state.saved?'Forget saved visit choices':'Remember my visit choices';
+    // The live-feed failure is derived from the current request state, not stored
+    // as a preference message. It cannot survive a successful refresh.
+    var text=state.memoryMessage||(state.saved?'Saved on this device only. Choices are relative to the current time; ship reports must be checked again.':'Optional: save your arrival and stay choices on this device, plus a recent check for comparison.');
+    if(state.saved&&state.failed)text='Saved visit choices are available, but live reports are unavailable. Remembered reports are not used as current conditions.';
+    if(els.memoryNote.textContent!==text)els.memoryNote.textContent=text;
+  }
+  function prefsNow(){return {startOffset:choice('lw-start')||0,stay:choice('lw-stay')||90};}
+  function persistMemory(preferences) {
+    if(!state.saved)return;
+    // A clear in another tab must not be undone by a background refresh.
+    var current=readMemory();
+    if(!current.ok){state.memoryMessage='Device storage is unavailable. Your saved choices may still be on this device.';renderMemory();return;}
+    if(!current.value){state.saved=null;state.returnCheck=null;state.memoryMessage='Saved choices cleared.';renderMemory();return;}
+    var record=current.value;
+    if(preferences)record={...record,prefs:prefsNow(),savedAt:Date.now()};
+    // Do not overwrite a newer check saved by another tab.
+    if(state.changes?.last&&state.changes.last.checked>=(record.lastCheck||0)){
+      record=memory.capture(record,state.changes,Date.now());
+    }
+    if(!record){state.saved=null;renderMemory();return;}
+    if(JSON.stringify(record)===JSON.stringify(current.value)){state.saved=record;return;}
+    var result=writeMemory(record);
+    state.saved=result.ok?result.value:current.value;
+    if(!result.ok){state.returnCheck=null;state.memoryMessage='Could not update saved choices on this device. You can still try to forget them.';}
+    renderMemory();
+  }
+  function setupMemory() {
+    if(!memory||!changing||!els.memory||!els.memoryButton)return;
+    var got=readMemory();
+    state.memoryReady=true;
+    if(got.value){
+      state.saved=got.value;
+      [['lw-start',got.value.prefs.startOffset],['lw-stay',got.value.prefs.stay]].forEach(function(pair){
+        var radio=section.querySelector('input[name="'+pair[0]+'"][value="'+pair[1]+'"]');if(radio)radio.checked=true;
+      });
+      state.returnCheck=got.value.lastCheck;
+      state.changes=memory.restore(got.value,changing,Date.now());
+      state.memoryMessage='Your saved visit choices are restored. Current reports are checked separately.';
+    }else if(!got.ok)state.memoryMessage='Device storage is unavailable; your visit planner still works.';
+    els.memoryButton.addEventListener('click',function(){
+      if(state.saved){
+        if(!forgetMemory()){state.memoryMessage='Could not clear saved choices. Try again or clear site data in your browser.';renderMemory();return;}
+        state.saved=null;state.returnCheck=null;
+        // Drop the restored comparison, but keep the live plan and seed from current evidence.
+        state.changes=changing.step(changing.initial(),state.failed?null:changing.snapshot(state.data,Date.now(),core,nearMotion),state.failed,Date.now());
+        state.memoryMessage='Saved choices and remembered check cleared.';update();return;
+      }
+      var record=memory.create(prefsNow(),Date.now());
+      if(record)record=memory.capture(record,state.changes,Date.now());
+      var result=record?writeMemory(record):{ok:false};
+      state.saved=result.ok?result.value:null;
+      state.memoryMessage=result.ok?'Visit choices saved on this device only.':'Device storage is unavailable; choices have not been saved.';
+      renderMemory();
+    });
+    root.addEventListener('storage',function(e){
+      if(e.key!==memory.KEY&&e.key!==null)return;
+      if(!state.saved)return;
+      var latest=readMemory();
+      if(!latest.ok){state.memoryMessage='Device storage is unavailable. Your saved choices may still be on this device.';renderMemory();return;}
+      if(!latest.value){
+        state.saved=null;state.returnCheck=null;state.memoryMessage='Saved choices cleared in another tab.';
+        state.changes=changing.step(changing.initial(),state.failed?null:changing.snapshot(state.data,Date.now(),core,nearMotion),state.failed,Date.now());
+        update();
+      }else state.saved=latest.value;
+    });
+    renderMemory();
+  }
+  function noteReturn(next) {
+    if(!state.saved||!state.returnCheck||!next||next.checked<=state.returnCheck||state.changes.failed)return;
+    var previous=state.returnCheck;
+    state.returnCheck=null;
+    state.memoryMessage=next.checked-previous>memory.GAP?
+      'First fresh check since '+clockZone(previous)+dayWord(previous,next.checked)+'. Earlier vessel reports are too old to compare.':
+      'Fresh check received. Saved visit choices are restored; see any supported changes above.';
+    renderMemory();
+  }
   function axisRange(p) {
     var start = p.now - 15 * MIN;
     var end = Math.max(p.now + 4 * HOUR, p.visit.end + 30 * MIN);
@@ -441,11 +614,11 @@
     return bits;
   }
   function fitText(s) {
-    return s.fit === 'now' ? 'In a chamber now'
-      : s.fit === 'gone' ? 'In a chamber now; likely gone before you arrive'
-      : s.fit === 'mostly' ? 'Mostly inside your visit'
-      : s.fit === 'partly' ? 'Partly inside your visit'
-      : 'Outside your visit';
+    return s.fit === 'now' ? 'Reported in a chamber'
+      : s.fit === 'gone' ? 'Reported in a chamber; may move before your visit'
+      : s.fit === 'mostly' ? 'Mostly inside available platform time'
+      : s.fit === 'partly' ? 'Partly inside available platform time'
+      : 'Outside available platform time';
   }
 
   function renderRows(r, p) {
@@ -462,7 +635,7 @@
       head.append(arrow, el('strong', 'lw-name', s.name));
       var size = rowLabel(s);
       if (size) head.append(el('span', 'lw-size', size));
-      var when = el('span', 'lw-when', s.inLock ? 'In the ' + (s.raw.chamberName || 'lock') + ' now' : clock(s.start) + '–' + clock(s.end) + dayWord(s.start, p.now));
+      var when = el('span', 'lw-when', s.inLock ? 'Last reported in the ' + (s.raw.chamberName || 'lock') : clock(s.start) + '–' + clock(s.end) + dayWord(s.start, p.now));
       var fit = el('span', 'lw-fit', directionShort(s.direction) + ' · ' + fitText(s) + (s.afterClose ? ' · outside park hours' : '') + (s.dark ? ' · after dark' : ''));
       var track = el('span', 'lw-track');
       track.setAttribute('aria-hidden', 'true');
@@ -493,7 +666,7 @@
     var s = p.ships.filter(function (x) { return x.id === state.selected; })[0];
     if (!s) { els.dossier.hidden = true; return; }
     els.dossier.hidden = false;
-    els.dossier.append(el('p', 'lw-dossier-kicker', s.inLock ? 'In a lock chamber now' : 'Selected ship'));
+    els.dossier.append(el('p', 'lw-dossier-kicker', s.inLock ? 'Reported in a lock chamber' : 'Selected ship'));
     var h = el('h3', 'lw-dossier-name', s.name);
     h.id = 'lw-dossier-title';
     els.dossier.append(h);
@@ -504,14 +677,14 @@
     if (s.inLock) {
       fact(dl, 'Last report', s.ageMinutes + ' min ago, inside the chamber');
     } else {
-      fact(dl, 'Estimated at the locks', clock(s.start) + '–' + clockZone(s.end) + dayWord(s.start, p.now));
+      fact(dl, 'Planning window at the locks', clock(s.start) + '–' + clockZone(s.end) + dayWord(s.start, p.now));
       var raw = s.raw;
       if (Number.isFinite(raw.channelMilesToLocks) && Number.isFinite(raw.speedKnots)) {
-        fact(dl, 'Where it is', raw.channelMilesToLocks + ' river miles out at ' + (raw.speedKnots * 1.15078).toFixed(1) + ' mph, reported ' + raw.ageMinutes + ' min ago');
+        fact(dl, 'Where it is', raw.channelMilesToLocks + ' river miles out at ' + (raw.speedKnots * 1.15078).toFixed(1) + ' mph, reported ' + s.ageMinutes + ' min ago');
       }
-      fact(dl, 'Your visit', fitText(s) + ' (' + clock(p.visit.start) + '–' + clock(p.visit.end) + ')');
+      fact(dl, 'Your visit', fitText(s) + ' (' + clock(p.visit.start) + '–' + clock(p.visit.end) + '); ' + duration(s.accessibleMinutes) + ' of the modeled window during posted hours');
       var light = [];
-      light.push(s.afterClose ? 'Outside posted park hours (' + s.parkLabel + ')' : s.runsPastClose ? 'Runs past posted closing (' + s.parkLabel + ')' : 'Inside posted park hours (' + s.parkLabel + ')');
+      light.push(s.afterClose ? 'Outside posted park hours (' + s.parkLabel + ')' : s.runsPastClose ? 'Partly outside posted hours (' + s.parkLabel + ')' : 'Inside posted park hours (' + s.parkLabel + ')');
       light.push(s.dark ? 'after dark' : 'in daylight');
       fact(dl, 'Park and light', light.join(', '));
     }
@@ -531,7 +704,7 @@
       act.append(lock);
     }
     els.dossier.append(act);
-    els.dossier.append(el('p', 'lw-note', 'An estimate from the ship’s latest AIS position, speed and river distance, not a lock schedule. Ships can wait for a chamber or stop at a dock. Not for navigation.'));
+    els.dossier.append(el('p', 'lw-note', 'This planning window uses reported position, speed and river distance, not a lock schedule. A ship may slow or stop; the actual arrival can be outside this window. Recheck movement before leaving. Not for navigation.'));
   }
 
   // Hand the selected ship to the page's lock simulator: direction, a same-size hull and a note.
@@ -570,7 +743,7 @@
     els.verdict.append(el('p', 'lw-verdict-head', p.headline));
     p.detail.forEach(function (d) { els.verdict.append(el('p', 'lw-verdict-detail', d)); });
     if (p.suggestion) {
-      var b = el('button', 'lw-adjust', 'Plan around ' + clock(p.suggestion.start) + '–' + clock(p.suggestion.end));
+      var b = el('button', 'lw-adjust', 'Try ' + clock(p.suggestion.start) + '–' + clock(p.suggestion.end) + ' (' + duration(p.suggestion.stay) + ')');
       b.type = 'button';
       b.addEventListener('click', function () { adjustTo(p.suggestion); });
       els.verdict.append(b);
@@ -588,22 +761,16 @@
     }
   }
 
-  // Snap the two choices to the smallest visit that covers a window.
+  // Revalidate the displayed alternative before applying it; no silent duration change.
   function adjustTo(sugg) {
-    var now = Date.now();
-    var offsets = Array.prototype.map.call(section.querySelectorAll('input[name="lw-start"]'), function (i) { return Number(i.value); });
-    var stays = Array.prototype.map.call(section.querySelectorAll('input[name="lw-stay"]'), function (i) { return Number(i.value); });
-    var want = (sugg.start - now) / MIN;
-    var start = offsets.filter(function (o) { return o <= Math.max(0, want); }).pop();
-    if (start === undefined) start = offsets[0];
-    var needed = (sugg.end - (now + start * MIN)) / MIN;
-    var stay = stays.filter(function (st) { return st >= needed; })[0];
-    if (stay === undefined) stay = stays[stays.length - 1];
-    section.querySelector('input[name="lw-start"][value="' + start + '"]').checked = true;
-    section.querySelector('input[name="lw-stay"][value="' + stay + '"]').checked = true;
-    state.selected = sugg.id; state.userSelected = true;
-    update();
-    els.verdict.focus({ preventScroll: true });
+    var latest=plan({data:state.data,failed:state.failed,now:Date.now(),startOffset:choice('lw-start')||0,stay:choice('lw-stay')||90});
+    var fresh=latest.suggestion;
+    if (!fresh || fresh.id!==sugg.id || fresh.startOffset!==sugg.startOffset || fresh.stay!==sugg.stay) { update(); return; }
+    var radio=section.querySelector('input[name="lw-start"][value="'+fresh.startOffset+'"]');
+    if (!radio || choice('lw-stay')!==fresh.stay) { update(); return; }
+    radio.checked=true;
+    state.selected=fresh.id; state.userSelected=true;
+    update(); persistMemory(true); els.verdict.focus({preventScroll:true});
   }
 
   function select(id, user) {
@@ -615,6 +782,13 @@
     renderDossier(state.plan);
   }
 
+  function renderChanges(p) {
+    if (!els.changes || !changing) return;
+    var item = p.status === 'season-closed' || p.status === 'loading' || p.status === 'unavailable' ? null : changing.summary(state.changes,p.now,[p.best && p.best.id,state.previousBest].filter(Boolean));
+    var message=item ? (item.kind==='recovered' ? clock(item.to)+' check: ' : 'Since the '+clock(item.from)+' check: ')+item.text : '';
+    if (els.changes.textContent!==message) els.changes.textContent=message;
+    els.changes.hidden=!item;
+  }
   function update() {
     var p = plan({ data: state.data, failed: state.failed, loading: !state.data && !state.failed, now: Date.now(), startOffset: choice('lw-start') || 0, stay: choice('lw-stay') || 90 });
     state.plan = p;
@@ -626,6 +800,8 @@
       state.selected = p.best.id;
     }
     renderVerdict(p);
+    renderChanges(p);
+    renderMemory();
     var showBoard = p.ships.length > 0;
     els.board.hidden = !showBoard;
     els.legend.hidden = !showBoard;
@@ -636,9 +812,10 @@
     }
     renderDossier(p);
     renderWeather(p);
+    scheduleDecisionAge();
     if (els.status) {
       els.status.textContent = state.data && state.data.checkedAt
-        ? 'Lined up from AIS reports checked ' + clockZone(Date.parse(state.data.checkedAt)) + (state.failed ? ' (latest refresh failed)' : '') + '.'
+        ? (state.failed ? 'Last successful AIS check: ' : 'Lined up from AIS reports checked ') + clockZone(Date.parse(state.data.checkedAt)) + (state.failed ? ' (latest refresh failed)' : '') + '.'
         : '';
     }
   }
@@ -681,16 +858,48 @@
   function receive(detail) {
     if (!detail) return;
     if (detail.data) state.data = detail.data;
+    var recovered=state.failed&&!detail.failed;
     state.failed = !!detail.failed;
+    if (changing) {
+      var now=Date.now(), next=state.failed?null:changing.snapshot(state.data,now,core,nearMotion);
+      var prior=state.changes;
+      state.changes=changing.step(prior,next,state.failed,now);
+      if (state.changes!==prior) state.previousBest=state.plan && state.plan.best ? state.plan.best.id : null;
+      if(state.saved&&recovered&&next&&!state.changes.failed)state.memoryMessage='Live reports are available again. Your visit choices remain saved on this device.';
+      noteReturn(next);
+      if(state.saved&&state.changes!==prior)persistMemory(false);
+    }
     update();
   }
 
+  // Re-evaluate source age and elapsed windows even if a refresh stalls.
+  var ageTimer;
+  function scheduleDecisionAge() {
+    clearTimeout(ageTimer);
+    if (state.failed || !state.data || !state.data.nextShip) return;
+    var now=Date.now(), n=state.data.nextShip, deadlines=[];
+    (n.inLock||[]).concat(n.candidates||[]).forEach(function(s){
+      if(!freshReport(s,now))return;
+      deadlines.push(Date.parse(s.seen)+REPORT_AGE_MS+1);
+      var end=Date.parse(s.window?.end);if(end>now)deadlines.push(end);
+    });
+    if (state.changes && state.changes.last) {
+      var expiry=state.changes.last.checked+changing.MAX_GAP+1;
+      if (expiry>now)deadlines.push(expiry);
+      state.changes.events.forEach(function(e){var t=e.to+changing.MAX_GAP+1;if(t>now)deadlines.push(t);});
+    }
+    var h=parkHours(now);
+    [h.open,h.close].forEach(function(t){if(t>now)deadlines.push(t);});
+    if(deadlines.length) ageTimer=setTimeout(function(){update();},Math.max(1,Math.min.apply(null,deadlines)-now));
+  }
+  document.addEventListener('visibilitychange',function(){if(!document.hidden)update();});
   section.classList.add('lw-ready');
   loadWeather();
   setInterval(function () { if (!document.hidden && Date.now() - state.wxAt > 30 * MIN) loadWeather(); }, 5 * MIN);
+  setupMemory();
   els.controls.hidden = false;
   section.addEventListener('change', function (e) {
-    if (e.target && (e.target.name === 'lw-start' || e.target.name === 'lw-stay')) update();
+    if (e.target && (e.target.name === 'lw-start' || e.target.name === 'lw-stay')) { update(); persistMemory(true); }
   });
   document.addEventListener('soo-ais:data', function (e) { receive(e.detail); });
   if (root.SooAis && root.SooAis.last) receive(root.SooAis.last);
