@@ -2,8 +2,8 @@
 const test=require('node:test'),assert=require('node:assert/strict');
 const {plan,inspect}=require('../scripts/shorefeel-archive-coverage.cjs');
 test('fixed archive sample is bounded and distinguishes actual model products',()=>{
- const p=plan();assert.equal(p.length,25);assert.equal(p.filter(x=>x.kind==='regular-grid-schema').length,9);
- assert.equal(p.filter(x=>x.kind==='native-field-schema').length,9);
+ const p=plan();assert.equal(p.length,32);assert.equal(p.filter(x=>x.kind==='regular-grid-schema').length,12);
+ assert.equal(p.filter(x=>x.kind==='native-field-schema').length,12);
  assert.ok(p.every(x=>x.cap<=1048576&&x.url.startsWith('https://')));
  assert.ok(p.some(x=>x.url.includes('2026/10/20/lmhofs.t00z.20261020.regulargrid.f048.nc.dds')));
  assert.ok(p.some(x=>x.url.includes('2026/10/20/lmhofs.t00z.20261020.fields.f048.nc.dds')));
