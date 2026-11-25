@@ -101,6 +101,17 @@ jobs:
           mkdir -p artifacts/shorefeel-beach-qa
           python3 scripts/shorefeel-seagull-depth-acquisition.py > artifacts/shorefeel-beach-qa/seagull-depth.json
           cat artifacts/shorefeel-beach-qa/seagull-depth.json
+      - name: Acquire untouched warm-season dates and score fixed reliability candidates
+        if: github.head_ref == 'research/shorefeel-actual-october-cohort'
+        run: |
+          python3 -m venv "$RUNNER_TEMP/shorefeel-reliability"
+          "$RUNNER_TEMP/shorefeel-reliability/bin/pip" install --disable-pip-version-check numpy==2.2.6 netCDF4==1.7.2
+          mkdir -p artifacts/shorefeel-beach-qa
+          "$RUNNER_TEMP/shorefeel-reliability/bin/python" scripts/shorefeel-expanded-dataset.py --reliability > artifacts/shorefeel-beach-qa/reliability-cohort.json
+          node scripts/shorefeel-forecast-reliability.cjs artifacts/shorefeel-beach-qa/reliability-cohort.json > artifacts/shorefeel-beach-qa/reliability-review.json
+          cat artifacts/shorefeel-beach-qa/reliability-cohort.json
+          cat artifacts/shorefeel-beach-qa/reliability-review.json
+          node --test tests/shorefeel-forecast-reliability.test.js
       - name: Install isolated pinned browser harness
         run: |
           npm install --prefix "$RUNNER_TEMP/shorefeel-playwright" --ignore-scripts --no-package-lock playwright@1.56.1
