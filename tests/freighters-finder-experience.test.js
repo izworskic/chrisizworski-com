@@ -37,3 +37,9 @@ test("existing map click and no-map fallback are preserved",()=>{
     h.radio.value="news";h.radio.fire("change");assert.equal(h.node("finder-go").href,"https://gazette.chrisizworski.com/");
   }
 });
+
+test("every corridor retains a static named Google Maps search and never routes to a vessel",()=>{
+ const cards=[...html.matchAll(/<article class="corridor-card">([\s\S]*?)<\/article>/g)];assert.equal(cards.length,10);
+ const {placeSearch}=require('../public/assets/visitor-map-links.js');
+ for(const [,card] of cards){const links=[...card.matchAll(/class="corridor-maps" href="([^"]+)"/g)];assert.ok(links.length>=1);for(const [,href] of links){const url=new URL(href.replaceAll('&amp;','&'));assert.equal(url.pathname,'/maps/search/');assert.equal(url.href,placeSearch({role:'public-place',query:url.searchParams.get('query')}));assert.ok(!/^[-\d., ]+$/.test(url.searchParams.get('query')));}}
+});

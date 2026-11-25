@@ -23,3 +23,14 @@ test('Expanded catalog preserves strict identity, dated reviews and exact profil
  assert.equal(ctx.storyFor(catalog,{mmsi:'366904950',name:''},now),null);
  const hub=fs.readFileSync('public/freighters/index.html','utf8');for(const s of catalog.stories){assert.ok(hub.includes('data-library-mmsi="'+s.mmsi+'"'));assert.ok(hub.includes('data-hub-find-ship="'+s.mmsi+'"'));assert.ok(hub.includes('value="'+s.specs.lengthFeet+'"'));}
 });
+
+test('catalog fetch failure permits a retry for both hub and dedicated tracker',async()=>{
+ const render=js.slice(js.indexOf('  function renderStory('),js.indexOf('  function showShip('));
+ for(const hubShipDesk of [false,true]){
+  let attempts=0;const storyBox={dataset:{},hidden:true,replaceChildren(){},append(){}};
+  const v={mmsi:'366904950',name:'LEE A. TREGURTHA'};
+  const context={storyBox,hubShipDesk,storyRequest:0,storyPromise:null,selectedMmsi:v.mmsi,selectedName:v.name,inspector:{hidden:false},normalizedShipName:n=>n,storyFor:()=>null,node:()=>({}),fetch:async()=>{attempts++;if(attempts===1)throw Error('temporary outage');return {ok:true,json:async()=>({schemaVersion:1,stories:[]})};}};
+  vm.runInNewContext(render,context);context.renderStory(v);await context.storyPromise;await new Promise(resolve=>setImmediate(resolve));
+  assert.equal(storyBox.dataset.storyKey,undefined);context.renderStory(v);await context.storyPromise;await new Promise(resolve=>setImmediate(resolve));assert.equal(attempts,2);
+ }
+});

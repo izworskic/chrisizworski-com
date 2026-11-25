@@ -190,8 +190,8 @@
         if(hubShipDesk){
           var message=node("p",catalog?"A reviewed history is not available for this exact vessel identity yet. The AIS details above are still available.":"The ship-history catalog could not be loaded. You can still read the AIS report above.");
           message.className="hub-story-message";storyBox.replaceChildren(message);storyBox.hidden=false;
-          if(!catalog)delete storyBox.dataset.storyKey;
         }
+        if(!catalog)delete storyBox.dataset.storyKey;
         return;
       }
       var content=document.createElement("div"), eyebrow=node("p","SHIP STORY"), heading=node("h4",story.headline), text=node("p",story.history);
