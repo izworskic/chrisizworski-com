@@ -1,0 +1,11 @@
+# CBBT observed status change pilot
+
+2026-11-24. Base 804418607dd90dc653822c4a2bf32c8709cb35ef, bridge and portfolio audit merged. Product Engineering OS remains candidate; use the existing CBBT engine, status view and refresh flow. Main push-only CI is not surfaced by connector. #1962 and #1963 are independently scoped and pending verification.
+
+## Decision
+
+Visitors waiting for bridge conditions need to understand what the latest official check changed. Compare successive accepted official operational states and restriction classes in memory for this page visit, instead of implementing a shared historical event store or inferring operating status from wind. Existing backend freshness and authority rules remain authoritative. No new runtime source request, polling cadence, route, database, notification, subscription, browser storage or tracking. The current official status and vehicle check remain primary. One accessible status note appears only following a material change. Do not claim an occurrence timestamp: detected at the browser check, exact change time unknown. Source recovery is not a reopening claim; no reconstruction across observation gaps. Ignore older snapshots and repeated state/restriction values, do not announce weather/vehicle-only changes as operating-state changes. Do not infer closure from source loss.
+
+## Scope and verification
+
+Deterministic state transitions cover restrictions, closure, open, unknown, conflict, recovery, repeated packets, stale/future timestamps, missing metadata and out-of-order observations. Existing CBBT verification workflow extended with isolated pinned Chromium replay at 390/1366 widths, no new production dependency. Existing strict live-source and full repository gate retained. No calibrated condition prediction, historical uptime, material weather-change thresholds, cross-visit history or fleet-wide adoption asserted. No change to official operating rules, vehicle eligibility rules, SEO canonical or ads. Exact-head CI/browser results and screenshot review remain outstanding. Normal reviewed revert is rollback.
