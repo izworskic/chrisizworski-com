@@ -18,7 +18,7 @@
 .lock-watch .lw-verdict-head{margin:0 0 6px;font-size:19px;line-height:1.35;color:#12384a;font-weight:bold}
 .lock-watch .lw-status-match .lw-verdict-head{color:#1d5a26}
 .lock-watch .lw-status-in-lock-now .lw-verdict-head{color:#1d5a26}
-.lock-watch .lw-status-none .lw-verdict-head,.lock-watch .lw-status-no-ships .lw-verdict-head{color:#6a4a10}
+.lock-watch .lw-status-park-hours .lw-verdict-head,.lock-watch .lw-status-stale-reports .lw-verdict-head,.lock-watch .lw-status-none .lw-verdict-head,.lock-watch .lw-status-no-ships .lw-verdict-head{color:#6a4a10}
 .lock-watch .lw-status-unavailable .lw-verdict-head,.lock-watch .lw-status-season-closed .lw-verdict-head{color:#7a2a24}
 .lock-watch .lw-verdict-detail{margin:0 0 8px;font-size:14px;line-height:1.6;color:#33403f}
 .lock-watch .lw-adjust{margin:2px 0 10px;font:700 13px/1.3 system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;color:#fff;background:#165d71;border:1px solid #165d71;border-radius:4px;padding:9px 12px;cursor:pointer;min-height:40px}

@@ -141,8 +141,8 @@ let base;
         await page.locator('#sooVesselMap').screenshot({ path: out + '/vessel-map-' + width + '.png' });
       }
       // 1. Default "Now, 1½ hr": the ship already in a chamber is the answer.
-      assert.match(await verdict(page), /EDWIN H\. GOTT is in the Poe Lock right now/);
-      assert.match(await dossier(page), /EDWIN H\. GOTT[\s\S]*Poe Lock, now/);
+      assert.match(await verdict(page), /EDWIN H\. GOTT last reported in the Poe Lock/);
+      assert.match(await dossier(page), /EDWIN H\. GOTT[\s\S]*Poe Lock \(last report\)/);
       assert.equal(await page.locator('.lw-row-btn').count(), 3);
       assert.match(await page.locator('.lw-notes').innerText(), /hotline is not maintained now/);
       // The next-ship card no longer offers the seasonal hotline in November.
@@ -176,14 +176,14 @@ let base;
       assert.equal(await page.locator('.lw-row-btn[aria-pressed="true"]').count(), 1);
       // The visit weather follows the visit: 2 hr out, 1½ hr stay covers 11:45 a.m. to 1:15 p.m.
       assert.match(await page.locator('[data-lw-weather]').innerText(), /32.34°F[\s\S]*up to 40%/);
-      // 4. A visit that misses every window offers a one-tap adjustment that covers the next one.
+      // 4. A missed window offers a feasible alternative without increasing the stay.
       await choose(page, 'How soon', '30 min');
       await choose(page, 'How long', '45 min');
-      assert.match(await verdict(page), /No reported ship is due during that visit/);
+      assert.match(await verdict(page), /No modeled arrival overlaps your available platform time/);
       await page.locator('.lw-adjust').click();
-      assert.match(await verdict(page), /^Best bet: BURNS HARBOR/);
-      assert.equal(await page.locator('input[name="lw-start"]:checked').getAttribute('value'), '90');
-      assert.equal(await page.locator('input[name="lw-stay"]:checked').getAttribute('value'), '180');
+      assert.match(await verdict(page), /^Possible: BURNS HARBOR/);
+      assert.equal(await page.locator('input[name="lw-start"]:checked').getAttribute('value'), '120');
+      assert.equal(await page.locator('input[name="lw-stay"]:checked').getAttribute('value'), '45');
       // web-quality-accessibility: axe-core WCAG 2.0 to 2.2 A/AA over the whole page, after interaction.
       if (AxeBuilder && (width === 390 || width === 1280)) {
         // The camera credit is part of the scan: wait for the fixture camera to render it.
@@ -302,6 +302,16 @@ let base;
       mode='slow'; await page.locator('#vesselMapRefresh').click();
       await page.locator('#soo-next-ship-heading').filter({hasText:'TEST SLOW FREIGHTER'}).waitFor();
       assert.deepEqual(errors,[]); await context.close();
+    }
+    // A closed park is not a recommended visit even if a forecast window overlaps.
+    for (const width of [390,1280]) {
+      const {context,page,errors}=await open(browser,{width,time:Date.parse('2026-11-21T22:30:00Z')});
+      await page.locator('.lw-row-btn').first().waitFor();
+      await choose(page,'How soon','2 hr');
+      assert.match(await verdict(page),/Your visit falls outside posted park hours/);
+      assert.equal(await page.locator('.lw-adjust').count(),0);
+      await page.locator('#soo-lock-watch').screenshot({path:out+'/visitor-closed-park-'+width+'.png'});
+      assert.deepEqual(errors,[]);await context.close();
     }
     // 7. Winter shutdown: the planner says so instead of lining up ships.
     {
