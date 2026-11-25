@@ -1,5 +1,6 @@
+const fs=require('node:fs');
 const test=require('node:test'), assert=require('node:assert/strict');
-const {classify}=require('../lib/adsense-audit');
+const {classify,classifyRuntime}=require('../lib/adsense-audit');
 const wrap=tag=>'<html><head>'+tag+'</head><body>Tool</body></html>';
 const url='https://chrisizworski.com/new-tool/';
 const tag='<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075"></script>';
@@ -41,10 +42,34 @@ test('existing owner exclusions are scoped to actual host and path, not entire p
  assert.equal(config.loaderMode,'standard');
  assert.equal(config.enabled,false);
 });
-test('an intentional exception cannot mask failed HTTP requests or duplicate network loaders',()=>{
+test('an intentional exception cannot mask failed HTTP requests, duplicate loaders, or client-rendered markers',()=>{
  const route='https://chrisizworski.com/isle-royale-ferry/';
+ const bloom='https://phenology.chrisizworski.com/wisconsin-bloom-tracker/door-county-cherries';
  const network='<script defer src="https://chrisizworski.com/assets/network-ads-v1.js"></script>';
  assert.equal(classify(wrap(''),route,503).state,'http-error');
+ assert.equal(classify(wrap(network),route).state,'page-exception');
  assert.equal(classify(wrap(network+network),route).state,'duplicate-loader');
  assert.equal(classify(wrap(network+tag),route).state,'exception-loader-present');
+ assert.equal(classify(wrap('<script>window.__loader="adsbygoogle.js"</script>'),bloom).state,'client-rendered-needs-browser');
+ assert.equal(classify(wrap(network+'<script>import("/assets/in-article-ads.js")</script>'),route).state,'client-rendered-needs-browser');
+ assert.equal(classify(wrap('<script>const s="network-ads-v1.js";</script>'),bloom).state,'client-rendered-needs-browser');
+});
+
+test('runtime audit requires deployed pageExceptions and manual-placement parity with central config',()=>{
+ const built=fs.readFileSync('public/assets/network-ads-v1.js','utf8');
+ assert.equal(classifyRuntime(built,200,'application/javascript; charset=utf-8').state,'standard-runtime');
+ assert.equal(classifyRuntime(built,503,'application/javascript').state,'invalid-runtime');
+ assert.equal(classifyRuntime(built,200,'text/html').state,'invalid-runtime');
+ const staleExceptions=built.replace(',{"host":"chrisizworski.com","path":"/isle-royale-ferry"', '');
+ const parsedStale=built.replace(/var settings = (\{[^\n]+\});/,(full,raw)=>{
+  const next=JSON.parse(raw);
+  next.pageExceptions=next.pageExceptions.slice(0,-1);
+  return 'var settings = '+JSON.stringify(next)+';';
+ });
+ assert.equal(classifyRuntime(parsedStale,200,'application/javascript').state,'stale-runtime-policy');
+ const staleEnabled=built.replace('"enabled":false','"enabled":true');
+ assert.equal(classifyRuntime(staleEnabled,200,'application/javascript').state,'stale-runtime-policy');
+ const wrongPub=built.replace('ca-pub-8222782620788075','ca-pub-0000000000000000');
+ assert.equal(classifyRuntime(wrongPub,200,'application/javascript').state,'invalid-runtime');
+ void staleExceptions;
 });
