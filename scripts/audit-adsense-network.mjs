@@ -70,4 +70,10 @@ for (const p of pages) counts[p.state] = (counts[p.state] || 0) + 1;
 const report = { runtime, checkedAt:new Date().toISOString(), registeredTools:tools.length, productionHosts:hosts.size, discoveredPages:queue.length, checkedPages:pages.length, counts, sitemapErrors, accountAutoAds:'unverified-needs-authenticated-account-check', delivery:'HTML code presence is not proof of an ad request or fill', pages:pages.sort((a,b)=>a.url.localeCompare(b.url)) };
 fs.mkdirSync(path.dirname(output),{recursive:true});fs.writeFileSync(output,JSON.stringify(report,null,2)+'\n');
 console.log(JSON.stringify({output,...counts,sitemapErrors:sitemapErrors.length}));
-if (args.includes('--check') && (runtime.state !== 'standard-runtime' || sitemapErrors.length || pages.some(p=>!['standard-code','network-code','excluded-document','page-exception'].includes(p.state)))) process.exitCode=1;
+// Name each open finding in the job log, so a failed run can be resolved by owner without downloading the artifact.
+const passing = ['standard-code','network-code','excluded-document','page-exception'];
+const open = pages.filter(p => !passing.includes(p.state));
+if (runtime.state !== 'standard-runtime') console.log(`runtime\t${runtime.state}`);
+for (const e of sitemapErrors) console.log(`sitemap-error\t${e.url}\t${e.status ?? e.error}`);
+for (const p of open) console.log(`${p.state}\t${p.url}`);
+if (args.includes('--check') && (runtime.state !== 'standard-runtime' || sitemapErrors.length || open.length)) process.exitCode=1;
