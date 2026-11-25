@@ -99,6 +99,14 @@
     const card = $('watchPick');
     card.replaceChildren();
     const pick = data.watchPick;
+    if (failed) {
+      card.className = 'watch-card quiet';
+      card.append(el('div', 'LIVE DATA TEMPORARILY UNAVAILABLE', 'watch-kicker'),
+        el('h2', 'Current passage estimate unavailable'),
+        el('p', 'The latest AIS refresh failed. Earlier passage windows are withheld until fresh reports return. This is not a zero-traffic report.', 'stale-warning'),
+        el('p', 'Use the last-known positions as a reference, or check the separate published harbor forecast and camera views before leaving.', 'watch-note'));
+      return;
+    }
     if (!pick) {
       card.className = 'watch-card quiet';
       card.append(
@@ -134,16 +142,19 @@
       el('h2', pick.name), heading, action, el('p', explainCandidate(pick), 'watch-why'), actions,
       el('p', 'For a shore-side view, arrive before the beginning of this window and watch the lift bridge and channel. A ship may slow, change berths or use another entrance, so this is a watching window, not a guaranteed bridge opening.', 'watch-note')
     );
-    if (failed) card.append(el('p', 'Fresh ship reports are unavailable. This was the last successful watch, not a current passage prediction.', 'stale-warning'));
   }
 
   function candidateMeta(c) {
     return [c.sizeLabel, `${c.distanceNm} NM`, `${Number(c.speedKnots).toFixed(1)} kn`, `AIS ${c.ageMinutes} min old`].join(' · ');
   }
 
-  function renderCandidates(data) {
+  function renderCandidates(data, failed) {
     const list = $('anticipatedShips');
     list.replaceChildren();
+    if (failed) {
+      list.append(el('div', 'Passage windows are unavailable until fresh AIS returns. Check the published harbor forecast separately.', 'empty-state'));
+      return;
+    }
     const candidates = Array.isArray(data.candidates) ? data.candidates : [];
     if (!candidates.length) {
       const empty = el('div', '', 'empty-state');
@@ -184,8 +195,10 @@
       } else {
         next.append(el('strong', 'No supported passage yet', 'monitor-title'), el('span', 'The harbor may still be active. Explore recent ships, cameras and shore viewpoints.', 'monitor-detail'));
       }
-      if (failed) next.append(el('span', 'Last successful AIS check shown, not a live update.', 'monitor-stale'));
+      if (failed) next.replaceChildren(el('div', 'NEXT WATCH', 'monitor-kicker'), el('strong', 'Current passage estimate unavailable', 'monitor-title'), el('span', 'The latest refresh failed. Last-known positions are not current passage predictions.', 'monitor-stale'));
     }
+    const focus = $('focusNext');
+    if (focus) focus.disabled = failed || !pick;
     const visual = $('monitorVisual');
     if (visual) {
       visual.replaceChildren(
@@ -206,11 +219,11 @@
     }
   }
 
-  function vesselPopup(v) {
+  function vesselPopup(v, failed = false) {
     const wrap = el('div');
     wrap.append(el('strong', v.name || `Vessel ${v.mmsi}`));
     const motion = v.speedKnots == null ? 'speed unavailable' : `${(v.speedKnots * 1.15078).toFixed(1)} mph (${Number(v.speedKnots).toFixed(1)} kn)`;
-    wrap.append(el('p', `${motion} · report ${age(v)}`));
+    wrap.append(el('p', `${failed ? 'Last-known position · ' : ''}${motion} · report ${age(v)}`));
     wrap.append(el('p', `AIS type: ${shipTypeLabel(v)}`));
     if (v.destination) wrap.append(el('p', `AIS destination: ${v.destination}`));
     if (v.lengthMeters) wrap.append(el('p', `Length: ${Math.round(v.lengthMeters)} m`));
@@ -450,7 +463,7 @@
 
   function setupMonitorControls() {
     const next = $('focusNext');
-    if (next) next.addEventListener('click', () => currentData?.watchPick && focusVessel(currentData.watchPick.mmsi));
+    if (next) { next.disabled = true; next.addEventListener('click', () => currentData?.watchPick && focusVessel(currentData.watchPick.mmsi)); }
     const cameras = $('focusCameras');
     if (cameras) cameras.addEventListener('click', focusAllCameras);
     const spots = $('focusSpots');
@@ -481,7 +494,7 @@
       autoPanPaddingTopLeft: [45, 14], autoPanPaddingBottomRight: [14, 26] };
   }
 
-  function renderMap(data) {
+  function renderMap(data, failed) {
     initMap();
     if (!map || !vesselLayer || !candidateLayer) {
       $('duluthVesselMap').textContent = 'Map could not load. Live vessel details remain available above.';
@@ -497,9 +510,9 @@
 
     (data.mapVessels || []).forEach(v => {
       if (candidateIds.has(String(v.mmsi))) return;
-      const state = localShipState(v);
+      const state = failed ? 'local' : localShipState(v);
       const marker = L.marker([v.lat, v.lon], { icon: shipIcon(v, state), keyboard: true, title: v.name || `Vessel ${v.mmsi}`, zIndexOffset: 520 })
-        .addTo(vesselLayer).bindTooltip(v.name || `Vessel ${v.mmsi}`, { direction: 'top' }).bindPopup(vesselPopup(v), vesselPopupOptions());
+        .addTo(vesselLayer).bindTooltip(v.name || `Vessel ${v.mmsi}`, { direction: 'top' }).bindPopup(vesselPopup(v, failed), vesselPopupOptions());
       markers.set(String(v.mmsi), marker);
     });
 
@@ -520,7 +533,7 @@
     }
 
     const caption = document.querySelector('.map-caption');
-    if (caption) caption.textContent = 'Ship shapes show reported AIS vessel types; size follows reported length bands, not map scale. Color shows watch status. Select a vessel for its details and report age. A question mark means the type symbol could not load.';
+    if (caption) caption.textContent = (failed ? 'Last-known positions only, not current movement or passage predictions. ' : '') + 'Ship shapes show reported AIS vessel types; size follows reported length bands, not map scale. Color shows watch status. Select a vessel for its details and report age. A question mark means the type symbol could not load.';
   }
 
   function focusVessel(mmsi) {
@@ -542,7 +555,7 @@
     const count = Array.isArray(data.mapVessels) ? data.mapVessels.length : 0;
     const candidates = Array.isArray(data.candidates) ? data.candidates.length : 0;
     $('mapStatus').textContent = failed
-      ? `Refresh unavailable. Last successful AIS picture retained · ${candidates} supported passage candidate${candidates === 1 ? '' : 's'} · 2 cameras · 3 viewing spots.`
+      ? `Refresh unavailable. Last successful AIS picture retained · ${count} last-known position${count === 1 ? '' : 's'} · passage estimates withheld · 2 cameras · 3 viewing spots.`
       : `${count} nearby AIS report${count === 1 ? '' : 's'} · ${candidates} supported passage candidate${candidates === 1 ? '' : 's'} · 2 cameras · 3 viewing spots · checked ${time(data.checkedAt)} CT`;
     $('liveDot').className = `live-dot${failed ? ' offline' : ' on'}`;
     const credits = (data.attribution || []).map(a => a.credit).filter(Boolean);
@@ -551,11 +564,19 @@
   }
 
   function render(data, failed) {
+    // A single display snapshot prevents retained candidates leaking into map, card or controls.
+    if (failed) {
+      const now = Date.now();
+      data = { ...data, watchPick: null, candidates: [], mapVessels: (data.mapVessels || []).filter(v => {
+        const seen = Date.parse(v.seen);
+        return Number.isFinite(seen) && seen <= now && now - seen <= 30 * 60 * 1000;
+      }) };
+    }
     currentData = data;
     renderPick(data, failed);
     renderMonitorSummary(data, failed);
-    renderMap(data);
-    renderCandidates(data);
+    renderMap(data, failed);
+    renderCandidates(data, failed);
     renderSource(data, failed);
     window.setTimeout(() => { if (map) map.invalidateSize({ pan: false, animate: false }); }, 80);
   }

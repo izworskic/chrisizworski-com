@@ -118,13 +118,26 @@ async function main(){
    if(width===390){
     mode='failed';await page.locator('#refreshVessels').click();
     await page.locator('#watchPick .stale-warning').waitFor();
-    assert.match(await page.locator('#mapStatus').innerText(),/Last successful AIS picture retained/);
+    assert.match(await page.locator('#mapStatus').innerText(),/Last successful AIS picture retained.*passage estimates withheld/);
+    assert.equal(await page.locator('#watchPick .arrival-time').count(),0);
+    assert.equal(await page.locator('#anticipatedShips .ship-window').count(),0);
+    assert.match(await page.locator('#monitorNext').innerText(),/Current passage estimate unavailable/);
+    assert.equal(await page.locator('#focusNext').isDisabled(),true);
+    assert.equal(await page.locator('.ship-map-marker.is-selected, .ship-map-marker.is-candidate').count(),0);
+    assert.equal(await page.locator('.ship-map-marker').count(),4);
+    const retained=page.locator('.ship-map-marker.type-cargo');
+    await retained.focus(); await retained.press('Enter');
+    await page.locator('.leaflet-popup-content').getByText(/Last-known position/).waitFor();
+    assert.doesNotMatch(await page.locator('.leaflet-popup-content').innerText(),/planning window/i);
+    await screenshot(page,'duluth-390-retained-failure');
     mode='empty';await page.locator('#refreshVessels').click();
     await page.locator('#watchPick').getByText(/No approaching ship confirmed/).waitFor();
     assert.equal(await page.locator('.ship-map-marker').count(),0);
     assert.equal(await page.locator('.watch-spot-marker').count(),3);
     mode='reports';await page.locator('#refreshVessels').click();
     await page.locator('.ship-map-marker.is-selected').waitFor();
+    assert.equal(await page.locator('#watchPick .arrival-time').count(),1);
+    assert.equal(await page.locator('#focusNext').isDisabled(),false);
    }
    report.cases.push({width,result:'PASS',tiles:width===390?'live OSM':'fixture',markerCount:4});
    await ctx.close();
