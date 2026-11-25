@@ -1,6 +1,6 @@
 'use strict';
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs');
-const {statusChange,changeText}=require('../public/assets/cbbt-view.js');
+const {statusChange,changeText,decisionImpact,impactText}=require('../public/assets/cbbt-view.js');
 const NOW=Date.parse('2026-11-24T20:00:00Z'),M=60000;
 function snapshot(at,state='OPEN',restrictionLevel='NONE',freshness={state:'fresh',ageMs:0}){
  return {engine:{generatedAt:new Date(at).toISOString()},officialStatus:{state,restrictionLevel},freshness:{officialStatus:freshness}};
@@ -58,7 +58,51 @@ test('session note uses text only, is initially hidden and attached to the offic
  const js=fs.readFileSync('public/assets/cbbt-live.js','utf8');
  assert.match(html,/id="statusChange"[^>]*aria-live="polite"[^>]*hidden/);
  assert.match(js,/CBBTView\.statusChange\(previous,snapshot,Date\.now\(\)\)/);
- assert.match(js,/renderApiFailure\(\)\{renderStatusChange\(null\)/);
+ assert.match(js,/renderApiFailure\(configuration\)\{renderStatusChange\(null\)/);
  assert.match(js,/exact change time unknown/);
  assert.doesNotMatch(js,/localStorage|sessionStorage/);
+});
+
+const {vehicleEligibility}=require('../lib/cbbt/core.js');
+function evaluated(at,state,level,vehicle){
+ const s=snapshot(at,state,level);
+ s.vehicleEligibility=vehicleEligibility(s.officialStatus,vehicle);
+ return s;
+}
+test('same official change has different impact on a car and a motorcycle',()=>{
+ for(const [type,expected] of [['car','eligibility-unchanged'],['motorcycle','eligibility-changed']]){
+  const v={vehicleType:type};
+  const a=decisionImpact(null,evaluated(NOW,'OPEN','NONE',v),type,NOW);
+  assert.equal(a.decision,'ALLOWED');
+  assert.equal(a.event,null);
+  const b=decisionImpact(a,evaluated(NOW+M,'OPEN_WITH_RESTRICTIONS','LEVEL_1',v),type,NOW+M);
+  assert.equal(b.event.kind,expected);
+  assert.equal(b.decision,type==='car'?'ALLOWED':'RESTRICTED');
+  assert.match(impactText(b.event),type==='car'?/unchanged/:/now restricted/);
+  const c=decisionImpact(b,evaluated(NOW+2*M,'OPEN_WITH_RESTRICTIONS','LEVEL_1',v),type,NOW+2*M);
+  assert.equal(c.event,b.event);
+ }
+});
+test('changed vehicle inputs reset baseline and loss of evidence never grants permission',()=>{
+ const car={vehicleType:'car'},bike={vehicleType:'motorcycle'};
+ const a=decisionImpact(null,evaluated(NOW,'OPEN_WITH_RESTRICTIONS','LEVEL_1',car),'car',NOW);
+ const b=decisionImpact(a,evaluated(NOW+M,'OPEN_WITH_RESTRICTIONS','LEVEL_1',bike),'motorcycle',NOW+M);
+ assert.equal(b.event,null);
+ assert.equal(b.decision,'RESTRICTED');
+ const c=decisionImpact(b,null,'motorcycle',NOW+2*M);
+ assert.equal(c.event.kind,'confirmation-lost');
+ assert.equal(c.decision,'UNKNOWN');
+ const d=decisionImpact(c,evaluated(NOW+3*M,'OPEN','NONE',bike),'motorcycle',NOW+3*M);
+ assert.equal(d.event.kind,'confirmation-restored');
+ assert.doesNotMatch(impactText(d.event),/now allowed/);
+});
+test('unchanged status with revised backend result is not an operating transition',()=>{
+ const a=evaluated(NOW,'OPEN','NONE',{vehicleType:'car'});
+ const p=decisionImpact(null,a,'car',NOW);
+ const b=evaluated(NOW+M,'OPEN','NONE',{vehicleType:'car'});
+ b.vehicleEligibility={decision:'UNKNOWN',reason:'MANUAL_REVIEW_REQUIRED_FOR_SPECIAL_VEHICLE'};
+ const q=decisionImpact(p,b,'car',NOW+M);
+ assert.equal(q.event.kind,'result-revised');
+ assert.equal(q.decision,'UNKNOWN');
+ assert.equal(decisionImpact(q,a,'car',NOW+M),q);
 });
