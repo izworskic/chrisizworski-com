@@ -27,4 +27,4 @@ Read `skills-expansion-plan.md` first. Update this log in the same commit as eac
 
 ## Next action
 
-Build photo-sourcing (absorbing hf-visual-evidence), run its pressure test, record it here, commit.
+Build search-demand, run its pressure test, record it here, commit.

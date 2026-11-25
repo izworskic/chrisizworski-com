@@ -10,8 +10,8 @@
     "claude": 45,
     "copilot": 42,
     "mirrorBlobMismatches": 0,
-    "dedicatedCaseSuites": 21,
-    "withoutDedicatedCasesLocated": 24,
+    "dedicatedCaseSuites": 22,
+    "withoutDedicatedCasesLocated": 23,
     "behaviorallyEvaluated": 0,
     "provenByPairedEvidence": 0
   },
@@ -606,29 +606,6 @@
       "implementationEvidence": []
     },
     {
-      "id": "hf-visual-evidence",
-      "family": "Hugging Face and machine learning",
-      "scope": "Already-sourced photo QA",
-      "expectedOutput": "Review-only captions/duplicates, human confirmation",
-      "routing": "Bounded, opt-in",
-      "authorization": "bounded-opt-in",
-      "documentedState": "documented",
-      "auditedSkillBlob": "4c7bd1d51c7d7232565d80dd4801848caa92b51a",
-      "mirrors": [
-        ".agents/skills/hf-visual-evidence/SKILL.md",
-        ".claude/skills/hf-visual-evidence/SKILL.md",
-        ".github/skills/hf-visual-evidence/SKILL.md"
-      ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
-      "behavioralEvidence": {
-        "status": "NOT_VERIFIED",
-        "runs": [],
-        "decision": "retain-pending-evidence"
-      },
-      "implementationEvidence": []
-    },
-    {
       "id": "hf-forecast-benchmark",
       "family": "Hugging Face and machine learning",
       "scope": "Offline forecast model challenger",
@@ -1104,6 +1081,29 @@
         "decision": "retain-pending-evidence"
       },
       "implementationEvidence": []
+    },
+    {
+      "id": "photo-sourcing",
+      "family": "Experience and research",
+      "scope": "Place photos for new tools and redesigns, unknown photo source or license, photo QA",
+      "expectedOutput": "Credit records, place confirmation and license verdict per photo",
+      "routing": "When a page needs or reviews real-place photos",
+      "authorization": "relevant-authorized-task",
+      "documentedState": "documented",
+      "auditedSkillBlob": "36e6946d8f3971cdd1e45143803afdc9d01ae642",
+      "mirrors": [
+        ".agents/skills/photo-sourcing/SKILL.md",
+        ".claude/skills/photo-sourcing/SKILL.md",
+        ".github/skills/photo-sourcing/SKILL.md"
+      ],
+      "caseSuite": "docs/skill-evals/photo-sourcing.md",
+      "caseCoverage": "dedicated",
+      "behavioralEvidence": {
+        "status": "NOT_VERIFIED",
+        "runs": [],
+        "decision": "retain-pending-evidence"
+      },
+      "implementationEvidence": []
     }
   ],
   "overlapReview": [
@@ -1183,7 +1183,6 @@
         "huggingface-tool-builder",
         "transformers-js",
         "hf-semantic-discovery",
-        "hf-visual-evidence",
         "hf-forecast-benchmark"
       ],
       "boundary": "Decide whether a model is needed, then choose authorized metadata, task-specific benchmark or runtime fit. No default downloads or inference.",

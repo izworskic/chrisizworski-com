@@ -7,10 +7,10 @@ const path=require('node:path');
 const {spawnSync}=require('node:child_process');
 const root=path.join(__dirname,'..');
 const names=['hf-cli','huggingface-best','huggingface-datasets','huggingface-tool-builder',
-  'transformers-js','hf-semantic-discovery','hf-visual-evidence','hf-forecast-benchmark'];
+  'transformers-js','hf-semantic-discovery','hf-forecast-benchmark'];
 const get=p=>fs.readFileSync(path.join(root,p),'utf8');
 
-test('eight review-only Hugging Face skills are mirrored exactly for all three agent harnesses',()=>{
+test('review-only Hugging Face skills are mirrored exactly for all three agent harnesses',()=>{
  for(const name of names) {
   const base=get('.agents/skills/'+name+'/SKILL.md');
   assert.match(base,new RegExp('^---\\nname: '+name+'\\n'));
