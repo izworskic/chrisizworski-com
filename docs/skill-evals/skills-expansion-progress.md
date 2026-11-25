@@ -27,4 +27,4 @@ Read `skills-expansion-plan.md` first. Update this log in the same commit as eac
 
 ## Next action
 
-Rebuild web-quality-audit from the upstream method (addyosmani/web-quality-skills, MIT), pressure-test it against the version on main, record it here, commit.
+Rebuild web-quality-performance, pressure-test it against the version on main, record it here, commit.

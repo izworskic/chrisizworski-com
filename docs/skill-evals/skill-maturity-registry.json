@@ -10,8 +10,8 @@
     "claude": 47,
     "copilot": 44,
     "mirrorBlobMismatches": 0,
-    "dedicatedCaseSuites": 24,
-    "withoutDedicatedCasesLocated": 23,
+    "dedicatedCaseSuites": 25,
+    "withoutDedicatedCasesLocated": 22,
     "behaviorallyEvaluated": 0,
     "provenByPairedEvidence": 0
   },
@@ -747,18 +747,18 @@
       "id": "web-quality-audit",
       "family": "Web and browser quality",
       "scope": "Cross-disciplinary audit or major release",
-      "expectedOutput": "Evidence-backed defect priorities",
+      "expectedOutput": "Severity-ranked findings with evidence, lab and field separated",
       "routing": "When relevant",
       "authorization": "relevant-authorized-task",
       "documentedState": "documented",
-      "auditedSkillBlob": "e59ac96d1ff6902e627f9d93e63233dec25a6cdc",
+      "auditedSkillBlob": "88f10c38c90e335655961c28fa7a2a1814216ecd",
       "mirrors": [
         ".agents/skills/web-quality-audit/SKILL.md",
         ".claude/skills/web-quality-audit/SKILL.md",
         ".github/skills/web-quality-audit/SKILL.md"
       ],
-      "caseSuite": null,
-      "caseCoverage": "dedicated-cases-not-located",
+      "caseSuite": "docs/skill-evals/web-quality-audit.md",
+      "caseCoverage": "dedicated",
       "behavioralEvidence": {
         "status": "NOT_VERIFIED",
         "runs": [],
