@@ -14,7 +14,7 @@ test('Observation Bridge is positioned before the legacy dashboard and preserves
   assert.ok(html.indexOf('id="observationBridge"') > html.indexOf('id="great-lakes-buoy-answer"'));
   assert.ok(html.indexOf('id="observationBridge"') < html.indexOf('id="lakeRow"'));
   assert.ok(html.includes('href="/great-lakes-buoys/observation-bridge.css?v=1"'));
-  assert.ok(html.includes('src="/great-lakes-buoys/observation-bridge.js?v=1"'));
+  assert.ok(html.includes('src="/great-lakes-buoys/observation-bridge.js?v=2"'));
   assert.ok(html.includes('<link rel="canonical" href="https://chrisizworski.com/great-lakes-buoys/">'));
   assert.ok(html.includes('https://chrisizworski.com/#person'));
   assert.ok(html.includes('id="snapshotData"'));
@@ -65,4 +65,22 @@ test('Never emit a confident comparison from a stale time, absent wave sensor or
   assert.equal(waveComparison(a, a, NOW).state,'same');
   assert.equal(waveComparison(a, null, NOW).state,'unknown');
   assert.equal(waveComparison(a, b, NOW).state,'compared');
+});
+
+test('snapshot source is never eligible for a current comparison even with a recent timestamp',()=>{
+  const a={...station('45029',2),observation_source:'snapshot'};
+  assert.equal(observationState(a,NOW),'older');
+  assert.equal(waveComparison(a,station('45005',1),NOW).state,'older');
+});
+
+test('observed change requires a fresh endpoint and a real three-hour comparison',()=>{
+  const {observedChange}=require('../public/great-lakes-buoys/observation-bridge.js');
+  const last=NOW-20*60000, prior=last-3*3600000;
+  const rows=[{t:last,wave_ht:0},{t:prior,wave_ht:1.2}];
+  assert.deepEqual(observedChange(rows,'wave_ht',NOW),{delta:-1.2,from:prior,to:last,hours:3});
+  assert.equal(observedChange([{t:last,wave_ht:0},{t:prior-31*60000,wave_ht:1.2}],'wave_ht',NOW),null);
+  assert.equal(observedChange(rows,'wave_ht',NOW+3*3600000),null);
+  assert.equal(observedChange([...rows,{t:last,wave_ht:null}],'wave_ht',NOW),null);
+  assert.equal(observedChange([...rows,{t:prior,wave_ht:2}],'wave_ht',NOW),null);
+  assert.equal(observedChange([...rows,{t:last+20*60000,wave_ht:null}],'wave_ht',NOW),null);
 });

@@ -23,7 +23,7 @@ test('Map is the first main visitor experience after the title, with activity ch
   assert.doesNotMatch(html,/I am <a href="\/about\/">Chris Izworski/);
   assert.ok(html.includes('Maintained by <a href="/about/">Chris Izworski</a>'));
   assert.ok(html.includes('href="/great-lakes-buoys/map-first.css?v=1"'));
-  assert.ok(html.includes('src="/great-lakes-buoys/map-first.js?v=1"'));
+  assert.ok(html.includes('src="/great-lakes-buoys/map-first.js?v=2"'));
   assert.ok(html.includes('id="buoyMap"'));
   assert.ok(html.includes('class="map-no-script"'));
   assert.ok(html.includes('id="stationList"'));
@@ -83,6 +83,16 @@ test('Map-first design keeps the original reports, feed, ad and SEO contracts',(
   assert.match(html,/basemaps\.cartocdn\.com/);
   assert.match(html,/OpenStreetMap &copy; CARTO/);
   assert.ok(html.includes('href="/great-lakes-buoys/observation-bridge.css?v=1"'));
-  assert.ok(html.includes('src="/great-lakes-buoys/observation-bridge.js?v=1"'));
+  assert.ok(html.includes('src="/great-lakes-buoys/observation-bridge.js?v=2"'));
   assert.doesNotMatch(mapJs,/\bfetch\s*\(/);
+});
+
+test('availability count uses actual current readings rather than catalog length and preserves snapshot provenance',()=>{
+  assert.match(html,/recent.length \+ ' of ' \+ allStations.length/);
+  assert.match(html,/data.feed_status === 'snapshot'/);
+  assert.match(html,/stationReportLabel\(s\)/);
+  assert.match(html,/Some buoys are recovered for winter; no report does not confirm why/);
+  assert.match(html,/id="buoySensorCoverage"/);
+  assert.doesNotMatch(html,/class="sparkline-val">now /);
+  assert.match(html,/s.t>=now-5\*86400000/);
 });

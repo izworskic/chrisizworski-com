@@ -233,6 +233,7 @@ h2.sh{font-size:21px;font-weight:normal;color:#2c5f2d;margin:34px 0 14px;border-
   <span class="live-dot" aria-hidden="true">&#9679;</span>
   <span class="live-label">Great Lakes Buoy Dashboard</span>
   <span class="live-status" id="liveStatus">loading current stations...</span>
+  <span id="buoySensorCoverage" class="small" aria-live="polite"></span>
   <span class="refresh-info" id="refreshInfo"></span>
 </div>
 <div class="body">
@@ -540,9 +541,15 @@ const ACTIVITY_REQUIREMENTS = {
   diving:['wave_ht_ft','water_t_f']
 };
 function recentObservation(s) {
-  const t = s && s.obs_time && Date.parse(s.obs_time);
+  if (!s || s.observation_source === 'snapshot' || s.observation_source === 'none') return false;
+  const t = s.obs_time && Date.parse(s.obs_time);
   const age = Date.now() - t;
-  return Number.isFinite(t) && age >= -10*60*1000 && age <= 2*60*60*1000;
+  return Number.isFinite(t) && age >= -10*60*1000 && age <= 2*60*60*1000 && ['wave_ht_ft','wind_spd_kt','water_t_f','air_t_f','pres','wind_dir','wind_gst_kt','wave_per','wave_dir'].some(k=>Number.isFinite(s[k]));
+}
+function stationReportLabel(s) {
+  if (recentObservation(s)) return 'Recent report';
+  if (s?.observation_source==='snapshot') return 'Saved historical report';
+  return s?.obs_time ? 'Older or incomplete report' : 'No report';
 }
 function activityEvidence(s, activity) {
   if (!recentObservation(s)) return 'unknown';
@@ -656,7 +663,7 @@ function renderList(stations) {
       <div class="sr-dot" style="background:${stationColor(s, currentActivity)}"></div>
       <div>
         <div><span class="sr-name">${s.name}</span><span class="sr-id">${s.id}</span></div>
-        <div class="sr-lake">Lake ${s.lake}</div>
+        <div class="sr-lake">Lake ${s.lake} · ${stationReportLabel(s)}</div>
       </div>
       <div class="sr-condition">
         ${s.wave_ht_ft != null ? '<b>' + s.wave_ht_ft.toFixed(1) + ' ft</b> wave<br>' : ''}
@@ -691,7 +698,9 @@ function renderSmartCta(stations) {
 }
 
 // === Open detail modal with sparklines ===
+let detailRequest=0;
 async function openDetail(station) {
+  const requestId=++detailRequest;
   const overlay = document.getElementById('modalOverlay');
   const title = document.getElementById('modalTitle');
   const meta = document.getElementById('modalMeta');
@@ -700,6 +709,7 @@ async function openDetail(station) {
   title.textContent = station.name;
   meta.innerHTML = `Station ${station.id} &middot; Lake ${station.lake} &middot; ${station.lat.toFixed(2)}, ${station.lng.toFixed(2)}`;
   body.innerHTML = `
+    <p>${stationReportLabel(station)}. A missing report may reflect winter recovery, an outage or a missing sensor. Check the official station status; do not infer calm water.</p>
     <div class="current-conditions">
       <div class="cc-card"><div class="cc-lbl">Wave height</div><div class="cc-val">${station.wave_ht_ft != null ? station.wave_ht_ft.toFixed(1) : '-'}</div><div class="cc-unit">feet</div></div>
       <div class="cc-card"><div class="cc-lbl">Wind</div><div class="cc-val">${station.wind_spd_kt != null ? Math.round(station.wind_spd_kt) : '-'}</div><div class="cc-unit">knots</div></div>
@@ -727,6 +737,7 @@ async function openDetail(station) {
     const r = await fetch('/api/buoy/' + station.id.toLowerCase());
     if (!r.ok) throw new Error('Detail unavailable');
     const data = await r.json();
+    if(requestId!==detailRequest)return;
     if (!data.samples || data.samples.length === 0) {
       document.getElementById('sparkLoading').textContent = 'Historical data unavailable for this station.';
       return;
@@ -742,8 +753,21 @@ async function openDetail(station) {
       { key:'pres', label:'Pressure (hPa)', conv: v => v, fmt: v => v.toFixed(1) },
     ];
     
+    const changes=document.createElement('p');
+    const changesText=[];
+    for(const p of params.slice(0,3)) {
+      const delta=window.buoyObservedChange?.(data.samples,p.key);
+      if(!delta)continue;
+      const amount=p.key==='water_t'?delta.delta*9/5:p.conv(delta.delta);
+      const unit=p.key==='wave_ht'?'ft':p.key==='wind_spd'?'kt':'°F';
+      const rounded=Math.round(amount*10)/10;
+      changesText.push(p.label.split(' (')[0]+': '+(rounded>0?'+':'')+rounded.toFixed(1)+' '+unit+' over '+delta.hours.toFixed(1)+' h (through '+fmtTime(delta.to)+')');
+    }
+    changes.textContent=changesText.length?'Observed change: '+changesText.join(' · ')+'. Not a forecast.':'Recent three-hour comparison unavailable: missing, conflicting or older observations.';
+    container.appendChild(changes);
     params.forEach(p => {
-      const points = data.samples.filter(s => s[p.key] != null).map(s => ({ t: s.t, v: p.conv(s[p.key]) }));
+      const now=Date.now();
+      const points = data.samples.filter(s => Number.isFinite(s[p.key]) && Number.isFinite(s.t) && s.t>=now-5*86400000 && s.t<=now+600000).map(s => ({ t: s.t, v: p.conv(s[p.key]) })).sort((a,b)=>a.t-b.t);
       if (points.length < 2) return;
       const vals = points.map(p => p.v);
       const min = Math.min(...vals), max = Math.max(...vals);
@@ -755,7 +779,7 @@ async function openDetail(station) {
       const path = points.map((pt, i) => {
         const x = padding + ((pt.t - tMin) / tRange) * (W - padding*2);
         const y = H - padding - ((pt.v - min) / range) * (H - padding*2);
-        return (i === 0 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
+        return (i === 0 || pt.t-points[i-1].t>3*3600000 ? 'M' : 'L') + x.toFixed(1) + ',' + y.toFixed(1);
       }).join(' ');
       const lastVal = points[points.length-1].v;
       
@@ -764,7 +788,7 @@ async function openDetail(station) {
         <h4>${p.label}</h4>
         <div class="sparkline-wrap">
           <span class="sparkline-label">${points.length} obs &middot; ${p.fmt(min)} to ${p.fmt(max)}</span>
-          <span class="sparkline-val">now ${p.fmt(lastVal)}</span>
+          <span class="sparkline-val">last ${p.fmt(lastVal)} · ${fmtTime(points[points.length-1].t)}</span>
           <svg class="sparkline-svg" viewBox="0 0 ${W} ${H}" preserveAspectRatio="none">
             <path d="${path}" fill="none" stroke="#2c5f2d" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
             <circle cx="${padding + (W - padding*2)}" cy="${H - padding - ((lastVal - min) / range) * (H - padding*2)}" r="2.5" fill="#2c5f2d"/>
@@ -774,11 +798,13 @@ async function openDetail(station) {
       container.appendChild(div);
     });
   } catch (e) {
+    if(requestId!==detailRequest)return;
     document.getElementById('sparkLoading').innerHTML = 'Historical data unavailable: ' + e.message + '. <br>Try the <a href="https://www.ndbc.noaa.gov/station_page.php?station=' + station.id.toLowerCase() + '" target="_blank" rel="noopener">station page on ndbc.noaa.gov</a>.';
   }
 }
 
 function closeModal() {
+  detailRequest++;
   document.getElementById('modalOverlay').classList.remove('show');
   document.body.style.overflow = '';
 }
@@ -860,7 +886,7 @@ function findMyBuoys() {
         const meta = document.createElement('span');
         meta.className = 'gl-meta';
         meta.textContent = String(station.id) + ' · Lake ' + station.lake + ' · ' +
-          (Number.isFinite(station.wave_ht_ft) ? station.wave_ht_ft.toFixed(1) + ' ft measured waves' : 'no wave measurement');
+          stationReportLabel(station)+' · '+(Number.isFinite(station.wave_ht_ft) ? station.wave_ht_ft.toFixed(1) + ' ft measured waves' : 'no wave measurement');
         details.append(name, meta);
         const miles = document.createElement('span');
         miles.className = 'gl-dist';
@@ -882,7 +908,7 @@ function findMyBuoys() {
       });
 
       const saved = document.getElementById('liveStatus')?.textContent?.includes('Saved snapshot');
-      title.textContent = saved ? 'Nearest stations from saved data' : 'Closest reporting stations';
+      title.textContent = saved ? 'Nearest stations from saved data' : 'Closest catalog stations';
       result.classList.add('show');
       feedback.textContent = saved
         ? 'Your position was found. The live buoy feed is unavailable, so nearby station readings are from an older snapshot.'
@@ -957,10 +983,13 @@ async function init() {
     }
   }
   
-  allStations = data.stations.map(enrich);
+  fromSnapshot = fromSnapshot || data.feed_status === 'snapshot' || String(data.source||'').includes('cached snapshot');
+  allStations = data.stations.map(s=>enrich(fromSnapshot?{...s,observation_source:'snapshot'}:s));
   
   // Update strip
-  document.getElementById('liveStatus').textContent = fromSnapshot ? 'Saved snapshot; live readings unavailable' : data.count + ' stations reporting';
+  const recent = allStations.filter(recentObservation);
+  document.getElementById('liveStatus').textContent = fromSnapshot ? 'Saved snapshot; live readings unavailable' : recent.length + ' of ' + allStations.length + ' stations have recent reports';
+  document.getElementById('buoySensorCoverage').textContent = recent.filter(s=>Number.isFinite(s.wave_ht_ft)).length+' recent wave · '+recent.filter(s=>Number.isFinite(s.wind_spd_kt)).length+' wind · '+recent.filter(s=>Number.isFinite(s.water_t_f)).length+' water temperature reports. Some buoys are recovered for winter; no report does not confirm why.';
   document.getElementById('refreshInfo').textContent = (fromSnapshot ? '· snapshot retrieved ' : '· fetched ') + fmtTime(data.fetched_at);
   
   // Render everything
@@ -1035,7 +1064,7 @@ window.addEventListener('DOMContentLoaded', () => {
   setInterval(init, 10 * 60 * 1000);
 });
 </script>
-<script src="/great-lakes-buoys/observation-bridge.js?v=1"></script>
-<script src="/great-lakes-buoys/map-first.js?v=1"></script>
+<script src="/great-lakes-buoys/observation-bridge.js?v=2"></script>
+<script src="/great-lakes-buoys/map-first.js?v=2"></script>
 </body>
 </html>

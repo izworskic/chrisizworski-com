@@ -6,7 +6,8 @@
   const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
   function finite(value) { return typeof value === 'number' && Number.isFinite(value); }
   function observationState(station, now = Date.now()) {
-    if (!station || !station.obs_time) return 'unknown';
+    if (!station || !station.obs_time || station.observation_source==='none') return 'unknown';
+    if (station.observation_source==='snapshot') return 'older';
     const instant = Date.parse(station.obs_time);
     if (!Number.isFinite(instant) || instant > now + 10 * 60 * 1000) return 'unknown';
     return now - instant <= TWO_HOURS_MS ? 'recent' : 'older';
@@ -29,7 +30,26 @@
     const lower = higher === a ? b : a;
     return { state: 'compared', text: 'Station ' + higher.id + ' reports waves ' + difference.toFixed(1) + ' ft higher than station ' + lower.id + '. These are point observations, not a route or nearshore forecast.' };
   }
-  if (typeof module === 'object' && module.exports) module.exports = { observationState, waveComparison };
+  // Three-hour observed change, never an extrapolation. Use the newest
+  // valid measured sample and an actual prior sample within 30 minutes.
+  function observedChange(samples, field, now=Date.now()) {
+    const byTime = new Map();
+    for (const s of Array.isArray(samples)?samples:[]) {
+      if (!s || !finite(s.t) || s.t>now+600000 || s.t<now-5*86400000) continue;
+      if (!byTime.has(s.t)) byTime.set(s.t,new Set());
+      byTime.get(s.t).add(finite(s[field])?s[field]:null);
+    }
+    const rows=[...byTime].sort((a,b)=>a[0]-b[0]);
+    // Do not bridge a conflicting or missing sensor record at either endpoint.
+    const last=rows.at(-1);
+    if (!last || now-last[0]>TWO_HOURS_MS || last[1].size!==1 || last[1].has(null)) return null;
+    const target=last[0]-3*3600000;
+    const prior=rows.filter(([t])=>t<last[0] && Math.abs(t-target)<=1800000).sort((a,b)=>Math.abs(a[0]-target)-Math.abs(b[0]-target)||a[0]-b[0])[0];
+    if (!prior || prior[1].size!==1 || prior[1].has(null)) return null;
+    return {delta:[...last[1]][0]-[...prior[1]][0],from:prior[0],to:last[0],hours:(last[0]-prior[0])/3600000};
+  }
+  if (typeof module === 'object' && module.exports) module.exports = { observationState, waveComparison, observedChange };
+  root.buoyObservedChange = observedChange;
   if (typeof document === 'undefined') return;
 
   const panel = document.getElementById('observationBridge');
@@ -61,7 +81,7 @@
     set('obName' + id, station ? station.name : 'No station selected');
     set('obMeta' + id, station ? 'Station ' + station.id + ' · Lake ' + station.lake : 'Waiting for station data');
     const status = observationState(station);
-    set('obAge' + id, status === 'recent' ? 'Recent report' : status === 'older' ? 'Older report' : 'Time unknown');
+    set('obAge' + id, station?.observation_source==='snapshot' ? 'Saved snapshot' : status === 'recent' ? 'Recent report' : status === 'older' ? 'Older report' : 'Time unknown');
     const badge = document.getElementById('obAge' + id);
     badge.dataset.state = status;
     set('obWhen' + id, observed(station));

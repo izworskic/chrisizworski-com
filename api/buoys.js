@@ -1,5 +1,5 @@
 const fallback = require("../data/buoy-fallback.json");
-const { mergeLatestWithStationMetadata, parseLatestObservations } = require("../lib/ndbc");
+const { mergeLatestWithStationMetadata, parseLatestObservations, summarizeStations } = require("../lib/ndbc");
 
 const NDBC_LATEST = "https://www.ndbc.noaa.gov/data/latest_obs/latest_obs.txt";
 
@@ -25,10 +25,13 @@ module.exports = async function handler(req, res) {
       source: "NOAA National Data Buoy Center",
       fetched_at: new Date().toISOString(),
       count: stations.length,
+      feed_status: "latest",
+      ...summarizeStations(stations),
       stations,
     });
   } catch {
     res.setHeader("X-Data-Fallback", "snapshot");
-    return res.status(200).json({ ...fallback, source: `${fallback.source || "NOAA NDBC"} (cached snapshot)` });
+    const stations = mergeLatestWithStationMetadata(new Map(), fallback.stations);
+    return res.status(200).json({ ...fallback, source: `${fallback.source || "NOAA NDBC"} (cached snapshot)`, feed_status:"snapshot", count:stations.length, ...summarizeStations(stations), stations });
   }
 };

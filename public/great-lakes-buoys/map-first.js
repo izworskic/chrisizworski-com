@@ -11,7 +11,8 @@
   const put = (id, value) => { const node=document.getElementById(id);if(node)node.textContent=value; };
   const goodNumber = value => typeof value === 'number' && Number.isFinite(value);
   function observationAge(st) {
-    if (!st || !st.obs_time) return 'unknown';
+    if (!st || !st.obs_time || st.observation_source==='none') return 'unknown';
+    if (st.observation_source==='snapshot') return 'older';
     const ts = Date.parse(st.obs_time);
     if (!Number.isFinite(ts) || ts > Date.now() + 600000) return 'unknown';
     return Date.now() - ts > 7200000 ? 'older' : 'recent';
@@ -30,6 +31,7 @@
   function verdict(st, age) {
     if (!st) return 'Choose a map marker or use the station picker to inspect an actual report.';
     if (state.source === 'snapshot') return 'Saved snapshot only. The current feed could not be reached, so these measurements are not a current outing check.';
+    if (st.observation_source==='snapshot') return 'This station is absent from the recent feed. The displayed reading is from a saved historical report. Winter recovery is possible, but not confirmed by absence; check the official station.';
     if (age !== 'recent') return 'Observation is older than two hours or has no trustworthy time. Check the official station before making plans.';
     if (state.activity === 'all') return 'A point observation from this station, not a report for nearby beaches, harbors or an entire lake.';
     const result = typeof window.getBuoyActivityEvidence === 'function'
@@ -56,7 +58,7 @@
     const age = observationAge(st);
     put('mapStationTitle',st.name);
     put('mapStationMeta','Station '+st.id+' · Lake '+st.lake);
-    const label = state.source === 'snapshot' ? 'Saved snapshot' : age === 'recent' ? 'Recent observation' : age === 'older' ? 'Older observation' : 'Time unknown';
+    const label = state.source === 'snapshot' || st.observation_source==='snapshot' ? 'Saved snapshot' : age === 'recent' ? 'Recent observation' : age === 'older' ? 'Older observation' : 'Time unknown';
     put('mapStationAge',label);
     document.getElementById('mapStationAge').dataset.state=state.source==='snapshot'?'older':age;
     put('mapStationWave',goodNumber(st.wave_ht_ft) ? st.wave_ht_ft.toFixed(1) : '--');
