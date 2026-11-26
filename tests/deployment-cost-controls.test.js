@@ -15,8 +15,11 @@ test('only internal Markdown changes can skip a deployment', () => {
     assert.equal(documentationOnly(files), false);
 });
 
-test('only the isolated Pukaskwa data branch skips Vercel builds', () => {
+test('only named isolated monitoring data branches skip Vercel builds', () => {
   assert.equal(isMonitorDataBranch('pukaskwa-conditions-data'), true);
+  assert.equal(isMonitorDataBranch('research/great-lakes-ice-data'), true);
+  assert.equal(isMonitorDataBranch('research/great-lakes-ice-data-other'), false);
+  assert.equal(isMonitorDataBranch('research/great-lakes-ice-evidence-20261126'), false);
   assert.equal(isMonitorDataBranch('main'), false);
   assert.equal(isMonitorDataBranch('feat/pukaskwa-condition-monitor'), false);
   assert.equal(isMonitorDataBranch('pukaskwa-conditions-data-other'), false);

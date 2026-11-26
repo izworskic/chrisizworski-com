@@ -135,6 +135,7 @@ def parse_mos(raw,c):
     if not required.issubset(rows.fieldnames or []):raise ValueError('MOS header')
     found={}
     for r in rows:
+        if any(not isinstance(r.get(field),str) for field in required):raise ValueError('truncated MOS row')
         if r['station'] not in STATIONS.values() or r['model']!='MEX' or r['runtime']!=c.strftime('%Y-%m-%d %H:%M'):raise ValueError('MOS identity mismatch')
         t=datetime.strptime(r['ftime'],'%Y-%m-%d %H:%M').replace(tzinfo=UTC);k=(r['station'],t)
         if k in found:raise ValueError('duplicate MOS row')

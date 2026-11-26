@@ -1,0 +1,115 @@
+name: Great Lakes ice prospective research archive
+
+on:
+  schedule:
+    - cron: '30 22 * 11,12,1,2,3 *'
+    - cron: '30 22 1-10 4 *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: great-lakes-ice-prospective-archive
+  cancel-in-progress: false
+
+jobs:
+  capture:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Check season and offline contracts
+        id: season
+        shell: bash
+        run: |
+          set -euo pipefail
+          TODAY="$(date -u +%F)"
+          if [[ "$TODAY" < 2026-11-25 || "$TODAY" > 2027-04-10 ]]; then
+            echo 'active=false' >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+          (cd scripts/ice/research && python3 -B test_prospective.py)
+          echo 'active=true' >> "$GITHUB_OUTPUT"
+      - name: Open isolated evidence branch without touching main
+        if: steps.season.outputs.active == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          BRANCH=research/great-lakes-ice-data
+          ARCHIVE="$RUNNER_TEMP/ice-evidence-worktree"
+          set +e
+          git ls-remote --exit-code --heads origin "refs/heads/$BRANCH" >/dev/null
+          STATUS=$?
+          set -e
+          if [[ "$STATUS" == 0 ]]; then
+            git fetch --depth=1 --no-tags origin "refs/heads/$BRANCH:refs/remotes/origin/$BRANCH"
+            git worktree add --detach "$ARCHIVE" "refs/remotes/origin/$BRANCH"
+          elif [[ "$STATUS" == 2 ]]; then
+            git worktree add --detach "$ARCHIVE" HEAD
+          else
+            exit "$STATUS"
+          fi
+          # The destination must already carry the exact Vercel build exclusion.
+          grep -F "ref === 'research/great-lakes-ice-data'" "$ARCHIVE/scripts/ignore-docs-build.mjs"
+          echo "ARCHIVE_WORKTREE=$ARCHIVE" >> "$GITHUB_ENV"
+          echo "ARCHIVE_ROOT=$ARCHIVE/data/great-lakes-ice-evidence" >> "$GITHUB_ENV"
+      - name: Import reviewed seed using immutable writes
+        if: steps.season.outputs.active == 'true'
+        env:
+          PYTHONPATH: scripts/ice/research
+        run: |
+          python3 -B - <<'PY'
+          import os
+          from pathlib import Path
+          from collector import write_once
+          src = Path('scripts/ice/research/seed')
+          dest = Path(os.environ['ARCHIVE_ROOT'])
+          for p in sorted(src.rglob('*')):
+              if p.is_file():
+                  write_once(dest / p.relative_to(src), p.read_bytes())
+          PY
+      - name: Capture one cycle and reconcile exact observation dates
+        if: steps.season.outputs.active == 'true'
+        run: |
+          python3 -B scripts/ice/research/prospective.py --root "$ARCHIVE_ROOT" --collect --out "$ARCHIVE_ROOT/reconciliation.json"
+      - name: Preserve immutable research evidence even after a partial capture
+        if: always() && steps.season.outputs.active == 'true' && env.ARCHIVE_WORKTREE != ''
+        shell: bash
+        run: |
+          set -euo pipefail
+          git -C "$ARCHIVE_WORKTREE" config user.name 'github-actions[bot]'
+          git -C "$ARCHIVE_WORKTREE" config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git -C "$ARCHIVE_WORKTREE" add -- data/great-lakes-ice-evidence
+          if git -C "$ARCHIVE_WORKTREE" diff --cached --quiet; then
+            echo 'No new evidence.'
+          else
+            git -C "$ARCHIVE_WORKTREE" commit -m "data(ice): retain research evidence $(date -u +%F)"
+            git -C "$ARCHIVE_WORKTREE" push origin HEAD:refs/heads/research/great-lakes-ice-data
+          fi
+      - name: Report research state only
+        if: always() && steps.season.outputs.active == 'true' && env.ARCHIVE_ROOT != ''
+        run: |
+          python3 -B - <<'PY' >> "$GITHUB_STEP_SUMMARY"
+          import json, os
+          from pathlib import Path
+          p=Path(os.environ['ARCHIVE_ROOT'])/'reconciliation.json'
+          print('## Great Lakes ice research (not a public forecast)')
+          if p.exists():
+              r=json.loads(p.read_text())
+              print('Forecast states:', r['forecast_states'])
+              print('Outcome states:', r['outcome_states'])
+              print('Raw response receipts:', r['raw_receipts'])
+              print('Forecasts qualified:', r['scored_count'])
+          else:
+              print('Reconciliation unavailable; inspect job logs.')
+          PY
