@@ -238,3 +238,25 @@ test("failed or stale refresh replaces previous open verdict, not merely the rib
   assert.equal(state.data.official.level,"unknown","expired status on returning to an already-loading tab must be invalidated");
   assert.equal(invalidations,3);
 });
+
+test("missing forecast and nearby winds remain unavailable in browser decision code",()=>{
+  const start=js.indexOf("function forecastBandForVehicle("),end=js.indexOf("\n  function renderForecastAnswer(",start);
+  const band=new Function(js.slice(start,end)+";return forecastBandForVehicle")();
+  assert.equal(band({wind_mph:null}),"unknown");assert.equal(band({wind_mph:0}),"open");assert.equal(band({wind_mph:-1}),"unknown");
+  const a=js.indexOf("function formatNearbyWind("),b=js.indexOf("\n  function currentConfidence(",a);
+  const format=new Function(js.slice(a,b)+";return formatNearbyWind")();
+  assert.match(format({wind_mph:null,gust_mph:12}),/Sustained wind unavailable/);
+  assert.match(format({wind_mph:0,gust_mph:null}),/0.0 mph.*gust unavailable/);
+});
+test("six-hour outlook requires complete sustained-wind coverage",()=>{
+  const v2=readFileSync(path.join(root,"public/assets/mackinac-bridge-v2.js"),"utf8");
+  const start=v2.indexOf("function blockWindEvidence("),end=v2.indexOf("\n  function renderRisk(",start);
+  const assess=new Function(v2.slice(start,end)+";return blockWindEvidence")();
+  const from=Date.parse("2026-11-26T12:00:00Z"),to=from+6*3600000;
+  const hours=Array.from({length:6},(_,i)=>({start_time:new Date(from+i*3600000).toISOString(),end_time:new Date(from+(i+1)*3600000).toISOString(),wind_mph:i}));
+  assert.equal(assess(hours,from,to),5);
+  assert.equal(assess(hours.slice(1),from,to),null);
+  assert.equal(assess(hours.filter((_,i)=>i!==3),from,to),null);
+  assert.equal(assess(hours.map((h,i)=>i===3?{...h,wind_mph:null}:h),from,to),null);
+  assert.equal(assess(hours.map(h=>({...h,wind_mph:0})),from,to),0);
+});

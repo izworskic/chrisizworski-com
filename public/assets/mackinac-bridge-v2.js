@@ -40,6 +40,14 @@
     if (wind >= 20) return { level: 'elevated', label: 'Elevated', hint: '20–34 mph: advisory reference range' };
     return { level: 'low', label: 'Low', hint: 'Below 20 mph wind reference' };
   }
+  function blockWindEvidence(hours,from,to) {
+    var spans=(Array.isArray(hours)?hours:[]).filter(h=>Number.isFinite(h.wind_mph)&&h.wind_mph>=0)
+      .map(h=>({a:Math.max(from,Date.parse(h.start_time)),b:Math.min(to,Date.parse(h.end_time)),wind:h.wind_mph}))
+      .filter(h=>Number.isFinite(h.a)&&Number.isFinite(h.b)&&h.b>h.a).sort((a,b)=>a.a-b.a);
+    var cursor=from;
+    for(var span of spans){if(span.a>cursor)return null;cursor=Math.max(cursor,span.b);}
+    return cursor>=to&&spans.length?Math.max(...spans.map(h=>h.wind)):null;
+  }
   function renderRisk(data) {
     if (!riskRoot) return;
     riskRoot.replaceChildren();
@@ -56,11 +64,7 @@
     for (var block = 0; block < 4; block++) {
       var from = start + block * 6 * 60 * 60 * 1000;
       var to = from + 6 * 60 * 60 * 1000;
-      var winds = hours.filter(function (h) {
-        var ts = Date.parse(h.start_time);
-        return Number.isFinite(ts) && ts >= from - (block === 0 ? 60 * 60 * 1000 : 0) && ts < to &&
-          h.wind_mph !== null && h.wind_mph !== undefined && Number.isFinite(Number(h.wind_mph));
-      }).map(function (h) { return Number(h.wind_mph); });
+      var max = blockWindEvidence(hours,from,to);
       var cell = document.createElement('div');
       cell.className = 'bridge-risk-block';
       var label = document.createElement('span');
@@ -68,12 +72,11 @@
       label.textContent = describeTime(new Date(from)) + ' – ' + describeTime(new Date(to));
       var grade = document.createElement('strong');
       var hint = document.createElement('small');
-      if (winds.length === 0) {
+      if (max === null) {
         cell.dataset.risk = 'unavailable';
         grade.textContent = 'Unavailable';
-        hint.textContent = 'No usable hourly wind forecast';
+        hint.textContent = 'Incomplete sustained-wind coverage; check NWS';
       } else {
-        var max = Math.max.apply(null, winds);
         var risk = riskValue(max);
         cell.dataset.risk = risk.level;
         grade.textContent = risk.label;

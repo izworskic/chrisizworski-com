@@ -132,7 +132,7 @@ test("NWS hourly periods gain gusts and threshold bands from grid data", () => {
   assert.equal(period.threshold_band, "advisory");
   assert.equal(period.precip_probability, 37);
   assert.equal(parseWindSpeedMph("Calm"), 0);
-  assert.equal(parseWindSpeedMph("Light Wind"), 3);
+  assert.equal(parseWindSpeedMph("Light Wind"), null);
 });
 
 test("the freshest nearby NOAA wind observation is selected and labeled as a proxy", () => {
@@ -316,5 +316,73 @@ test("Mackinac endpoint fails safe when the official status source is unavailabl
     assert.deepEqual(response.body.approach_traffic.events, []);
   } finally {
     global.fetch = originalFetch;
+  }
+});
+
+test("lane closure notes do not become a bridge-wide closure",()=>{
+  assert.equal(classifyBridgeStatus("All Clear","Southbound lane closure for construction."),"open");
+  assert.equal(classifyBridgeStatus("High Wind Warning","Lane closure NB; follow signs."),"advisory");
+  assert.equal(classifyBridgeStatus("All Clear","If winds increase the bridge may be closed to all traffic."),"open");
+  assert.equal(classifyBridgeStatus("High Wind Warning","The bridge is closed to all traffic."),"closed");
+  assert.equal(classifyBridgeStatus("Unknown condition","Construction lane closure."),"unknown");
+  assert.equal(classifyBridgeStatus("Partial Closure","The bridge is closed to all traffic."),"closed");
+  assert.equal(classifyBridgeStatus("Bridge Closed Due to Falling Ice",""),"closed");
+});
+test("missing wind, unknown units and negative readings never become calm",()=>{
+  const {convertWindToMph,windThresholdBand}=require("../lib/mackinac");
+  for(const v of [null,undefined,"",false,-1,NaN]) {
+    assert.equal(convertWindToMph(v,"m/s"),null);
+    assert.equal(windThresholdBand(v),null);
+  }
+  assert.equal(convertWindToMph(0,"m/s"),0);
+  assert.equal(convertWindToMph(8,"unknown"),null);
+  assert.equal(windThresholdBand(0).level,"normal");
+  const [h]=mergeNwsForecast({properties:{periods:[{startTime:"2026-11-26T12:00:00Z",windSpeed:null,temperature:null}]}},{});
+  assert.equal(h.wind_mph,null);assert.equal(h.gust_mph,null);assert.equal(h.threshold_band,null);assert.equal(h.temperature_f,null);
+});
+test("nearby wind change needs real same-station endpoints; future observations are ignored",()=>{
+  const now=Date.parse("2026-11-26T12:00:00Z");
+  const header="#YY MM DD hh mm WDIR WSPD GST";
+  const station={id:"MACM4",name:"Fixture",text:header+"\n2026 11 26 12 15 90 80 90\n2026 11 26 11 40 90 4 MM\n2026 11 26 08 40 90 2 5"};
+  const w=selectWindObservation([station],now);
+  assert.equal(w.observed_at,"2026-11-26T11:40:00.000Z");
+  assert.equal(w.gust_mph,null);assert.equal(w.observed_change.wind_mph,4.5);
+  assert.equal(w.observed_change.hours,3);assert.equal(w.observed_change.gust_mph,undefined);
+  assert.equal(selectWindObservation([station],now+3*3600000).observed_change,null);
+  assert.equal(selectWindObservation([{...station,text:header+"\n2026 11 26 12 15 90 80 90"}],now),null);
+});
+
+test("explicit current closure overrides a contradictory heading; negation and lanes do not", () => {
+  const cases = [
+    ["All Clear", "The bridge is temporarily closed to all traffic.", "closed"],
+    ["All Clear", "The bridge is now closed to all traffic.", "closed"],
+    ["High Wind Warning", "The bridge is closed for falling ice.", "closed"],
+    ["No longer closed to all traffic", "", "unknown"],
+    ["Bridge Closed Due to Falling Ice", "", "closed"],
+    ["All Clear", "The bridge is closed to all vehicles.", "closed"],
+    ["All Clear", "The bridge is no longer closed to all traffic.", "open"],
+    ["All Clear", "If winds increase the bridge may be closed to all traffic.", "open"],
+    ["All Clear", "Southbound lane closure for construction.", "open"],
+    ["All Clear", "RVs will be escorted.", "unknown"],
+    ["High Wind Warning", "RVs will be escorted.", "escort"],
+    ["Partial Closure", "Closed to all traffic.", "closed"],
+  ];
+  for (const [heading, body, expected] of cases) {
+    assert.equal(classifyBridgeStatus(heading, body), expected, heading + " / " + body);
+    const parsed = parseOfficialConditions({content:{rendered:
+      '<h3 class="status">'+heading+'</h3><div class="condition-description"><p>'+body+'</p></div>'}});
+    assert.equal(parsed.level, expected);
+  }
+});
+
+test("hourly wind speed requires a recognized nonnegative mph value", () => {
+  for (const raw of ["-5 mph", "15 kt", "unknown 25", "Light Wind", "10 to 5 mph", "10 mph gusting 20 mph", "", null, 15]) {
+    assert.equal(parseWindSpeedMph(raw), null);
+    const [hour] = mergeNwsForecast({properties:{periods:[{windSpeed:raw}]}}, {});
+    assert.equal(hour.wind_mph, null);
+    assert.equal(hour.threshold_band, null);
+  }
+  for (const [raw, expected] of [["Calm",0],["0 mph",0],["10 mph",10],["5 to 10 mph",10],["5 - 10 mph",10]]) {
+    assert.equal(parseWindSpeedMph(raw), expected);
   }
 });
