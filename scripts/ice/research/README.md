@@ -56,3 +56,5 @@ The new seasonal GitHub Actions workflow uses the existing research-data-branch 
 Local replay: `python3 -B scripts/ice/research/prospective.py --root scripts/ice/research/seed --out /tmp/ice-reconciliation.json`. On an internet-enabled host, add `--collect` with a separate durable archive root. Local targeted synthetic tests passed; full CI and first actual unattended capture remain release gates. Search and visitor effects NOT MEASURED. No public experience changes.
 
 Review correction: undecodable source bodies are retained and reported in `quarantined_receipts`, while missing or corrupt hashes still fail closed. Conflicting values at any identical observation timestamp are ambiguous rather than a sequence of revisions. Outcome collection extends through April 10, allowing post-target-day capture of the final March 31 cycle.
+
+Second review correction: MOS rows must supply string values for all required fields. Truncated rows and CSV parser validation errors are reported as INVALID_MOS in the quarantine report, preserving their source bytes without blocking subsequent valid forecasts or independent observations.

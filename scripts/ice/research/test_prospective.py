@@ -94,6 +94,29 @@ class Tests(unittest.TestCase):
         self.assertEqual(outcome['state'],'AMBIGUOUS')
         self.assertEqual(outcome['conflicting_timestamps'],[c.iso(later)])
         self.assertNotIn('versions',outcome)
+    def test_truncated_mos_preserves_other_sources_and_later_valid_capture(self):
+        when=CYCLE+timedelta(hours=3)
+        malformed='station,model,runtime,ftime,n_x,wsp\nKDLH,MEX,2026-11-25 12:00,2026-11-26 12:00,10\n'
+        self.assertRaises(ValueError,c.parse_mos,malformed,CYCLE)
+        bad=receipt(self.root,p.mos_url(CYCLE),malformed,when)
+        manifest(self.root,[bad,receipt(self.root,p.inventory_url('leofs',CYCLE,72),inventory(),when),self.obs(0,VALID+timedelta(days=1))])
+        result=p.reconcile(self.root,ASOF)
+        self.assertFalse(self.erie(result)['mos_captured'])
+        self.assertEqual(self.erie(result)['forecast_state'],'INVENTORY_ONLY')
+        self.assertEqual(self.erie(result)['outcomes']['Erie']['first_value_pct'],0)
+        self.assertTrue(any(q['sha256']==bad['sha256'] and q['reason']=='INVALID_MOS' for q in result['quarantined_receipts']))
+        header='station,model,runtime,ftime,n_x,wsp\n'
+        rows=[]
+        for station in c.STATIONS.values():
+            for day in range(1,8):
+                for hour,temp in ((day*24,10),(day*24+12,20)):
+                    valid=CYCLE+timedelta(hours=hour)
+                    rows.append(f"{station},MEX,{CYCLE:%Y-%m-%d %H:%M},{valid:%Y-%m-%d %H:%M},{temp},5")
+        manifest(self.root,[receipt(self.root,p.mos_url(CYCLE),header+'\n'.join(rows)+'\n',when+timedelta(hours=1))])
+        result=p.reconcile(self.root,ASOF)
+        self.assertTrue(self.erie(result)['mos_captured'])
+        self.assertTrue(any(q['sha256']==bad['sha256'] for q in result['quarantined_receipts']))
+        self.assertEqual(result['raw_receipts'],4)
     def test_final_target_has_post_day_followup(self):
         final=datetime.combine(p.END,time(12),c.UTC)+timedelta(hours=120)
         after=datetime.combine(final.date()+timedelta(days=1),time(),c.UTC)

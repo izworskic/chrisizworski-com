@@ -189,7 +189,9 @@ def reconcile(root,as_of=None):
             for when,url,h,raw in group:
                 if cycle<=when<=cutoff(cycle) and same_url(url,mos_url(cycle)):
                     try: c.parse_mos(raw,cycle); mos=True
-                    except ValueError: pass
+                    except (ValueError, c.csv.Error) as e:
+                        issue={'url':url,'sha256':h,'captured_at':c.iso(when),'reason':'INVALID_MOS','detail':str(e)[:300]}
+                        if issue not in quarantined: quarantined.append(issue)
         for model,lakes in DOMAINS.items():
             for lead in c.HORIZONS:
                 valid=cycle+timedelta(hours=lead); inventory=False; fields=[]
