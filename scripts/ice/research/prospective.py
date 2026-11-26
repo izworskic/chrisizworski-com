@@ -12,7 +12,7 @@ from xml.etree.ElementTree import ParseError
 from urllib.parse import parse_qs, quote, urlencode, urlsplit
 import collector as c
 
-START, END, FOLLOWUP = date(2026, 11, 25), date(2027, 3, 31), date(2027, 4, 5)
+START, END, FOLLOWUP = date(2026, 11, 25), date(2027, 3, 31), date(2027, 4, 10)
 DOMAINS = {'lsofs': ('Superior',), 'lmhofs': ('Michigan', 'Huron'), 'leofs': ('Erie',), 'loofs': ('Ontario',)}
 OBS_URL = c.ICE + 'g2026_2027_ice.dat'
 CHUNK = 2048
@@ -101,7 +101,7 @@ def collect(root, now=None):
 
 def verified_receipts(root, as_of):
     """Hash every referenced raw response; fail closed on corruption or future records."""
-    groups=[]
+    groups=[]; quarantined=[]
     for p in sorted((root/'manifests').rglob('*.json')):
         data=json.loads(p.read_text())
         rows=[]
@@ -117,9 +117,13 @@ def verified_receipts(root, as_of):
             raw=(root/'blobs'/h).read_bytes()
             if len(raw)!=r['bytes'] or c.digest(raw)!=h:
                 raise ValueError('raw evidence integrity: '+h)
-            rows.append((when,r['url'],h,raw.decode('utf-8')))
+            try: body=raw.decode('utf-8')
+            except UnicodeDecodeError:
+                quarantined.append({'url':r['url'],'sha256':h,'captured_at':c.iso(when),'reason':'INVALID_UTF8'})
+                continue
+            rows.append((when,r['url'],h,body))
         groups.append(rows)
-    return groups
+    return groups, quarantined
 
 
 def physical_replay(group,cycle,lead):
@@ -153,16 +157,20 @@ def match_outcome(index, target, lake):
     entries=sorted(set((when,h,val) for when,h,val in index.get((target,lake),[]) if when>=day_end))
     if not entries: return None
     first=entries[0]
-    if len({x[2] for x in entries if x[0]==first[0]})>1:
-        return {'state':'AMBIGUOUS','revisions':len({x[2] for x in entries})}
+    by_time=defaultdict(set)
+    for when,h,value in entries:
+        by_time[when].add(value)
+    conflicts=[c.iso(when) for when,values in sorted(by_time.items()) if len(values)>1]
+    if conflicts:
+        return {'state':'AMBIGUOUS','conflicting_timestamps':conflicts,'revisions':len({x[2] for x in entries})}
     changes=[x for i,x in enumerate(entries) if i==0 or x[2]!=entries[i-1][2]]
     return {'state':'DATE_MATCHED_UNQUALIFIED','first_seen_at':c.iso(first[0]),'first_value_pct':first[2], 'first_sha256':first[1], 'versions':[{'seen_at':c.iso(t),'sha256':h,'pct':v} for t,h,v in changes], 'evidence_count':len(entries), 'revised':len({x[2] for x in entries})>1,'time_precision':'calendar date, not exact-hour outcome'}
 
 
 def reconcile(root,as_of=None):
     as_of=as_of or datetime.now(c.UTC); root=Path(root)
-    groups=verified_receipts(root,as_of)
-    obs=defaultdict(list); receipts=0; rejected=[]
+    groups,quarantined=verified_receipts(root,as_of)
+    obs=defaultdict(list); receipts=len(quarantined); rejected=[]
     for group in groups:
         receipts+=len(group)
         for when,url,h,raw in group:
@@ -202,7 +210,7 @@ def reconcile(root,as_of=None):
                 day_end=datetime.combine(valid.date()+timedelta(days=1),time(),c.UTC)
                 outcomes={lake:match_outcome(obs,valid.date(),lake) for lake in lakes} if as_of>=day_end else {}
                 slots.append({'cycle_at':c.iso(cycle),'valid_at':c.iso(valid),'decision_cutoff':c.iso(cutoff(cycle)),'model':model,'lead_hours':lead,'forecast_state':state,'mos_captured':mos,'provisional_domain_pct':next(iter(values)) if state=='PROVISIONAL_FIELD' else None,'outcome_state':'NOT_YET_DUE' if as_of<day_end else 'DATE_MATCHED_UNQUALIFIED' if outcomes and all(o and o['state']=='DATE_MATCHED_UNQUALIFIED' for o in outcomes.values()) else 'MISSING_OR_AMBIGUOUS','outcomes':outcomes,'score_eligible':False})
-    return {'schema':'ice-prospective-reconciliation-v1','as_of':c.iso(as_of),'forecast_states':dict(Counter(s['forecast_state'] for s in slots)),'outcome_states':dict(Counter(s['outcome_state'] for s in slots)),'raw_receipts':receipts,'rejected_observations':rejected,'slots':slots,'release_eligible':False,'scored_count':0,'reason':'Date-only outcome time, domain masks and prospective independent validation remain unqualified.'}
+    return {'schema':'ice-prospective-reconciliation-v1','as_of':c.iso(as_of),'forecast_states':dict(Counter(s['forecast_state'] for s in slots)),'outcome_states':dict(Counter(s['outcome_state'] for s in slots)),'raw_receipts':receipts,'quarantined_receipts':quarantined,'rejected_observations':rejected,'slots':slots,'release_eligible':False,'scored_count':0,'reason':'Date-only outcome time, domain masks and prospective independent validation remain unqualified.'}
 
 
 if __name__=='__main__':

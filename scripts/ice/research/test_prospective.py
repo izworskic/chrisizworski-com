@@ -76,7 +76,33 @@ class Tests(unittest.TestCase):
         self.assertEqual(len(rows),8)
         self.assertTrue(all(x['forecast_state']=='INVENTORY_ONLY' and x['mos_captured'] for x in rows))
         self.assertTrue(all(x['outcome_state']=='NOT_YET_DUE' and not x['score_eligible'] for x in rows))
+    def test_undecodable_body_is_quarantined_without_losing_valid_data(self):
+        when=VALID+timedelta(days=1)
+        raw=b'\xff'; h=c.digest(raw); c.write_once(self.root/'blobs'/h,raw)
+        bad=dict(url=p.OBS_URL,sha256=h,bytes=1,state='CAPTURED',status=200,started_at=c.iso(when),captured_at=c.iso(when))
+        manifest(self.root,[bad,self.obs(0,when)])
+        report=p.reconcile(self.root,ASOF)
+        self.assertEqual(report['raw_receipts'],2)
+        self.assertEqual(report['quarantined_receipts'][0]['sha256'],h)
+        self.assertEqual(report['quarantined_receipts'][0]['reason'],'INVALID_UTF8')
+        self.assertEqual(self.erie(report)['outcomes']['Erie']['first_value_pct'],0)
+        self.assertEqual((self.root/'blobs'/h).read_bytes(),raw)
+    def test_conflict_after_first_timestamp_is_ambiguous(self):
+        first=VALID+timedelta(days=1); later=first+timedelta(days=1)
+        manifest(self.root,[self.obs(0,first),self.obs(1,later),self.obs(2,later)])
+        outcome=self.erie(p.reconcile(self.root,ASOF))['outcomes']['Erie']
+        self.assertEqual(outcome['state'],'AMBIGUOUS')
+        self.assertEqual(outcome['conflicting_timestamps'],[c.iso(later)])
+        self.assertNotIn('versions',outcome)
+    def test_final_target_has_post_day_followup(self):
+        final=datetime.combine(p.END,time(12),c.UTC)+timedelta(hours=120)
+        after=datetime.combine(final.date()+timedelta(days=1),time(),c.UTC)
+        self.assertGreaterEqual(p.FOLLOWUP,after.date())
+        self.assertEqual(p.match_outcome({(final.date(),'Erie'):[(after,'hash',0)]},final.date(),'Erie')['state'],'DATE_MATCHED_UNQUALIFIED')
+        workflow=(Path(__file__).resolve().parents[3]/'.github/workflows/great-lakes-ice-prospective-archive.yml').read_text()
+        self.assertIn("30 22 1-10 4 *",workflow)
+        self.assertIn('2027-04-10',workflow)
     def test_cycle_selection(self):
-        self.assertEqual(p.cycle_for(c.timestamp('2026-11-26T01:00:00Z')),CYCLE);self.assertEqual(p.cutoff(CYCLE),CYCLE+timedelta(days=1));self.assertEqual(p.collect(self.root,c.timestamp('2027-04-06T22:30:00Z'))['state'],'OUTSIDE_SEASON')
+        self.assertEqual(p.cycle_for(c.timestamp('2026-11-26T01:00:00Z')),CYCLE);self.assertEqual(p.cutoff(CYCLE),CYCLE+timedelta(days=1));self.assertEqual(p.collect(self.root,c.timestamp('2027-04-11T22:30:00Z'))['state'],'OUTSIDE_SEASON')
 
 if __name__=='__main__':unittest.main()

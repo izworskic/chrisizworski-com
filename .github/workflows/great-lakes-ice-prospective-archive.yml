@@ -3,7 +3,7 @@ name: Great Lakes ice prospective research archive
 on:
   schedule:
     - cron: '30 22 * 11,12,1,2,3 *'
-    - cron: '30 22 1-5 4 *'
+    - cron: '30 22 1-10 4 *'
   workflow_dispatch:
 
 permissions:
@@ -34,7 +34,7 @@ jobs:
         run: |
           set -euo pipefail
           TODAY="$(date -u +%F)"
-          if [[ "$TODAY" < 2026-11-25 || "$TODAY" > 2027-04-05 ]]; then
+          if [[ "$TODAY" < 2026-11-25 || "$TODAY" > 2027-04-10 ]]; then
             echo 'active=false' >> "$GITHUB_OUTPUT"
             exit 0
           fi
