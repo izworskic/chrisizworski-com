@@ -318,3 +318,35 @@ test("Mackinac endpoint fails safe when the official status source is unavailabl
     global.fetch = originalFetch;
   }
 });
+
+test("lane closure notes do not become a bridge-wide closure",()=>{
+  assert.equal(classifyBridgeStatus("All Clear","Southbound lane closure for construction."),"open");
+  assert.equal(classifyBridgeStatus("High Wind Warning","Lane closure NB; follow signs."),"advisory");
+  assert.equal(classifyBridgeStatus("All Clear","If winds increase the bridge may be closed to all traffic."),"open");
+  assert.equal(classifyBridgeStatus("High Wind Warning","The bridge is closed to all traffic."),"closed");
+  assert.equal(classifyBridgeStatus("Unknown condition","Construction lane closure."),"unknown");
+  assert.equal(classifyBridgeStatus("Partial Closure","The bridge is closed to all traffic."),"closed");
+});
+test("missing wind, unknown units and negative readings never become calm",()=>{
+  const {convertWindToMph,windThresholdBand}=require("../lib/mackinac");
+  for(const v of [null,undefined,"",false,-1,NaN]) {
+    assert.equal(convertWindToMph(v,"m/s"),null);
+    assert.equal(windThresholdBand(v),null);
+  }
+  assert.equal(convertWindToMph(0,"m/s"),0);
+  assert.equal(convertWindToMph(8,"unknown"),null);
+  assert.equal(windThresholdBand(0).level,"normal");
+  const [h]=mergeNwsForecast({properties:{periods:[{startTime:"2026-11-26T12:00:00Z",windSpeed:null,temperature:null}]}},{});
+  assert.equal(h.wind_mph,null);assert.equal(h.gust_mph,null);assert.equal(h.threshold_band,null);assert.equal(h.temperature_f,null);
+});
+test("nearby wind change needs real same-station endpoints; future observations are ignored",()=>{
+  const now=Date.parse("2026-11-26T12:00:00Z");
+  const header="#YY MM DD hh mm WDIR WSPD GST";
+  const station={id:"MACM4",name:"Fixture",text:header+"\n2026 11 26 12 15 90 80 90\n2026 11 26 11 40 90 4 MM\n2026 11 26 08 40 90 2 5"};
+  const w=selectWindObservation([station],now);
+  assert.equal(w.observed_at,"2026-11-26T11:40:00.000Z");
+  assert.equal(w.gust_mph,null);assert.equal(w.observed_change.wind_mph,4.5);
+  assert.equal(w.observed_change.hours,3);assert.equal(w.observed_change.gust_mph,undefined);
+  assert.equal(selectWindObservation([station],now+3*3600000).observed_change,null);
+  assert.equal(selectWindObservation([{...station,text:header+"\n2026 11 26 12 15 90 80 90"}],now),null);
+});
