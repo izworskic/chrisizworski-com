@@ -326,6 +326,7 @@ test("lane closure notes do not become a bridge-wide closure",()=>{
   assert.equal(classifyBridgeStatus("High Wind Warning","The bridge is closed to all traffic."),"closed");
   assert.equal(classifyBridgeStatus("Unknown condition","Construction lane closure."),"unknown");
   assert.equal(classifyBridgeStatus("Partial Closure","The bridge is closed to all traffic."),"closed");
+  assert.equal(classifyBridgeStatus("Bridge Closed Due to Falling Ice",""),"closed");
 });
 test("missing wind, unknown units and negative readings never become calm",()=>{
   const {convertWindToMph,windThresholdBand}=require("../lib/mackinac");

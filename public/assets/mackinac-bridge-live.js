@@ -453,7 +453,7 @@
           headline: "Driver assistance does not override this vehicle restriction.",
           detail: "Your selected high-profile vehicle remains prohibited during the reported partial closure.",
         };
-      } else if (official.available) {
+      } else if (official.available && official.level !== "unknown") {
         copy = {
           headline: "Bridge Authority driver assistance is available 24/7.",
           detail: "The service costs $10 plus the vehicle toll. Follow the direction-specific request instructions below.",
