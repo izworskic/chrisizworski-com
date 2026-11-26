@@ -92,3 +92,18 @@ test('Next.js Script loaders are verified from the exact src and strategy in the
  assert.equal(classify(nextPage(google,tag),url).state,'duplicate-loader');
  assert.notEqual(classify(nextPage(google),'https://chrisizworski.com/isle-royale-ferry/').state,'page-exception');
 });
+
+
+test('Next.js loader props can span multiple type-1 Flight transport chunks',()=>{
+ const network={src:'https://chrisizworski.com/assets/network-ads-v1.js',strategy:'afterInteractive'};
+ const google={src:'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8222782620788075',strategy:'lazyOnload'};
+ const page=(parts)=>wrap(parts.map(part=>'<script>self.__next_f.push([1,'+JSON.stringify(part)+'])</script>').join(''));
+ for(const props of [network,google]){
+  const row='a:["$","$L14",null,'+JSON.stringify(props)+']\n';
+  for(let cut=1;cut<row.length;cut++) assert.equal(classify(page([row.slice(0,cut),row.slice(cut)]),url).state,'next-script-code','split '+cut);
+  assert.equal(classify(page([row,row]),url).state,'duplicate-loader');
+ }
+ const wrong={...network,strategy:'worker'};
+ const row='a:["$","$L14",null,'+JSON.stringify(wrong)+']\n';
+ assert.equal(classify(page([row.slice(0,20),row.slice(20)]),url).state,'client-rendered-needs-browser');
+});
