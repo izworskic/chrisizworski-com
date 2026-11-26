@@ -1,0 +1,386 @@
+{
+  "cycle_at": "2026-11-25T12:00:00Z",
+  "record_prepared_at": "2026-11-26T02:48:10.117773Z",
+  "record_type": "compact normalized prospective connector-probe evidence, not a source-byte archive",
+  "source_capture_precision": "UTC date 2026-11-26; individual retrieval timestamps not exposed; preparation time is not retrieval time",
+  "raw_response_bytes_retained": false,
+  "release_eligible": false,
+  "outcome": {
+    "state": "NOT_YET_DUE_AT_CAPTURE",
+    "matched_count": 0
+  },
+  "observation": {
+    "source": "https://apps.glerl.noaa.gov/coastwatch/webdata/statistic/ice/dat/g2026_2027_ice.dat",
+    "state": "UNAVAILABLE_IN_PROBE",
+    "values": null,
+    "site_generated_at": "2026-11-26T02:43:52.012Z",
+    "site_cover": null
+  },
+  "node_counts": {
+    "lsofs": 90964,
+    "lmhofs": 90806,
+    "leofs": 6106,
+    "loofs": 34395
+  },
+  "physical_columns": [
+    "model",
+    "lead_hours",
+    "object_bytes",
+    "etag_not_sha256",
+    "object_last_modified",
+    "state"
+  ],
+  "physical": [
+    [
+      "lsofs",
+      72,
+      189375245,
+      "89b60dc334c39d899387fe9583549b74-23",
+      "2026-11-25T15:13:04.000Z",
+      "INVENTORY_ONLY"
+    ],
+    [
+      "lsofs",
+      120,
+      189375245,
+      "85ee1701632db015963cd3c89700cec0-23",
+      "2026-11-25T15:13:17.000Z",
+      "INVENTORY_ONLY"
+    ],
+    [
+      "lmhofs",
+      72,
+      187953590,
+      "426226b6699e1cba85f6a36953f4b41a-23",
+      "2026-11-25T15:15:12.000Z",
+      "INVENTORY_ONLY"
+    ],
+    [
+      "lmhofs",
+      120,
+      187953590,
+      "fa80bfdc82f279875d35eb60e0b0a771-23",
+      "2026-11-25T15:15:31.000Z",
+      "INVENTORY_ONLY"
+    ],
+    [
+      "leofs",
+      72,
+      12650484,
+      "f301e25d3428f683da0c1ddb8d3375b2-2",
+      "2026-11-25T14:31:49.000Z",
+      "PROVISIONAL_DERIVED_FIELD"
+    ],
+    [
+      "leofs",
+      120,
+      12650484,
+      "8a743f3f557fbf47a92c240cd3b0deee-2",
+      "2026-11-25T14:31:51.000Z",
+      "PROVISIONAL_DERIVED_FIELD"
+    ],
+    [
+      "loofs",
+      72,
+      70159473,
+      "a0c0361cf88012563f47fca723455727-9",
+      "2026-11-25T14:43:24.000Z",
+      "INVENTORY_ONLY"
+    ],
+    [
+      "loofs",
+      120,
+      70159473,
+      "3959ac03c28a048e285ef391f29fae73-9",
+      "2026-11-25T14:43:30.000Z",
+      "INVENTORY_ONLY"
+    ]
+  ],
+  "object_key_template": "{model}/netcdf/2026/11/25/{model}.t12z.20261125.fields.f{lead:03d}.nc",
+  "s3": "https://noaa-nos-ofs-pds.s3.amazonaws.com/",
+  "dap": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/{MODEL}/MODELS/2026/11/25/{filename}",
+  "erie": {
+    "coverage_pct": 0,
+    "nodes": 6106,
+    "wet_nodes": 6106,
+    "invalid_nodes": 0,
+    "area_sum": 25465237221.349957,
+    "domain_reviewed": false,
+    "raw_vectors_retained": false,
+    "horizons": [
+      72,
+      120
+    ],
+    "query_constraints": [
+      "Times",
+      "aice[0][0:1:3052]",
+      "aice[0][3053:1:6105]",
+      "art1[0:1:3052]",
+      "art1[3053:1:6105]",
+      "wet_nodes[0][0:1:3052]",
+      "wet_nodes[0][3053:1:6105]"
+    ]
+  },
+  "mos": {
+    "source": "https://mesonet.agron.iastate.edu/api/1/mos.txt?station=KDLH&station=KMKG&station=KAPN&station=KCLE&station=KROC&runtime=2026-11-25+12%3A00Z&model=MEX",
+    "coastal_proxy": true,
+    "valid_hours": [
+      [
+        24,
+        36
+      ],
+      [
+        48,
+        60
+      ],
+      [
+        72,
+        84
+      ],
+      [
+        96,
+        108
+      ],
+      [
+        120,
+        132
+      ],
+      [
+        144,
+        156
+      ],
+      [
+        168,
+        180
+      ]
+    ],
+    "columns": [
+      "min_f",
+      "max_f",
+      "wind_min_time_kt",
+      "wind_max_time_kt"
+    ],
+    "values": {
+      "KDLH": [
+        [
+          10,
+          37,
+          6,
+          4
+        ],
+        [
+          15,
+          44,
+          5,
+          9
+        ],
+        [
+          32,
+          40,
+          10,
+          15
+        ],
+        [
+          26,
+          32,
+          14,
+          14
+        ],
+        [
+          19,
+          31,
+          11,
+          8
+        ],
+        [
+          23,
+          34,
+          8,
+          10
+        ],
+        [
+          27,
+          36,
+          8,
+          9
+        ]
+      ],
+      "KMKG": [
+        [
+          30,
+          48,
+          11,
+          16
+        ],
+        [
+          36,
+          46,
+          15,
+          12
+        ],
+        [
+          35,
+          47,
+          8,
+          13
+        ],
+        [
+          42,
+          48,
+          11,
+          7
+        ],
+        [
+          34,
+          42,
+          8,
+          9
+        ],
+        [
+          30,
+          42,
+          6,
+          9
+        ],
+        [
+          38,
+          45,
+          8,
+          11
+        ]
+      ],
+      "KAPN": [
+        [
+          27,
+          45,
+          8,
+          20
+        ],
+        [
+          33,
+          50,
+          13,
+          13
+        ],
+        [
+          26,
+          43,
+          6,
+          8
+        ],
+        [
+          36,
+          45,
+          8,
+          8
+        ],
+        [
+          34,
+          38,
+          8,
+          10
+        ],
+        [
+          24,
+          39,
+          6,
+          8
+        ],
+        [
+          31,
+          40,
+          6,
+          8
+        ]
+      ],
+      "KCLE": [
+        [
+          38,
+          49,
+          16,
+          23
+        ],
+        [
+          40,
+          45,
+          19,
+          15
+        ],
+        [
+          36,
+          47,
+          15,
+          15
+        ],
+        [
+          40,
+          53,
+          12,
+          10
+        ],
+        [
+          41,
+          46,
+          17,
+          15
+        ],
+        [
+          32,
+          44,
+          7,
+          8
+        ],
+        [
+          33,
+          48,
+          6,
+          9
+        ]
+      ],
+      "KROC": [
+        [
+          25,
+          45,
+          9,
+          20
+        ],
+        [
+          39,
+          45,
+          19,
+          10
+        ],
+        [
+          36,
+          46,
+          10,
+          14
+        ],
+        [
+          38,
+          51,
+          10,
+          11
+        ],
+        [
+          41,
+          45,
+          11,
+          17
+        ],
+        [
+          31,
+          41,
+          11,
+          8
+        ],
+        [
+          32,
+          44,
+          6,
+          9
+        ]
+      ]
+    }
+  }
+}

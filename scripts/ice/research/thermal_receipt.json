@@ -1,0 +1,319 @@
+{
+  "kind": "actual retrospective evaluation from bounded source retrieval, not operational forecast",
+  "sourceRevision": "e7f314982c4272b39521ac21eeedfefa1411265e",
+  "developmentIceYears": [
+    1983,
+    2003
+  ],
+  "calibrationIceYears": [
+    2004,
+    2013
+  ],
+  "evaluationIceYears": [
+    2014,
+    2023
+  ],
+  "modelOrder": [
+    "persistence",
+    "seasonal",
+    "pastThermal",
+    "realizedWeatherDiagnostic"
+  ],
+  "metricsOrder": [
+    "evaluationMAE",
+    "calibrationMAE",
+    "evaluationBias",
+    "calibrationWinterBlockHalfWidth",
+    "evaluationRowCoverage",
+    "evaluationWintersFullyCovered",
+    "evaluationWintersBeatingPersistence"
+  ],
+  "lakes": [
+    {
+      "name": "Erie",
+      "tempFirst": "1976-02-01",
+      "tempLast": "2023-10-22",
+      "tempRows": 17431,
+      "tempRangeStartByte": 650000,
+      "tempBytes": 398737,
+      "icePrefixBytes": 59249,
+      "iceCompleteRows": 178,
+      "train": 200,
+      "cal": 100,
+      "eval": 99,
+      "slots": 10,
+      "missingIce": 82,
+      "missingTemp": 0,
+      "metrics": [
+        [
+          11.67474747474748,
+          12.517,
+          -4.248484848484849,
+          62.3,
+          0.9797979797979798,
+          8,
+          0
+        ],
+        [
+          11.82222222222222,
+          12.924,
+          -1.6353535353535351,
+          62.2,
+          0.9797979797979798,
+          8,
+          6
+        ],
+        [
+          12.850399586568725,
+          13.72235638597105,
+          0.9655620712499008,
+          60.53595014561361,
+          0.9797979797979798,
+          8,
+          2
+        ],
+        [
+          8.478032300519926,
+          10.022971152391277,
+          0.28673054831143274,
+          51.39854018114168,
+          1,
+          10,
+          8
+        ]
+      ]
+    },
+    {
+      "name": "Huron",
+      "tempFirst": "1972-09-03",
+      "tempLast": "2023-10-22",
+      "tempRows": 18677,
+      "tempRangeStartByte": 600000,
+      "tempBytes": 405253,
+      "icePrefixBytes": 59252,
+      "iceCompleteRows": 178,
+      "train": 200,
+      "cal": 100,
+      "eval": 100,
+      "slots": 10,
+      "missingIce": 81,
+      "missingTemp": 0,
+      "metrics": [
+        [
+          8.352,
+          7.135,
+          -4.1,
+          22.9,
+          0.95,
+          6,
+          0
+        ],
+        [
+          7.466,
+          6.797,
+          -0.8,
+          24.2,
+          0.97,
+          7,
+          8
+        ],
+        [
+          7.417048683094963,
+          6.913519064312133,
+          -0.9333769859912713,
+          23.454559357204502,
+          0.96,
+          6,
+          8
+        ],
+        [
+          5.149971965169429,
+          4.6395782496277205,
+          -1.580146919489284,
+          18.187795104728664,
+          0.98,
+          8,
+          9
+        ]
+      ]
+    },
+    {
+      "name": "Michigan",
+      "tempFirst": "1975-09-30",
+      "tempLast": "2023-10-22",
+      "tempRows": 17555,
+      "tempRangeStartByte": 800000,
+      "tempBytes": 489546,
+      "icePrefixBytes": 59252,
+      "iceCompleteRows": 178,
+      "train": 200,
+      "cal": 100,
+      "eval": 100,
+      "slots": 10,
+      "missingIce": 81,
+      "missingTemp": 0,
+      "metrics": [
+        [
+          6.35,
+          4.203,
+          -2.462,
+          15.9,
+          0.94,
+          7,
+          0
+        ],
+        [
+          5.955,
+          4.043,
+          -1.122,
+          15.7,
+          0.93,
+          6,
+          7
+        ],
+        [
+          5.9175843070377905,
+          3.971114716290097,
+          -0.7920808309389096,
+          13.923021237364548,
+          0.93,
+          6,
+          7
+        ],
+        [
+          4.323076243041516,
+          2.9526654893005544,
+          -0.8036286489691515,
+          14.147946319924127,
+          0.95,
+          7,
+          9
+        ]
+      ]
+    },
+    {
+      "name": "Ontario",
+      "tempFirst": "1978-08-15",
+      "tempLast": "2023-10-22",
+      "tempRows": 16505,
+      "tempRangeStartByte": 640000,
+      "tempBytes": 402758,
+      "icePrefixBytes": 59252,
+      "iceCompleteRows": 178,
+      "train": 200,
+      "cal": 100,
+      "eval": 100,
+      "slots": 10,
+      "missingIce": 81,
+      "missingTemp": 0,
+      "metrics": [
+        [
+          4.312,
+          4.068,
+          -1.568,
+          22.5,
+          0.98,
+          8,
+          0
+        ],
+        [
+          4.386,
+          4.042,
+          -0.876,
+          23.5,
+          0.98,
+          8,
+          3
+        ],
+        [
+          4.429063171859193,
+          4.3390821539525675,
+          0.07598299478605805,
+          20.049610301794317,
+          0.96,
+          8,
+          4
+        ],
+        [
+          3.607631301087634,
+          3.2453060560865237,
+          0.31287650689736163,
+          12.991043790529742,
+          0.96,
+          8,
+          7
+        ]
+      ]
+    },
+    {
+      "name": "Superior",
+      "tempFirst": "1974-10-12",
+      "tempLast": "2023-10-22",
+      "tempRows": 17908,
+      "tempRangeStartByte": 640000,
+      "tempBytes": 409290,
+      "icePrefixBytes": 59252,
+      "iceCompleteRows": 178,
+      "train": 200,
+      "cal": 100,
+      "eval": 100,
+      "slots": 10,
+      "missingIce": 81,
+      "missingTemp": 0,
+      "metrics": [
+        [
+          6.314,
+          4.725,
+          -4.168,
+          24.3,
+          0.96,
+          6,
+          0
+        ],
+        [
+          5.83,
+          4.741,
+          -1.748,
+          22.8,
+          0.95,
+          6,
+          8
+        ],
+        [
+          5.9847376663737455,
+          5.1453644885870355,
+          -0.751819164294174,
+          23.299420482034936,
+          0.96,
+          7,
+          5
+        ],
+        [
+          4.707263074764723,
+          5.17572867825557,
+          0.40737458359593215,
+          26.221925252027976,
+          0.99,
+          9,
+          8
+        ]
+      ]
+    }
+  ],
+  "canPromote": false,
+  "limitations": [
+    "Temperature range downloads checked byte lengths and overlapping bytes but not whole-file hashes; NOAA ice responses were bounded prefixes, not full file hashes. All required calendar rows were present.",
+    "Reconstructed historical station averages and historical GLERL ice estimates were not authenticated as originally available at each forecast issue.",
+    "Realized weather diagnostic uses future observed air temperature, not weather forecasts. Never deploy it or report its skill as operational skill.",
+    "Evaluation winters are retrospectively held out, now spent for further model tuning; future independent evaluation is required.",
+    "Winter blocks and lakes may be meteorologically correlated. Pooled metrics are descriptive only.",
+    "The included Python replay implements the same protocol and passed synthetic tests; real-data calculations were executed in a separate JavaScript harness and have not been independently rerun in Python."
+  ],
+  "pooledDescriptiveMAE": {
+    "persistence": 7.391983967935873,
+    "seasonal": 7.0823647294589165,
+    "pastThermal": 7.308683250314375,
+    "realizedWeatherDiagnostic": 5.246732377069745
+  },
+  "pooledEvaluationCount": 499
+}
