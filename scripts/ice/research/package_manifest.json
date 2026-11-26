@@ -1,0 +1,45 @@
+{
+  "schema": "ice-research-artifact-index-v1",
+  "date": "2026-11-26",
+  "note": "SHA-256 of six recovered ZIP files. Originals not embedded; this is a custody index, not a claim of repository storage of the ZIP bytes.",
+  "packages": [
+    {
+      "filename": "ice-progression-research.zip",
+      "sha256": "93c3c3c5acbcee31f736471d2e9c1c89264e010efd68a7563a77bd0b4c700450"
+    },
+    {
+      "filename": "great-lakes-thermal-research.zip",
+      "sha256": "8fea214b33e2c9123971719b0b22128edd5a8c81b763cbe55ebbcd77a39b6189"
+    },
+    {
+      "filename": "great-lakes-issued-forecast-research.zip",
+      "sha256": "9ad41e9a0517611757438bd57d6f1b87987f2e2cdf5f558b4b72246def4b4336"
+    },
+    {
+      "filename": "great-lakes-five-lake-forecast-research.zip",
+      "sha256": "c1de1b0b309c0161e3380c540e65ff2251fa85fde84cc92ba66a4c9aea575c69"
+    },
+    {
+      "filename": "great-lakes-hybrid-forecast-research.zip",
+      "sha256": "bf82445a3d4105ef8e0d1749fab1c7205c0d937636eaebb5f4f7a82a64cb6390"
+    },
+    {
+      "filename": "great-lakes-operational-evidence.zip",
+      "sha256": "53192705788d306eb01ca53a5b28e451969c008b96497be5753730932078c166"
+    }
+  ],
+  "original_engine_blobs": {
+    "ice_progression": "90e896d28702e152e9ce9aed750a95e8987bb8e0",
+    "thermal_backtest": "35ccf2376bc3d30812daad26318d06f5889180eb",
+    "hybrid": "bf079eacfa78a60942d13a2611811e56e6f043f5",
+    "collector": "33944b9977456ba3162ace19fa40d97166f1f0ca"
+  },
+  "local_validation": {
+    "original_unit_tests_passed": 70,
+    "basin_self_test": "passed",
+    "issued_reference_metrics_matched": 149,
+    "full_thermal_source_replay": "NOT_VERIFIED",
+    "collector_live_network_replay": "NOT_VERIFIED"
+  },
+  "release_eligible": false
+}

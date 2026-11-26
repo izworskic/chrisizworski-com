@@ -1,0 +1,46 @@
+# Great Lakes ice research archive (2026-11-26)
+
+**Offline only; NOT QUALIFIED FOR PRODUCTION.** Nothing in this directory is imported by the public website, the existing ice API, or a scheduled repository workflow. No forecast or safety claim is authorized.
+
+## Reproduction
+
+From the repository root:
+
+```sh
+python3 -B scripts/ice/research/replay.py
+python3 -B scripts/ice/research/ice_progression.py scripts/ice/data/noaa-basin-daily-1973-2026.txt
+node --test tests/great-lakes-ice-research.test.js
+```
+
+The issued-weather replay checks SHA-256 of both compact frozen inputs and reproduces 149 reference MAE/bias/RMSE values from three studies. The two compact files contain numeric extracts, not original HTTP responses. They are byte-verified against the locally reconstructed files. The basin replay uses the previously committed pinned NOAA archive (Git blob 1abdebb4d427bc404957cdf3baf517ff5d50fa69); its independent full-file Python CI execution remains pending at PR creation.
+
+| Stage | Archived implementation/evidence | Historical result (MAE in ice-cover percentage points) | Remaining gate |
+|---|---|---|---|
+| Basin progression | ice_progression.py; reference_metrics.json; pinned NOAA archive | 100 evaluation cases: persistence 5.922, seasonal 5.805 | Wide winter-block uncertainty; no independent prospective cohort |
+| Reconstructed thermal | thermal_backtest.py; thermal_receipt.json | 499 evaluation cases: persistence 7.392, seasonal 7.082, past thermal 7.309; realized-weather diagnostic 5.247 | Full original source retrieval and independent Python replay; future observed weather is not a forecast |
+| Five-station Erie MEX | replay.py; erie_frozen.txt | 16 evaluation cases: persistence 17.075, thermal 12.436 | Issue-time observation availability and independent winter outcomes |
+| Five-lake MEX proxy | replay.py; five_lake_frozen.txt | 80 evaluation cases: persistence 10.401, thermal 8.106, wind 8.175, retrospective water correction 8.049 | Coastal representativeness, independent evaluation and uncertainty |
+| Hybrid physical | hybrid.py; reference_metrics.json | No scored physical/thermal hybrid. Erie thermal 3-day 15.162 vs persistence 11.444; 5-day 13.167 vs 16.656 | Exact matched physical outcomes, masks, publication times and development cohort |
+| Operational evidence | collector.py; first_capture_compact.json | Eight model-object inventory records, two provisional Erie domain fields, 70 extrema plus 70 wind values | Durable original bytes, actual outcome reconciliation and unattended capture verification |
+
+## Frozen issued-weather input contract
+
+Each line begins with lake name and year, a vertical bar, then eight semicolon-separated rows in order Jan 5,12,19,26 and Feb 2,9,16,23. Forecast runtime is 12Z on the slot date. The five-lake data has 30 lines (240 lake-week records), columns prior ice %, base ice %, target ice %, freezing and warming Fahrenheit degree-day sums, sum of 14 wind samples in knots, prior-day GLSEA water temperature Celsius. Erie data has six lines (48 records), columns prior/base/7-day ice %, seven daily five-station mean Fahrenheit temperatures, 3-day and 5-day ice %. Baseline date is cycle day minus one, prior date minus eight, target cycle day plus horizon. Baseline-to-target spans h+1 days. Weather day pairs use extrema at lead 24*d and 24*d+12 hours; they are proxies, not exact-hour atmospheric forcing.
+
+Training 2021–23, calibration diagnostic 2024, evaluation 2025–26; the Erie five-station and one-station cohorts overlap and are NOT independent. The older outcome data has been inspected and must not be reused as a fresh holdout. All calculations are bounded to [0,100]. The five-lake weather proxies are KDLH/KMKG/KAPN/KCLE/KROC. The five-station Erie run uses KBUF/KCLE/KDTW/KERI/KTOL. NOAA NWS GFS Extended MOS is archived by Iowa Environmental Mesonet, Iowa State University: https://mesonet.agron.iastate.edu/mos/ and https://mesonet.agron.iastate.edu/api/1/mos.txt (station parameters, exact runtime, model=MEX). IEM describes its website materials as public domain and requests attribution: https://mesonet1.agron.iastate.edu/disclaimer.php . No new live retrieval from this archive is introduced.
+
+NOAA GLERL daily observed ice matrices: https://www.glerl.noaa.gov/data/ice/glicd/daily/{sup,mic,hur,eri,ont,bas}.txt . NOAA GLSEA: https://coastwatch.glerl.noaa.gov/statistics/average-surface-water-temperature-glsea/ ; 2021–22 annual files glsea-tempsYYYY_1024.dat, 2023–25 _1024_3.dat and 2026 rolling glsea-temps_1024_3.dat at https://apps.glerl.noaa.gov/erddap/files/glsea_avgtemps_3/ . Historical water series may have been revised/smoothed; diagnostic only. Observation publication timestamps and original forecast dissemination timestamps are unauthenticated. Original upstream bytes for these extracts were not retained.
+
+## Reconstructed thermal
+
+The optional thermal_backtest.py is original research source and needs an isolated Python environment with NumPy; not installed by the production build or the offline stdlib gate. It verifies the full temperature Git blob against the pinned CC0 research repository, https://github.com/kingka21/historical_GL_ice/tree/e7f314982c4272b39521ac21eeedfefa1411265e/ice_data/air_temp_data/ (Lake_<Lake>_Average.csv). NOAA accession 0291722: https://www.ncei.noaa.gov/archive/archive-management-system/OAS/bin/prd/jquery/accession/details/291722 . DOI https://doi.org/10.5281/zenodo.17456419 . Input lake ice archive is provided manually; the original study used bounded prefixes. thermal_receipt.json preserves its metrics and coverage, not an authenticated complete archive. Do not promote future realized temperature diagnostics.
+
+## Physical evidence and collector
+
+NOAA NOS OFS S3 exact object probes and CO-OPS OpenDAP field extraction are summarized in first_capture_compact.json. November 19 00Z cycle: eight 72/120-hour inventory objects were present; exact-key January 19 2026 tests for four models and January 19 2025 Erie were absent (not a universal archive-absence claim). Full Erie vectors at 72/120h for November 19 and November 25 were inspected via aice, art1, wet_nodes: 6,106 nodes, all wet, provisional coverage zero. Scientific area, fraction units and geography require review; LMHOFS combined domain must not be presented as separate Michigan/Huron values. No physical matched outcomes were available at those probes. Zero modeled coverage is not observed zero.
+
+Collector is a manual research CLI. Use an internet-enabled host, explicit archive root outside repository and production build, current 12Z cycle and bounded retrieval. Example command shape: python3 collector.py YYYY-MM-DDT12:00:00Z --root /path/to/private-evidence --inventory-only . It does not provision storage or a scheduler. No direct live network end-to-end collector replay has been verified. Fixed research dates November 25 2026 through March 31 2027, outcome follow-up through April 5; keep missing slots and never substitute later cycles. Original source byte hashes and timestamps are required for future evidence; ETags are not SHA-256. Do not equate task summaries, retrospective extracts, or model inventory receipts with complete raw-byte capture. The separate daily research task is not a repository workflow.
+
+## Release boundary and original artifact custody
+
+The consolidated numeric inputs and five executable research modules are in this directory. Original ZIP archives are not all embedded in the repository; their digests are in package_manifest.json for future byte-level reconciliation. Full original source receipts and redundant intermediate files remain in those archives; the compact first-capture receipt is not the full original JSON. The previous public observation-only improvement was released separately in PR #1985. No public code, URL, Person/creator identity, ads, dependencies, scheduling, API, infrastructure or sitemap changes are part of this research PR. Search and visitor effects NOT MEASURED. The next gate is durable source-byte capture and exact outcome matching; no predictive release until independently qualified.
