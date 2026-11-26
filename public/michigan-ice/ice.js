@@ -637,6 +637,46 @@
     return cell;
   }
 
+  function renderObservedChange(history) {
+    var board = document.getElementById('hist-board');
+    if (!board) return;
+    var host = document.getElementById('hist-observed-change');
+    if (!host) {
+      host = historyNode('section'); host.id = 'hist-observed-change';
+      host.setAttribute('aria-labelledby', 'hist-change-heading');
+      var section = board.closest('section');
+      if (!section) return;
+      section.after(host);
+    }
+    host.replaceChildren();
+    var heading = historyNode('h2', 'Where the ice is changing');
+    heading.id = 'hist-change-heading'; host.appendChild(heading);
+    var change = history && history.observedChange;
+    var age = change && change.observedAt ? Date.now() - Date.parse(change.observedAt + 'T00:00:00Z') : NaN;
+    if (!change || change.state !== 'observed' || !Number.isFinite(age) || age < 0 || age > 48 * 3600000) {
+      host.appendChild(historyNode('p', change && change.state === 'off-season' ? 'The seasonal observation record is not active.' : 'Recent NOAA ice observations are unavailable. No change is inferred.'));
+      return;
+    }
+    var labels = Object.fromEntries(HISTORY_LAKES);
+    var signed = function (n) { return (n > 0 ? '+' : '') + n.toFixed(1) + ' pp'; };
+    host.appendChild(historyNode('p', 'Latest NOAA observation: ' + change.observedAt + '. Changes are measured between exact calendar dates, in percentage points. They are not forecasts.'));
+    if (change.fastestGrowth) host.appendChild(historyNode('p', 'Largest measured seven-day increase: ' + change.fastestGrowth.keys.map(function (k) { return labels[k]; }).join(', ') + ', ' + signed(change.fastestGrowth.percentagePoints) + '.'));
+    if (change.fastestRetreat) host.appendChild(historyNode('p', 'Largest measured seven-day decrease: ' + change.fastestRetreat.keys.map(function (k) { return labels[k]; }).join(', ') + ', ' + signed(change.fastestRetreat.percentagePoints) + '.'));
+    var wrapper=historyNode('div', undefined, 'tbl-wrap');
+    var table=historyNode('table', undefined, 'ice-record-board');
+    table.appendChild(historyNode('caption', 'Measured lake-wide ice cover and change'));
+    var head=historyNode('thead'), hr=historyNode('tr');
+    ['Lake or basin','Ice cover','1 day','3 days','7 days','Historical median'].forEach(function (s) { var th=historyNode('th',s); th.setAttribute('scope','col');hr.appendChild(th); });
+    head.appendChild(hr);table.appendChild(head);
+    var tbody=historyNode('tbody');
+    change.lakes.forEach(function (r) {
+      var tr=historyTableRow([labels[r.key], historyNumber(r.cover)].concat([1,3,7].map(function (days) { var pair=r.changes[days]; return pair ? signed(pair.percentagePoints) : 'Not measured'; }), [r.reference ? historyNumber(r.reference.median) + ' (' + r.reference.yearsOfRecord + ' winters)' : 'Not available']));
+      tr.firstChild.setAttribute('scope','row'); tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);wrapper.appendChild(table);host.appendChild(wrapper);
+    host.appendChild(historyNode('p','Lake-wide coverage cannot establish safe ice thickness or local conditions. Wind can move and break ice; air temperatures alone cannot predict local safety. See the official NOAA and Michigan DNR sources below.','note'));
+  }
+
   function renderHistory(server) {
     var history = server && server.history;
     var el = document.getElementById('hist-detail');
@@ -644,6 +684,7 @@
     var season = document.getElementById('hist-offseason');
     var stamp = document.getElementById('hist-stamp');
     if (!el || !board) return;
+    renderObservedChange(history);
     board.replaceChildren();
     if (!history || !history.lakes) {
       el.textContent = 'NOAA GLERL is not reachable right now. No current ice percentage is inferred.';

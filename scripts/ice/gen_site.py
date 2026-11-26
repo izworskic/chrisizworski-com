@@ -15,7 +15,7 @@ ICE_ROOT_DATE_MODIFIED = "2026-11-23" # Region descriptions revised for current-
 # dateModified on 2026-08-25. Keep this separate from the root/region date: the stamper
 # only corrects stamps FORWARD, so an overstated date would never be walked back.
 ICE_SUBPAGE_DATE_MODIFIED = "2026-10-24"
-ICE_HISTORY_DATE_MODIFIED = "2026-11-23"  # Only the history page changes this date.
+ICE_HISTORY_DATE_MODIFIED = "2026-11-25"  # Only the history page changes this date.
 ICE_HUB_DATE_MODIFIED = "2026-11-23"  # Hub history handoff changed; region stamps untouched.
 
 REGIONS = [
@@ -736,6 +736,9 @@ def build_history():
         '<th scope="col">Historical span and mean</th></tr></thead>'
         '<tbody id="hist-board"><tr><td colspan="3">Loading measured records.</td></tr></tbody>'
         '</table></div><p class="note" id="hist-stamp"></p></section>'
+        '<section id="hist-observed-change" aria-labelledby="hist-change-heading">'
+        '<h2 id="hist-change-heading">Where the ice is changing</h2>'
+        '<p>Recent measured changes will appear when NOAA observations are available. Missing data does not mean zero ice.</p></section>'
         '<section aria-labelledby="hist-season-heading">'
         '<h2 id="hist-season-heading">How this ice year is unfolding</h2>'
         '<p>Follow measured daily ice cover against the long-term mean. The shaded range shows '
