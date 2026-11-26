@@ -72,3 +72,15 @@ test('snapshot source is never eligible for a current comparison even with a rec
   assert.equal(observationState(a,NOW),'older');
   assert.equal(waveComparison(a,station('45005',1),NOW).state,'older');
 });
+
+test('observed change requires a fresh endpoint and a real three-hour comparison',()=>{
+  const {observedChange}=require('../public/great-lakes-buoys/observation-bridge.js');
+  const last=NOW-20*60000, prior=last-3*3600000;
+  const rows=[{t:last,wave_ht:0},{t:prior,wave_ht:1.2}];
+  assert.deepEqual(observedChange(rows,'wave_ht',NOW),{delta:-1.2,from:prior,to:last,hours:3});
+  assert.equal(observedChange([{t:last,wave_ht:0},{t:prior-31*60000,wave_ht:1.2}],'wave_ht',NOW),null);
+  assert.equal(observedChange(rows,'wave_ht',NOW+3*3600000),null);
+  assert.equal(observedChange([...rows,{t:last,wave_ht:null}],'wave_ht',NOW),null);
+  assert.equal(observedChange([...rows,{t:prior,wave_ht:2}],'wave_ht',NOW),null);
+  assert.equal(observedChange([...rows,{t:last+20*60000,wave_ht:null}],'wave_ht',NOW),null);
+});

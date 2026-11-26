@@ -698,7 +698,9 @@ function renderSmartCta(stations) {
 }
 
 // === Open detail modal with sparklines ===
+let detailRequest=0;
 async function openDetail(station) {
+  const requestId=++detailRequest;
   const overlay = document.getElementById('modalOverlay');
   const title = document.getElementById('modalTitle');
   const meta = document.getElementById('modalMeta');
@@ -735,6 +737,7 @@ async function openDetail(station) {
     const r = await fetch('/api/buoy/' + station.id.toLowerCase());
     if (!r.ok) throw new Error('Detail unavailable');
     const data = await r.json();
+    if(requestId!==detailRequest)return;
     if (!data.samples || data.samples.length === 0) {
       document.getElementById('sparkLoading').textContent = 'Historical data unavailable for this station.';
       return;
@@ -750,6 +753,18 @@ async function openDetail(station) {
       { key:'pres', label:'Pressure (hPa)', conv: v => v, fmt: v => v.toFixed(1) },
     ];
     
+    const changes=document.createElement('p');
+    const changesText=[];
+    for(const p of params.slice(0,3)) {
+      const delta=window.buoyObservedChange?.(data.samples,p.key);
+      if(!delta)continue;
+      const amount=p.key==='water_t'?delta.delta*9/5:p.conv(delta.delta);
+      const unit=p.key==='wave_ht'?'ft':p.key==='wind_spd'?'kt':'°F';
+      const rounded=Math.round(amount*10)/10;
+      changesText.push(p.label.split(' (')[0]+': '+(rounded>0?'+':'')+rounded.toFixed(1)+' '+unit+' over '+delta.hours.toFixed(1)+' h (through '+fmtTime(delta.to)+')');
+    }
+    changes.textContent=changesText.length?'Observed change: '+changesText.join(' · ')+'. Not a forecast.':'Recent three-hour comparison unavailable: missing, conflicting or older observations.';
+    container.appendChild(changes);
     params.forEach(p => {
       const now=Date.now();
       const points = data.samples.filter(s => Number.isFinite(s[p.key]) && Number.isFinite(s.t) && s.t>=now-5*86400000 && s.t<=now+600000).map(s => ({ t: s.t, v: p.conv(s[p.key]) })).sort((a,b)=>a.t-b.t);
@@ -783,11 +798,13 @@ async function openDetail(station) {
       container.appendChild(div);
     });
   } catch (e) {
+    if(requestId!==detailRequest)return;
     document.getElementById('sparkLoading').innerHTML = 'Historical data unavailable: ' + e.message + '. <br>Try the <a href="https://www.ndbc.noaa.gov/station_page.php?station=' + station.id.toLowerCase() + '" target="_blank" rel="noopener">station page on ndbc.noaa.gov</a>.';
   }
 }
 
 function closeModal() {
+  detailRequest++;
   document.getElementById('modalOverlay').classList.remove('show');
   document.body.style.overflow = '';
 }
