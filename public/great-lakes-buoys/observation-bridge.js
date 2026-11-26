@@ -6,7 +6,8 @@
   const TWO_HOURS_MS = 2 * 60 * 60 * 1000;
   function finite(value) { return typeof value === 'number' && Number.isFinite(value); }
   function observationState(station, now = Date.now()) {
-    if (!station || !station.obs_time) return 'unknown';
+    if (!station || !station.obs_time || station.observation_source==='none') return 'unknown';
+    if (station.observation_source==='snapshot') return 'older';
     const instant = Date.parse(station.obs_time);
     if (!Number.isFinite(instant) || instant > now + 10 * 60 * 1000) return 'unknown';
     return now - instant <= TWO_HOURS_MS ? 'recent' : 'older';
@@ -61,7 +62,7 @@
     set('obName' + id, station ? station.name : 'No station selected');
     set('obMeta' + id, station ? 'Station ' + station.id + ' · Lake ' + station.lake : 'Waiting for station data');
     const status = observationState(station);
-    set('obAge' + id, status === 'recent' ? 'Recent report' : status === 'older' ? 'Older report' : 'Time unknown');
+    set('obAge' + id, station?.observation_source==='snapshot' ? 'Saved snapshot' : status === 'recent' ? 'Recent report' : status === 'older' ? 'Older report' : 'Time unknown');
     const badge = document.getElementById('obAge' + id);
     badge.dataset.state = status;
     set('obWhen' + id, observed(station));
