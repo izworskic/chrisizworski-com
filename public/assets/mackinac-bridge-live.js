@@ -81,7 +81,7 @@
   }
 
   function cardinalDirection(degrees) {
-    if (!Number.isFinite(Number(degrees))) return "Direction unavailable";
+    if (!Number.isFinite(degrees)) return "Direction unavailable";
     var points = ["N", "NE", "E", "SE", "S", "SW", "W", "NW"];
     return points[Math.round(Number(degrees) / 45) % 8] + " wind";
   }
@@ -97,7 +97,7 @@
 
   function formatObserved(observation) {
     if (!observation) return "Observation unavailable";
-    if (observation.stale) return observation.station_name + " reading may be stale";
+    if (observation.stale || !Number.isFinite(Date.parse(observation.observed_at)) || Date.now()-Date.parse(observation.observed_at)>90*60000) return observation.station_name + " older reading ("+formatDetroitTime(observation.observed_at,{month:"short",day:"numeric",hour:"numeric",minute:"2-digit"})+")";
     if (Number.isFinite(observation.age_minutes) && observation.age_minutes < 2) {
       return observation.station_name + " just now";
     }
@@ -150,19 +150,15 @@
     return Boolean(
       official?.wind_related &&
         !["open", "unknown"].includes(official.level) &&
-        (Number.isFinite(Number(nearby?.wind_mph)) ||
-          Number.isFinite(Number(nearby?.gust_mph))),
+        (Number.isFinite(nearby?.wind_mph) ||
+          Number.isFinite(nearby?.gust_mph)),
     );
   }
 
   function formatNearbyWind(observation) {
-    if (!observation || !Number.isFinite(Number(observation.wind_mph))) {
-      return "Unavailable";
-    }
-    var value = Number(observation.wind_mph).toFixed(1) + " mph";
-    if (Number.isFinite(Number(observation.gust_mph))) {
-      value += " • gust " + Number(observation.gust_mph).toFixed(1) + " mph";
-    }
+    if (!observation) return "Unavailable";
+    var value = Number.isFinite(observation.wind_mph) ? observation.wind_mph.toFixed(1) + " mph" : "Sustained wind unavailable";
+    value += Number.isFinite(observation.gust_mph) ? " • gust " + observation.gust_mph.toFixed(1) + " mph" : " • gust unavailable";
     return value;
   }
 
@@ -248,7 +244,7 @@
     } else if (officialLevel === "open") {
       confidence = {
         code: "CLEAR",
-        label: "High confidence",
+        label: "Officially open",
         level: officialLevel,
         basis: "The official report says open and includes no current lane restriction for your selection.",
       };
@@ -291,6 +287,13 @@
         : "NOAA off-bridge feed unavailable",
     );
 
+    var change = wind?.observed_change;
+    var changeText = [];
+    if(change && !wind.stale && Date.now()-Date.parse(change.to)<=90*60000){
+      if(Number.isFinite(change.wind_mph))changeText.push("sustained "+(change.wind_mph>0?"+":"")+change.wind_mph.toFixed(1)+" mph");
+      if(Number.isFinite(change.gust_mph))changeText.push("gust "+(change.gust_mph>0?"+":"")+change.gust_mph.toFixed(1)+" mph");
+    }
+    setText("nearbyWindChange",changeText.length ? "Observed change over "+change.hours.toFixed(1)+" h: "+changeText.join(" · ")+". Same NOAA station, not a forecast." : "Recent three-hour change unavailable.");
     var mismatchNotice = byId("windMismatchNotice");
     if (showWindContextWarning()) {
       mismatchNotice.hidden = false;
@@ -374,6 +377,7 @@
     if (level === "advisory") {
       return "This overlaps MDOT's advisory reference range, but only the Bridge Authority can declare a bridge advisory.";
     }
+    if (level === "unknown") return "There is not enough sustained-wind evidence for this hour. Check NWS and the official bridge report.";
     return "The approach forecast is below MDOT's first wind reference range, but it does not guarantee unrestricted bridge conditions.";
   }
 
@@ -425,7 +429,7 @@
             detail: "The Bridge Authority reports no weather restriction, but it has posted traffic information.",
           }
         : {
-            headline: "You should have a straightforward crossing right now.",
+            headline: "The official report says the bridge is open.",
             detail: "The Bridge Authority reports the bridge open without a weather restriction.",
           };
     }
@@ -482,7 +486,7 @@
           wind.wind_mph.toFixed(1) +
           " mph sustained" +
           (Number.isFinite(wind.gust_mph) ? ", gusting " + wind.gust_mph.toFixed(1) + " mph" : "") +
-          ". This is not the bridge gauge.",
+          ". This is not the bridge gauge." + (wind.stale ? " Older observation; not a current reading." : ""),
       );
     }
 
@@ -521,8 +525,8 @@
   }
 
   function forecastBandForVehicle(hour) {
-    var wind = Number(hour?.wind_mph);
-    if (!Number.isFinite(wind)) return "unknown";
+    var wind = hour?.wind_mph;
+    if (!Number.isFinite(wind) || wind < 0) return "unknown";
     if (wind >= 65) return "closed";
     if (wind >= 50) return "partial";
     if (wind >= 35) return "escort";
@@ -537,6 +541,7 @@
     else if (band === "partial") headline = "Approach wind is forecast in MDOT's 50–64 mph reference range.";
     else if (band === "escort") headline = "Approach wind is forecast in MDOT's 35–49 mph reference range.";
     else if (band === "advisory") headline = "Approach wind is forecast in MDOT's 20–34 mph reference range.";
+    else if (band === "unknown") headline = "Sustained approach wind forecast unavailable.";
     else headline = "The approach forecast is below MDOT's first wind reference range.";
 
     var answer = byId("personalAnswer");
@@ -557,8 +562,7 @@
     appendListItem(
       list,
       "Forecast: " +
-        hour.wind_mph +
-        " mph sustained" +
+        (Number.isFinite(hour.wind_mph) ? hour.wind_mph + " mph sustained" : "sustained wind unavailable") +
         (Number.isFinite(hour.gust_mph) ? ", gusting " + hour.gust_mph + " mph" : "") +
         " from " +
         (hour.wind_direction || "an unknown direction") +
@@ -890,7 +894,7 @@
     }
 
     hours.slice(0, 30).forEach(function (hour, index) {
-      var band = hour.threshold_band || "normal";
+      var band = hour.threshold_band || "unknown";
       var button = document.createElement("button");
       button.type = "button";
       button.className = "forecast-hour " + band;
@@ -961,8 +965,7 @@
     setText("forecastDetailTime", formatForecastLong(hour.start_time));
     setText(
       "forecastDetailWind",
-      hour.wind_mph +
-        " mph" +
+      (Number.isFinite(hour.wind_mph) ? hour.wind_mph + " mph" : "Sustained wind unavailable") +
         (Number.isFinite(hour.gust_mph) ? " • gust " + hour.gust_mph + " mph" : ""),
     );
     setText(
@@ -1101,6 +1104,16 @@
       if (!snapshotFresh(data, Date.now())) {
         invalidateStatus("The response was too old or its check time could not be verified. Check the official Bridge Authority report.");
         return;
+      }
+      var issue=Date.parse(data?.forecast?.generated_at || "");
+      if(!Number.isFinite(issue) || Date.now()-issue>6*3600000 || issue>Date.now()+60000) {
+        data.forecast={...data.forecast,hours:[]};
+        state.selectedHour=null;
+      } else {
+        var selectedStart=state.selectedHour==null?null:state.data?.forecast?.hours?.[state.selectedHour]?.start_time;
+        data.forecast.hours=(data.forecast.hours||[]).filter(h=>Number.isFinite(Date.parse(h.start_time))&&Date.parse(h.end_time)>Date.now()&&Date.parse(h.end_time)>Date.parse(h.start_time));
+        state.selectedHour=selectedStart?data.forecast.hours.findIndex(h=>h.start_time===selectedStart):null;
+        if(state.selectedHour===-1)state.selectedHour=null;
       }
       state.data = data;
       window.dispatchEvent(new CustomEvent('mackinac:official-data', { detail: data }));
