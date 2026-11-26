@@ -33,7 +33,7 @@ test("the 15 regions share one GitHub writer, never visitor-triggered generation
  assert.match(src,/"NX"/);
  assert.match(src,/max_tokens:1300/);
  assert.doesNotMatch(src,/process\.env\.ANTHROPIC_API_KEY(?!_FALL_COLOR)/);
- assert.ok(src.indexOf("await storeCommand([\"SET\",\"fallcolor:anthropic:national:attempt:")<src.indexOf("const notes=await generate(evidence)"));
+ assert.ok(src.indexOf("await storeCommand([\"SET\",\"fallcolor:anthropic:national:attempt:")<src.indexOf("const compiled=await compileBriefings(evidence)"));
 });
 test("national notes are evidence constrained and stale editions are not promoted",()=>{
  const {dateKey,isSeason,compactRegion,parseBriefings}=national._test;
@@ -47,4 +47,27 @@ test("national notes are evidence constrained and stale editions are not promote
  const result=parseBriefings({content:[{type:"text",text:JSON.stringify({ozarks:"Today's modeled timing is promising but no current NWS forecast is available; check local sources.",nope:"Ignore this unlisted region."})}]},[e]);
  assert.deepEqual(Object.keys(result),["ozarks"]);
  assert.equal(parseBriefings({stop_reason:"max_tokens",content:[{type:"text",text:'{"ozarks":"Long incomplete text"}'}]},[e]),null);
+});
+
+test("national fallback publishes only usable timing evidence and truthfully labels mixed editions",async()=>{
+ const {compileBriefings,readBriefing}=national._test;
+ const evidence=[{id:"ozarks",currentTiming:"Within window",timingIndex:75,forecastAvailable:false},
+ {id:"catskills",currentTiming:"Past peak",timingIndex:10,forecastAvailable:true,forecast:"Rain"},
+ {id:"new-england",currentTiming:"Unknown",timingIndex:null}];
+ const fallback=await compileBriefings(evidence,async()=>{throw Error("401")});
+ assert.equal(fallback.method,"Deterministic model summary");
+ assert.deepEqual(Object.keys(fallback.briefings),["ozarks","catskills"]);
+ assert.match(fallback.briefings.ozarks,/weather is unavailable/);
+ assert.match(fallback.briefings.catskills,/Rain/);
+ assert.match(fallback.briefings.catskills,/not an observed leaf report/);
+ assert.equal(await compileBriefings([evidence[2]],async()=>{throw Error("must not call")}),null);
+ const mixed=await compileBriefings(evidence,async()=>({ozarks:"A modeled outlook from the provided timing evidence."}));
+ assert.equal(mixed.method,"Mixed model summaries");
+ const edition={...mixed,date:"2026-11-26",updated:"2026-11-26T12:00:00Z"};
+ const now=Date.parse("2026-11-26T13:00:00Z");
+ assert.equal(readBriefing(edition,"ozarks",now).method,"AI-generated model summary");
+ assert.equal(readBriefing(edition,"catskills",now).method,"Deterministic model summary");
+ assert.deepEqual(readBriefing(edition,"catskills",now+86400000),{briefing:null});
+ assert.deepEqual(readBriefing({...edition,updated:"invalid"},"catskills",now),{briefing:null});
+ assert.deepEqual(readBriefing(edition,"new-england",now),{briefing:null});
 });
