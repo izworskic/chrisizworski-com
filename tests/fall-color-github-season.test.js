@@ -23,6 +23,10 @@ test("archive requires authenticated dated eligibility before reserving attempts
   const readback = section.slice(section.indexOf("# Read-back"));
   assert.ok(readback.indexOf(".eligible[$kind]") >= 0);
   assert.ok(readback.indexOf(".eligible[$kind]") < readback.indexOf("Missing $kind daily edition"));
-  assert.ok(section.includes("refusing any second spend"));
+  const recovery = section.indexOf('if [[ "$RECOVERY_ONLY" == "true" || -f "$sentinel" ]]; then');
+  const noSpend = section.indexOf('recovery="&recovery=1"', recovery);
+  const otherwise = section.indexOf("else", noSpend);
+  assert.ok(recovery >= 0 && recovery < noSpend && noSpend < otherwise && otherwise < reserve);
+  assert.ok(section.includes('! request_edition "&recovery=1"'));
   assert.ok(section.includes('.ok == true and .kind == $kind and .date == $date and .edition.date == $date'));
 });

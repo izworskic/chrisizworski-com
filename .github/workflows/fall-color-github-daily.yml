@@ -6,10 +6,18 @@ on:
   schedule:
     - cron: '25 11 * * *'
   workflow_dispatch:
+    inputs:
+      recovery:
+        description: 'Recover missing editions from source evidence without a model call'
+        type: boolean
+        default: true
   push:
     branches: [main]
     paths:
       - ".github/workflows/fall-color-github-daily.yml"
+      - ".github/workflows/fall-color-writer-test.yml"
+      - "lib/fall-color/routes/github-publish.js"
+      - "lib/fall-color/routes/national-briefings.js"
 
 permissions:
   contents: write
@@ -32,6 +40,7 @@ jobs:
     uses: ./.github/workflows/fall-color-writer-test.yml
     with:
       publish_github: true
+      recovery_only: ${{ github.event_name == 'push' || (github.event_name == 'workflow_dispatch' && inputs.recovery) }}
     permissions:
       contents: write
       id-token: write

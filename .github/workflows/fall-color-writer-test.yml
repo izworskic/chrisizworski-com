@@ -13,6 +13,11 @@ on:
         type: boolean
         required: false
         default: false
+      recovery_only:
+        description: 'Source-only recovery, never spend model tokens'
+        type: boolean
+        required: false
+        default: false
 
 permissions:
   # Only the no-Redis publish caller requests write; the original signed
@@ -176,6 +181,7 @@ jobs:
         env:
           OIDC_AUDIENCE: "https://chrisizworski.com/api/fall-color-writer-test"
           WRITER_URL: "https://chrisizworski.com/api/fall-color?view=github-publish"
+          RECOVERY_ONLY: ${{ inputs.recovery_only }}
         run: |
           set -euo pipefail
           today="$(TZ=America/Detroit date +%F)"
@@ -222,31 +228,36 @@ jobs:
               continue
             fi
             sentinel="data/fall-color/attempts/${kind}-${today}.json"
-            if [[ -f "$sentinel" ]]; then
-              echo "Daily $kind paid attempt already reserved; refusing any second spend."
-              continue
-            fi
             mkdir -p data/fall-color/attempts "data/fall-color/$kind"
-            # This commit makes paid generation at most once per model/day,
-            # even across workflow retries, server failures or redeploys.
-            printf '{"date":"%s","kind":"%s","attempted":true}\n' "$today" "$kind" > "$sentinel"
-            git add "$sentinel"
-            git commit -m "Reserve one daily $kind model attempt for $today"
-            git push origin HEAD:fall-color-data
-
-            oidc_token="$(curl --fail --silent --show-error \
-              -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
-              "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${OIDC_AUDIENCE}" | jq -er '.value')"
-            response="$RUNNER_TEMP/fall-${kind}-edition.json"
-            code="$(curl --silent --show-error --max-time 65 \
-              -o "$response" -w '%{http_code}' \
-              -H "Authorization: Bearer ${oidc_token}" \
-              "${WRITER_URL}&kind=${kind}")"
-            unset oidc_token
-            if [[ "$code" != "200" ]]; then
-              echo "::error::Fall $kind generation failed (HTTP $code); daily attempt stays reserved."
-              jq '{error,date}' "$response" 2>/dev/null || true
-              exit 1
+            recovery=""
+            if [[ "$RECOVERY_ONLY" == "true" || -f "$sentinel" ]]; then
+              recovery="&recovery=1"
+              echo "Source-only $kind recovery; no model spend."
+            else
+              printf '{"date":"%s","kind":"%s","attempted":true}\n' "$today" "$kind" > "$sentinel"
+              git add "$sentinel"
+              git commit -m "Reserve one daily $kind model attempt for $today"
+              git push origin HEAD:fall-color-data
+            fi
+            response="$RUNNER_TEMP/fall-$kind-edition.json"
+            request_edition() {
+              local suffix="$1" token
+              token="$(curl --fail --silent --show-error \
+                -H "Authorization: bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" \
+                "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${OIDC_AUDIENCE}" | jq -er '.value')" || return 1
+              code="$(curl --silent --show-error --max-time 65 \
+                -o "$response" -w '%{http_code}' \
+                -H "Authorization: Bearer $token" \
+                "${WRITER_URL}&kind=${kind}$suffix")" || return 1
+              [[ "$code" == "200" ]] || return 1
+              jq -e --arg date "$today" --arg kind "$kind" \
+                '.ok == true and .kind == $kind and .date == $date and .edition.date == $date' "$response" >/dev/null
+            }
+            if ! request_edition "$recovery"; then
+              if [[ -n "$recovery" ]] || ! request_edition "&recovery=1"; then
+                echo "::error::Fall $kind generation unavailable; continue to other eligible edition."
+                continue
+              fi
             fi
             jq --exit-status -e --arg date "$today" --arg kind "$kind" \
               '.ok == true and .kind == $kind and .date == $date and .edition.date == $date' \
@@ -275,4 +286,13 @@ jobs:
               exit 1
             fi
             jq --exit-status -e --arg date "$today" '.date == $date' "data/fall-color/$kind/$today.json"
+            verified=false
+            for read_attempt in $(seq 1 12); do
+              if curl -fsS --max-time 15 "https://raw.githubusercontent.com/izworskic/chrisizworski-com/fall-color-data/data/fall-color/$kind/latest.json?verify=$GITHUB_RUN_ID-$read_attempt" -o "$RUNNER_TEMP/fall-readback.json" &&
+                jq -e --arg date "$today" '.date == $date' "$RUNNER_TEMP/fall-readback.json"; then
+                verified=true; break
+              fi
+              sleep 5
+            done
+            if [[ "$verified" != "true" ]]; then echo "::error::Public archive read-back failed for $kind"; exit 1; fi
           done

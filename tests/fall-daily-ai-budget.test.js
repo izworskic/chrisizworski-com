@@ -71,3 +71,19 @@ test("national fallback publishes only usable timing evidence and truthfully lab
  assert.deepEqual(readBriefing({...edition,updated:"invalid"},"catskills",now),{briefing:null});
  assert.deepEqual(readBriefing(edition,"new-england",now),{briefing:null});
 });
+
+test("authorized release recovery uses source evidence only and preserves independent editions",async()=>{
+ const {compileBriefings}=national._test;
+ const result=await compileBriefings([{id:"ozarks",currentTiming:"Within window",timingIndex:75,forecastAvailable:false}],async()=>null);
+ assert.equal(result.method,"Deterministic model summary");
+ const route=fs.readFileSync(path.join(__dirname,"../lib/fall-color/routes/github-publish.js"),"utf8");
+ const worker=fs.readFileSync(path.join(__dirname,"../.github/workflows/fall-color-writer-test.yml"),"utf8");
+ assert.match(route,/const sourceOnly = req\.query\?\.recovery === "1"/);
+ assert.match(route,/sourceOnly \|\| allPastPeak \? null/);
+ assert.match(worker,/if \[\[ "\$RECOVERY_ONLY" == "true" \|\| -f "\$sentinel" \]\]/);
+ assert.match(worker,/! request_edition "&recovery=1"/);
+ assert.match(worker,/continue to other eligible edition/);
+ assert.match(worker,/raw\.githubusercontent\.com\/izworskic\/chrisizworski-com\/fall-color-data/);
+ assert.equal(require("../lib/fall-color/routes/github-publish")._test.seasonEligibility("2026-11-26").mi,false);
+ assert.equal(require("../lib/fall-color/routes/github-publish")._test.seasonEligibility("2026-11-26").national,true);
+});
