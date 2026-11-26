@@ -13,7 +13,7 @@ export function documentationOnly(paths) {
 }
 
 export function isMonitorDataBranch(ref) {
-  return ref === 'pukaskwa-conditions-data';
+  return ref === 'pukaskwa-conditions-data' || ref === 'research/great-lakes-ice-data';
 }
 
 export function shouldSkipBuild({ previous, current = 'HEAD', cwd = process.cwd() } = {}) {
@@ -28,7 +28,7 @@ export function shouldSkipBuild({ previous, current = 'HEAD', cwd = process.cwd(
 if (import.meta.url === pathToFileURL(process.argv[1] || '').href) {
   const isDataOnly = isMonitorDataBranch(process.env.VERCEL_GIT_COMMIT_REF);
   const skip = isDataOnly || shouldSkipBuild({ previous: process.env.VERCEL_GIT_PREVIOUS_SHA, current: process.env.VERCEL_GIT_COMMIT_SHA || 'HEAD' });
-  console.log(isDataOnly ? 'Skip: isolated Pukaskwa monitoring data branch (not a site deployment).' : skip ? 'Skip: only internal Markdown documentation changed.' : 'Build: deployable changes or uncertain history.');
+  console.log(isDataOnly ? 'Skip: isolated monitoring data branch (not a site deployment).' : skip ? 'Skip: only internal Markdown documentation changed.' : 'Build: deployable changes or uncertain history.');
   // Vercel's ignored-build contract is inverted: 0 skips, 1 builds.
   process.exit(skip ? 0 : 1);
 }
