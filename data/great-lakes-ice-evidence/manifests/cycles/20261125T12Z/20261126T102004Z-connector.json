@@ -1,0 +1,134 @@
+{
+  "season": 2026,
+  "cycle_at": "2026-11-25T12:00:00Z",
+  "started_at": "2026-11-26T10:19:27.480Z",
+  "finished_at": "2026-11-26T10:20:04.597Z",
+  "state": "PARTIAL",
+  "release_eligible": false,
+  "scope": "original inventory and issued weather response bodies, no complete physical field or independently observed outcome",
+  "receipts": [
+    {
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=lsofs%2Fnetcdf%2F2026%2F11%2F25%2Flsofs.t12z.20261125.fields.f072.nc",
+      "started_at": "2026-11-26T10:19:27.480Z",
+      "captured_at": "2026-11-26T10:19:36.241Z",
+      "state": "BODY_CAPTURED",
+      "status": null,
+      "transport": "connector-body",
+      "sha256": "65ee3ed1f3a28565457bb21b5d46079980c7b810dff4d8da9670c69f610a4f7f",
+      "bytes": 652,
+      "git_blob": "49ac41c69196bb95094c431a57a348fa5525d7f4",
+      "cache": "miss",
+      "request_id": "c7420e5d-7abb-416f-aa08-52d8ea21a250"
+    },
+    {
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=lsofs%2Fnetcdf%2F2026%2F11%2F25%2Flsofs.t12z.20261125.fields.f120.nc",
+      "started_at": "2026-11-26T10:19:27.482Z",
+      "captured_at": "2026-11-26T10:19:36.242Z",
+      "state": "BODY_CAPTURED",
+      "status": null,
+      "transport": "connector-body",
+      "sha256": "fdd8abe20e30561cb738bfb605ee7d2ae511c0c51fe904267d3b2684dd5726d8",
+      "bytes": 652,
+      "git_blob": "738e885a32e6ec4c3ee159f2f0a7319b7ddf0831",
+      "cache": "miss",
+      "request_id": "4ecb5758-4724-4def-8ae4-6002eef74a89"
+    },
+    {
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=lmhofs%2Fnetcdf%2F2026%2F11%2F25%2Flmhofs.t12z.20261125.fields.f072.nc",
+      "started_at": "2026-11-26T10:19:27.482Z",
+      "captured_at": "2026-11-26T10:19:36.244Z",
+      "state": "BODY_CAPTURED",
+      "status": null,
+      "transport": "connector-body",
+      "sha256": "879280d26b05170e182bd6af466b6d1c9f269f86a5ba4a45781c35c49d9889de",
+      "bytes": 656,
+      "git_blob": "78f1e15f143c04f30306775814449c4ae2a8b3a9",
+      "cache": "miss",
+      "request_id": "6fb91601-1d63-44d4-9b5b-f8db541b7fc1"
+    },
+    {
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=lmhofs%2Fnetcdf%2F2026%2F11%2F25%2Flmhofs.t12z.20261125.fields.f120.nc",
+      "started_at": "2026-11-26T10:19:27.482Z",
+      "captured_at": "2026-11-26T10:19:36.245Z",
+      "state": "BODY_CAPTURED",
+      "status": null,
+      "transport": "connector-body",
+      "sha256": "01e91f581e46ce729e29bc6d26b8edf6f1835acb0893fd16814fe420135f082e",
+      "bytes": 656,
+      "git_blob": "0ae7bda4a8c482fd50a12c8f5ef3bac733390de4",
+      "cache": "miss",
+      "request_id": "7e3bc15e-c429-44ad-80d5-cacc40dcc35c"
+    },
+    {
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=leofs%2Fnetcdf%2F2026%2F11%2F25%2Fleofs.t12z.20261125.fields.f072.nc",
+      "started_at": "2026-11-26T10:19:55.787Z",
+      "captured_at": "2026-11-26T10:20:04.592Z",
+      "state": "BODY_CAPTURED",
+      "status": null,
+      "transport": "connector-body",
+      "sha256": "24c3a6ea92a04487da9bb8c3239d1a4656b8b0d2b7bb794cf0013acb9199005b",
+      "bytes": 650,
+      "git_blob": "8800ee19b5654584a3bb07ef1e44d1a685583d37",
+      "cache": "miss",
+      "request_id": "b70eb494-baae-4dec-8d1e-92af56ea3677"
+    },
+    {
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=leofs%2Fnetcdf%2F2026%2F11%2F25%2Fleofs.t12z.20261125.fields.f120.nc",
+      "started_at": "2026-11-26T10:19:55.788Z",
+      "captured_at": "2026-11-26T10:20:04.593Z",
+      "state": "BODY_CAPTURED",
+      "status": null,
+      "transport": "connector-body",
+      "sha256": "f4a4c221cd29351b3395dc17af15b46a999067c728e7db8ad80f9694fca47a28",
+      "bytes": 650,
+      "git_blob": "ba6fc5970c308239d5a5550ac6e0c6735750afbc",
+      "cache": "miss",
+      "request_id": "21c11dbd-1a0e-42da-8fb4-4fb562fcf46b"
+    },
+    {
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=loofs%2Fnetcdf%2F2026%2F11%2F25%2Floofs.t12z.20261125.fields.f072.nc",
+      "started_at": "2026-11-26T10:19:55.788Z",
+      "captured_at": "2026-11-26T10:20:04.595Z",
+      "state": "BODY_CAPTURED",
+      "status": null,
+      "transport": "connector-body",
+      "sha256": "10b94653db964a4c73215b8eb22db8461b25520aad8d63796c6b5ce1cd81c24e",
+      "bytes": 650,
+      "git_blob": "37e4d3793795c6a4f20fdf0ffbc0dd82f2f741f1",
+      "cache": "miss",
+      "request_id": "3f6e5af0-8ee9-408f-ae8e-f71dacbe1dbb"
+    },
+    {
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=loofs%2Fnetcdf%2F2026%2F11%2F25%2Floofs.t12z.20261125.fields.f120.nc",
+      "started_at": "2026-11-26T10:19:55.788Z",
+      "captured_at": "2026-11-26T10:20:04.596Z",
+      "state": "BODY_CAPTURED",
+      "status": null,
+      "transport": "connector-body",
+      "sha256": "caeff1d774974d6710e82acea8c8a03f968bbd5d005237a6b5dc56bd2ca8ccd6",
+      "bytes": 650,
+      "git_blob": "5bd569fb53d136a39de1c90936221e5a393d2016",
+      "cache": "miss",
+      "request_id": "43b45dc7-06dc-4b48-9bad-92807aab97a4"
+    },
+    {
+      "url": "https://mesonet.agron.iastate.edu/api/1/mos.txt?station=KDLH&station=KMKG&station=KAPN&station=KCLE&station=KROC&runtime=2026-11-25%2012:00Z&model=MEX",
+      "started_at": "2026-11-26T10:19:55.788Z",
+      "captured_at": "2026-11-26T10:20:04.597Z",
+      "state": "BODY_CAPTURED",
+      "status": null,
+      "transport": "connector-body",
+      "sha256": "8a1f9394fd123fa339e40e08ef202a883e6bd7103f0c3088439b4eb46aabdb5b",
+      "bytes": 9127,
+      "git_blob": "1c1f92c49197e8dcbd529a49fb213ff14c2e0244",
+      "cache": "miss",
+      "request_id": "36eb71a6-2e1a-4234-b405-15132a1be251"
+    }
+  ],
+  "errors": [
+    {
+      "source": "observations",
+      "error": "Current seasonal file unavailable in preceding probe; no raw observation receipt."
+    }
+  ]
+}
