@@ -1,0 +1,34 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import {createHash} from 'node:crypto';
+import {createRequire} from 'node:module';
+const require=createRequire(import.meta.url);
+const {release,releaseHtml,prefix}=require('../lib/garden-water-release-c82dda3c.js');
+const blob=s=>createHash('sha1').update('blob '+Buffer.byteLength(s)+'\0').update(s).digest('hex');
+const read=p=>fs.readFileSync('public'+prefix+'/'+p,'utf8');
+test('release bytes match reviewed owner except explicit canonical asset routing',()=>{
+ assert.equal(release.commit,'c82dda3cf19cd002ce1571db6459186a923ac2d6');
+ assert.equal(blob(release.html),release.blobs['public/national-tools/garden-water/index.html']);
+ for(const file of ['national-garden-water-engine.js','national-garden-water.css'])assert.equal(blob(read(file)),release.blobs['public/assets/'+file]);
+ assert.equal(blob(read('national-garden-water-crops.json')),release.blobs['public/data/national-garden-water-crops.json']);
+ assert.equal(blob(read('national-garden-water-page.js').replace(prefix+'/national-garden-water-crops.json','/data/national-garden-water-crops.json')),release.blobs['public/assets/national-garden-water-page.js']);
+ assert.match(releaseHtml(),/id="decision-content"/);assert.match(releaseHtml(),/id="adjustment-error"/);
+ assert.ok(releaseHtml().includes(prefix+'/national-garden-water-page.js'));
+ assert.ok(releaseHtml().includes(prefix+'/national-garden-water.css'));
+ assert.equal((releaseHtml().match(/rel="canonical"/g)||[]).length,1);
+ assert.ok(releaseHtml().includes('https://chrisizworski.com/national-tools/garden-water/'));
+ const routes=JSON.parse(fs.readFileSync('vercel.json','utf8')).rewrites;
+ assert.equal(routes.find(r=>r.source==='/api/national-garden-water').destination,'https://national-garden-water.vercel.app/api/national-garden-water');
+});
+test('canonical handler serves pinned reviewed HTML without owner HTML fetch',async()=>{
+ const handler=require('../api/garden-water-page.js');
+ let response;const headers={};
+ const res={setHeader(k,v){headers[k]=v;return this;},status(code){this.code=code;return this;},send(html){response={code:this.code,html};return this;}};
+ await handler({method:'GET',url:'/national-tools/garden-water/'},res);
+ assert.equal(response.code,200);assert.match(headers['Content-Type'],/text\/html/);
+ assert.match(response.html,/id="decision-content"/);
+ assert.ok(response.html.includes(prefix+'/national-garden-water-page.js'));
+ assert.ok(response.html.includes('https://chrisizworski.com/#person'));
+ assert.equal((response.html.match(/rel="canonical"/g)||[]).length,1);
+});
