@@ -1,0 +1,333 @@
+{
+ "schema": "thousand-islands-passage-model-v1",
+ "generatedAt": "2026-11-27T15:17:18.379Z",
+ "source": "NOAA Marine Cadastre AIS 2025 (public domain), 36 days Apr-Dec, GitHub Actions run 46020845579",
+ "coverage": 0.8,
+ "bar": {
+  "minTestPassages": 50,
+  "minHitRate": 0.75,
+  "maxWindowMin": 180
+ },
+ "checkpointKm": 5,
+ "split": {
+  "train": 174,
+  "calibrate": 162,
+  "test": 118
+ },
+ "viewpoints": {
+  "alexandria-bay": {
+   "km": 237.31,
+   "name": "Alexandria Bay"
+  },
+  "clayton": {
+   "km": 254.23,
+   "name": "Clayton"
+  }
+ },
+ "windows": {
+  "alexandria-bay": {
+   "2-6h": {
+    "halfWidthMin": 17.5,
+    "testPassages": 50,
+    "hitRate": 0.76,
+    "medianAbsErrMin": 11.4
+   },
+   "0-2h": {
+    "halfWidthMin": 5,
+    "testPassages": 72,
+    "hitRate": 0.847,
+    "medianAbsErrMin": 1.9
+   }
+  },
+  "clayton": {
+   "0-2h": {
+    "halfWidthMin": 3.4,
+    "testPassages": 73,
+    "hitRate": 0.795,
+    "medianAbsErrMin": 2.1
+   }
+  }
+ },
+ "medians": {
+  "down|240|alexandria-bay": {
+   "m": 8.3,
+   "n": 46
+  },
+  "down|245|alexandria-bay": {
+   "m": 23.4,
+   "n": 46
+  },
+  "down|250|alexandria-bay": {
+   "m": 39.7,
+   "n": 37
+  },
+  "down|255|alexandria-bay": {
+   "m": 55.7,
+   "n": 37
+  },
+  "down|260|alexandria-bay": {
+   "m": 70.3,
+   "n": 37
+  },
+  "down|265|alexandria-bay": {
+   "m": 83.4,
+   "n": 37
+  },
+  "down|270|alexandria-bay": {
+   "m": 97.3,
+   "n": 37
+  },
+  "down|275|alexandria-bay": {
+   "m": 113.4,
+   "n": 37
+  },
+  "down|280|alexandria-bay": {
+   "m": 129.9,
+   "n": 37
+  },
+  "down|255|clayton": {
+   "m": 2.5,
+   "n": 45
+  },
+  "down|260|clayton": {
+   "m": 16.9,
+   "n": 45
+  },
+  "down|265|clayton": {
+   "m": 30.1,
+   "n": 44
+  },
+  "down|270|clayton": {
+   "m": 44.3,
+   "n": 44
+  },
+  "down|275|clayton": {
+   "m": 60.1,
+   "n": 44
+  },
+  "down|280|clayton": {
+   "m": 76,
+   "n": 44
+  },
+  "up|250|clayton": {
+   "m": 16.3,
+   "n": 54
+  },
+  "up|215|alexandria-bay": {
+   "m": 65.8,
+   "n": 42
+  },
+  "up|220|alexandria-bay": {
+   "m": 52.3,
+   "n": 42
+  },
+  "up|225|alexandria-bay": {
+   "m": 39,
+   "n": 44
+  },
+  "up|230|alexandria-bay": {
+   "m": 24.3,
+   "n": 46
+  },
+  "up|235|alexandria-bay": {
+   "m": 8.4,
+   "n": 48
+  },
+  "up|215|clayton": {
+   "m": 130.6,
+   "n": 39
+  },
+  "up|220|clayton": {
+   "m": 115.7,
+   "n": 39
+  },
+  "up|225|clayton": {
+   "m": 102.2,
+   "n": 41
+  },
+  "up|230|clayton": {
+   "m": 87.8,
+   "n": 44
+  },
+  "up|235|clayton": {
+   "m": 72.3,
+   "n": 43
+  },
+  "up|240|clayton": {
+   "m": 53.9,
+   "n": 46
+  },
+  "up|245|clayton": {
+   "m": 35.2,
+   "n": 49
+  },
+  "up|75|alexandria-bay": {
+   "m": 658.5,
+   "n": 8
+  },
+  "up|80|alexandria-bay": {
+   "m": 679.1,
+   "n": 9
+  },
+  "up|85|alexandria-bay": {
+   "m": 663.6,
+   "n": 8
+  },
+  "up|120|alexandria-bay": {
+   "m": 454.7,
+   "n": 8
+  },
+  "up|125|alexandria-bay": {
+   "m": 389.4,
+   "n": 14
+  },
+  "up|130|alexandria-bay": {
+   "m": 384.3,
+   "n": 14
+  },
+  "up|135|alexandria-bay": {
+   "m": 373.2,
+   "n": 13
+  },
+  "up|140|alexandria-bay": {
+   "m": 354.8,
+   "n": 14
+  },
+  "up|145|alexandria-bay": {
+   "m": 338.2,
+   "n": 14
+  },
+  "up|150|alexandria-bay": {
+   "m": 322.2,
+   "n": 16
+  },
+  "up|155|alexandria-bay": {
+   "m": 306.9,
+   "n": 17
+  },
+  "up|160|alexandria-bay": {
+   "m": 286.5,
+   "n": 17
+  },
+  "up|165|alexandria-bay": {
+   "m": 226.3,
+   "n": 19
+  },
+  "up|170|alexandria-bay": {
+   "m": 205.1,
+   "n": 18
+  },
+  "up|175|alexandria-bay": {
+   "m": 187.4,
+   "n": 19
+  },
+  "up|180|alexandria-bay": {
+   "m": 169.7,
+   "n": 21
+  },
+  "up|185|alexandria-bay": {
+   "m": 154.4,
+   "n": 23
+  },
+  "up|190|alexandria-bay": {
+   "m": 141,
+   "n": 25
+  },
+  "up|195|alexandria-bay": {
+   "m": 126.6,
+   "n": 25
+  },
+  "up|200|alexandria-bay": {
+   "m": 111.5,
+   "n": 25
+  },
+  "up|205|alexandria-bay": {
+   "m": 97.9,
+   "n": 28
+  },
+  "up|210|alexandria-bay": {
+   "m": 80.8,
+   "n": 33
+  },
+  "up|125|clayton": {
+   "m": 448.4,
+   "n": 12
+  },
+  "up|130|clayton": {
+   "m": 449.5,
+   "n": 12
+  },
+  "up|135|clayton": {
+   "m": 433.8,
+   "n": 12
+  },
+  "up|140|clayton": {
+   "m": 415.6,
+   "n": 13
+  },
+  "up|145|clayton": {
+   "m": 399.9,
+   "n": 13
+  },
+  "up|150|clayton": {
+   "m": 384.7,
+   "n": 15
+  },
+  "up|155|clayton": {
+   "m": 367.1,
+   "n": 16
+  },
+  "up|160|clayton": {
+   "m": 349.3,
+   "n": 17
+  },
+  "up|165|clayton": {
+   "m": 292.7,
+   "n": 18
+  },
+  "up|170|clayton": {
+   "m": 269.8,
+   "n": 17
+  },
+  "up|175|clayton": {
+   "m": 253.7,
+   "n": 18
+  },
+  "up|180|clayton": {
+   "m": 234.2,
+   "n": 19
+  },
+  "up|185|clayton": {
+   "m": 218.7,
+   "n": 21
+  },
+  "up|190|clayton": {
+   "m": 210.2,
+   "n": 23
+  },
+  "up|195|clayton": {
+   "m": 196.8,
+   "n": 23
+  },
+  "up|200|clayton": {
+   "m": 182,
+   "n": 23
+  },
+  "up|205|clayton": {
+   "m": 166.6,
+   "n": 25
+  },
+  "up|210|clayton": {
+   "m": 147.7,
+   "n": 30
+  },
+  "up|110|alexandria-bay": {
+   "m": 564.8,
+   "n": 8
+  },
+  "up|115|alexandria-bay": {
+   "m": 540.5,
+   "n": 8
+  }
+ }
+}

@@ -4254,6 +4254,51 @@
       }
     },
     {
+      "id": "thousand-islands-ships",
+      "name": "Thousand Islands Ship Watch",
+      "canonical": "https://chrisizworski.com/thousand-islands-ships/",
+      "aliases": [],
+      "kind": "focused-live-acquisition",
+      "cluster": "great-lakes-shipping",
+      "primaryIntent": "When the next freighter passes Boldt Castle (Alexandria Bay) or Clayton",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "st-lawrence-seaway",
+        "new-york",
+        "ontario",
+        "thousand-islands"
+      ],
+      "personas": [
+        "ship-watcher",
+        "traveler"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "new-canonical",
+        "note": "Owner chose a dedicated page on 2026-11-27 after the NOAA 2025 passage study (docs/SEAWAY_PASSAGE_RESEARCH.md). Keyword volumes and postlaunch GSC are NOT AVAILABLE."
+      },
+      "measurement": {
+        "search": "GSC Web page x non-branded query at 7/28 days",
+        "product": "GA4 viewpoint switches, refresh and official order-of-turn/source clicks",
+        "decisionWindowDays": 28,
+        "privacy": "No visitor coordinates or free-text values collected; forecasts are computed in the browser."
+      }
+    },
+    {
       "id": "eisenhower-lock",
       "name": "Eisenhower Lock Ships and Visiting",
       "canonical": "https://chrisizworski.com/eisenhower-lock/",
@@ -7420,6 +7465,30 @@
       "strength": "optional",
       "surface": "great-lakes-shipping",
       "reason": "Visitors can compare Cuyahoga bend navigation with Calumet’s lift-bridge corridor while keeping each source scoped."
+    },
+    {
+      "from": "st-lawrence-seaway",
+      "to": "thousand-islands-ships",
+      "type": "regional-handoff",
+      "strength": "strong",
+      "surface": "seaway-maritime-network",
+      "reason": "Pin down when a ship should pass a Thousand Islands riverbank."
+    },
+    {
+      "from": "thousand-islands-ships",
+      "to": "st-lawrence-seaway",
+      "type": "regional-handoff",
+      "strength": "strong",
+      "surface": "seaway-maritime-network",
+      "reason": "Follow the whole corridor and its seven locks from Montreal."
+    },
+    {
+      "from": "thousand-islands-ships",
+      "to": "eisenhower-lock",
+      "type": "regional-handoff",
+      "strength": "strong",
+      "surface": "seaway-maritime-network",
+      "reason": "Plan a close-up public lock visit downriver at Massena."
     }
   ],
   "cannibalizationGroups": [

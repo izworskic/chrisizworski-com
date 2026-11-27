@@ -1,0 +1,29 @@
+{
+  "title": "Thousand Islands Ship Times at Boldt Castle | Chris Izworski",
+  "description": "When will the next freighter pass Boldt Castle or Clayton? Live St. Lawrence ship reports turned into tested passage windows, plus where to watch.",
+  "dateModified": "2026-11-27",
+  "viewpoints": {
+    "alexandria-bay": {
+      "town": "Alexandria Bay",
+      "short": "Boldt Castle view",
+      "name": "Scenic View Park",
+      "description": "A small village park on the river with a view across to Heart Island and Boldt Castle. Ships pass through the American Narrows off the village.",
+      "lat": 44.337,
+      "lon": -75.9218,
+      "mapUrl": "https://www.openstreetmap.org/way/469073736",
+      "source": "https://visitalexbay.org/?p=1927",
+      "sourceNote": "Alexandria Bay Chamber directory lists Scenic View Park under Must See & Do | Public Facilities; OpenStreetMap way 469073736 (leisure=park). Checked 2026-11-27."
+    },
+    "clayton": {
+      "town": "Clayton",
+      "short": "Frink Park",
+      "name": "Frink Park and the Riverwalk",
+      "description": "The village's riverfront park on the former rail and ferry terminal, joined to the Clayton Riverwalk. Ships pass between the village and Grindstone Island.",
+      "lat": 44.2396,
+      "lon": -76.0847,
+      "mapUrl": "https://www.openstreetmap.org/?mlat=44.2396&mlon=-76.0847#map=17/44.2396/-76.0847",
+      "source": "https://www.villageofclaytonny.gov/wp-content/uploads/2026/03/LWRP-Map-6.pdf",
+      "sourceNote": "Village of Clayton LWRP Map 6 (March 2026) shows Frink Park in the village center on the river; NY DOS describes the Riverwalk and Frink Park pavilion. Coordinates approximate. Checked 2026-11-27."
+    }
+  }
+}

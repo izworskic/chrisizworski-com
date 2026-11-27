@@ -30,11 +30,11 @@ test('Working river listings are distinct real tool cards in the Great Lakes sec
  }
  assert.equal(new Set(catalog.map(m=>m[1])).size,catalog.length);
 });
-test('Tools ItemList and registry agree with all 94 rendered cards',()=>{
+test('Tools ItemList and registry agree with all 95 rendered cards',()=>{
  const graph=schema(tools)['@graph'];
  const list=graph.find(x=>x['@id']==='https://chrisizworski.com/tools/#toollist');
  assert.ok(list);
- assert.equal(catalog.length,94);
+ assert.equal(catalog.length,95);
  assert.equal(list.numberOfItems,catalog.length);
  assert.equal(list.itemListElement.length,catalog.length);
  assert.deepEqual(list.itemListElement.map(x=>x.position),catalog.map((_,i)=>i+1));
