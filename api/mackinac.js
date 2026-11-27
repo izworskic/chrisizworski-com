@@ -8,6 +8,7 @@ const {
 
 const URLS = Object.freeze({
   official: "https://www.mackinacbridge.org/wp-json/wp/v2/pages/1439",
+  officialPage: "https://www.mackinacbridge.org/fares-traffic/conditions/",
   mackinawCityWind: "https://www.ndbc.noaa.gov/data/realtime2/MACM4.txt",
   straitsWind: "https://www.ndbc.noaa.gov/data/realtime2/45175.txt",
   nwsHourly: "https://api.weather.gov/gridpoints/APX/55,96/forecast/hourly",
@@ -22,13 +23,34 @@ const USER_AGENT =
 async function fetchSource(url, type) {
   const response = await fetch(url, {
     headers: {
-      accept: type === "json" ? "application/geo+json, application/json" : "text/plain",
+      accept: type === "json" ? "application/geo+json, application/json" : type === "html" ? "text/html" : "text/plain",
       "user-agent": USER_AGENT,
     },
     signal: AbortSignal.timeout(8_000),
   });
   if (!response.ok) throw new Error(`Source returned ${response.status}`);
   return type === "json" ? response.json() : response.text();
+}
+
+// Both representations are maintained by the Bridge Authority. A second
+// request is made only when the primary report is missing or unrecognized.
+async function fetchOfficialStatus() {
+  let primary;
+  try {
+    primary = parseOfficialConditions(await fetchSource(URLS.official, "json"));
+    if (primary.available) return { ...primary, retrieval_source: "authority-json" };
+  } catch {}
+  try {
+    const page = await fetchSource(URLS.officialPage, "html");
+    // Scope extraction to the full report, not a sidebar status or historic copy.
+    const heading = /<h1\b[^>]*>\s*Current Bridge Conditions\s*<\/h1>/i.exec(page);
+    if (heading) {
+      const section = page.slice(heading.index + heading[0].length);
+      const status = parseOfficialConditions(section);
+      if (status.available) return { ...status, retrieval_source: "authority-page" };
+    }
+  } catch {}
+  return { ...parseOfficialConditions(""), retrieval_source: "unavailable" };
 }
 
 function sourceState(result, name, url) {
@@ -59,7 +81,7 @@ module.exports = async function handler(req, res) {
     constructionResult,
   ] =
     await Promise.allSettled([
-      fetchSource(URLS.official, "json"),
+      fetchOfficialStatus(),
       fetchSource(URLS.mackinawCityWind, "text"),
       fetchSource(URLS.straitsWind, "text"),
       fetchSource(URLS.nwsHourly, "json"),
@@ -70,7 +92,7 @@ module.exports = async function handler(req, res) {
 
   const official =
     officialResult.status === "fulfilled"
-      ? parseOfficialConditions(officialResult.value)
+      ? officialResult.value
       : parseOfficialConditions("");
 
   const stations = [
@@ -104,11 +126,12 @@ module.exports = async function handler(req, res) {
   );
 
   const sources = {
-    official_status: sourceState(
-      officialResult,
-      "Mackinac Bridge Authority",
-      "https://www.mackinacbridge.org/fares-traffic/conditions/",
-    ),
+    official_status: {
+      name: "Mackinac Bridge Authority",
+      url: URLS.officialPage,
+      available: official.available,
+      retrieval_source: official.retrieval_source || "unavailable",
+    },
     current_wind: {
       name: "NOAA National Data Buoy Center",
       url: "https://www.ndbc.noaa.gov/station_page.php?station=macm4",

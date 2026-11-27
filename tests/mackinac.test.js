@@ -386,3 +386,31 @@ test("hourly wind speed requires a recognized nonnegative mph value", () => {
     assert.equal(parseWindSpeedMph(raw), expected);
   }
 });
+
+test("official page fallback accepts only the full dated authority report and fails closed", async () => {
+  const original=global.fetch;
+  let fallbackCalls=0;
+  try {
+    global.fetch=async url=>{
+      const u=String(url);
+      if(u.includes("wp-json"))return new Response("{}",{status:200});
+      if(u.endsWith("/fares-traffic/conditions/")){
+        fallbackCalls++;
+        return new Response('<aside><h3 class="status">All Clear</h3></aside><h1>Current Bridge Conditions</h1>'+officialHighWind.content.rendered);
+      }
+      return new Response("",{status:503});
+    };
+    const r=responseRecorder();await mackinacHandler({method:"GET"},r);
+    assert.equal(fallbackCalls,1);
+    assert.equal(r.body.official.available,true);
+    assert.equal(r.body.official.level,"advisory");
+    assert.equal(r.body.official.retrieval_source,"authority-page");
+    assert.equal(r.body.sources.official_status.available,true);
+    global.fetch=async url=>String(url).endsWith("/fares-traffic/conditions/")?new Response('<h3 class="status">All Clear</h3>'):new Response("",{status:503});
+    const failed=responseRecorder();await mackinacHandler({method:"GET"},failed);
+    assert.equal(failed.body.official.available,false);
+    assert.equal(failed.body.official.level,"unknown");
+    assert.equal(failed.body.sources.official_status.available,false);
+    assert.equal(parseOfficialConditions('<h3 class="status">All Clear</h3>').available,false);
+  } finally {global.fetch=original;}
+});
