@@ -185,3 +185,26 @@ test('conflicting NOAA rows are diagnostics, not numerical history', async () =>
   assert.equal(malformed[0].superior, null);
   assert.equal(malformed[0].total, 0);
 });
+
+test('a conflicting newest NOAA date cannot make yesterday appear to be the latest observed change', async () => {
+  const now = new Date('2026-11-26T15:00:00Z');
+  const text = [
+    '2026 328 1 0 0 0 0 0 1',
+    '2026 329 2 0 0 0 0 0 2',
+    '2026 330 3 0 0 0 0 0 3',
+    '2026 330 9 0 0 0 0 0 9'
+  ].join('\n');
+  const fetcher = async url => new Response(String(url).includes('_ice.dat') ? text : '1973 1974\nNov-24 0 1\nNov-25 0 2\nNov-26 0 3');
+  const source = await fetchSeasonCover(now, fetcher);
+  const result = seasonCoverStatus(source, now);
+  assert.equal(result.status.state, 'unavailable');
+  assert.equal(result.status.observedAt, null);
+  assert.equal(result.cover, null);
+  const history = await buildIceRecord(now, fetcher, Promise.resolve(source));
+  assert.equal(history.observedChange.state, 'unavailable');
+  assert.equal(history.observedChange.observedAt, null);
+  assert.deepEqual(history.observedChange.lakes, []);
+  assert.equal(history.series.superior.find(row => row.date === 'Nov-25').current, 2);
+  assert.equal(history.series.superior.find(row => row.date === 'Nov-26').current, null);
+  assert.deepEqual(history.peaks.superior, { date:'2026-11-25', value:2 });
+});
