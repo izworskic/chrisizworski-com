@@ -8,10 +8,12 @@ const {RESORTS}=require('../lib/michigan-ski/resorts');
 const root=path.resolve(__dirname,'../public'),out=path.resolve(__dirname,'../artifacts/michigan-ski');
 fs.mkdirSync(out,{recursive:true});
 let mode='one-open';
+const beforeTarget=Date.parse('2026-11-25T17:00:00Z'),afterTarget=Date.parse('2026-11-27T17:00:00Z');
+let fixtureNow=beforeTarget;
 const mime={'.html':'text/html; charset=utf-8','.js':'application/javascript; charset=utf-8','.css':'text/css; charset=utf-8','.json':'application/json; charset=utf-8','.svg':'image/svg+xml'};
 function snapshot(){
- const now=new Date().toISOString(),report=new Date(Date.now()-60*60*1000).toISOString();
- return {ok:true,generatedAt:now,season:'2026-27',policy:'PROVISIONAL',health:{nwsAlerts:'UNAVAILABLE',localStormReports:'UNAVAILABLE',nwsGridAvailable:0,officialReportsChecked:16,officialReportsParsed:mode==='one-open'?1:0},resorts:RESORTS.map(r=>{
+ const now=new Date(fixtureNow).toISOString(),report=new Date(fixtureNow-60*60*1000).toISOString();
+ return {ok:true,generatedAt:now,season:'2026-27',policy:'PROVISIONAL',health:{nwsAlerts:'UNAVAILABLE',localStormReports:'UNAVAILABLE',nwsGridAvailable:0,officialReportsChecked:16,officialReportsParsed:mode==='one-open'?2:0},resorts:RESORTS.map(r=>{
   const isOpen=mode==='one-open'&&r.slug==='caberfae-peaks';
   const isClosed=mode==='one-open'&&r.slug==='nubs-nob';
   return {...r,official:isClosed?{status:'CLOSED_PER_OPERATOR',url:r.snow,lifts:{open:0,total:5},reportUpdatedAt:report,checkedAt:now}:r.slug==='alpine-valley'?{status:'NOT_CONNECTED',url:null,checkedAt:now}:isOpen?
@@ -51,9 +53,10 @@ async function run(){
  try{
   browser=await chromium.launch({headless:true,executablePath:process.env.CHROME_PATH||'/usr/bin/chromium',args:['--no-sandbox','--disable-dev-shm-usage']});
   for(const width of [360,390,768,1280,1440]){
-   mode='one-open';
+   mode='one-open';fixtureNow=beforeTarget;
    const ctx=await browser.newContext({viewport:{width,height:900},deviceScaleFactor:1,reducedMotion:'reduce'});
    const page=await ctx.newPage(),errors=[];
+   await page.clock.setFixedTime(new Date(fixtureNow));
    page.on('pageerror',e=>errors.push(e.message));
    const response=await page.goto(url,{waitUntil:'domcontentloaded',timeout:30000});
    need(response.status()===200,width+' hub loads');
@@ -147,6 +150,13 @@ async function run(){
    need(await page.locator('.ski-unconfirmed').count()===1,width+' groups source gaps into an expandable summary');
    const down=path.join(out,width+'-all-sources-down.png');
    await page.locator('.ski-operations').screenshot({path:down});report.screenshots.push(path.basename(down));
+   fixtureNow=afterTarget;
+   await page.clock.setFixedTime(new Date(fixtureNow));
+   await page.reload({waitUntil:'domcontentloaded'});
+   await page.waitForFunction(()=>document.querySelector('#ski-open-count')?.textContent.includes('0 confirmed open'),null,{timeout:20000});
+   const nextTarget=await page.locator('.ski-next-opening').innerText();
+   need(nextTarget.includes('Next operator-announced opening target: Crystal Mountain'),width+' expired November 26 target excluded');
+   need(!nextTarget.includes('Ski Brule'),width+' past target not labeled upcoming');
    mode='undated';
    await page.reload({waitUntil:'domcontentloaded'});
    await page.waitForFunction(()=>document.querySelector('#ski-open-count')?.textContent.includes('0 confirmed open'),null,{timeout:20000});
