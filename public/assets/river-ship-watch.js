@@ -5,6 +5,8 @@
  * split-conformal half-widths for the (viewpoint, lead time) pairs that met the release bar on
  * held-out days. A ship gets a window only when its newest report is fresh and moving along the
  * channel, and only within a published lead time. Never a schedule or promise.
+ * Optional: data-max-report-age-min on the board drops any window whose source report is older
+ * than that many minutes (the Detroit page keeps its 10-minute freshness rule this way).
  * Requires RiverPassage (river-passage.js), #rswModel and a #rswBoard with data-api. */
 (function (root, factory) {
   const api = factory();
@@ -17,16 +19,17 @@
   const COMMERCIAL = t => t === null || t === undefined || (t >= 60 && t <= 89);
   const bucketOf = h => h < 2 ? '0-2h' : h < 6 ? '2-6h' : h < 12 ? '6-12h' : '12h+';
 
-  function forecasts(model, vessels, now, corridor) {
+  function forecasts(model, vessels, now, corridor, opts) {
     const out = [];
     const nowMs = now instanceof Date ? now.getTime() : now;
+    const maxAgeMs = opts && Number.isFinite(opts.maxReportAgeMin) ? opts.maxReportAgeMin * 60000 : Infinity;
     for (const v of vessels || []) {
       const motion = v.motion || {};
       if (motion.approachEligible !== true) continue;
       if (!COMMERCIAL(v.shipType)) continue;
       if (Number.isFinite(v.lengthMeters) && v.lengthMeters < 50) continue;
       const seen = Date.parse(v.seen);
-      if (!Number.isFinite(seen)) continue;
+      if (!Number.isFinite(seen) || nowMs - seen > maxAgeMs) continue;
       const pr = corridor.project(v.lat, v.lon);
       if (!pr || pr.offsetKm > corridor.MAX_OFFSET_KM) continue;
       const course = Number.isFinite(motion.courseOverGround) ? motion.courseOverGround : v.course;
@@ -96,6 +99,9 @@
     const first = tabs[0] && tabs[0].dataset.rswView;
     const asked = new URL(root.location.href).searchParams.get('view');
     let view = model.viewpoints[asked] ? asked : first;
+    const maxAge = Number(el.dataset.maxReportAgeMin);
+    const ageOpts = Number.isFinite(maxAge) && maxAge > 0 ? { maxReportAgeMin: maxAge } : null;
+    const fresh = (r, nowMs) => !ageOpts || nowMs - r.reportSeen <= ageOpts.maxReportAgeMin * 60000;
     let latest = null, timer = null;
 
     function paint() {
@@ -109,7 +115,7 @@
         status.textContent = 'Ship reports are unavailable right now, so no window can be shown. Try again in a few minutes.';
         return;
       }
-      const rows = latest.rows.filter(r => r.viewpoint === view && r.latest >= nowMs);
+      const rows = latest.rows.filter(r => r.viewpoint === view && r.latest >= nowMs && fresh(r, nowMs));
       const horizon = 'the next ' + horizonHours(model, view) + ' hours';
       list.innerHTML = renderList(rows, nowMs, labels);
       if (rows.length) {
@@ -118,6 +124,7 @@
       } else {
         el.setAttribute('data-state', 'empty');
         status.textContent = 'No ship is forecast to pass within ' + horizon + ' from the reports received at ' + clock(latest.checkedAt) +
+          (ageOpts ? ' (only reports from the last ' + ageOpts.maxReportAgeMin + ' minutes count)' : '') +
           '. A ship can still appear: one may be anchored, out of receiver range, or not yet reporting a steady course.';
       }
     }
@@ -128,7 +135,7 @@
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
         if (!data || data.ok === false || !Array.isArray(data.vessels)) throw new Error('unavailable');
-        latest = { rows: forecasts(model, data.vessels, o.now(), corridor), checkedAt: Date.parse(data.checkedAt || data.generatedAt) || o.now() };
+        latest = { rows: forecasts(model, data.vessels, o.now(), corridor, ageOpts), checkedAt: Date.parse(data.checkedAt || data.generatedAt) || o.now() };
       } catch (_) {
         latest = { error: true, rows: [], checkedAt: o.now() };
       }
