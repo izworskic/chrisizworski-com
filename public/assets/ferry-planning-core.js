@@ -52,6 +52,11 @@
   // Operator-specific Jet Express season, not a shared Put-in-Bay island season.
   // https://jet-express.com/put-in-bay-upcoming-events/ (2026 first and last operating days).
   if(c.id==='put-in-bay'&&r.id==='jet'&&year==='2026'&&!inRange(date,'2026-05-01','2026-10-25'))return {state:'closed',title:'Jet Express is outside its published 2026 season',text:'The Port Clinton operator listed May 1 through October 25, 2026. Miller Ferry has a separate, weather-dependent calendar; verify its own operation.'};
+  if(c.id==='beaver'&&year==='2026'&&Array.isArray(c.sailingDays2026)){
+   if(date==='2026-12-19')return {state:'unknown',title:'December 19 departure not verified',text:'The operator rates notice names December 19 as the season end, but the printed schedule has no sailing marked that day. Verify current service directly.',source:'https://www.bibco.com/ferry-schedules/'};
+   if(!c.sailingDays2026.includes(date))return {state:'closed',title:'No sailing listed in the printed 2026 calendar',text:'The dated operator reference does not list a departure on this date. Verify any updated or special service directly.',source:'https://www.bibco.com/ferry-schedules/'};
+   return {state:'reference',title:'Published 2026 Beaver Island sailing date',text:'The printed operator calendar marks this date. Check the current exact departures, weather, reservations and return before entering times.',source:'https://www.bibco.com/ferry-schedules/'};
+  }
   if(c.id==='manitou'){
    if(year==='2026')return {state:'closed',title:'No regular ferry service in 2026',text:'Both Manitou docks were under construction; no scheduled ferry service in 2026.'};
    if(year==='2027')return {state:'unknown',title:'2027 ferry restart not confirmed',text:'A 2026 NPS notice expected dock reopening in 2027, not a confirmed ferry service restart. Check current NPS and Manitou Island Transit announcements.'};
@@ -98,12 +103,13 @@
  function fare(c,o,date,adults,kids,vehicle,roundtrip){
   const r=c.experience.routes.find(r=>r.id===o?.id||(o?.id==='hunter'&&r.id==='sea-hunter'))||c.experience.routes[0];if(availability(c,date,r).state!=='reference'||!o?.pricing||date.slice(0,4)!=='2026'||(vehicle&&o.noVehicle))return null;
   if((o.priceStart&&date<o.priceStart)||(o.priceEnd&&date>o.priceEnd))return null;
+  const fuel=c.id==='beaver'?c.fuelSurcharge2026:null;if(fuel&&date===fuel.ambiguousDate)return null;
   let t=o.pricing;if((o.id==='badger'||o.id==='chi')&&inRange(date,'2026-06-19','2026-09-07'))t=o.summerPricing||t;
   if(c.id==='toronto'&&inRange(date,'2026-08-01','2026-08-31'))t={...t,childRT:0};
   const s=roundtrip?'RT':'OW';adults=number(adults,1,20);kids=number(kids,0,20);vehicle=number(vehicle,0,1);
   if(t['adult'+s]==null||(kids&&t['child'+s]==null)||(vehicle&&t['vehicle'+s]==null))return null;
   const promo=o.childPromo,free=promo&&inRange(date,promo.start,promo.end)?Math.min(kids,adults*promo.freePerAdult):0;
-  const passengers=adults*t['adult'+s]+(kids-free)*(t['child'+s]||0),car=vehicle*(t['vehicle'+s]||0),fees=(adults+kids)*(t['feePerson'+s]||0)+vehicle*(t['feeVehicle'+s]||0);
+  const passengers=adults*t['adult'+s]+(kids-free)*(t['child'+s]||0),car=vehicle*(t['vehicle'+s]||0),fuelFee=fuel&&inRange(date,fuel.start,fuel.end)?Math.round((passengers+car)*fuel.rate*100)/100:0,fees=(adults+kids)*(t['feePerson'+s]||0)+vehicle*(t['feeVehicle'+s]||0)+fuelFee;
   return {passengers,vehicle:car,fees,total:Math.round((passengers+car+fees)*100)/100};
  }
  return {routeFor,availability,localInstant,tripPlan,fare};

@@ -70,11 +70,16 @@
  }
  function renderBudget(p,i){
   const o=c.options.find(o=>o.id===i.route||(i.route==='sea-hunter'&&o.id==='hunter'))||(c.options.length===1?c.options[0]:null);
-  const f=o?core.fare(c,o,i.date,$('adult-count').value,$('child-count').value,+i.vehicle,i.tripType==='roundtrip'):null;
+  let f=o?core.fare(c,o,i.date,$('adult-count').value,$('child-count').value,+i.vehicle,i.tripType==='roundtrip'):null;
+  // A supplied return crossing a Beaver fare regime cannot use the selected day's round-trip reference.
+  if(c.id==='beaver'&&i.tripType==='roundtrip'&&i.returnDate&&i.returnDate!==i.date){
+   const fuel=c.fuelSurcharge2026,regime=d=>!fuel||d<fuel.ambiguousDate?'base':d===fuel.ambiguousDate?'ambiguous':d>=fuel.start&&d<=fuel.end?'surcharge':'unknown';
+   if(regime(i.date)!==regime(i.returnDate)||core.availability(c,i.returnDate,{...p.route,a:p.route.b,b:p.route.a}).state!=='reference')f=null;
+  }
   const parking=$('journey-parking').value,extras=$('journey-extra').value;
-  const host=$('journey-budget');if(!f||p.availability.state!=='reference'){host.textContent='A complete published ferry subtotal is not available for this route, date or group. Check the operator; do not substitute a zero fare.';return;}
+  const host=$('journey-budget');if(!f||p.availability.state!=='reference'){host.textContent='A complete published ferry subtotal is not available for this route, date or group. Check the operator; do not substitute a zero fare.'+(c.id==='beaver'?' Confirm both sailing dates and tariff periods; October 19 fuel-surcharge evidence conflicts.':'');return;}
   const park=parking===''?null:Math.max(0,Math.min(10000,Number(parking)||0)),extra=extras===''?null:Math.max(0,Math.min(10000,Number(extras)||0));
-  host.innerHTML=`<span class="budget-breakdown"><span>Selected service: ${escape(o.name)}</span>${[['Passenger reference',money(f.passengers)],['Vehicle reference',money(f.vehicle)],['Published fees included',money(f.fees)],['Your parking amount',park==null?'Unpriced':money(park)],['Your other costs',extra==null?'Unpriced':money(extra)]].map(([a,b])=>`<span>${escape(a)}: <strong>${escape(b)}</strong></span>`).join('')}<strong>Priced subtotal: ${money(f.total+(park||0)+(extra||0))}</strong><span>${park==null||extra==null?'Incomplete trip budget: blank costs are unpriced.':'A planning sum of published references and your inputs, not an operator checkout quote.'}</span></span>`;
+  host.innerHTML=`<span class="budget-breakdown"><span>Selected service: ${escape(o.name)}</span>${[['Passenger reference',money(f.passengers)],['Vehicle reference',money(f.vehicle)],['Published fees included',money(f.fees)],['Your parking amount',park==null?'Unpriced':money(park)],['Your other costs',extra==null?'Unpriced':money(extra)]].map(([a,b])=>`<span>${escape(a)}: <strong>${escape(b)}</strong></span>`).join('')}<strong>Priced subtotal: ${money(f.total+(park||0)+(extra||0))}</strong><span>${park==null||extra==null?'Incomplete trip budget: blank costs are unpriced.':'A planning sum of published references and your inputs, not an operator checkout quote.'}</span>${c.id==='beaver'&&i.tripType==='roundtrip'?'<span>Round-trip reference assumes both legs use the selected date’s tariff. Verify the actual return fare.</span>':''}</span>`;
  }
  // Share only explicit form settings. No account or server-side storage is involved.
  const params=new URLSearchParams(location.search);if(params.get('ferryPlan')==='1')for(const id of ids){const el=$(id),value=params.get(id);if(el&&value!=null&&value.length<100){if(el.tagName==='SELECT'){if([...el.options].some(o=>o.value===value))el.value=value;}else{el.value=value;if(!el.validity.valid)el.value=el.defaultValue||'';}}}

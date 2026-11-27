@@ -51,6 +51,10 @@
     return o.pricing;
   }
   function estimate(o,date,adults,kids,vehicle,roundtrip){
+    if(config.id==="beaver"){
+      const v=globalThis.FerryPlanning.fare(config,o,date,adults,kids,vehicle,roundtrip);
+      return v?{text:currency(v.total,config.currency),complete:true,base:v.passengers+v.vehicle,fee:v.fees}:{text:"Published fare lookup required",complete:false};
+    }
     const t=tariff(o,date);if(!t)return {text:"Published fare lookup required",complete:false};
     const s=roundtrip?"RT":"OW";
     if(t["adult"+s]==null||(kids>0&&t["child"+s]==null)||(vehicle>0&&t["vehicle"+s]==null)){
@@ -65,6 +69,7 @@
     const date=currentDate.value,adults=Math.min(20,Math.max(1,Number($("adult-count").value)||1)),kids=Math.min(20,Math.max(0,Number($("child-count").value)||0)),vehicle=Math.min(1,Math.max(0,Number($("vehicle-count").value)||0)),roundtrip=$("trip-type").value==="roundtrip";
     const seasonInfo=season(date);const outside=seasonInfo.state==="no";
     let html='<div class="result '+(outside?'warning':'')+'"><h3>'+ (outside?'Outside the published season':seasonInfo.state==="unknown"?'Schedule verification needed':'Your crossing outlook')+'</h3><p>'+escapeHtml(seasonInfo.text)+'</p></div>';
+    if(config.id==="beaver"&&date.slice(0,4)==="2026")html+='<div class="note">2026 fare reference: 15% fuel surcharge applies from October 20 through the stated December 19 season end. The operator notices disagree on October 19, so no subtotal is shown for that date. Round-trip arithmetic assumes the same tariff on both legs; confirm your return date and rate with the operator.</div>';
     if(config.id==="isle-royale"&&roundtrip)html+='<div class="note">Ranger III cannot provide a same-day round trip. Island visits require matching inbound and outbound dates; the calculator does not verify ferry inventory.</div>';
     if(config.id==="put-in-bay"&&vehicle)html+='<div class="note">Miller Ferry transports vehicles; Jet Express is passenger-only. For a vehicle, only Miller is a possible option. Island car traffic can be restricted on busy weekends.</div>';
     if(config.id==="toronto"&&dateIn(date,"2026-08-01","2026-08-31"))html+='<div class="note">Toronto City Council waived children, youth and older-adult round-trip ferry fares for August 2026. The junior (ages 2–14) category is discounted to free here; youth/senior ticket types require operator selection.</div>';
