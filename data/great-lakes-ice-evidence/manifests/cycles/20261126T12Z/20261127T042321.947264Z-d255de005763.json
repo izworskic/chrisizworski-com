@@ -1,0 +1,1120 @@
+{
+  "cycle_at": "2026-11-26T12:00:00Z",
+  "errors": [
+    {
+      "error": "HTTP Error 404: Not Found",
+      "source": "observations"
+    }
+  ],
+  "finished_at": "2026-11-27T04:23:21.947209Z",
+  "mos": {
+    "captured_at": "2026-11-27T04:23:05.809417Z",
+    "coastal_proxy": true,
+    "cycle_at": "2026-11-26T12:00:00Z",
+    "lakes": {
+      "Erie": {
+        "pairs": [
+          [
+            {
+              "temperature_f": 38,
+              "valid_at": "2026-11-27T12:00:00Z",
+              "wind_kt": 21
+            },
+            {
+              "temperature_f": 46,
+              "valid_at": "2026-11-28T00:00:00Z",
+              "wind_kt": 14
+            }
+          ],
+          [
+            {
+              "temperature_f": 37,
+              "valid_at": "2026-11-28T12:00:00Z",
+              "wind_kt": 14
+            },
+            {
+              "temperature_f": 47,
+              "valid_at": "2026-11-29T00:00:00Z",
+              "wind_kt": 15
+            }
+          ],
+          [
+            {
+              "temperature_f": 39,
+              "valid_at": "2026-11-29T12:00:00Z",
+              "wind_kt": 10
+            },
+            {
+              "temperature_f": 52,
+              "valid_at": "2026-11-30T00:00:00Z",
+              "wind_kt": 10
+            }
+          ],
+          [
+            {
+              "temperature_f": 37,
+              "valid_at": "2026-11-30T12:00:00Z",
+              "wind_kt": 23
+            },
+            {
+              "temperature_f": 42,
+              "valid_at": "2026-12-01T00:00:00Z",
+              "wind_kt": 18
+            }
+          ],
+          [
+            {
+              "temperature_f": 31,
+              "valid_at": "2026-12-01T12:00:00Z",
+              "wind_kt": 9
+            },
+            {
+              "temperature_f": 46,
+              "valid_at": "2026-12-02T00:00:00Z",
+              "wind_kt": 8
+            }
+          ],
+          [
+            {
+              "temperature_f": 35,
+              "valid_at": "2026-12-02T12:00:00Z",
+              "wind_kt": 8
+            },
+            {
+              "temperature_f": 50,
+              "valid_at": "2026-12-03T00:00:00Z",
+              "wind_kt": 13
+            }
+          ],
+          [
+            {
+              "temperature_f": 43,
+              "valid_at": "2026-12-03T12:00:00Z",
+              "wind_kt": 11
+            },
+            {
+              "temperature_f": 56,
+              "valid_at": "2026-12-04T00:00:00Z",
+              "wind_kt": 13
+            }
+          ]
+        ],
+        "station": "KCLE"
+      },
+      "Huron": {
+        "pairs": [
+          [
+            {
+              "temperature_f": 36,
+              "valid_at": "2026-11-27T12:00:00Z",
+              "wind_kt": 13
+            },
+            {
+              "temperature_f": 46,
+              "valid_at": "2026-11-28T00:00:00Z",
+              "wind_kt": 13
+            }
+          ],
+          [
+            {
+              "temperature_f": 28,
+              "valid_at": "2026-11-28T12:00:00Z",
+              "wind_kt": 6
+            },
+            {
+              "temperature_f": 48,
+              "valid_at": "2026-11-29T00:00:00Z",
+              "wind_kt": 8
+            }
+          ],
+          [
+            {
+              "temperature_f": 34,
+              "valid_at": "2026-11-29T12:00:00Z",
+              "wind_kt": 5
+            },
+            {
+              "temperature_f": 45,
+              "valid_at": "2026-11-30T00:00:00Z",
+              "wind_kt": 6
+            }
+          ],
+          [
+            {
+              "temperature_f": 32,
+              "valid_at": "2026-11-30T12:00:00Z",
+              "wind_kt": 13
+            },
+            {
+              "temperature_f": 38,
+              "valid_at": "2026-12-01T00:00:00Z",
+              "wind_kt": 15
+            }
+          ],
+          [
+            {
+              "temperature_f": 25,
+              "valid_at": "2026-12-01T12:00:00Z",
+              "wind_kt": 8
+            },
+            {
+              "temperature_f": 39,
+              "valid_at": "2026-12-02T00:00:00Z",
+              "wind_kt": 8
+            }
+          ],
+          [
+            {
+              "temperature_f": 31,
+              "valid_at": "2026-12-02T12:00:00Z",
+              "wind_kt": 7
+            },
+            {
+              "temperature_f": 44,
+              "valid_at": "2026-12-03T00:00:00Z",
+              "wind_kt": 9
+            }
+          ],
+          [
+            {
+              "temperature_f": 36,
+              "valid_at": "2026-12-03T12:00:00Z",
+              "wind_kt": 7
+            },
+            {
+              "temperature_f": 48,
+              "valid_at": "2026-12-04T00:00:00Z",
+              "wind_kt": 9
+            }
+          ]
+        ],
+        "station": "KAPN"
+      },
+      "Michigan": {
+        "pairs": [
+          [
+            {
+              "temperature_f": 35,
+              "valid_at": "2026-11-27T12:00:00Z",
+              "wind_kt": 15
+            },
+            {
+              "temperature_f": 45,
+              "valid_at": "2026-11-28T00:00:00Z",
+              "wind_kt": 13
+            }
+          ],
+          [
+            {
+              "temperature_f": 36,
+              "valid_at": "2026-11-28T12:00:00Z",
+              "wind_kt": 9
+            },
+            {
+              "temperature_f": 48,
+              "valid_at": "2026-11-29T00:00:00Z",
+              "wind_kt": 12
+            }
+          ],
+          [
+            {
+              "temperature_f": 40,
+              "valid_at": "2026-11-29T12:00:00Z",
+              "wind_kt": 8
+            },
+            {
+              "temperature_f": 48,
+              "valid_at": "2026-11-30T00:00:00Z",
+              "wind_kt": 11
+            }
+          ],
+          [
+            {
+              "temperature_f": 31,
+              "valid_at": "2026-11-30T12:00:00Z",
+              "wind_kt": 14
+            },
+            {
+              "temperature_f": 39,
+              "valid_at": "2026-12-01T00:00:00Z",
+              "wind_kt": 12
+            }
+          ],
+          [
+            {
+              "temperature_f": 28,
+              "valid_at": "2026-12-01T12:00:00Z",
+              "wind_kt": 6
+            },
+            {
+              "temperature_f": 47,
+              "valid_at": "2026-12-02T00:00:00Z",
+              "wind_kt": 14
+            }
+          ],
+          [
+            {
+              "temperature_f": 35,
+              "valid_at": "2026-12-02T12:00:00Z",
+              "wind_kt": 13
+            },
+            {
+              "temperature_f": 48,
+              "valid_at": "2026-12-03T00:00:00Z",
+              "wind_kt": 11
+            }
+          ],
+          [
+            {
+              "temperature_f": 42,
+              "valid_at": "2026-12-03T12:00:00Z",
+              "wind_kt": 8
+            },
+            {
+              "temperature_f": 50,
+              "valid_at": "2026-12-04T00:00:00Z",
+              "wind_kt": 10
+            }
+          ]
+        ],
+        "station": "KMKG"
+      },
+      "Ontario": {
+        "pairs": [
+          [
+            {
+              "temperature_f": 40,
+              "valid_at": "2026-11-27T12:00:00Z",
+              "wind_kt": 19
+            },
+            {
+              "temperature_f": 47,
+              "valid_at": "2026-11-28T00:00:00Z",
+              "wind_kt": 13
+            }
+          ],
+          [
+            {
+              "temperature_f": 37,
+              "valid_at": "2026-11-28T12:00:00Z",
+              "wind_kt": 10
+            },
+            {
+              "temperature_f": 44,
+              "valid_at": "2026-11-29T00:00:00Z",
+              "wind_kt": 15
+            }
+          ],
+          [
+            {
+              "temperature_f": 38,
+              "valid_at": "2026-11-29T12:00:00Z",
+              "wind_kt": 14
+            },
+            {
+              "temperature_f": 48,
+              "valid_at": "2026-11-30T00:00:00Z",
+              "wind_kt": 12
+            }
+          ],
+          [
+            {
+              "temperature_f": 41,
+              "valid_at": "2026-11-30T12:00:00Z",
+              "wind_kt": 21
+            },
+            {
+              "temperature_f": 42,
+              "valid_at": "2026-12-01T00:00:00Z",
+              "wind_kt": 24
+            }
+          ],
+          [
+            {
+              "temperature_f": 31,
+              "valid_at": "2026-12-01T12:00:00Z",
+              "wind_kt": 18
+            },
+            {
+              "temperature_f": 43,
+              "valid_at": "2026-12-02T00:00:00Z",
+              "wind_kt": 10
+            }
+          ],
+          [
+            {
+              "temperature_f": 32,
+              "valid_at": "2026-12-02T12:00:00Z",
+              "wind_kt": 7
+            },
+            {
+              "temperature_f": 48,
+              "valid_at": "2026-12-03T00:00:00Z",
+              "wind_kt": 13
+            }
+          ],
+          [
+            {
+              "temperature_f": 38,
+              "valid_at": "2026-12-03T12:00:00Z",
+              "wind_kt": 10
+            },
+            {
+              "temperature_f": 51,
+              "valid_at": "2026-12-04T00:00:00Z",
+              "wind_kt": 14
+            }
+          ]
+        ],
+        "station": "KROC"
+      },
+      "Superior": {
+        "pairs": [
+          [
+            {
+              "temperature_f": 12,
+              "valid_at": "2026-11-27T12:00:00Z",
+              "wind_kt": 4
+            },
+            {
+              "temperature_f": 39,
+              "valid_at": "2026-11-28T00:00:00Z",
+              "wind_kt": 8
+            }
+          ],
+          [
+            {
+              "temperature_f": 29,
+              "valid_at": "2026-11-28T12:00:00Z",
+              "wind_kt": 8
+            },
+            {
+              "temperature_f": 42,
+              "valid_at": "2026-11-29T00:00:00Z",
+              "wind_kt": 14
+            }
+          ],
+          [
+            {
+              "temperature_f": 27,
+              "valid_at": "2026-11-29T12:00:00Z",
+              "wind_kt": 12
+            },
+            {
+              "temperature_f": 32,
+              "valid_at": "2026-11-30T00:00:00Z",
+              "wind_kt": 15
+            }
+          ],
+          [
+            {
+              "temperature_f": 17,
+              "valid_at": "2026-11-30T12:00:00Z",
+              "wind_kt": 14
+            },
+            {
+              "temperature_f": 30,
+              "valid_at": "2026-12-01T00:00:00Z",
+              "wind_kt": 8
+            }
+          ],
+          [
+            {
+              "temperature_f": 21,
+              "valid_at": "2026-12-01T12:00:00Z",
+              "wind_kt": 7
+            },
+            {
+              "temperature_f": 37,
+              "valid_at": "2026-12-02T00:00:00Z",
+              "wind_kt": 10
+            }
+          ],
+          [
+            {
+              "temperature_f": 30,
+              "valid_at": "2026-12-02T12:00:00Z",
+              "wind_kt": 8
+            },
+            {
+              "temperature_f": 38,
+              "valid_at": "2026-12-03T00:00:00Z",
+              "wind_kt": 9
+            }
+          ],
+          [
+            {
+              "temperature_f": 32,
+              "valid_at": "2026-12-03T12:00:00Z",
+              "wind_kt": 8
+            },
+            {
+              "temperature_f": 42,
+              "valid_at": "2026-12-04T00:00:00Z",
+              "wind_kt": 9
+            }
+          ]
+        ],
+        "station": "KDLH"
+      }
+    },
+    "model": "MEX",
+    "note": "Runtime not issuance; record actual capture. Extrema pairs extend 12h after final nominal horizon; cannot be used without explicit target alignment.",
+    "state": "CAPTURED"
+  },
+  "observations": null,
+  "physical": [
+    {
+      "etag": "\"f6d0cbb3f2828433f7c7785b3b9d890b-23\"",
+      "etag_is_not_sha256": true,
+      "key": "lsofs/netcdf/2026/11/26/lsofs.t12z.20261126.fields.f072.nc",
+      "lead_hours": 72,
+      "model": "lsofs",
+      "object_bytes": 189375245,
+      "object_last_modified": "2026-11-26T15:12:57Z",
+      "state": "INVENTORY_ONLY"
+    },
+    {
+      "etag": "\"500258648fac22f36e5625383c468716-23\"",
+      "etag_is_not_sha256": true,
+      "key": "lsofs/netcdf/2026/11/26/lsofs.t12z.20261126.fields.f120.nc",
+      "lead_hours": 120,
+      "model": "lsofs",
+      "object_bytes": 189375245,
+      "object_last_modified": "2026-11-26T15:13:10Z",
+      "state": "INVENTORY_ONLY"
+    },
+    {
+      "etag": "\"caefd6cac99e45491cd4772f727eb9a3-23\"",
+      "etag_is_not_sha256": true,
+      "key": "lmhofs/netcdf/2026/11/26/lmhofs.t12z.20261126.fields.f072.nc",
+      "lead_hours": 72,
+      "model": "lmhofs",
+      "object_bytes": 187953590,
+      "object_last_modified": "2026-11-26T15:15:41Z",
+      "state": "INVENTORY_ONLY"
+    },
+    {
+      "etag": "\"eca48ffe5fb9801715f10b53fc852573-23\"",
+      "etag_is_not_sha256": true,
+      "key": "lmhofs/netcdf/2026/11/26/lmhofs.t12z.20261126.fields.f120.nc",
+      "lead_hours": 120,
+      "model": "lmhofs",
+      "object_bytes": 187953590,
+      "object_last_modified": "2026-11-26T15:15:56Z",
+      "state": "INVENTORY_ONLY"
+    },
+    {
+      "etag": "\"b22f3f84f541909d3b1d5e09d617d305-2\"",
+      "etag_is_not_sha256": true,
+      "key": "leofs/netcdf/2026/11/26/leofs.t12z.20261126.fields.f072.nc",
+      "lead_hours": 72,
+      "model": "leofs",
+      "object_bytes": 12650484,
+      "object_last_modified": "2026-11-26T14:31:51Z",
+      "state": "INVENTORY_ONLY"
+    },
+    {
+      "etag": "\"926123d078421678067b4372d2cb4901-2\"",
+      "etag_is_not_sha256": true,
+      "key": "leofs/netcdf/2026/11/26/leofs.t12z.20261126.fields.f120.nc",
+      "lead_hours": 120,
+      "model": "leofs",
+      "object_bytes": 12650484,
+      "object_last_modified": "2026-11-26T14:31:53Z",
+      "state": "INVENTORY_ONLY"
+    },
+    {
+      "etag": "\"e0bddea21d0a04da5b5aa146722f02a4-9\"",
+      "etag_is_not_sha256": true,
+      "key": "loofs/netcdf/2026/11/26/loofs.t12z.20261126.fields.f072.nc",
+      "lead_hours": 72,
+      "model": "loofs",
+      "object_bytes": 70159473,
+      "object_last_modified": "2026-11-26T14:43:38Z",
+      "state": "INVENTORY_ONLY"
+    },
+    {
+      "etag": "\"b2f91790dd257869f9d57a48dda38590-9\"",
+      "etag_is_not_sha256": true,
+      "key": "loofs/netcdf/2026/11/26/loofs.t12z.20261126.fields.f120.nc",
+      "lead_hours": 120,
+      "model": "loofs",
+      "object_bytes": 70159473,
+      "object_last_modified": "2026-11-26T14:43:44Z",
+      "state": "INVENTORY_ONLY"
+    },
+    {
+      "can_promote": false,
+      "captured_at": "2026-11-27T04:23:14.810129Z",
+      "coverage_pct": 0.0,
+      "cycle_at": "2026-11-26T12:00:00Z",
+      "domain_reviewed": false,
+      "etag": "\"b22f3f84f541909d3b1d5e09d617d305-2\"",
+      "etag_is_not_sha256": true,
+      "key": "leofs/netcdf/2026/11/26/leofs.t12z.20261126.fields.f072.nc",
+      "lead_hours": 72,
+      "mesh_derived_sha256": "e3fffb0a78e6af7f88d784d254517e7453f4e0427290020b41c4b48dcbd93476",
+      "model": "leofs",
+      "node_count": 6106,
+      "object_bytes": 12650484,
+      "object_last_modified": "2026-11-26T14:31:51Z",
+      "scope": "entire model domain only; Michigan-Huron not split; mask and units unreviewed",
+      "state": "PROVISIONAL",
+      "valid_at": "2026-11-29T12:00:00Z",
+      "wet_area_fraction": 1.0,
+      "wet_nodes": 6106
+    },
+    {
+      "can_promote": false,
+      "captured_at": "2026-11-27T04:23:21.935371Z",
+      "coverage_pct": 0.0,
+      "cycle_at": "2026-11-26T12:00:00Z",
+      "domain_reviewed": false,
+      "etag": "\"926123d078421678067b4372d2cb4901-2\"",
+      "etag_is_not_sha256": true,
+      "key": "leofs/netcdf/2026/11/26/leofs.t12z.20261126.fields.f120.nc",
+      "lead_hours": 120,
+      "mesh_derived_sha256": "e3fffb0a78e6af7f88d784d254517e7453f4e0427290020b41c4b48dcbd93476",
+      "model": "leofs",
+      "node_count": 6106,
+      "object_bytes": 12650484,
+      "object_last_modified": "2026-11-26T14:31:53Z",
+      "scope": "entire model domain only; Michigan-Huron not split; mask and units unreviewed",
+      "state": "PROVISIONAL",
+      "valid_at": "2026-12-01T12:00:00Z",
+      "wet_area_fraction": 1.0,
+      "wet_nodes": 6106
+    }
+  ],
+  "receipts": [
+    {
+      "captured_at": "2026-11-27T04:23:05.575316Z",
+      "started_at": "2026-11-27T04:23:04.999939Z",
+      "state": "UNAVAILABLE",
+      "status": 404,
+      "url": "https://apps.glerl.noaa.gov/coastwatch/webdata/statistic/ice/dat/g2026_2027_ice.dat"
+    },
+    {
+      "bytes": 9124,
+      "captured_at": "2026-11-27T04:23:05.809391Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "7cd1c5d6b2035fd237b07c063d241fa407d5824d4f599a69f41fd1bb1e28cda6",
+      "started_at": "2026-11-27T04:23:05.575566Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://mesonet.agron.iastate.edu/api/1/mos.txt?station=KDLH&station=KMKG&station=KAPN&station=KCLE&station=KROC&runtime=2026-11-26+12%3A00Z&model=MEX"
+    },
+    {
+      "bytes": 652,
+      "captured_at": "2026-11-27T04:23:06.009751Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "70d92841f98c0c58627f2d6dfccdb96e380fe1e6bb8cf76589eaaf3230908327",
+      "started_at": "2026-11-27T04:23:05.814976Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=lsofs%2Fnetcdf%2F2026%2F11%2F26%2Flsofs.t12z.20261126.fields.f072.nc"
+    },
+    {
+      "bytes": 652,
+      "captured_at": "2026-11-27T04:23:06.219217Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "2c1433cd799ac0b3a3842237b3fa5fa9cd83f086cd227f25f6eac9506ec0cfc5",
+      "started_at": "2026-11-27T04:23:06.010009Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=lsofs%2Fnetcdf%2F2026%2F11%2F26%2Flsofs.t12z.20261126.fields.f120.nc"
+    },
+    {
+      "bytes": 656,
+      "captured_at": "2026-11-27T04:23:06.424473Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "5c8b179e9ea92f845bfb8381f8cf522fa11c84e6b03a1982ca81e3713e521316",
+      "started_at": "2026-11-27T04:23:06.219440Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=lmhofs%2Fnetcdf%2F2026%2F11%2F26%2Flmhofs.t12z.20261126.fields.f072.nc"
+    },
+    {
+      "bytes": 656,
+      "captured_at": "2026-11-27T04:23:06.636100Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "60aa4e3cb904a256e37acd04f413524f36f18ed62c3ed257c1d242f7ff4dd27e",
+      "started_at": "2026-11-27T04:23:06.424683Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=lmhofs%2Fnetcdf%2F2026%2F11%2F26%2Flmhofs.t12z.20261126.fields.f120.nc"
+    },
+    {
+      "bytes": 650,
+      "captured_at": "2026-11-27T04:23:06.848469Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "95380993dd6a09f744074b9eb73358a5f1a6dce5d518ae196b0a47f2f1d65f22",
+      "started_at": "2026-11-27T04:23:06.636283Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=leofs%2Fnetcdf%2F2026%2F11%2F26%2Fleofs.t12z.20261126.fields.f072.nc"
+    },
+    {
+      "bytes": 650,
+      "captured_at": "2026-11-27T04:23:07.060830Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "8a7b03b2e6df34d322a3a404277212bd2c22e17b92cd207102a98d0cf5e7bdcc",
+      "started_at": "2026-11-27T04:23:06.848669Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=leofs%2Fnetcdf%2F2026%2F11%2F26%2Fleofs.t12z.20261126.fields.f120.nc"
+    },
+    {
+      "bytes": 650,
+      "captured_at": "2026-11-27T04:23:07.264558Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "8367ea4d6dc0a5dfb14bf92f3edb648472c0a178ee584d96a5ec799af3c875c6",
+      "started_at": "2026-11-27T04:23:07.060991Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=loofs%2Fnetcdf%2F2026%2F11%2F26%2Floofs.t12z.20261126.fields.f072.nc"
+    },
+    {
+      "bytes": 650,
+      "captured_at": "2026-11-27T04:23:07.466776Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "e5ae97b407f3c2591cc7b85107620469e1f3544565b848ba04677b81d7abc625",
+      "started_at": "2026-11-27T04:23:07.264745Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=loofs%2Fnetcdf%2F2026%2F11%2F26%2Floofs.t12z.20261126.fields.f120.nc"
+    },
+    {
+      "bytes": 650,
+      "captured_at": "2026-11-27T04:23:07.671598Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "95380993dd6a09f744074b9eb73358a5f1a6dce5d518ae196b0a47f2f1d65f22",
+      "started_at": "2026-11-27T04:23:07.466972Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=leofs%2Fnetcdf%2F2026%2F11%2F26%2Fleofs.t12z.20261126.fields.f072.nc"
+    },
+    {
+      "bytes": 2758,
+      "captured_at": "2026-11-27T04:23:08.184363Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "272ee21f0dc7c113b8bd72a72a288ec1a7879e1deb3742d641a251667b82dafe",
+      "started_at": "2026-11-27T04:23:07.671740Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.dds"
+    },
+    {
+      "bytes": 14515,
+      "captured_at": "2026-11-27T04:23:08.606716Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "18e0ba0785b8b0311dcbe14311de623e7ea6c6bbe6e16beed2aa4c8592016546",
+      "started_at": "2026-11-27T04:23:08.184383Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.das"
+    },
+    {
+      "bytes": 190,
+      "captured_at": "2026-11-27T04:23:08.949963Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "17dd1c6d357b11b4e337d9c315ff5f9520081e908d0a9b096049a3bf0c3136bf",
+      "started_at": "2026-11-27T04:23:08.606739Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.ascii?Times"
+    },
+    {
+      "bytes": 10423,
+      "captured_at": "2026-11-27T04:23:09.309739Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "e248bd873231f4c0226cba238b3dd98dff4d938fbea57ff736dc6a6d185bd46e",
+      "started_at": "2026-11-27T04:23:08.950141Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.ascii?aice%5B0%5D%5B0%3A1%3A2047%5D"
+    },
+    {
+      "bytes": 10423,
+      "captured_at": "2026-11-27T04:23:09.644552Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "e248bd873231f4c0226cba238b3dd98dff4d938fbea57ff736dc6a6d185bd46e",
+      "started_at": "2026-11-27T04:23:09.311158Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.ascii?aice%5B0%5D%5B2048%3A1%3A4095%5D"
+    },
+    {
+      "bytes": 10233,
+      "captured_at": "2026-11-27T04:23:09.984700Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "0397e85cf522ec29f2760029431ce52574f4b4e702bfba88d3d6fa6d718c31bb",
+      "started_at": "2026-11-27T04:23:09.645782Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.ascii?aice%5B0%5D%5B4096%3A1%3A6105%5D"
+    },
+    {
+      "bytes": 6335,
+      "captured_at": "2026-11-27T04:23:10.337368Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "3284d4572773afa76a1a5b9582c8610d76e95658696ea3f4c3e61ae60239d0ba",
+      "started_at": "2026-11-27T04:23:09.985906Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.ascii?wet_nodes%5B0%5D%5B0%3A1%3A2047%5D"
+    },
+    {
+      "bytes": 6335,
+      "captured_at": "2026-11-27T04:23:10.687905Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "3284d4572773afa76a1a5b9582c8610d76e95658696ea3f4c3e61ae60239d0ba",
+      "started_at": "2026-11-27T04:23:10.338475Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.ascii?wet_nodes%5B0%5D%5B2048%3A1%3A4095%5D"
+    },
+    {
+      "bytes": 6221,
+      "captured_at": "2026-11-27T04:23:11.019916Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "1cf1bec651a479615e116a09531d815b7548d8ea526c832d7d9ca790132dfeee",
+      "started_at": "2026-11-27T04:23:10.689053Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.ascii?wet_nodes%5B0%5D%5B4096%3A1%3A6105%5D"
+    },
+    {
+      "bytes": 22520,
+      "captured_at": "2026-11-27T04:23:11.442112Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "156c6fff2ed4449c5202e68df8e9208deb42778bb2737edadf4d659af40f153c",
+      "started_at": "2026-11-27T04:23:11.021056Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.ascii?art1%5B0%3A1%3A2047%5D"
+    },
+    {
+      "bytes": 22702,
+      "captured_at": "2026-11-27T04:23:11.861392Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "54581f3cc40b928f5fb004770bdefe02b2ea657bf4af9b576ec126885579e679",
+      "started_at": "2026-11-27T04:23:11.443500Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.ascii?art1%5B2048%3A1%3A4095%5D"
+    },
+    {
+      "bytes": 22218,
+      "captured_at": "2026-11-27T04:23:12.280862Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "ea1e70058347b9e66e63c3324c13d669f195473fc8528840ad8fd467b25a49f3",
+      "started_at": "2026-11-27T04:23:11.862738Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.ascii?art1%5B4096%3A1%3A6105%5D"
+    },
+    {
+      "bytes": 21970,
+      "captured_at": "2026-11-27T04:23:12.694444Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "293ecc759c2bbae50aeacff0cd193ecd7f6f77edd51d9f3e40c0459d46a633e7",
+      "started_at": "2026-11-27T04:23:12.282436Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.ascii?lon%5B0%3A1%3A2047%5D"
+    },
+    {
+      "bytes": 22036,
+      "captured_at": "2026-11-27T04:23:13.109556Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "5dd4a12d30a8bbfeed5dff79c5288824587d12cf1ecb291f3648eed47b6b0c94",
+      "started_at": "2026-11-27T04:23:12.695792Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.ascii?lon%5B2048%3A1%3A4095%5D"
+    },
+    {
+      "bytes": 21567,
+      "captured_at": "2026-11-27T04:23:13.525093Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "1950a8e85c084531ab09cdbd72b9c9a47f72e3783ca4cccb0fbff76f09b4ed3d",
+      "started_at": "2026-11-27T04:23:13.110856Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.ascii?lon%5B4096%3A1%3A6105%5D"
+    },
+    {
+      "bytes": 21735,
+      "captured_at": "2026-11-27T04:23:13.944454Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "53ee75a9fc5133b63f2b13c8ee838f665e9a928b50d2c5c86112e48c9cbb4847",
+      "started_at": "2026-11-27T04:23:13.526363Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.ascii?lat%5B0%3A1%3A2047%5D"
+    },
+    {
+      "bytes": 21815,
+      "captured_at": "2026-11-27T04:23:14.382392Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "7c3e2b4d2047c1cbcf8dcc97ac26785330ef17b63211b0a877a847a9931f9315",
+      "started_at": "2026-11-27T04:23:13.945816Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.ascii?lat%5B2048%3A1%3A4095%5D"
+    },
+    {
+      "bytes": 21377,
+      "captured_at": "2026-11-27T04:23:14.808840Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "74d87750ac4a905db22e458138fe08ff2457fd38a594173463f3cbb7305ef683",
+      "started_at": "2026-11-27T04:23:14.383708Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f072.nc.ascii?lat%5B4096%3A1%3A6105%5D"
+    },
+    {
+      "bytes": 650,
+      "captured_at": "2026-11-27T04:23:15.015581Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "8a7b03b2e6df34d322a3a404277212bd2c22e17b92cd207102a98d0cf5e7bdcc",
+      "started_at": "2026-11-27T04:23:14.822332Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://noaa-nos-ofs-pds.s3.amazonaws.com/?list-type=2&max-keys=5&prefix=leofs%2Fnetcdf%2F2026%2F11%2F26%2Fleofs.t12z.20261126.fields.f120.nc"
+    },
+    {
+      "bytes": 2758,
+      "captured_at": "2026-11-27T04:23:15.400506Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "d9994293445c24688bace14b6915ef60d8cef4166f6266637533a558902a4a92",
+      "started_at": "2026-11-27T04:23:15.015740Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.dds"
+    },
+    {
+      "bytes": 14515,
+      "captured_at": "2026-11-27T04:23:15.817654Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "18e0ba0785b8b0311dcbe14311de623e7ea6c6bbe6e16beed2aa4c8592016546",
+      "started_at": "2026-11-27T04:23:15.400526Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.das"
+    },
+    {
+      "bytes": 190,
+      "captured_at": "2026-11-27T04:23:16.151527Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "8a8e3bd8d393a2a65c5a72f9e03a65dd3660b61d282dd2372ac68283985728a8",
+      "started_at": "2026-11-27T04:23:15.817677Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.ascii?Times"
+    },
+    {
+      "bytes": 10423,
+      "captured_at": "2026-11-27T04:23:16.502634Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "28787a8a126e2b8dd1b352cf41b25af477dd926df1f3f88390c04744b8f443e3",
+      "started_at": "2026-11-27T04:23:16.151571Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.ascii?aice%5B0%5D%5B0%3A1%3A2047%5D"
+    },
+    {
+      "bytes": 10423,
+      "captured_at": "2026-11-27T04:23:16.837486Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "28787a8a126e2b8dd1b352cf41b25af477dd926df1f3f88390c04744b8f443e3",
+      "started_at": "2026-11-27T04:23:16.503850Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.ascii?aice%5B0%5D%5B2048%3A1%3A4095%5D"
+    },
+    {
+      "bytes": 10233,
+      "captured_at": "2026-11-27T04:23:17.173807Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "1a871e301078a1c179023185d2396261e728f5d759393194fe80bae13f825948",
+      "started_at": "2026-11-27T04:23:16.838694Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.ascii?aice%5B0%5D%5B4096%3A1%3A6105%5D"
+    },
+    {
+      "bytes": 6335,
+      "captured_at": "2026-11-27T04:23:17.515636Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "0372f8c5df232707f13c756dd03c4812b757c875362f2dee0d771ac09f211cf4",
+      "started_at": "2026-11-27T04:23:17.174987Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.ascii?wet_nodes%5B0%5D%5B0%3A1%3A2047%5D"
+    },
+    {
+      "bytes": 6335,
+      "captured_at": "2026-11-27T04:23:17.853554Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "0372f8c5df232707f13c756dd03c4812b757c875362f2dee0d771ac09f211cf4",
+      "started_at": "2026-11-27T04:23:17.516789Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.ascii?wet_nodes%5B0%5D%5B2048%3A1%3A4095%5D"
+    },
+    {
+      "bytes": 6221,
+      "captured_at": "2026-11-27T04:23:18.186480Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "69be9a3e803de76f16038f1f2c66de693541b73cff301179c3572ba42883f2b7",
+      "started_at": "2026-11-27T04:23:17.854712Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.ascii?wet_nodes%5B0%5D%5B4096%3A1%3A6105%5D"
+    },
+    {
+      "bytes": 22520,
+      "captured_at": "2026-11-27T04:23:18.613334Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "a1a156e5d65ff0b4fb7ba2717e48afac04f45008c2b5e39c5d3e90202f91b68d",
+      "started_at": "2026-11-27T04:23:18.187582Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.ascii?art1%5B0%3A1%3A2047%5D"
+    },
+    {
+      "bytes": 22702,
+      "captured_at": "2026-11-27T04:23:19.026485Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "c2eb0f82be9b769768b8de3cc96d0d76c512280191cddd31c5006f1fb580b454",
+      "started_at": "2026-11-27T04:23:18.614655Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.ascii?art1%5B2048%3A1%3A4095%5D"
+    },
+    {
+      "bytes": 22218,
+      "captured_at": "2026-11-27T04:23:19.443345Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "7efa2b4baccdffa65bae8c4fb1c198c067aa8ab0cf6ae5b31fb769716dbd10b0",
+      "started_at": "2026-11-27T04:23:19.027889Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.ascii?art1%5B4096%3A1%3A6105%5D"
+    },
+    {
+      "bytes": 21970,
+      "captured_at": "2026-11-27T04:23:19.857331Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "8f724a337b3ab19ae8d12641334bf2013aaaf67c18679bd168e895ff97cee893",
+      "started_at": "2026-11-27T04:23:19.444639Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.ascii?lon%5B0%3A1%3A2047%5D"
+    },
+    {
+      "bytes": 22036,
+      "captured_at": "2026-11-27T04:23:20.272577Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "db76a13d6e2f3a16696337db8140813b0a43ae400205ef1238f79fab84436343",
+      "started_at": "2026-11-27T04:23:19.858671Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.ascii?lon%5B2048%3A1%3A4095%5D"
+    },
+    {
+      "bytes": 21567,
+      "captured_at": "2026-11-27T04:23:20.687714Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "2f5d0b42bd72cee8acae077b4269a4acb845167c2b37943573f24676c93a475b",
+      "started_at": "2026-11-27T04:23:20.273925Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.ascii?lon%5B4096%3A1%3A6105%5D"
+    },
+    {
+      "bytes": 21735,
+      "captured_at": "2026-11-27T04:23:21.106548Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "cafd9805e99b61453def5322ce7ffa846bcd008c4b49995623cc34cd8a81605a",
+      "started_at": "2026-11-27T04:23:20.689038Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.ascii?lat%5B0%3A1%3A2047%5D"
+    },
+    {
+      "bytes": 21815,
+      "captured_at": "2026-11-27T04:23:21.521842Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "8b26a5fae0ae872482360d988b22e6771b1821dacc775b1513e040e850da4086",
+      "started_at": "2026-11-27T04:23:21.107884Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.ascii?lat%5B2048%3A1%3A4095%5D"
+    },
+    {
+      "bytes": 21377,
+      "captured_at": "2026-11-27T04:23:21.934083Z",
+      "etag": null,
+      "last_modified": null,
+      "sha256": "96a89db8f412d4b8ac5d43062ad45a5042b973a07716575e733e3270b5d70495",
+      "started_at": "2026-11-27T04:23:21.523172Z",
+      "state": "CAPTURED",
+      "status": 200,
+      "url": "https://opendap.co-ops.nos.noaa.gov/thredds/dodsC/NOAA/LEOFS/MODELS/2026/11/26/leofs.t12z.20261126.fields.f120.nc.ascii?lat%5B4096%3A1%3A6105%5D"
+    }
+  ],
+  "release_eligible": false,
+  "season": 2026,
+  "started_at": "2026-11-27T04:23:04.999926Z",
+  "state": "PARTIAL"
+}
