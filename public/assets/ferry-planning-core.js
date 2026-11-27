@@ -28,6 +28,27 @@
     return {state:'reference',title:'Published 2027 Ranger III sailing date',text:'NPS lists this Rock Harbor service date. Enter the official departure time and verify reservations, changes and availability; 2027 fare arithmetic is not supplied here.'};
    }
   }
+  // Published 2027 calendars, date eligibility only. No inventory or assumed departure.
+  // https://isleroyaleboats.com/schedules.html (checked 2026-11-27).
+  if(c.id==='isle-royale'&&year==='2027'&&['sea-hunter','voyageur'].includes(r.id)){
+   const day=new Date(date+'T12:00:00Z').getUTCDay(),inbound=r.a.name==='Windigo';
+   let scheduled=false;
+   if(r.id==='sea-hunter'){
+    scheduled=(inRange(date,'2027-06-09','2027-07-10')&&[3,4,5,6].includes(day))||(inRange(date,'2027-07-14','2027-08-08')&&[0,3,4,5,6].includes(day))||(inRange(date,'2027-08-11','2027-09-04')&&[3,4,5,6].includes(day));
+   }else{
+    scheduled=(inRange(date,'2027-05-08','2027-05-23')&&(inbound?[0,4]:[3,6]).includes(day))||(inRange(date,'2027-05-24','2027-09-12')&&(inbound?[0,2,4]:[1,3,6]).includes(day))||(inRange(date,'2027-09-15','2027-09-23')&&day===(inbound?4:3));
+   }
+   // The separate late-September Voyageur II day-trip sailings are not this
+   // regular overnight route model. Direct visitors to the operator instead.
+   if(r.id==='voyageur'&&['2027-09-18','2027-09-19','2027-09-25','2027-09-26'].includes(date))return {state:'unknown',title:'Separate Voyageur II day-trip schedule',text:'The operator lists a special Windigo day trip, not the regular overnight itinerary modeled here. Check the operator for times.',source:'https://isleroyaleboats.com/schedules.html'};
+   const name=r.id==='sea-hunter'?'Sea Hunter III':'Voyageur II';
+   return {state:scheduled?'reference':'closed',title:scheduled?'Published 2027 '+name+' sailing date':'No regular '+name+' sailing on this date',text:scheduled?'The operator lists this regular sailing date. Verify the exact timetable, reservations and return before entering departure times.':'This date or direction is outside the published regular service. Check the operator for exceptions.',source:'https://isleroyaleboats.com/schedules.html'};
+  }
+  // https://www.lake-express.com/plan-your-trip/schedule/ (updated 2026-11-13).
+  if(c.id==='lake-express'&&year==='2027'){
+   const scheduled=inRange(date,'2027-05-07','2027-10-18');
+   return {state:scheduled?'reference':'closed',title:scheduled?'Published 2027 Lake Express season':'Outside the published 2027 Lake Express season',text:scheduled?'The operator lists service on this date, but departure times vary by day and season. Verify the exact sailing and 2027 fare with the operator.':'The operator lists May 7 through October 18, 2027. Verify any changes directly.',source:'https://www.lake-express.com/plan-your-trip/schedule/'};
+  }
   // Operator-specific Jet Express season, not a shared Put-in-Bay island season.
   // https://jet-express.com/put-in-bay-upcoming-events/ (2026 first and last operating days).
   if(c.id==='put-in-bay'&&r.id==='jet'&&year==='2026'&&!inRange(date,'2026-05-01','2026-10-25'))return {state:'closed',title:'Jet Express is outside its published 2026 season',text:'The Port Clinton operator listed May 1 through October 25, 2026. Miller Ferry has a separate, weather-dependent calendar; verify its own operation.'};
