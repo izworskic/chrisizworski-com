@@ -71,7 +71,7 @@ jobs:
 
   michigan-ski-browser-qa:
     needs: verify
-    if: github.event_name == 'pull_request' && (github.head_ref == 'feat/michigan-ski-official-open-today' || github.head_ref == 'fix/michigan-ski-evidence-first-status' || github.head_ref == 'experience/michigan-ski-decision-and-quality-20261124' || github.head_ref == 'experience/michigan-ski-map-carousel-dedup-20261124')
+    if: github.event_name == 'pull_request' && (github.head_ref == 'feat/michigan-ski-official-open-today' || github.head_ref == 'fix/michigan-ski-evidence-first-status' || github.head_ref == 'experience/michigan-ski-decision-and-quality-20261124' || github.head_ref == 'experience/michigan-ski-map-carousel-dedup-20261124' || github.head_ref == 'fix/ski-operator-status-evidence')
     runs-on: ubuntu-latest
     timeout-minutes: 12
     steps:
