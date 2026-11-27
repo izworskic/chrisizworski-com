@@ -237,8 +237,10 @@ the same PR. Each one has failed `main` before when it was forgotten:
 2. For a tool on a separate host (for example `phenology.chrisizworski.com`), its id in
    that host's `toolIds` in `benchmarks/creator-entity-contract.json`.
 3. Any API route it adds sends `X-Robots-Tag` (`tests/api-contract.test.js`).
-4. `node scripts/stamp-freshness.mjs` after the edit, so the sitemap `lastmod` matches the
-   page's `dateModified`. Run it on a full-history clone, never a shallow one.
+4. `node scripts/stamp-freshness.mjs --changed` after committing the edit, so the sitemap `lastmod`
+   matches the page's `dateModified` for the pages this branch changed. A bare run restamps every
+   lagging page on the site; do that only as its own PR. Run it on a full-history clone, never a
+   shallow one.
 
 `npm run verify:quick` checks all four in seconds.
 

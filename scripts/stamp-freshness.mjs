@@ -17,9 +17,13 @@
 // prior Michigan calendar day. Running this changes only the stamp; the gate below tolerates a few
 // days of lag so that the commit which writes the stamp does not immediately invalidate it.
 //
-// Usage: node scripts/stamp-freshness.mjs [--check]
-//   default   rewrite stamps that are older than the file's real last-commit date
-//   --check   report only, exit 1 if any stamp lags by more than TOLERANCE_DAYS
+// Usage: node scripts/stamp-freshness.mjs [--check | --changed[=REF] | --only=ROUTE_OR_FILE,...]
+//   default        rewrite every stamp that is older than the file's real last-commit date
+//   --check        report only, exit 1 if any stamp lags by more than TOLERANCE_DAYS
+//   --changed[=REF] rewrite only pages this branch changed versus REF (default origin/main),
+//                  plus their sitemap entries. Use this in a feature PR: a full run restamps
+//                  every lagging page on the site and drags unrelated pages into one change.
+//   --only=...     rewrite only the named routes (/soo-locks/) or files (public/x/index.html)
 
 import { readFile, writeFile } from "node:fs/promises";
 import { readdirSync, statSync } from "node:fs";
@@ -29,6 +33,12 @@ import path from "node:path";
 const root = path.resolve(import.meta.dirname, "..");
 const publicRoot = path.join(root, "public");
 const CHECK = process.argv.includes("--check");
+const changedArg = process.argv.find((a) => a === "--changed" || a.startsWith("--changed="));
+const onlyArg = process.argv.find((a) => a.startsWith("--only="));
+if (CHECK && (changedArg || onlyArg)) {
+  console.error("FRESHNESS: --check always audits the whole site; do not combine it with --changed or --only.");
+  process.exit(2);
+}
 
 // A shallow clone has one commit, so every file's "last commit" is that commit and every stamp
 // looks wrong at once (248 false mismatches seen in practice). Worse, running the stamper there
@@ -75,6 +85,37 @@ function walk(dir) {
   }
   return out;
 }
+
+
+// Optional write scope. null means every page (the historical behaviour).
+function changedPublicFiles(ref) {
+  const git = (args) => execFileSync("git", args, { cwd: root, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] })
+    .split("\n").map((l) => l.trim()).filter(Boolean);
+  let base = ref;
+  try { git(["rev-parse", "--verify", base]); } catch {
+    if (ref === "origin/main") { try { git(["rev-parse", "--verify", "main"]); base = "main"; } catch { base = null; } }
+    else base = null;
+  }
+  if (!base) {
+    console.error(`FRESHNESS: cannot resolve ${ref}; fetch it or pass --changed=REF. Nothing was changed.`);
+    process.exit(2);
+  }
+  const names = new Set([
+    ...git(["diff", "--name-only", "--diff-filter=AMR", `${base}...HEAD`]),
+    ...git(["diff", "--name-only", "--diff-filter=AMR", "HEAD"]),
+  ]);
+  return [...names].filter((n) => n.startsWith("public/") && n.endsWith(".html")).map((n) => path.join(root, n));
+}
+let scopeFiles = null;
+if (changedArg) scopeFiles = changedPublicFiles(changedArg.includes("=") ? changedArg.slice(changedArg.indexOf("=") + 1) : "origin/main");
+if (onlyArg) {
+  scopeFiles = (scopeFiles || []).concat(onlyArg.slice("--only=".length).split(",").map((v) => v.trim()).filter(Boolean).map((v) =>
+    v.startsWith("/") && !v.startsWith(root) ? path.join(publicRoot, v.replace(/^\//, ""), v.endsWith(".html") ? "" : "index.html")
+      : path.resolve(root, v)));
+}
+const scopeSet = scopeFiles ? new Set(scopeFiles.map((f) => path.resolve(f))) : null;
+const inScope = (file) => !scopeSet || scopeSet.has(path.resolve(file));
+const scopedRoutes = new Set();
 
 // When did this file's CONTENT last change, ignoring commits that only moved the stamp itself.
 // Without this the script oscillates: it stamps a date, the commit carrying that stamp becomes the
@@ -154,6 +195,7 @@ async function syncSitemaps(dateByRoute) {
     let next = xml.replace(
       /<loc>https:\/\/chrisizworski\.com([^<]*)<\/loc>(\s*)<lastmod>(\d{4}-\d{2}-\d{2})<\/lastmod>/g,
       (whole, route, gap, current) => {
+        if (scopeSet && !scopedRoutes.has(route) && !scopedRoutes.has(route.replace(/\/$/, "") + "/")) return whole;
         const want = dateByRoute.get(route) || dateByRoute.get(route.replace(/\/$/, "") + "/");
         if (!want || want === current) return whole;
         updated += 1;
@@ -170,6 +212,7 @@ async function syncSitemaps(dateByRoute) {
     next = next.replace(
       /<loc>https:\/\/chrisizworski\.com([^<]*)<\/loc>(\s*)<(?!lastmod>)/g,
       (whole, route, gap) => {
+        if (scopeSet && !scopedRoutes.has(route) && !scopedRoutes.has(route.replace(/\/$/, "") + "/")) return whole;
         const want = dateByRoute.get(route) || dateByRoute.get(route.replace(/\/$/, "") + "/");
         if (!want) return whole;
         updated += 1;
@@ -203,6 +246,8 @@ for (const file of files) {
   if (!real) { skippedNoHistory += 1; continue; }
 
   const routeKey = "/" + path.relative(publicRoot, file).replace(/\\/g, "/").replace(/index\.html$/, "");
+  if (scopeSet && !inScope(file)) { dateByRoute.set(routeKey, claimed); continue; }
+  if (scopeSet) scopedRoutes.add(routeKey);
   const lagDays = Math.round((Date.parse(real) - Date.parse(claimed)) / 86400000);
   // In check mode compare the sitemap with the date actually in the document.
   // Write mode synchronizes to the date it will stamp; a permitted lag in check
@@ -236,6 +281,7 @@ for (const rule of localRewrites) {
   const documentRoute = rule.destination.replace(/index\.html$/, "");
   const date = dateByRoute.get(documentRoute);
   if (date) dateByRoute.set(rule.source, date);
+  if (date && scopedRoutes.has(documentRoute)) scopedRoutes.add(rule.source);
   else if (unstamped.includes(documentRoute)) unstamped.push(rule.source);
 }
 
@@ -252,14 +298,20 @@ if (iceParent !== undefined) {
   if (!generatorDate) throw new Error("Ice-out generated pages require the generator's full git history for freshness.");
   if (ledger.generatorModified !== generatorDate) {
     generatedDateDrift.push({ generator: ledger.generator, claimed: ledger.generatorModified, real: generatorDate });
-    if (!CHECK) await writeFile(ledgerPath, JSON.stringify({ ...ledger, generatorModified: generatorDate }, null, 2) + "\n");
+    const ledgerInScope = !scopeSet || scopedRoutes.has(ledger.parent) || scopeSet.has(path.resolve(root, ledger.generator));
+    if (!CHECK && ledgerInScope) await writeFile(ledgerPath, JSON.stringify({ ...ledger, generatorModified: generatorDate }, null, 2) + "\n");
   }
   const parentDate = dateByRoute.get(ledger.parent);
   if (!parentDate) throw new Error("Ice-out parent requires a checked content date before generated-page freshness.");
   const generatedDate = [parentDate, generatorDate].sort().at(-1);
-  for (const route of ledger.pages) dateByRoute.set(route, generatedDate);
+  for (const route of ledger.pages) {
+    dateByRoute.set(route, generatedDate);
+    if (scopeSet && scopedRoutes.has(ledger.parent)) scopedRoutes.add(route);
+  }
 }
 
+const RUN_HINT = "Run: node scripts/stamp-freshness.mjs --changed   (stamps only the pages this branch changed)\n" +
+  "     node scripts/stamp-freshness.mjs             (restamps every lagging page site-wide; a separate PR)";
 const sitemapSync = await syncSitemaps(dateByRoute);
 const sitemapDrift = sitemapSync.updated;
 
@@ -267,7 +319,7 @@ if (CHECK) {
   if (generatedDateDrift.length) {
     console.error("FRESHNESS CHECK FAILED: the generated-page content date does not match the generator's git history.");
     for (const item of generatedDateDrift) console.error(`  ${item.generator}  ${item.claimed} -> ${item.real}`);
-    console.error("Run: node scripts/stamp-freshness.mjs");
+    console.error(RUN_HINT);
     process.exit(1);
   }
   if (sitemapDrift) {
@@ -296,17 +348,18 @@ if (CHECK) {
   }
   if (sitemapDrift) {
     console.error(`\nFRESHNESS CHECK FAILED: ${sitemapDrift} sitemap lastmod entries disagree with their page's dateModified.`);
-    console.error("Run: node scripts/stamp-freshness.mjs");
+    console.error(RUN_HINT);
     process.exit(1);
   }
   if (bad.length) {
     console.error(`\nFRESHNESS CHECK FAILED: ${bad.length} pages understate their own modification date by more than ${TOLERANCE_DAYS} days.`);
-    console.error("Run: node scripts/stamp-freshness.mjs");
+    console.error(RUN_HINT);
     process.exit(1);
   }
   console.log("freshness PASS\n");
 } else {
-  console.log(`stamped ${rewritten} pages from git history, synced ${sitemapDrift} sitemap entries`);
+  console.log(`stamped ${rewritten} pages from git history, synced ${sitemapDrift} sitemap entries` +
+    (scopeSet ? ` (scoped to ${scopedRoutes.size} changed page${scopedRoutes.size === 1 ? "" : "s"})` : ""));
   if (skippedNoHistory) console.log(`  ${skippedNoHistory} skipped, no git history`);
   const worst = lagging.sort((a, b) => b.lagDays - a.lagDays).slice(0, 5);
   for (const l of worst) console.log(`  ${String(l.lagDays).padStart(4)}d corrected  ${l.claimed} -> ${l.real}  ${l.rel}`);
