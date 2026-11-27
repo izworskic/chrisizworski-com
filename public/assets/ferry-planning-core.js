@@ -14,6 +14,44 @@
  function availability(c,date,r){
   if(!/^\d{4}-\d{2}-\d{2}$/.test(date)||(!Number.isFinite(Date.parse(date+'T12:00:00Z'))||new Date(date+'T12:00:00Z').toISOString().slice(0,10)!==date))return {state:'unknown',title:'Choose a valid travel date',text:'The plan needs a calendar date.'};
   const year=date.slice(0,4),fareYear=String(c.fareReferenceYear||2026),known=c.seasonWindows?.[year]||(year===fareYear?c.season:null);
+  // NPS annual public-use closure: https://www.nps.gov/isro/planyourvisit/directions.htm
+  if(c.id==='isle-royale'){
+   const md=date.slice(5);
+   if(md>='11-01'||md<='04-15')return {state:'closed',title:'Isle Royale is closed to visitors',text:'NPS closes the park to public use November 1 through April 15. Do not plan a ferry voyage during this closure.'};
+   // The official 2027 schedule is direction-specific and includes Rock Harbor exceptions.
+   // https://www.nps.gov/isro/planyourvisit/ranger-iii-schedule.htm (updated 2026-10-14).
+   if(year==='2027'&&r.id==='ranger'){
+    const inbound=r.a.name==='Rock Harbor',day=new Date(date+'T12:00:00Z').getUTCDay();
+    const exceptions=inbound?['2027-06-16','2027-07-03','2027-07-14','2027-08-11']:['2027-06-15','2027-07-02','2027-07-13','2027-08-10'];
+    const scheduled=inRange(date,inbound?'2027-05-26':'2027-05-25',inbound?'2027-09-11':'2027-09-10')&&(inbound?[3,6]:[2,5]).includes(day)&&!exceptions.includes(date);
+    if(!scheduled)return {state:'closed',title:'No published Ranger III Rock Harbor sailing on this date',text:'The 2027 NPS timetable does not list this direction to or from Rock Harbor on the selected day. Some exception dates serve Windigo instead; check the official timetable.'};
+    return {state:'reference',title:'Published 2027 Ranger III sailing date',text:'NPS lists this Rock Harbor service date. Enter the official departure time and verify reservations, changes and availability; 2027 fare arithmetic is not supplied here.'};
+   }
+  }
+  // Published 2027 calendars, date eligibility only. No inventory or assumed departure.
+  // https://isleroyaleboats.com/schedules.html (checked 2026-11-27).
+  if(c.id==='isle-royale'&&year==='2027'&&['sea-hunter','voyageur'].includes(r.id)){
+   const day=new Date(date+'T12:00:00Z').getUTCDay(),inbound=r.a.name==='Windigo';
+   let scheduled=false;
+   if(r.id==='sea-hunter'){
+    scheduled=(inRange(date,'2027-06-09','2027-07-10')&&[3,4,5,6].includes(day))||(inRange(date,'2027-07-14','2027-08-08')&&[0,3,4,5,6].includes(day))||(inRange(date,'2027-08-11','2027-09-04')&&[3,4,5,6].includes(day));
+   }else{
+    scheduled=(inRange(date,'2027-05-08','2027-05-23')&&(inbound?[0,4]:[3,6]).includes(day))||(inRange(date,'2027-05-24','2027-09-12')&&(inbound?[0,2,4]:[1,3,6]).includes(day))||(inRange(date,'2027-09-15','2027-09-23')&&day===(inbound?4:3));
+   }
+   // The separate late-September Voyageur II day-trip sailings are not this
+   // regular overnight route model. Direct visitors to the operator instead.
+   if(r.id==='voyageur'&&['2027-09-18','2027-09-19','2027-09-25','2027-09-26'].includes(date))return {state:'unknown',title:'Separate Voyageur II day-trip schedule',text:'The operator lists a special Windigo day trip, not the regular overnight itinerary modeled here. Check the operator for times.',source:'https://isleroyaleboats.com/schedules.html'};
+   const name=r.id==='sea-hunter'?'Sea Hunter III':'Voyageur II';
+   return {state:scheduled?'reference':'closed',title:scheduled?'Published 2027 '+name+' sailing date':'No regular '+name+' sailing on this date',text:scheduled?'The operator lists this regular sailing date. Verify the exact timetable, reservations and return before entering departure times.':'This date or direction is outside the published regular service. Check the operator for exceptions.',source:'https://isleroyaleboats.com/schedules.html'};
+  }
+  // https://www.lake-express.com/plan-your-trip/schedule/ (updated 2026-11-13).
+  if(c.id==='lake-express'&&year==='2027'){
+   const scheduled=inRange(date,'2027-05-07','2027-10-18');
+   return {state:scheduled?'reference':'closed',title:scheduled?'Published 2027 Lake Express season':'Outside the published 2027 Lake Express season',text:scheduled?'The operator lists service on this date, but departure times vary by day and season. Verify the exact sailing and 2027 fare with the operator.':'The operator lists May 7 through October 18, 2027. Verify any changes directly.',source:'https://www.lake-express.com/plan-your-trip/schedule/'};
+  }
+  // Operator-specific Jet Express season, not a shared Put-in-Bay island season.
+  // https://jet-express.com/put-in-bay-upcoming-events/ (2026 first and last operating days).
+  if(c.id==='put-in-bay'&&r.id==='jet'&&year==='2026'&&!inRange(date,'2026-05-01','2026-10-25'))return {state:'closed',title:'Jet Express is outside its published 2026 season',text:'The Port Clinton operator listed May 1 through October 25, 2026. Miller Ferry has a separate, weather-dependent calendar; verify its own operation.'};
   if(c.id==='manitou'){
    if(year==='2026')return {state:'closed',title:'No regular ferry service in 2026',text:'Both Manitou docks were under construction; no scheduled ferry service in 2026.'};
    if(year==='2027')return {state:'unknown',title:'2027 ferry restart not confirmed',text:'A 2026 NPS notice expected dock reopening in 2027, not a confirmed ferry service restart. Check current NPS and Manitou Island Transit announcements.'};
@@ -58,7 +96,7 @@
   return p;
  }
  function fare(c,o,date,adults,kids,vehicle,roundtrip){
-  const r=c.experience.routes.find(r=>r.id===o?.id)||c.experience.routes[0];if(availability(c,date,r).state!=='reference'||!o?.pricing||date.slice(0,4)!=='2026'||(vehicle&&o.noVehicle))return null;
+  const r=c.experience.routes.find(r=>r.id===o?.id||(o?.id==='hunter'&&r.id==='sea-hunter'))||c.experience.routes[0];if(availability(c,date,r).state!=='reference'||!o?.pricing||date.slice(0,4)!=='2026'||(vehicle&&o.noVehicle))return null;
   if((o.priceStart&&date<o.priceStart)||(o.priceEnd&&date>o.priceEnd))return null;
   let t=o.pricing;if((o.id==='badger'||o.id==='chi')&&inRange(date,'2026-06-19','2026-09-07'))t=o.summerPricing||t;
   if(c.id==='toronto'&&inRange(date,'2026-08-01','2026-08-31'))t={...t,childRT:0};

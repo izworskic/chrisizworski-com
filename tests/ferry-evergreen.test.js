@@ -59,3 +59,54 @@ test('Fares cite their evidence year and every route has live official source ha
   assert.ok(c.sources.every(([,url])=>url.startsWith('https://')),key);
  }
 });
+
+test('Isle Royale public closure overrides every ferry and hypothetical timeline',()=>{
+ const c=data['isle-royale'];
+ for(const r of c.experience.routes){
+  for(const date of ['2026-11-27','2027-01-15','2027-04-15','2028-11-01']){
+   assert.equal(core.availability(c,date,r).state,'closed');
+   assert.equal(core.tripPlan(c,{route:r.id,date,departure:'09:00',tripType:'oneway'}).events.length,0);
+  }
+ }
+});
+test('Ranger III 2027 Rock Harbor schedule respects dates, direction and exceptions',()=>{
+ const c=data['isle-royale'],r=c.experience.routes.find(x=>x.id==='ranger');
+ assert.equal(core.availability(c,'2027-05-25',r).state,'reference');
+ assert.equal(core.availability(c,'2027-05-26',r).state,'closed');
+ assert.equal(core.availability(c,'2027-06-15',r).state,'closed');
+ assert.equal(core.availability(c,'2027-07-02',r).state,'closed');
+ const reverse={...r,a:r.b,b:r.a}; // tripPlan constructs the return direction this way.
+ assert.equal(core.availability(c,'2027-05-26',reverse).state,'reference');
+ assert.equal(core.availability(c,'2027-06-16',reverse).state,'closed');
+ assert.equal(core.availability(c,'2027-09-11',reverse).state,'reference');
+ assert.equal(core.fare(c,c.options[0],'2027-05-25',2,0,0,false),null);
+});
+test('Jet Express season is distinct from Miller and closed routes have no quote',()=>{
+ const c=data['put-in-bay'],jet=c.experience.routes.find(r=>r.id==='jet'),miller=c.experience.routes.find(r=>r.id==='miller');
+ assert.equal(core.availability(c,'2026-10-25',jet).state,'reference');
+ assert.equal(core.availability(c,'2026-11-27',jet).state,'closed');
+ assert.equal(core.fare(c,c.options.find(o=>o.id==='jet'),'2026-11-27',2,0,0,true),null);
+ assert.notEqual(core.availability(c,'2026-11-27',miller).state,'closed');
+ const browser=fs.readFileSync('public/assets/great-lakes-ferry.js','utf8');
+ assert.match(browser,/FerryPlanning\.availability\(config,date,route\)/);
+ assert.match(browser,/blocked\?\{text:gate.title,complete:false\}/);
+});
+
+test('newly published 2027 Lake Express, Sea Hunter and Voyageur regular dates remain distinct',()=>{
+ const le=data['lake-express'],lr=le.experience.routes[0];
+ assert.equal(core.availability(le,'2027-05-06',lr).state,'closed');
+ assert.equal(core.availability(le,'2027-05-07',lr).state,'reference');
+ assert.equal(core.availability(le,'2027-10-18',lr).state,'reference');
+ assert.equal(core.availability(le,'2027-10-19',lr).state,'closed');
+ assert.equal(core.fare(le,le.options[0],'2027-07-01',2,1,0,true),null);
+ const c=data['isle-royale'],hunter=c.experience.routes.find(r=>r.id==='sea-hunter'),v=c.experience.routes.find(r=>r.id==='voyageur');
+ assert.equal(core.availability(c,'2027-06-09',hunter).state,'reference');
+ assert.equal(core.availability(c,'2027-06-13',hunter).state,'closed');
+ assert.equal(core.availability(c,'2027-07-18',hunter).state,'reference');
+ assert.equal(core.availability(c,'2027-08-15',hunter).state,'closed');
+ assert.equal(core.availability(c,'2027-05-08',v).state,'reference');
+ assert.equal(core.availability(c,'2027-05-09',v).state,'closed');
+ assert.equal(core.availability(c,'2027-05-09',{...v,a:v.b,b:v.a}).state,'reference');
+ assert.equal(core.availability(c,'2027-09-18',v).state,'unknown');
+ assert.equal(core.availability(c,'2027-09-22',v).state,'reference');
+});
