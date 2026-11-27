@@ -27,18 +27,26 @@
   const towns = {};
   board.querySelectorAll('[data-rsw-view]').forEach(b => { towns[b.dataset.rswView] = (b.querySelector('strong') || b).textContent; });
 
-  let L = null, map = null, shipLayer = null, spotMarkers = {}, started = false;
+  let L = null, map = null, shipLayer = null, spotMarkers = {}, started = false, framedShips = false;
 
+  // One Leaflet per page. The Detroit relation map looks for script[data-detroit-leaflet], so this
+  // tags its own copy the same way and waits for whichever copy is already loading.
   function loadLeaflet() {
     if (window.L) return Promise.resolve(window.L);
     return new Promise((resolve, reject) => {
-      const css = doc.createElement('link');
-      css.rel = 'stylesheet'; css.href = '/assets/leaflet-1.9.4.css';
-      doc.head.appendChild(css);
+      const done = () => window.L ? resolve(window.L) : reject(new Error('no Leaflet'));
+      const existing = doc.querySelector('script[data-detroit-leaflet],script[data-rsw-leaflet]');
+      if (existing) { existing.addEventListener('load', done, { once: true }); existing.addEventListener('error', reject, { once: true }); return; }
+      if (!doc.querySelector('link[data-detroit-leaflet],link[data-rsw-leaflet]')) {
+        const css = doc.createElement('link');
+        css.rel = 'stylesheet'; css.href = '/assets/leaflet-1.9.4.css';
+        css.dataset.rswLeaflet = '1'; css.dataset.detroitLeaflet = '1';
+        doc.head.appendChild(css);
+      }
       const s = doc.createElement('script');
       s.src = '/assets/leaflet-1.9.4.js'; s.async = true;
-      s.onload = () => window.L ? resolve(window.L) : reject(new Error('no Leaflet'));
-      s.onerror = reject;
+      s.dataset.rswLeaflet = '1'; s.dataset.detroitLeaflet = '1';
+      s.onload = done; s.onerror = reject;
       doc.head.appendChild(s);
     });
   }
@@ -64,11 +72,18 @@
     }).addTo(map);
     // The model's channel line is an approximate centreline for the arithmetic, not a chart, so it is not drawn.
     const pts = [];
+    // Labels go right on a north-south river (St. Clair). On an east-west reach (Detroit) the
+    // westernmost spot's label goes above so neighbouring labels do not collide.
+    const list = Object.values(vp);
+    const lats = list.map(v => v.lat), lons = list.map(v => v.lon);
+    const eastWest = (Math.max(...lons) - Math.min(...lons)) > (Math.max(...lats) - Math.min(...lats));
+    const west = Math.min(...lons);
     for (const [id, v] of Object.entries(vp)) {
+      const dir = eastWest && v.lon === west ? 'top' : 'right';
       pts.push([v.lat, v.lon]);
       const m = L.circleMarker([v.lat, v.lon], { radius: 9, color: '#0f2a3a', weight: 2, fillColor: '#e0b970', fillOpacity: 1 })
         .addTo(map)
-        .bindTooltip(towns[id] || v.name, { permanent: true, direction: 'right', offset: [10, 0], className: 'rsw-spot-label' });
+        .bindTooltip(towns[id] || v.name, { permanent: true, direction: dir, offset: dir === 'top' ? [0, -10] : [10, 0], className: 'rsw-spot-label' });
       m.on('click', () => selectSpot(id));
       spotMarkers[id] = m;
     }
@@ -79,7 +94,10 @@
         .bindPopup('<strong>' + esc(c.short) + ' live camera</strong><br><a href="#cam-' + esc(c.id) + '">Watch it below</a>');
     }
     shipLayer = L.layerGroup().addTo(map);
-    map.fitBounds(L.latLngBounds(pts).pad(0.08));
+    for (const c of cams) if (Number.isFinite(c.lat) && Number.isFinite(c.lon)) pts.push([c.lat, c.lon]);
+    const box = L.latLngBounds(pts);
+    const span = Math.max(box.getNorth() - box.getSouth(), box.getEast() - box.getWest());
+    map.fitBounds(box.pad(span < 0.15 ? 0.12 : 0.08));
     highlight(board.dataset.view);
     if (board.rswData) draw(board.rswData);
   }
@@ -116,6 +134,12 @@
         .addTo(shipLayer).bindPopup(lines.join('<br>'));
       if (isMoving) moving++; else stopped++;
       if (bounds.contains([v.lat, v.lon])) inBox++;
+    }
+    // Once per page view: if a highlighted ship is off the map, widen the view to include it.
+    if (!framedShips && Object.keys(next).length) {
+      const want = (data.vessels || []).filter(v => next[String(v.mmsi)] && Number.isFinite(v.lat)).map(v => [v.lat, v.lon]);
+      if (want.some(p => !bounds.contains(p))) { map.fitBounds(bounds.extend(L.latLngBounds(want)).pad(0.05)); }
+      framedShips = true;
     }
     const forecast = Object.keys(next).length;
     summary.textContent = (moving + stopped === 0

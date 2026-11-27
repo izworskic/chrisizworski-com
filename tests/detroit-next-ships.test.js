@@ -56,9 +56,10 @@ test('refusals: stopped, recreational and off-channel reports never get a window
   assert.equal(watch.forecasts(model, [stopped, pleasure, off], NOW, corridor, { maxReportAgeMin: 10 }).length, 0);
 });
 
-test('page: box is additive, below the live answer, and the live answer is untouched', () => {
-  const live = html.indexOf('<section class="intent-live"'), box = html.indexOf('id="rswBoard"'), editorial = html.indexOf('id="intent-editorial"');
-  assert.ok(live > 0 && live < box && box < editorial);
+test('page: answer first, live signal kept intact below it', () => {
+  const lede = html.indexOf('class="lede"'), season = html.indexOf('data-detroit-season'), box = html.indexOf('id="rswBoard"'),
+    map = html.indexOf('data-rsw-map '), live = html.indexOf('<section class="intent-live"'), where = html.indexOf('id="drWhereTitle"'), editorial = html.indexOf('id="intent-editorial"');
+  assert.ok(lede < season && season < box && box < map && map < live && live < where && where < editorial, 'order: season, board, map, live signal, where to stand, editorial');
   assert.match(html, /id="intent-headline">Reading the current Detroit signal…</);
   assert.match(html, /data-max-report-age-min="10"/);
   assert.match(html, /Tested estimate, not a schedule/);
@@ -67,7 +68,31 @@ test('page: box is additive, below the live answer, and the live answer is untou
   assert.match(html, /detroit-freighter-relation\.js\?v=20260924a/);
   const inline = html.match(/<script type="application\/json" id="rswModel">([\s\S]*?)<\/script>/)[1];
   assert.deepEqual(JSON.parse(inline), model);
-  assert.equal((html.match(/rsw-detroit:start/g) || []).length, 1);
+  for (const m of ['rsw-detroit:start', 'rsw-detroit-where:start', 'rsw-detroit-method:start']) assert.equal((html.match(new RegExp(m, 'g')) || []).length, 1, m);
+});
+
+test('page: method panels folded, not removed; self-link marked current', () => {
+  assert.match(html, /<details class="dr-method"><summary>How the live signal decides<\/summary><section class="content-grid">/);
+  for (const phrase of [/10 minutes/, /active reported movement/, /roughly 12 miles/, /No active passage nearby is a useful answer/]) assert.match(html, phrase);
+  assert.match(html, /href="\/detroit-river-freighters\/" aria-current="page"/);
+  assert.match(html, /When will the next freighter pass the Detroit RiverWalk or Belle Isle\?/);
+});
+
+test('one Leaflet per page: the map reuses the relation map copy and vice versa', () => {
+  const js = fs.readFileSync('public/assets/river-ship-map.js', 'utf8');
+  assert.match(js, /script\[data-detroit-leaflet\]/);
+  assert.match(js, /dataset\.detroitLeaflet = '1'/);
+});
+
+test('season band: Soo Locks open Mar 25 to Jan 15, winter says a quiet river is normal', () => {
+  const { season } = require('../public/assets/detroit-river-page.js');
+  assert.equal(season(new Date('2026-07-01T16:00:00Z')).state, 'open');
+  assert.equal(season(new Date('2026-12-30T16:00:00Z')).state, 'final-weeks');
+  assert.equal(season(new Date('2027-01-15T16:00:00Z')).state, 'winter');
+  assert.match(season(new Date('2027-02-10T16:00:00Z')).text, /quiet board is normal/);
+  assert.equal(season(new Date('2027-03-25T16:00:00Z')).state, 'open');
+  assert.match(html, /data-detroit-season/);
+  assert.match(html, /\/great-lakes-winter-freighter-guide\//);
 });
 
 test('Detroit cameras: USGS Fort Wayne still through the allowlist, BoatNerd Belle Isle click-to-play', () => {
