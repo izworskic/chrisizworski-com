@@ -149,3 +149,17 @@
  .seaway-type-legend-items{gap:6px 9px}
  .seaway-type-legend-item{font-size:10px}
 }
+/* Navigation-season state (seaway-season.js): official target dates, first screen and ship watch. */
+.season-band{margin-top:20px;max-width:760px;padding:14px 16px 13px;background:var(--white);border:1px solid #e6d5b8;border-left:4px solid var(--gold);border-radius:6px}
+.season-band .season-kicker{font-size:10px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:#7a5a24;margin:0 0 6px}
+.season-band .season-headline{font-family:Georgia,"Times New Roman",serif;font-size:21px;line-height:1.28;color:var(--ink);margin:0}
+.season-band .season-detail{font-size:13px;line-height:1.6;color:#4e676d;margin-top:7px}
+.season-band .season-source{font-size:11px;line-height:1.5;color:var(--muted);margin-top:8px}
+.season-band[data-season-state="final-weeks"],.season-band[data-season-state="last-day"],.season-band[data-season-state="clearing"]{border-left-color:var(--rust)}
+.season-band[data-season-state="final-weeks"] .season-kicker,.season-band[data-season-state="last-day"] .season-kicker,.season-band[data-season-state="clearing"] .season-kicker{color:#94462f}
+.season-band[data-season-state="opening-week"]{border-left-color:var(--green)}.season-band[data-season-state="opening-week"] .season-kicker{color:#3d6a52}
+.season-band[data-season-state="closed"]{border-color:#cdd8d6;border-left-color:#5f7c84;background:#f1f4f2}
+.season-inline{margin:8px 0 0;font-size:12px;line-height:1.5;font-weight:650;color:#7a3f2c}
+.season-inline[data-season-state="open"]{color:#46717a}.season-inline[data-season-state="closed"]{color:#3f5d65}
+.season-inline a{font-weight:700;white-space:nowrap}
+@media(max-width:740px){.season-band{margin-top:16px;padding:12px 13px}.season-band .season-headline{font-size:19px}.season-band .season-detail{font-size:12.5px}.station-head .season-inline{font-size:11.5px}}
