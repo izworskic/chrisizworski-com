@@ -140,6 +140,7 @@ test('static Pukaskwa fallback reflects dated reopening without implying current
  assert.match(html,/reported the White River Suspension Bridge trail open on Nov 3/);
  assert.match(html,/The report is now stale/);
  assert.doesNotMatch(html,/last reported closed|last reported the bridge trail closed/i);
+ assert.match(html,/data-trail="white-river-bridge"[^>]*data-status="source-unverified"/);
 });
 test('a healthy monitor with a superseding but aged reopening cannot certify access',async()=>{
  const {recordSuccess}=await import('../lib/pukaskwa/condition-monitor.mjs');
