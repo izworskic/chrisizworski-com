@@ -12,8 +12,8 @@ const USER_AGENT =
 
 function configuredKeys() {
   return {
-    ny: process.env.NY511_API_KEY || null,
-    ontario: process.env.ONTARIO511_API_KEY || null,
+    ny: String(process.env.NY511_API_KEY || "").trim() || null,
+    ontario: String(process.env.ONTARIO511_API_KEY || "").trim() || null,
   };
 }
 
@@ -24,20 +24,35 @@ async function fetchJson(url, params) {
     headers: { accept: "application/json", "user-agent": USER_AGENT },
     signal: AbortSignal.timeout(10_000),
   });
-  if (!response.ok) throw new Error(`Official approach source returned ${response.status}`);
-  return response.json();
+  if (!response.ok) throw new Error("HTTP " + response.status);
+  const data = await response.json();
+  if (!Array.isArray(data) || !data.every(item => item && typeof item === "object" && !Array.isArray(item) && ("ID" in item || "Id" in item) && "Latitude" in item && "Longitude" in item)) {
+    throw new Error("Invalid feed schema");
+  }
+  return data;
 }
 
 async function sourcePair(key, eventsUrl, camerasUrl, extraParams = {}) {
-  if (!key) return { configured: false, available: false, events: [], cameras: [] };
+  if (!key) return { configured: false, available: false, complete: false, events_status: "not-configured", cameras_status: "not-configured", events: [], cameras: [] };
   const baseParams = { key, format: "json", ...extraParams };
   const [eventsResult, camerasResult] = await Promise.allSettled([
     fetchJson(eventsUrl, baseParams),
     fetchJson(camerasUrl, baseParams),
   ]);
+  const state = result => {
+    if (result.status === "fulfilled") return "available";
+    const reason = String(result.reason?.message || "");
+    if (/^HTTP (401|403)$/.test(reason)) return "credential-rejected";
+    if (reason === "Invalid feed schema") return "invalid-schema";
+    if (/^HTTP 429$/.test(reason)) return "rate-limited";
+    return "unavailable";
+  };
+  const events_status = state(eventsResult), cameras_status = state(camerasResult);
   return {
     configured: true,
-    available: eventsResult.status === "fulfilled" || camerasResult.status === "fulfilled",
+    available: events_status === "available" || cameras_status === "available",
+    complete: events_status === "available" && cameras_status === "available",
+    events_status, cameras_status,
     events: eventsResult.status === "fulfilled" ? eventsResult.value : [],
     cameras: camerasResult.status === "fulfilled" ? camerasResult.value : [],
   };
@@ -67,8 +82,8 @@ module.exports = async function handler(req, res) {
       ontarioCameras: ontario.cameras,
     },
     {
-      ny: { configured: ny.configured, available: ny.available },
-      ontario: { configured: ontario.configured, available: ontario.available },
+      ny: { configured: ny.configured, available: ny.available, complete: ny.complete, events_status: ny.events_status, cameras_status: ny.cameras_status },
+      ontario: { configured: ontario.configured, available: ontario.available, complete: ontario.complete, events_status: ontario.events_status, cameras_status: ontario.cameras_status },
     },
   );
 

@@ -148,3 +148,32 @@ test("UI refuses to convert approach context into an exact route claim", () => {
   assert.match(js, /no road-delay estimate is being invented/i);
   assert.doesNotMatch(js, /travel_time_minutes\s*=/i);
 });
+
+test("511 source pair accepts genuine empty arrays, rejects error envelopes and preserves partial coverage", async () => {
+  const { sourcePair } = require("../api/niagara-approach-context");
+  const prior = global.fetch;
+  try {
+    const missing = await sourcePair(null,"https://example.invalid/events","https://example.invalid/cameras");
+    assert.equal(missing.events_status,"not-configured");
+    assert.equal(missing.available,false);
+    global.fetch = async u => new Response(JSON.stringify(String(u).includes("/events") ? [] : {error:"Invalid key"}),{status:200});
+    const partial = await sourcePair("fixture","https://example.invalid/events","https://example.invalid/cameras");
+    assert.equal(partial.events_status,"available");
+    assert.equal(partial.cameras_status,"invalid-schema");
+    assert.equal(partial.available,true);
+    assert.equal(partial.complete,false);
+    global.fetch = async () => new Response("{}",{status:401});
+    const rejected = await sourcePair("fixture","https://example.invalid/events","https://example.invalid/cameras");
+    assert.equal(rejected.events_status,"credential-rejected");
+    assert.equal(rejected.available,false);
+    global.fetch = async () => new Response(JSON.stringify([]),{status:200});
+    const complete = await sourcePair("fixture","https://example.invalid/events","https://example.invalid/cameras");
+    assert.equal(complete.complete,true);
+    assert.equal(complete.available,true);
+    const context = buildApproachContext({}, {ny:complete,ontario:partial});
+    assert.equal(context.complete,false);
+    assert.equal(context.sources.ontario.cameras_status,"invalid-schema");
+    assert.equal(context.decision_role,"context_only");
+    assert.equal(buildApproachContext({}, {ny:complete,ontario:complete}).complete,true);
+  } finally { global.fetch = prior; }
+});
