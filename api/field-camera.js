@@ -112,7 +112,9 @@ async function handler(req, res) {
     // MDOT carries its capture time only on the image response.
     const lastModified = upstream.headers.get("last-modified");
     const capturedAt = camera.capturedAt || (lastModified ? new Date(lastModified).toISOString() : null);
-    const fresh = capturedAt ? isUsable(capturedAt, MAX_AGE_HOURS) : true;
+    // A camera can ask for a tighter limit (the Detroit River camera is stale after 3 hours).
+    const limit = Number.isFinite(camera.maxAgeHours) ? camera.maxAgeHours : MAX_AGE_HOURS;
+    const fresh = capturedAt ? isUsable(capturedAt, limit) : true;
 
     if (wantsMeta) {
       res.setHeader("Cache-Control", "public, max-age=120, s-maxage=300, stale-while-revalidate=900");

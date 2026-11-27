@@ -24,6 +24,17 @@
         "lat": 42.8195,
         "lon": -82.4855
       }
+    ],
+    "detroit-river-freighters": [
+      {
+        "id": "belle-isle",
+        "viewpoint": "belle-isle",
+        "label": "Belle Isle, from the roof of the Dossin Great Lakes Museum",
+        "short": "Belle Isle",
+        "youtube": "1KG2FbTdUAM",
+        "lat": 42.3376,
+        "lon": -82.9838
+      }
     ]
   }
 }

@@ -69,3 +69,24 @@ test('page: box is additive, below the live answer, and the live answer is untou
   assert.deepEqual(JSON.parse(inline), model);
   assert.equal((html.match(/rsw-detroit:start/g) || []).length, 1);
 });
+
+test('Detroit cameras: USGS Fort Wayne still through the allowlist, BoatNerd Belle Isle click-to-play', () => {
+  const { CAMERAS } = require('../lib/field-cameras.js');
+  const fw = CAMERAS['detroit-river-fort-wayne'];
+  assert.equal(fw.source, 'usgs');
+  assert.equal(fw.camId, 'MI_Detroit_River_at_Fort_Wayne_at_Detroit');
+  assert.equal(fw.maxAgeHours, 3, 'a ship-watching camera is stale after 3 hours, not the default 26');
+  assert.match(html, /data-field-camera="detroit-river-fort-wayne"/);
+  const cams = JSON.parse(fs.readFileSync('data/river-cameras.json', 'utf8')).pages['detroit-river-freighters'];
+  for (const c of cams) assert.ok(html.includes(`data-river-cam data-yt="${c.youtube}"`), c.id);
+  assert.doesNotMatch(html, /<iframe/);
+  assert.match(html, /\/assets\/field-camera\.js/);
+  assert.match(html, /\/assets\/river-cams\.js\?v=/);
+  const box = html.indexOf('id="rswBoard"'), camsAt = html.indexOf('id="rswCamsTitle"'), end = html.indexOf('rsw-detroit:end');
+  assert.ok(box < camsAt && camsAt < end);
+});
+
+test('field-camera API honours a per-camera age limit', () => {
+  const api = fs.readFileSync('api/field-camera.js', 'utf8');
+  assert.match(api, /camera\.maxAgeHours/);
+});
