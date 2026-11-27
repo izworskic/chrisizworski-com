@@ -91,3 +91,22 @@ test('Jet Express season is distinct from Miller and closed routes have no quote
  assert.match(browser,/FerryPlanning\.availability\(config,date,route\)/);
  assert.match(browser,/blocked\?\{text:gate.title,complete:false\}/);
 });
+
+test('newly published 2027 Lake Express, Sea Hunter and Voyageur regular dates remain distinct',()=>{
+ const le=data['lake-express'],lr=le.experience.routes[0];
+ assert.equal(core.availability(le,'2027-05-06',lr).state,'closed');
+ assert.equal(core.availability(le,'2027-05-07',lr).state,'reference');
+ assert.equal(core.availability(le,'2027-10-18',lr).state,'reference');
+ assert.equal(core.availability(le,'2027-10-19',lr).state,'closed');
+ assert.equal(core.fare(le,le.options[0],'2027-07-01',2,1,0,true),null);
+ const c=data['isle-royale'],hunter=c.experience.routes.find(r=>r.id==='sea-hunter'),v=c.experience.routes.find(r=>r.id==='voyageur');
+ assert.equal(core.availability(c,'2027-06-09',hunter).state,'reference');
+ assert.equal(core.availability(c,'2027-06-13',hunter).state,'closed');
+ assert.equal(core.availability(c,'2027-07-18',hunter).state,'reference');
+ assert.equal(core.availability(c,'2027-08-15',hunter).state,'closed');
+ assert.equal(core.availability(c,'2027-05-08',v).state,'reference');
+ assert.equal(core.availability(c,'2027-05-09',v).state,'closed');
+ assert.equal(core.availability(c,'2027-05-09',{...v,a:v.b,b:v.a}).state,'reference');
+ assert.equal(core.availability(c,'2027-09-18',v).state,'unknown');
+ assert.equal(core.availability(c,'2027-09-22',v).state,'reference');
+});
