@@ -419,3 +419,21 @@ test("a recognized official REST report never makes a second request", async()=>
    assert.equal(count,1);
  }finally{global.fetch=original;}
 });
+
+test("official fallback reserves a combined eight-second network budget", async () => {
+  const originalFetch = global.fetch;
+  const originalTimeout = AbortSignal.timeout;
+  const budgets = [];
+  try {
+    AbortSignal.timeout = ms => { budgets.push(ms); return originalTimeout(ms); };
+    global.fetch = async url => String(url).includes("wp-json")
+      ? new Response("", { status: 503 })
+      : new Response("<main>" + officialHighWind.content.rendered + "</main>");
+    const result = await mackinacHandler.fetchOfficialConditions();
+    assert.equal(result.retrieval, "authority-html");
+    assert.deepEqual(budgets, [4000, 4000]);
+  } finally {
+    global.fetch = originalFetch;
+    AbortSignal.timeout = originalTimeout;
+  }
+});
