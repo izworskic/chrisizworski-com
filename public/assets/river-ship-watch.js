@@ -7,6 +7,8 @@
  * channel, and only within a published lead time. Never a schedule or promise.
  * Optional: data-max-report-age-min on the board drops any window whose source report is older
  * than that many minutes (the Detroit page keeps its 10-minute freshness rule this way).
+ * Emits 'rsw:data' and 'rsw:view' events on the board so an optional map (river-ship-map.js) can
+ * draw the same reports without a second request.
  * Requires RiverPassage (river-passage.js), #rswModel and a #rswBoard with data-api. */
 (function (root, factory) {
   const api = factory();
@@ -104,9 +106,11 @@
     const fresh = (r, nowMs) => !ageOpts || nowMs - r.reportSeen <= ageOpts.maxReportAgeMin * 60000;
     let latest = null, timer = null;
 
+    const emit = (type, detail) => { if (type === 'rsw:data') el.rswData = detail; try { el.dispatchEvent(new root.CustomEvent(type, { detail })); } catch (_) { /* map is optional */ } };
     function paint() {
       tabs.forEach(t => t.setAttribute('aria-pressed', String(t.dataset.rswView === view)));
       el.setAttribute('data-view', view);
+      emit('rsw:view', { view });
       if (!latest) return;
       const nowMs = o.now();
       if (latest.error) {
@@ -135,10 +139,11 @@
         if (!res.ok) throw new Error('HTTP ' + res.status);
         const data = await res.json();
         if (!data || data.ok === false || !Array.isArray(data.vessels)) throw new Error('unavailable');
-        latest = { rows: forecasts(model, data.vessels, o.now(), corridor, ageOpts), checkedAt: Date.parse(data.checkedAt || data.generatedAt) || o.now() };
+        latest = { rows: forecasts(model, data.vessels, o.now(), corridor, ageOpts), checkedAt: Date.parse(data.checkedAt || data.generatedAt) || o.now(), vessels: data.vessels };
       } catch (_) {
-        latest = { error: true, rows: [], checkedAt: o.now() };
+        latest = { error: true, rows: [], checkedAt: o.now(), vessels: [] };
       }
+      emit('rsw:data', { vessels: latest.vessels, rows: latest.rows, checkedAt: latest.checkedAt, error: !!latest.error, view, maxReportAgeMin: ageOpts ? ageOpts.maxReportAgeMin : null });
       paint();
     }
     tabs.forEach(t => t.addEventListener('click', () => {
@@ -153,7 +158,7 @@
     const schedule = () => { clearInterval(timer); if (o.refreshMs && doc.visibilityState !== 'hidden') timer = setInterval(load, o.refreshMs); };
     doc.addEventListener('visibilitychange', () => { if (doc.visibilityState === 'visible') load(); schedule(); });
     paint(); load(); schedule();
-    return { load, paint, get view() { return view; } };
+    return { load, paint, get view() { return view; }, get latest() { return latest; } };
   }
 
   if (typeof document !== 'undefined') {

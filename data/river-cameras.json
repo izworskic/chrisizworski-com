@@ -1,0 +1,29 @@
+{
+  "schema": 1,
+  "note": "Live river cameras embedded on River Ship Watch pages. The operators' YouTube video ids change whenever a stream restarts; scripts/check-river-cams.mjs runs daily in GitHub Actions and opens an issue when one stops being live. Positions are approximate and only place a camera icon on the map.",
+  "channelStreamsUrl": "https://www.youtube.com/channel/UCqfPoSUtVhsQp2AmJ4uot1w/streams",
+  "operator": "BoatNerd",
+  "operatorUrl": "https://www.boatnerd.com/",
+  "pages": {
+    "st-clair-river-ships": [
+      {
+        "id": "port-huron",
+        "viewpoint": "port-huron",
+        "label": "Port Huron, looking at the St. Clair River near the Blue Water Bridge",
+        "short": "Port Huron",
+        "youtube": "SrL74LPoXF8",
+        "lat": 42.9745,
+        "lon": -82.4215
+      },
+      {
+        "id": "st-clair",
+        "viewpoint": "st-clair",
+        "label": "St. Clair, from the Voyageur Restaurant on the riverfront",
+        "short": "St. Clair",
+        "youtube": "yu0pKQSvYX8",
+        "lat": 42.8195,
+        "lon": -82.4855
+      }
+    ]
+  }
+}
