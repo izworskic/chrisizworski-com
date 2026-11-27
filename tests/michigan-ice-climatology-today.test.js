@@ -169,3 +169,19 @@ test('ice API makes one shared season-file request, exposing genuine missing-sou
     }
   }finally{globalThis.fetch=original;}
 });
+
+test('conflicting NOAA rows are diagnostics, not numerical history', async () => {
+  const now = new Date('2026-11-26T15:00:00Z');
+  const f = seasonalFixture(now);
+  const conflict = f.season + f.season.replace('37.1', '99');
+  const fetcher = async url => new Response(String(url).includes('_ice.dat') ? conflict : f.climate);
+  const source = await fetchSeasonCover(now, fetcher);
+  assert.equal(seasonCoverStatus(source, now).cover, null);
+  const history = await buildIceRecord(now, fetcher, Promise.resolve(source));
+  assert.equal(history.lakes.superior.current, null);
+  assert.equal(history.series.superior.find(row => row.date === f.stamp).current, null);
+  assert.equal(history.peaks.superior, null);
+  const malformed = parseSeasonCover('2026 330 0x10 0 0 0 0 0 0', 2026, '2026-11-26');
+  assert.equal(malformed[0].superior, null);
+  assert.equal(malformed[0].total, 0);
+});
