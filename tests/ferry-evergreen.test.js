@@ -59,3 +59,35 @@ test('Fares cite their evidence year and every route has live official source ha
   assert.ok(c.sources.every(([,url])=>url.startsWith('https://')),key);
  }
 });
+
+test('Isle Royale public closure overrides every ferry and hypothetical timeline',()=>{
+ const c=data['isle-royale'];
+ for(const r of c.experience.routes){
+  for(const date of ['2026-11-27','2027-01-15','2027-04-15','2028-11-01']){
+   assert.equal(core.availability(c,date,r).state,'closed');
+   assert.equal(core.tripPlan(c,{route:r.id,date,departure:'09:00',tripType:'oneway'}).events.length,0);
+  }
+ }
+});
+test('Ranger III 2027 Rock Harbor schedule respects dates, direction and exceptions',()=>{
+ const c=data['isle-royale'],r=c.experience.routes.find(x=>x.id==='ranger');
+ assert.equal(core.availability(c,'2027-05-25',r).state,'reference');
+ assert.equal(core.availability(c,'2027-05-26',r).state,'closed');
+ assert.equal(core.availability(c,'2027-06-15',r).state,'closed');
+ assert.equal(core.availability(c,'2027-07-02',r).state,'closed');
+ const reverse=core.routeFor(c,'ranger','2027-05-26',0,'reverse');
+ assert.equal(core.availability(c,'2027-05-26',reverse).state,'reference');
+ assert.equal(core.availability(c,'2027-06-16',reverse).state,'closed');
+ assert.equal(core.availability(c,'2027-09-11',reverse).state,'reference');
+ assert.equal(core.fare(c,c.options[0],'2027-05-25',2,0,0,false),null);
+});
+test('Jet Express season is distinct from Miller and closed routes have no quote',()=>{
+ const c=data['put-in-bay'],jet=c.experience.routes.find(r=>r.id==='jet'),miller=c.experience.routes.find(r=>r.id==='miller');
+ assert.equal(core.availability(c,'2026-10-25',jet).state,'reference');
+ assert.equal(core.availability(c,'2026-11-27',jet).state,'closed');
+ assert.equal(core.fare(c,c.options.find(o=>o.id==='jet'),'2026-11-27',2,0,0,true),null);
+ assert.notEqual(core.availability(c,'2026-11-27',miller).state,'closed');
+ const browser=fs.readFileSync('public/assets/great-lakes-ferry.js','utf8');
+ assert.match(browser,/FerryPlanning\.availability\(config,date,route\)/);
+ assert.match(browser,/blocked\?\{text:gate.title,complete:false\}/);
+});
