@@ -3,7 +3,7 @@
 // daily AIS file (public domain, US-received broadcasts) as compact NDJSON points for
 // lib/seaway-passage.js. Keeps at most one fix per ship per minute. No live claims.
 //
-// Usage: node scripts/seaway-noaa-corridor.mjs --input ais-YYYY-MM-DD.csv.zst --out points.ndjson
+// Usage: node scripts/seaway-noaa-corridor.mjs --input ais-YYYY-MM-DD.csv.zst --out points.ndjson [--bbox latMin,lonMin,latMax,lonMax]
 import { createWriteStream } from 'node:fs';
 import { spawn } from 'node:child_process';
 import { createInterface } from 'node:readline';
@@ -14,8 +14,15 @@ export const CORRIDOR = [44.05, -76.6, 45.6, -73.35]; // lat min, lon min, lat m
 const key = s => String(s).trim().replace(/^﻿/, '').toLowerCase().replace(/[_\s-]/g, '');
 const ALIASES = { mmsi: ['mmsi'], time: ['basedatetime'], lon: ['longitude', 'lon'], lat: ['latitude', 'lat'],
   sog: ['sog'], type: ['vesseltype'], len: ['length'] };
-// Cheap prefilter on raw text: a longitude in -76.x .. -73.x and a latitude in 44.x/45.x.
-const PREFILTER = /,-7[3-6]\.\d+,4[45]\.\d+|,4[45]\.\d+,-7[3-6]\.\d+/;
+// Cheap prefilter on raw text: whole-degree longitude and latitude of the bbox, in either
+// column order. For the Seaway corridor this is -76..-73 and 44..45 (the original filter).
+export function prefilterFor(bbox) {
+  const ints = (lo, hi) => { const out = []; for (let d = Math.trunc(lo); lo < 0 ? d >= Math.trunc(hi) : d <= Math.trunc(hi); d += lo < 0 ? -1 : 1) out.push(d); return out; };
+  const lat = ints(Math.min(bbox[0], bbox[2]), Math.max(bbox[0], bbox[2])).join('|');
+  const lonLo = Math.max(bbox[1], bbox[3]), lonHi = Math.min(bbox[1], bbox[3]); // e.g. -73.35 .. -76.6
+  const lon = ints(lonLo, lonHi).join('|');
+  return new RegExp(`,(?:${lon})\\.\\d+,(?:${lat})\\.\\d+|,(?:${lat})\\.\\d+,(?:${lon})\\.\\d+`);
+}
 
 export function columns(header) {
   const names = parseCsvLine(header).map(key), out = {};
@@ -28,6 +35,7 @@ export function columns(header) {
 }
 
 export function createExtractor(bbox = CORRIDOR) {
+  const PREFILTER = prefilterFor(bbox);
   const last = new Map();
   const stats = { lines: 0, prefiltered: 0, kept: 0, throttled: 0 };
   let cols = null;
@@ -58,10 +66,12 @@ export function createExtractor(bbox = CORRIDOR) {
 async function main() {
   const arg = n => { const i = process.argv.indexOf('--' + n); return i > 0 ? process.argv[i + 1] : null; };
   const input = arg('input'), out = arg('out');
+  const bbox = arg('bbox') ? arg('bbox').split(',').map(Number) : CORRIDOR;
+  if (bbox.length !== 4 || bbox.some(n => !Number.isFinite(n))) { console.error('--bbox latMin,lonMin,latMax,lonMax'); process.exit(2); }
   if (!input || !out) { console.error('--input and --out are required'); process.exit(2); }
   const child = spawn('zstd', ['-dc', input], { stdio: ['ignore', 'pipe', 'inherit'] });
   const rl = createInterface({ input: child.stdout, crlfDelay: Infinity });
-  const ex = createExtractor(), sink = createWriteStream(out);
+  const ex = createExtractor(bbox), sink = createWriteStream(out);
   for await (const line of rl) {
     const p = ex.line(line);
     if (p && !sink.write(JSON.stringify(p) + '\n')) await new Promise(r => sink.once('drain', r));

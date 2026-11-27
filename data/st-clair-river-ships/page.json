@@ -1,0 +1,68 @@
+{
+  "slug": "st-clair-river-ships",
+  "title": "Port Huron & St. Clair River Ship Times | Chris Izworski",
+  "description": "When will the next freighter pass Port Huron, St. Clair, Marine City or Algonac? Live ship reports turned into tested passage windows, plus where to watch.",
+  "dateModified": "2026-11-27",
+  "name": "St. Clair River Ship Watch",
+  "eyebrow": "Port Huron · Marysville · St. Clair · Marine City · Algonac",
+  "h1": "St. Clair River Ship Watch",
+  "h1em": "When will the next freighter pass your riverbank?",
+  "lede": "Pick a town on the river. If a ship is already on its way, you get a tested window for when it should pass, worked out from its latest public position report and how fast ships really moved down and up this river in 2025.",
+  "api": "/api/freighter-ais?region=st-clair-detroit",
+  "breadcrumbParent": {
+    "name": "Freighter Central",
+    "url": "https://chrisizworski.com/freighters/"
+  },
+  "viewpoints": {
+    "port-huron": {
+      "town": "Port Huron",
+      "short": "Blue Water Bridge",
+      "name": "Thomas Edison Park Boardwalk",
+      "description": "Where Lake Huron becomes the St. Clair River under the Blue Water Bridges, with benches and open views. Ships turn close to shore here.",
+      "address": "2200 Thomas Edison Parkway, Port Huron",
+      "mapUrl": "https://www.openstreetmap.org/?mlat=42.9993&mlon=-82.4237#map=17/42.9993/-82.4237",
+      "source": "https://www.bluewater.org/member-detail/ship-freighter-watching",
+      "sourceLabel": "Blue Water Area CVB"
+    },
+    "marysville": {
+      "town": "Marysville",
+      "short": "Chrysler Beach",
+      "name": "Chrysler Beach and the riverwalk",
+      "description": "A riverfront park at the north end of Marysville's riverwalk, beside Marysville City Park.",
+      "address": "Marysville riverfront, off River Road",
+      "mapUrl": "https://www.openstreetmap.org/way/755919824",
+      "source": "https://bridgetobay.org/",
+      "sourceLabel": "Bridge to Bay Trail"
+    },
+    "st-clair": {
+      "town": "St. Clair",
+      "short": "Palmer Park",
+      "name": "Palmer Park boardwalk",
+      "description": "The city's half-mile riverfront boardwalk beside downtown, with a self-guided Freighter Walk of marked plaques.",
+      "address": "201 N. Riverside Ave., St. Clair",
+      "mapUrl": "https://www.openstreetmap.org/way/572118013",
+      "source": "https://www.michigan.org/city/saint-clair",
+      "sourceLabel": "Pure Michigan"
+    },
+    "marine-city": {
+      "town": "Marine City",
+      "short": "Water Street",
+      "name": "Water Street riverfront parks",
+      "description": "Eight walkable waterfront parks along Water Street between Bridge and Pearl streets.",
+      "address": "301 S. Water St., Marine City",
+      "mapUrl": "https://www.openstreetmap.org/?mlat=42.716&mlon=-82.493#map=17/42.716/-82.493",
+      "source": "https://www.bluewater.org/member-detail/ship-freighter-watching",
+      "sourceLabel": "Blue Water Area CVB"
+    },
+    "algonac": {
+      "town": "Algonac",
+      "short": "Riverfront Park",
+      "name": "Algonac Riverfront Park boardwalk",
+      "description": "A half-mile boardwalk on the river in town; Algonac State Park's riverfront is a few miles north.",
+      "address": "Algonac riverfront, St. Clair River Drive",
+      "mapUrl": "https://www.openstreetmap.org/relation/16660231",
+      "source": "https://bridgetobay.org/",
+      "sourceLabel": "Bridge to Bay Trail"
+    }
+  }
+}

@@ -30,11 +30,11 @@ test('Working river listings are distinct real tool cards in the Great Lakes sec
  }
  assert.equal(new Set(catalog.map(m=>m[1])).size,catalog.length);
 });
-test('Tools ItemList and registry agree with all 95 rendered cards',()=>{
+test('Tools ItemList and registry agree with all 96 rendered cards',()=>{
  const graph=schema(tools)['@graph'];
  const list=graph.find(x=>x['@id']==='https://chrisizworski.com/tools/#toollist');
  assert.ok(list);
- assert.equal(catalog.length,95);
+ assert.equal(catalog.length,96);
  assert.equal(list.numberOfItems,catalog.length);
  assert.equal(list.itemListElement.length,catalog.length);
  assert.deepEqual(list.itemListElement.map(x=>x.position),catalog.map((_,i)=>i+1));
@@ -48,7 +48,7 @@ test('Tools ItemList and registry agree with all 95 rendered cards',()=>{
   assert.equal(tool.cluster,'great-lakes-shipping');
   assert.equal(tool.searchTreatment.status,'noindex-pilot');
  }
- assert.equal(graph.find(x=>x['@id']==='https://chrisizworski.com/tools/').dateModified,'2026-11-23');
+ assert.equal(graph.find(x=>x['@id']==='https://chrisizworski.com/tools/').dateModified,'2026-11-27');
 });
 test('Great Lakes hub displays both river cards plus discoverable ship-following links',()=>{
  const i=great.indexOf('<div class="card-grid live-grid">');
