@@ -117,3 +117,17 @@ test('coverage report counts share of polls with reports per region', async () =
   assert.equal(c.byRegion.massena.shareWithReports, 0.5);
   assert.equal(c.byRegion.montreal.errors, 1);
 });
+
+test('split-conformal calibration reaches its coverage on untouched synthetic test passages', () => {
+  const mk = (first, count) => {
+    const ps = [];
+    for (let k = first; k < first + count; k++) ps.push(...engine.passages(ship(String(316300000 + k), Date.UTC(2025, 4, 1) + k * 86400000, 150, 260, 10 + (k * 13 % 11))));
+    return ps;
+  };
+  const train = mk(0, 60), calib = mk(60, 60), testSet = mk(120, 60);
+  const r = engine.evaluateCalibrated(train, calib, testSet, 0.8);
+  const rows = Object.values(r.summary).filter(s => s.n >= 30);
+  assert.ok(rows.length > 0, JSON.stringify(r.summary));
+  for (const s of rows) assert.ok(s.hitRate >= 0.7 && s.hitRate <= 0.95, JSON.stringify(s));
+  assert.equal(Object.keys(engine.evaluateCalibrated(train, calib.slice(0, 2), testSet).summary).length, 0, 'thin calibration publishes nothing');
+});
