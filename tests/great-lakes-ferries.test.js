@@ -56,7 +56,9 @@ function interact(path,date,{adults=2,kids=0,vehicle=0,roundtrip=true}={}){
  elements["ferry-config"]={textContent:JSON.stringify(config)};
  elements["ferry-form"]={addEventListener(){},querySelectorAll(){return ["trip-date","adult-count","child-count","vehicle-count","trip-type"].map(k=>elements[k])}};
  const code=fs.readFileSync("public/assets/great-lakes-ferry.js","utf8");
- vm.runInNewContext(code,{document:{getElementById:id=>elements[id]},Intl,Date,Number,String,JSON,Math,RegExp},{timeout:2000});
+ const context=vm.createContext({document:{getElementById:id=>elements[id]},Intl,Date,Number,String,JSON,Math,RegExp});
+ vm.runInContext(fs.readFileSync("public/assets/ferry-planning-core.js","utf8"),context,{timeout:2000});
+ vm.runInContext(code,context,{timeout:2000});
  // The browser pre-fills the current local date, so select the test date afterward.
  elements["trip-date"].value=date;
  elements["adult-count"].value=String(adults);
