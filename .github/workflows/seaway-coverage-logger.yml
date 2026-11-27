@@ -1,0 +1,55 @@
+name: Seaway AIS coverage logger
+
+# OFFLINE RESEARCH. Measures which Seaway regions the live AIS source actually covers and how
+# ships move between them, as validation data for any future passage-window feature.
+# Runs on GitHub Actions only (no Vercel function calls, no commits, no deploys).
+# Skips itself while the Seaway is closed for winter (public/assets/seaway-season.js).
+on:
+  schedule:
+    # Four ~5h45m logging runs a day give near-continuous coverage.
+    - cron: '7 0,6,12,18 * * *'
+  workflow_dispatch:
+    inputs:
+      minutes:
+        description: Minutes to log (1-350)
+        default: '345'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: seaway-coverage-logger
+  cancel-in-progress: false
+
+jobs:
+  log:
+    runs-on: ubuntu-latest
+    timeout-minutes: 360
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Log corridor AIS reports
+        env:
+          OPEN_WATERS_API_TOKEN: ${{ secrets.OPEN_WATERS_API_TOKEN }}
+        run: |
+          set -euo pipefail
+          mkdir -p seaway-coverage
+          stamp=$(date -u +%Y%m%dT%H%M%SZ)
+          node scripts/seaway-coverage-log.mjs \
+            --out "seaway-coverage/seaway-coverage-$stamp.ndjson" \
+            --minutes "${{ github.event.inputs.minutes || '345' }}" \
+            --interval 180
+      - name: Upload log
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: seaway-coverage-${{ github.run_id }}
+          path: seaway-coverage/*.ndjson
+          if-no-files-found: ignore
+          retention-days: 90
+      - name: Summarize
+        if: always()
+        run: |
+          node scripts/seaway-coverage-report.mjs --dir seaway-coverage --summary >> "$GITHUB_STEP_SUMMARY" || true
