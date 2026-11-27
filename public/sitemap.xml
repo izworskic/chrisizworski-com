@@ -458,7 +458,7 @@
   </url>
   <url>
     <loc>https://chrisizworski.com/tools/</loc>
-    <lastmod>2026-11-23</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1239,7 +1239,7 @@
   </url>
   <url>
     <loc>https://chrisizworski.com/great-lakes-ship-watching-spots/</loc>
-    <lastmod>2026-11-08</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
@@ -1287,7 +1287,7 @@
   </url>
   <url>
     <loc>https://chrisizworski.com/freighters/</loc>
-    <lastmod>2026-11-24</lastmod>
+    <lastmod>2026-11-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -1444,4 +1444,5 @@
     <priority>0.7</priority>
   </url>
   <url><loc>https://chrisizworski.com/thousand-islands-ships/</loc><lastmod>2026-11-27</lastmod></url>
+  <url><loc>https://chrisizworski.com/st-clair-river-ships/</loc><lastmod>2026-11-27</lastmod></url>
 </urlset>

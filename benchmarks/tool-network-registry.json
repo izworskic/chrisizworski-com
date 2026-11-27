@@ -4299,6 +4299,51 @@
       }
     },
     {
+      "id": "st-clair-river-ships",
+      "name": "St. Clair River Ship Watch",
+      "canonical": "https://chrisizworski.com/st-clair-river-ships/",
+      "aliases": [],
+      "kind": "focused-live-acquisition",
+      "cluster": "great-lakes-shipping",
+      "primaryIntent": "When the next freighter passes Port Huron, Marysville, St. Clair, Marine City or Algonac",
+      "seasons": [
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12
+      ],
+      "geographies": [
+        "michigan",
+        "st-clair-river",
+        "port-huron",
+        "ontario"
+      ],
+      "personas": [
+        "ship-watcher",
+        "traveler"
+      ],
+      "networkRole": "destination",
+      "searchTreatment": {
+        "status": "active"
+      },
+      "searchEvidence": {
+        "status": "new-canonical",
+        "note": "Owner approved building St. Clair River passage windows on 2026-11-27 after the NOAA 2025 corridor study (docs/ST_CLAIR_DETROIT_PASSAGE_RESEARCH.md). Keyword volumes and postlaunch GSC are NOT AVAILABLE."
+      },
+      "measurement": {
+        "search": "GSC Web page x non-branded query at 7/28 days",
+        "product": "GA4 town switches, refresh and viewing-spot/source clicks",
+        "decisionWindowDays": 28,
+        "privacy": "No visitor coordinates or free-text values collected; forecasts are computed in the browser."
+      }
+    },
+    {
       "id": "eisenhower-lock",
       "name": "Eisenhower Lock Ships and Visiting",
       "canonical": "https://chrisizworski.com/eisenhower-lock/",
@@ -7489,6 +7534,38 @@
       "strength": "strong",
       "surface": "seaway-maritime-network",
       "reason": "Plan a close-up public lock visit downriver at Massena."
+    },
+    {
+      "from": "ship-tracker",
+      "to": "st-clair-river-ships",
+      "type": "regional-handoff",
+      "strength": "strong",
+      "surface": "seaway-maritime-network",
+      "reason": "Pin down when a ship should pass a St. Clair River town."
+    },
+    {
+      "from": "st-clair-river-ships",
+      "to": "detroit-freighters",
+      "type": "regional-handoff",
+      "strength": "strong",
+      "surface": "seaway-maritime-network",
+      "reason": "Follow the same ships down to the Detroit River."
+    },
+    {
+      "from": "detroit-freighters",
+      "to": "st-clair-river-ships",
+      "type": "regional-handoff",
+      "strength": "strong",
+      "surface": "seaway-maritime-network",
+      "reason": "Catch Detroit River ships again upriver at Port Huron or Marine City."
+    },
+    {
+      "from": "st-clair-river-ships",
+      "to": "ship-tracker",
+      "type": "regional-handoff",
+      "strength": "strong",
+      "surface": "seaway-maritime-network",
+      "reason": "See every ship across the Great Lakes."
     }
   ],
   "cannibalizationGroups": [

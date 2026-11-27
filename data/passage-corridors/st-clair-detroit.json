@@ -1,0 +1,167 @@
+{
+  "id": "st-clair-detroit",
+  "name": "St. Clair River, Lake St. Clair and Detroit River",
+  "positiveDirection": "downbound",
+  "positiveDirectionLabel": "Downbound, toward Lake Erie",
+  "negativeDirectionLabel": "Upbound, toward Lake Huron",
+  "refLat": 42.6,
+  "maxOffsetKm": 3,
+  "bbox": [
+    41.98,
+    -83.3,
+    43.12,
+    -82.35
+  ],
+  "channelNote": "Approximate ship-channel centreline, Lake Huron Cut to the Detroit River mouth, ordered downbound. Checked against 2025 NOAA commercial fixes (see docs/ST_CLAIR_DETROIT_PASSAGE_RESEARCH.md).",
+  "channel": [
+    [
+      43.1,
+      -82.405
+    ],
+    [
+      43.02,
+      -82.418
+    ],
+    [
+      42.999,
+      -82.423
+    ],
+    [
+      42.975,
+      -82.42
+    ],
+    [
+      42.94,
+      -82.44
+    ],
+    [
+      42.905,
+      -82.465
+    ],
+    [
+      42.86,
+      -82.48
+    ],
+    [
+      42.823,
+      -82.487
+    ],
+    [
+      42.77,
+      -82.49
+    ],
+    [
+      42.716,
+      -82.492
+    ],
+    [
+      42.66,
+      -82.51
+    ],
+    [
+      42.618,
+      -82.53
+    ],
+    [
+      42.58,
+      -82.56
+    ],
+    [
+      42.555,
+      -82.6
+    ],
+    [
+      42.52,
+      -82.68
+    ],
+    [
+      42.455,
+      -82.765
+    ],
+    [
+      42.393,
+      -82.858
+    ],
+    [
+      42.355,
+      -82.925
+    ],
+    [
+      42.34,
+      -82.955
+    ],
+    [
+      42.333,
+      -82.985
+    ],
+    [
+      42.326,
+      -83.02
+    ],
+    [
+      42.325,
+      -83.04
+    ],
+    [
+      42.312,
+      -83.074
+    ],
+    [
+      42.285,
+      -83.105
+    ],
+    [
+      42.24,
+      -83.12
+    ],
+    [
+      42.15,
+      -83.12
+    ],
+    [
+      42.1,
+      -83.115
+    ],
+    [
+      42.03,
+      -83.13
+    ]
+  ],
+  "viewpoints": {
+    "port-huron": {
+      "name": "Port Huron, Thomas Edison Park",
+      "lat": 42.9993,
+      "lon": -82.4237
+    },
+    "marysville": {
+      "name": "Marysville, Chrysler Beach",
+      "lat": 42.90465,
+      "lon": -82.46835
+    },
+    "st-clair": {
+      "name": "St. Clair, Palmer Park",
+      "lat": 42.8241,
+      "lon": -82.48533
+    },
+    "marine-city": {
+      "name": "Marine City, Water Street parks",
+      "lat": 42.716,
+      "lon": -82.493
+    },
+    "algonac": {
+      "name": "Algonac, Riverfront Park",
+      "lat": 42.61744,
+      "lon": -82.53137
+    },
+    "belle-isle": {
+      "name": "Belle Isle, Detroit",
+      "lat": 42.3335,
+      "lon": -82.9875
+    },
+    "detroit-riverwalk": {
+      "name": "Detroit RiverWalk",
+      "lat": 42.3275,
+      "lon": -83.035
+    }
+  }
+}

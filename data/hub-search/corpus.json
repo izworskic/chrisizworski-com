@@ -913,6 +913,16 @@
    "href": "/thousand-islands-ships/"
   },
   {
+   "id": "st-clair-river-ships",
+   "title": "St. Clair River Ship Watch",
+   "tags": "boating planning transportation great-lakes ships michigan port-huron st-clair-river",
+   "place": "",
+   "kind": "Ship times",
+   "description": "See when the next freighter should pass Port Huron, Marysville, St. Clair, Marine City or Algonac, with windows tested on 2025 passages.",
+   "months": "1,3,4,5,6,7,8,9,10,11,12",
+   "href": "/st-clair-river-ships/"
+  },
+  {
    "id": "welland-canal",
    "title": "Welland Canal Ships Today — Live Map and Lock Guide",
    "tags": "boating planning transportation great-lakes ships locks ontario",
