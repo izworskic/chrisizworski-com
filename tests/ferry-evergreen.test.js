@@ -75,7 +75,7 @@ test('Ranger III 2027 Rock Harbor schedule respects dates, direction and excepti
  assert.equal(core.availability(c,'2027-05-26',r).state,'closed');
  assert.equal(core.availability(c,'2027-06-15',r).state,'closed');
  assert.equal(core.availability(c,'2027-07-02',r).state,'closed');
- const reverse=core.routeFor(c,'ranger','2027-05-26',0,'reverse');
+ const reverse={...r,a:r.b,b:r.a}; // tripPlan constructs the return direction this way.
  assert.equal(core.availability(c,'2027-05-26',reverse).state,'reference');
  assert.equal(core.availability(c,'2027-06-16',reverse).state,'closed');
  assert.equal(core.availability(c,'2027-09-11',reverse).state,'reference');
