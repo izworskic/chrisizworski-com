@@ -16,6 +16,10 @@
   const dateIn=(date,start,end)=>date>=start&&date<=end;
   function season(date){
     const year=date.slice(0,4),fareYear=String(config.fareReferenceYear||2026);
+    if(config.id==="isle-royale"&&/^\d{4}-\d{2}-\d{2}$/.test(date)){
+      const md=date.slice(5);
+      if(md>="11-01"||md<="04-15")return{state:"no",text:"NPS closes Isle Royale to public use November 1 through April 15. No ferry visit is supported during this closure."};
+    }
     if(config.id==="manitou")return year==="2026"?{state:"no",text:"No regular ferry service to either Manitou Island in 2026; both docks were under construction."}:{state:"unknown",text:year==="2027"?"In a 2026 notice NPS expected dock reopening in 2027, but no regular ferry restart, timetable or fare has been verified. Check NPS and Manitou Island Transit.":"No verified current-year ferry operation is available in this planner. Check NPS and Manitou Island Transit for the latest access status."};
     if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return{state:"unknown",text:"Choose a valid travel date."};
     const window=config.seasonWindows?.[year]||(year===fareYear?config.season:null);
@@ -66,10 +70,13 @@
     const available=(config.options||[]).filter(o=>eligibleOption(o,date)&&!(vehicle&&o.noVehicle));
     if(!available.length)html+='<div class="option">No eligible route for these settings. Change the vehicle or seasonal route selection.</div>';
     for(const o of available){
-      const v=estimate(o,date,adults,kids,vehicle,roundtrip);
+      const route=config.experience.routes.find(r=>r.id===o.id||(o.id==='hunter'&&r.id==='sea-hunter'))||config.experience.routes[0];
+      const gate=globalThis.FerryPlanning.availability(config,date,route);
+      const blocked=outside||gate.state==='closed';
+      const v=blocked?{text:gate.title,complete:false}:estimate(o,date,adults,kids,vehicle,roundtrip);
       html+='<div class="option"><b>'+escapeHtml(o.name)+'</b><p>'+escapeHtml(o.description)+'</p>';
-      html+='<span class="cost">'+escapeHtml(outside?'Fares not applicable outside season':v.text)+'</span>';
-      if(v.complete&&!outside)html+='<p class="fine">Published '+(roundtrip?'round-trip':'one-way')+' fare arithmetic for specified age bands and standard vehicle only'+(v.fee?' including the stated fuel/port surcharges':'')+'. Not a live checkout quote.</p>';
+      html+='<span class="cost">'+escapeHtml(blocked?(outside?'Fares not applicable outside season':gate.title):v.text)+'</span>';
+      if(v.complete&&!blocked)html+='<p class="fine">Published '+(roundtrip?'round-trip':'one-way')+' fare arithmetic for specified age bands and standard vehicle only'+(v.fee?' including the stated fuel/port surcharges':'')+'. Not a live checkout quote.</p>';
       if(o.tripTime)html+='<p class="fine">Typical one-way crossing: '+escapeHtml(o.tripTime)+'</p>';
       if(o.notice)html+='<p class="fine">'+escapeHtml(o.notice)+'</p>';
       html+='</div>';
