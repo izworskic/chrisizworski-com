@@ -18,7 +18,7 @@ function collect(dir) {
   }
 }
 collect(path.join(root, 'functions'));
-for (const api of ['flight-assignment', 'mackinac-watch', 'ballard-locks', 'garden-water-page', 'epic-ikon-guide'])
+for (const api of ['flight-assignment', 'mackinac-watch', 'ballard-locks', 'garden-water-page', 'national-garden-water', 'epic-ikon-guide'])
   assert.ok(functions.some(x => x.file.endsWith(`/api/${api}.func/.vc-config.json`)), `missing API: ${api}`);
 assert.ok(functions.some(x => x.config.runtime === 'edge'), 'middleware must survive prebuilding');
 assert.ok(config.routes.length > 100, 'routing composition missing');

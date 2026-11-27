@@ -18,9 +18,8 @@ function walk(value, visit) {
   }
 }
 
-test('Garden Water canonical, API, assets and data route to owning project', () => {
+test('Garden Water canonical HTML and API use the pinned owner release', () => {
   const expected = new Map([
-    ['/api/national-garden-water', `${child}/api/national-garden-water`],
     ['/assets/national-garden-water.css', `${child}/assets/national-garden-water.css`],
     ['/assets/national-garden-water-engine.js', `${child}/assets/national-garden-water-engine.js`],
     ['/assets/national-garden-water-page.js', `${child}/assets/national-garden-water-page.js`],
@@ -28,6 +27,9 @@ test('Garden Water canonical, API, assets and data route to owning project', () 
     ['/national-tools/garden-water', '/api/garden-water-page'],
     ['/national-tools/garden-water/', '/api/garden-water-page'],
   ]);
+  assert.equal(route('/api/national-garden-water'), undefined, 'no external self-proxy');
+  assert.ok(fs.existsSync('api/national-garden-water.js'));
+  assert.equal(vercel.functions['api/national-garden-water.js'].maxDuration, 60);
   for (const [source, destination] of expected) {
     assert.equal(route(source)?.destination, destination, source);
   }

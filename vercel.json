@@ -104,6 +104,9 @@
     "api/ice.js": {
       "maxDuration": 30
     },
+    "api/national-garden-water.js": {
+      "maxDuration": 60
+    },
     "api/**/*.js": {
       "maxDuration": 10
     }
@@ -1086,10 +1089,6 @@
     {
       "source": "/api/national-frost",
       "destination": "https://national-frost.vercel.app/api/national-frost"
-    },
-    {
-      "source": "/api/national-garden-water",
-      "destination": "https://national-garden-water.vercel.app/api/national-garden-water"
     },
     {
       "source": "/api/national-fall-color",
