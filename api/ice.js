@@ -1,7 +1,7 @@
-import { michiganIceClock, winterObservationDate, belongsToWinter } from '../lib/michigan-ice/season.mjs';
+import { michiganIceClock } from '../lib/michigan-ice/season.mjs';
 import { acisRange, afddFrom } from '../lib/michigan-ice/thermal.mjs';
 import { cavesResponse } from '../lib/michigan-ice/caves.mjs';
-import { buildIceRecord, ICE_LAKES } from '../lib/michigan-ice/climatology.mjs';
+import { buildIceRecord, ICE_LAKES, fetchSeasonCover, seasonCoverStatus } from '../lib/michigan-ice/climatology.mjs';
 // /api/ice — server-side aggregation for the Michigan Ice Report.
 //
 // Upstreams:
@@ -33,37 +33,6 @@ function rowLabel(d) {
 }
 function pad(n) { return String(n).padStart(2, '0'); }
 
-async function currentCover(now) {
-  const clock = michiganIceClock(now);
-  if (!clock.active) return null;
-  const y = seasonStartYear(now);
-  const url = 'https://apps.glerl.noaa.gov/coastwatch/webdata/statistic/ice/dat/' +
-    'g' + y + '_' + (y + 1) + '_ice.dat';
-  const r = await fetch(url, { headers: UA });
-  if (!r.ok) return null;
-  const txt = await r.text();
-  const lines = txt.split('\n');
-  let latest = null;
-  for (const line of lines) {
-    const p = line.trim().split(/\s+/);
-    if (p.length !== 9 || !/^\d{4}$/.test(p[0]) || !/^\d{1,3}$/.test(p[1])) continue;
-    const date = winterObservationDate(Number(p[0]), Number(p[1]));
-    const values = p.slice(2).map(Number);
-    if (!belongsToWinter(date, y, clock.today) ||
-        values.some(v => !Number.isFinite(v) || v < 0 || v > 100)) continue;
-    if (!latest || date > latest.date) latest = { date, p, values };
-  }
-  if (!latest) return null;
-  const age = (now.getTime() - Date.parse(latest.date + 'T00:00:00Z')) / 3600000;
-  if (!Number.isFinite(age) || age < -2 || age > 48) return null;
-  const values = latest.values;
-  return {
-    seasonFile: 'g' + y + '_' + (y + 1) + '_ice.dat', observedAt: latest.date,
-    year: Number(latest.p[0]), dayOfYear: Number(latest.p[1]),
-    superior: values[0], michigan: values[1], huron: values[2],
-    erie: values[3], ontario: values[4], stclair: values[5], total: values[6]
-  };
-}
 
 function afddChange(rows, days, current) {
   if (!rows || current === null) return null;
@@ -114,14 +83,17 @@ export default async function handler(req) {
       cold: 'ACIS daily maximum and minimum temperature records'
     },
     cover: null,
+    coverStatus: { state:'unavailable', reason:'not-checked', observedAt:null, httpStatus:null },
     climatology: {},
     history: null,
     cold: []
   };
 
+  // Share the one season-file request across the headline and history sections.
+  const season = fetchSeasonCover(now);
   const tasks = [
-    currentCover(now).then(v => { out.cover = v; }).catch(() => { out.cover = null; }),
-    buildIceRecord(now).then(history => {
+    season.then(source => { const result = seasonCoverStatus(source, now); out.cover = result.cover; out.coverStatus = result.status; }),
+    buildIceRecord(now, fetch, season).then(history => {
       out.history = history;
       for (const lake of ICE_LAKES) out.climatology[lake.key] = history.lakes[lake.key] ?? null;
     }).catch(() => {
