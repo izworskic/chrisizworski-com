@@ -8,6 +8,7 @@ const {
 
 const URLS = Object.freeze({
   official: "https://www.mackinacbridge.org/wp-json/wp/v2/pages/1439",
+  officialPage: "https://www.mackinacbridge.org/fares-traffic/conditions/",
   mackinawCityWind: "https://www.ndbc.noaa.gov/data/realtime2/MACM4.txt",
   straitsWind: "https://www.ndbc.noaa.gov/data/realtime2/45175.txt",
   nwsHourly: "https://api.weather.gov/gridpoints/APX/55,96/forecast/hourly",
@@ -19,18 +20,39 @@ const URLS = Object.freeze({
 const USER_AGENT =
   "MackinacBridgeLive/1.0 (+https://chrisizworski.com/mackinac-bridge-live/; contact: izworski@gmail.com)";
 
-async function fetchSource(url, type) {
+async function fetchSource(url, type, timeoutMs = 8_000) {
   const response = await fetch(url, {
     headers: {
-      accept: type === "json" ? "application/geo+json, application/json" : "text/plain",
+      accept: type === "json" ? "application/geo+json, application/json" : type === "html" ? "text/html" : "text/plain",
       "user-agent": USER_AGENT,
     },
-    signal: AbortSignal.timeout(8_000),
+    signal: AbortSignal.timeout(timeoutMs),
   });
   if (!response.ok) throw new Error(`Source returned ${response.status}`);
   return type === "json" ? response.json() : response.text();
 }
 
+// The Authority publishes the same condition block in its public HTML and REST
+// response. Retry only if the primary cannot provide a recognized dated status.
+// Bound both attempts to eight seconds total, below the browser's 15-second deadline.
+// Never infer status from wind, banners, navigation or a different provider.
+async function fetchOfficialConditions() {
+  const usable = status => status.available && status.level !== "unknown" &&
+    Boolean(status.updated_text) && !/could not be read/i.test(status.message);
+  try {
+    const status = parseOfficialConditions(await fetchSource(URLS.official, "json", 4_000));
+    if (usable(status)) return {...status, retrieval:"authority-rest"};
+  } catch {}
+  try {
+    const html = await fetchSource(URLS.officialPage, "html", 4_000);
+    // Scope to the actual report, not repeated status badges in the page header.
+    const main = html.match(/<main\b[^>]*>([\s\S]*?)<\/main>/i)?.[1] || "";
+    const report = main.match(/<h3\b[^>]*class=["'][^"']*\bstatus\b[^"']*["'][^>]*>[\s\S]*?<div\b[^>]*class=["'][^"']*\bcondition-description\b[^"']*["'][^>]*>[\s\S]*?<\/div>/i)?.[0] || "";
+    const status = parseOfficialConditions(report);
+    if (usable(status)) return {...status, retrieval:"authority-html"};
+  } catch {}
+  return {...parseOfficialConditions(""),retrieval:"unavailable"};
+}
 function sourceState(result, name, url) {
   return {
     name,
@@ -59,7 +81,7 @@ module.exports = async function handler(req, res) {
     constructionResult,
   ] =
     await Promise.allSettled([
-      fetchSource(URLS.official, "json"),
+      fetchOfficialConditions(),
       fetchSource(URLS.mackinawCityWind, "text"),
       fetchSource(URLS.straitsWind, "text"),
       fetchSource(URLS.nwsHourly, "json"),
@@ -70,8 +92,8 @@ module.exports = async function handler(req, res) {
 
   const official =
     officialResult.status === "fulfilled"
-      ? parseOfficialConditions(officialResult.value)
-      : parseOfficialConditions("");
+      ? officialResult.value
+      : {...parseOfficialConditions(""),retrieval:"unavailable"};
 
   const stations = [
     {
@@ -104,11 +126,10 @@ module.exports = async function handler(req, res) {
   );
 
   const sources = {
-    official_status: sourceState(
-      officialResult,
-      "Mackinac Bridge Authority",
-      "https://www.mackinacbridge.org/fares-traffic/conditions/",
-    ),
+    official_status: {
+      name:"Mackinac Bridge Authority",url:URLS.officialPage,
+      available:official.available,retrieval:official.retrieval,
+    },
     current_wind: {
       name: "NOAA National Data Buoy Center",
       url: "https://www.ndbc.noaa.gov/station_page.php?station=macm4",
@@ -171,3 +192,5 @@ module.exports = async function handler(req, res) {
     sources,
   });
 };
+
+module.exports.fetchOfficialConditions = fetchOfficialConditions;
