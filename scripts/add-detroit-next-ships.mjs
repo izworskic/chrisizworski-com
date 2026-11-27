@@ -22,10 +22,10 @@ const MODEL = 'data/detroit-river-freighters/passage-model.json';
 const A0 = '<!-- rsw-detroit:start -->', A1 = '<!-- rsw-detroit:end -->';
 const B0 = '<!-- rsw-detroit-where:start -->', B1 = '<!-- rsw-detroit-where:end -->';
 const M0 = '<!-- rsw-detroit-method:start -->', M1 = '<!-- rsw-detroit-method:end -->';
-const CSS = '<link rel="stylesheet" href="/assets/river-ship-watch.css?v=20261127e">';
+const CSS = '<link rel="stylesheet" href="/assets/river-ship-watch.css?v=20261127f">';
 const JS = ['<script src="/assets/river-passage.js?v=20261127a" defer></script>',
   '<script src="/assets/river-ship-watch.js?v=20261127c" defer></script>',
-  '<script src="/assets/river-ship-map.js?v=20261127b" defer></script>',
+  '<script src="/assets/river-ship-map.js?v=20261127c" defer></script>',
   '<script src="/assets/field-camera.js" defer></script>',
   '<script src="/assets/river-cams.js?v=20261127a" defer></script>',
   '<script src="/assets/detroit-river-page.js?v=20261127a" defer></script>'].join('');
@@ -63,7 +63,7 @@ const map = `<section class="rsw-map dr-block" data-rsw-map aria-labelledby="rsw
 
 const cams = `<section class="rsw-embed-cams dr-block" aria-labelledby="rswCamsTitle"><div class="eyebrow">See the river now</div><h2 id="rswCamsTitle">Detroit River cameras</h2><p class="dr-sub">Check the water before you go, or watch a ship from the list pass by.</p><div class="rsw-cams"><article class="rsw-cam" id="cam-fort-wayne"><div class="rsw-cam-still field-camera" data-field-camera="detroit-river-fort-wayne"><p class="camera-out">Loading the camera…</p></div><div class="rsw-cam-body"><p class="rsw-kicker">Fort Wayne · still picture</p><h3>Looking up the shipping channel to the Ambassador Bridge</h3><p>A new picture from USGS about every 15 minutes, with its age shown. Ships heading to or from the RiverWalk pass through this view.</p></div></article>${streams}</div></section>`;
 
-const nowLabel = `<div class="dr-block dr-now" id="right-now"><div class="eyebrow">Right now near the riverfront</div><h2 class="dr-now-title">Is a moving ship already close?</h2><p class="dr-sub">The Detroit Outdoors live check looks within about 12 miles of the riverfront for a named commercial ship with active reported movement and a report no older than 10 minutes. It measures distance, not direction, so check the next-ships board above for which way the ship is heading.</p></div>`;
+const nowLabel = `<div class="dr-block dr-now" id="right-now"><div class="eyebrow">Right now near the riverfront</div><h2 class="dr-now-title">Is a moving ship already close?</h2><p class="dr-sub">The Detroit Outdoors live check looks within about 12 miles of the riverfront for a named commercial ship with active reported movement and a report no older than 10 minutes. It also checks which way each ship is heading: a ship still coming toward the RiverWalk wins over a nearer one that has already passed, and a ship heading away is labelled that way.</p></div>`;
 
 const blockA = `${A0}
 ${season}
