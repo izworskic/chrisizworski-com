@@ -133,3 +133,24 @@ test('Source-fetch helper rejects wrong host without publication',async()=>{
   const response={ok:true,url:'https://fake.example.org/pukaskwa.json',headers:new Map(),text:async()=>JSON.stringify(await feed())};
   await assert.rejects(fetchFeed(async()=>response),/redirect/);
 });
+
+// The official 2026-11-03 open report superseded the 2026-10-22 closure.
+test('static Pukaskwa fallback reflects dated reopening without implying current access',()=>{
+ const html=fs.readFileSync('public/pukaskwa-national-park/index.html','utf8');
+ assert.match(html,/reported the White River Suspension Bridge trail open on Nov 3/);
+ assert.match(html,/The report is now stale/);
+ assert.doesNotMatch(html,/last reported closed|last reported the bridge trail closed/i);
+ assert.match(html,/data-trail="white-river-bridge"[^>]*data-status="source-unverified"/);
+});
+test('a healthy monitor with a superseding but aged reopening cannot certify access',async()=>{
+ const {recordSuccess}=await import('../lib/pukaskwa/condition-monitor.mjs');
+ const {projectPukaskwaFeed}=await readStatus();
+ const later='2026-11-27T12:17:16Z';const packet=raw();packet.retrievedAt=later;
+ const bridge=packet.sourceRecords.find(x=>x.name.startsWith('White River'));
+ Object.assign(bridge,{status:'open',rawStatus:'Open.',issuedOn:'2026-11-03'});
+ const next=recordSuccess(await feed(),packet,later).feed;
+ const result=projectPukaskwaFeed(next,Date.parse(later));
+ const current=result.dayHikes.find(x=>x.id==='white-river-bridge');
+ assert.notEqual(current.status,'recently-reported-open');assert.notEqual(current.status,'closed');
+ assert.equal(current.observations[0].issuedOn,'2026-11-03');
+});
