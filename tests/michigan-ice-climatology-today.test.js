@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { buildIceRecord, ICE_LAKES, dailyLabel, parseDailyClimatology,
-  parseSeasonCover } from '../lib/michigan-ice/climatology.mjs';
+  parseSeasonCover, fetchSeasonCover, seasonCoverStatus } from '../lib/michigan-ice/climatology.mjs';
 import { michiganIceClock } from '../lib/michigan-ice/season.mjs';
 import handler from '../api/ice.js';
 
@@ -121,4 +121,90 @@ test('generated history page owns today query and keeps the canonical and safety
   assert.match(answer, /Across 54 recorded ice years/);
   const description = (html.match(/<meta name="description" content="([^"]+)"/) || [])[1] || '';
   assert.ok(description.length <= 158);
+});
+
+test('cover source distinguishes missing, stale, partial and measured zero without fabricating a timestamp',async()=>{
+  const now=new Date('2026-11-26T15:00:00Z');
+  const missing=await fetchSeasonCover(now,async()=>new Response('',{status:404}));
+  assert.equal(missing.reason,'file-not-found');
+  assert.deepEqual(seasonCoverStatus(missing,now).cover,null);
+  assert.equal(seasonCoverStatus(missing,now).status.observedAt,null);
+  const failed=await fetchSeasonCover(now,async()=>{throw Error('transport')});
+  assert.equal(failed.reason,'upstream-request-failed');
+  const malformed=await fetchSeasonCover(now,async()=>new Response('<html>not data</html>'));
+  assert.equal(malformed.reason,'no-valid-season-rows');
+  const stale=await fetchSeasonCover(now,async()=>new Response('2026 326 0 0 0 0 0 0 0'));
+  const old=seasonCoverStatus(stale,now);
+  assert.equal(old.cover,null);
+  assert.equal(old.status.state,'stale');
+  assert.equal(old.status.observedAt,'2026-11-22');
+  const partial=await fetchSeasonCover(now,async()=>new Response('2026 330 0 NA 0 0 0 0 0'));
+  assert.equal(seasonCoverStatus(partial,now).status.state,'partial');
+  assert.equal(seasonCoverStatus(partial,now).cover,null);
+  const fresh=await fetchSeasonCover(now,async()=>new Response('2026 330 0 0 0 0 0 0 0'));
+  assert.equal(seasonCoverStatus(fresh,now).status.state,'fresh');
+  assert.equal(seasonCoverStatus(fresh,now).cover.total,0);
+  const duplicate=await fetchSeasonCover(now,async()=>new Response('2026 330 0 0 0 0 0 0 0\n2026 330 1 0 0 0 0 0 0'));
+  assert.equal(seasonCoverStatus(duplicate,now).cover,null);
+  assert.equal(seasonCoverStatus(duplicate,now).status.observedAt,null);
+});
+test('ice API makes one shared season-file request, exposing genuine missing-source status',async()=>{
+  const original=globalThis.fetch;
+  let seasonCalls=0;
+  try{
+    globalThis.fetch=async url=>{
+      if(String(url).includes('_ice.dat')){seasonCalls++;return new Response('',{status:404});}
+      if(String(url).includes('/glicd/daily/'))return new Response('1973 1974\nNov-26 0 0');
+      return new Response('{"data":[]}');
+    };
+    const response=await handler({url:'https://chrisizworski.com/api/ice'});
+    const p=await response.json();
+    assert.equal(p.cover,null);
+    assert.equal(p.coverStatus.observedAt,null);
+    assert.ok(seasonCalls<=1);
+    if(michiganIceClock().active){
+      assert.equal(seasonCalls,1);
+      assert.equal(p.coverStatus.reason,'file-not-found');
+      assert.equal(p.coverStatus.httpStatus,404);
+    }
+  }finally{globalThis.fetch=original;}
+});
+
+test('conflicting NOAA rows are diagnostics, not numerical history', async () => {
+  const now = new Date('2026-11-26T15:00:00Z');
+  const f = seasonalFixture(now);
+  const conflict = f.season + f.season.replace('37.1', '99');
+  const fetcher = async url => new Response(String(url).includes('_ice.dat') ? conflict : f.climate);
+  const source = await fetchSeasonCover(now, fetcher);
+  assert.equal(seasonCoverStatus(source, now).cover, null);
+  const history = await buildIceRecord(now, fetcher, Promise.resolve(source));
+  assert.equal(history.lakes.superior.current, null);
+  assert.equal(history.series.superior.find(row => row.date === f.stamp).current, null);
+  assert.equal(history.peaks.superior, null);
+  const malformed = parseSeasonCover('2026 330 0x10 0 0 0 0 0 0', 2026, '2026-11-26');
+  assert.equal(malformed[0].superior, null);
+  assert.equal(malformed[0].total, 0);
+});
+
+test('a conflicting newest NOAA date cannot make yesterday appear to be the latest observed change', async () => {
+  const now = new Date('2026-11-26T15:00:00Z');
+  const text = [
+    '2026 328 1 0 0 0 0 0 1',
+    '2026 329 2 0 0 0 0 0 2',
+    '2026 330 3 0 0 0 0 0 3',
+    '2026 330 9 0 0 0 0 0 9'
+  ].join('\n');
+  const fetcher = async url => new Response(String(url).includes('_ice.dat') ? text : '1973 1974\nNov-24 0 1\nNov-25 0 2\nNov-26 0 3');
+  const source = await fetchSeasonCover(now, fetcher);
+  const result = seasonCoverStatus(source, now);
+  assert.equal(result.status.state, 'unavailable');
+  assert.equal(result.status.observedAt, null);
+  assert.equal(result.cover, null);
+  const history = await buildIceRecord(now, fetcher, Promise.resolve(source));
+  assert.equal(history.observedChange.state, 'unavailable');
+  assert.equal(history.observedChange.observedAt, null);
+  assert.deepEqual(history.observedChange.lakes, []);
+  assert.equal(history.series.superior.find(row => row.date === 'Nov-25').current, 2);
+  assert.equal(history.series.superior.find(row => row.date === 'Nov-26').current, null);
+  assert.deepEqual(history.peaks.superior, { date:'2026-11-25', value:2 });
 });
