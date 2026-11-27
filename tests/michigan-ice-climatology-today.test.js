@@ -4,7 +4,7 @@ import { readFileSync } from 'node:fs';
 import { buildIceRecord, ICE_LAKES, dailyLabel, parseDailyClimatology,
   parseSeasonCover } from '../lib/michigan-ice/climatology.mjs';
 import { michiganIceClock } from '../lib/michigan-ice/season.mjs';
-import handler from '../api/ice.js';
+import handler, { currentCover } from '../api/ice.js';
 
 // Dates and ice-year columns follow the runtime clock. Nothing is tied to a
 // particular November / February observation that will rot tomorrow.
@@ -121,4 +121,31 @@ test('generated history page owns today query and keeps the canonical and safety
   assert.match(answer, /Across 54 recorded ice years/);
   const description = (html.match(/<meta name="description" content="([^"]+)"/) || [])[1] || '';
   assert.ok(description.length <= 158);
+});
+
+test('current cover distinguishes missing, partial, stale and measured zero without manufacturing values', async () => {
+  const clock = new Date('2026-11-26T12:00:00Z');
+  const fetchBody = (body, status=200) => async () => new Response(body,{status});
+  const missing = await currentCover(clock,fetchBody('not found',404));
+  assert.equal(missing.cover,null);
+  assert.equal(missing.status.state,'source-unavailable');
+  assert.equal(missing.status.httpStatus,404);
+  assert.equal((await currentCover(clock,fetchBody(''))).status.state,'no-observations');
+  assert.equal((await currentCover(clock,fetchBody('<html>access denied</html>'))).status.state,'no-valid-observations');
+  const partial = await currentCover(clock,fetchBody('2026 330 0 0 NA 0 0 0 0'));
+  assert.equal(partial.cover,null);
+  assert.equal(partial.status.state,'partial-observation');
+  assert.equal(partial.status.latestObservedAt,'2026-11-26');
+  const stale = await currentCover(clock,fetchBody('2026 326 0 0 0 0 0 0 0'));
+  assert.equal(stale.cover,null);
+  assert.equal(stale.status.state,'stale');
+  assert.equal(stale.status.latestObservedAt,'2026-11-22');
+  const zero = await currentCover(clock,fetchBody('2026 330 0 0 0 0 0 0 0'));
+  assert.equal(zero.status.state,'observed');
+  assert.equal(zero.cover.total,0);
+  assert.equal(zero.cover.observedAt,'2026-11-26');
+  const duplicate = await currentCover(clock,fetchBody('2026 330 0 0 0 0 0 0 0\n2026 330 1 0 0 0 0 0 0'));
+  assert.equal(duplicate.status.state,'invalid-observation');
+  assert.equal(duplicate.cover,null);
+  assert.equal((await currentCover(new Date('2026-07-01T12:00:00Z'),async()=>{throw Error('must not fetch')})).status.state,'off-season');
 });
