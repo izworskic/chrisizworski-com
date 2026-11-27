@@ -40,7 +40,10 @@ The Circle Tour runtime reads only the generated allowlisted catalog and existin
 
 Owner instructions, QA, scope and source limits: [Circle Tour integration contract](../docs/CIRCLE_TOUR_INTEGRATION_ARCHITECTURE_2026_11_08.md).
 
-## Improve an existing tool (the default workflow)
+## Improve an existing tool (the default workflow for substantial changes)
+
+Use this for substantial existing-tool work as defined in [Proportionality](../docs/PRODUCT_ENGINEERING_OS.md#proportionality-size-the-process-to-the-change). A small change (one section or control, unchanged primary answer, no new engine or source) needs targeted tests, an inspected render and full CI instead; a Foundry run is optional there.
+
 
 Foundry is an agent-operated improvement system. The agent investigates the visitor problem, compares credible alternatives and implements the chosen experience. The CLI captures the actual baseline, checks the assignment for missing decisions, executes the same behavioral adapter before and after, and reports gains, regressions and stale proof. It does not pretend to autonomously research or judge creativity.
 
