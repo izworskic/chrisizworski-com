@@ -22,6 +22,11 @@
     }
     if(config.id==="manitou")return year==="2026"?{state:"no",text:"No regular ferry service to either Manitou Island in 2026; both docks were under construction."}:{state:"unknown",text:year==="2027"?"In a 2026 notice NPS expected dock reopening in 2027, but no regular ferry restart, timetable or fare has been verified. Check NPS and Manitou Island Transit.":"No verified current-year ferry operation is available in this planner. Check NPS and Manitou Island Transit for the latest access status."};
     if(!/^\d{4}-\d{2}-\d{2}$/.test(date))return{state:"unknown",text:"Choose a valid travel date."};
+    if(year==="2027"&&(config.id==="isle-royale"||config.id==="lake-express")){
+      const gates=config.experience.routes.map(r=>globalThis.FerryPlanning.availability(config,date,r));
+      if(gates.some(g=>g.state==="reference"))return{state:"yes",text:"Published 2027 dates exist for selected services. Check the individual route, direction and operator timetable. 2026 fares are not used."};
+      if(gates.every(g=>g.state==="closed"))return{state:"no",text:"Outside the published regular service for the listed routes. Check operator exceptions."};
+    }
     const window=config.seasonWindows?.[year]||(year===fareYear?config.season:null);
     if(window&&!(date>=window[0]&&date<=window[1]))return{state:"no",text:"Outside the operator's published "+year+" season window. Check the exact dates and exceptions."};
     if(year!==fareYear&&!window)return{state:"unknown",text:"No "+year+" timetable is verified here. The "+fareYear+" reference fares are historical and are not applied to a new year. Open the official operator calendar."};
@@ -77,6 +82,7 @@
       html+='<div class="option"><b>'+escapeHtml(o.name)+'</b><p>'+escapeHtml(o.description)+'</p>';
       html+='<span class="cost">'+escapeHtml(blocked?(outside?'Fares not applicable outside season':gate.title):v.text)+'</span>';
       if(v.complete&&!blocked)html+='<p class="fine">Published '+(roundtrip?'round-trip':'one-way')+' fare arithmetic for specified age bands and standard vehicle only'+(v.fee?' including the stated fuel/port surcharges':'')+'. Not a live checkout quote.</p>';
+      if(gate.source)html+='<p class="fine">'+escapeHtml(gate.text)+' <a href="'+escapeHtml(gate.source)+'" target="_blank" rel="noopener noreferrer">Official dated calendar</a></p>';
       if(o.tripTime)html+='<p class="fine">Typical one-way crossing: '+escapeHtml(o.tripTime)+'</p>';
       if(o.notice)html+='<p class="fine">'+escapeHtml(o.notice)+'</p>';
       html+='</div>';
