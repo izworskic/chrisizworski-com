@@ -19,7 +19,8 @@ test('release bytes match reviewed owner except explicit canonical asset routing
  assert.equal((releaseHtml().match(/rel="canonical"/g)||[]).length,1);
  assert.ok(releaseHtml().includes('https://chrisizworski.com/national-tools/garden-water/'));
  const routes=JSON.parse(fs.readFileSync('vercel.json','utf8')).rewrites;
- assert.equal(routes.find(r=>r.source==='/api/national-garden-water').destination,'https://national-garden-water.vercel.app/api/national-garden-water');
+ assert.equal(routes.find(r=>r.source==='/api/national-garden-water'),undefined);
+ assert.equal(blob(fs.readFileSync('lib/garden-water-owner-api-c82dda3c.mjs','utf8')),release.blobs['api/national-garden-water.js']);
 });
 test('canonical handler serves pinned reviewed HTML without owner HTML fetch',async()=>{
  const handler=require('../api/garden-water-page.js');
@@ -31,4 +32,31 @@ test('canonical handler serves pinned reviewed HTML without owner HTML fetch',as
  assert.ok(response.html.includes(prefix+'/national-garden-water-page.js'));
  assert.ok(response.html.includes('https://chrisizworski.com/#person'));
  assert.equal((response.html.match(/rel="canonical"/g)||[]).length,1);
+});
+
+test('pinned API serves health locally and rejects missing coordinates',async()=>{
+ const handler=require('../api/national-garden-water.js');
+ const make=()=>({headers:{},setHeader(k,v){this.headers[k.toLowerCase()]=v;return this;},status(code){this.code=code;return this;},json(body){this.body=body;return this;}});
+ let res=make();await handler({method:'GET',query:{health:'1'}},res);assert.equal(res.code,200);assert.equal(res.body.service,'national-garden-water');assert.match(res.headers['x-robots-tag'],/noindex/);
+ res=make();await handler({method:'GET',query:{lat:'',lon:''}},res);assert.equal(res.code,400);
+ res=make();await handler({method:'POST',query:{lat:'43.6',lon:'-83.9'}},res);assert.equal(res.code,405);
+});
+test('pinned API invokes original public providers, not the owner deployment',async()=>{
+ const handler=require('../api/national-garden-water.js');
+ const original=globalThis.fetch,seen=[];
+ globalThis.fetch=async (url)=>{
+   const u=new URL(url);seen.push(u.hostname);
+   if(u.hostname==='api.weather.gov'&&u.pathname.startsWith('/points/'))return new Response(JSON.stringify({properties:{timeZone:'America/Detroit',forecastGridData:'https://api.weather.gov/gridpoints/DTX/1,1',observationStations:'https://api.weather.gov/stations'}}));
+   if(u.hostname==='api.weather.gov'&&u.pathname.startsWith('/gridpoints/'))return new Response(JSON.stringify({properties:{quantitativePrecipitation:{values:[]},maxTemperature:{values:[{value:15}]},minTemperature:{values:[{value:5}]}}}));
+   return new Response('unavailable',{status:503});
+ };
+ try{
+   const res={setHeader(){},status(code){this.code=code;return this;},json(body){this.body=body;return this;}};
+   await handler({method:'GET',query:{lat:'43.6',lon:'-83.9'}},res);
+   assert.equal(res.code,200);assert.equal(res.body.location.lat,43.6);assert.equal(res.body.location.lon,-83.9);
+   assert.equal(res.body.observedHistory.coveredDays,0);assert.equal(res.body.observedHistory.confidence,'low');
+   assert.ok(res.body.referenceEt.daily.length>0);
+   assert.ok(seen.includes('api.weather.gov'));assert.ok(seen.includes('www.ncei.noaa.gov'));
+   assert.ok(seen.every(h=>!h.endsWith('.vercel.app')&&h!=='chrisizworski.com'));
+ }finally{globalThis.fetch=original;}
 });
