@@ -1,0 +1,44 @@
+{
+  "schema": "seaway-navigation-season-v2",
+  "section": "Montreal–Lake Ontario",
+  "entryPoints": "upbound at Cap St. Michel, downbound at Cape Vincent",
+  "finalWeeksDays": 35,
+  "openingWeekDays": 10,
+  "typical": {
+    "openingMonthDay": "03-22",
+    "regularEntryEndsMonthDay": "12-24",
+    "allClearMonthDay": "01-05",
+    "basis": "Recent official notices: openings March 22 in 2025 and 2026 and targeted for 2027; regular entries without special agreement ended December 24 in the 2025 and 2026 seasons; all ships clear by January 5 for the 2025 and 2026 seasons (January 10 for 2024). Used only when a season has no official dates loaded below, and always labelled as typical."
+  },
+  "seasons": {
+    "2026": {
+      "opening": "2026-03-22T08:00:00-04:00",
+      "regularEntryEnds": "2026-12-24T23:59:00-05:00",
+      "allClearBy": "2027-01-05T12:00:00-05:00",
+      "source": {
+        "title": "Seaway Notice #9 (2026), Closing of the 2026 Navigation Season",
+        "url": "https://greatlakes-seaway.com/wp-content/uploads/2026/10/notice20261022_en.pdf",
+        "published": "2026-10-22",
+        "checked": "2026-11-27"
+      }
+    },
+    "2027": {
+      "opening": "2027-03-22T08:00:00-04:00",
+      "openingNote": "Targeted opening date from Seaway Notice #9 (2026); no hour given, 08:00 Eastern (the 2026 opening hour) is used as the state boundary.",
+      "source": {
+        "title": "Seaway Notice #9 (2026), targeted 2027 opening",
+        "url": "https://greatlakes-seaway.com/wp-content/uploads/2026/10/notice20261022_en.pdf",
+        "published": "2026-10-22",
+        "checked": "2026-11-27"
+      }
+    }
+  },
+  "winterHarbourSource": {
+    "title": "Seaway Notice #14 (2025), Closing of the 2025 Navigation Season",
+    "url": "https://greatlakes-seaway.com/wp-content/uploads/2025/10/notice20251017_en.pdf",
+    "checked": "2026-11-27",
+    "notes": "Ports east of the Seaway (St. Lambert Lock) on the St. Lawrence River remain open to navigation during the winter months."
+  },
+  "noticesIndex": "https://greatlakes-seaway.com/news-and-information/notices/seaway-notices/",
+  "upkeep": "Optional each year: add the new season's official dates under seasons.<year> when the Seaway publishes its opening (about February) and closing (about October) notices. Without them the page keeps working on the typical schedule, labelled as typical."
+}
