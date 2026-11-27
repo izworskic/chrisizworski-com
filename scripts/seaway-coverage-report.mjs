@@ -70,6 +70,15 @@ export function holdout(passages) {
   return { train, test };
 }
 
+// Day-of-year mod 3: train / calibrate / test, no passage shared between splits.
+export function calibratedSplit(passages, coverage = 0.8) {
+  const day = p => Math.floor(p.fixes[0].t / 86400000) % 3;
+  const train = passages.filter(p => day(p) === 0), calib = passages.filter(p => day(p) === 1), test = passages.filter(p => day(p) === 2);
+  if (!train.length || !calib.length || !test.length) return null;
+  const r = engine.evaluateCalibrated(train, calib, test, coverage);
+  return { ...r, split: { train: train.length, calibrate: calib.length, test: test.length } };
+}
+
 function main() {
   const live = readLiveLogs(dir);
   const noaa = readNoaa(many('noaa'));
@@ -83,7 +92,8 @@ function main() {
     const { train, test } = holdout(ps);
     report.sources[name] = { points: pts.length, ships: new Set(pts.map(p => p.mmsi)).size, passages: ps.length,
       upbound: ps.filter(p => p.dir > 0).length, downbound: ps.filter(p => p.dir < 0).length, viewpointCrossings: crossings,
-      heldOut: train.length && test.length ? engine.evaluate(train, test) : null };
+      heldOut: train.length && test.length ? engine.evaluate(train, test) : null,
+      calibrated: calibratedSplit(ps) };
   }
   if (outFile) writeFileSync(outFile, JSON.stringify(report, null, 2) + '\n');
   if (markdown) {
@@ -96,6 +106,16 @@ function main() {
       if (s.heldOut) {
         lines.push('', `Held-out windows (nominal ${(s.heldOut.nominal * 100).toFixed(0)}%), ${s.heldOut.forecasts} forecasts:`, '', '| Viewpoint, lead | n | Hit rate | Median abs error | Median width |', '| --- | ---: | ---: | ---: | ---: |');
         for (const [k, v] of Object.entries(s.heldOut.summary).sort()) lines.push(`| ${k} | ${v.n} | ${(v.hitRate * 100).toFixed(0)}% | ${v.medianAbsErrMin.toFixed(0)} min | ${v.medianWidthMin.toFixed(0)} min |`);
+      }
+    }
+    for (const [name, s] of Object.entries(report.sources)) {
+      if (!s.calibrated) continue;
+      const c = s.calibrated;
+      lines.push('', `### ${name}: calibrated windows (target ${(c.coverage * 100).toFixed(0)}%; passages train ${c.split.train} / calibrate ${c.split.calibrate} / test ${c.split.test})`, '',
+        '| Viewpoint, lead | Test passages | Hit rate | Window | Median abs error | Meets bar |', '| --- | ---: | ---: | ---: | ---: | --- |');
+      for (const [k, v] of Object.entries(c.summary).sort()) {
+        const ok = v.n >= 50 && v.hitRate >= 0.75 && v.windowMin <= 180;
+        lines.push(`| ${k} | ${v.n} | ${(v.hitRate * 100).toFixed(0)}% | ${v.windowMin.toFixed(0)} min | ${v.medianAbsErrMin.toFixed(0)} min | ${ok ? 'yes' : 'no'} |`);
       }
     }
     lines.push('', 'Research only: no window here is published or validated for visitors.');

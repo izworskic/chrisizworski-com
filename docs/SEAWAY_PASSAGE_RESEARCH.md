@@ -36,3 +36,43 @@ gh run list --workflow seaway-coverage-logger.yml --limit 100 --json databaseId 
   | xargs -I{} gh run download {} --dir seaway-coverage --pattern 'seaway-coverage-*'
 node scripts/seaway-coverage-report.mjs --dir seaway-coverage --summary
 ```
+
+## Results: NOAA 2025 study (run 46020845579, 2026-11-27)
+
+**Data:** 36 days, four consecutive days a month from April to December 2025. That gave 347,176 corridor positions from 460 ships, forming 454 passages (228 upbound, 226 downbound).
+
+**Viewpoint crossings with fixes 45 minutes or less apart:**
+
+| Viewpoint | Crossings |
+| --- | ---: |
+| Alexandria Bay | 289 |
+| Clayton | 272 |
+| Brockville | 120 |
+| Iroquois | 67 |
+| Eisenhower | 35 |
+| Snell | 31 |
+| St. Lambert | 1 |
+
+US receivers cover the Thousand Islands well and Massena poorly. Montreal is out of range.
+
+**Raw empirical windows were overconfident.** They hit 55–77% against a nominal 80%. A split-conformal calibration fixed that. The split uses day-of-year mod 3 (train, calibrate, test), with no passage shared between splits, and one forecast per passage, viewpoint and lead bucket:
+
+| Viewpoint, lead | Test passages | Hit rate (target 80%) | Window | Median abs error | Meets bar |
+| --- | ---: | ---: | ---: | ---: | --- |
+| Alexandria Bay, 0–2 h | 72 | 85% | 10 min | 2 min | **yes** |
+| Alexandria Bay, 2–6 h | 50 | 76% | 35 min | 11 min | **yes** |
+| Clayton, 0–2 h | 73 | 79% | 7 min | 2 min | **yes** |
+| Clayton, 2–6 h | 31 | 81% | 33 min | 8 min | no (too few passages) |
+| Brockville, 0–2 h | 29 | 66% | 7 min | 3 min | no |
+| Brockville, 2–6 h | 25 | 64% | 41 min | 9 min | no |
+| Eisenhower, Snell, Iroquois | fewer than 20 calibration passages | — | — | — | no forecast |
+
+**Conclusions**
+
+- An honest "when will a ship pass" window is supported **for Alexandria Bay and Clayton**, up to about 6 hours ahead for Alexandria Bay and 2 hours for Clayton.
+- The live feed covers this stretch: the Thousand Islands region reported ships in every check so far. The coverage logger will confirm its gap rate.
+- **Eisenhower cannot be forecast** from either source today. Neither feed hears ships reliably at Massena. The Eisenhower page keeps the official order of turn and the daily recording as its schedule answer.
+- Remaining caveats before release:
+  - These are typical-pace windows from 2025 passages. Ice, weather, anchoring and lock queues upstream are not modelled; the 12-hour-plus bucket is refused.
+  - The live feed's own fix interval and gaps (from the logger) must be checked before a visitor sees a window.
+  - Calibration should be refreshed each season, with the 2026 NOAA archive once it is published.
