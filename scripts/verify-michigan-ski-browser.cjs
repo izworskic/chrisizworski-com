@@ -13,7 +13,8 @@ function snapshot(){
  const now=new Date().toISOString(),report=new Date(Date.now()-60*60*1000).toISOString();
  return {ok:true,generatedAt:now,season:'2026-27',policy:'PROVISIONAL',health:{nwsAlerts:'UNAVAILABLE',localStormReports:'UNAVAILABLE',nwsGridAvailable:0,officialReportsChecked:16,officialReportsParsed:mode==='one-open'?1:0},resorts:RESORTS.map(r=>{
   const isOpen=mode==='one-open'&&r.slug==='caberfae-peaks';
-  return {...r,official:r.slug==='alpine-valley'?{status:'NOT_CONNECTED',url:null,checkedAt:now}:isOpen?
+  const isClosed=mode==='one-open'&&r.slug==='nubs-nob';
+  return {...r,official:isClosed?{status:'CLOSED_PER_OPERATOR',url:r.snow,lifts:{open:0,total:5},reportUpdatedAt:report,checkedAt:now}:r.slug==='alpine-valley'?{status:'NOT_CONNECTED',url:null,checkedAt:now}:isOpen?
    {status:'OPEN_PER_OPERATOR',url:'https://caberfaepeaks.com/snow-report/',lifts:{open:2,total:5},trails:{open:8,total:27},reportUpdatedAt:report,checkedAt:now}:
    mode==='undated'&&r.slug==='pine-knob'?
    {status:'UNVERIFIED',url:r.snow,reason:'UNDATED_OPERATOR_REPORT',lifts:{open:0,total:13},reportUpdatedAt:null,checkedAt:now}:
@@ -59,6 +60,11 @@ async function run(){
    await page.waitForFunction(()=>document.querySelector('#ski-open-count')?.textContent.includes('1 confirmed open'),null,{timeout:20000});
    need(await page.locator('#ski-operating-list .ski-operation-row').count()===17,width+' displays all downhill hills');
    need((await page.locator('#ski-operating-list').innerText()).includes('Caberfae Peaks'),width+' shows named official result');
+   const closedRow=page.locator('.ski-operation-row').filter({hasText:"Nub's Nob"});
+   need((await closedRow.innerText()).includes('lists zero lifts running'),width+' closed report has consistent evidence');
+   need(!(await closedRow.innerText()).includes('could not be established'),width+' no contradictory closure note');
+   const openRow=page.locator('.ski-operation-row').filter({hasText:'Caberfae Peaks'});
+   need((await openRow.innerText()).includes('confirms lifts running'),width+' open report has consistent evidence');
    await page.waitForFunction(()=>document.querySelectorAll('#ski-resort-carousel .ski-carousel-card').length===18,null,{timeout:20000});
    need(await page.locator('#ski-point-map .ski-dot').count()===18,width+' map contains all 18 resort markers');
    need(await page.locator('#ski-resort-carousel .is-selected').count()===1,width+' exactly one selected card');

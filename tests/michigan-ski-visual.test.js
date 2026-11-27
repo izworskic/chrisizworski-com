@@ -65,3 +65,17 @@ test('resort location searches use shared place contract and static fallback, ne
  assert.ok(g.includes('ski-directory-maps'));assert.ok(g.includes('/assets/visitor-map-links.js'));
  assert.doesNotMatch(map,/verifiedDirections|maps\/dir/);
 });
+
+test('dated operator status and evidence note agree, uncertain reasons remain distinct',()=>{
+ const vm=require('node:vm'),src=read('public/assets/michigan-ski.js');
+ const f=vm.runInNewContext(src.slice(src.indexOf('function operatingLabel('),src.indexOf('function operatorOpeningPlans('))+'\n({operatingLabel,evidenceNote})');
+ const resort=(status,reason,open)=>({official:{status,reason,lifts:{open}}});
+ for(const [status,expected,count] of [['OPEN_PER_OPERATOR',/confirms lifts running/,2],['CLOSED_PER_OPERATOR',/lists zero lifts/,0]]){
+  const r=resort(status,undefined,count);assert.match(f.evidenceNote(r),expected);assert.doesNotMatch(f.evidenceNote(r),/could not be established/);
+ }
+ assert.match(f.evidenceNote(resort('STALE_REPORT','REPORT_OVER_36_HOURS',0)),/older than 36 hours/);
+ assert.match(f.evidenceNote(resort('UNVERIFIED','UNDATED_OPERATOR_REPORT',0)),/no published report date/);
+ assert.match(f.evidenceNote(resort('UNVERIFIED','OPERATOR_STATUS_CONFLICT',2)),/conflicts/);
+ assert.match(f.evidenceNote(resort('UNVERIFIED','INVALID_REPORT_DATE',2)),/invalid or in the future/);
+ assert.match(f.evidenceNote(resort('UNVERIFIED','NO_LIFT_COUNT',null)),/does not publish a usable lift count/);
+});
