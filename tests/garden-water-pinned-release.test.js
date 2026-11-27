@@ -4,11 +4,11 @@ import fs from 'node:fs';
 import {createHash} from 'node:crypto';
 import {createRequire} from 'node:module';
 const require=createRequire(import.meta.url);
-const {release,releaseHtml,prefix}=require('../lib/garden-water-release-27f5f98e.js');
+const {release,releaseHtml,prefix}=require('../lib/garden-water-release-c82dda3c.js');
 const blob=s=>createHash('sha1').update('blob '+Buffer.byteLength(s)+'\0').update(s).digest('hex');
 const read=p=>fs.readFileSync('public'+prefix+'/'+p,'utf8');
 test('release bytes match reviewed owner except explicit canonical asset routing',()=>{
- assert.equal(release.commit,'27f5f98e1e22106dd43009e889a4aa2e37a6a4b8');
+ assert.equal(release.commit,'c82dda3cf19cd002ce1571db6459186a923ac2d6');
  assert.equal(blob(release.html),release.blobs['public/national-tools/garden-water/index.html']);
  for(const file of ['national-garden-water-engine.js','national-garden-water.css'])assert.equal(blob(read(file)),release.blobs['public/assets/'+file]);
  assert.equal(blob(read('national-garden-water-crops.json')),release.blobs['public/data/national-garden-water-crops.json']);
