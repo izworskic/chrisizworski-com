@@ -19,16 +19,32 @@ const URLS = Object.freeze({
 const USER_AGENT =
   "MackinacBridgeLive/1.0 (+https://chrisizworski.com/mackinac-bridge-live/; contact: izworski@gmail.com)";
 
-async function fetchSource(url, type) {
+async function fetchSource(url, type, timeoutMs = 8000) {
   const response = await fetch(url, {
     headers: {
       accept: type === "json" ? "application/geo+json, application/json" : "text/plain",
       "user-agent": USER_AGENT,
     },
-    signal: AbortSignal.timeout(8_000),
+    signal: AbortSignal.timeout(timeoutMs),
   });
   if (!response.ok) throw new Error(`Source returned ${response.status}`);
   return type === "json" ? response.json() : response.text();
+}
+
+// Retry only the official source, within the same eight-second request budget.
+// A successful HTTP response with an unrecognized heading is not a verified status.
+async function fetchOfficialStatus(fetcher = fetchSource) {
+  let last = parseOfficialConditions("");
+  for (let attempt = 1; attempt <= 2; attempt++) {
+    try {
+      const parsed = parseOfficialConditions(await fetcher(URLS.official, "json", 4000));
+      last = parsed;
+      if (parsed.available && ["open","advisory","escort","partial","closed"].includes(parsed.level)) {
+        return {...parsed, verified: true, attempts: attempt};
+      }
+    } catch { /* no inferred open state, retry once */ }
+  }
+  return {...last, available: false, verified: false, attempts: 2};
 }
 
 function sourceState(result, name, url) {
@@ -59,7 +75,7 @@ module.exports = async function handler(req, res) {
     constructionResult,
   ] =
     await Promise.allSettled([
-      fetchSource(URLS.official, "json"),
+      fetchOfficialStatus(),
       fetchSource(URLS.mackinawCityWind, "text"),
       fetchSource(URLS.straitsWind, "text"),
       fetchSource(URLS.nwsHourly, "json"),
@@ -70,8 +86,8 @@ module.exports = async function handler(req, res) {
 
   const official =
     officialResult.status === "fulfilled"
-      ? parseOfficialConditions(officialResult.value)
-      : parseOfficialConditions("");
+      ? officialResult.value
+      : {...parseOfficialConditions(""), verified: false, attempts: 0};
 
   const stations = [
     {
@@ -104,11 +120,12 @@ module.exports = async function handler(req, res) {
   );
 
   const sources = {
-    official_status: sourceState(
-      officialResult,
-      "Mackinac Bridge Authority",
-      "https://www.mackinacbridge.org/fares-traffic/conditions/",
-    ),
+    official_status: {
+      name: "Mackinac Bridge Authority",
+      url: "https://www.mackinacbridge.org/fares-traffic/conditions/",
+      available: official.verified === true,
+      attempts: official.attempts,
+    },
     current_wind: {
       name: "NOAA National Data Buoy Center",
       url: "https://www.ndbc.noaa.gov/station_page.php?station=macm4",
@@ -171,3 +188,5 @@ module.exports = async function handler(req, res) {
     sources,
   });
 };
+
+module.exports.fetchOfficialStatus = fetchOfficialStatus;

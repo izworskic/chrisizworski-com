@@ -386,3 +386,26 @@ test("hourly wind speed requires a recognized nonnegative mph value", () => {
     assert.equal(parseWindSpeedMph(raw), expected);
   }
 });
+
+test("official status retries a transient source failure without inventing an open state", async () => {
+  let calls=0;
+  const got=await mackinacHandler.fetchOfficialStatus(async(url,type,timeout)=>{
+    assert.match(url,/mackinacbridge\.org\/wp-json/);
+    assert.equal(type,"json");
+    assert.equal(timeout,4000);
+    if(++calls===1) throw Error("transient");
+    return officialHighWind;
+  });
+  assert.equal(calls,2);
+  assert.equal(got.level,"advisory");
+  assert.equal(got.verified,true);
+  assert.equal(got.attempts,2);
+  const unknown=await mackinacHandler.fetchOfficialStatus(async()=>({content:{rendered:'<h3 class="status">Unrecognized heading</h3>'}}));
+  assert.equal(unknown.available,false);
+  assert.equal(unknown.verified,false);
+  assert.equal(unknown.level,"unknown");
+  const closed=await mackinacHandler.fetchOfficialStatus(async()=>({content:{rendered:'<h3 class="status">Bridge Closed</h3>'}}));
+  assert.equal(closed.level,"closed");
+  assert.equal(closed.verified,true);
+  assert.equal(closed.attempts,1);
+});
