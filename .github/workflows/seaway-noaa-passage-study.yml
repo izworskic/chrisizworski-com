@@ -1,0 +1,84 @@
+name: Seaway NOAA passage study
+
+# OFFLINE RESEARCH. Extracts St. Lawrence corridor positions from public-domain NOAA Marine
+# Cadastre daily AIS files and runs a held-out evaluation of passage windows
+# (lib/seaway-passage.js). Nothing here is published to visitors. Manual dispatch only.
+on:
+  workflow_dispatch:
+    inputs:
+      year:
+        description: NOAA archive year
+        default: '2025'
+
+permissions:
+  contents: read
+
+jobs:
+  extract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 120
+    strategy:
+      fail-fast: false
+      max-parallel: 5
+      matrix:
+        # Four consecutive days a month across one navigation season, so whole passages survive.
+        block: ['04-14', '05-12', '06-09', '07-14', '08-11', '09-08', '10-13', '11-10', '12-08']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Extract corridor points
+        shell: bash
+        run: |
+          set -euo pipefail
+          command -v zstd
+          year='${{ github.event.inputs.year }}'
+          mkdir -p points
+          start="$year-${{ matrix.block }}"
+          for offset in 0 1 2 3; do
+            day=$(date -u -d "$start + $offset day" +%Y-%m-%d)
+            archive="$RUNNER_TEMP/ais-$day.csv.zst"
+            if ! curl --fail --location --silent --show-error --retry 2 --connect-timeout 20 --max-time 900 \
+                "https://noaaocm.blob.core.windows.net/ais/csv2/csv$year/ais-$day.csv.zst" -o "$archive"; then
+              echo "::warning::NOAA file unavailable for $day"; continue
+            fi
+            sha256sum "$archive" | tee "points/ais-$day.sha256"
+            node scripts/seaway-noaa-corridor.mjs --input "$archive" --out "points/seaway-$day.ndjson"
+            rm -f "$archive"
+          done
+      - uses: actions/upload-artifact@v4
+        with:
+          name: seaway-noaa-points-${{ matrix.block }}
+          path: points/
+          retention-days: 90
+
+  evaluate:
+    needs: extract
+    if: always()
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: seaway-noaa-points-*
+          path: points
+          merge-multiple: true
+      - name: Held-out passage evaluation
+        shell: bash
+        run: |
+          set -euo pipefail
+          ls points | head -50
+          noaa_args=()
+          for f in points/seaway-*.ndjson; do noaa_args+=(--noaa "$f"); done
+          node scripts/seaway-coverage-report.mjs "${noaa_args[@]}" --out seaway-noaa-study.json
+          node scripts/seaway-coverage-report.mjs "${noaa_args[@]}" --summary | tee -a "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: seaway-noaa-passage-study
+          path: seaway-noaa-study.json
+          retention-days: 90
