@@ -1,4 +1,4 @@
-/* River Ship Watch: a riverbank arrival board, not a map. Builds on seaway.css tokens. */
+/* River Ship Watch: a riverbank arrival board first, with an optional map and live cameras. Builds on seaway.css tokens. */
 .rsw-hero{padding:26px 28px 14px}
 .rsw-hero .lede{font-size:14px;line-height:1.7;max-width:760px;margin-top:14px;color:#4e676d}
 .rsw-board{background:#0f2a3a;color:#eef3ef;border-radius:10px;padding:20px 22px 16px;box-shadow:0 10px 30px #0f2a3a22}
@@ -38,7 +38,44 @@
 .rsw-links{margin-top:10px!important;font-size:12px!important;font-weight:700}
 .rsw-section table{margin-top:14px}
 .rsw-section.faq{padding-bottom:20px}
+/* Map */
+.rsw-map{margin-top:16px}
+.rsw-map-canvas{height:min(620px,75vh);border:1px solid var(--line,#d8dfdc);border-radius:8px;background:#dfe9ea;position:relative;z-index:0}
+.rsw-map:not([data-js]) .rsw-map-canvas{display:none}
+.rsw-map-summary{font-size:13px;color:#3c5960;margin:10px 0 0;line-height:1.55}
+.rsw-legend{display:flex;flex-wrap:wrap;gap:6px 18px;list-style:none;padding:0;margin:10px 0 0;font-size:12px;color:#3c5960}
+.rsw-legend li{display:flex;align-items:center;gap:6px}
+.rsw-key{display:inline-block;width:14px;height:14px;border-radius:50%}
+.rsw-key.spot{background:#e0b970;border:2px solid #0f2a3a}
+.rsw-key.ship{background:#0f2a3a;clip-path:polygon(50% 0,100% 100%,50% 75%,0 100%);border-radius:0}
+.rsw-key.forecast{background:#c2502e;clip-path:polygon(50% 0,100% 100%,50% 75%,0 100%);border-radius:0}
+.rsw-key.stopped{background:#fff;border:2px solid #7d8c8f}
+.rsw-key.cam{background:#94462f;border-radius:4px}
+.rsw-ship-icon svg{width:26px;height:26px;display:block;transform-origin:50% 50%;filter:drop-shadow(0 1px 1px #0006)}
+.rsw-ship-icon.is-moving path{fill:#0f2a3a;stroke:#fff;stroke-width:1.2}
+.rsw-ship-icon.is-forecast path{fill:#c2502e}
+.rsw-ship-icon.is-stopped circle{fill:#fff;stroke:#7d8c8f;stroke-width:2.5}
+.rsw-cam-icon{display:grid;place-items:center;background:#94462f;color:#fff;border-radius:5px;font-size:10px;box-shadow:0 1px 3px #0006}
+.rsw-spot-label{font:700 12px/1.2 system-ui,sans-serif;color:#0f2a3a;background:#fffefa;border:1px solid #e0b970;box-shadow:none;padding:2px 6px}
+.rsw-spot-label::before{display:none}
+/* Cameras */
+.rsw-cams{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:16px;margin:18px 0 22px}
+.rsw-cam{background:var(--white,#fff);border:1px solid var(--line,#d8dfdc);border-radius:8px;overflow:hidden;scroll-margin-top:16px}
+.rsw-cam-stage{aspect-ratio:16/9;background:#0f2a3a;display:grid;place-items:center}
+.rsw-cam-stage iframe{width:100%;height:100%;border:0;display:block}
+.rsw-cam-play{all:unset;box-sizing:border-box;cursor:pointer;width:100%;height:100%;display:flex;align-items:center;justify-content:center;gap:14px;color:#fffefa;background:radial-gradient(circle at 50% 45%,#1d4a60,#0f2a3a 70%);padding:16px;text-align:left}
+.rsw-cam-play:focus-visible{outline:3px solid #e0b970;outline-offset:-3px}
+.rsw-cam-play:hover .rsw-cam-glyph{background:#f3d9a4}
+.rsw-cam-glyph{display:grid;place-items:center;width:54px;height:54px;border-radius:50%;background:#e0b970;color:#0f2a3a;font-size:20px;padding-left:4px;box-sizing:border-box;flex:0 0 auto}
+.rsw-cam-play strong{display:block;font-size:16px}.rsw-cam-play small{display:block;font-size:12px;color:#a9c3c6;margin-top:2px}
+.rsw-cam-fallback{color:#fffefa;font-size:14px;font-weight:700;padding:16px;text-align:center}
+.rsw-cam-fallback a{color:#f3d9a4}
+.rsw-cam-body{padding:14px 16px}
+.rsw-cam-body h3{font-size:20px;margin:2px 0 6px}
+.rsw-cam-body p{font-size:13px;color:#526b71;line-height:1.6;margin:0}
 @media(max-width:740px){
+ .rsw-map-canvas{height:70vh;max-height:520px}
+ .rsw-cams{grid-template-columns:1fr}
  .rsw-hero{padding:20px 16px 10px}
  .rsw-board{padding:16px 14px 14px;border-radius:8px}
  .rsw-board h2{font-size:22px}

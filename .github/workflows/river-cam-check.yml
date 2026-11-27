@@ -1,0 +1,44 @@
+name: River camera check
+
+# Checks the YouTube live cameras embedded on River Ship Watch pages once a day.
+# Operators change a stream's video id when it restarts; when one is confirmed not live this opens
+# (or comments on) a single issue listing the operator's current streams. A one-line edit to
+# data/river-cameras.json fixes it. GitHub Actions only: no Vercel calls, no commits, no deploys.
+on:
+  schedule:
+    - cron: '41 13 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  issues: write
+
+concurrency:
+  group: river-cam-check
+  cancel-in-progress: true
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check embedded camera streams
+        id: check
+        run: |
+          set +e
+          node scripts/check-river-cams.mjs | tee cam-report.txt
+          echo "failed=$([ ${PIPESTATUS[0]} -ne 0 ] && echo true || echo false)" >> "$GITHUB_OUTPUT"
+          exit 0
+      - name: Open or update the issue
+        if: steps.check.outputs.failed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          title="River camera stream is not live"
+          body=$(printf 'A camera in data/river-cameras.json is not live. Swap its youtube id for the current stream.\n\n```\n%s\n```\n' "$(cat cam-report.txt)")
+          num=$(gh issue list --state open --search "in:title \"$title\"" --json number --jq '.[0].number')
+          if [ -n "$num" ]; then gh issue comment "$num" --body "$body"; else gh issue create --title "$title" --body "$body"; fi

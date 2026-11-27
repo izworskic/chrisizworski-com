@@ -21,8 +21,8 @@
       "description": "Where Lake Huron becomes the St. Clair River under the Blue Water Bridges, with benches and open views. Ships turn close to shore here.",
       "address": "2200 Thomas Edison Parkway, Port Huron",
       "mapUrl": "https://www.openstreetmap.org/?mlat=42.9993&mlon=-82.4237#map=17/42.9993/-82.4237",
-      "source": "https://www.bluewater.org/member-detail/ship-freighter-watching",
-      "sourceLabel": "Blue Water Area CVB"
+      "source": "https://www.porthuronrec.com/parks",
+      "sourceLabel": "Port Huron parks"
     },
     "marysville": {
       "town": "Marysville",
@@ -51,8 +51,8 @@
       "description": "Eight walkable waterfront parks along Water Street between Bridge and Pearl streets.",
       "address": "301 S. Water St., Marine City",
       "mapUrl": "https://www.openstreetmap.org/?mlat=42.716&mlon=-82.493#map=17/42.716/-82.493",
-      "source": "https://www.bluewater.org/member-detail/ship-freighter-watching",
-      "sourceLabel": "Blue Water Area CVB"
+      "source": "https://www.michigan.org/city/marine-city",
+      "sourceLabel": "Pure Michigan"
     },
     "algonac": {
       "town": "Algonac",
