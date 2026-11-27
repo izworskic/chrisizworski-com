@@ -35,6 +35,11 @@ function operatingLabel(r){
 }
 function evidenceNote(r){
  const official=r.official||{};
+ if(official.status==='OPEN_PER_OPERATOR')return 'A current dated operator report confirms lifts running at the reported time; check again before travel';
+ if(official.status==='CLOSED_PER_OPERATOR')return 'A current dated operator report lists zero lifts running at the reported time; check for changes before travel';
+ if(official.reason==='OPERATOR_STATUS_CONFLICT')return 'The operator lift count conflicts with its status text; current operations are not confirmed';
+ if(official.reason==='INVALID_REPORT_DATE')return 'The report date is invalid or in the future; current operations are not confirmed';
+ if(official.reason==='NO_LIFT_COUNT')return 'The dated operator report does not publish a usable lift count';
  if(official.status==='NOT_CONNECTED')return 'No approved operator lift-report connection';
  if(official.status==='STALE_REPORT')return 'The operator report is older than 36 hours';
  if(official.reason==='UNDATED_OPERATOR_REPORT'){
@@ -100,8 +105,9 @@ function operatingBoard(data){
   const info=node('p','small'),lifts=r.official?.lifts,trail=r.official?.trails;
   const confirmed=['OPEN_PER_OPERATOR','CLOSED_PER_OPERATOR'].includes(r.official?.status);
   const liftText=confirmed&&lifts?.open!=null?lifts.open+' of '+(lifts.total??'?')+' lifts confirmed by the dated report':
-   lifts?.open===0?lifts.open+' of '+(lifts.total??'?')+' lifts listed (undated, not independently confirmed)':
-   lifts?.open>0?'A lift count is shown, but it is undated and cannot confirm an opening':
+   r.official?.status==='STALE_REPORT'&&lifts?.open!=null?lifts.open+' of '+(lifts.total??'?')+' lifts on the outdated report, not current':
+   r.official?.reason==='UNDATED_OPERATOR_REPORT'&&lifts?.open!=null?lifts.open+' of '+(lifts.total??'?')+' lifts listed (undated, not independently confirmed)':
+   lifts?.open!=null?'A lift count is listed, but current operations are not confirmed':
    'No usable current lift count';
   const runsText=confirmed&&trail?.open!=null?' · '+trail.open+' of '+(trail.total??'?')+' runs':'';
   info.textContent=liftText+runsText+' · Operator report: '+reportStamp(r.official?.reportUpdatedAt)+' · Checked: '+reportStamp(r.official?.checkedAt);
