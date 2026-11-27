@@ -47,3 +47,10 @@
  .rsw-when strong{font-size:24px}
  .rsw-places{grid-template-columns:1fr}
 }
+/* Embedded on a page without seaway.css (Detroit). Self-contained button. */
+.rsw-embed{margin:22px 0}
+.rsw-embed .rsw-refresh{font:inherit;font-size:13px;font-weight:700;cursor:pointer;background:transparent;color:#fffefa;border:1px solid #4f7a8c;border-radius:6px;padding:9px 14px;min-height:44px}
+.rsw-embed .rsw-refresh:hover{background:#173b4f}
+.rsw-embed .rsw-eyebrow{font-size:11px;letter-spacing:.12em;text-transform:uppercase;font-weight:800;color:#e0b970;margin:0 0 4px}
+.rsw-embed .rsw-intro{font-size:13px;line-height:1.6;color:#c9dad9;margin:10px 0 0;max-width:720px}
+.rsw-embed .rsw-board-foot .fine{font-size:12px;line-height:1.5}
