@@ -49,7 +49,7 @@ for (const slug of (process.argv.slice(2).length ? process.argv.slice(2) : ['st-
   const html = `<!doctype html>
 <html lang="en-US"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${esc(page.title)}</title><meta name="description" content="${esc(page.description)}"><link rel="canonical" href="${canonical}"><link rel="author" href="${base}/chris-izworski/"><link rel="icon" href="/favicon.ico"><meta name="theme-color" content="#123247"><meta name="robots" content="index,follow,max-image-preview:large">
 <meta property="og:type" content="website"><meta property="og:site_name" content="Chris Izworski"><meta property="og:title" content="${esc(page.title)}"><meta property="og:description" content="${esc(page.description)}"><meta property="og:url" content="${canonical}"><meta name="twitter:card" content="summary"><meta name="twitter:title" content="${esc(page.title)}"><meta name="twitter:description" content="${esc(page.description)}">
-<link rel="stylesheet" href="/assets/seaway.css?v=20261108i"><link rel="stylesheet" href="/assets/river-ship-watch.css?v=20261127d"><script type="application/ld+json">${json(schema)}</script></head>
+<link rel="stylesheet" href="/assets/seaway.css?v=20261108i"><link rel="stylesheet" href="/assets/river-ship-watch.css?v=20261127e"><script type="application/ld+json">${json(schema)}</script></head>
 <body data-analytics-page="${slug}"><a class="skip" href="#rswBoard">Skip to the next ships</a>
 <header class="site-bar"><a class="brand" href="/">Chris Izworski <span>/ Great Lakes Desk</span></a><nav aria-label="Main navigation"><a href="/freighters/">Freighter Central</a><a href="/detroit-river-freighters/">Detroit River</a><a href="/great-lakes-ship-watching-spots/">Ship-watching spots</a></nav></header>
 <main class="rsw">
@@ -75,7 +75,7 @@ ${camSection}
 </div></main>
 <footer class="site-footer"><div class="wrap"><span>Independent shore-watching guide. Not affiliated with any shipping company or agency.</span><span>Built by <a href="${base}/chris-izworski/">Chris Izworski</a> · © 2026 Chris Izworski</span></div></footer>
 <script type="application/json" id="rswModel">${json(model)}</script>${camList.length ? `<script type="application/json" id="rswCams">${json(camList.map(c => ({ id: c.id, short: c.short, lat: c.lat, lon: c.lon })))}</script>` : ''}
-<script defer src="/assets/river-passage.js?v=20261127a"></script><script defer src="/assets/river-ship-watch.js?v=20261127c"></script><script defer src="/assets/river-ship-map.js?v=20261127a"></script>${camList.length ? '<script defer src="/assets/river-cams.js?v=20261127a"></script>' : ''}
+<script defer src="/assets/river-passage.js?v=20261127a"></script><script defer src="/assets/river-ship-watch.js?v=20261127c"></script><script defer src="/assets/river-ship-map.js?v=20261127b"></script>${camList.length ? '<script defer src="/assets/river-cams.js?v=20261127a"></script>' : ''}
 </body></html>
 `;
   fs.mkdirSync('public/' + slug, { recursive: true });

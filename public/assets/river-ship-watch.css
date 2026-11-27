@@ -101,3 +101,37 @@
 .rsw-cam-still .camera-credit{padding-top:0;padding-bottom:10px}
 .rsw-cam-still .camera-credit a{color:#f3d9a4}
 .rsw-cam-still .camera-out{margin:0;padding:40px 16px;color:#d7e5e4;font-size:14px;text-align:center}
+/* Detroit River freighters page layout (.dr-*), on detroit-intent.css tokens */
+.dr-season{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 10px;margin:0 0 14px;padding:10px 14px;border-radius:6px;background:#0f2a3a;color:#d7e5e4;font-size:13px;line-height:1.5}
+.dr-season-kicker{font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:#e0b970}
+.dr-season[data-state="winter"] .dr-season-kicker{color:#9cc9e0}
+.dr-season a{color:#f3d9a4;font-weight:700;margin-left:auto}
+.dr-block{margin:34px 0 0}
+.dr-block>h2,.dr-now-title{font-size:27px;line-height:1.2;font-weight:400;margin:5px 0 8px}
+.dr-sub{font-size:14px;line-height:1.65;color:#4e5954;max-width:780px;margin:0}
+.rsw-embed+.dr-block{margin-top:30px}
+.rsw-map.dr-block .rsw-map-canvas{margin-top:14px}
+.rsw-embed-cams.dr-block{margin-bottom:0}
+.dr-now{padding-top:26px;border-top:1px solid var(--line,#d8d6cd);margin-bottom:16px}
+.dr-where{margin:6px 0 30px}
+.dr-places{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px;margin-top:14px}
+.dr-place{background:var(--card,#fff);border:1px solid var(--line,#d8d6cd);border-radius:7px;padding:18px}
+.dr-place h3{font-size:22px;font-weight:400;margin:4px 0 8px}
+.dr-place p{font-size:14px;line-height:1.6;color:#4e5954;margin:0}
+.dr-place .rsw-address{color:#2f3d39!important}
+.dr-method{margin:28px 0;border:1px solid var(--line,#d8d6cd);border-radius:7px;background:var(--card,#fff)}
+.dr-method>summary{cursor:pointer;padding:16px 20px;font-weight:700;font-size:15px;color:var(--green,#174a3f);min-height:24px}
+.dr-method>summary:focus-visible{outline:3px solid #e0b970;outline-offset:2px}
+.dr-method[open]>summary{border-bottom:1px solid var(--line,#d8d6cd)}
+.dr-method .content-grid{margin:18px;gap:14px}
+.intent-link[aria-current="page"]{border-color:var(--green,#174a3f);box-shadow:inset 4px 0 var(--green,#174a3f)}
+@media(max-width:720px){
+ .dr-block>h2,.dr-now-title{font-size:24px}
+ .dr-season a{margin-left:0}
+ .dr-method .content-grid{margin:12px}
+}
+@media(max-width:740px){
+ .rsw-embed .rsw-tabs{display:grid;grid-template-columns:1fr 1fr;overflow:visible}
+ .rsw-embed .rsw-tabs button{min-width:0}
+}
+.rsw-embed .rsw-board-head h2{margin:0}
