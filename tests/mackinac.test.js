@@ -386,3 +386,36 @@ test("hourly wind speed requires a recognized nonnegative mph value", () => {
     assert.equal(parseWindSpeedMph(raw), expected);
   }
 });
+
+test("official REST failure uses only the Authority's dated report block", async()=>{
+ const original=global.fetch;
+ let calls=[];
+ try {
+   global.fetch=async url=>{
+     calls.push(String(url));
+     if(String(url).includes("wp-json"))return new Response("",{status:503});
+     return new Response('<aside><div class="date">Wrong date</div><span class="status">All Clear</span></aside><main>'+officialHighWind.content.rendered+'</main>');
+   };
+   const status=await mackinacHandler.fetchOfficialConditions();
+   assert.equal(status.level,"advisory");
+   assert.equal(status.retrieval,"authority-html");
+   assert.equal(status.updated_text,"Monday, Jul 27 - 9:43 AM");
+   assert.equal(calls.length,2);
+   global.fetch=async url=>new Response(String(url).includes("wp-json")?'{"content":{"rendered":"<h3 class=\"status\">Unrecognized</h3>"}}':'<aside><span class="status">All Clear</span></aside><main>Generic page</main>');
+   const unknown=await mackinacHandler.fetchOfficialConditions();
+   assert.equal(unknown.level,"unknown");
+   assert.equal(unknown.available,false);
+   assert.equal(unknown.retrieval,"unavailable");
+ }finally{global.fetch=original;}
+});
+test("a recognized official REST report never makes a second request", async()=>{
+ const original=global.fetch;
+ let count=0;
+ try{
+   global.fetch=async()=>{count++;return new Response(JSON.stringify(officialAllClear));};
+   const status=await mackinacHandler.fetchOfficialConditions();
+   assert.equal(status.retrieval,"authority-rest");
+   assert.equal(status.level,"open");
+   assert.equal(count,1);
+ }finally{global.fetch=original;}
+});
