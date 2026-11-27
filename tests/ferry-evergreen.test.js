@@ -110,3 +110,16 @@ test('newly published 2027 Lake Express, Sea Hunter and Voyageur regular dates r
  assert.equal(core.availability(c,'2027-09-18',v).state,'unknown');
  assert.equal(core.availability(c,'2027-09-22',v).state,'reference');
 });
+
+test('Beaver calendar and surcharge respect dated evidence and conflicts',()=>{
+ const c=data.beaver,o=option('beaver'),r=c.experience.routes[0];
+ assert.equal(core.availability(c,'2026-11-27',r).state,'closed');
+ assert.equal(core.availability(c,'2026-11-29',r).state,'reference');
+ assert.equal(core.availability(c,'2026-12-19',r).state,'unknown');
+ assert.equal(core.availability(c,'2027-07-01',r).state,'unknown');
+ assert.equal(core.fare(c,o,'2026-10-18',2,0,0,true)?.total,134);
+ assert.equal(core.fare(c,o,'2026-10-19',2,0,0,true),null);
+ assert.equal(core.fare(c,o,'2026-10-21',2,0,0,true)?.total,154.10);
+ assert.equal(core.fare(c,o,'2026-11-29',2,1,1,true)?.total,455.4);
+ assert.equal(core.fare(c,o,'2026-11-27',2,0,0,true),null);
+});

@@ -106,3 +106,10 @@ test("Vehicle restriction and incomplete fares do not produce false totals",()=>
  assert.match(royale,/cannot provide a same-day round trip/i);
  assert.match(royale,/Published fare lookup required/);
 });
+test("Beaver fare comparison uses dated surcharge and refuses unsupported dates",()=>{
+ assert.match(interact("beaver-island-ferry","2026-10-18"),/\$134\.00/);
+ assert.match(interact("beaver-island-ferry","2026-10-19"),/Published fare lookup required/);
+ assert.match(interact("beaver-island-ferry","2026-11-29"),/\$154\.10/);
+ assert.doesNotMatch(interact("beaver-island-ferry","2026-11-27"),/\$154\.10/);
+ assert.match(interact("beaver-island-ferry","2026-12-19"),/Published fare lookup required/);
+});
