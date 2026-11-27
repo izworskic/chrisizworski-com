@@ -53,3 +53,15 @@ test('camera checker reads live, ended and throttled pages correctly', async () 
   assert.equal(liveState('<html>302 Moved</html>'), 'unknown');
   assert.equal(liveState(null), 'unknown');
 });
+
+test('ship markers use the Welland Canal freighter silhouette, mirrored for westward ships', () => {
+  const welland = fs.readFileSync('public/assets/welland-canal.js', 'utf8');
+  const hull = 'M3 19 L8 19 L11 24 L58 24 L67 18 L70 14 L62 14 L55 18 Z';
+  assert.ok(welland.includes(hull), 'reference silhouette still on the Welland page');
+  assert.ok(mapJs.includes(hull));
+  assert.match(mapJs, /is-westward/);
+  const css = fs.readFileSync('public/assets/river-ship-watch.css', 'utf8');
+  assert.match(css, /\.rsw-ship-marker\.is-westward svg\{transform:scaleX\(-1\)\}/);
+  assert.match(css, /\.rsw-ship-marker\.is-stopped \.ship-hull[^{]*\{fill:#8a6a42\}/);
+  assert.match(mapJs, /soonest/, 'auto-framing follows only the next forecast ship');
+});

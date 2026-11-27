@@ -56,13 +56,17 @@
     if (btn) btn.click();
   }
 
+  // The Welland Canal / Duluth freighter silhouette (side view, bow to the right). It is mirrored so
+  // the bow points the way the ship is heading east or west; it is a position marker, not a chart.
+  const SHIP_SVG = '<svg viewBox="0 0 72 32" focusable="false" aria-hidden="true"><path class="ship-hull" d="M3 19 L8 19 L11 24 L58 24 L67 18 L70 14 L62 14 L55 18 Z"/><path class="ship-house" d="M8 19 V10 H20 V19 Z"/><rect class="ship-stack" x="11" y="5" width="4" height="5" rx="1"/><rect class="ship-window" x="10" y="12" width="3" height="2" rx=".5"/><rect class="ship-window" x="15" y="12" width="3" height="2" rx=".5"/><rect class="ship-hatch" x="24" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="34" y="15" width="8" height="4" rx="1"/><rect class="ship-hatch" x="44" y="15" width="8" height="4" rx="1"/><path class="ship-waterline" d="M12 21.5 H59"/></svg>';
   function shipIcon(moving, inWindow, course) {
-    const cls = 'rsw-ship-icon' + (moving ? ' is-moving' : ' is-stopped') + (inWindow ? ' is-forecast' : '');
-    const rot = moving && Number.isFinite(course) ? course : 0;
-    const shape = moving
-      ? '<svg viewBox="0 0 20 20" aria-hidden="true" style="transform:rotate(' + rot + 'deg)"><path d="M10 1 L16 17 L10 13.5 L4 17 Z"/></svg>'
-      : '<svg viewBox="0 0 20 20" aria-hidden="true"><circle cx="10" cy="10" r="6"/></svg>';
-    return L.divIcon({ className: cls, html: shape, iconSize: [26, 26], iconAnchor: [13, 13], popupAnchor: [0, -12] });
+    const westward = moving && Number.isFinite(course) && course > 180 && course < 360;
+    const cls = 'rsw-ship-marker' + (moving ? ' is-moving' : ' is-stopped') + (inWindow ? ' is-forecast' : '') + (westward ? ' is-westward' : '');
+    const w = moving ? (inWindow ? 62 : 54) : 44, h = moving ? (inWindow ? 34 : 30) : 25;
+    return L.divIcon({ className: cls, html: '<span class="ship-glyph">' + SHIP_SVG + '</span>', iconSize: [w, h], iconAnchor: [Math.round(w / 2), Math.round(h / 2)], popupAnchor: [0, -Math.round(h / 2)] });
+  }
+  function legendGlyphs() {
+    holder.querySelectorAll('.rsw-key.ship,.rsw-key.forecast,.rsw-key.stopped').forEach(k => { k.innerHTML = SHIP_SVG; k.classList.add('has-glyph'); });
   }
 
   function build() {
@@ -94,6 +98,7 @@
         .bindPopup('<strong>' + esc(c.short) + ' live camera</strong><br><a href="#cam-' + esc(c.id) + '">Watch it below</a>');
     }
     shipLayer = L.layerGroup().addTo(map);
+    legendGlyphs();
     for (const c of cams) if (Number.isFinite(c.lat) && Number.isFinite(c.lon)) pts.push([c.lat, c.lon]);
     const box = L.latLngBounds(pts);
     const span = Math.max(box.getNorth() - box.getSouth(), box.getEast() - box.getWest());
@@ -130,14 +135,16 @@
           (Number.isFinite(v.lengthMeters) ? ' · ' + Math.round(v.lengthMeters * 3.28084) + ' ft' : ''),
         'Reported ' + (mins < 1 ? 'just now' : mins + ' min ago') + ' (' + clock(seen) + ')'];
       if (f) lines.push('Window at ' + esc(towns[view] || view) + ': <strong>' + esc(clock(f.earliest)) + '–' + esc(clock(f.latest)) + '</strong>');
-      L.marker([v.lat, v.lon], { icon: shipIcon(isMoving, !!f, course), title: (v.name || 'Unnamed vessel') + (f ? ', forecast at ' + (towns[view] || view) : ''), keyboard: true })
+      L.marker([v.lat, v.lon], { icon: shipIcon(isMoving, !!f, course), zIndexOffset: f ? 900 : isMoving ? 600 : 300, title: (v.name || 'Unnamed vessel') + (f ? ', forecast at ' + (towns[view] || view) : ''), keyboard: true })
         .addTo(shipLayer).bindPopup(lines.join('<br>'));
       if (isMoving) moving++; else stopped++;
       if (bounds.contains([v.lat, v.lon])) inBox++;
     }
-    // Once per page view: if a highlighted ship is off the map, widen the view to include it.
+    // Once per page view: if the next highlighted ship is off the map, widen the view to include it.
     if (!framedShips && Object.keys(next).length) {
-      const want = (data.vessels || []).filter(v => next[String(v.mmsi)] && Number.isFinite(v.lat)).map(v => [v.lat, v.lon]);
+      // Only the soonest one: a ship six hours away should not pull a city map out to the lake.
+      const soonest = Object.values(next).sort((a, b) => a.earliest - b.earliest)[0];
+      const want = (data.vessels || []).filter(v => soonest && String(v.mmsi) === soonest.mmsi && Number.isFinite(v.lat)).map(v => [v.lat, v.lon]);
       if (want.some(p => !bounds.contains(p))) { map.fitBounds(bounds.extend(L.latLngBounds(want)).pad(0.05)); }
       framedShips = true;
     }

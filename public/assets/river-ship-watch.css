@@ -51,10 +51,19 @@
 .rsw-key.forecast{background:#c2502e;clip-path:polygon(50% 0,100% 100%,50% 75%,0 100%);border-radius:0}
 .rsw-key.stopped{background:#fff;border:2px solid #7d8c8f}
 .rsw-key.cam{background:#94462f;border-radius:4px}
-.rsw-ship-icon svg{width:26px;height:26px;display:block;transform-origin:50% 50%;filter:drop-shadow(0 1px 1px #0006)}
-.rsw-ship-icon.is-moving path{fill:#0f2a3a;stroke:#fff;stroke-width:1.2}
-.rsw-ship-icon.is-forecast path{fill:#c2502e}
-.rsw-ship-icon.is-stopped circle{fill:#fff;stroke:#7d8c8f;stroke-width:2.5}
+.rsw-ship-marker{background:transparent;border:0}
+.rsw-ship-marker .ship-glyph{display:block;width:100%;height:100%;filter:drop-shadow(0 2px 3px rgba(18,52,64,.38))}
+.rsw-ship-marker svg,.rsw-key.has-glyph svg{display:block;width:100%;height:100%;overflow:visible}
+.rsw-ship-marker.is-westward svg{transform:scaleX(-1)}
+.rsw-ship-marker .ship-hull,.rsw-key.has-glyph .ship-hull{fill:#146c86;stroke:#fff;stroke-width:2.3;stroke-linejoin:round}
+.rsw-ship-marker .ship-house,.rsw-ship-marker .ship-stack,.rsw-key.has-glyph .ship-house,.rsw-key.has-glyph .ship-stack{fill:#f8fbfc;stroke:#fff;stroke-width:1.3}
+.rsw-ship-marker .ship-hatch,.rsw-key.has-glyph .ship-hatch{fill:#d8e8ec;stroke:#fff;stroke-width:1}
+.rsw-ship-marker .ship-window,.rsw-key.has-glyph .ship-window{fill:#173f50}
+.rsw-ship-marker .ship-waterline,.rsw-key.has-glyph .ship-waterline{stroke:#fff;stroke-width:1.6;opacity:.9}
+.rsw-ship-marker.is-stopped .ship-hull,.rsw-key.stopped.has-glyph .ship-hull{fill:#8a6a42}
+.rsw-ship-marker.is-forecast .ship-hull,.rsw-key.forecast.has-glyph .ship-hull{fill:#b8452a}
+.rsw-ship-marker.is-forecast .ship-glyph{filter:drop-shadow(0 0 3px #e3b970) drop-shadow(0 0 5px #f4dfbd)}
+.rsw-key.has-glyph{width:30px;height:14px;background:none!important;border:0!important;clip-path:none!important;border-radius:0}
 .rsw-cam-icon{display:grid;place-items:center;background:#94462f;color:#fff;border-radius:5px;font-size:10px;box-shadow:0 1px 3px #0006}
 .rsw-spot-label{font:700 12px/1.2 system-ui,sans-serif;color:#0f2a3a;background:#fffefa;border:1px solid #e0b970;box-shadow:none;padding:2px 6px}
 .rsw-spot-label::before{display:none}
