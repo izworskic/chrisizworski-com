@@ -123,7 +123,7 @@ test('every eagle map selection offers the same vetted public-place Google link 
  assert.match(app,/e\.target\.closest\("button,a"\)/);
  assert.match(app,/window\.EagleMap\?\.publicMapLink\?\.\(selected\)/);
  assert.match(page,/eagle-map\.js\?v=6/);
- assert.match(page,/app\.js\?v=15/);
+ assert.match(page,/app\.js\?v=20261128-evidence/);
  assert.match(page,/id="directions"[^>]*>View in Google Maps/);
  // Seney's map search uses the public trail-planning area, not its regional weather pin.
  assert.ok(curatorLinks.some(([,href])=>href.includes('Seney+National+Wildlife+Refuge+Robinson+Road+trail')));
