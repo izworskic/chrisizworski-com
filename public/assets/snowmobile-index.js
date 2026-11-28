@@ -227,14 +227,14 @@ async function loadClubReceipts(){
   if(run===clubRun&&button)button.disabled=false;
 }
 function regionCard(region,active,decision){
-  const r=region.route||{},cls=bandClass(r.band),badge=badgeClass(r.band);
+  const r=region.route||{},fresh=comparison.bundleFresh(BUNDLE),cls=fresh?dotClassFor(region):'unknown',badge=fresh?badgeClass(['UNAVAILABLE','UNVERIFIED','UNKNOWN'].includes(decision?.state)?null:r.band):'';
   let label='UNKNOWN';
-  if(region.error)label='DATA UNAVAILABLE';
+  if(region.error||!fresh)label='DATA UNAVAILABLE';
   else if(!active||r.band==='OFF_SEASON')label='OFF SEASON';
   else if(r.routeState==='ROUTE_BROKEN')label='CLOSED / ROUTE BROKEN';
   else if(['UNAVAILABLE','UNVERIFIED'].includes(decision?.state))label=decision.state==='UNAVAILABLE'?'DATA UNAVAILABLE':'CLOSURE CHECK INCOMPLETE';
   else if(Number.isFinite(r.score))label=`${r.band} · ${r.score}/100`;
-  const conf=r.confidence!=null?`${r.confidence}% confidence`:'confidence unavailable';
+  const conf=fresh&&r.confidence!=null?`${r.confidence}% confidence`:'confidence unavailable';
   const age=evidenceAge(region);
   const evidence=region.hasClubEvidence?'Local surface report configured':'No current local surface-report feed configured';
   return `<article class="region-card ${esc(cls)}" data-region="${esc(region.key)}">
@@ -242,16 +242,16 @@ function regionCard(region,active,decision){
       <div class="rc-head"><h2>${esc(region.shortLabel||region.label)}</h2><span class="region-badge ${esc(badge)}">${esc(label)}</span></div>
       <p class="rc-decision"><strong>${esc(decision?.label||'Verify local conditions')}</strong></p>
       <p class="rc-drive">${esc(driveLine(region))}</p>
-      <p class="rc-verdict">${decision?.state==='UNAVAILABLE'?'Current evidence is unavailable or too old. No riding recommendation.':decision?.state==='UNVERIFIED'?'Official closure verification is incomplete. Check the official source before a trip.':verdictLine(region,active)}</p>
-      <p class="rc-meta"><strong>${esc(bestLine(region,active))}</strong></p>
-      <p class="rc-meta">${esc(snowLine(region))} · ${esc(thawLine(region))}</p>
+      <p class="rc-verdict">${!fresh||decision?.state==='UNAVAILABLE'?'Current evidence is unavailable or too old. No riding recommendation.':decision?.state==='UNVERIFIED'?'Official closure verification is incomplete. Check the official source before a trip.':verdictLine(region,active)}</p>
+      <p class="rc-meta"><strong>${esc(fresh?bestLine(region,active):'Best time: current evidence unavailable')}</strong></p>
+      <p class="rc-meta">${esc(fresh?snowLine(region):'Observed snowfall: current evidence unavailable')} · ${esc(fresh?thawLine(region):'Recent thaw/rain: unverified')}</p>
       <div class="sled-outlook-slot" data-outlook-region="${esc(region.key)}">${threeDayForecast(region)}</div>
       <div class="rc-meta" id="club-receipt-${esc(region.key)}">
         <p><strong>Local club check:</strong> <span class="club-receipt-line">Checking dated club reports…</span></p>
         <details class="rc-planning"><summary>Club names, report dates and grooming evidence</summary><div class="club-receipt-detail"></div><p><a href="${esc(detailUrl(region))}">Open the regional planner and original club sources</a>. A club posting applies locally and does not override a DNR closure.</p></details>
       </div>
-      <p class="rc-meta">${esc(reportLine(region))}</p>
-      <p class="rc-meta">Grooming: ${esc(region.grooming?.label||'unverified')}</p>
+      <p class="rc-meta">${esc(fresh?reportLine(region):'Cached surface reports withheld; check dated local club reports.')}</p>
+      <p class="rc-meta">Grooming: ${esc(fresh?(region.grooming?.label||'unverified'):'unverified')}</p>
       <p class="rc-meta">${esc(conf)} · ${esc(evidence)}${age?` · supporting evidence ${esc(age)}`:''}</p>
       <details class="rc-planning"><summary>Local reports and staging</summary><p>${esc(region.planning?.note||'Road time ends at the hub; trailhead travel is additional.')}</p>${(region.planning?.reports||[]).map(source=>`<p><a href="${esc(source.url)}" target="_blank" rel="noopener" data-source-name="${esc(source.name)}">${esc(source.name)}</a><br>${esc(source.scope)}</p>`).join('')}<p>Read the report date before relying on its condition. These links are manual checks, not automated evidence for every trail.</p></details>
       <p class="rc-meta">${esc(region.segmentCount||0)} designated trail segments</p>
@@ -260,7 +260,7 @@ function regionCard(region,active,decision){
     ${WATCH?'<button class="secondary-btn sled-watch-save" type="button" data-sled-watch-region="'+esc(region.key)+'" aria-pressed="false">Save this riding region</button>':''}</div>
   </article>`;
 }
-function dotClassFor(region){const d=comparison.evaluate(region,context());return ['UNAVAILABLE','UNVERIFIED','UNKNOWN'].includes(d.state)?'unknown':bandClass(region.route&&region.route.band);}
+function dotClassFor(region){if(!comparison.bundleFresh(BUNDLE))return 'unknown';const d=comparison.evaluate(region,context());return ['UNAVAILABLE','UNVERIFIED','UNKNOWN'].includes(d.state)?'unknown':bandClass(region.route&&region.route.band);}
 function sortRegions(regions,active){
   if(!active)return regions;
   return [...regions].sort((a,b)=>{
@@ -285,10 +285,7 @@ async function boot(){
     const active=!!data.season?.active;
     if(bannerEl){
       bannerEl.classList.toggle('active',active);
-      const rankable=Number(data.statewide?.rankableRegionCount||0);
-      bannerEl.textContent=active
-        ?`${rankable} of ${data.statewide?.regionCount||7} regions currently have enough verified surface evidence to be ranked for a long-drive decision. UNKNOWN regions stay unranked until better evidence arrives.`
-        :'Pre-season mode. Trail/closure, snow and weather feeds remain connected, but no ride-quality score is generated before Dec. 1.';
+      bannerEl.textContent=comparison.seasonBanner(data);
     }
     if(scopeEl&&data.statewide)scopeEl.textContent=data.statewide.outOfScopeNote||'';
     if(totalEl&&data.statewide)totalEl.textContent=`${Number(data.statewide.totalSegments||0).toLocaleString()} designated trail segments across ${data.statewide.regionCount} regions`;
@@ -317,8 +314,8 @@ function drawMap(regions,active){
     const cls=dotClassFor(region);
     const color={good:'#1f6b46',fair:'#93641d',marginal:'#a45b20',closed:'#5f2c2a','off-season':'#9aa6a0',unknown:'#9aa6a0'}[cls]||'#9aa6a0';
     const marker=L.circleMarker([region.hubLat,region.hubLon],{radius:11,color,fillColor:color,fillOpacity:.85,weight:2}).addTo(map);
-    const scoreTxt=comparison.evaluate(region,context()).label;
-    marker.bindPopup(`<strong>${esc(region.label)}</strong><br>${esc(scoreTxt)}<br>${esc(snowLine(region))}<br><a href="/snowmobile/regions/${esc(region.key)}.html">Check region →</a>`);
+    const fresh=comparison.bundleFresh(BUNDLE);const scoreTxt=fresh?comparison.evaluate(region,context()).label:'Current evidence unavailable';
+    marker.bindPopup(`<strong>${esc(region.label)}</strong><br>${esc(scoreTxt)}<br>${esc(fresh?snowLine(region):'Observed snowfall: current evidence unavailable')}<br><a href="/snowmobile/regions/${esc(region.key)}.html">Check region →</a>`);
   }
 }
 document.addEventListener('DOMContentLoaded',()=>{

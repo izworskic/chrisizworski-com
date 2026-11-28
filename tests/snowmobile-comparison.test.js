@@ -2,7 +2,7 @@ import test from 'node:test';
 import assert from 'node:assert/strict';
 import {createRequire} from 'node:module';
 const require=createRequire(import.meta.url);
-const {evaluate,compare,bundleFresh,detailUrl}=require('../public/assets/snowmobile-comparison.js');
+const {evaluate,compare,bundleFresh,detailUrl,seasonBanner}=require('../public/assets/snowmobile-comparison.js');
 const context={active:true,fresh:true,closuresVerified:true};
 const good={key:'good',route:{score:84,band:'GOOD',confidence:80,legalVerification:'CURRENT_LAYER_CHECKED'}};
 test('comparison refuses a recommendation from stale data or missing closure verification',()=>{
@@ -52,4 +52,16 @@ test('a failed DNR geometry feed retains independent weather context without ver
   assert.equal(summary.route.confidence,0);
   assert.equal(evaluate(summary,context,{driveMinutes:90}).tripCandidate,false);
   assert.ok(summary.planning.reports.length>0);
+});
+
+test('statewide banner must not repeat a stale favorable ranking or unchecked closure count',()=>{
+ const now=Date.parse('2026-12-05T12:00:00Z');
+ const data={generatedAt:'2026-12-05T11:55:00Z',season:{active:true},statewide:{rankableRegionCount:7,regionCount:7,closuresVerified:true}};
+ assert.match(seasonBanner(data,now),/7 of 7 regions/);
+ for(const bad of [{...data,generatedAt:'2020-01-01T00:00:00Z'},{...data,generatedAt:null},{...data,operational:{dataState:'stale-last-known'}}]){
+  assert.match(seasonBanner(bad,now),/unavailable or too old/);
+  assert.doesNotMatch(seasonBanner(bad,now),/7 of 7/);
+ }
+ assert.match(seasonBanner({...data,statewide:{...data.statewide,closuresVerified:false}},now),/closure verification is incomplete/);
+ assert.match(seasonBanner({...data,season:{active:false}},now),/Pre-season mode/);
 });
