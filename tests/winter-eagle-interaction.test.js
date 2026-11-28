@@ -42,7 +42,7 @@ function makeBrowser(){
   createElement:tag=>new E(tag),createElementNS:(_ns,tag)=>new E(tag)
  };
  const now=Date.now();
- const periods=Array.from({length:155},(_,i)=>({startTime:new Date(now+i*3600000).toISOString(),temperature:i%24<14?29:40,temperatureUnit:'F',windSpeed:'7 mph',windDirection:'NW',shortForecast:'Partly Cloudy'}));
+ const periods=Array.from({length:155},(_,i)=>({startTime:new Date(now+i*3600000).toISOString(),endTime:new Date(now+(i+1)*3600000).toISOString(),temperature:i%24<14?29:40,temperatureUnit:'F',windSpeed:'7 mph',windDirection:'NW',shortForecast:'Partly Cloudy'}));
  const fetch=async(url)=>{
    if(String(url).includes('/points/'))return {ok:true,json:async()=>({properties:{timeZone:'America/Detroit',forecastHourly:'https://api.weather.gov/gridpoints/DTX/12,13/forecast/hourly'}})};
    if(String(url).includes('/forecast/hourly'))return {ok:true,json:async()=>({properties:{updated:new Date(now).toISOString(),periods}})};
