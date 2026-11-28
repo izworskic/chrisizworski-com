@@ -1,5 +1,19 @@
 'use strict';
 (function () {
+  // Client admission mirrors the shared collector's 75-minute freshness contract.
+  // HTTP cache residence does not make an expired observation current.
+  function admitRocketSchedule(data, now = Date.now()) {
+    const observed = typeof data.scheduleCheckedAt === 'string' ? Date.parse(data.scheduleCheckedAt) : NaN;
+    const age = now - observed;
+    if (data.scheduleFreshness === 'recent' && Number.isFinite(age) && age >= -60000 && age <= 75 * 60000) return data;
+    data.scheduleFreshness = 'stale';
+    data.scheduleWarning = 'The schedule observation is unavailable or overdue. Verify the current target with the operator.';
+    for (const mission of [data.selectedLaunch, data.next, data.nationalNext, ...(data.upcoming || []), ...(data.regions || []).flatMap(region => region.launches || [])]) {
+      if (mission && typeof mission === 'object') mission.sourceStale = true;
+    }
+    return data;
+  }
+  
   const API = '/api/space-coast-launch';
   const KSC_API = '/api/space-coast-ksc';
   const KSC_HISTORY_API = '/api/space-coast-ksc-watch';
@@ -1221,6 +1235,7 @@
       const d = await r.json();
       if (sequence !== loadSequence) return;
       if (!r.ok || !d.ok) throw new Error(d.error || 'Launch data unavailable');
+      admitRocketSchedule(d);
       renderSelector(d);
       renderFacilityNetwork(d);
       set('loading',
