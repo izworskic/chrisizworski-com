@@ -109,7 +109,7 @@ test('Michigan overview has a deterministic vector map even without third-party 
  assert.match(page,/id="mapOverviewBtn"/);
  assert.match(page,/id="mapStreetBtn"/);
  assert.match(page,/map-vector\.js\?v=1/);
- assert.match(page,/app\.js\?v=4/);
+ assert.match(page,/app\.js\?v=5-admission-20261128/);
  assert.match(vector,/PublicaMundi\/MappingAPI/);
  assert.match(vector,/Michigan/);
  assert.match(vector,/map-vector-land/);
