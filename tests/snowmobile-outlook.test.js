@@ -48,5 +48,5 @@ test('source and display use existing API, no new route, and precise hub scope',
  assert.match(read('lib/snowmobile/build-region.mjs'),/outlook:w.outlook/);
  const js=read('public/assets/snowmobile-index.js');
  assert.match(js,/threeDayForecast/);assert.match(js,/All times Eastern/);assert.match(js,/not measured thaw or trail base/);
- assert.match(read('public/snowmobile/index.html'),/20261124-outlook-1/);
+ assert.match(read('public/snowmobile/index.html'),/snowmobile-comparison\.js\?v=20261127-freshness/);
 });
