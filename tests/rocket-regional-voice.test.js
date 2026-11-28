@@ -30,8 +30,8 @@ for(const site of sites){
     assert.ok(html.includes(cacheVersion),site.name+' changed client copy must bust cache');
     assert.doesNotThrow(()=>new Function(js),site.name+' dynamic guide parses as JavaScript');
     if(site.name!=='Florida'){
-      assert.ok(html.includes('"dateModified":"'+(['Wallops','Starbase'].includes(site.name)?'2026-11-16':['Vandenberg','Kodiak','Barking Sands'].includes(site.name)?'2026-11-13':'2026-11-10')+'"'),site.name+' truthful structured metadata');
-      assert.ok(sitemap.includes('<loc>https://chrisizworski.com/'+site.slug+'/</loc>\n    <lastmod>'+(['Wallops','Starbase'].includes(site.name)?'2026-11-16':['Vandenberg','Kodiak','Barking Sands'].includes(site.name)?'2026-11-13':'2026-11-10')+'</lastmod>'),site.name+' sitemap lastmod');
+      assert.ok(html.includes('"dateModified":"'+(site.name==='Vandenberg'?'2026-11-13':'2026-11-28')+'"'),site.name+' truthful structured metadata');
+      assert.ok(sitemap.includes('<loc>https://chrisizworski.com/'+site.slug+'/</loc>\n    <lastmod>'+(site.name==='Vandenberg'?'2026-11-13':'2026-11-28')+'</lastmod>'),site.name+' sitemap lastmod');
     }
   });
 }

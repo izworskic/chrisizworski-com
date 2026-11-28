@@ -40,7 +40,7 @@ test('both regional guides use the verified shared Rust adapter without changing
    assert.match(html,/rocket-range-rust\.js\?v=20261113-range-v1/);
    assert.ok(html.indexOf('rocket-range-rust.js')<html.indexOf(slug+'/app.js'));
    assert.match(html,/rel="canonical"/);
-   assert.match(html,/2026-11-13/);
+   assert.match(html,/2026-11-28/);
  }
  assert.match(akJs,/RocketRangeRust\?\.load\('kodiak'/);
  assert.match(pmrfJs,/RocketRangeRust\?\.load\('pmrf'/);

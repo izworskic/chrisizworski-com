@@ -3,6 +3,20 @@
    usable when the shared launch/notice API fails; launch pad only uses real
    LL2 mission GPS. Region/mission continuity uses the national UUID. */
 (()=>{
+  // Client admission mirrors the shared collector's 75-minute freshness contract.
+  // HTTP cache residence does not make an expired observation current.
+  function admitRocketSchedule(data, now = Date.now()) {
+    const observed = typeof data.scheduleCheckedAt === 'string' ? Date.parse(data.scheduleCheckedAt) : NaN;
+    const age = now - observed;
+    if (data.scheduleFreshness === 'recent' && Number.isFinite(age) && age >= -60000 && age <= 75 * 60000) return data;
+    data.scheduleFreshness = 'stale';
+    data.scheduleWarning = 'The schedule observation is unavailable or overdue. Verify the current target with the operator.';
+    for (const mission of [data.selectedLaunch, data.next, data.nationalNext, ...(data.upcoming || []), ...(data.regions || []).flatMap(region => region.launches || [])]) {
+      if (mission && typeof mission === 'object') mission.sourceStale = true;
+    }
+    return data;
+  }
+  
  const API='/api/rocket-launch-usa',PLACES='/starbase-rocket-launch-viewing/places.json';
  const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
  const $=id=>document.getElementById(id),set=(id,value)=>{const x=$(id);if(x)x.textContent=value??'Not verified'};
@@ -264,7 +278,8 @@
     await loadMission(null,true);return;
    }
    if(!response.ok||!data.ok||data.region?.id!=='texas')throw Error(data.error||'Schedule unavailable');
-   showMission(data,fromExpired);
+   admitRocketSchedule(data);
+      showMission(data,fromExpired);
   }catch(error){
    if(seq!==state.request)return;
    select.disabled=true;set('sb-mission-name','Starship launch calendar unavailable');

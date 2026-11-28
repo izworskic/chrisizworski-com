@@ -6,6 +6,20 @@
  * verified launch viewing or live maritime-zone authorization.
  */
 (()=>{
+  // Client admission mirrors the shared collector's 75-minute freshness contract.
+  // HTTP cache residence does not make an expired observation current.
+  function admitRocketSchedule(data, now = Date.now()) {
+    const observed = typeof data.scheduleCheckedAt === 'string' ? Date.parse(data.scheduleCheckedAt) : NaN;
+    const age = now - observed;
+    if (data.scheduleFreshness === 'recent' && Number.isFinite(age) && age >= -60000 && age <= 75 * 60000) return data;
+    data.scheduleFreshness = 'stale';
+    data.scheduleWarning = 'The schedule observation is unavailable or overdue. Verify the current target with the operator.';
+    for (const mission of [data.selectedLaunch, data.next, data.nationalNext, ...(data.upcoming || []), ...(data.regions || []).flatMap(region => region.launches || [])]) {
+      if (mission && typeof mission === 'object') mission.sourceStale = true;
+    }
+    return data;
+  }
+  
 const API='/api/rocket-launch-usa',OFFICIAL='/api/pmrf-official',ATLAS='/barking-sands-rocket-launch-viewing/atlas.json';
 const UUID=/^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
 const $=id=>document.getElementById(id);
@@ -133,7 +147,8 @@ async function loadMission(id,expired=false){
   const d=await r.json();
   if(seq!==state.request)return;
   if(!r.ok||!d?.ok||d.region?.id!=='hawaii')throw Error('PMRF national feed unavailable');
-  showMissions(d,expired);
+  admitRocketSchedule(d);
+      showMissions(d,expired);
  }catch{
   if(seq!==state.request)return;
   state.data=null;state.rocketPins?.update([],null);$('mission-picker').disabled=true;
