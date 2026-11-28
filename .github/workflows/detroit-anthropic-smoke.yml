@@ -134,7 +134,7 @@ jobs:
             fi
             for slug in detroit-river-freighters detroit-birding-today lake-st-clair-outdoors detroit-sunset-tonight; do
               curl -fsS --max-time 20 "https://chrisizworski.com/${slug}/?smoke=${EXPECTED_SHA}" -o "/tmp/${slug}.html"
-              grep -Fq "/assets/detroit-intent.js?v=20260922b" "/tmp/${slug}.html"
+              grep -Fq "/assets/detroit-intent.js?v=20261127-null-candidate" "/tmp/${slug}.html"
             done
 
             curl -fsS --max-time 25 -A "ChrisIzworski.com Detroit Outdoors specialist adapter" "https://chrisizworski.com/api/freighter-ais?freshness_smoke=${EXPECTED_SHA}" -o /tmp/detroit-freighter-ais.json
