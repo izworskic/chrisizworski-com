@@ -433,6 +433,11 @@
       "permanent": true
     },
     {
+      "source": "/national-tools/garden-water/:city(phoenix-az|denver-co|dallas-tx|atlanta-ga|austin-tx|sacramento-ca|raleigh-nc|minneapolis-mn){/}?",
+      "destination": "/national-tools/garden-water/",
+      "permanent": false
+    },
+    {
       "source": "/national-tools/yosemite-firefall-live",
       "destination": "/yosemite-firefall-live/",
       "permanent": true
