@@ -130,7 +130,10 @@
    const response=await fetch('/api/lighthouse-ice',{headers:{Accept:'application/json'},cache:'no-store'});
    if(!response.ok)throw Error('The lighthouse feed is unavailable.');
    const data=await response.json();
-   if(!data||!Array.isArray(data.piers)||!data.generatedAt)throw Error('Forecast data is incomplete.');
+   // The server allows 60 minutes of edge cache plus 30 minutes of stale revalidation.
+   // A failed revalidation must not keep an old forecast on either live surface.
+   const age=Date.now()-Date.parse(data?.generatedAt||'');
+   if(!data||!Array.isArray(data.piers)||!data.piers.length||!Number.isFinite(age)||age<0||age>90*60000)throw Error('Forecast packet is missing or outdated.');
    setTop(data);
    host.replaceChildren();
    for(const pier of data.piers)host.append(card(pier));
