@@ -21,7 +21,10 @@ async function nwsHourly(site){
  const result=await json(hourly);
  const periods=result?.properties?.periods;
  if(!Array.isArray(periods)||periods.length<24)throw new Error('NWS hourly forecast is incomplete');
- return {periods,url:hourly,updatedAt:result?.properties?.updated||result?.properties?.generatedAt||null};
+ const updatedAt=result?.properties?.updated||result?.properties?.generatedAt||null;
+ const age=Date.now()-Date.parse(updatedAt||'');
+ if(!Number.isFinite(age)||age< -60000||age>12*3600000)throw new Error('NWS forecast observation expired or unverified');
+ return {periods,url:hourly,updatedAt};
 }
 // ArcGIS identify returns raster values for Snow Depth (layer 0, image layer 3).
 // Only a qualitative modeled-cover signal is used; raster units are not verified.
