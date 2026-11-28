@@ -4,7 +4,7 @@ import fs from 'node:fs';
 
 const vercel = JSON.parse(fs.readFileSync('vercel.json', 'utf8'));
 const registry = JSON.parse(fs.readFileSync('benchmarks/tool-network-registry.json', 'utf8'));
-const child = 'https://national-garden-water.vercel.app';
+const pinned = '/assets/garden-water-release-c82dda3c';
 
 function route(source) {
   return vercel.rewrites.find((item) => item.source === source);
@@ -20,10 +20,10 @@ function walk(value, visit) {
 
 test('Garden Water canonical HTML and API use the pinned owner release', () => {
   const expected = new Map([
-    ['/assets/national-garden-water.css', `${child}/assets/national-garden-water.css`],
-    ['/assets/national-garden-water-engine.js', `${child}/assets/national-garden-water-engine.js`],
-    ['/assets/national-garden-water-page.js', `${child}/assets/national-garden-water-page.js`],
-    ['/data/national-garden-water-crops.json', `${child}/data/national-garden-water-crops.json`],
+    ['/assets/national-garden-water.css', `${pinned}/national-garden-water.css`],
+    ['/assets/national-garden-water-engine.js', `${pinned}/national-garden-water-engine.js`],
+    ['/assets/national-garden-water-page.js', `${pinned}/national-garden-water-page.js`],
+    ['/data/national-garden-water-crops.json', `${pinned}/national-garden-water-crops.json`],
     ['/national-tools/garden-water', '/api/garden-water-page'],
     ['/national-tools/garden-water/', '/api/garden-water-page'],
   ]);
@@ -32,7 +32,9 @@ test('Garden Water canonical HTML and API use the pinned owner release', () => {
   assert.equal(vercel.functions['api/national-garden-water.js'].maxDuration, 60);
   for (const [source, destination] of expected) {
     assert.equal(route(source)?.destination, destination, source);
+    if (destination.startsWith(pinned)) assert.ok(fs.existsSync('public'+destination), 'missing local asset '+destination);
   }
+  assert.ok(vercel.rewrites.every(r => !r.destination.includes('national-garden-water.vercel.app')), 'no Garden Water dependency on child deployment');
 });
 
 test('Garden Water has one canonical registry owner and garden-network relationships', () => {
