@@ -21,7 +21,7 @@ test("Detroit growth pages are indexable, monetizable and share one live intent 
     assert.match(html,/pagead2\.googlesyndication\.com\/pagead\/js\/adsbygoogle\.js/);
     assert.match(html,new RegExp(`data-detroit-intent="${intent}"`));
     assert.match(html,/\/assets\/detroit-intent\.css\?v=20260922a/);
-    assert.match(html,/\/assets\/detroit-intent\.js\?v=20260922b/);
+    assert.match(html,/\/assets\/detroit-intent\.js\?v=20261127-null-candidate/);
     assert.match(html,/See all Detroit opportunities/);
   }
   const js=read("public/assets/detroit-intent.js");
