@@ -96,17 +96,29 @@ function selectSite(id){
  window.history.replaceState({},'',url.pathname+url.search+url.hash);
  renderBoard();markSites();loadSite();
 }
+function admitSite(data,site,now=Date.now()){
+ if(!site||data?.site?.id!==site.id||!data.summary||!Array.isArray(data.daily))return false;
+ const m=new Date(now).getUTCMonth()+1;
+ const off=m>=6||(m===5&&site.region!=='Upper Peninsula');
+ if(data.phase==='OFF_SEASON')return off&&data.daily.length===0&&data.summary.bestScore===null&&data.summary.bestDay===null;
+ if(off||data.phase!=='WEATHER_WINDOW')return false;
+ const fetched=typeof data.fetchedAt==='string'?Date.parse(data.fetchedAt):NaN;
+ const issued=typeof data.forecastUpdatedAt==='string'?Date.parse(data.forecastUpdatedAt):NaN;
+ return Number.isFinite(fetched)&&fetched<=now+60000&&now-fetched<=3600000&&Number.isFinite(issued)&&issued<=now+60000&&now-issued<=12*3600000;
+}
 async function loadSite(){
+ const requested=current;
  $('refreshWeather').disabled=true;
  $('statusHeading').textContent='Checking local weather…';
  try{
-  const r=await fetch('/api/maple-sap?mode=site&site='+encodeURIComponent(current));
+  const r=await fetch('/api/maple-sap?mode=site&site='+encodeURIComponent(requested));
   if(!r.ok)throw new Error('NWS unavailable');
   const data=await r.json();
-  if(current!==data.site.id)return;
+  if(current!==requested)return;
+  if(!admitSite(data,sites.get(requested)))throw Error('Expired, unavailable or mismatched forecast');
   renderSite(data);
- }catch(e){renderSite({phase:'UNAVAILABLE',summary:{},daily:[]});}
- finally{$('refreshWeather').disabled=false;}
+ }catch(e){if(current===requested)renderSite({phase:'UNAVAILABLE',summary:{},daily:[]});}
+ finally{if(current===requested)$('refreshWeather').disabled=false;}
 }
 function colorFor(row){
  if(!row)return '';
