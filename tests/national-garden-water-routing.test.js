@@ -37,6 +37,16 @@ test('Garden Water canonical HTML and API use the pinned owner release', () => {
   assert.ok(vercel.rewrites.every(r => !r.destination.includes('national-garden-water.vercel.app')), 'no Garden Water dependency on child deployment');
 });
 
+test('Only the known Garden Water city aliases redirect to the working national tool', () => {
+  const cityRedirects = vercel.redirects.filter(({ source }) =>
+    source.startsWith('/national-tools/garden-water/'));
+  assert.deepEqual(cityRedirects, [{
+    source: '/national-tools/garden-water/:city(phoenix-az|denver-co|dallas-tx|atlanta-ga|austin-tx|sacramento-ca|raleigh-nc|minneapolis-mn){/}?',
+    destination: '/national-tools/garden-water/',
+    permanent: false,
+  }]);
+});
+
 test('Garden Water has one canonical registry owner and garden-network relationships', () => {
   const node = registry.tools.find((tool) => tool.id === 'national-garden-water');
   assert.equal(node?.canonical, 'https://chrisizworski.com/national-tools/garden-water/');
