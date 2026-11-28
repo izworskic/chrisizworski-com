@@ -18,6 +18,13 @@
     const age=now-Date.parse(data?.generatedAt);
     return data?.operational?.dataState!=='stale-last-known'&&Number.isFinite(age)&&age>=-300000&&age<=1200000;
   }
+  function seasonBanner(data,now=Date.now()){
+    if(!bundleFresh(data,now))return 'Current statewide evidence is unavailable or too old. No riding recommendation.';
+    if(!data.season?.active)return 'Pre-season mode. Trail/closure, snow and weather feeds remain connected, but no ride-quality score is generated before Dec. 1.';
+    if(data.statewide?.closuresVerified!==true)return 'Official closure verification is incomplete. No statewide riding recommendation.';
+    const rankable=Number(data.statewide?.rankableRegionCount||0);
+    return `${rankable} of ${data.statewide?.regionCount||7} regions currently have enough verified surface evidence to be ranked for a long-drive decision. UNKNOWN regions stay unranked until better evidence arrives.`;
+  }
   function evaluate(region,context={},drive=null,maxHours=3){
     const route=region.route||{};
     let state='UNKNOWN',label='Verify local conditions',rank=2;
@@ -94,5 +101,5 @@
       !Array.isArray(o.days)||o.days.length!==3)return null;
     return o;
   }
-  return {ORIGINS,bundleFresh,evaluate,compare,detailUrl,clubEvidence,currentOutlook};
+  return {ORIGINS,bundleFresh,seasonBanner,evaluate,compare,detailUrl,clubEvidence,currentOutlook};
 });
