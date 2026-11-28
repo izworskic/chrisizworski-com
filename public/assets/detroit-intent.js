@@ -141,7 +141,7 @@ function editorialSignature(candidate){
   place:candidate.place&&candidate.place.id||null,
   source:candidate.sourceEngine||null,
   opportunity:candidate.opportunityType||null,
-  score:Number.isFinite(Number(candidate.score))?Number(candidate.score):null,
+  score:candidate.score!=null&&Number.isFinite(Number(candidate.score))?Number(candidate.score):null,
   specialist:candidate.specialist||null,
   reasons:Array.isArray(candidate.reasons)?candidate.reasons:[],
   whyNow:candidate.whyNow||null,
@@ -229,7 +229,7 @@ async function load(force=false){
    source_engine:c&&c.sourceEngine||"none",
    place_id:c&&c.place&&c.place.id||"none",
    confidence:c&&c.confidence&&c.confidence.level||"none",
-   score:Number.isFinite(Number(c&&c.score))?Number(c.score):null,
+   score:c?.score!=null&&Number.isFinite(Number(c.score))?Number(c.score):null,
    metric_count:Array.isArray(signal.metrics)?signal.metrics.length:0,
    rejected_count:Array.isArray(signal.rejected)?signal.rejected.length:0
   },stateKey);

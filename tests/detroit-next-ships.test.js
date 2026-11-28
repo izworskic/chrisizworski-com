@@ -64,7 +64,7 @@ test('page: answer first, live signal kept intact below it', () => {
   assert.match(html, /data-max-report-age-min="10"/);
   assert.match(html, /Tested estimate, not a schedule/);
   assert.match(html, /data-api="\/api\/freighter-ais\?region=st-clair-detroit"/);
-  assert.match(html, /detroit-intent\.js\?v=20260922b/);
+  assert.match(html, /detroit-intent\.js\?v=20261127-null-candidate/);
   assert.match(html, /detroit-freighter-relation\.js\?v=20260924a/);
   const inline = html.match(/<script type="application\/json" id="rswModel">([\s\S]*?)<\/script>/)[1];
   assert.deepEqual(JSON.parse(inline), model);
