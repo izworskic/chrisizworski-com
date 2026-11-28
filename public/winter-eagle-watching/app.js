@@ -270,6 +270,39 @@ function pick(s){
  el("saved-toggle").textContent=saved.has(s.id)?"Saved ✓":"Save spot";
  loadWeather(s);loadCount(s);loadEvidence(s);
 }
+// Evidence adapter: six hours fresh plus twelve hours stale revalidation.
+// Date-only observations use UTC calendar days; recompute age at display.
+function eagleEvidenceCurrent(result,now=Date.now()){
+ const stamp=Date.parse(result?.asOf||"");
+ return Number.isFinite(stamp)&&stamp<=now+60000&&now-stamp<=18*3600000;
+}
+function eagleCalendarAge(value,now=Date.now()){
+ if(typeof value!=="string"||!/^\d{4}-\d{2}-\d{2}$/.test(value))return null;
+ const stamp=Date.parse(value+"T00:00:00Z");
+ if(!Number.isFinite(stamp)||new Date(stamp).toISOString().slice(0,10)!==value)return null;
+ const age=Math.floor((now-stamp)/86400000);
+ return age>=0?age:null;
+}
+function admitEagleSources(result,now=Date.now()){
+ const obs={...result.observations},ice={...result.ice};
+ const age=eagleCalendarAge(obs.latestObservedOn,now);
+ if(obs.status==="ok"){
+  if(!Number.isSafeInteger(obs.observationsSampled)||obs.observationsSampled<0||
+   (obs.observationsSampled>0&&(age===null||age>30))||
+   (obs.observationsSampled===0&&obs.latestObservedOn))obs.status="unavailable";
+  else obs.ageDays=age;
+ }
+ if(["recent","historical"].includes(ice.status)){
+  const days=eagleCalendarAge(ice.date,now);
+  if(days===null||!Number.isFinite(ice.percent)||ice.percent<0||ice.percent>100)ice.status="unavailable";
+  else{ice.ageDays=days;ice.status=days<=7?"recent":"historical";}
+ }
+ return {obs,ice};
+}
+function eagleForecastCurrent(issued,now=Date.now()){
+ const t=Date.parse(issued||"");
+ return Number.isFinite(t)&&t<=now+3600000&&now-t<=12*3600000;
+}
 async function loadEvidence(s){
  const token=++evidenceToken;
  for(const [id,msg] of [
@@ -289,8 +322,8 @@ async function loadEvidence(s){
   if(!response.ok)throw Error("Evidence adapter unavailable");
   const result=await response.json();
   if(token!==evidenceToken||selected.id!==s.id)return;
-  if(!result.available||result.site!==s.id)throw Error("Mismatched evidence");
-  const obs=result.observations||{},ice=result.ice||{};
+  if(!result.available||result.site!==s.id||!eagleEvidenceCurrent(result))throw Error("Mismatched or expired evidence");
+  const {obs,ice}=admitEagleSources(result);
   if(obs.searchUrl&&obs.searchUrl.startsWith("https://www.inaturalist.org/"))inatLink.href=obs.searchUrl;
   if(obs.searchUrl&&obs.searchUrl.startsWith("https://www.gbif.org/"))inatLink.href=obs.searchUrl;
   const gbif=obs.source==="GBIF";
@@ -372,6 +405,7 @@ function drawChart(hours){
 }
 async function loadWeather(s){
  if(forecastController)forecastController.abort();forecastController=new AbortController();const signal=forecastController.signal;const token=++fetchToken;
+ plannerDays=[];renderPlanner();
  text("weather-status","Loading live NWS forecast for "+s.city+"…");text("weather-updated","");el("temperature-chart").replaceChildren();el("weather-steps").replaceChildren();
  ["air-now","air-low","air-wind"].forEach(id=>text(id,"—"));
  try{
@@ -380,7 +414,10 @@ async function loadWeather(s){
   if(!hourlyUrl||!/^https:\/\/api\.weather\.gov\//.test(hourlyUrl))throw new Error("No supported NWS hourly grid");
   const data=await getJson(hourlyUrl,signal);
   if(token!==fetchToken)return;
-  const hours=(data.properties&&data.properties.periods||[]).filter(p=>Number.isFinite(Number(p.temperature))&&p.startTime);
+  const issued=data.properties?.updated||data.properties?.generatedAt||null;
+  if(!eagleForecastCurrent(issued))throw Error("NWS forecast timestamp unavailable or expired");
+  const now=Date.now();
+  const hours=(data.properties?.periods||[]).filter(p=>typeof p.temperature==="number"&&Number.isFinite(p.temperature)&&p.temperatureUnit==="F"&&Number.isFinite(Date.parse(p.startTime))&&Date.parse(p.endTime)>now&&Date.parse(p.startTime)<=now+7*86400000);
   plannerZone=point.properties?.timeZone||"America/Detroit";plannerDays=window.EaglePlanning?window.EaglePlanning.summarizeHourly(hours,plannerZone):[];renderPlanner();
   if(!hours.length)throw new Error("No hourly values published");
   const next=hours.slice(0,48),temps=next.map(x=>Number(x.temperature)),cold=next.filter(x=>Number(x.temperature)<=32).length;
@@ -390,7 +427,6 @@ async function loadWeather(s){
   const forceWinter=(inWinter||[11,4].includes(month));
   const verdict=!forceWinter?"Outside main winter aggregation window. Resident eagles can still be seen.":cold===0?"No freezing hours in the next 48-hour air forecast; flowing-water access may still matter.":cold>=32?"Extended freezing air forecast may concentrate fishing opportunities at remaining open water.":"Some freezing hours forecast; verify whether open-water pockets actually exist.";
   text("weather-status",verdict);
-  const issued=data.properties.updated||data.properties.generatedAt||null;
   text("weather-updated","NWS forecast updated: "+(issued?new Date(issued).toLocaleString():"unknown")+" · Retrieved: "+new Date().toLocaleTimeString()+". Neither confirms river ice.");
   drawChart(next);
   const four=[0,12,24,36];const grid=el("weather-steps");
