@@ -33,3 +33,15 @@ test('time zone and partial first days never fabricate conditions',()=>{
   assert.equal(daily[1].level,'FAVORABLE');
   assert.ok(E.summarize(daily).bestDay);
 });
+
+test('maple client rejects old, foreign, missing-issuance and off-season weather claims',()=>{
+ const src=require('node:fs').readFileSync('public/michigan-maple-sap-run/app.js','utf8');
+ const admit=require('node:vm').runInNewContext('('+src.match(/function admitSite\(data,site,now=Date\.now\(\)\)\{[\s\S]*?\n\}/)[0]+')');
+ const now=Date.parse('2026-03-01T12:00:00Z'),site={id:'bay-city',region:'Central Lower'};
+ const packet={site,phase:'WEATHER_WINDOW',summary:{bestScore:90},daily:[],fetchedAt:'2026-03-01T11:50:00Z',forecastUpdatedAt:'2026-03-01T10:00:00Z'};
+ assert.equal(admit(packet,site,now),true);
+ for(const bad of [{...packet,site:{id:'ironwood'}},{...packet,fetchedAt:'2020-03-01T12:00:00Z'},{...packet,forecastUpdatedAt:null},{...packet,forecastUpdatedAt:'2020-03-01T12:00:00Z'}])assert.equal(admit(bad,site,now),false);
+ const winter=Date.parse('2026-11-28T12:00:00Z');
+ assert.equal(admit({...packet,fetchedAt:new Date(winter).toISOString(),forecastUpdatedAt:new Date(winter).toISOString()},site,winter),false);
+ assert.equal(admit({site,phase:'OFF_SEASON',daily:[],summary:{bestDay:null,bestScore:null}},site,winter),true);
+});
