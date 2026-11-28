@@ -5,6 +5,20 @@
  const fmt=date=>new Date(date+'T12:00:00Z').toLocaleDateString('en-US',{month:'short',day:'numeric',timeZone:'UTC'});
  const weekday=date=>new Date(date+'T12:00:00Z').toLocaleDateString('en-US',{weekday:'short',timeZone:'UTC'});
  const seasonNow=()=>state.data?.season||'OFF_SEASON';
+ function forecastCurrent(packet,site,now=Date.now()){
+  const stamp=typeof packet?.forecastUpdatedAt==='string'?Date.parse(packet.forecastUpdatedAt):NaN;
+  if(packet?.location?.id!==site||!Number.isFinite(stamp)||stamp>now+60000||now-stamp>12*3600000)return false;
+  if(!Array.isArray(packet.daily)||packet.daily.length<3||packet.daily.length>7)return false;
+  const today=new Date(now).toISOString().slice(0,10);
+  const end=new Date(Date.parse(today+'T00:00:00Z')+6*86400000).toISOString().slice(0,10);
+  return new Set(packet.daily.map(d=>d?.date)).size===packet.daily.length&&packet.daily.every(d=>d&&typeof d.date==='string'&&/^\d{4}-\d{2}-\d{2}$/.test(d.date)&&d.date>=today&&d.date<=end&&Number.isFinite(d.highF)&&Number.isFinite(d.lowF)&&d.highF>=d.lowF&&['snowHours','rainHours','thawHours'].every(k=>Number.isInteger(d[k])&&d[k]>=0&&d[k]<=25)&&(d.maxWindMph===null||Number.isFinite(d.maxWindMph)&&d.maxWindMph>=0));
+ }
+ function clearForecastMetrics(){
+  for(const key of ['best-day','thaw','snow','temperature'])$(key).textContent='—';
+  $('classification').textContent='No current forecast';$('classification').className='pill unavailable';
+  $('provenance').textContent='No current forecast evidence.';
+  $('days').textContent='Waiting for verified regional forecast.';
+ }
  function judge(day,ground){
   if(seasonNow()!=='SEARCH_SEASON')return {status:'seasonal',score:null,label:'Plan for late winter / spring',reason:'This is outside the core January–April search-planning window. A weather forecast does not indicate antler casting.'};
   if(!day)return {status:'unavailable',score:null,label:'Weather unavailable',reason:'A date-level NWS forecast is needed; do not infer conditions from missing data.'};
@@ -27,7 +41,7 @@
   $('loaded').textContent=message;$('loaded').className='pill '+(klass||'');
  }
  function render(){
-  const data=state.data;if(!data){$('decision').textContent='Live outlook unavailable';$('classification').textContent='No current forecast';$('reason').textContent='Please try another region or refresh. No search recommendation is available without source data.';return;}
+  const data=state.data;if(!data){clearForecastMetrics();$('decision').textContent='Live outlook unavailable';$('classification').textContent='No current forecast';$('reason').textContent='Please try another region or refresh. No search recommendation is available without source data.';return;}
   const days=data.daily||[];
   const ground=$('ground').value;
   const decisions=days.map(d=>({...judge(d,ground),date:d.date,weather:d}));
@@ -91,14 +105,14 @@
  }
  async function loadForecast(){
   const id=++state.request;const region=state.site;
-  state.data=null;state.day=0;$('noaa-summary').textContent='NOAA modeled snow: loading regional analysis…';$('retreat-summary').textContent='Checking model history…';$('retreat-chart').textContent='Waiting for model samples…';setStatus('Loading NWS forecast…');$('decision').textContent='Checking NWS…';
+  state.data=null;state.day=0;clearForecastMetrics();$('noaa-summary').textContent='NOAA modeled snow: loading regional analysis…';$('retreat-summary').textContent='Checking model history…';$('retreat-chart').textContent='Waiting for model samples…';setStatus('Loading NWS forecast…');$('decision').textContent='Checking NWS…';
   const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),18000);
   try{
    const r=await fetch('/api/shed-antlers?mode=forecast&site='+encodeURIComponent(region),{signal:controller.signal,headers:{'Accept':'application/json'}});
    if(!r.ok)throw new Error('NWS forecast currently unavailable');
    const json=await r.json();
    if(id!==state.request)return;
-   if(!Array.isArray(json.daily)||json.daily.length<3)throw Error('Incomplete forecast');
+   if(!forecastCurrent(json,region))throw Error('Forecast expired, incomplete or wrong region');
    state.data=json;
    const noaa=json.snowDepth;
    $('noaa-summary').textContent='NOAA modeled snow: '+(noaa?.description||'Not available')+(noaa?.validTime?' · Analysis '+noaa.validTime:'')+'. This is a regional model point, not measured field snow.';
