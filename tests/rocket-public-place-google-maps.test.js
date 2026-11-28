@@ -36,8 +36,8 @@ for(const region of regions){
   assert.match(css,new RegExp('\\.'+region.linkClass+':focus-visible\\{'));
   assert.match(html,/20261113-rust-network-v1-gmaps-20261116/);
   assert.match(html,/styles\.css\?v=20261116-public-gmaps/);
-  assert.match(html,/"dateModified":"2026-11-16"/);
-  assert.match(read('public/sitemap.xml'),new RegExp('<loc>https://chrisizworski.com/'+region.slug+'/</loc>\\s*<lastmod>2026-11-16</lastmod>'));
+  assert.match(html,/"dateModified":"2026-11-28"/);
+  assert.match(read('public/sitemap.xml'),new RegExp('<loc>https://chrisizworski.com/'+region.slug+'/</loc>\\s*<lastmod>2026-11-28</lastmod>'));
  });
  test(region.name+' shows Google Maps in selected-place and map popups, never at the restricted pad',()=>{
   const script=read('public/'+region.slug+'/app.js');
