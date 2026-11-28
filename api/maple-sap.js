@@ -18,10 +18,13 @@ async function forecast(site,now){
   const data=await getJson(hourly);
   const periods=data?.properties?.periods;
   if(!Array.isArray(periods)||periods.length<10)throw new Error('Incomplete NWS hourly forecast');
+  const forecastUpdatedAt=data?.properties?.updated||data?.properties?.generatedAt||null;
+  const age=+now-Date.parse(forecastUpdatedAt||'');
+  if(!Number.isFinite(age)||age< -60000||age>12*3600000)throw Error('NWS forecast issuance unavailable or expired');
   const daily=E.evaluate(periods,site,now);
   return {site,phase:'WEATHER_WINDOW',daily,summary:E.summarize(daily),
     source:'National Weather Service',sourceUrl:hourly,
-    fetchedAt:new Date().toISOString(),
+    forecastUpdatedAt,fetchedAt:new Date().toISOString(),
     detail:'Heuristic index of favorable freeze/thaw weather, not observed flow, gallons, or a guarantee. Tree dormancy and bud development must be checked locally.'};
 }
 async function board(now){
