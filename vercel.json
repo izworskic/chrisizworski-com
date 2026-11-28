@@ -1168,15 +1168,15 @@
     },
     {
       "source": "/assets/national-garden-water.css",
-      "destination": "https://national-garden-water.vercel.app/assets/national-garden-water.css"
+      "destination": "/assets/garden-water-release-c82dda3c/national-garden-water.css"
     },
     {
       "source": "/assets/national-garden-water-engine.js",
-      "destination": "https://national-garden-water.vercel.app/assets/national-garden-water-engine.js"
+      "destination": "/assets/garden-water-release-c82dda3c/national-garden-water-engine.js"
     },
     {
       "source": "/assets/national-garden-water-page.js",
-      "destination": "https://national-garden-water.vercel.app/assets/national-garden-water-page.js"
+      "destination": "/assets/garden-water-release-c82dda3c/national-garden-water-page.js"
     },
     {
       "source": "/assets/white-christmas.css",
@@ -1252,7 +1252,7 @@
     },
     {
       "source": "/data/national-garden-water-crops.json",
-      "destination": "https://national-garden-water.vercel.app/data/national-garden-water-crops.json"
+      "destination": "/assets/garden-water-release-c82dda3c/national-garden-water-crops.json"
     },
     {
       "source": "/national-tools/ice-out",
