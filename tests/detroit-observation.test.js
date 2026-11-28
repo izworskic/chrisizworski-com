@@ -75,3 +75,36 @@ test("Detroit discovery report accepts the expanded observation schema",()=>{
   assert.match(out,/missingTelemetry/);
   assert.match(out,/report:detroit-discovery PASS/);
 });
+
+
+test("Detroit focused renderer preserves valid no-window and source-unavailable states without a candidate",async()=>{
+  const vm=require("node:vm");
+  const js=read("public/assets/detroit-intent.js");
+  for(const intent of ["water","birding","sunset","freighter"]){
+    for(const state of ["no-window","source-unavailable"]){
+      const nodes=new Map(),events=[];
+      const node=id=>{
+        if(!nodes.has(id))nodes.set(id,{textContent:"",innerHTML:"",hidden:false,className:"",classList:{add(){},remove(){}}});
+        return nodes.get(id);
+      };
+      const response={ok:true,generatedAt:"2026-11-27T23:00:00Z",intent:{status:state,candidate:null,rejected:[{reasons:["No qualifying current observation"]}],metrics:[]}};
+      vm.runInNewContext(js,{
+        document:{body:{dataset:{detroitIntent:intent}},querySelector:node,addEventListener(){}},
+        window:{gtag:(...args)=>events.push(args)},
+        sessionStorage:{getItem:()=>null,setItem(){}},
+        fetch:async()=>({ok:true,json:async()=>response}),
+        setInterval:()=>0
+      });
+      await new Promise(resolve=>setImmediate(resolve));
+      assert.equal(node("#intent-status").textContent,state==="no-window"?"Not a window now":"Source unavailable",intent+" "+state);
+      assert.match(node("#intent-reasons").innerHTML,/No qualifying current observation/);
+      assert.match(node("#intent-updated").textContent,/Updated/);
+      assert.equal(node("#intent-editorial").hidden,true);
+      const observed=events.find(e=>e[1]==="detroit_intent_observation");
+      assert.ok(observed,intent+" "+state+" missing observation");
+      assert.equal(observed[2].score,null);
+      assert.equal(observed[2].candidate_id,"none");
+      assert.ok(!events.some(e=>e[1]==="detroit_live_failure"));
+    }
+  }
+});
