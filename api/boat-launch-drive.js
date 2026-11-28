@@ -113,11 +113,11 @@ module.exports = async function handler(req, res) {
       .map((_, index) => {
         const meters = distances[index + 1];
         const seconds = durations[index + 1];
-        if (!Number.isFinite(Number(meters))) return null;
+        if (!Number.isFinite(meters) || meters < 0) return null;
         return {
           index,
           meters: Number(meters),
-          seconds: Number.isFinite(Number(seconds)) ? Number(seconds) : null,
+          seconds: Number.isFinite(seconds) && seconds >= 0 ? seconds : null,
         };
       })
       .filter(Boolean);

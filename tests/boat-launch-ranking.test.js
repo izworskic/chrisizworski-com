@@ -178,3 +178,21 @@ test('county is a county, not the DNR display label', () => {
   assert.equal(bareCounty('Ottawa'), 'Ottawa');
   assert.equal(bareCounty(''), null);
 });
+
+test('explicit null and negative routing legs never become zero-mile or zero-minute trips',()=>{
+  const pool=[{id:'missing',distanceMiles:3},{id:'unknown-time',distanceMiles:5},{id:'known',distanceMiles:7},{id:'negative',distanceMiles:2}];
+  const result=rank.finalizeShortlist({pool,drive:{legs:[{index:0,meters:null,seconds:null},{index:1,meters:6*METERS,seconds:null},{index:2,meters:8*METERS,seconds:900},{index:3,meters:-1,seconds:0}]}});
+  assert.deepEqual(result.items.map(x=>x.id),['known','unknown-time']);
+  assert.equal(result.items[1].driveMinutes,null);
+  assert.equal(result.unroutable,2);
+});
+test('OSRM null matrix entries are omitted and missing durations stay null',async()=>{
+  const original=global.fetch;
+  global.fetch=async()=>({ok:true,json:async()=>({code:'Ok',distances:[[0,null,10000,12000]],durations:[[0,null,null,600]]})});
+  try{
+    const res={statusCode:200,body:null,setHeader(){},status(code){this.statusCode=code;return this;},json(v){this.body=v;return this;}};
+    await drive({method:'GET',query:{from:'43.59,-83.89',to:'43.60,-83.88;43.62,-83.87;43.65,-83.86'}},res);
+    assert.equal(res.statusCode,200);
+    assert.deepEqual(res.body.legs,[{index:1,meters:10000,seconds:null},{index:2,meters:12000,seconds:600}]);
+  }finally{global.fetch=original;}
+});

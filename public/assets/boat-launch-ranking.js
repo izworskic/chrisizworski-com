@@ -100,7 +100,7 @@
     const legByIndex = new Map();
     if (drive && Array.isArray(drive.legs)) {
       for (const leg of drive.legs) {
-        if (!leg || !Number.isFinite(Number(leg.meters))) continue;
+        if (!leg || !Number.isInteger(leg.index) || leg.index < 0 || leg.index >= pool.length || !Number.isFinite(leg.meters) || leg.meters < 0) continue;
         legByIndex.set(Number(leg.index), leg);
       }
     }
@@ -112,7 +112,7 @@
       return {
         ...record,
         driveMiles: Number(leg.meters) / METERS_PER_MILE,
-        driveMinutes: Number.isFinite(Number(leg.seconds)) ? Number(leg.seconds) / 60 : null,
+        driveMinutes: Number.isFinite(leg.seconds) && leg.seconds >= 0 ? leg.seconds / 60 : null,
       };
     });
 
@@ -128,8 +128,8 @@
         : Math.round(record.driveMinutes);
     const sorted = routed
       ? rankable.slice().sort((a, b) => {
-          const byTime = shownMinutes(a) - shownMinutes(b);
-          return byTime !== 0 ? byTime : a.driveMiles - b.driveMiles;
+          const at = shownMinutes(a), bt = shownMinutes(b);
+          return at !== bt ? at - bt : a.driveMiles - b.driveMiles;
         })
       : rankable.slice().sort((a, b) => a.distanceMiles - b.distanceMiles);
 

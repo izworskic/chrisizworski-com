@@ -88,7 +88,7 @@ function sortList(list){
   if(sort.value==='nearest'&&destinationPoint){
     return copy.sort((a,b)=>{
       const ad=num(a.driveMinutes),bd=num(b.driveMinutes);
-      if(routed&&ad!==null&&bd!==null&&Math.round(ad)!==Math.round(bd))return Math.round(ad)-Math.round(bd);
+      if(routed){const at=ad===null?Infinity:Math.round(ad),bt=bd===null?Infinity:Math.round(bd);if(at!==bt)return at-bt;}
       const ar=num(a.driveMiles)??a.distanceMiles??recordDistance(a)??Infinity;
       const br=num(b.driveMiles)??b.distanceMiles??recordDistance(b)??Infinity;
       return ar-br;
