@@ -1,0 +1,7 @@
+Dataset {
+    String Times[time = 1];
+} NOAA/LEOFS/MODELS/2026/11/27/leofs.t12z.20261127.fields.f072.nc;
+---------------------------------------------
+Times[1]
+"2026-11-30T12:00:00.000000"
+
